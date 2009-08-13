@@ -1,0 +1,1000 @@
+From: voith@soccer.sps.mot.com (Ray Voith)
+
+Here's some of the more common chords (done with A as the root):
+
+A  B  C# D  E  F# G# A  B  C# D
+1  2  3  3  5  6  7  8  9  10 11
+
+major [A]: 1 3 5                            A C# E
+minor [Am]: 1 3b 5                          A C E
+seventh [A7]: 1 3 5 7b                      A C# E G
+minor seventh [Am7]: 1 3b 5 7b              A C E G
+major seventh [Amaj7 or AM7]: 1 3 5 7       A C# E G#
+sixth [A6]: 1 3 5 6                         A C# E F#
+minor sixth [Am6]: 1 3b 5 6                 A C E F#
+augmented [A+]: 1 3 5#                      A C# E#  (A C# F)
+augmented 7th [A7+]: 1 3 5# 7b              A C# E# G
+diminished [Adim]: 1 3b 5b                  A C Eb
+diminished 7th [Adim7 or Ao]: 1 3b 5b 7bb   A C Eb Gb
+                              1 3b 5b 6     A C Eb Gb
+seventh (flatted fifth) A7(5b): 1 3 5b 7b   A C# Eb G
+minor 7th (flatted 5th) A7(5b): 1 3b 5b 7b  A C Eb G
+ninth [A9]: 1 3 5 7b 9                      A C# E G B
+minor ninth [Am9]: 1 3b 5 7b 9              A C E G B
+major ninth [Amaj9 or AM9]: 1 3 5 7 9       A C# E G# B
+eleventh [A11]: 1 3 5 7b 9 11               A C# E G B D
+diminished 9th: 1 3 5 7b 9b                 A C# E G Bb
+added ninth [A(9) or A(2)]: 1 3 5 9         A C# E B (A B C# E)
+added fourth [A(4) or A(11)]: 1 3 5 11      A C# E D
+suspended [Asus or Asus4]: 1 4 5            A D E 
+suspended 9th [Asus9 or Asus2]: 1 2 5       A B E (A E B)
+7th suspended 4th [A7sus or A7sus4]: 1 4 5 7b    A D E G
+7th suspended 9th [A7sus2 or A7sus9]: 1 2 5 7b   A B E G
+fifth [A5 or A(no 3rd)]: 1 5                     A E
+.. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+
+typically X/Y means "an X chord with a Y in the bass".
+Sometimes Y is part of the X chord but not the root (e.g., C/G)
+Sometimes it is not (e.g., Bb/C).
+
+C/D is a C chord with a D bass note (xx0010).
+A/B is an A chord with a B bass note (x22220).
+G/D is a G with a D bass (xx0003).  And so on.
+
+---------
+
+Diminished
+
+In popular music, "diminished" is usually synonymous with "diminished
+seventh", which is root-b3-b5-bb7 (yes, double-flatted seventh).
+So Cdim = Cdim7 = C-Eb-Gb-Bbb = C-Eb-Gb-A.
+Cdim7 is often notated as "C-followed-by-a-raised-circle".
+
+A related chord, the half-diminished (also called "minor seventh/flat
+fifth", replaces the double-flatted seventh with a flatted seventh;
+thus, Cm7-5 (or Cm7b5) = C-Eb-Gb-Bb.  Cm7-5 is often notated as
+"C-followed-by-a-raised- circle-with-a-diagonal-slash-through-it".
+
+
+PS: any Beach Boys ballad circa "Pet Sounds" makes extensive use of half-
+diminished chords, often with the flatted 5th or 7th in the bass:
+
+	D/A       Bm6                  F#m
+	I may not always love you
+	   F#m7/E            D#m7-5/A
+	But long as there are stars above you
+	E/B       Cdim
+	You never need to doubt it
+	E/B       Bbm7-5
+	I'll make you so sure about it
+	A              E/G#        F#m           A/E  B/F#  C/G
+	God only knows what I'd be without you
+
+Due to the symmetry of the intervals, an augmented or
+diminished-seventh chord may be named after any note in it,
+so C+ = E+ = G#+ and Cdim = Ebdim = Gbdim = Adim.
+
+---------
+
+Suspended chords.
+
+A suspended chord typically means that the 3rd of the chord has been
+replaced by the 4th (Xsus4) (or, less commonly, by the 2nd in which
+case it is called Xsus2).  Xsus = Xsus4
+
+Try these chord progressions, both of which launched a zillion
+folk-rock hits circa 1965:
+
+	Asus (x02230)	A (x02220)	Asus2 (x02200)	A
+
+or:
+
+	Dsus (x00233)	D (x00232)	Dsus2 (x00230)	D
+
+&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
+
+A         or   Amaj      [0 0 2 2 2 0] (Db E  A) : major triad
+A         or   Amaj      [0 4 x 2 5 0] (Db E  A) : major triad
+A         or   Amaj      [5 7 7 6 5 5] (Db E  A) : major triad
+A         or   Amaj      [x 0 2 2 2 0] (Db E  A) : major triad
+A         or   Amaj      [x 4 7 x x 5] (Db E  A) : major triad
+A #5      or   Aaug      [x 0 3 2 2 1] (Db F  A) : augmented triad
+A #5      or   Aaug      [x 0 x 2 2 1] (Db F  A) : augmented triad
+A/Ab                     [x 0 2 1 2 0] (Db E  Ab A) : major triad (altered bass)
+A/B                      [0 0 2 4 2 0] (Db E  A  B) : major triad (altered bass)
+A/B                      [x 0 7 6 0 0] (Db E  A  B) : major triad (altered bass)
+A/D                      [x 0 0 2 2 0] (Db D  E  A) : major triad (altered bass)
+A/D                      [x x 0 2 2 0] (Db D  E  A) : major triad (altered bass)
+A/D                      [x x 0 6 5 5] (Db D  E  A) : major triad (altered bass)
+A/D                      [x x 0 9 10 9] (Db D  E  A) : major triad (altered bass)
+A/G                      [3 x 2 2 2 0] (Db E  G  A) : major triad (altered bass)
+A/G                      [x 0 2 0 2 0] (Db E  G  A) : major triad (altered bass)
+A/G                      [x 0 2 2 2 3] (Db E  G  A) : major triad (altered bass)
+A/Gb                     [0 0 2 2 2 2] (Db E  Gb A) : major triad (altered bass)
+A/Gb                     [0 x 4 2 2 0] (Db E  Gb A) : major triad (altered bass)
+A/Gb                     [2 x 2 2 2 0] (Db E  Gb A) : major triad (altered bass)
+A/Gb                     [x 0 4 2 2 0] (Db E  Gb A) : major triad (altered bass)
+A/Gb                     [x x 2 2 2 2] (Db E  Gb A) : major triad (altered bass)
+A5        or   A(no 3rd) [5 7 7 x x 5] (E  A): root and 5th (power chord)
+A5        or   A(no 3rd) [x 0 2 2 x 0] (E  A) : root and 5th (power chord)
+A5        or   A(no 3rd) [5 7 7 x x 0] (E  A) : root and 5th (power chord)
+A6                       [0 0 2 2 2 2] (Db E  Gb A) : major triad plus 6th
+A6                       [0 x 4 2 2 0] (Db E  Gb A) : major triad plus 6th
+A6                       [2 x 2 2 2 0] (Db E  Gb A) : major triad plus 6th
+A6                       [x 0 4 2 2 0] (Db E  Gb A) : major triad plus 6th
+A6                       [x x 2 2 2 2] (Db E  Gb A) : major triad plus 6th
+A6/7                     [0 0 2 0 2 2] (Db E  Gb G  A) : major triad plus 6th, minor 7th
+A6/7 sus  or   A6/7 sus4 [5 5 4 0 3 0] (D  E  Gb G  A) : sus4 triad plus 6th, minor 7th
+A6/7 sus  or   A6/7 sus4 [x 0 2 0 3 2] (D  E  Gb G  A) : sus4 triad plus 6th, minor 7th
+A7        or   Adom 7    [3 x 2 2 2 0] (Db E  G  A) : major triad, minor 7th
+A7        or   Adom 7    [x 0 2 0 2 0] (Db E  G  A) : major triad, minor 7th
+A7        or   Adom 7    [x 0 2 2 2 3] (Db E  G  A) : major triad, minor 7th
+A7(#5)                   [1 0 3 0 2 1] (Db F  G  A) : minor 7th, sharp 5th
+A7/add11  or   A7/11     [x 0 0 0 2 0] (Db D  E  G  A) : major triad, minor 7th, plus 11th
+A7sus4                   [x 0 2 0 3 0] (D  E  G  A) : sus4 triad, minor 7th
+A7sus4                   [x 0 2 0 3 3] (D  E  G  A) : sus4 triad, minor 7th
+A7sus4                   [x 0 2 2 3 3] (D  E  G  A) : sus4 triad, minor 7th
+A7sus4                   [5 x 0 0 3 0] (D  E  G  A) : sus4 triad, minor 7th
+A7sus4                   [x 0 0 0 x 0] (D  E  G  A) : sus4 triad, minor 7th
+Aadd9     or   A2        [0 0 2 4 2 0] (Db E  A  B) : major triad plus 9th
+Aadd9     or   A2        [x 0 7 6 0 0] (Db E  A  B) : major triad plus 9th
+Aaug/D                   [x x 0 2 2 1] (Db D  F  A) : augmented triad (altered bass)
+Aaug/G                   [1 0 3 0 2 1] (Db F  G  A) : augmented triad (altered bass)
+Ab        or   Abmaj     [4 6 6 5 4 4] (C  Eb Ab) : major triad
+Ab #5     or   Abaug     [x 3 2 1 1 0] (C  E  Ab) : augmented triad
+Ab/A                     [x x 1 2 1 4] (C  Eb Ab A) : major triad (altered bass)
+Ab/F                     [x 8 10 8 9 8] (C  Eb F  Ab) : major triad (altered bass)
+Ab/F                     [x x 1 1 1 1] (C  Eb F  Ab) : major triad (altered bass)
+Ab/Gb                    [x x 1 1 1 2] (C  Eb Gb Ab) : major triad (altered bass)
+Ab/Gb                    [x x 4 5 4 4] (C  Eb Gb Ab) : major triad (altered bass)
+Ab5       or   Ab(no 3rd)[4 6 6 x x 4] (Eb Ab): root and 5th (power chord)
+Ab6                      [x 8 10 8 9 8] (C  Eb F  Ab) : major triad plus 6th
+Ab6                      [x x 1 1 1 1] (C  Eb F  Ab) : major triad plus 6th
+Ab7       or   Abdom 7   [x x 1 1 1 2] (C  Eb Gb Ab) : major triad, minor 7th
+Ab7       or   Abdom 7   [x x 4 5 4 4] (C  Eb Gb Ab) : major triad, minor 7th
+Abdim/E                  [0 2 0 1 0 0] (D  E  Ab B) : diminished triad (altered bass)
+Abdim/E                  [0 2 2 1 3 0] (D  E  Ab B) : diminished triad (altered bass)
+Abdim/E                  [x 2 0 1 3 0] (D  E  Ab B) : diminished triad (altered bass)
+Abdim/E                  [x x 0 1 0 0] (D  E  Ab B) : diminished triad (altered bass)
+Abdim/Eb                 [x x 0 4 4 4] (D  Eb Ab B) : diminished triad (altered bass)
+Abdim/F                  [x 2 0 1 0 1] (D  F  Ab B) : diminished triad (altered bass)
+Abdim/F                  [x x 0 1 0 1] (D  F  Ab B) : diminished triad (altered bass)
+Abdim/F                  [x x 3 4 3 4] (D  F  Ab B) : diminished triad (altered bass)
+Abdim7                   [x 2 0 1 0 1] (D  F  Ab B) : diminished triad, diminished 7th
+Abdim7                   [x x 0 1 0 1] (D  F  Ab B) : diminished triad, diminished 7th
+Abdim7                   [x x 3 4 3 4] (D  F  Ab B) : diminished triad, diminished 7th
+Abm                      [x x 6 4 4 4] (Eb Ab B) : minor triad
+Abm/D                    [x x 0 4 4 4] (D  Eb Ab B) : minor triad (altered bass)
+Abm/E                    [0 2 1 1 0 0] (Eb E  Ab B) : minor triad (altered bass)
+Abm/E                    [0 x 6 4 4 0] (Eb E  Ab B) : minor triad (altered bass)
+Abm/E                    [x x 1 1 0 0] (Eb E  Ab B) : minor triad (altered bass)
+Abm/Gb                   [x x 4 4 4 4] (Eb Gb Ab B) : minor triad (altered bass)
+Abm7                     [x x 4 4 4 4] (Eb Gb Ab B) : minor triad, minor 7th
+Absus     or   Absus4    [x x 6 6 4 4] (Db Eb Ab) : no 3rd but a 4th from a major triad
+Absus2/F                 [x 1 3 1 4 1] (Eb F  Ab Bb) : sus2 triad (altered bass)
+Adim/Ab                  [x x 1 2 1 4] (C  Eb Ab A) : diminished triad (altered bass)
+Adim/E                   [0 3 x 2 4 0] (C  Eb E  A) : diminished triad (altered bass)
+Adim/F                   [x x 1 2 1 1] (C  Eb F  A) : diminished triad (altered bass)
+Adim/F                   [x x 3 5 4 5] (C  Eb F  A) : diminished triad (altered bass)
+Adim/G                   [x x 1 2 1 3] (C  Eb G  A) : diminished triad (altered bass)
+Adim/Gb                  [x x 1 2 1 2] (C  Eb Gb A) : diminished triad (altered bass)
+Adim7                    [x x 1 2 1 2] (C  Eb Gb A) : diminished triad, diminished 7th
+Am                       [x 0 2 2 1 0] (C  E  A) : minor triad
+Am                       [x 0 7 5 5 5] (C  E  A) : minor triad
+Am                       [x 3 2 2 1 0] (C  E  A) : minor triad
+Am                       [8 12 x x x 0] (C  E  A) : minor triad
+Am/B                     [0 0 7 5 0 0] (C  E  A  B) : minor triad (altered bass)
+Am/B                     [x 3 2 2 0 0] (C  E  A  B) : minor triad (altered bass)
+Am/D                     [x x 0 2 1 0] (C  D  E  A) : minor triad (altered bass)
+Am/D                     [x x 0 5 5 5] (C  D  E  A) : minor triad (altered bass)
+Am/Eb                    [0 3 x 2 4 0] (C  Eb E  A) : minor triad (altered bass)
+Am/F                     [0 0 3 2 1 0] (C  E  F  A) : minor triad (altered bass)
+Am/F                     [1 3 3 2 1 0] (C  E  F  A) : minor triad (altered bass)
+Am/F                     [1 x 2 2 1 0] (C  E  F  A) : minor triad (altered bass)
+Am/F                     [x x 2 2 1 1] (C  E  F  A) : minor triad (altered bass)
+Am/F                     [x x 3 2 1 0] (C  E  F  A) : minor triad (altered bass)
+Am/G                     [0 0 2 0 1 3] (C  E  G  A) : minor triad (altered bass)
+Am/G                     [x 0 2 0 1 0] (C  E  G  A) : minor triad (altered bass)
+Am/G                     [x 0 2 2 1 3] (C  E  G  A) : minor triad (altered bass)
+Am/G                     [x 0 5 5 5 8] (C  E  G  A) : minor triad (altered bass)
+Am/Gb                    [x 0 2 2 1 2] (C  E  Gb A) : minor triad (altered bass)
+Am/Gb                    [x x 2 2 1 2] (C  E  Gb A) : minor triad (altered bass)
+Am6                      [x 0 2 2 1 2] (C  E  Gb A) : minor triad plus 6th
+Am6                      [x x 2 2 1 2] (C  E  Gb A) : minor triad plus 6th
+Am7                      [0 0 2 0 1 3] (C  E  G  A) : minor triad, minor 7th
+Am7                      [x 0 2 0 1 0] (C  E  G  A) : minor triad, minor 7th
+Am7                      [x 0 2 2 1 3] (C  E  G  A) : minor triad, minor 7th
+Am7                      [x 0 5 5 5 8] (C  E  G  A) : minor triad, minor 7th
+Am7(b5)   or   Ao7       [x x 1 2 1 3] (C  Eb G  A) : diminished triad, minor 7th : half-diminished 7th
+Am7/add11 or   Am7/11    [x 5 7 5 8 0] (C  D  E  G  A) : minor triad, minor 7th, plus 11th
+Amaj7     or   A#7       [x 0 2 1 2 0] (Db E  Ab A) : major triad, major 7th
+Amin/maj9                [x 0 6 5 5 7] (C  E  Ab A  B) : minor triad, major 7th plus 9th
+Asus      or   Asus4     [0 0 2 2 3 0] (D  E  A) : no 3rd but a 4th from a major triad
+Asus      or   Asus4     [x 0 2 2 3 0] (D  E  A) : no 3rd but a 4th from a major triad
+Asus      or   Asus4     [5 5 7 7 x 0] (D  E  A) : no 3rd but a 4th from a major triad
+Asus      or   Asus4     [x 0 0 2 3 0] (D  E  A) : no 3rd but a 4th from a major triad
+Asus2     or   Aadd9(no3)[0 0 2 2 0 0] (E  A  B) : no 3rd but a 2nd from a major triad
+Asus2     or   Aadd9(no3)[0 0 2 4 0 0] (E  A  B) : no 3rd but a 2nd from a major triad
+Asus2     or   Aadd9(no3)[0 2 2 2 0 0] (E  A  B) : no 3rd but a 2nd from a major triad
+Asus2     or   Aadd9(no3)[x 0 2 2 0 0] (E  A  B) : no 3rd but a 2nd from a major triad
+Asus2     or   Aadd9(no3)[x x 2 2 0 0] (E  A  B) : no 3rd but a 2nd from a major triad
+Asus2/Ab                 [x 0 2 1 0 0] (E  Ab A  B) : sus2 triad (altered bass)
+Asus2/C                  [0 0 7 5 0 0] (C  E  A  B) : sus2 triad (altered bass)
+Asus2/C                  [x 3 2 2 0 0] (C  E  A  B) : sus2 triad (altered bass)
+Asus2/D                  [0 2 0 2 0 0] (D  E  A  B) : sus2 triad (altered bass)
+Asus2/D                  [x 2 0 2 3 0] (D  E  A  B) : sus2 triad (altered bass)
+Asus2/Db                 [0 0 2 4 2 0] (Db E  A  B) : sus2 triad (altered bass)
+Asus2/Db                 [x 0 7 6 0 0] (Db E  A  B) : sus2 triad (altered bass)
+Asus2/Eb                 [x 2 1 2 0 0] (Eb E  A  B) : sus2 triad (altered bass)
+Asus2/F                  [0 0 3 2 0 0] (E  F  A  B) : sus2 triad (altered bass)
+Asus2/G                  [3 x 2 2 0 0] (E  G  A  B) : sus2 triad (altered bass)
+Asus2/G                  [x 0 2 0 0 0] (E  G  A  B) : sus2 triad (altered bass)
+Asus2/G                  [x 0 5 4 5 0] (E  G  A  B) : sus2 triad (altered bass)
+Asus2/Gb                 [x 0 4 4 0 0] (E  Gb A  B) : sus2 triad (altered bass)
+Asus2/Gb                 [x 2 4 2 5 2] (E  Gb A  B) : sus2 triad (altered bass)
+Asus4/Ab                 [4 x 0 2 3 0] (D  E  Ab A) : sus4 triad (altered bass)
+Asus4/B                  [0 2 0 2 0 0] (D  E  A  B) : sus4 triad (altered bass)
+Asus4/Bb                 [0 1 x 2 3 0] (D  E  A  Bb) : sus4 triad (altered bass)
+Asus4/C                  [x x 0 2 1 0] (C  D  E  A) : sus4 triad (altered bass)
+Asus4/C                  [x x 0 5 5 5] (C  D  E  A) : sus4 triad (altered bass)
+Asus4/Db                 [x 0 0 2 2 0] (Db D  E  A) : sus4 triad (altered bass)
+Asus4/Db                 [x x 0 2 2 0] (Db D  E  A) : sus4 triad (altered bass)
+Asus4/Db                 [x x 0 6 5 5] (Db D  E  A) : sus4 triad (altered bass)
+Asus4/Db                 [x x 0 9 10 9] (Db D  E  A) : sus4 triad (altered bass)
+Asus4/F                  [x x 7 7 6 0] (D  E  F  A) : sus4 triad (altered bass)
+Asus4/G                  [x 0 2 0 3 0] (D  E  G  A) : sus4 triad (altered bass)
+Asus4/G                  [x 0 2 0 3 3] (D  E  G  A) : sus4 triad (altered bass)
+Asus4/G                  [x 0 2 2 3 3] (D  E  G  A) : sus4 triad (altered bass)
+Asus4/G                  [x 0 0 0 x 0] (D  E  G  A) : sus4 triad (altered bass)
+Asus4/Gb                 [0 0 0 2 3 2] (D  E  Gb A) : sus4 triad (altered bass)
+Asus4/Gb                 [0 0 4 2 3 0] (D  E  Gb A) : sus4 triad (altered bass)
+Asus4/Gb                 [2 x 0 2 3 0] (D  E  Gb A) : sus4 triad (altered bass)
+Asus4/Gb                 [x 0 2 2 3 2] (D  E  Gb A) : sus4 triad (altered bass)
+Asus4/Gb                 [x x 2 2 3 2] (D  E  Gb A) : sus4 triad (altered bass)
+Asus4/Gb                 [x 5 4 2 3 0] (D  E  Gb A) : sus4 triad (altered bass)
+Asus4/Gb                 [x 9 7 7 x 0] (D  E  Gb A) : sus4 triad (altered bass)
+B         or   Bmaj      [x 2 4 4 4 2] (Eb Gb B) : major triad
+B #5      or   Baug      [3 2 1 0 0 3] (Eb G  B) : augmented triad
+B #5      or   Baug      [3 x 1 0 0 3] (Eb G  B) : augmented triad
+B/A                      [2 x 1 2 0 2] (Eb Gb A  B) : major triad (altered bass)
+B/A                      [x 0 1 2 0 2] (Eb Gb A  B) : major triad (altered bass)
+B/A                      [x 2 1 2 0 2] (Eb Gb A  B) : major triad (altered bass)
+B/A                      [x 2 4 2 4 2] (Eb Gb A  B) : major triad (altered bass)
+B/Ab                     [x x 4 4 4 4] (Eb Gb Ab B) : major triad (altered bass)
+B/E                      [x 2 2 4 4 2] (Eb E  Gb B) : major triad (altered bass)
+B/E                      [x x 4 4 4 0] (Eb E  Gb B) : major triad (altered bass)
+B5        or   B(no 3rd) [7 9 9 x x 2] (Gb B): root and 5th (power chord)
+B5        or   B(no 3rd) [x 2 4 4 x 2] (Gb B): root and 5th (power chord)
+B6                       [x x 4 4 4 4] (Eb Gb Ab B) : major triad plus 6th
+B7        or   Bdom 7    [2 x 1 2 0 2] (Eb Gb A  B) : major triad, minor 7th
+B7        or   Bdom 7    [x 0 1 2 0 2] (Eb Gb A  B) : major triad, minor 7th
+B7        or   Bdom 7    [x 2 1 2 0 2] (Eb Gb A  B) : major triad, minor 7th
+B7        or   Bdom 7    [x 2 4 2 4 2] (Eb Gb A  B) : major triad, minor 7th
+B7/add11  or   B7/11     [0 0 4 4 4 0] (Eb E  Gb A  B) : major triad, minor 7th, plus 11th
+B7/add11  or   B7/11     [0 2 1 2 0 2] (Eb E  Gb A  B) : major triad, minor 7th, plus 11th
+B7sus4                   [x 0 4 4 0 0] (E  Gb A  B) : sus4 triad, minor 7th
+B7sus4                   [x 2 4 2 5 2] (E  Gb A  B) : sus4 triad, minor 7th
+Baug/E                   [3 x 1 0 0 0] (Eb E  G  B) : augmented triad (altered bass)
+Baug/E                   [x x 1 0 0 0] (Eb E  G  B) : augmented triad (altered bass)
+Bb        or   Bbmaj     [1 1 3 3 3 1] (D  F  Bb) : major triad
+Bb        or   Bbmaj     [x 1 3 3 3 1] (D  F  Bb) : major triad
+Bb        or   Bbmaj     [x x 0 3 3 1] (D  F  Bb) : major triad
+Bb #5     or   Bbaug     [x x 0 3 3 2] (D  Gb Bb) : augmented triad
+Bb b5                    [x x 0 3 x 0] (D  E  Bb) : flat 5th
+Bb/A                     [1 1 3 2 3 1] (D  F  A  Bb) : major triad (altered bass)
+Bb/Ab                    [x 1 3 1 3 1] (D  F  Ab Bb) : major triad (altered bass)
+Bb/Ab                    [x x 3 3 3 4] (D  F  Ab Bb) : major triad (altered bass)
+Bb/Db                    [x x 0 6 6 6] (Db D  F  Bb) : major triad (altered bass)
+Bb/E                     [x 1 3 3 3 0] (D  E  F  Bb) : major triad (altered bass)
+Bb/G                     [3 5 3 3 3 3] (D  F  G  Bb) : major triad (altered bass)
+Bb/G                     [x x 3 3 3 3] (D  F  G  Bb) : major triad (altered bass)
+Bb5       or   Bb(no 3rd)[6 8 8 x x 6] (F  Bb): root and 5th (power chord)
+Bb5       or   Bb(no 3rd)[x 1 3 3 x 6] (F  Bb): root and 5th (power chord)
+Bb6                      [3 5 3 3 3 3] (D  F  G  Bb) : major triad plus 6th
+Bb6                      [x x 3 3 3 3] (D  F  G  Bb) : major triad plus 6th
+Bb6/add9  or   Bb6/9     [x 3 3 3 3 3] (C  D  F  G  Bb) : major triad plus 6th and 9th
+Bb7       or   Bbdom 7   [x 1 3 1 3 1] (D  F  Ab Bb) : major triad, minor 7th
+Bb7       or   Bbdom 7   [x x 3 3 3 4] (D  F  Ab Bb) : major triad, minor 7th
+Bb7sus4                  [x 1 3 1 4 1] (Eb F  Ab Bb) : sus4 triad, minor 7th
+Bbadd#11                 [x 1 3 3 3 0] (D  E  F  Bb) : major triad, augmented 11th
+Bbaug/E                  [2 x 4 3 3 0] (D  E  Gb Bb) : augmented triad (altered bass)
+Bbdim/C                  [x 3 x 3 2 0] (C  Db E  Bb) : diminished triad (altered bass)
+Bbdim/D                  [x x 0 3 2 0] (Db D  E  Bb) : diminished triad (altered bass)
+Bbdim/G                  [x 1 2 0 2 0] (Db E  G  Bb) : diminished triad (altered bass)
+Bbdim/G                  [x x 2 3 2 3] (Db E  G  Bb) : diminished triad (altered bass)
+Bbdim/Gb                 [2 4 2 3 2 2] (Db E  Gb Bb) : diminished triad (altered bass)
+Bbdim/Gb                 [x x 4 3 2 0] (Db E  Gb Bb) : diminished triad (altered bass)
+Bbdim7                   [x 1 2 0 2 0] (Db E  G  Bb) : diminished triad, diminished 7th
+Bbdim7                   [x x 2 3 2 3] (Db E  G  Bb) : diminished triad, diminished 7th
+Bbm                      [1 1 3 3 2 1] (Db F  Bb) : minor triad
+Bbm/Ab                   [x 1 3 1 2 1] (Db F  Ab Bb) : minor triad (altered bass)
+Bbm/D                    [x x 0 6 6 6] (Db D  F  Bb) : minor triad (altered bass)
+Bbm/Gb                   [x x 3 3 2 2] (Db F  Gb Bb) : minor triad (altered bass)
+Bbm7                     [x 1 3 1 2 1] (Db F  Ab Bb) : minor triad, minor 7th
+Bbmaj7    or   Bb#7      [1 1 3 2 3 1] (D  F  A  Bb) : major triad, major 7th
+Bbmaj9    or   Bb9(#7)   [x 3 3 3 3 5] (C  D  F  A  Bb) : major triad, major 7th plus 9th
+Bbsus2   or   Bbadd9(no3)[x x 3 3 1 1] (C  F  Bb) : no 3rd but a 2nd from a major triad
+Bbsus2/G                 [x 3 5 3 6 3] (C  F  G  Bb) : sus2 triad (altered bass)
+Bbsus4/Ab                [x 1 3 1 4 1] (Eb F  Ab Bb) : sus4 triad (altered bass)
+Bdim/A                   [1 2 3 2 3 1] (D  F  A  B) : diminished triad (altered bass)
+Bdim/A                   [x 2 0 2 0 1] (D  F  A  B) : diminished triad (altered bass)
+Bdim/A                   [x x 0 2 0 1] (D  F  A  B) : diminished triad (altered bass)
+Bdim/Ab                  [x 2 0 1 0 1] (D  F  Ab B) : diminished triad (altered bass)
+Bdim/Ab                  [x x 0 1 0 1] (D  F  Ab B) : diminished triad (altered bass)
+Bdim/Ab                  [x x 3 4 3 4] (D  F  Ab B) : diminished triad (altered bass)
+Bdim/G                   [1 x 0 0 0 3] (D  F  G  B) : diminished triad (altered bass)
+Bdim/G                   [3 2 0 0 0 1] (D  F  G  B) : diminished triad (altered bass)
+Bdim/G                   [x x 0 0 0 1] (D  F  G  B) : diminished triad (altered bass)
+Bdim7                    [x 2 0 1 0 1] (D  F  Ab B) : diminished triad, diminished 7th
+Bdim7                    [x x 0 1 0 1] (D  F  Ab B) : diminished triad, diminished 7th
+Bdim7                    [x x 3 4 3 4] (D  F  Ab B) : diminished triad, diminished 7th
+Bm                       [2 2 4 4 3 2] (D  Gb B) : minor triad
+Bm                       [x 2 4 4 3 2] (D  Gb B) : minor triad
+Bm                       [x x 0 4 3 2] (D  Gb B) : minor triad
+Bm/A                     [x 0 4 4 3 2] (D  Gb A  B) : minor triad (altered bass)
+Bm/A                     [x 2 0 2 0 2] (D  Gb A  B) : minor triad (altered bass)
+Bm/A                     [x 2 0 2 3 2] (D  Gb A  B) : minor triad (altered bass)
+Bm/A                     [x 2 4 2 3 2] (D  Gb A  B) : minor triad (altered bass)
+Bm/A                     [x x 0 2 0 2] (D  Gb A  B) : minor triad (altered bass)
+Bm/G                     [2 2 0 0 0 3] (D  Gb G  B) : minor triad (altered bass)
+Bm/G                     [2 2 0 0 3 3] (D  Gb G  B) : minor triad (altered bass)
+Bm/G                     [3 2 0 0 0 2] (D  Gb G  B) : minor triad (altered bass)
+Bm/G                     [x x 4 4 3 3] (D  Gb G  B) : minor triad (altered bass)
+Bm7                      [x 0 4 4 3 2] (D  Gb A  B) : minor triad, minor 7th
+Bm7                      [x 2 0 2 0 2] (D  Gb A  B) : minor triad, minor 7th
+Bm7                      [x 2 0 2 3 2] (D  Gb A  B) : minor triad, minor 7th
+Bm7                      [x 2 4 2 3 2] (D  Gb A  B) : minor triad, minor 7th
+Bm7                      [x x 0 2 0 2] (D  Gb A  B) : minor triad, minor 7th
+Bm7(b5)   or   Bo7       [1 2 3 2 3 1] (D  F  A  B) : diminished triad, minor 7th : half-diminished 7th
+Bm7(b5)   or   Bo7       [x 2 0 2 0 1] (D  F  A  B) : diminished triad, minor 7th : half-diminished 7th
+Bm7(b5)   or   Bo7       [x x 0 2 0 1] (D  F  A  B) : diminished triad, minor 7th : half-diminished 7th
+Bm7/add11 or   Bm7/11    [0 0 2 4 3 2] (D  E  Gb A  B) : minor triad, minor 7th, plus 11th
+Bm7/add11 or   Bm7/11    [0 2 0 2 0 2] (D  E  Gb A  B) : minor triad, minor 7th, plus 11th
+Bmaj7/#11                [x 2 3 3 4 2] (Eb F  Gb Bb B) : major triad, major 7th, augmented 11th
+Bsus      or   Bsus4     [7 9 9 x x 0] (E  Gb B) : no 3rd but a 4th from a major triad
+Bsus      or   Bsus4     [x 2 4 4 x 0] (E  Gb B) : no 3rd but a 4th from a major triad
+Bsus2     or   Badd9(no3)[x 4 4 4 x 2] (Db Gb B): no 3rd but a 2nd from a major triad
+Bsus2     or   Badd9(no3)[x x 4 4 2 2] (Db Gb B) : no 3rd but a 2nd from a major triad
+Bsus2/E                  [x 4 4 4 x 0] (Db E  Gb B) : sus2 triad (altered bass)
+Bsus4/A                  [x 0 4 4 0 0] (E  Gb A  B) : sus4 triad (altered bass)
+Bsus4/A                  [x 2 4 2 5 2] (E  Gb A  B) : sus4 triad (altered bass)
+Bsus4/Ab                 [0 2 2 1 0 2] (E  Gb Ab B) : sus4 triad (altered bass)
+Bsus4/Ab                 [0 x 4 1 0 0] (E  Gb Ab B) : sus4 triad (altered bass)
+Bsus4/Ab                 [2 2 2 1 0 0] (E  Gb Ab B) : sus4 triad (altered bass)
+Bsus4/Db                 [x 4 4 4 x 0] (Db E  Gb B) : sus4 triad (altered bass)
+Bsus4/Eb                 [x 2 2 4 4 2] (Eb E  Gb B) : sus4 triad (altered bass)
+Bsus4/Eb                 [x x 4 4 4 0] (Eb E  Gb B) : sus4 triad (altered bass)
+Bsus4/G                  [0 2 2 0 0 2] (E  Gb G  B) : sus4 triad (altered bass)
+Bsus4/G                  [0 2 4 0 0 0] (E  Gb G  B) : sus4 triad (altered bass)
+Bsus4/G                  [0 x 4 0 0 0] (E  Gb G  B) : sus4 triad (altered bass)
+Bsus4/G                  [2 2 2 0 0 0] (E  Gb G  B) : sus4 triad (altered bass)
+C         or   Cmaj      [0 3 2 0 1 0] (C  E  G) : major triad
+C         or   Cmaj      [0 3 5 5 5 3] (C  E  G) : major triad
+C         or   Cmaj      [3 3 2 0 1 0] (C  E  G) : major triad
+C         or   Cmaj      [3 x 2 0 1 0] (C  E  G) : major triad
+C         or   Cmaj      [x 3 2 0 1 0] (C  E  G) : major triad
+C         or   Cmaj      [x 3 5 5 5 0] (C  E  G) : major triad
+C #5      or   Caug      [x 3 2 1 1 0] (C  E  Ab) : augmented triad
+C b5                     [x x 4 5 x 0] (C  E  Gb) : flat 5th
+C/A                      [0 0 2 0 1 3] (C  E  G  A) : major triad (altered bass)
+C/A                      [x 0 2 0 1 0] (C  E  G  A) : major triad (altered bass)
+C/A                      [x 0 2 2 1 3] (C  E  G  A) : major triad (altered bass)
+C/A                      [x 0 5 5 5 8] (C  E  G  A) : major triad (altered bass)
+C/B                      [0 3 2 0 0 0] (C  E  G  B) : major triad (altered bass)
+C/B                      [x 2 2 0 1 0] (C  E  G  B) : major triad (altered bass)
+C/B                      [x 3 5 4 5 3] (C  E  G  B) : major triad (altered bass)
+C/Bb                     [x 3 5 3 5 3] (C  E  G  Bb) : major triad (altered bass)
+C/D                      [3 x 0 0 1 0] (C  D  E  G) : major triad (altered bass)
+C/D                      [x 3 0 0 1 0] (C  D  E  G) : major triad (altered bass)
+C/D                      [x 3 2 0 3 0] (C  D  E  G) : major triad (altered bass)
+C/D                      [x 3 2 0 3 3] (C  D  E  G) : major triad (altered bass)
+C/D                      [x x 0 0 1 0] (C  D  E  G) : major triad (altered bass)
+C/D                      [x x 0 5 5 3] (C  D  E  G) : major triad (altered bass)
+C/D                      [x 10 12 12 13 0] (C  D  E  G) : major triad (altered bass)
+C/D                      [x 5 5 5 x 0] (C  D  E  G) : major triad (altered bass)
+C/F                      [x 3 3 0 1 0] (C  E  F  G) : major triad (altered bass)
+C/F                      [x x 3 0 1 0] (C  E  F  G) : major triad (altered bass)
+C5        or   C(no 3rd) [x 3 5 5 x 3] (C  G): root and 5th (power chord)
+C6                       [0 0 2 0 1 3] (C  E  G  A) : major triad plus 6th
+C6                       [x 0 2 0 1 0] (C  E  G  A) : major triad plus 6th
+C6                       [x 0 2 2 1 3] (C  E  G  A) : major triad plus 6th
+C6                       [x 0 5 5 5 8] (C  E  G  A) : major triad plus 6th
+C6/add9   or   C6/9      [x 5 7 5 8 0] (C  D  E  G  A) : major triad plus 6th and 9th
+C7        or   Cdom 7    [x 3 5 3 5 3] (C  E  G  Bb) : major triad, minor 7th
+C7sus4                   [x 3 5 3 6 3] (C  F  G  Bb) : sus4 triad, minor 7th
+C9(b5)                   [0 3 x 3 3 2] (C  D  E  Gb Bb) : diminished 5th, minor 7th, plus 9th
+Cadd9     or   C2        [3 x 0 0 1 0] (C  D  E  G) : major triad plus 9th
+Cadd9     or   C2        [x 3 0 0 1 0] (C  D  E  G) : major triad plus 9th
+Cadd9     or   C2        [x 3 2 0 3 0] (C  D  E  G) : major triad plus 9th
+Cadd9     or   C2        [x 3 2 0 3 3] (C  D  E  G) : major triad plus 9th
+Cadd9     or   C2        [x x 0 0 1 0] (C  D  E  G) : major triad plus 9th
+Cadd9     or   C2        [x x 0 5 5 3] (C  D  E  G) : major triad plus 9th
+Cadd9     or   C2        [x 10 12 12 13 0] (C  D  E  G) : major triad plus 9th
+Cadd9     or   C2        [x 3 2 0 3 0] (C  D  E  G) : major triad plus 9th
+Cadd9     or   C2        [x 5 5 5 x 0] (C  D  E  G) : major triad plus 9th
+Cdim/A                   [x x 1 2 1 2] (C  Eb Gb A) : diminished triad (altered bass)
+Cdim/Ab                  [x x 1 1 1 2] (C  Eb Gb Ab) : diminished triad (altered bass)
+Cdim/Ab                  [x x 4 5 4 4] (C  Eb Gb Ab) : diminished triad (altered bass)
+Cdim/D                   [x 5 4 5 4 2] (C  D  Eb Gb): diminished triad (altered bass)
+Cdim7                    [x x 1 2 1 2] (C  Eb Gb A) : diminished triad, diminished 7th
+Cm                       [x 3 5 5 4 3] (C  Eb G) : minor triad
+Cm                       [x x 5 5 4 3] (C  Eb G) : minor triad
+Cm/A                     [x x 1 2 1 3] (C  Eb G  A) : minor triad (altered bass)
+Cm/Bb                    [x 3 5 3 4 3] (C  Eb G  Bb) : minor triad (altered bass)
+Cm6                      [x x 1 2 1 3] (C  Eb G  A) : minor triad plus 6th
+Cm7                      [x 3 5 3 4 3] (C  Eb G  Bb) : minor triad, minor 7th
+Cmaj7     or   C#7       [0 3 2 0 0 0] (C  E  G  B) : major triad, major 7th
+Cmaj7     or   C#7       [x 2 2 0 1 0] (C  E  G  B) : major triad, major 7th
+Cmaj7     or   C#7       [x 3 5 4 5 3] (C  E  G  B) : major triad, major 7th
+Cmaj9     or   C9(#7)    [x 3 0 0 0 0] (C  D  E  G  B) : major triad, major 7th plus 9th
+Csus      or   Csus4     [x 3 3 0 1 1] (C  F  G) : no 3rd but a 4th from a major triad
+Csus      or   Csus4     [x x 3 0 1 1] (C  F  G) : no 3rd but a 4th from a major triad
+Csus2     or   Cadd9(no3)[x 10 12 12 13 3] (C  D  G): no 3rd but a 2nd from a major triad
+Csus2     or   Cadd9(no3)[x 5 5 5 x 3] (C  D  G): no 3rd but a 2nd from a major triad
+Csus2     or   Cadd9(no3)[x 3 0 0 3 3] (C  D  G) : no 3rd but a 2nd from a major triad
+Csus2     or   Cadd9(no3)[x 3 5 5 3 3] (C  D  G) : no 3rd but a 2nd from a major triad
+Csus2/A                  [x 5 7 5 8 3] (C  D  G  A): sus2 triad (altered bass)
+Csus2/A                  [x x 0 2 1 3] (C  D  G  A) : sus2 triad (altered bass)
+Csus2/B                  [3 3 0 0 0 3] (C  D  G  B) : sus2 triad (altered bass)
+Csus2/B                  [x 3 0 0 0 3] (C  D  G  B) : sus2 triad (altered bass)
+Csus2/E                  [3 x 0 0 1 0] (C  D  E  G) : sus2 triad (altered bass)
+Csus2/E                  [x 3 0 0 1 0] (C  D  E  G) : sus2 triad (altered bass)
+Csus2/E                  [x 3 2 0 3 0] (C  D  E  G) : sus2 triad (altered bass)
+Csus2/E                  [x 3 2 0 3 3] (C  D  E  G) : sus2 triad (altered bass)
+Csus2/E                  [x x 0 0 1 0] (C  D  E  G) : sus2 triad (altered bass)
+Csus2/E                  [x x 0 5 5 3] (C  D  E  G) : sus2 triad (altered bass)
+Csus2/E                  [x 10 12 12 13 0] (C  D  E  G) : sus2 triad (altered bass)
+Csus2/E                  [x 5 5 5 x 0] (C  D  E  G) : sus2 triad (altered bass)
+Csus2/F                  [3 3 0 0 1 1] (C  D  F  G) : sus2 triad (altered bass)
+Csus4/A                  [3 x 3 2 1 1] (C  F  G  A) : sus4 triad (altered bass)
+Csus4/A                  [x x 3 2 1 3] (C  F  G  A) : sus4 triad (altered bass)
+Csus4/B                  [x 3 3 0 0 3] (C  F  G  B) : sus4 triad (altered bass)
+Csus4/Bb                 [x 3 5 3 6 3] (C  F  G  Bb) : sus4 triad (altered bass)
+Csus4/D                  [3 3 0 0 1 1] (C  D  F  G) : sus4 triad (altered bass)
+Csus4/E                  [x 3 3 0 1 0] (C  E  F  G) : sus4 triad (altered bass)
+Csus4/E                  [x x 3 0 1 0] (C  E  F  G) : sus4 triad (altered bass)
+D         or   Dmaj      [x 5 4 2 3 2] (D  Gb A): major triad
+D         or   Dmaj      [x 9 7 7 x 2] (D  Gb A): major triad
+D         or   Dmaj      [2 0 0 2 3 2] (D  Gb A) : major triad
+D         or   Dmaj      [x 0 0 2 3 2] (D  Gb A) : major triad
+D         or   Dmaj      [x 0 4 2 3 2] (D  Gb A) : major triad
+D         or   Dmaj      [x x 0 2 3 2] (D  Gb A) : major triad
+D         or   Dmaj      [x x 0 7 7 5] (D  Gb A) : major triad
+D #5      or   Daug      [x x 0 3 3 2] (D  Gb Bb) : augmented triad
+D/B                      [x 0 4 4 3 2] (D  Gb A  B) : major triad (altered bass)
+D/B                      [x 2 0 2 0 2] (D  Gb A  B) : major triad (altered bass)
+D/B                      [x 2 0 2 3 2] (D  Gb A  B) : major triad (altered bass)
+D/B                      [x 2 4 2 3 2] (D  Gb A  B) : major triad (altered bass)
+D/B                      [x x 0 2 0 2] (D  Gb A  B) : major triad (altered bass)
+D/C                      [x 5 7 5 7 2] (C  D  Gb A): major triad (altered bass)
+D/C                      [x 0 0 2 1 2] (C  D  Gb A) : major triad (altered bass)
+D/C                      [x 3 x 2 3 2] (C  D  Gb A) : major triad (altered bass)
+D/C                      [x 5 7 5 7 5] (C  D  Gb A) : major triad (altered bass)
+D/Db                     [x x 0 14 14 14] (Db D  Gb A) : major triad (altered bass)
+D/Db                     [x x 0 2 2 2] (Db D  Gb A) : major triad (altered bass)
+D/E                      [0 0 0 2 3 2] (D  E  Gb A) : major triad (altered bass)
+D/E                      [0 0 4 2 3 0] (D  E  Gb A) : major triad (altered bass)
+D/E                      [2 x 0 2 3 0] (D  E  Gb A) : major triad (altered bass)
+D/E                      [x 0 2 2 3 2] (D  E  Gb A) : major triad (altered bass)
+D/E                      [x x 2 2 3 2] (D  E  Gb A) : major triad (altered bass)
+D/E                      [x 5 4 2 3 0] (D  E  Gb A) : major triad (altered bass)
+D/E                      [x 9 7 7 x 0] (D  E  Gb A) : major triad (altered bass)
+D/G                      [5 x 4 0 3 5] (D  Gb G  A): major triad (altered bass)
+D/G                      [3 x 0 2 3 2] (D  Gb G  A) : major triad (altered bass)
+D5        or   D(no 3rd) [5 5 7 7 x 5] (D  A): root and 5th (power chord)
+D5        or   D(no 3rd) [x 0 0 2 3 5] (D  A): root and 5th (power chord)
+D6                       [x 0 4 4 3 2] (D  Gb A  B) : major triad plus 6th
+D6                       [x 2 0 2 0 2] (D  Gb A  B) : major triad plus 6th
+D6                       [x 2 0 2 3 2] (D  Gb A  B) : major triad plus 6th
+D6                       [x 2 4 2 3 2] (D  Gb A  B) : major triad plus 6th
+D6                       [x x 0 2 0 2] (D  Gb A  B) : major triad plus 6th
+D6/add9   or   D6/9      [0 0 2 4 3 2] (D  E  Gb A  B) : major triad plus 6th and 9th
+D6/add9   or   D6/9      [0 2 0 2 0 2] (D  E  Gb A  B) : major triad plus 6th and 9th
+D7        or   Ddom 7    [x 5 7 5 7 2] (C  D  Gb A): major triad, minor 7th
+D7        or   Ddom 7    [x 0 0 2 1 2] (C  D  Gb A) : major triad, minor 7th
+D7        or   Ddom 7    [x 3 x 2 3 2] (C  D  Gb A) : major triad, minor 7th
+D7        or   Ddom 7    [x 5 7 5 7 5] (C  D  Gb A) : major triad, minor 7th
+D7sus4                   [x 5 7 5 8 3] (C  D  G  A): sus4 triad, minor 7th
+D7sus4                   [x x 0 2 1 3] (C  D  G  A) : sus4 triad, minor 7th
+D9        or   Ddom 9    [0 0 0 2 1 2] (C  D  E  Gb A) : major triad, minor 7th plus 9th
+D9        or   Ddom 9    [2 x 0 2 1 0] (C  D  E  Gb A) : major triad, minor 7th plus 9th
+D9        or   Ddom 9    [x 5 7 5 7 0] (C  D  E  Gb A) : major triad, minor 7th plus 9th
+D9(#5)                   [0 3 x 3 3 2] (C  D  E  Gb Bb) : augmented 5th, minor 7th plus 9th
+Dadd9     or   D2        [0 0 0 2 3 2] (D  E  Gb A) : major triad plus 9th
+Dadd9     or   D2        [0 0 4 2 3 0] (D  E  Gb A) : major triad plus 9th
+Dadd9     or   D2        [2 x 0 2 3 0] (D  E  Gb A) : major triad plus 9th
+Dadd9     or   D2        [x 0 2 2 3 2] (D  E  Gb A) : major triad plus 9th
+Dadd9     or   D2        [x x 2 2 3 2] (D  E  Gb A) : major triad plus 9th
+Dadd9     or   D2        [x 5 4 2 3 0] (D  E  Gb A) : major triad plus 9th
+Dadd9     or   D2        [x 9 7 7 x 0] (D  E  Gb A) : major triad plus 9th
+Daug/E                   [2 x 4 3 3 0] (D  E  Gb Bb) : augmented triad (altered bass)
+Db        or   Dbmaj     [4 4 6 6 6 4] (Db F  Ab) : major triad
+Db        or   Dbmaj     [x 4 3 1 2 1] (Db F  Ab) : major triad
+Db        or   Dbmaj     [x 4 6 6 6 4] (Db F  Ab) : major triad
+Db        or   Dbmaj     [x x 3 1 2 1] (Db F  Ab) : major triad
+Db        or   Dbmaj     [x x 6 6 6 4] (Db F  Ab) : major triad
+Db #5     or   Dbaug     [x 0 3 2 2 1] (Db F  A) : augmented triad
+Db #5     or   Dbaug     [x 0 x 2 2 1] (Db F  A) : augmented triad
+Db b5                    [x x 3 0 2 1] (Db F  G) : flat 5th
+Db/B                     [x 4 3 4 0 4] (Db F  Ab B) : major triad (altered bass)
+Db/Bb                    [x 1 3 1 2 1] (Db F  Ab Bb) : major triad (altered bass)
+Db/C                     [x 3 3 1 2 1] (C  Db F  Ab) : major triad (altered bass)
+Db/C                     [x 4 6 5 6 4] (C  Db F  Ab) : major triad (altered bass)
+Db5       or   Db(no 3rd)[x 4 6 6 x 4] (Db Ab): root and 5th (power chord)
+Db6                      [x 1 3 1 2 1] (Db F  Ab Bb) : major triad plus 6th
+Db7       or   Dbdom 7   [x 4 3 4 0 4] (Db F  Ab B) : major triad, minor 7th
+Dbaug/D                  [x x 0 2 2 1] (Db D  F  A) : augmented triad (altered bass)
+Dbaug/G                  [1 0 3 0 2 1] (Db F  G  A) : augmented triad (altered bass)
+Dbdim/A                  [3 x 2 2 2 0] (Db E  G  A) : diminished triad (altered bass)
+Dbdim/A                  [x 0 2 0 2 0] (Db E  G  A) : diminished triad (altered bass)
+Dbdim/A                  [x 0 2 2 2 3] (Db E  G  A) : diminished triad (altered bass)
+Dbdim/B                  [0 2 2 0 2 0] (Db E  G  B) : diminished triad (altered bass)
+Dbdim/Bb                 [x 1 2 0 2 0] (Db E  G  Bb) : diminished triad (altered bass)
+Dbdim/Bb                 [x x 2 3 2 3] (Db E  G  Bb) : diminished triad (altered bass)
+Dbdim/D                  [3 x 0 0 2 0] (Db D  E  G) : diminished triad (altered bass)
+Dbdim/D                  [x x 0 0 2 0] (Db D  E  G) : diminished triad (altered bass)
+Dbdim7                   [x 1 2 0 2 0] (Db E  G  Bb) : diminished triad, diminished 7th
+Dbdim7                   [x x 2 3 2 3] (Db E  G  Bb) : diminished triad, diminished 7th
+Dbm                      [x 4 6 6 5 4] (Db E  Ab) : minor triad
+Dbm                      [x x 2 1 2 0] (Db E  Ab) : minor triad
+Dbm                      [x 4 6 6 x 0] (Db E  Ab) : minor triad
+Dbm/A                    [x 0 2 1 2 0] (Db E  Ab A) : minor triad (altered bass)
+Dbm/B                    [0 2 2 1 2 0] (Db E  Ab B) : minor triad (altered bass)
+Dbm/B                    [x 4 6 4 5 4] (Db E  Ab B) : minor triad (altered bass)
+Dbm7                     [0 2 2 1 2 0] (Db E  Ab B) : minor triad, minor 7th
+Dbm7                     [x 4 6 4 5 4] (Db E  Ab B) : minor triad, minor 7th
+Dbm7(b5)  or   Dbo7      [0 2 2 0 2 0] (Db E  G  B) : diminished triad, minor 7th : half-diminished 7th
+Dbmaj7    or   Db#7      [x 3 3 1 2 1] (C  Db F  Ab) : major triad, major 7th
+Dbmaj7    or   Db#7      [x 4 6 5 6 4] (C  Db F  Ab) : major triad, major 7th
+Dbsus2  or   Dbadd9(no3) [x x 6 6 4 4] (Db Eb Ab) : no 3rd but a 2nd from a major triad
+Dbsus4/Bb                [x x 4 3 2 4] (Db Gb Ab Bb) : sus4 triad (altered bass)
+Ddim/B                   [x 2 0 1 0 1] (D  F  Ab B) : diminished triad (altered bass)
+Ddim/B                   [x x 0 1 0 1] (D  F  Ab B) : diminished triad (altered bass)
+Ddim/B                   [x x 3 4 3 4] (D  F  Ab B) : diminished triad (altered bass)
+Ddim/Bb                  [x 1 3 1 3 1] (D  F  Ab Bb) : diminished triad (altered bass)
+Ddim/Bb                  [x x 3 3 3 4] (D  F  Ab Bb) : diminished triad (altered bass)
+Ddim/C                   [x x 0 1 1 1] (C  D  F  Ab) : diminished triad (altered bass)
+Ddim7                    [x 2 0 1 0 1] (D  F  Ab B) : diminished triad, diminished 7th
+Ddim7                    [x x 0 1 0 1] (D  F  Ab B) : diminished triad, diminished 7th
+Ddim7                    [x x 3 4 3 4] (D  F  Ab B) : diminished triad, diminished 7th
+Dm                       [x 0 0 2 3 1] (D  F  A) : minor triad
+Dm/B                     [1 2 3 2 3 1] (D  F  A  B) : minor triad (altered bass)
+Dm/B                     [x 2 0 2 0 1] (D  F  A  B) : minor triad (altered bass)
+Dm/B                     [x x 0 2 0 1] (D  F  A  B) : minor triad (altered bass)
+Dm/Bb                    [1 1 3 2 3 1] (D  F  A  Bb) : minor triad (altered bass)
+Dm/C                     [x 5 7 5 6 5] (C  D  F  A) : minor triad (altered bass)
+Dm/C                     [x x 0 2 1 1] (C  D  F  A) : minor triad (altered bass)
+Dm/C                     [x x 0 5 6 5] (C  D  F  A) : minor triad (altered bass)
+Dm/Db                    [x x 0 2 2 1] (Db D  F  A) : minor triad (altered bass)
+Dm/E                     [x x 7 7 6 0] (D  E  F  A) : minor triad (altered bass)
+Dm6                      [1 2 3 2 3 1] (D  F  A  B) : minor triad plus 6th
+Dm6                      [x 2 0 2 0 1] (D  F  A  B) : minor triad plus 6th
+Dm6                      [x x 0 2 0 1] (D  F  A  B) : minor triad plus 6th
+Dm7                      [x 5 7 5 6 5] (C  D  F  A) : minor triad, minor 7th
+Dm7                      [x x 0 2 1 1] (C  D  F  A) : minor triad, minor 7th
+Dm7                      [x x 0 5 6 5] (C  D  F  A) : minor triad, minor 7th
+Dm7(b5)   or   Do7       [x x 0 1 1 1] (C  D  F  Ab) : diminished triad, minor 7th : half-diminished 7th
+Dm7/add11 or   Dm7/11    [3 x 0 2 1 1] (C  D  F  G  A) : minor triad, minor 7th, plus 11th
+Dmaj7     or   D#7       [x x 0 14 14 14] (Db D  Gb A) : major triad, major 7th
+Dmaj7     or   D#7       [x x 0 2 2 2] (Db D  Gb A) : major triad, major 7th
+Dmin/maj7                [x x 0 2 2 1] (Db D  F  A) : minor triad, major 7th
+Dsus      or   Dsus4     [5 x 0 0 3 5] (D  G  A): no 3rd but a 4th from a major triad
+Dsus      or   Dsus4     [3 0 0 0 3 3] (D  G  A) : no 3rd but a 4th from a major triad
+Dsus      or   Dsus4     [x 0 0 0 3 3] (D  G  A) : no 3rd but a 4th from a major triad
+Dsus      or   Dsus4     [x x 0 2 3 3] (D  G  A) : no 3rd but a 4th from a major triad
+Dsus2     or   Dadd9(no3)[5 5 7 7 x 0] (D  E  A): no 3rd but a 2nd from a major triad
+Dsus2     or   Dadd9(no3)[x 0 0 2 3 0] (D  E  A): no 3rd but a 2nd from a major triad
+Dsus2     or   Dadd9(no3)[0 0 2 2 3 0] (D  E  A) : no 3rd but a 2nd from a major triad
+Dsus2     or   Dadd9(no3)[x 0 2 2 3 0] (D  E  A) : no 3rd but a 2nd from a major triad
+Dsus2     or   Dadd9(no3)[x x 0 2 3 0] (D  E  A) : no 3rd but a 2nd from a major triad
+Dsus2/Ab                 [4 x 0 2 3 0] (D  E  Ab A) : sus2 triad (altered bass)
+Dsus2/B                  [0 2 0 2 0 0] (D  E  A  B) : sus2 triad (altered bass)
+Dsus2/B                  [x 2 0 2 3 0] (D  E  A  B) : sus2 triad (altered bass)
+Dsus2/Bb                 [0 1 x 2 3 0] (D  E  A  Bb) : sus2 triad (altered bass)
+Dsus2/C                  [x x 0 2 1 0] (C  D  E  A) : sus2 triad (altered bass)
+Dsus2/C                  [x x 0 5 5 5] (C  D  E  A) : sus2 triad (altered bass)
+Dsus2/Db                 [x 0 0 2 2 0] (Db D  E  A) : sus2 triad (altered bass)
+Dsus2/Db                 [x x 0 2 2 0] (Db D  E  A) : sus2 triad (altered bass)
+Dsus2/Db                 [x x 0 6 5 5] (Db D  E  A) : sus2 triad (altered bass)
+Dsus2/Db                 [x x 0 9 10 9] (Db D  E  A) : sus2 triad (altered bass)
+Dsus2/F                  [x x 7 7 6 0] (D  E  F  A) : sus2 triad (altered bass)
+Dsus2/G                  [x 0 2 0 3 0] (D  E  G  A) : sus2 triad (altered bass)
+Dsus2/G                  [x 0 2 0 3 3] (D  E  G  A) : sus2 triad (altered bass)
+Dsus2/G                  [x 0 2 2 3 3] (D  E  G  A) : sus2 triad (altered bass)
+Dsus2/G                  [5 x 0 0 3 0] (D  E  G  A) : sus2 triad (altered bass)
+Dsus2/G                  [x 0 0 0 x 0] (D  E  G  A) : sus2 triad (altered bass)
+Dsus2/Gb                 [0 0 0 2 3 2] (D  E  Gb A) : sus2 triad (altered bass)
+Dsus2/Gb                 [0 0 4 2 3 0] (D  E  Gb A) : sus2 triad (altered bass)
+Dsus2/Gb                 [2 x 0 2 3 0] (D  E  Gb A) : sus2 triad (altered bass)
+Dsus2/Gb                 [x 0 2 2 3 2] (D  E  Gb A) : sus2 triad (altered bass)
+Dsus2/Gb                 [x x 2 2 3 2] (D  E  Gb A) : sus2 triad (altered bass)
+Dsus2/Gb                 [x 5 4 2 3 0] (D  E  Gb A) : sus2 triad (altered bass)
+Dsus2/Gb                 [x 9 7 7 x 0] (D  E  Gb A) : sus2 triad (altered bass)
+Dsus4/B                  [3 0 0 0 0 3] (D  G  A  B) : sus4 triad (altered bass)
+Dsus4/B                  [3 2 0 2 0 3] (D  G  A  B) : sus4 triad (altered bass)
+Dsus4/C                  [x 5 7 5 8 3] (C  D  G  A): sus4 triad (altered bass)
+Dsus4/C                  [x x 0 2 1 3] (C  D  G  A) : sus4 triad (altered bass)
+Dsus4/E                  [x 0 2 0 3 0] (D  E  G  A) : sus4 triad (altered bass)
+Dsus4/E                  [x 0 2 0 3 3] (D  E  G  A) : sus4 triad (altered bass)
+Dsus4/E                  [x 0 2 2 3 3] (D  E  G  A) : sus4 triad (altered bass)
+Dsus4/E                  [5 x 0 0 3 0] (D  E  G  A) : sus4 triad (altered bass)
+Dsus4/E                  [x 0 0 0 x 0] (D  E  G  A) : sus4 triad (altered bass)
+Dsus4/Gb                 [5 x 4 0 3 5] (D  Gb G  A): sus4 triad (altered bass)
+Dsus4/Gb                 [3 x 0 2 3 2] (D  Gb G  A) : sus4 triad (altered bass)
+E         or   Emaj      [0 2 2 1 0 0] (E  Ab B) : major triad
+E         or   Emaj      [x 7 6 4 5 0] (E  Ab B) : major triad
+E #5      or   Eaug      [x 3 2 1 1 0] (C  E  Ab) : augmented triad
+E/A                      [x 0 2 1 0 0] (E  Ab A  B) : major triad (altered bass)
+E/D                      [0 2 0 1 0 0] (D  E  Ab B) : major triad (altered bass)
+E/D                      [0 2 2 1 3 0] (D  E  Ab B) : major triad (altered bass)
+E/D                      [x 2 0 1 3 0] (D  E  Ab B) : major triad (altered bass)
+E/D                      [x x 0 1 0 0] (D  E  Ab B) : major triad (altered bass)
+E/Db                     [0 2 2 1 2 0] (Db E  Ab B) : major triad (altered bass)
+E/Db                     [x 4 6 4 5 4] (Db E  Ab B) : major triad (altered bass)
+E/Eb                     [0 2 1 1 0 0] (Eb E  Ab B) : major triad (altered bass)
+E/Eb                     [0 x 6 4 4 0] (Eb E  Ab B) : major triad (altered bass)
+E/Eb                     [x x 1 1 0 0] (Eb E  Ab B) : major triad (altered bass)
+E/Gb                     [0 2 2 1 0 2] (E  Gb Ab B) : major triad (altered bass)
+E/Gb                     [0 x 4 1 0 0] (E  Gb Ab B) : major triad (altered bass)
+E/Gb                     [2 2 2 1 0 0] (E  Gb Ab B) : major triad (altered bass)
+E11/b9                   [0 0 3 4 3 4] (D  E  F  Ab A  B) : major triad, minor 7th, flat 9th, plus 11th
+E5        or   E(no 3rd) [0 2 x x x 0] (E  B) : root and 5th (power chord)
+E5        or   E(no 3rd) [x 7 9 9 x 0] (E  B) : root and 5th (power chord)
+E6                       [0 2 2 1 2 0] (Db E  Ab B) : major triad plus 6th
+E6                       [x 4 6 4 5 4] (Db E  Ab B) : major triad plus 6th
+E7        or   Edom 7    [0 2 0 1 0 0] (D  E  Ab B) : major triad, minor 7th
+E7        or   Edom 7    [0 2 2 1 3 0] (D  E  Ab B) : major triad, minor 7th
+E7        or   Edom 7    [x 2 0 1 3 0] (D  E  Ab B) : major triad, minor 7th
+E7        or   Edom 7    [x x 0 1 0 0] (D  E  Ab B) : major triad, minor 7th
+E7/add11  or   E7/11     [x 0 0 1 0 0] (D  E  Ab A  B) : major triad, minor 7th, plus 11th
+E7/b9(b5)                [0 1 3 1 3 1] (D  E  F  Ab Bb) : diminished 5th, minor 7th, flat 9th
+E7sus4                   [0 2 0 2 0 0] (D  E  A  B) : sus4 triad, minor 7th
+E9        or   Edom 9    [0 2 0 1 0 2] (D  E  Gb Ab B) : major triad, minor 7th plus 9th
+E9        or   Edom 9    [2 2 0 1 0 0] (D  E  Gb Ab B) : major triad, minor 7th plus 9th
+Eadd9     or   E2        [0 2 2 1 0 2] (E  Gb Ab B) : major triad plus 9th
+Eadd9     or   E2        [0 x 4 1 0 0] (E  Gb Ab B) : major triad plus 9th
+Eadd9     or   E2        [2 2 2 1 0 0] (E  Gb Ab B) : major triad plus 9th
+Eb        or   Ebmaj     [x 1 1 3 4 3] (Eb G  Bb) : major triad
+Eb        or   Ebmaj     [x x 1 3 4 3] (Eb G  Bb) : major triad
+Eb        or   Ebmaj     [x x 5 3 4 3] (Eb G  Bb) : major triad
+Eb #5     or   Ebaug     [3 2 1 0 0 3] (Eb G  B) : augmented triad
+Eb #5     or   Ebaug     [3 x 1 0 0 3] (Eb G  B) : augmented triad
+Eb/C                     [x 3 5 3 4 3] (C  Eb G  Bb) : major triad (altered bass)
+Eb/D                     [x 6 8 7 8 6] (D  Eb G  Bb) : major triad (altered bass)
+Eb/Db                    [x 1 1 3 2 3] (Db Eb G  Bb) : major triad (altered bass)
+Eb/Db                    [x 6 8 6 8 6] (Db Eb G  Bb) : major triad (altered bass)
+Eb/Db                    [x x 1 3 2 3] (Db Eb G  Bb) : major triad (altered bass)
+Eb/E                     [x x 5 3 4 0] (Eb E  G  Bb) : major triad (altered bass)
+Eb5       or   Eb(no 3rd)[x 6 8 8 x 6] (Eb Bb): root and 5th (power chord)
+Eb6                      [x 3 5 3 4 3] (C  Eb G  Bb) : major triad plus 6th
+Eb7       or   Ebdom 7   [x 1 1 3 2 3] (Db Eb G  Bb) : major triad, minor 7th
+Eb7       or   Ebdom 7   [x 6 8 6 8 6] (Db Eb G  Bb) : major triad, minor 7th
+Eb7       or   Ebdom 7   [x x 1 3 2 3] (Db Eb G  Bb) : major triad, minor 7th
+Ebaug/E                  [3 x 1 0 0 0] (Eb E  G  B) : augmented triad (altered bass)
+Ebaug/E                  [x x 1 0 0 0] (Eb E  G  B) : augmented triad (altered bass)
+Ebdim/B                  [2 x 1 2 0 2] (Eb Gb A  B) : diminished triad (altered bass)
+Ebdim/B                  [x 0 1 2 0 2] (Eb Gb A  B) : diminished triad (altered bass)
+Ebdim/B                  [x 2 1 2 0 2] (Eb Gb A  B) : diminished triad (altered bass)
+Ebdim/B                  [x 2 4 2 4 2] (Eb Gb A  B) : diminished triad (altered bass)
+Ebdim/C                  [x x 1 2 1 2] (C  Eb Gb A) : diminished triad (altered bass)
+Ebdim7                   [x x 1 2 1 2] (C  Eb Gb A) : diminished triad, diminished 7th
+Ebm                      [x x 4 3 4 2] (Eb Gb Bb) : minor triad
+Ebm/Db                   [x x 1 3 2 2] (Db Eb Gb Bb) : minor triad (altered bass)
+Ebm7                     [x x 1 3 2 2] (Db Eb Gb Bb) : minor triad, minor 7th
+Ebmaj7    or   Eb#7      [x 6 8 7 8 6] (D  Eb G  Bb) : major triad, major 7th
+Ebsus2/Ab                [x 1 3 1 4 1] (Eb F  Ab Bb) : sus2 triad (altered bass)
+Ebsus4/F                 [x 1 3 1 4 1] (Eb F  Ab Bb) : sus4 triad (altered bass)
+Edim/C                   [x 3 5 3 5 3] (C  E  G  Bb) : diminished triad (altered bass)
+Edim/D                   [3 x 0 3 3 0] (D  E  G  Bb) : diminished triad (altered bass)
+Edim/Db                  [x 1 2 0 2 0] (Db E  G  Bb) : diminished triad (altered bass)
+Edim/Db                  [x x 2 3 2 3] (Db E  G  Bb) : diminished triad (altered bass)
+Edim/Eb                  [x x 5 3 4 0] (Eb E  G  Bb) : diminished triad (altered bass)
+Edim7                    [x 1 2 0 2 0] (Db E  G  Bb) : diminished triad, diminished 7th
+Edim7                    [x x 2 3 2 3] (Db E  G  Bb) : diminished triad, diminished 7th
+Em                       [0 2 2 0 0 0] (E  G  B) : minor triad
+Em                       [3 x 2 0 0 0] (E  G  B) : minor triad
+Em                       [x 2 5 x x 0] (E  G  B) : minor triad
+Em/A                     [3 x 2 2 0 0] (E  G  A  B) : minor triad (altered bass)
+Em/A                     [x 0 2 0 0 0] (E  G  A  B) : minor triad (altered bass)
+Em/A                     [x 0 5 4 5 0] (E  G  A  B) : minor triad (altered bass)
+Em/C                     [0 3 2 0 0 0] (C  E  G  B) : minor triad (altered bass)
+Em/C                     [x 2 2 0 1 0] (C  E  G  B) : minor triad (altered bass)
+Em/C                     [x 3 5 4 5 3] (C  E  G  B) : minor triad (altered bass)
+Em/D                     [0 2 0 0 0 0] (D  E  G  B) : minor triad (altered bass)
+Em/D                     [0 2 0 0 3 0] (D  E  G  B) : minor triad (altered bass)
+Em/D                     [0 2 2 0 3 0] (D  E  G  B) : minor triad (altered bass)
+Em/D                     [0 2 2 0 3 3] (D  E  G  B) : minor triad (altered bass)
+Em/D                     [x x 0 12 12 12] (D  E  G  B) : minor triad (altered bass)
+Em/D                     [x x 0 9 8 7] (D  E  G  B) : minor triad (altered bass)
+Em/D                     [x x 2 4 3 3] (D  E  G  B) : minor triad (altered bass)
+Em/D                     [0 x 0 0 0 0] (D  E  G  B) : minor triad (altered bass)
+Em/D                     [x 10 12 12 12 0] (D  E  G  B) : minor triad (altered bass)
+Em/Db                    [0 2 2 0 2 0] (Db E  G  B) : minor triad (altered bass)
+Em/Eb                    [3 x 1 0 0 0] (Eb E  G  B) : minor triad (altered bass)
+Em/Eb                    [x x 1 0 0 0] (Eb E  G  B) : minor triad (altered bass)
+Em/Gb                    [0 2 2 0 0 2] (E  Gb G  B) : minor triad (altered bass)
+Em/Gb                    [0 2 4 0 0 0] (E  Gb G  B) : minor triad (altered bass)
+Em/Gb                    [0 x 4 0 0 0] (E  Gb G  B) : minor triad (altered bass)
+Em/Gb                    [2 2 2 0 0 0] (E  Gb G  B) : minor triad (altered bass)
+Em6                      [0 2 2 0 2 0] (Db E  G  B) : minor triad plus 6th
+Em7                      [0 2 0 0 0 0] (D  E  G  B) : minor triad, minor 7th
+Em7                      [0 2 0 0 3 0] (D  E  G  B) : minor triad, minor 7th
+Em7                      [0 2 2 0 3 0] (D  E  G  B) : minor triad, minor 7th
+Em7                      [0 2 2 0 3 3] (D  E  G  B) : minor triad, minor 7th
+Em7                      [x x 0 0 0 0] (D  E  G  B) : minor triad, minor 7th
+Em7                      [x x 0 12 12 12] (D  E  G  B) : minor triad, minor 7th
+Em7                      [x x 0 9 8 7] (D  E  G  B) : minor triad, minor 7th
+Em7                      [x x 2 4 3 3] (D  E  G  B) : minor triad, minor 7th
+Em7                      [0 x 0 0 0 0] (D  E  G  B) : minor triad, minor 7th
+Em7                      [x 10 12 12 12 0] (D  E  G  B) : minor triad, minor 7th
+Em7(b5)   or   Eo7       [3 x 0 3 3 0] (D  E  G  Bb) : diminished triad, minor 7th : half-diminished 7th
+Em7/add11 or   Em7/11    [0 0 0 0 0 0] (D  E  G  A  B) : minor triad, minor 7th, plus 11th
+Em7/add11 or   Em7/11    [0 0 0 0 0 3] (D  E  G  A  B) : minor triad, minor 7th, plus 11th
+Em7/add11 or   Em7/11    [3 x 0 2 0 0] (D  E  G  A  B) : minor triad, minor 7th, plus 11th
+Em9                      [0 2 0 0 0 2] (D  E  Gb G  B) : minor triad, minor 7th plus 9th
+Em9                      [0 2 0 0 3 2] (D  E  Gb G  B) : minor triad, minor 7th plus 9th
+Em9                      [2 2 0 0 0 0] (D  E  Gb G  B) : minor triad, minor 7th plus 9th
+Emaj7     or   E#7       [0 2 1 1 0 0] (Eb E  Ab B) : major triad, major 7th
+Emaj7     or   E#7       [0 x 6 4 4 0] (Eb E  Ab B) : major triad, major 7th
+Emaj7     or   E#7       [x x 1 1 0 0] (Eb E  Ab B) : major triad, major 7th
+Emaj9     or   E9(#7)    [0 2 1 1 0 2] (Eb E  Gb Ab B) : major triad, major 7th plus 9th
+Emaj9     or   E9(#7)    [4 x 4 4 4 0] (Eb E  Gb Ab B) : major triad, major 7th plus 9th
+Emin/maj7                [3 x 1 0 0 0] (Eb E  G  B) : minor triad, major 7th
+Emin/maj7                [x x 1 0 0 0] (Eb E  G  B) : minor triad, major 7th
+Emin/maj9                [0 6 4 0 0 0] (Eb E  Gb G  B) : minor triad, major 7th plus 9th
+Esus      or   Esus4     [0 0 2 2 0 0] (E  A  B) : no 3rd but a 4th from a major triad
+Esus      or   Esus4     [0 0 2 4 0 0] (E  A  B) : no 3rd but a 4th from a major triad
+Esus      or   Esus4     [0 2 2 2 0 0] (E  A  B) : no 3rd but a 4th from a major triad
+Esus      or   Esus4     [x 0 2 2 0 0] (E  A  B) : no 3rd but a 4th from a major triad
+Esus      or   Esus4     [x x 2 2 0 0] (E  A  B) : no 3rd but a 4th from a major triad
+Esus2     or   Eadd9(no3)[7 9 9 x x 0] (E  Gb B): no 3rd but a 2nd from a major triad
+Esus2     or   Eadd9(no3)[x 2 4 4 x 0] (E  Gb B): no 3rd but a 2nd from a major triad
+Esus2/A                  [x 0 4 4 0 0] (E  Gb A  B) : sus2 triad (altered bass)
+Esus2/A                  [x 2 4 2 5 2] (E  Gb A  B) : sus2 triad (altered bass)
+Esus2/Ab                 [0 2 2 1 0 2] (E  Gb Ab B) : sus2 triad (altered bass)
+Esus2/Ab                 [0 x 4 1 0 0] (E  Gb Ab B) : sus2 triad (altered bass)
+Esus2/Ab                 [2 2 2 1 0 0] (E  Gb Ab B) : sus2 triad (altered bass)
+Esus2/Db                 [x 4 4 4 x 0] (Db E  Gb B) : sus2 triad (altered bass)
+Esus2/Eb                 [x 2 2 4 4 2] (Eb E  Gb B) : sus2 triad (altered bass)
+Esus2/Eb                 [x x 4 4 4 0] (Eb E  Gb B) : sus2 triad (altered bass)
+Esus2/G                  [0 2 2 0 0 2] (E  Gb G  B) : sus2 triad (altered bass)
+Esus2/G                  [0 2 4 0 0 0] (E  Gb G  B) : sus2 triad (altered bass)
+Esus2/G                  [0 x 4 0 0 0] (E  Gb G  B) : sus2 triad (altered bass)
+Esus2/G                  [2 2 2 0 0 0] (E  Gb G  B) : sus2 triad (altered bass)
+Esus4/Ab                 [x 0 2 1 0 0] (E  Ab A  B) : sus4 triad (altered bass)
+Esus4/C                  [0 0 7 5 0 0] (C  E  A  B) : sus4 triad (altered bass)
+Esus4/C                  [x 3 2 2 0 0] (C  E  A  B) : sus4 triad (altered bass)
+Esus4/D                  [0 2 0 2 0 0] (D  E  A  B) : sus4 triad (altered bass)
+Esus4/D                  [x 2 0 2 3 0] (D  E  A  B) : sus4 triad (altered bass)
+Esus4/Db                 [0 0 2 4 2 0] (Db E  A  B) : sus4 triad (altered bass)
+Esus4/Db                 [x 0 7 6 0 0] (Db E  A  B) : sus4 triad (altered bass)
+Esus4/Eb                 [x 2 1 2 0 0] (Eb E  A  B) : sus4 triad (altered bass)
+Esus4/F                  [0 0 3 2 0 0] (E  F  A  B) : sus4 triad (altered bass)
+Esus4/G                  [3 x 2 2 0 0] (E  G  A  B) : sus4 triad (altered bass)
+Esus4/G                  [x 0 2 0 0 0] (E  G  A  B) : sus4 triad (altered bass)
+Esus4/G                  [x 0 5 4 5 0] (E  G  A  B) : sus4 triad (altered bass)
+Esus4/Gb                 [x 0 4 4 0 0] (E  Gb A  B) : sus4 triad (altered bass)
+Esus4/Gb                 [x 2 4 2 5 2] (E  Gb A  B) : sus4 triad (altered bass)
+F         or   Fmaj      [1 3 3 2 1 1] (C  F  A) : major triad
+F         or   Fmaj      [x 0 3 2 1 1] (C  F  A) : major triad
+F         or   Fmaj      [x 3 3 2 1 1] (C  F  A) : major triad
+F         or   Fmaj      [x x 3 2 1 1] (C  F  A) : major triad
+F #5      or   Faug      [x 0 3 2 2 1] (Db F  A) : augmented triad
+F #5      or   Faug      [x 0 x 2 2 1] (Db F  A) : augmented triad
+F/D                      [x 5 7 5 6 5] (C  D  F  A) : major triad (altered bass)
+F/D                      [x x 0 2 1 1] (C  D  F  A) : major triad (altered bass)
+F/D                      [x x 0 5 6 5] (C  D  F  A) : major triad (altered bass)
+F/E                      [0 0 3 2 1 0] (C  E  F  A) : major triad (altered bass)
+F/E                      [1 3 3 2 1 0] (C  E  F  A) : major triad (altered bass)
+F/E                      [1 x 2 2 1 0] (C  E  F  A) : major triad (altered bass)
+F/E                      [x x 2 2 1 1] (C  E  F  A) : major triad (altered bass)
+F/E                      [x x 3 2 1 0] (C  E  F  A) : major triad (altered bass)
+F/Eb                     [x x 1 2 1 1] (C  Eb F  A) : major triad (altered bass)
+F/Eb                     [x x 3 5 4 5] (C  Eb F  A) : major triad (altered bass)
+F/G                      [3 x 3 2 1 1] (C  F  G  A) : major triad (altered bass)
+F/G                      [x x 3 2 1 3] (C  F  G  A) : major triad (altered bass)
+F5        or   F(no 3rd) [1 3 3 x x 1] (C  F): root and 5th (power chord)
+F5        or   F(no 3rd) [x 8 10 x x 1] (C  F): root and 5th (power chord)
+F6                       [x 5 7 5 6 5] (C  D  F  A) : major triad plus 6th
+F6                       [x x 0 2 1 1] (C  D  F  A) : major triad plus 6th
+F6                       [x x 0 5 6 5] (C  D  F  A) : major triad plus 6th
+F6/add9   or   F6/9      [3 x 0 2 1 1] (C  D  F  G  A) : major triad plus 6th and 9th
+F7        or   Fdom 7    [x x 1 2 1 1] (C  Eb F  A) : major triad, minor 7th
+F7        or   Fdom 7    [x x 3 5 4 5] (C  Eb F  A) : major triad, minor 7th
+Fadd9     or   F2        [3 x 3 2 1 1] (C  F  G  A) : major triad plus 9th
+Fadd9     or   F2        [x x 3 2 1 3] (C  F  G  A) : major triad plus 9th
+Faug/D                   [x x 0 2 2 1] (Db D  F  A) : augmented triad (altered bass)
+Faug/G                   [1 0 3 0 2 1] (Db F  G  A) : augmented triad (altered bass)
+Fdim/D                   [x 2 0 1 0 1] (D  F  Ab B) : diminished triad (altered bass)
+Fdim/D                   [x x 0 1 0 1] (D  F  Ab B) : diminished triad (altered bass)
+Fdim/D                   [x x 3 4 3 4] (D  F  Ab B) : diminished triad (altered bass)
+Fdim/Db                  [x 4 3 4 0 4] (Db F  Ab B) : diminished triad (altered bass)
+Fdim7                    [x 2 0 1 0 1] (D  F  Ab B) : diminished triad, diminished 7th
+Fdim7                    [x x 0 1 0 1] (D  F  Ab B) : diminished triad, diminished 7th
+Fdim7                    [x x 3 4 3 4] (D  F  Ab B) : diminished triad, diminished 7th
+Fm                       [x 3 3 1 1 1] (C  F  Ab) : minor triad
+Fm                       [x x 3 1 1 1] (C  F  Ab) : minor triad
+Fm/D                     [x x 0 1 1 1] (C  D  F  Ab) : minor triad (altered bass)
+Fm/Db                    [x 3 3 1 2 1] (C  Db F  Ab) : minor triad (altered bass)
+Fm/Db                    [x 4 6 5 6 4] (C  Db F  Ab) : minor triad (altered bass)
+Fm/Eb                    [x 8 10 8 9 8] (C  Eb F  Ab) : minor triad (altered bass)
+Fm/Eb                    [x x 1 1 1 1] (C  Eb F  Ab) : minor triad (altered bass)
+Fm6                      [x x 0 1 1 1] (C  D  F  Ab) : minor triad plus 6th
+Fm7                      [x 8 10 8 9 8] (C  Eb F  Ab) : minor triad, minor 7th
+Fm7                      [x x 1 1 1 1] (C  Eb F  Ab) : minor triad, minor 7th
+Fmaj7     or   F#7       [0 0 3 2 1 0] (C  E  F  A) : major triad, major 7th
+Fmaj7     or   F#7       [1 3 3 2 1 0] (C  E  F  A) : major triad, major 7th
+Fmaj7     or   F#7       [1 x 2 2 1 0] (C  E  F  A) : major triad, major 7th
+Fmaj7     or   F#7       [x x 2 2 1 1] (C  E  F  A) : major triad, major 7th
+Fmaj7     or   F#7       [x x 3 2 1 0] (C  E  F  A) : major triad, major 7th
+Fmaj7/#11                [0 2 3 2 1 0] (C  E  F  A  B) : major triad, major 7th, augmented 11th
+Fmaj7/#11                [1 3 3 2 0 0] (C  E  F  A  B) : major triad, major 7th, augmented 11th
+Fmaj9     or   F9(#7)    [0 0 3 0 1 3] (C  E  F  G  A) : major triad, major 7th plus 9th
+Fsus      or   Fsus4     [x x 3 3 1 1] (C  F  Bb) : no 3rd but a 4th from a major triad
+Fsus2     or   Fadd9(no3)[x 3 3 0 1 1] (C  F  G) : no 3rd but a 2nd from a major triad
+Fsus2     or   Fadd9(no3)[x x 3 0 1 1] (C  F  G) : no 3rd but a 2nd from a major triad
+Fsus2/A                  [3 x 3 2 1 1] (C  F  G  A) : sus2 triad (altered bass)
+Fsus2/A                  [x x 3 2 1 3] (C  F  G  A) : sus2 triad (altered bass)
+Fsus2/B                  [x 3 3 0 0 3] (C  F  G  B) : sus2 triad (altered bass)
+Fsus2/Bb                 [x 3 5 3 6 3] (C  F  G  Bb) : sus2 triad (altered bass)
+Fsus2/D                  [3 3 0 0 1 1] (C  D  F  G) : sus2 triad (altered bass)
+Fsus2/E                  [x 3 3 0 1 0] (C  E  F  G) : sus2 triad (altered bass)
+Fsus2/E                  [x x 3 0 1 0] (C  E  F  G) : sus2 triad (altered bass)
+Fsus4/G                  [x 3 5 3 6 3] (C  F  G  Bb) : sus4 triad (altered bass)
+G         or   Gmaj      [x 10 12 12 12 10] (D  G  B): major triad
+G         or   Gmaj      [3 2 0 0 0 3] (D  G  B) : major triad
+G         or   Gmaj      [3 2 0 0 3 3] (D  G  B) : major triad
+G         or   Gmaj      [3 5 5 4 3 3] (D  G  B) : major triad
+G         or   Gmaj      [3 x 0 0 0 3] (D  G  B) : major triad
+G         or   Gmaj      [x 5 5 4 3 3] (D  G  B) : major triad
+G         or   Gmaj      [x x 0 4 3 3] (D  G  B) : major triad
+G         or   Gmaj      [x x 0 7 8 7] (D  G  B) : major triad
+G #5      or   Gaug      [3 2 1 0 0 3] (Eb G  B) : augmented triad
+G #5      or   Gaug      [3 x 1 0 0 3] (Eb G  B) : augmented triad
+G/A                      [3 0 0 0 0 3] (D  G  A  B) : major triad (altered bass)
+G/A                      [3 2 0 2 0 3] (D  G  A  B) : major triad (altered bass)
+G/C                      [3 3 0 0 0 3] (C  D  G  B) : major triad (altered bass)
+G/C                      [x 3 0 0 0 3] (C  D  G  B) : major triad (altered bass)
+G/E                      [0 2 0 0 0 0] (D  E  G  B) : major triad (altered bass)
+G/E                      [0 2 0 0 3 0] (D  E  G  B) : major triad (altered bass)
+G/E                      [0 2 2 0 3 0] (D  E  G  B) : major triad (altered bass)
+G/E                      [0 2 2 0 3 3] (D  E  G  B) : major triad (altered bass)
+G/E                      [x x 0 12 12 12] (D  E  G  B) : major triad (altered bass)
+G/E                      [x x 0 9 8 7] (D  E  G  B) : major triad (altered bass)
+G/E                      [x x 2 4 3 3] (D  E  G  B) : major triad (altered bass)
+G/E                      [0 x 0 0 0 0] (D  E  G  B) : major triad (altered bass)
+G/E                      [x 10 12 12 12 0] (D  E  G  B) : major triad (altered bass)
+G/F                      [1 x 0 0 0 3] (D  F  G  B) : major triad (altered bass)
+G/F                      [3 2 0 0 0 1] (D  F  G  B) : major triad (altered bass)
+G/F                      [x x 0 0 0 1] (D  F  G  B) : major triad (altered bass)
+G/Gb                     [2 2 0 0 0 3] (D  Gb G  B) : major triad (altered bass)
+G/Gb                     [2 2 0 0 3 3] (D  Gb G  B) : major triad (altered bass)
+G/Gb                     [3 2 0 0 0 2] (D  Gb G  B) : major triad (altered bass)
+G/Gb                     [x x 4 4 3 3] (D  Gb G  B) : major triad (altered bass)
+G5        or   G(no 3rd) [3 5 5 x x 3] (D  G): root and 5th (power chord)
+G5        or   G(no 3rd) [3 x 0 0 3 3] (D  G) : root and 5th (power chord)
+G6                       [0 2 0 0 0 0] (D  E  G  B) : major triad plus 6th
+G6                       [0 2 0 0 3 0] (D  E  G  B) : major triad plus 6th
+G6                       [0 2 2 0 3 0] (D  E  G  B) : major triad plus 6th
+G6                       [0 2 2 0 3 3] (D  E  G  B) : major triad plus 6th
+G6                       [x x 0 12 12 12] (D  E  G  B) : major triad plus 6th
+G6                       [x x 0 9 8 7] (D  E  G  B) : major triad plus 6th
+G6                       [x x 2 4 3 3] (D  E  G  B) : major triad plus 6th
+G6                       [0 x 0 0 0 0] (D  E  G  B) : major triad plus 6th
+G6                       [x 10 12 12 12 0] (D  E  G  B) : major triad plus 6th
+G6/add9   or   G6/9      [0 0 0 0 0 0] (D  E  G  A  B) : major triad plus 6th and 9th
+G6/add9   or   G6/9      [0 0 0 0 0 3] (D  E  G  A  B) : major triad plus 6th and 9th
+G6/add9   or   G6/9      [3 x 0 2 0 0] (D  E  G  A  B) : major triad plus 6th and 9th
+G7        or   Gdom 7    [1 x 0 0 0 3] (D  F  G  B) : major triad, minor 7th
+G7        or   Gdom 7    [3 2 0 0 0 1] (D  F  G  B) : major triad, minor 7th
+G7        or   Gdom 7    [x x 0 0 0 1] (D  F  G  B) : major triad, minor 7th
+G7/add11  or   G7/11     [x 3 0 0 0 1] (C  D  F  G  B) : major triad, minor 7th, plus 11th
+G7sus4                   [3 3 0 0 1 1] (C  D  F  G) : sus4 triad, minor 7th
+G9        or   Gdom 9    [x 0 0 0 0 1] (D  F  G  A  B) : major triad, minor 7th plus 9th
+G9        or   Gdom 9    [x 2 3 2 3 3] (D  F  G  A  B) : major triad, minor 7th plus 9th
+Gadd9     or   G2        [3 0 0 0 0 3] (D  G  A  B) : major triad plus 9th
+Gadd9     or   G2        [3 2 0 2 0 3] (D  G  A  B) : major triad plus 9th
+Gaug/E                   [3 x 1 0 0 0] (Eb E  G  B) : augmented triad (altered bass)
+Gaug/E                   [x x 1 0 0 0] (Eb E  G  B) : augmented triad (altered bass)
+Gb        or   Gbmaj     [2 4 4 3 2 2] (Db Gb Bb) : major triad
+Gb        or   Gbmaj     [x 4 4 3 2 2] (Db Gb Bb) : major triad
+Gb        or   Gbmaj     [x x 4 3 2 2] (Db Gb Bb) : major triad
+Gb #5     or   Gbaug     [x x 0 3 3 2] (D  Gb Bb) : augmented triad
+Gb/Ab                    [x x 4 3 2 4] (Db Gb Ab Bb) : major triad (altered bass)
+Gb/E                     [2 4 2 3 2 2] (Db E  Gb Bb) : major triad (altered bass)
+Gb/E                     [x x 4 3 2 0] (Db E  Gb Bb) : major triad (altered bass)
+Gb/Eb                    [x x 1 3 2 2] (Db Eb Gb Bb) : major triad (altered bass)
+Gb/F                     [x x 3 3 2 2] (Db F  Gb Bb) : major triad (altered bass)
+Gb6                      [x x 1 3 2 2] (Db Eb Gb Bb) : major triad plus 6th
+Gb7       or   Gbdom 7   [2 4 2 3 2 2] (Db E  Gb Bb) : major triad, minor 7th
+Gb7       or   Gbdom 7   [x x 4 3 2 0] (Db E  Gb Bb) : major triad, minor 7th
+Gb7(#5)                  [2 x 4 3 3 0] (D  E  Gb Bb) : minor 7th, sharp 5th
+Gb7/#9                   [x 0 4 3 2 0] (Db E  Gb A  Bb) : major triad, minor 7th augmented 9th
+Gb7sus4                  [x 4 4 4 x 0] (Db E  Gb B) : sus4 triad, minor 7th
+Gbadd9    or   Gb2       [x x 4 3 2 4] (Db Gb Ab Bb) : major triad plus 9th
+Gbaug/E                  [2 x 4 3 3 0] (D  E  Gb Bb) : augmented triad (altered bass)
+Gbdim/D                  [x 5 7 5 7 2] (C  D  Gb A): diminished triad (altered bass)
+Gbdim/D                  [x 0 0 2 1 2] (C  D  Gb A) : diminished triad (altered bass)
+Gbdim/D                  [x 3 x 2 3 2] (C  D  Gb A) : diminished triad (altered bass)
+Gbdim/D                  [x 5 7 5 7 5] (C  D  Gb A) : diminished triad (altered bass)
+Gbdim/E                  [x 0 2 2 1 2] (C  E  Gb A) : diminished triad (altered bass)
+Gbdim/E                  [x x 2 2 1 2] (C  E  Gb A) : diminished triad (altered bass)
+Gbdim/Eb                 [x x 1 2 1 2] (C  Eb Gb A) : diminished triad (altered bass)
+Gbdim7                   [x x 1 2 1 2] (C  Eb Gb A) : diminished triad, diminished 7th
+Gbm                      [2 4 4 2 2 2] (Db Gb A) : minor triad
+Gbm                      [x 4 4 2 2 2] (Db Gb A) : minor triad
+Gbm                      [x x 4 2 2 2] (Db Gb A) : minor triad
+Gbm/D                    [x x 0 14 14 14] (Db D  Gb A) : minor triad (altered bass)
+Gbm/D                    [x x 0 2 2 2] (Db D  Gb A) : minor triad (altered bass)
+Gbm/E                    [0 0 2 2 2 2] (Db E  Gb A) : minor triad (altered bass)
+Gbm/E                    [0 x 4 2 2 0] (Db E  Gb A) : minor triad (altered bass)
+Gbm/E                    [2 x 2 2 2 0] (Db E  Gb A) : minor triad (altered bass)
+Gbm/E                    [x 0 4 2 2 0] (Db E  Gb A) : minor triad (altered bass)
+Gbm/E                    [x x 2 2 2 2] (Db E  Gb A) : minor triad (altered bass)
+Gbm7                     [0 0 2 2 2 2] (Db E  Gb A) : minor triad, minor 7th
+Gbm7                     [0 x 4 2 2 0] (Db E  Gb A) : minor triad, minor 7th
+Gbm7                     [2 x 2 2 2 0] (Db E  Gb A) : minor triad, minor 7th
+Gbm7                     [x 0 4 2 2 0] (Db E  Gb A) : minor triad, minor 7th
+Gbm7                     [x x 2 2 2 2] (Db E  Gb A) : minor triad, minor 7th
+Gbm7(b5)  or   Gbo7      [x 0 2 2 1 2] (C  E  Gb A) : diminished triad, minor 7th : half-diminished 7th
+Gbm7(b5)  or   Gbo7      [x x 2 2 1 2] (C  E  Gb A) : diminished triad, minor 7th : half-diminished 7th
+Gbm7/b9                  [0 0 2 0 2 2] (Db E  Gb G  A) : minor triad, minor 7th flat 9th
+Gbmaj7    or   Gb#7      [x x 3 3 2 2] (Db F  Gb Bb) : major triad, major 7th
+Gbsus     or   Gbsus4    [x 4 4 4 2 2] (Db Gb B) : no 3rd but a 4th from a major triad
+Gbsus2/Bb                [x x 4 3 2 4] (Db Gb Ab Bb) : sus2 triad (altered bass)
+Gbsus4/E                 [x 4 4 4 x 0] (Db E  Gb B) : sus4 triad (altered bass)
+Gdim/E                   [x 1 2 0 2 0] (Db E  G  Bb) : diminished triad (altered bass)
+Gdim/E                   [x x 2 3 2 3] (Db E  G  Bb) : diminished triad (altered bass)
+Gdim/Eb                  [x 1 1 3 2 3] (Db Eb G  Bb) : diminished triad (altered bass)
+Gdim/Eb                  [x 6 8 6 8 6] (Db Eb G  Bb) : diminished triad (altered bass)
+Gdim/Eb                  [x x 1 3 2 3] (Db Eb G  Bb) : diminished triad (altered bass)
+Gdim7                    [x 1 2 0 2 0] (Db E  G  Bb) : diminished triad, diminished 7th
+Gdim7                    [x x 2 3 2 3] (Db E  G  Bb) : diminished triad, diminished 7th
+Gm                       [3 5 5 3 3 3] (D  G  Bb) : minor triad
+Gm                       [x x 0 3 3 3] (D  G  Bb) : minor triad
+Gm/E                     [3 x 0 3 3 0] (D  E  G  Bb) : minor triad (altered bass)
+Gm/Eb                    [x 6 8 7 8 6] (D  Eb G  Bb) : minor triad (altered bass)
+Gm/F                     [3 5 3 3 3 3] (D  F  G  Bb) : minor triad (altered bass)
+Gm/F                     [x x 3 3 3 3] (D  F  G  Bb) : minor triad (altered bass)
+Gm13                     [0 0 3 3 3 3] (D  E  F  G  A  Bb) : minor triad, minor 7th, plus 9th and 13th
+Gm6                      [3 x 0 3 3 0] (D  E  G  Bb) : minor triad plus 6th
+Gm7                      [3 5 3 3 3 3] (D  F  G  Bb) : minor triad, minor 7th
+Gm7                      [x x 3 3 3 3] (D  F  G  Bb) : minor triad, minor 7th
+Gm7/add11 or   Gm7/11    [x 3 3 3 3 3] (C  D  F  G  Bb) : minor triad, minor 7th, plus 11th
+Gm9                      [3 5 3 3 3 5] (D  F  G  A  Bb) : minor triad, minor 7th plus 9th
+Gmaj7     or   G#7       [2 2 0 0 0 3] (D  Gb G  B) : major triad, major 7th
+Gmaj7     or   G#7       [2 2 0 0 3 3] (D  Gb G  B) : major triad, major 7th
+Gmaj7     or   G#7       [3 2 0 0 0 2] (D  Gb G  B) : major triad, major 7th
+Gmaj7     or   G#7       [x x 4 4 3 3] (D  Gb G  B) : major triad, major 7th
+Gsus      or   Gsus4     [x 10 12 12 13 3] (C  D  G): no 3rd but a 4th from a major triad
+Gsus      or   Gsus4     [x 3 0 0 3 3] (C  D  G) : no 3rd but a 4th from a major triad
+Gsus      or   Gsus4     [x 3 5 5 3 3] (C  D  G) : no 3rd but a 4th from a major triad
+Gsus      or   Gsus4     [x 5 5 5 3 3] (C  D  G) : no 3rd but a 4th from a major triad
+Gsus2     or   Gadd9(no3)[5 x 0 0 3 5] (D  G  A): no 3rd but a 2nd from a major triad
+Gsus2     or   Gadd9(no3)[3 0 0 0 3 3] (D  G  A) : no 3rd but a 2nd from a major triad
+Gsus2     or   Gadd9(no3)[x 0 0 0 3 3] (D  G  A) : no 3rd but a 2nd from a major triad
+Gsus2     or   Gadd9(no3)[x x 0 2 3 3] (D  G  A) : no 3rd but a 2nd from a major triad
+Gsus2/B                  [3 0 0 0 0 3] (D  G  A  B) : sus2 triad (altered bass)
+Gsus2/B                  [3 2 0 2 0 3] (D  G  A  B) : sus2 triad (altered bass)
+Gsus2/C                  [x 5 7 5 8 3] (C  D  G  A): sus2 triad (altered bass)
+Gsus2/C                  [x x 0 2 1 3] (C  D  G  A) : sus2 triad (altered bass)
+Gsus2/E                  [x 0 2 0 3 0] (D  E  G  A) : sus2 triad (altered bass)
+Gsus2/E                  [x 0 2 0 3 3] (D  E  G  A) : sus2 triad (altered bass)
+Gsus2/E                  [x 0 2 2 3 3] (D  E  G  A) : sus2 triad (altered bass)
+Gsus2/E                  [5 0 0 0 3 0] (D  E  G  A) : sus2 triad (altered bass)
+Gsus2/Gb                 [5 x 4 0 3 5] (D  Gb G  A): sus2 triad (altered bass)
+Gsus2/Gb                 [3 x 0 2 3 2] (D  Gb G  A) : sus2 triad (altered bass)
+Gsus4/A                  [x 5 7 5 8 3] (C  D  G  A): sus4 triad (altered bass)
+Gsus4/A                  [x x 0 2 1 3] (C  D  G  A) : sus4 triad (altered bass)
+Gsus4/B                  [3 3 0 0 0 3] (C  D  G  B) : sus4 triad (altered bass)
+Gsus4/B                  [x 3 0 0 0 3] (C  D  G  B) : sus4 triad (altered bass)
+Gsus4/E                  [3 x 0 0 1 0] (C  D  E  G) : sus4 triad (altered bass)
+Gsus4/E                  [x 3 0 0 1 0] (C  D  E  G) : sus4 triad (altered bass)
+Gsus4/E                  [x 3 2 0 3 0] (C  D  E  G) : sus4 triad (altered bass)
+Gsus4/E                  [x 3 2 0 3 3] (C  D  E  G) : sus4 triad (altered bass)
+Gsus4/E                  [x x 0 0 1 0] (C  D  E  G) : sus4 triad (altered bass)
+Gsus4/E                  [x x 0 5 5 3] (C  D  E  G) : sus4 triad (altered bass)
+Gsus4/E                  [x 10 12 12 13 0] (C  D  E  G) : sus4 triad (altered bass)
+Gsus4/E                  [x 5 5 5 x 0] (C  D  E  G) : sus4 triad (altered bass)
+Gsus4/F                  [3 3 0 0 1 1] (C  D  F  G) : sus4 triad (altered bass)
+

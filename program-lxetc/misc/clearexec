@@ -1,0 +1,15 @@
+
+__my_post_clearexec () {
+	ln -sf /mnt/win/mitesh/lxadmin-img/ img; 
+	if [ $1 = "grep" ] ; then
+		/bin/mv ../__old.tag tags 2>/dev/null
+	fi
+}
+
+__my_pre_clearexec () {
+	rm img; 
+	if [ $1 = "grep" ] ; then
+		/bin/mv tags ../__old.tag
+	fi
+}
+

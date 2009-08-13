@@ -1,0 +1,11 @@
+folder-hook . my_hdr from: %fullname% <%username%@lxlabs.com>
+folder-hook . my_hdr Reply-To: %username%@lxlabs.com
+folder-hook . unmy_hdr bcc
+folder-hook . set record="+/sent/sent"
+folder-hook . set signature=""
+folder-hook . set postponed="+/postponed"
+folder-hook . set reverse_alias=no
+
+
+folder-hook mbox set record="+/mboxes/mbox"
+folder-hook lxlabs-forums set record="+/mboxes/lxlabs-forums"

@@ -1,0 +1,14 @@
+export TERM=xterm
+lsmod	() {	modstat "$@" ; 			}
+alias ls='/usr/bin/ls -F'
+ps	() {	if [ "$1" = "ax" ] ; then
+			ps -aef ;
+		else
+			ps -"$@" ;
+		fi;				}
+mn	() {	man "$@" | col -b > ~/.etc/.tmp/Manual. ;
+		if [ "$PIPESTATUS" == 0 ] ; then
+			 vi ~/.etc/.tmp/Manual. ; fi ;	}
+
+
+make	() {	gmake "$@" ; 				}

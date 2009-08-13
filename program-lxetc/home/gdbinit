@@ -1,0 +1,210 @@
+set history filename ~/.etc/.tmp/.gdbhist
+set history save
+set history size 3333
+set print pretty
+set width 100
+
+define rmtz
+	set remotebaud 38400
+	target remote /dev/ttyc0
+end
+
+define rmts
+	set remotebaud 38400
+	target remote /dev/ttyS0
+end
+
+define nrmt
+	target remote localhost:1234
+end
+
+define rmtn
+	set remotebreak 1
+	set remotebaud 9600
+	target remote /dev/ttyS0
+end
+
+define hr 
+	thr $arg0
+end
+
+define srcinit
+	source $HOME/.gdbinit
+end
+
+
+define rmto
+	set remotebaud 38400
+	target remote /dev/ttyc1
+end
+
+define fs 
+	finish
+end
+
+set $i=0
+
+define coms
+	comm $arg0
+	silent
+	f
+end
+
+
+
+#Using ia-32 hardware breakpoints.
+#
+#4 hardware breakpoints are available in ia-32 processors. These breakpoints
+#do not need code modification. They are set using debug registers.
+#
+#Each hardware breakpoint can be of one of the
+#three types: execution, write, access.
+#1. An Execution breakpoint is triggered when code at the breakpoint address is
+#executed.
+#2. A write breakpoint ( aka watchpoints ) is triggered when memory location
+#at the breakpoint address is written.
+#3. An access breakpoint is triggered when memory location at the breakpoint
+#address is either read or written.
+#
+#As hardware breakpoints are available in limited number, use software
+#breakpoints ( br command in gdb ) instead of execution hardware breakpoints.
+#
+#Length of an access or a write breakpoint defines length of the datatype to
+#be watched. Length is 1 for char, 2 short , 3 int.
+#
+#For placing execution, write and access breakpoints, use commands
+#hwebrk, hwwbrk, hwabrk
+#To remove a breakpoint use hwrmbrk command.
+#
+#These commands take following types of arguments. For arguments associated
+#with each command, use help command.
+#1. breakpointno: 0 to 3
+#2. length: 1 to 3
+#3. address: Memory location in hex ( without 0x ) e.g c015e9bc
+#
+#Use the command exinfo to find which hardware breakpoint occured.
+
+
+define psname
+	if $arg0 == 0 
+		set $athread =  (struct task_struct*)init_tasks
+	else 
+		set $athread = pidhash[(($arg0 >> 8) ^ $arg0) & 1023]
+	end
+	if $athread != 0 
+		while $athread->pid != $arg0 && $athread != 0
+			set $athread = $athread->hash_next
+		end
+		if $athread != 0 
+			printf "%d %s\n", $arg0, (char*)$athread->comm
+		end
+	end
+end
+
+define array
+	p/x $arg0[1]->action
+end
+
+define ps
+	set $initthread = (struct task_struct*)init_tasks
+	set $athread = (struct task_struct*)init_tasks
+	printf "%d %s\n", $athread->pid, (char*)($athread->comm)
+	set $athread = $athread->next_task
+	while $athread != ($initthread)
+		if ($athread->pid) != (0)
+			printf "%d %s %d\n", $athread->pid, (char*)$athread->comm, ($athread->times.tms_stime / 100)
+		end
+		set $athread = $athread->next_task
+	end
+end
+
+#hwebrk breakpointno address
+define hwebrk
+	maintenance packet Y$arg0,0,0,$arg1
+end
+document hwebrk
+	hwebrk breakpointno address
+	Places a hardware execution breakpoint
+end
+
+#hwwbrk breakpointno length address
+define hwwbrk
+	maintenance packet Y$arg0,1,$arg1,$arg2
+end
+document hwwbrk
+	hwwbrk breakpointno length address
+	Places a hardware write breakpoint
+end
+
+#hwabrk breakpointno length address
+define hwabrk
+	maintenance packet Y$arg0,1,$arg1,$arg2
+end
+document hwabrk
+	hwabrk breakpointno length address
+	Places a hardware access breakpoint
+end
+
+#hwrmbrk breakpointno
+define hwrmbrk
+	maintenance packet y$arg0
+end
+document hwrmbrk
+	hwrmbrk breakpointno
+	Removes a hardware breakpoint
+end
+
+#exinfo 
+define exinfo
+	maintenance packet qE
+end
+
+document exinfo
+	exinfo 
+	Gives information about a breakpoint.
+end
+
+define lsmod
+    set $mod = (struct module*)module_list
+    # the last module is the kernel, ignore it
+    while $mod != &kernel_module
+    	printf "%p\t%s\n", (long)$mod, ($mod)->name
+	set $mod = $mod->next
+    end
+end
+
+define pvar
+    set $mod = (struct $arg1*) $arg2
+	p *$mod
+	set $mod = $mod->$arg3
+    while $mod != 0
+    	p *$mod
+		set $mod = $mod->$arg3
+    end
+end
+
+
+define comedi_drv
+    set $tsk = (struct comedi_driver_struct *)driv
+	p *$tsk
+    set $tsk = $tsk->next
+    while $tsk != 0
+		 p *$tsk
+         set $tsk = $tsk->next
+    end
+end
+
+define psst
+    set $tsk = (struct task_struct *)&init_task_union.task
+    printf "%10.10s\t%p\t%d\n", ($tsk)->comm, (long)$tsk, ($tsk)->pid
+    set $tsk = $tsk->next_task
+    while $tsk != &init_task_union.task
+         printf "%10.10s\t%p\t%d\n", ($tsk)->comm, (long)$tsk, ($tsk)->pid
+         set $tsk = $tsk->next_task
+    end
+end
+
+define runls
+    set $tsk = (struct task_struct *) runqueue_head->next
+    (struct task_struct *) tsk->run_list
+

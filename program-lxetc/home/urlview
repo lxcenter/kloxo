@@ -1,0 +1,2 @@
+#COMMAND	~/.etc/screen/urlview %s
+COMMAND	~/.etc/bin/show-url %s

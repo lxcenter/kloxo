@@ -1,0 +1,7 @@
+alias parport_lowlevel parport_pc
+alias sound-slot-0 sb
+options sound dmabuf=1
+options opl3 io=0x388
+alias midi awe_wave
+post-install awe_wave /bin/sfxload /etc/midi/GU11-ROM.SF2
+options sb io=0x220 irq=5 dma=1 dma16=5 mpu_io=0x330

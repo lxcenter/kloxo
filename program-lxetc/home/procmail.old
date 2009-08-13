@@ -1,0 +1,23 @@
+
+:0
+* ^To.*sales
+mail/.vm/sales.spool
+
+
+:0
+* ^To.*qsupport
+mail/.vm/qsupport.spool
+
+:0
+* ^To.*drkrunch
+mail/.vm/drkrunch.spool
+
+
+
+:0
+* ^Subject.*File.system.warning
+{
+	:0
+	mail/.vm/space2let.spool
+
+}

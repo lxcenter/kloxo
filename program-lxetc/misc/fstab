@@ -1,0 +1,15 @@
+/dev/hda8 	        /                       ext2    defaults        1 1
+/dev/hdb6		/usr			ext2	defaults,ro	1 1
+/dev/hda1		/mnt/aum_c		vfat	noauto		0 0
+/dev/hda5		/mnt/d_aum		vfat	noauto		0 0
+/dev/hda7		/mnt/jack		ext2	defaults,ro	1 1
+/dev/hdb1		/mnt/d_aum/		vfat	defaults,owner	0 0
+/dev/hdb2		/mnt/general/		ext2	defaults,ro     1 1 
+/dev/hdb3		/home			ext2	defaults	1 1
+/dev/cdrom              /mnt/cdrom              iso9660 noauto,owner,ro 0 0
+/dev/writer		/mnt/writer		iso9660 noauto,owner,ro 0 0
+/dev/fd0                /mnt/floppy             auto    noauto,owner    0 0
+none                    /proc                   proc    defaults        0 0
+none                    /dev/pts                devpts  gid=5,mode=620  0 0
+/dev/hda6               swap                    swap    defaults        0 0
+/dev/hdb7               swap                    swap    defaults        0 0

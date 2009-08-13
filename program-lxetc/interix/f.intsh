@@ -1,0 +1,23 @@
+export PATH=/usr/windows:/twodot/v2.0/Bin:/dev/fs/C/WINDOWS/system32:/dev/fs/C/WINDOWS/system32/dllcache/:/dev/fs/C/WINDOWS/Microsoft.NET/Framework/v2.0.50727:/debug/bin/Debug:/opt/gcc.3.3/bin:~/bin/:$PATH:"/dev/fs/C/Program Files/Windows Resource Kits/Tools/":"/dev/fs/C/Program Files/Mail Enable/Bin:/c/Program Files/Phalanger v2.0/Bin/"
+export VIM_GDBCMD=mdbg.exe
+export HOME="/home/root"
+unset ENV
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/lib
+export TMP=/tmp
+export TEMP=/tmp
+export TERM=vt100
+#export XENVIRONMENT=~/.etc/xxwin/xresource
+
+#send-tty `tty` 
+
+# If you are in the round about home, go to the real home
+#if [ `pwd` = "$SFUDIR_INTERIX"home/root ] ; then ; cd ; fi
+
+local directory
+directory=`pwd`
+
+if [ $directory = /dev/fs/D/sfu/home/root ] ; then ; cd ; fi
+if [ $directory = /dev/fs/C/sfu/home/root ] ; then ; cd ; fi
+if [ $directory = /dev/fs/E/sfu/home/root ] ; then ; cd ; fi
+xrdb -merge ~/.etc/xxwin/xresource
+

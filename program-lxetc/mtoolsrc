@@ -1,0 +1,10 @@
+drive a: file="/dev/fd0" exclusive 1.44m mformat_only
+drive c: file="/dev/hda1"
+drive d: file="/dev/hda5"
+drive f: file="/dev/hdd"
+drive m: file="/var/lib/dosemu/hdimage.first" offset=8832
+drive q: file="/root/bochs/1.44"
+drive u: file="/mnt/general/vmware/linux/linux.flp" exclusive 1.44m mformat_only
+drive l: file="/mnt/general/vmware/linux/linux.dsk" offset=8832
+drive v: file="/usr/share/bochs/dlxlinux/hd10meg.img" offset=8704
+mtools_lower_case=1

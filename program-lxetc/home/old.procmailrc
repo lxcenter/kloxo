@@ -1,0 +1,69 @@
+#VERBOSE=on
+
+
+DEFAULT=mail/mboxes/rest
+
+LOGFILE=.etc/.tmp/procmaillogs
+
+
+INCLUDERC=.etc/mail/proc-common
+
+INCLUDERC=.etc/mail/proc-ligesh-forums
+
+INCLUDERC=.etc/mail/spamfilter
+
+INCLUDERC=.etc/mail/dump.prc
+
+
+:0
+* ^From.*redhat
+mail/mboxes/redhat
+
+:0
+* ^From.*sharekhan.com
+mail/mboxes/sharekhan
+
+
+
+:0
+* ^From.*auto-notification@elance.com
+{
+	:0
+	mail/mboxes/back/elance
+}
+
+:0
+* ^X-Mailer: PhpCollab
+{
+	:0
+	mail/mboxes/john-phpcollab
+}
+
+
+:0
+* ^From.*alert@icicibank.com
+mail/mboxes/bankalerts
+
+:0
+* ^From.*customercare@icicibank.com
+mail/mboxes/bankalerts
+
+:0
+* ^To.*wordorigins
+mail/mboxes/dictionary
+
+
+:0
+* ^To.*wordoftheday.*
+mail/mboxes/dictionary
+
+INCLUDERC=.etc/mail/spam-config
+
+INCLUDERC=.etc/mail/users.proc.out
+
+:0
+* ^From.*Mail Delivery .*system
+mail/mboxes/lostmail
+
+
+

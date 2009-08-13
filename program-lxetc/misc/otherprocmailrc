@@ -1,0 +1,18 @@
+#VERBOSE=on
+DEFAULT=mail/mboxes/mbox
+LOGFILE=.etc/.tmp/procmaillogs
+INCLUDERC=.etc/mail/proc-common
+
+INCLUDERC=.etc/mail/spam-config
+
+:0
+* ^From.*redhat
+mail/mboxes/redhat
+
+
+:0
+* ^From.*Mail Delivery .*system
+mail/mboxes/lostmail
+
+
+

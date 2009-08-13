@@ -1,0 +1,15 @@
+#!/bin/zsh
+#source ~/.etc/f.bashrc
+export PATH=/bin:/usr/bin:/sbin:/usr/sbin:/usr/bin/mh:/etc/rc.d/init.d:/usr/X11R6/bin:/usr/games:/usr/local/bin:/usr/lib/cdwtools/:$HOME/.etc/bin:$HOME/.etc/bin/aascripts/:$WNHOME/bin:/home/lxlabs.com/gnats/bin:/home/lxlabs.com/gnats/libexec/gnats/:
+xsetroot -solid black
+#xsetroot -solid "#308050"
+xrdb -merge ~/.etc/xxwin/xresource
+xrdb -merge ~/.etc/xxwin/extra.xresource
+xrdb -merge ~/.etc/xxwin/local.xresource
+kbdrate -r 100 &
+xhost +
+#xset fp+ unix/:7101
+xmodmap ~/.etc/xxwin/xkeys
+export FVWM_MODULEDIR=/usr/local/libexec/fvwm/2.5.5:/usr/lib/X11/fvwm:/usr/lib/X11/fvwm2:
+#exec fvwm -cmd "FvwmM4 $HOME/.etc/xxwin/fvwm2rc.m4" -cmd "Read /home/root/.etc/xxwin/vnc.fvwm2rc.m4" > ~/.etc/.tmp/.fvwm_errors 2>&1
+exec fvwm -cmd "FvwmM4 $HOME/.etc/xxwin/fvwm2rc.m4"  > ~/.etc/.tmp/fvwm_errors 2>&1

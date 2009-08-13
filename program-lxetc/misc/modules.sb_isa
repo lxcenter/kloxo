@@ -1,0 +1,6 @@
+alias parport_lowlevel parport_pc
+alias sound-slot-0 sb
+options sound dmabuf=1
+alias midi opl3
+options opl3 io=0x388
+options sb io=0x220 irq=5 dma=1 mpu_io=0x330

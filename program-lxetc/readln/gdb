@@ -1,0 +1,6 @@
+<M-n>: "next "
+"\en": "next "
+<M-s>: "step "
+"\es": "step "
+#<C-c>: ""
+<C-c>: "abcd"

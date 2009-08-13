@@ -1,0 +1,2 @@
+#source ~/.etc/f.bashrc
+screen -m -RR dict_mut

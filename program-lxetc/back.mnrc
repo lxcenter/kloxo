@@ -1,0 +1,40 @@
+FSSTND
+MANPATH	/usr/share/man
+MANPATH	/usr/local/share/man
+MANPATH	/usr/local/man
+MANPATH	/usr/X11R6/man
+MANPATH /usr/lib/perl5/man
+MANPATH /usr/local/wordnet1.6/man
+MANPATH_MAP	/bin			/usr/man
+MANPATH_MAP	/sbin			/usr/man
+MANPATH_MAP	/usr/bin		/usr/man
+MANPATH_MAP	/usr/sbin		/usr/man
+MANPATH_MAP	/usr/local/bin		/usr/local/man
+MANPATH_MAP	/usr/X11R6/bin		/usr/X11R6/man
+MANPATH_MAP	/usr/bin/X11		/usr/X11R6/man
+MANPATH_MAP	/usr/bin/mh		/usr/man
+
+#TROFF       /usr/bin/groff -Tps -mandoc
+#NROFF       /usr/bin/nroff -c -mandoc
+#JNROFF      /usr/bin/groff -Tnippon -mandocj
+#EQN     /usr/bin/geqn -Tps
+#NEQN        /usr/bin/geqn -Tlatin1
+#JNEQN       /usr/bin/geqn -Tnippon
+#TBL     /usr/bin/gtbl
+#COL       /usr/bin/col
+#REFER       /usr/bin/grefer
+#PIC     /usr/bin/gpic
+
+#PAGER		col -b | less -isr
+PAGER		zsh -c 'source ~/.etc/zshrc ; col -b | vip'
+CAT		/bin/cat
+#CMP		/usr/bin/cmp -s
+COMPRESS	/bin/gzip
+COMPRESS_EXT	.gz
+MANSECT		1:8:2:3:4:5:6:7:9:tcl:n:l:p:o
+.gz		/bin/gunzip -c
+.bz2		/usr/bin/bzip2 -c -d
+.z		
+.Z		/bin/zcat
+.F		
+.Y		

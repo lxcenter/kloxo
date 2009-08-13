@@ -1,0 +1,6 @@
+mke2fs /dev/ram1
+mount /dev/ram1 /tmp
+mkdir /tmp/home
+rm -r ~/.etc/.tmp
+ln -sf /tmp/home ~/.etc/.tmp
+rnt o /

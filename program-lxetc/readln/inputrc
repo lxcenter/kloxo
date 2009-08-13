@@ -1,0 +1,51 @@
+set meta-flag on
+set input-meta on
+set convert-meta on
+set output-meta on
+
+set show-all-if-ambiguous on
+set visible-stats on
+set glob_dot_filenames off
+set globdot off
+set completion-query-items 150
+
+<M-o>: dynamic-complete-history
+"\eo": dynamic-complete-history
+<M-z>: complete-command
+"\ez": complete-command
+<M-x>: possible-command-completions 
+"\ex": possible-command-completions 
+<M-i>: history-search-backward
+"\ei": history-search-backward
+<C-p>: history-search-backward
+<M-k>: history-search-forward
+"\ek": history-search-forward
+<C-n>: history-search-forward
+<M-l>: forward-char
+"\el": forward-char
+<M-j>: backward-char
+"\ej": backward-char
+<M-.>: yank-last-arg
+<C-w>: backward-kill-word
+<C-p>: history-search-backward
+<C-n>: history-search-forward
+<M-w>: forward-word
+"\ew": forward-word
+
+"\e0d": backward-word
+"\e0c": forward-word
+"\e[h": beginning-of-line
+"\e[f": end-of-line
+"\e[1~": beginning-of-line
+"\e[4~": end-of-line
+"\e[5~": beginning-of-history
+"\e[6~": end-of-history
+"\e[3~": delete-char
+"\e[2~": quoted-insert
+
+
+$if Bash
+	$include ~/.etc/readln/bash
+$else if gdb
+	$include ~/.etc/readln/gdb
+$endif

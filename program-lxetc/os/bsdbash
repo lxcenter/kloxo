@@ -1,0 +1,9 @@
+export TERM=xterm
+lsmod	() {	modstat "$@" ; 			}
+alias ls='/usr/bin/ls --color'
+mn	() {	man "$@" | col -b > ~/.etc/.tmp/Manual. ;
+		if [ "$PIPESTATUS" == 0 ] ; then
+			 vi ~/.etc/.tmp/Manual. ; fi ;	}
+
+
+make	() {	gmake "$@" ; 				}
