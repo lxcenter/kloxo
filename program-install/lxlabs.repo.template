@@ -1,0 +1,8 @@
+
+#additional packages that may be useful
+[lxlabsupdate]
+name=%distro%-$releasever - lxlabsupdates
+baseurl=http://download.lxlabs.com/download/update/%distro%/$basearch/
+gpgcheck=0
+enabled=1
+
