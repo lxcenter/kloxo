@@ -1,0 +1,5 @@
+17:21 Jun/01/2009: apache restart executed for port 80
+17:21 Jun/01/2009: /etc/init.d/mysqld restart executed for port 3306
+07:37 Jun/02/2009: apache restart executed for port 80
+12:20 Jun/02/2009: scavenge is running
+12:25 Jun/02/2009: scavenge is running

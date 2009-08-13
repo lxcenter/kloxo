@@ -1,0 +1,86 @@
+#!/bin/bash
+#
+# Startup script for the Qmail Mail Server
+#
+# chkconfig: - 86 16
+# description: clamd
+# processname: clamd
+# pidfile: /var/run/clamd
+
+# Source function library.
+. /etc/rc.d/init.d/functions
+
+
+# Path to the Qmailctl script, server binary, and short-form for messages.
+Qmailproc=/var/qmail/boot/proc
+prog=clamd
+RETVAL=0
+
+PATH=$PATH:/usr/local/bin
+
+# The semantics of these two functions differ from the way Qmailctl does
+# things -- attempting to start while running is a failure, and shutdown
+# when not running is also a failure.  So we just do it the way init scripts
+# are expected to behave here.
+start() {
+
+		cd /var/qmail/supervise/clamd/
+		chmod 755 run
+		./run > /dev/null 2>&1 &
+		RETVAL=$?
+        echo
+        exit $RETVAL
+}
+
+stop() {
+	echo -n $"Stopping $prog: "
+	pkill -x clamd
+	RETVAL=$?
+	echo
+	[ $RETVAL = 0 ] && rm -f /var/lock/subsys/djbdns /var/run/clamd.pid
+}
+reload() {
+	echo -n $"Reloading $prog: "
+	killproc $Qmailtcp -HUP
+		RETVAL=$?
+		echo
+	[ $RETVAL = 0 ] && rm -f /var/lock/subsys/djbdns /var/run/clamd.pid
+}
+
+# See how we were called.
+case "$1" in
+  start)
+	start
+	;;
+  stop)
+	stop
+	;;
+  status)
+        status clamd
+		RETVAL=$?
+		RETVAL=$?
+	;;
+  restart)
+	stop
+	sleep 1
+	start
+	;;
+  condrestart)
+	if [ -f /var/run/Qmail.pid ] ; then
+		stop
+		start
+	fi
+	;;
+  reload)
+        reload
+	;;
+  graceful|help|configtest|fullstatus)
+        $Qmailtcp $@ 
+	RETVAL=$?
+	;;
+  *)
+	echo $"Usage: $prog {start|stop|restart|condrestart|reload|status|fullstatus|graceful|help|configtest}"
+	exit 1
+esac
+
+exit $RETVAL

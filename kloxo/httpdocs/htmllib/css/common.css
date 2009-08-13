@@ -1,0 +1,560 @@
+	/*
+	Style sheet for the navigation banner at the top of the page.
+	It is assumed the banner looks somewhat like this:
+	<div class="banner">
+	<p>
+	<a href="../"><img alt="W3C" src="../Icons/w3c_home"></a>
+	<a href="Consortium/Activities">Activities</a>
+	<a href="TR/">Tech.&nbsp;Reports</a>
+	<a href="Consortium/Translation/">Translations</a>
+	<a href="Status">Software</a>
+	<a href="Help/siteindex">Site&nbsp;index</a>
+	<a href="Consortium/">About</a>
+	<a href="Consortium/Contact">Contact</a>
+	<a href="http://search.w3.org/Public/">Search</a>
+	</p>
+	</div>
+	I.e., a DIV.banner with a P with a small logo and a couple of
+	A elements.
+	Copyright © 2000 W3C® (MIT, INRIA, Keio). All Rights Reserved.
+	See http://www.w3.org/Consortium/Legal/ipr-notice.html#Copyright
+	Author: Bert Bos <bert@w3.org>
+	Created: 26 July 2000
+	*/
+/*body div.banner { display: block } /* Overrides 'none' in banner-*.css */
+	
+	
+table  {
+	margin: 0 0 0 0;
+	padding: 0 0 0 0 ;
+	font-size: 8pt;
+	font-weight: 100;
+	font-family: Tahoma, Verdana, Arial, sans-serif;
+	border-width: 0;
+	border-bottom: nil;
+}
+
+td  {
+	margin: 0 0 0 0;
+	padding: 0 0 0 0 ;
+}
+
+tr  {
+	margin: 0 0 0 0;
+	padding: 0 0 0 0 ;
+}
+
+form {
+	margin: 0 0 0 0;
+	padding: 0 0 0 0 ;
+}
+
+
+a  {
+	margin: 0 0 0 0;
+	padding: 0 0 0 0 ;
+	font-size: 8pt ;
+	font-weight: 100;
+	font-family: Tahoma, Verdana, Arial, sans-serif;
+	border-width: 0;
+}
+
+
+a:link     {color: #003366; text-decoration:none; }
+a:visited  {color: #003366; text-decoration:none; }
+a:active   {color: #003366; text-decoration:none; }
+a:hover    {text-decoration:underline; }
+
+a.insidelist:link  {color: #003366; text-decoration:underline; }
+a.insidelist:hover  {color: #003366; text-decoration:none; }
+a.insidelist:visited  {color: #003366; text-decoration:underline; }
+a.insidelist:active   {color: #003366; text-decoration:underline; }
+
+img  {
+	margin: 0 0 0 0;
+	padding: 0 0 0 0 ;
+	font-size: 8pt ;
+	font-weight: 100;
+	font-family: Tahoma, Verdana, Arial, sans-serif;
+	border-width: 0;
+}
+
+div  {
+	margin: 0 0 0 0;
+	padding: 0 0 0 0 ;
+	font-size: 8pt  ;
+	font-weight: 100;
+	font-family: Tahoma, Verdana, Arial, sans-serif;
+}
+
+
+table.table_head {
+	background: url("/img/images/FINAL_07.gif");
+}
+
+
+div.mainButton {
+	position:relative;
+	cursor:pointer;
+	border-style:groove;
+	border-color:#3399CC;
+	border-width:0px;
+	height:90;
+	width:30;
+}
+
+.forgotpwd { 
+        color: #3992de; 
+	    font-family: arial; 
+		font-weight: bold;
+		font-size: 8pt;
+		text-decoration: none;	
+}
+
+.forgotpwd:hover { 
+        color: #0066CC;
+}
+
+
+.small {
+	font-size: 9px;
+    font-family:arial;
+	letter-spacing : 1px;
+}
+
+input.small {
+	width: 30;
+}
+
+input.verysmall {
+	margin: 0 0 0 0 ;
+	width: 11;
+	height: 11;
+}
+
+.lightandthin {
+	font-family:arial;
+	font-size: 9px;
+	font-weight: normal;
+	letter-spacing : 0pt;
+}
+
+abbr {
+	border-bottom: 10px solid black;
+
+}
+
+.logintextbox {
+ border:1px solid #9dddff; 
+ font-family: arial; 
+ font-size: 10pt; 
+ font-weight: bold; 
+ color:#666666;  
+ padding: 0; 
+ background-color:#f4faff;
+}
+
+.forgottextbox {
+ border:1px solid #9dddff; 
+ font-family: arial; 
+ font-size: 10pt; 
+ font-weight: bold; 
+ color:#666666;  
+ padding: 3; 
+ background-color:#f4faff;
+}
+
+.submitbox {
+ border:1px solid #A5C7E7; 
+ font-family: arial; 
+ font-size: 10pt; 
+ font-weight: bold; 
+ color:#FFFFFF;  
+ background-color:#A5c7e3;
+}
+
+font.bold {
+	font-weight: bold;
+}
+
+fieldset {
+	background: #ffffff;
+	width:95%;
+}
+
+.menus { 
+  font-family     	: arial;
+  font-weight     	: bold;
+  font-size       	: 10px;
+  text-decoration 	: none ;
+}
+
+.helparea{
+	font-family: arial, verdana; 
+	font-weight:normal; 
+	font-size: 10px; 
+	height: 85 ; 
+	width: 140; 
+	border-style:groove;
+	border-color:#3399CC;
+	border-width:0px;
+	text:10%
+}
+
+.button { 
+  font-family     	: arial;
+  font-weight     	: bold;
+  font-size       	: 10px;
+  text-decoration 	: none;
+}
+
+.searchbox {
+  border			: 1px solid #b0c0f0;
+  font-family		: arial; 
+  color				: #000000;
+  font-size			: 10px; 
+  font-weight		: normal; 
+  padding-left		: 2; 
+  background-color	: #ffffff;
+}
+
+.seabox {
+  border			: 1px solid #000000;
+  font-family		: arial; 
+  color				: #000000;
+  font-size			: 10px; 
+  font-weight		: normal; 
+  padding-left		: 2; 
+  background-color	: #ffffff;
+	MARGIN: 1px;
+	BACKGROUND: URL(/img/login/user.gif) no-repeat;
+	BACKGROUND-POSITION: 1px 1px;
+	BACKGROUND-COLOR: #FFFFFF;
+	PADDING-LEFT: 18px;
+	VERTICAL-ALIGN: middle;
+}
+.seabox1 {
+  border			: 1px solid #000000;
+  font-family		: arial; 
+  color				: #000000;
+  font-size			: 10px; 
+  font-weight		: normal; 
+  padding-left		: 2; 
+  background-color	: #ffffff;
+	MARGIN: 1px;
+	BACKGROUND-POSITION: 1px 1px;
+	BACKGROUND-COLOR: #FFFFFF;
+	VERTICAL-ALIGN: middle;
+}
+
+.textdisable {
+  font-family		: arial; 
+  color				: #000000;
+  font-size			: 11px; 
+  font-weight		: normal; 
+  padding-left		: 2; 
+  background-color	: #eeeeee;
+}
+
+.dckbox1 {
+ background-color	: #eeeeee;
+}
+
+.dckbox2 {
+  background-color	: #eeeeee;
+}
+
+.legend {
+ font-weight: normal;
+}
+
+.textarea {
+  color				: #000000; 
+  font-family		: arial; 
+  color				: #000000;
+  font-size			: 11px; 
+  font-weight		: normal; 
+  padding-left		: 2; 
+  background-color	: #ffffff;
+}
+
+.frmtextarea {
+  color				: #000000; 
+  font-family		: arial; 
+  color				: #000000;
+  font-size			: 11px; 
+  font-weight		: normal; 
+  padding-left		: 2; 
+  background-color	: #ffffff;
+}
+
+.frmtextareadisable {
+  color				: #000000; 
+  font-family		: arial; 
+  font-size			: 11px; 
+  font-weight		: normal; 
+  padding-left		: 2; 
+}
+
+.textchmoddisable {
+  font-family		: arial; 
+  color				: #000000;
+  font-size			: 11px; 
+  font-weight		: bold; 
+  padding-left		: 12; 
+  background-color	: #ffffff;
+}
+
+.textenable {
+  font-family		: arial; 
+  color				: #000000;
+  font-size			: 11px; 
+  font-weight		: normal; 
+  padding-left		: 2; 
+  background-color	: #ffffff;
+}
+
+
+.textbox {
+  font-family		: arial; 
+  color				: #000000;
+  font-size			: 11px; 
+  font-weight		: normal; 
+  padding-left		: 2; 
+  background-color	: #FFFFFF;
+  width: 190;
+}
+
+
+.lpanelbuttonrow2 {
+  font-weight		: bold;
+  cursor            : pointer;
+}
+
+.buttonunselect {
+  color				: #ffffff;
+  font-weight		: bold;
+  font-size			: 11px;
+  font-family       : arial;
+}
+
+.buttonselect {
+  color				: #336699;
+  font-weight		: bold;
+  font-size			: 11px;
+  font-family       : arial;
+  background-color 	: #f5f5f5;
+  cursor			: pointer;
+}
+
+.messagetable { 
+  border-top-style		: dashed; 
+  border-top-width		: 1; 
+  border-bottom-style	: dashed; 
+  border-bottom-width	: 1;
+  border-collapse		: collapse; 
+  background-color		: #FFFFFD;
+  border-color			: #000000;
+  border-width			: 1;
+}
+
+.messagetext {
+  font-size 		: 8pt;
+  font-weight 		: normal;
+  color 			: #000000;
+  font-family		: Arial, Verdana;
+}	
+
+.helparea {
+  font-family		: arial, verdana; 
+  font-weight		: normal; 
+  font-size			: 10px; 
+  height			: 85; 
+  width				: 140; 
+  border-style		: groove;
+  border-width		: 0px;
+  text				: 10%;
+}
+.icontextlink { 
+  color				: #000000; 
+  font-family		: arial;
+  font-weight		: normal;
+  font-size			: 10px;
+  cursor			: pointer;
+  text-decoration	: none;
+}
+
+.icontextlink:hover {
+  text-decoration	: underline;
+  cursor			: pointer;
+}
+
+.searchtext {
+  font-family		: arial, verdana;
+  font-size			: 12px;
+  color				: #000000;
+}
+
+.pagetext {
+  font-family		: arial, verdana;
+  font-size			: 10px;
+  color				: #000000;
+  font-weight		: bold;
+}
+
+.lpanelbutton {
+  cursor			: pointer;
+}
+
+.submitbutton {
+ font-family		: arial; 
+ font-size			: 8pt; 
+ font-weight		: bold; 
+ color				: #000000;  
+ background-color	: #FFFFFF;
+}
+
+.submitupdatebutton {
+ padding: 0 5 0  20;
+ font-family		: arial; 
+ font-size			: 8pt; 
+ font-weight		: bold; 
+ padding: 0 0 0  0;
+ background-color	: #FFFFFF;
+ /*background         : url('/img/skin/hypervm/default/default/btn_ok_bg.gif'); */
+}
+
+.submitbuttonlogout {
+ font-family		: arial; 
+ font-size			: 8pt; 
+ font-weight		: bold; 
+ color				: #bb3333;  
+ background-color	: #FFFFFF;
+}
+
+.tableheadtext {
+  font-size   		: 11px;
+  font-family 		: Arial;
+  font-weight       : bold;
+  text-decoration	: none;
+}
+
+.tableheadtext:hover {
+  text-decoration	: underline;
+  cursor			: pointer;
+}
+
+.sortby {
+  padding-left      : 5;
+}
+
+.detailtablehead {
+  font-size   		: 11px;
+  font-family 		: Arial;
+  font-weight       : bold;
+  text-decoration	: none;
+}
+
+.detailleft {
+  color				: #003366;
+  background-color  : #7db3ee;
+  padding-left      : 5;
+  padding-right		: 5;
+}
+
+
+.rowpoint {
+  background-color  : #ffffff;
+}
+
+.rowpointhilite {
+  background-color  : #ff9933;
+}
+
+.hiliterow {
+  background-color	: #dddddd;
+}
+
+.tablerowdetail0 {
+  font-weight		: normal;
+  font-size			: 11px;
+  font-family		: arial;
+  color				: #000000;
+}
+
+.tablerowhilite {
+	background-color   : #dde;
+}
+
+.tablerowdetail1 {
+  font-weight		: normal;
+  font-size			: 11px;
+  font-family		: arial;
+  color				: #000000;
+}
+
+.hiliterowdetail {
+  font-weight		: normal;
+  font-size			: 11px;
+  font-family		: arial;
+}
+
+.detailother {
+  padding-left      : 5;
+  padding-right		: 5;
+  background-color	: #eeeeee;
+}
+
+.col {
+  padding: 7 5 7 10 ;
+  vertical-align    : middle;
+  
+}
+
+.collist {
+  padding: 0 5 0 5 ;
+  vertical-align    : middle;
+  
+}
+.filebox {
+  font-family		: arial; 
+  color				: #000000;
+  font-size			: 9px; 
+  font-weight		: normal; 
+  background-color	: #FFFFFF;
+
+}
+
+.coldetail {
+  padding-left      : 15;
+}
+
+.colHighLight {
+  padding-left      : 5;
+}
+
+.copyright {
+  font-family		: Arial;
+  font-weight		: normal;
+  padding-left		: 20px;
+}
+
+.smallroundedmodule{padding:0 4px;}
+.smallroundedmodule div{border-style:solid;border-width:1px;margin:-2px -4px;height:1em;}
+html>body .smallroundedmodule div{height:auto;}
+.smallroundedmodule div div{border-style:none;border-width:0;margin:0 4px;}
+.smallroundedmodule .first, .smallroundedmodule .last{position:relative;height:4px;margin:0;}			
+.smallroundedmodule .first{border-width:1px 0 0 0;}
+.smallroundedmodule .last{border-width:0 0 1px 0;}
+.smallroundedmodule .first .first, .smallroundedmodule .first .last{margin-top:-1px;}
+.smallroundedmodule .last .first, .smallroundedmodule .last .last{margin-bottom:-1px;}
+.smallroundedmodule .first .first, .smallroundedmodule .first .last, .smallroundedmodule .last .first, .smallroundedmodule .last .last{border:0px none;position:absolute;z-index:1;width:4px;background-repeat:no-repeat}
+.smallroundedmodule .first .first, .smallroundedmodule .last .first{margin-left:-4px;}
+.smallroundedmodule .first .last, .smallroundedmodule .last .last{right:0px;margin-right:-4px;}
+div.lowquota span#quotausagebar span.first{background:#ffffff  repeat-x center left;}
+div#quotameter div{border-width:0; border-color:#ffffff;}
+#quotausagebar{border-color:#dddddd;}
+#quotausagebar{position:relative;display:block;border-style:solid;border-width:1px;margin:2px 4px;height:1em;}
+#quotausagebar span.first{position:absolute;height:100%;}
+#quotausagebar span.last{width:100%;text-align:center;font:normal 78% verdana;}
+html>body #quotausagebar span.last{display:block;width:auto;}

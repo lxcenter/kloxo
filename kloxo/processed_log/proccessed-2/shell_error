@@ -1,0 +1,44 @@
+12:26 Jun/05/2009: : [(__system__:/home/root/work/software/kloxo/httpdocs) '/usr/local/lxlabs/ext/php/php'  '../bin/common/misc/checktotalmemory.php']
+01:04 Jun/06/2009: rndc: 'reload' failed: not found
+: [(__system__:/home/root/work/software/kloxo/httpdocs) 'rndc'  'reload' 'newdomain.comdd']
+01:04 Jun/06/2009: : [(__system__:/home/root/work/software/kloxo/httpdocs) '/home/lxadmin/mail/bin/vdominfo'  '-d' 'newdomain.comdd']
+01:04 Jun/06/2009: : [(__system__:/home/root/work/software/kloxo/httpdocs) '/home/lxadmin/mail/bin/vadduser'  'postmaster@newdomain.comdd' '-e' '$1$qVgNsacE$aWshMqtfW.p6Fl37sfmwQ1']
+01:27 Jun/06/2009: nice: a command must be given with an adjustment
+Try `nice --help' for more information.
+: [(__system__:/home/admin/debugtest) nice -n 15 ]
+01:27 Jun/06/2009: rndc: 'reload' failed: not found
+: [(__system__:/home/root/work/software/kloxo/httpdocs) 'rndc'  'reload' 'newdomain.comd']
+01:27 Jun/06/2009: : [(__system__:/home/root/work/software/kloxo/httpdocs) '/home/lxadmin/mail/bin/vdominfo'  '-d' 'newdomain.comd']
+01:27 Jun/06/2009: : [(__system__:/home/root/work/software/kloxo/httpdocs) '/home/lxadmin/mail/bin/vadduser'  'postmaster@newdomain.comd' '-e' '$1$W1m7u2Jv$6D0I6C82ssZHRIEs8DjKS0']
+01:29 Jun/06/2009: rndc: 'reload' failed: not found
+: [(__system__:/home/root/work/software/kloxo/httpdocs) 'rndc'  'reload' 'whatever.com']
+01:29 Jun/06/2009: : [(__system__:/home/root/work/software/kloxo/httpdocs) '/home/lxadmin/mail/bin/vdominfo'  '-d' 'whatever.com']
+01:29 Jun/06/2009: : [(__system__:/home/root/work/software/kloxo/httpdocs) '/home/lxadmin/mail/bin/vadduser'  'postmaster@whatever.com' '-e' '$1$57ZNBI79$y6rHjlUUlG090TUt63aaW0']
+01:29 Jun/06/2009: rndc: 'reload' failed: not found
+: [(__system__:/home/root/work/software/kloxo/httpdocs) 'rndc'  'reload' 'whatever.dd']
+01:29 Jun/06/2009: : [(__system__:/home/root/work/software/kloxo/httpdocs) '/home/lxadmin/mail/bin/vdominfo'  '-d' 'whatever.dd']
+01:29 Jun/06/2009: : [(__system__:/home/root/work/software/kloxo/httpdocs) '/home/lxadmin/mail/bin/vadduser'  'postmaster@whatever.dd' '-e' '$1$RA.bq79b$kYO6yc0pUMeR1Cr3Molcd0']
+02:31 Jun/06/2009: rndc: 'reload' failed: not found
+: [(__system__:/home/root/work/software/kloxo/httpdocs) 'rndc'  'reload' 'justintime.com']
+02:31 Jun/06/2009: : [(__system__:/home/root/work/software/kloxo/httpdocs) '/home/lxadmin/mail/bin/vdominfo'  '-d' 'justintime.com']
+02:31 Jun/06/2009: : [(__system__:/home/root/work/software/kloxo/httpdocs) '/home/lxadmin/mail/bin/vadduser'  'postmaster@justintime.com' '-e' '$1$M7wvs8cV$D6QZE44HlS0pfV7PLcekn.']
+03:41 Jun/06/2009: rndc: 'reload' failed: not found
+: [(__system__:/home/root/work/software/kloxo/httpdocs) 'rndc'  'reload' 'backlog.com']
+03:41 Jun/06/2009: : [(__system__:/home/root/work/software/kloxo/httpdocs) '/home/lxadmin/mail/bin/vdominfo'  '-d' 'backlog.com']
+03:41 Jun/06/2009: : [(__system__:/home/root/work/software/kloxo/httpdocs) '/home/lxadmin/mail/bin/vadduser'  'postmaster@backlog.com' '-e' '$1$sWbu2s4e$ObB4ESSYRN42DlwpaTryE1']
+03:41 Jun/06/2009: rndc: 'reload' failed: not found
+: [(__system__:/home/root/work/software/kloxo/httpdocs) 'rndc'  'reload' 'deeproot.com']
+03:41 Jun/06/2009: : [(__system__:/home/root/work/software/kloxo/httpdocs) '/home/lxadmin/mail/bin/vdominfo'  '-d' 'deeproot.com']
+03:41 Jun/06/2009: : [(__system__:/home/root/work/software/kloxo/httpdocs) '/home/lxadmin/mail/bin/vadduser'  'postmaster@deeproot.com' '-e' '$1$M/MjjDaN$46IehZitxgTWcAI.Is/yR.']
+03:45 Jun/06/2009: rndc: 'reload' failed: not found
+: [(__system__:/home/root/work/software/kloxo/httpdocs) 'rndc'  'reload' 'voxhole.com']
+03:45 Jun/06/2009: : [(__system__:/home/root/work/software/kloxo/httpdocs) '/home/lxadmin/mail/bin/vdominfo'  '-d' 'voxhole.com']
+03:45 Jun/06/2009: : [(__system__:/home/root/work/software/kloxo/httpdocs) '/home/lxadmin/mail/bin/vadduser'  'postmaster@voxhole.com' '-e' '$1$uDiVQ417$Zbhr0V1ESXc0wVdoZeAwM0']
+03:46 Jun/06/2009: rndc: 'reload' failed: not found
+: [(__system__:/home/root/work/software/kloxo/httpdocs) 'rndc'  'reload' 'blahtest.com']
+03:46 Jun/06/2009: : [(__system__:/home/root/work/software/kloxo/httpdocs) '/home/lxadmin/mail/bin/vdominfo'  '-d' 'blahtest.com']
+03:46 Jun/06/2009: : [(__system__:/home/root/work/software/kloxo/httpdocs) '/home/lxadmin/mail/bin/vadduser'  'postmaster@blahtest.com' '-e' '$1$zBvWy86M$btIV.wEr3daPHyB.sHIdu/']
+03:50 Jun/06/2009: rndc: 'reload' failed: not found
+: [(__system__:/home/root/work/software/kloxo/httpdocs) 'rndc'  'reload' 'merab.com']
+03:50 Jun/06/2009: : [(__system__:/home/root/work/software/kloxo/httpdocs) '/home/lxadmin/mail/bin/vdominfo'  '-d' 'merab.com']
+03:50 Jun/06/2009: : [(__system__:/home/root/work/software/kloxo/httpdocs) '/home/lxadmin/mail/bin/vadduser'  'postmaster@merab.com' '-e' '$1$vyHFbfFt$ke0pUNGGicWrxAFlC2/9J0']

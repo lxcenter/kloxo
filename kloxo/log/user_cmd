@@ -1,0 +1,31 @@
+14:02 Jun/07/2009: (/home/admin/newdo.com) admin zip -ou -r NewArchive-Jun-07-14 "cgi-bin" "images" "index.html" sh: /usr/local/lxlabs/kloxo/cexec/lxexec: No such file or directory
+14:02 Jun/07/2009: (/home/admin/newdo.com) admin zip -ou -r NewArchive-Jun-07-14 "cgi-bin" "images" "index.html" 	zip warning: NewArchive-Jun-07-14.zip not found or empty
+  adding: cgi-bin/ (stored 0%)
+  adding: images/ (stored 0%)
+  adding: images/dheadbg.gif (deflated 5%)
+  adding: images/lxalogo_d.gif (stored 0%)
+  adding: images/disableskeletonbg.gif (deflated 1%)
+  adding: images/copy-disableskeletonbg.gif (stored 0%)
+  adding: images/thumbs/ (stored 0%)
+  adding: images/thumbs/th_copy-disableskeletonbg.gif (deflated 22%)
+  adding: images/thumbs/th_dheadbg.gif (deflated 4%)
+  adding: images/thumbs/th_disableskeletonbg.gif (deflated 19%)
+  adding: images/thumbs/th_lxalogo_d.gif (deflated 28%)
+  adding: index.html (deflated 52%)
+14:06 Jun/07/2009: (/home/admin/newdo.com) admin zip -ou -r NewArchive-Jun-07-14 "cgi-bin" "images" "index.html"
+14:06 Jun/07/2009: (/home/admin/newdo.com) admin zip -ou -r NewArchive-Jun-07-14 "cgi-bin" "images" "index.html" 	zip warning: NewArchive-Jun-07-14.zip not found or empty
+  adding: cgi-bin/ (stored 0%)
+  adding: images/ (stored 0%)
+  adding: images/dheadbg.gif (deflated 5%)
+  adding: images/lxalogo_d.gif (stored 0%)
+  adding: images/disableskeletonbg.gif (deflated 1%)
+  adding: images/copy-disableskeletonbg.gif (stored 0%)
+  adding: images/thumbs/ (stored 0%)
+  adding: images/thumbs/th_copy-disableskeletonbg.gif (deflated 22%)
+  adding: images/thumbs/th_dheadbg.gif (deflated 4%)
+  adding: images/thumbs/th_disableskeletonbg.gif (deflated 19%)
+  adding: images/thumbs/th_lxalogo_d.gif (deflated 28%)
+  adding: index.html (deflated 52%)
+14:28 Jun/07/2009: (/home/admin/newdo.com) admin zip -qu -r NewArchive-Jun-07-14 "cgi-bin" "images" "index.html"
+14:28 Jun/07/2009: (/home/admin/newdo.com) admin zip -qu -r NewArchive-Jun-07-14 "cgi-bin" "images" "index.html"
+15:30 Jun/07/2009: (/home/admin/newdo.com) admin zip -qu -r NewArchive-Jun-07-15 "cgi-bin" "images" "index.html"

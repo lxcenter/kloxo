@@ -1,0 +1,22 @@
+12:25 Jun/02/2009: : [(__system__:/home/root/work/software/kloxo/httpdocs) '/usr/local/lxlabs/ext/php/php'  '../bin/common/misc/checktotalmemory.php']
+18:16 Jun/02/2009: rndc: connection to remote host closed
+This may indicate that the remote server is using an older version of 
+the command protocol, this host is not authorized to connect,
+or the key is invalid.
+: [(__system__:/home/root/work/software/kloxo/httpdocs) 'rndc'  'reload' 'domain.happy.com']
+18:16 Jun/02/2009: rndc: connect failed: 127.0.0.1#953: connection refused
+: [(__system__:/home/root/work/software/kloxo/httpdocs) 'rndc'  'reload']
+18:16 Jun/02/2009: : [(__system__:/home/root/work/software/kloxo/httpdocs) '/home/lxadmin/mail/bin/vdominfo'  '-d' 'domain.happy.com']
+18:16 Jun/02/2009: : [(__system__:/home/root/work/software/kloxo/httpdocs) '/home/lxadmin/mail/bin/vadduser'  'postmaster@domain.happy.com' '-e' '$1$oy8CPVAq$s2xMW80ZXp8MehihEvJg./']
+18:17 Jun/02/2009: rndc: connection to remote host closed
+This may indicate that the remote server is using an older version of 
+the command protocol, this host is not authorized to connect,
+or the key is invalid.
+: [(__system__:/home/root/work/software/kloxo/httpdocs) 'rndc'  'reload' 'domains.bakery.newdomain.com']
+18:17 Jun/02/2009: rndc: connect failed: 127.0.0.1#953: connection refused
+: [(__system__:/home/root/work/software/kloxo/httpdocs) 'rndc'  'reload']
+18:17 Jun/02/2009: : [(__system__:/home/root/work/software/kloxo/httpdocs) '/home/lxadmin/mail/bin/vdominfo'  '-d' 'domains.bakery.newdomain.com']
+18:17 Jun/02/2009: : [(__system__:/home/root/work/software/kloxo/httpdocs) '/home/lxadmin/mail/bin/vadduser'  'postmaster@domains.bakery.newdomain.com' '-e' '$1$21YACXge$lQDHdXG53ovX0ApGKpfnZ.']
+18:19 Jun/02/2009: : [(__system__:/home/root/work/software/kloxo/httpdocs) '/home/lxadmin/mail/bin/vadduser'  'microsoft@bakery.newdomain.com' '-e' '$1$7BWe3pfb$DxYDYfkZPJZeMSpjR5VYv1']
+18:20 Jun/02/2009: : [(__system__:/home/root/work/software/kloxo/httpdocs) '/home/lxadmin/mail/bin/vadduser'  'microsoft@bakery.newdomain.com' '-e' '$1$ZWr126vK$a72W1qpxCn04SRyY8QYJc/']
+01:59 Jun/03/2009: : [(__system__:/home/root/work/software/kloxo/httpdocs) '/usr/local/lxlabs/ext/php/php'  '../bin/common/misc/checktotalmemory.php']

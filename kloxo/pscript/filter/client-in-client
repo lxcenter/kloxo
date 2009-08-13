@@ -1,0 +1,2 @@
+#!/bin/sh
+echo "select nname from client where parent_clname = 'client-$1'" | kloxodb | tail -n+2

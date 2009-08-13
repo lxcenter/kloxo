@@ -1,0 +1,220 @@
+#!/bin/bash
+#
+# Startup script for the Apache Web Server
+#
+# chkconfig: - 85 15
+# description: Apache is a World Wide Web server.  It is used to serve \
+#	       HTML files and CGI.
+# processname: httpd
+# pidfile: /var/run/httpd.pid
+# config: /etc/httpd/conf/httpd.conf
+
+# Source function library.
+#. /etc/rc.d/init.d/functions
+
+# This will prevent initlog from swallowing up a pass-phrase prompt if
+# mod_ssl needs a pass-phrase from the user.
+INITLOG_ARGS=""
+
+# Set HTTPD=/usr/sbin/httpd.worker in /etc/sysconfig/httpd to use a server
+# with the thread-based "worker" MPM; BE WARNED that some modules may not
+# work correctly with a thread-based MPM; notably PHP will refuse to start.
+
+# Path to the apachectl script, server binary, and short-form for messages.
+prog=`basename $0`
+ 
+
+initstring=${prog:0:1}
+if [ $initstring = 'S' ] || [ $initstring = 'K' ] ; then
+	prog=${prog#???}
+fi
+
+
+lxdir=/usr/local/lxlabs/$prog/httpdocs
+apachectl=/usr/local/lxlabs/ext/lxhttpd/bin/apachectl
+
+
+cd $lxdir
+
+httpd=/usr/local/lxlabs/ext/lxlighttpd/sbin/$prog.httpd
+OPTIONS="-f /usr/local/lxlabs/$prog/file/lighttpd.conf"
+
+
+RETVAL=0
+__var_server_name=$prog.php
+__var_server_exe=$prog.exe
+__var_wrapper_name=$prog-wrapper.sh
+__var_slave_db=/usr/local/lxlabs/$prog/etc/conf/slave-db.db
+
+# The semantics of these two functions differ from the way apachectl does
+# things -- attempting to start while running is a failure, and shutdown
+# when not running is also a failure.  So we just do it the way init scripts
+# are expected to behave here.
+start() {
+        echo -n $"Starting $prog: "
+		cd $lxdir
+		if ! pgrep -f $__var_wrapper_name ; then
+			lphp.exe /usr/local/lxlabs/$prog/bin/common/misc/checktotalmemory.php
+			RETVAL=$?
+			echo $RETVAL
+# temporarility disabling it. The actual value is 15. We need the backend for restarting teh services.
+			if [ $RETVAL = 16 ] ; then 
+				echo "low mem"; 
+			else 
+				sh ../sbin/$__var_wrapper_name &
+			fi
+		fi
+
+		(cd /usr/local/lxlabs/$prog/httpdocs ; lphp.exe ../bin/common/misc/fixlighty.php $1 )
+		cp /usr/local/lxlabs/ext/lxlighttpd/sbin/lighttpd /usr/local/lxlabs/ext/lxlighttpd/sbin/$prog.httpd 2>/dev/null
+		$httpd $OPTIONS &
+		if ! [ -f $__var_slave_db ] ; then
+			if ! /etc/init.d/mysqld status ; then
+				/etc/init.d/mysqld start
+			fi
+			sleep 1
+			pkill -f php_cgi
+		fi
+
+		(cd /usr/local/lxlabs/$prog/httpdocs ; lphp.exe ../bin/execatinit.php)
+
+		echo "Started $prog"
+        RETVAL=$?
+        echo
+        [ $RETVAL = 0 ] && touch /var/lock/subsys/lxhttpd
+        return $RETVAL
+}
+
+startdefaultport () {
+	start --default-port=true
+}
+
+
+
+
+mystatus () {
+
+	local base=${1##*/}
+	if pgrep -f $base >/dev/null 2>&1; then
+		echo Process $base is running 
+	fi
+}
+
+stop() {
+	echo -n $"Stopping $prog: "
+	pkill -f $httpd
+	pkill -f $__var_server_name 2>/dev/null
+	pkill -f $__var_server_exe 2>/dev/null
+	pkill -f $__var_wrapper_name 2>/dev/null
+	pkill -f lxhttpd 2>/dev/null
+	pkill -f lxphp
+
+
+	while : ; do
+		echo "Waiting for the process to die....."
+		if ! pgrep -f $__var_wrapper_name ; then
+				break;
+		fi
+		sleep 1
+		pkill -f $__var_wrapper_name 2>/dev/null
+	done
+
+	RETVAL=$?
+	echo "Stopped $prog"
+	echo
+	[ $RETVAL = 0 ] && rm -f /var/lock/subsys/lxhttpd /var/run/lxhttpd.pid
+}
+
+backendrestart () {
+	pkill -f $__var_server_name 2>/dev/null
+	pkill -f $__var_server_exe 2>/dev/null
+	pkill -f $__var_wrapper_name 2>/dev/null
+	pkill -f lxphp
+	unset SERVER_NAME
+	unset SCRIPT_NAME
+	unset GATEWAY_INTERFACE
+	while : ; do
+		echo "Waiting for the process to die....."
+			if ! pgrep -f $__var_wrapper_name ; then
+				break;
+			fi
+		sleep 1
+	done
+	sh ../sbin/$__var_wrapper_name &
+}
+
+lxstop() {
+	echo -n $"Stopping $prog: "
+	pkill -f $__var_server_name 2>/dev/null
+	pkill -f $__var_server_exe 2>/dev/null
+	pkill -f lxphp
+	pkill -f lxhttpd 2>/dev/null
+	pkill -f $httpd
+	RETVAL=$?
+	echo
+	[ $RETVAL = 0 ] && rm -f /var/lock/subsys/lxhttpd /var/run/lxhttpd.pid
+}
+
+lxstart () {
+		(cd /usr/local/lxlabs/$prog/httpdocs ; lphp.exe ../bin/common/misc/fixlighty.php $1 )
+		cp /usr/local/lxlabs/ext/lxlighttpd/sbin/lighttpd /usr/local/lxlabs/ext/lxlighttpd/sbin/$prog.httpd 2>/dev/null
+		$httpd $OPTIONS &
+}
+
+
+# See how we were called.
+case "$1" in
+  start)
+	start
+	;;
+  stop)
+	stop
+	;;
+  status)
+        mystatus $httpd
+		mystatus $__var_server_exe
+		mystatus $__var_server_name
+	RETVAL=$?
+	;;
+  restart)
+	stop
+	start
+	;;
+
+startdefaultport)
+	startdefaultport
+	;;
+
+restartdefaultport)
+	stop
+	startdefaultport
+	;;
+
+backendrestart)
+	backendrestart
+	;;
+
+ lxrestart)
+	lxstop
+	lxstart
+	;;
+
+  condrestart)
+	if [ -f /var/run/lxhttpd.pid ] ; then
+		stop
+		start
+	fi
+	;;
+  reload)
+        reload
+	;;
+  graceful|help|configtest|fullstatus)
+#$$apachectl $@
+	RETVAL=$?
+	;;
+  *)
+	echo $"Usage: $prog {start|stop|restart}"
+	exit 1
+esac
+
+exit $RETVAL

@@ -1,0 +1,4 @@
+#/bin/sh
+for i in `/script/simplelist --resource=all_client ` 
+do /script/update --class=sp_specialplay --name=client-$i --subaction=skin --v-specialplay_b_s_skin_name=feather --v-specialplay_b_s_skin_color=default
+done

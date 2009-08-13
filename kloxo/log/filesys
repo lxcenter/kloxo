@@ -1,0 +1,51 @@
+04:07 Jun/07/2009: Removing /usr/local/lxlabs/kloxo/log/access_log
+04:07 Jun/07/2009: Removing /usr/local/lxlabs/kloxo/log/lighttpd_error.log
+04:07 Jun/07/2009: Chown /usr/local/lxlabs/kloxo/log to lxlabs:lxlabs
+04:11 Jun/07/2009: Removing /home/kloxo/lxguard/access.info
+14:02 Jun/07/2009: Chown /tmp/cmd_execlPKwla to admin
+14:02 Jun/07/2009: Chown /home/admin/newdo.com/NewArchive-Jun-07-14.zip to admin
+14:02 Jun/07/2009: Chown /home/admin/newdo.com/NewArchive-Jun-07-14.zip to admin:admin
+14:02 Jun/07/2009: Chown /tmp/cmd_exec2COCKx to admin
+14:02 Jun/07/2009: Chown /home/admin/newdo.com/NewArchive-Jun-07-14.zip to admin
+14:02 Jun/07/2009: Chown /home/admin/newdo.com/NewArchive-Jun-07-14.zip to admin:admin
+14:06 Jun/07/2009: Chown /tmp/cmd_execH7ScOW to admin
+14:06 Jun/07/2009: Chown /tmp/cmd_exec0jLHi7 to admin
+14:28 Jun/07/2009: Chown /tmp/cmd_execISVJeW to admin
+14:28 Jun/07/2009: Chown /tmp/cmd_execXrUab5 to admin
+15:30 Jun/07/2009: Chown /tmp/cmd_execGn1R9O to admin
+00:09 Jan/01/2006: Removing /usr/local/lxlabs/kloxo/log/access_log
+00:09 Jan/01/2006: Removing /usr/local/lxlabs/kloxo/log/lighttpd_error.log
+00:09 Jan/01/2006: Chown /usr/local/lxlabs/kloxo/log to lxlabs:lxlabs
+00:14 Jan/01/2006: Removing /usr/local/lxlabs/kloxo/log/access_log
+00:14 Jan/01/2006: Removing /usr/local/lxlabs/kloxo/log/lighttpd_error.log
+00:14 Jan/01/2006: Chown /usr/local/lxlabs/kloxo/log to lxlabs:lxlabs
+12:22 Jun/18/2009: Removing /usr/local/lxlabs/kloxo/log/access_log
+12:22 Jun/18/2009: Removing /usr/local/lxlabs/kloxo/log/lighttpd_error.log
+12:22 Jun/18/2009: Chown /usr/local/lxlabs/kloxo/log to lxlabs:lxlabs
+19:07 Jun/23/2009: Removing /usr/local/lxlabs/kloxo/log/access_log
+19:07 Jun/23/2009: Removing /usr/local/lxlabs/kloxo/log/lighttpd_error.log
+19:07 Jun/23/2009: Chown /usr/local/lxlabs/kloxo/log to lxlabs:lxlabs
+19:49 Jun/23/2009: Removing /usr/local/lxlabs/kloxo/log/access_log
+19:49 Jun/23/2009: Removing /usr/local/lxlabs/kloxo/log/lighttpd_error.log
+19:49 Jun/23/2009: Chown /usr/local/lxlabs/kloxo/log to lxlabs:lxlabs
+20:29 Jun/23/2009: Removing /usr/local/lxlabs/kloxo/log/access_log
+20:29 Jun/23/2009: Removing /usr/local/lxlabs/kloxo/log/lighttpd_error.log
+20:29 Jun/23/2009: Chown /usr/local/lxlabs/kloxo/log to lxlabs:lxlabs
+20:34 Jun/23/2009: Removing /usr/local/lxlabs/kloxo/log/access_log
+20:34 Jun/23/2009: Removing /usr/local/lxlabs/kloxo/log/lighttpd_error.log
+20:34 Jun/23/2009: Chown /usr/local/lxlabs/kloxo/log to lxlabs:lxlabs
+20:48 Jun/23/2009: Removing /usr/local/lxlabs/kloxo/log/access_log
+20:48 Jun/23/2009: Removing /usr/local/lxlabs/kloxo/log/lighttpd_error.log
+20:48 Jun/23/2009: Chown /usr/local/lxlabs/kloxo/log to lxlabs:lxlabs
+20:53 Jun/23/2009: Removing /usr/local/lxlabs/kloxo/log/access_log
+20:53 Jun/23/2009: Removing /usr/local/lxlabs/kloxo/log/lighttpd_error.log
+20:53 Jun/23/2009: Chown /usr/local/lxlabs/kloxo/log to lxlabs:lxlabs
+20:16 Jun/25/2009: Removing /usr/local/lxlabs/kloxo/log/access_log
+20:16 Jun/25/2009: Removing /usr/local/lxlabs/kloxo/log/lighttpd_error.log
+20:16 Jun/25/2009: Chown /usr/local/lxlabs/kloxo/log to lxlabs:lxlabs
+18:17 Aug/01/2009: Removing /usr/local/lxlabs/kloxo/log/access_log
+18:17 Aug/01/2009: Removing /usr/local/lxlabs/kloxo/log/lighttpd_error.log
+18:17 Aug/01/2009: Chown /usr/local/lxlabs/kloxo/log to lxlabs:lxlabs
+19:07 Aug/01/2009: Removing /usr/local/lxlabs/kloxo/log/access_log
+19:07 Aug/01/2009: Removing /usr/local/lxlabs/kloxo/log/lighttpd_error.log
+19:07 Aug/01/2009: Chown /usr/local/lxlabs/kloxo/log to lxlabs:lxlabs

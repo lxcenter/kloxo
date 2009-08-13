@@ -1,0 +1,386 @@
+12:26 Jun/05/2009: Removing /usr/local/lxlabs/kloxo/log/access_log
+12:26 Jun/05/2009: Removing /usr/local/lxlabs/kloxo/log/lighttpd_error.log
+12:26 Jun/05/2009: Chown /usr/local/lxlabs/kloxo/log to lxlabs:lxlabs
+12:28 Jun/05/2009: Removing /home/kloxo/lxguard/access.info
+00:11 Jun/06/2009: Removing /usr/local/lxlabs/kloxo/pid/client-admin.backup
+01:04 Jun/06/2009: Chown /usr/local/lxlabs/kloxo/serverfile to lxlabs:lxlabs
+01:04 Jun/06/2009: Chown /usr/local/lxlabs/kloxo/serverfile/skeleton.zipKG2joC to lxlabs
+01:04 Jun/06/2009: Chown /home/admin/file to admin
+01:04 Jun/06/2009: Copying /home/kloxo/httpd/skeleton.zip /home/admin/file/skeleton.zipKG2joC
+01:04 Jun/06/2009: Copying /home/admin/file/index.html.tmp /home/admin/file/index.html
+01:04 Jun/06/2009: Chown /home/admin/file to admin:apache
+01:04 Jun/06/2009: Chown /home/admin to admin:apache
+01:04 Jun/06/2009: Chown /home/httpd/newdomain.comdd/stats/ to admin:apache
+01:04 Jun/06/2009: Chown /home/httpd/newdomain.comdd to admin:apache
+01:04 Jun/06/2009: Linking /home/admin/file to /home/httpd/newdomain.comdd/httpdocs
+01:04 Jun/06/2009: Chown /home/httpd/newdomain.comdd to admin:apache
+01:04 Jun/06/2009: Copying /etc/php.ini /home/httpd/newdomain.comdd/php.ini
+01:04 Jun/06/2009: Chown /home/httpd/newdomain.comdd to admin:apache
+01:04 Jun/06/2009: Copying ../file/script/phpinfo.phps /home/httpd/newdomain.comdd/kloxoscript/phpinfo.php
+01:04 Jun/06/2009: Chown /var/named/chroot/var/named/newdomain.comdd to named
+01:04 Jun/06/2009: Chown /var/named/chroot/etc/kloxo.named.conf to named
+01:04 Jun/06/2009: Chown /home/lxadmin/mail/domains/newdomain.comdd/.qmail-default to 1057:1057
+01:04 Jun/06/2009: Chown /home/lxadmin/mail/domains/newdomain.comdd/postmaster/.qmail to 1057:1057
+01:04 Jun/06/2009: Chown /home/lxadmin/mail/domains/newdomain.comdd/postmaster/.maildroprc to 1057:1057
+01:04 Jun/06/2009: Chown /var/bogofilter/postmaster_newdomain_comdd.wordlist.db to 1057:1057
+01:04 Jun/06/2009: Chown /home/lxadmin/mail/domains/newdomain.comdd/postmaster/.bogopref.cf to 1057:1057
+01:27 Jun/06/2009: Chown /usr/local/lxlabs/kloxo/serverfile to lxlabs:lxlabs
+01:27 Jun/06/2009: Chown /usr/local/lxlabs/kloxo/serverfile/skeleton.zipV6RLyR to lxlabs
+01:27 Jun/06/2009: Chown /home/admin/debugtest to admin
+01:27 Jun/06/2009: Copying /home/kloxo/httpd/skeleton.zip /home/admin/debugtest/skeleton.zipV6RLyR
+01:27 Jun/06/2009: Copying /home/admin/debugtest/index.html.tmp /home/admin/debugtest/index.html
+01:27 Jun/06/2009: Chown /home/admin/debugtest to admin:apache
+01:27 Jun/06/2009: Chown /home/admin to admin:apache
+01:27 Jun/06/2009: Chown /home/httpd/newdomain.comd/stats/ to admin:apache
+01:27 Jun/06/2009: Chown /home/httpd/newdomain.comd to admin:apache
+01:27 Jun/06/2009: Linking /home/admin/debugtest to /home/httpd/newdomain.comd/httpdocs
+01:27 Jun/06/2009: Chown /home/httpd/newdomain.comd to admin:apache
+01:27 Jun/06/2009: Copying /etc/php.ini /home/httpd/newdomain.comd/php.ini
+01:27 Jun/06/2009: Chown /home/httpd/newdomain.comd to admin:apache
+01:27 Jun/06/2009: Copying ../file/script/phpinfo.phps /home/httpd/newdomain.comd/kloxoscript/phpinfo.php
+01:27 Jun/06/2009: Chown /var/named/chroot/var/named/newdomain.comd to named
+01:27 Jun/06/2009: Chown /var/named/chroot/etc/kloxo.named.conf to named
+01:27 Jun/06/2009: Chown /home/lxadmin/mail/domains/newdomain.comd/.qmail-default to 1057:1057
+01:27 Jun/06/2009: Chown /home/lxadmin/mail/domains/newdomain.comd/postmaster/.qmail to 1057:1057
+01:27 Jun/06/2009: Chown /home/lxadmin/mail/domains/newdomain.comd/postmaster/.maildroprc to 1057:1057
+01:27 Jun/06/2009: Chown /var/bogofilter/postmaster_newdomain_comd.wordlist.db to 1057:1057
+01:27 Jun/06/2009: Chown /home/lxadmin/mail/domains/newdomain.comd/postmaster/.bogopref.cf to 1057:1057
+01:29 Jun/06/2009: Chown /usr/local/lxlabs/kloxo/serverfile to lxlabs:lxlabs
+01:29 Jun/06/2009: Chown /usr/local/lxlabs/kloxo/serverfile/skeleton.zip5MSrQY to lxlabs
+01:29 Jun/06/2009: Chown /home/admin/newdomain.com to admin
+01:29 Jun/06/2009: Chown /home/admin/newdomain.com to admin:apache
+01:29 Jun/06/2009: Chown /home/admin to admin:apache
+01:29 Jun/06/2009: Chown /home/httpd/whatever.com/stats/ to admin:apache
+01:29 Jun/06/2009: Chown /home/httpd/whatever.com to admin:apache
+01:29 Jun/06/2009: Linking /home/admin/newdomain.com to /home/httpd/whatever.com/httpdocs
+01:29 Jun/06/2009: Chown /home/httpd/whatever.com to admin:apache
+01:29 Jun/06/2009: Copying /etc/php.ini /home/httpd/whatever.com/php.ini
+01:29 Jun/06/2009: Chown /home/httpd/whatever.com to admin:apache
+01:29 Jun/06/2009: Copying ../file/script/phpinfo.phps /home/httpd/whatever.com/kloxoscript/phpinfo.php
+01:29 Jun/06/2009: Chown /var/named/chroot/var/named/whatever.com to named
+01:29 Jun/06/2009: Chown /var/named/chroot/etc/kloxo.named.conf to named
+01:29 Jun/06/2009: Chown /home/lxadmin/mail/domains/whatever.com/.qmail-default to 1057:1057
+01:29 Jun/06/2009: Chown /home/lxadmin/mail/domains/whatever.com/postmaster/.qmail to 1057:1057
+01:29 Jun/06/2009: Chown /home/lxadmin/mail/domains/whatever.com/postmaster/.maildroprc to 1057:1057
+01:29 Jun/06/2009: Chown /var/bogofilter/postmaster_whatever_com.wordlist.db to 1057:1057
+01:29 Jun/06/2009: Chown /home/lxadmin/mail/domains/whatever.com/postmaster/.bogopref.cf to 1057:1057
+01:29 Jun/06/2009: Chown /usr/local/lxlabs/kloxo/serverfile to lxlabs:lxlabs
+01:29 Jun/06/2009: Chown /usr/local/lxlabs/kloxo/serverfile/skeleton.zipWwp47U to lxlabs
+01:29 Jun/06/2009: Chown /home/admin/whatever.dd to admin
+01:29 Jun/06/2009: Copying /home/kloxo/httpd/skeleton.zip /home/admin/whatever.dd/skeleton.zipWwp47U
+01:29 Jun/06/2009: Copying /home/admin/whatever.dd/index.html.tmp /home/admin/whatever.dd/index.html
+01:29 Jun/06/2009: Chown /home/admin/whatever.dd to admin:apache
+01:29 Jun/06/2009: Chown /home/admin to admin:apache
+01:29 Jun/06/2009: Chown /home/httpd/whatever.dd/stats/ to admin:apache
+01:29 Jun/06/2009: Chown /home/httpd/whatever.dd to admin:apache
+01:29 Jun/06/2009: Linking /home/admin/whatever.dd to /home/httpd/whatever.dd/httpdocs
+01:29 Jun/06/2009: Chown /home/httpd/whatever.dd to admin:apache
+01:29 Jun/06/2009: Copying /etc/php.ini /home/httpd/whatever.dd/php.ini
+01:29 Jun/06/2009: Chown /home/httpd/whatever.dd to admin:apache
+01:29 Jun/06/2009: Copying ../file/script/phpinfo.phps /home/httpd/whatever.dd/kloxoscript/phpinfo.php
+01:29 Jun/06/2009: Chown /var/named/chroot/var/named/whatever.dd to named
+01:29 Jun/06/2009: Chown /var/named/chroot/etc/kloxo.named.conf to named
+01:29 Jun/06/2009: Chown /home/lxadmin/mail/domains/whatever.dd/.qmail-default to 1057:1057
+01:29 Jun/06/2009: Chown /home/lxadmin/mail/domains/whatever.dd/postmaster/.qmail to 1057:1057
+01:29 Jun/06/2009: Chown /home/lxadmin/mail/domains/whatever.dd/postmaster/.maildroprc to 1057:1057
+01:29 Jun/06/2009: Chown /var/bogofilter/postmaster_whatever_dd.wordlist.db to 1057:1057
+01:29 Jun/06/2009: Chown /home/lxadmin/mail/domains/whatever.dd/postmaster/.bogopref.cf to 1057:1057
+01:30 Jun/06/2009: Removing ../etc/flag/xcache_enabled.flg
+01:30 Jun/06/2009: Removing /home/httpd/bakery.newdomain.com/php.ini
+01:30 Jun/06/2009: Removing ../etc/flag/xcache_enabled.flg
+01:30 Jun/06/2009: Removing /home/httpd/happy.com/php.ini
+01:30 Jun/06/2009: Removing ../etc/flag/xcache_enabled.flg
+01:30 Jun/06/2009: Removing /home/httpd/mock.com/php.ini
+01:30 Jun/06/2009: Removing ../etc/flag/xcache_enabled.flg
+01:30 Jun/06/2009: Removing /home/httpd/newdomain.com/php.ini
+01:30 Jun/06/2009: Removing ../etc/flag/xcache_enabled.flg
+01:30 Jun/06/2009: Removing /home/httpd/newsub.happy.com/php.ini
+01:30 Jun/06/2009: Removing ../etc/flag/xcache_enabled.flg
+01:30 Jun/06/2009: Removing /home/httpd/test.com/php.ini
+01:30 Jun/06/2009: Removing ../etc/flag/xcache_enabled.flg
+01:30 Jun/06/2009: Removing /home/httpd/tracker.com/php.ini
+01:30 Jun/06/2009: Removing ../etc/flag/xcache_enabled.flg
+01:30 Jun/06/2009: Copying /etc/php.ini /etc/kloxo-backup-php.ini
+01:30 Jun/06/2009: Copying ../file/xcache.ini /etc/php.d/xcache.noini
+01:30 Jun/06/2009: Removing /etc/php.ini
+01:30 Jun/06/2009: Removing ../etc/flag/xcache_enabled.flg
+01:30 Jun/06/2009: Chown /home/newclientt/sadd.com/.htaccess to newclientt:apache
+01:30 Jun/06/2009: Removing /home/httpd/sadd.com/php.ini
+01:30 Jun/06/2009: Removing ../etc/flag/xcache_enabled.flg
+01:30 Jun/06/2009: Removing /home/httpd/bakery.newdomain.com/php.ini
+01:30 Jun/06/2009: Removing ../etc/flag/xcache_enabled.flg
+01:30 Jun/06/2009: Chown /home/admin/domain.happy.com/.htaccess to admin:apache
+01:30 Jun/06/2009: Removing /home/httpd/domain.happy.com/php.ini
+01:30 Jun/06/2009: Removing ../etc/flag/xcache_enabled.flg
+01:30 Jun/06/2009: Chown /home/admin/domains.bakery.newdomain.com/.htaccess to admin:apache
+01:30 Jun/06/2009: Removing /home/httpd/domains.bakery.newdomain.com/php.ini
+01:30 Jun/06/2009: Removing ../etc/flag/xcache_enabled.flg
+01:30 Jun/06/2009: Removing /home/httpd/happy.com/php.ini
+01:30 Jun/06/2009: Removing ../etc/flag/xcache_enabled.flg
+01:30 Jun/06/2009: Removing /home/httpd/mock.com/php.ini
+01:30 Jun/06/2009: Removing ../etc/flag/xcache_enabled.flg
+01:30 Jun/06/2009: Chown /home/admin/newd.com/.htaccess to admin:apache
+01:30 Jun/06/2009: Removing /home/httpd/newd.com/php.ini
+01:30 Jun/06/2009: Removing ../etc/flag/xcache_enabled.flg
+01:30 Jun/06/2009: Removing /home/httpd/newdomain.com/php.ini
+01:30 Jun/06/2009: Removing ../etc/flag/xcache_enabled.flg
+01:30 Jun/06/2009: Chown /home/admin/debugtest/.htaccess to admin:apache
+01:30 Jun/06/2009: Removing /home/httpd/newdomain.comd/php.ini
+01:30 Jun/06/2009: Removing ../etc/flag/xcache_enabled.flg
+01:30 Jun/06/2009: Chown /home/admin/file/.htaccess to admin:apache
+01:30 Jun/06/2009: Removing /home/httpd/newdomain.comdd/php.ini
+01:30 Jun/06/2009: Removing ../etc/flag/xcache_enabled.flg
+01:30 Jun/06/2009: Removing /home/httpd/newsub.happy.com/php.ini
+01:30 Jun/06/2009: Removing ../etc/flag/xcache_enabled.flg
+01:30 Jun/06/2009: Chown /home/admin/nq.com/.htaccess to admin:apache
+01:30 Jun/06/2009: Removing /home/httpd/nq.com/php.ini
+01:30 Jun/06/2009: Removing ../etc/flag/xcache_enabled.flg
+01:30 Jun/06/2009: Chown /home/admin/subdomain.newd.com/.htaccess to admin:apache
+01:30 Jun/06/2009: Removing /home/httpd/subdomain.newd.com/php.ini
+01:30 Jun/06/2009: Removing ../etc/flag/xcache_enabled.flg
+01:30 Jun/06/2009: Removing /home/httpd/test.com/php.ini
+01:30 Jun/06/2009: Removing ../etc/flag/xcache_enabled.flg
+01:30 Jun/06/2009: Removing /home/httpd/tracker.com/php.ini
+01:30 Jun/06/2009: Removing ../etc/flag/xcache_enabled.flg
+01:30 Jun/06/2009: Removing /home/httpd/whatever.com/php.ini
+01:30 Jun/06/2009: Removing ../etc/flag/xcache_enabled.flg
+01:30 Jun/06/2009: Chown /home/admin/whatever.dd/.htaccess to admin:apache
+01:30 Jun/06/2009: Removing /home/httpd/whatever.dd/php.ini
+01:31 Jun/06/2009: Removing ../etc/flag/xcache_enabled.flg
+01:31 Jun/06/2009: Copying ../file/xcache.ini /etc/php.d/xcache.noini
+01:31 Jun/06/2009: Removing /etc/php.ini
+01:31 Jun/06/2009: Removing ../etc/flag/xcache_enabled.flg
+01:31 Jun/06/2009: Removing /home/httpd/sadd.com/php.ini
+01:31 Jun/06/2009: Removing ../etc/flag/xcache_enabled.flg
+01:31 Jun/06/2009: Removing /home/httpd/bakery.newdomain.com/php.ini
+01:31 Jun/06/2009: Removing ../etc/flag/xcache_enabled.flg
+01:31 Jun/06/2009: Removing /home/httpd/domain.happy.com/php.ini
+01:31 Jun/06/2009: Removing ../etc/flag/xcache_enabled.flg
+01:31 Jun/06/2009: Removing /home/httpd/domains.bakery.newdomain.com/php.ini
+01:31 Jun/06/2009: Removing ../etc/flag/xcache_enabled.flg
+01:31 Jun/06/2009: Removing /home/httpd/happy.com/php.ini
+01:31 Jun/06/2009: Removing ../etc/flag/xcache_enabled.flg
+01:31 Jun/06/2009: Removing /home/httpd/mock.com/php.ini
+01:31 Jun/06/2009: Removing ../etc/flag/xcache_enabled.flg
+01:31 Jun/06/2009: Removing /home/httpd/newd.com/php.ini
+01:31 Jun/06/2009: Removing ../etc/flag/xcache_enabled.flg
+01:31 Jun/06/2009: Removing /home/httpd/newdomain.com/php.ini
+01:31 Jun/06/2009: Removing ../etc/flag/xcache_enabled.flg
+01:31 Jun/06/2009: Removing /home/httpd/newdomain.comd/php.ini
+01:31 Jun/06/2009: Removing ../etc/flag/xcache_enabled.flg
+01:31 Jun/06/2009: Removing /home/httpd/newdomain.comdd/php.ini
+01:31 Jun/06/2009: Removing ../etc/flag/xcache_enabled.flg
+01:31 Jun/06/2009: Removing /home/httpd/newsub.happy.com/php.ini
+01:31 Jun/06/2009: Removing ../etc/flag/xcache_enabled.flg
+01:31 Jun/06/2009: Removing /home/httpd/nq.com/php.ini
+01:31 Jun/06/2009: Removing ../etc/flag/xcache_enabled.flg
+01:31 Jun/06/2009: Removing /home/httpd/subdomain.newd.com/php.ini
+01:31 Jun/06/2009: Removing ../etc/flag/xcache_enabled.flg
+01:31 Jun/06/2009: Removing /home/httpd/test.com/php.ini
+01:31 Jun/06/2009: Removing ../etc/flag/xcache_enabled.flg
+01:31 Jun/06/2009: Removing /home/httpd/tracker.com/php.ini
+01:31 Jun/06/2009: Removing ../etc/flag/xcache_enabled.flg
+01:31 Jun/06/2009: Removing /home/httpd/whatever.com/php.ini
+01:31 Jun/06/2009: Removing ../etc/flag/xcache_enabled.flg
+01:31 Jun/06/2009: Removing /home/httpd/whatever.dd/php.ini
+01:31 Jun/06/2009: Removing ../etc/flag/xcache_enabled.flg
+01:31 Jun/06/2009: Copying ../file/xcache.ini /etc/php.d/xcache.noini
+01:31 Jun/06/2009: Removing /etc/php.ini
+01:31 Jun/06/2009: Removing ../etc/flag/xcache_enabled.flg
+01:31 Jun/06/2009: Removing /home/httpd/sadd.com/php.ini
+01:31 Jun/06/2009: Removing ../etc/flag/xcache_enabled.flg
+01:31 Jun/06/2009: Removing /home/httpd/bakery.newdomain.com/php.ini
+01:31 Jun/06/2009: Removing ../etc/flag/xcache_enabled.flg
+01:31 Jun/06/2009: Removing /home/httpd/domain.happy.com/php.ini
+01:31 Jun/06/2009: Removing ../etc/flag/xcache_enabled.flg
+01:31 Jun/06/2009: Removing /home/httpd/domains.bakery.newdomain.com/php.ini
+01:31 Jun/06/2009: Removing ../etc/flag/xcache_enabled.flg
+01:31 Jun/06/2009: Removing /home/httpd/happy.com/php.ini
+01:31 Jun/06/2009: Removing ../etc/flag/xcache_enabled.flg
+01:31 Jun/06/2009: Removing /home/httpd/mock.com/php.ini
+01:31 Jun/06/2009: Removing ../etc/flag/xcache_enabled.flg
+01:31 Jun/06/2009: Removing /home/httpd/newd.com/php.ini
+01:31 Jun/06/2009: Removing ../etc/flag/xcache_enabled.flg
+01:31 Jun/06/2009: Removing /home/httpd/newdomain.com/php.ini
+01:31 Jun/06/2009: Removing ../etc/flag/xcache_enabled.flg
+01:31 Jun/06/2009: Removing /home/httpd/newdomain.comd/php.ini
+01:31 Jun/06/2009: Removing ../etc/flag/xcache_enabled.flg
+01:31 Jun/06/2009: Removing /home/httpd/newdomain.comdd/php.ini
+01:31 Jun/06/2009: Removing ../etc/flag/xcache_enabled.flg
+01:31 Jun/06/2009: Removing /home/httpd/newsub.happy.com/php.ini
+01:31 Jun/06/2009: Removing ../etc/flag/xcache_enabled.flg
+01:31 Jun/06/2009: Removing /home/httpd/nq.com/php.ini
+01:31 Jun/06/2009: Removing ../etc/flag/xcache_enabled.flg
+01:31 Jun/06/2009: Removing /home/httpd/subdomain.newd.com/php.ini
+01:31 Jun/06/2009: Removing ../etc/flag/xcache_enabled.flg
+01:31 Jun/06/2009: Removing /home/httpd/test.com/php.ini
+01:31 Jun/06/2009: Removing ../etc/flag/xcache_enabled.flg
+01:31 Jun/06/2009: Removing /home/httpd/tracker.com/php.ini
+01:31 Jun/06/2009: Removing ../etc/flag/xcache_enabled.flg
+01:31 Jun/06/2009: Removing /home/httpd/whatever.com/php.ini
+01:31 Jun/06/2009: Removing ../etc/flag/xcache_enabled.flg
+01:31 Jun/06/2009: Removing /home/httpd/whatever.dd/php.ini
+02:31 Jun/06/2009: Chown /usr/local/lxlabs/kloxo/serverfile to lxlabs:lxlabs
+02:31 Jun/06/2009: Chown /usr/local/lxlabs/kloxo/serverfile/skeleton.zip0BVvA4 to lxlabs
+02:31 Jun/06/2009: Chown /home/admin/justintime.com to admin
+02:31 Jun/06/2009: Copying /home/kloxo/httpd/skeleton.zip /home/admin/justintime.com/skeleton.zip0BVvA4
+02:31 Jun/06/2009: Copying /home/admin/justintime.com/index.html.tmp /home/admin/justintime.com/index.html
+02:31 Jun/06/2009: Chown /home/admin/justintime.com to admin:apache
+02:31 Jun/06/2009: Chown /home/admin to admin:apache
+02:31 Jun/06/2009: Chown /home/httpd/justintime.com/stats/ to admin:apache
+02:31 Jun/06/2009: Chown /home/httpd/justintime.com to admin:apache
+02:31 Jun/06/2009: Linking /home/admin/justintime.com to /home/httpd/justintime.com/httpdocs
+02:31 Jun/06/2009: Chown /home/httpd/justintime.com to admin:apache
+02:31 Jun/06/2009: Copying /etc/php.ini /home/httpd/justintime.com/php.ini
+02:31 Jun/06/2009: Chown /home/httpd/justintime.com to admin:apache
+02:31 Jun/06/2009: Copying ../file/script/phpinfo.phps /home/httpd/justintime.com/kloxoscript/phpinfo.php
+02:31 Jun/06/2009: Chown /var/named/chroot/var/named/justintime.com to named
+02:31 Jun/06/2009: Chown /var/named/chroot/etc/kloxo.named.conf to named
+02:31 Jun/06/2009: Chown /home/lxadmin/mail/domains/justintime.com/postmaster/.maildroprc to 1057:1057
+02:31 Jun/06/2009: Chown /home/lxadmin/mail/domains/justintime.com/postmaster/.qmail to 1057:1057
+02:31 Jun/06/2009: Chown /var/bogofilter/postmaster_justintime_com.wordlist.db to 1057:1057
+02:31 Jun/06/2009: Chown /home/lxadmin/mail/domains/justintime.com/postmaster/.bogopref.cf to 1057:1057
+03:19 Jun/06/2009: Chown /bhargi/ to bhargi
+03:19 Jun/06/2009: /bhargi/ is a hard link not chowning
+03:20 Jun/06/2009: Chown /bhargi/password to bhargi
+03:20 Jun/06/2009: Chown /bhargi/password to bhargi
+03:20 Jun/06/2009: Chown /bhargi/password to bhargi
+03:21 Jun/06/2009: Chown /bhargi/passwd to bhargi
+03:21 Jun/06/2009: /bhargi/passwd is a hard link not chowning
+03:23 Jun/06/2009: Chown /bhargi to bhargi
+03:23 Jun/06/2009: Chown /bhargi/passwd to bhargi
+03:23 Jun/06/2009: /bhargi/passwd is a hard link not chowning
+03:41 Jun/06/2009: Chown /usr/local/lxlabs/kloxo/serverfile to lxlabs:lxlabs
+03:41 Jun/06/2009: Chown /usr/local/lxlabs/kloxo/serverfile/skeleton.zipgKALT8 to lxlabs
+03:41 Jun/06/2009: Chown /home/admin/backlog.com to admin
+03:41 Jun/06/2009: Copying /home/kloxo/httpd/skeleton.zip /home/admin/backlog.com/skeleton.zipgKALT8
+03:41 Jun/06/2009: Moving /home/admin/backlog.com/index.html.tmp /home/admin/backlog.com/index.html
+03:41 Jun/06/2009: Copying /home/admin/backlog.com/index.html.tmp /home/admin/backlog.com/index.html
+03:41 Jun/06/2009: Chown /home/admin/backlog.com to admin:apache
+03:41 Jun/06/2009: Chown /home/admin to admin:apache
+03:41 Jun/06/2009: Chown /home/httpd/backlog.com/stats/ to admin:apache
+03:41 Jun/06/2009: Chown /home/httpd/backlog.com to apache:apache
+03:41 Jun/06/2009: Linking /home/admin/backlog.com to /home/httpd/backlog.com/httpdocs
+03:41 Jun/06/2009: Chown /home/httpd/backlog.com to admin:apache
+03:41 Jun/06/2009: Copying /etc/php.ini /home/httpd/backlog.com/php.ini
+03:41 Jun/06/2009: Chown /home/httpd/backlog.com to admin:apache
+03:41 Jun/06/2009: Copying ../file/script/phpinfo.phps /home/httpd/backlog.com/kloxoscript/phpinfo.php
+03:41 Jun/06/2009: Chown /var/named/chroot/var/named/backlog.com to named
+03:41 Jun/06/2009: Chown /var/named/chroot/etc/kloxo.named.conf to named
+03:41 Jun/06/2009: Chown /home/lxadmin/mail/domains/backlog.com/postmaster/.maildroprc to 1057:1057
+03:41 Jun/06/2009: Chown /home/lxadmin/mail/domains/backlog.com/postmaster/.qmail to 1057:1057
+03:41 Jun/06/2009: Chown /var/bogofilter/postmaster_backlog_com.wordlist.db to 1057:1057
+03:41 Jun/06/2009: Chown /usr/local/lxlabs/kloxo/serverfile to lxlabs:lxlabs
+03:41 Jun/06/2009: Chown /usr/local/lxlabs/kloxo/serverfile/skeleton.ziprmAzvL to lxlabs
+03:41 Jun/06/2009: Chown /home/admin/deeproot.com to admin
+03:41 Jun/06/2009: Copying /home/kloxo/httpd/skeleton.zip /home/admin/deeproot.com/skeleton.ziprmAzvL
+03:41 Jun/06/2009: Moving /home/admin/deeproot.com/index.html.tmp /home/admin/deeproot.com/index.html
+03:41 Jun/06/2009: Copying /home/admin/deeproot.com/index.html.tmp /home/admin/deeproot.com/index.html
+03:41 Jun/06/2009: Chown /home/admin/deeproot.com to admin:apache
+03:41 Jun/06/2009: Chown /home/admin to admin:apache
+03:41 Jun/06/2009: Chown /home/httpd/deeproot.com/stats/ to admin:apache
+03:41 Jun/06/2009: Chown /home/httpd/deeproot.com to apache:apache
+03:41 Jun/06/2009: Linking /home/admin/deeproot.com to /home/httpd/deeproot.com/httpdocs
+03:41 Jun/06/2009: Chown /home/httpd/deeproot.com to admin:apache
+03:41 Jun/06/2009: Copying /etc/php.ini /home/httpd/deeproot.com/php.ini
+03:41 Jun/06/2009: Chown /home/httpd/deeproot.com to admin:apache
+03:41 Jun/06/2009: Copying ../file/script/phpinfo.phps /home/httpd/deeproot.com/kloxoscript/phpinfo.php
+03:41 Jun/06/2009: Chown /var/named/chroot/var/named/deeproot.com to named
+03:41 Jun/06/2009: Chown /var/named/chroot/etc/kloxo.named.conf to named
+03:41 Jun/06/2009: Chown /home/lxadmin/mail/domains/deeproot.com/postmaster/.maildroprc to 1057:1057
+03:41 Jun/06/2009: Chown /home/lxadmin/mail/domains/deeproot.com/postmaster/.qmail to 1057:1057
+03:41 Jun/06/2009: Chown /var/bogofilter/postmaster_deeproot_com.wordlist.db to 1057:1057
+03:45 Jun/06/2009: Chown /usr/local/lxlabs/kloxo/serverfile to lxlabs:lxlabs
+03:45 Jun/06/2009: Chown /usr/local/lxlabs/kloxo/serverfile/skeleton.zipn8rPn8 to lxlabs
+03:45 Jun/06/2009: Chown /home/admin/voxhole.com to admin
+03:45 Jun/06/2009: Copying /home/kloxo/httpd/skeleton.zip /home/admin/voxhole.com/skeleton.zipn8rPn8
+03:45 Jun/06/2009: Moving /home/admin/voxhole.com/index.html.tmp /home/admin/voxhole.com/index.html
+03:45 Jun/06/2009: Copying /home/admin/voxhole.com/index.html.tmp /home/admin/voxhole.com/index.html
+03:45 Jun/06/2009: Chown /home/admin/voxhole.com to admin:apache
+03:45 Jun/06/2009: Chown /home/admin to admin:apache
+03:45 Jun/06/2009: Chown /home/httpd/voxhole.com/stats/ to apache:apache
+03:45 Jun/06/2009: Chown /home/httpd/voxhole.com to apache:apache
+03:45 Jun/06/2009: Linking /home/admin/voxhole.com to /home/httpd/voxhole.com/httpdocs
+03:45 Jun/06/2009: Chown /home/httpd/voxhole.com to admin:apache
+03:45 Jun/06/2009: Copying /etc/php.ini /home/httpd/voxhole.com/php.ini
+03:45 Jun/06/2009: Chown /home/httpd/voxhole.com to admin:apache
+03:45 Jun/06/2009: Copying ../file/script/phpinfo.phps /home/httpd/voxhole.com/kloxoscript/phpinfo.php
+03:45 Jun/06/2009: Chown /var/named/chroot/var/named/voxhole.com to named
+03:45 Jun/06/2009: Chown /var/named/chroot/etc/kloxo.named.conf to named
+03:45 Jun/06/2009: Chown /home/lxadmin/mail/domains/voxhole.com/postmaster/.maildroprc to 1057:1057
+03:45 Jun/06/2009: Chown /home/lxadmin/mail/domains/voxhole.com/postmaster/.qmail to 1057:1057
+03:45 Jun/06/2009: Chown /var/bogofilter/postmaster_voxhole_com.wordlist.db to 1057:1057
+03:46 Jun/06/2009: Chown /usr/local/lxlabs/kloxo/serverfile to lxlabs:lxlabs
+03:46 Jun/06/2009: Chown /usr/local/lxlabs/kloxo/serverfile/skeleton.ziplOibRO to lxlabs
+03:46 Jun/06/2009: Chown /home/admin/blahtest.com to admin
+03:46 Jun/06/2009: Copying /home/kloxo/httpd/skeleton.zip /home/admin/blahtest.com/skeleton.ziplOibRO
+03:46 Jun/06/2009: Moving /home/admin/blahtest.com/index.html.tmp /home/admin/blahtest.com/index.html
+03:46 Jun/06/2009: Copying /home/admin/blahtest.com/index.html.tmp /home/admin/blahtest.com/index.html
+03:46 Jun/06/2009: Chown /home/admin/blahtest.com to admin:apache
+03:46 Jun/06/2009: Chown /home/admin to admin:apache
+03:46 Jun/06/2009: Chown /home/httpd/blahtest.com/stats/ to apache:apache
+03:46 Jun/06/2009: Chown /home/httpd/blahtest.com to apache:apache
+03:46 Jun/06/2009: Linking /home/admin/blahtest.com to /home/httpd/blahtest.com/httpdocs
+03:46 Jun/06/2009: Chown /home/httpd/blahtest.com to admin:apache
+03:46 Jun/06/2009: Copying /etc/php.ini /home/httpd/blahtest.com/php.ini
+03:46 Jun/06/2009: Chown /home/httpd/blahtest.com to admin:apache
+03:46 Jun/06/2009: Copying ../file/script/phpinfo.phps /home/httpd/blahtest.com/kloxoscript/phpinfo.php
+03:46 Jun/06/2009: Chown /var/named/chroot/var/named/blahtest.com to named
+03:46 Jun/06/2009: Chown /var/named/chroot/etc/kloxo.named.conf to named
+03:46 Jun/06/2009: Chown /home/lxadmin/mail/domains/blahtest.com/postmaster/.maildroprc to 1057:1057
+03:46 Jun/06/2009: Chown /home/lxadmin/mail/domains/blahtest.com/postmaster/.qmail to 1057:1057
+03:46 Jun/06/2009: Chown /var/bogofilter/postmaster_blahtest_com.wordlist.db to 1057:1057
+03:46 Jun/06/2009: Copying ../file/script/phpinfo.phps /home/httpd/sadd.com/kloxoscript/phpinfo.php
+03:46 Jun/06/2009: Chown /home/httpd/sadd.com to newclientt:apache
+03:46 Jun/06/2009: Chown /home/httpd/sadd.com to newclientt:apache
+03:46 Jun/06/2009: Chown /home/httpd/sadd.com to apache:apache
+03:46 Jun/06/2009: Copying ../file/script/phpinfo.phps /home/httpd/backlog.com/kloxoscript/phpinfo.php
+03:46 Jun/06/2009: Chown /home/httpd/backlog.com to admin:apache
+03:46 Jun/06/2009: Chown /home/httpd/backlog.com to admin:apache
+03:46 Jun/06/2009: Chown /home/httpd/backlog.com to apache:apache
+03:46 Jun/06/2009: Copying ../file/script/phpinfo.phps /home/httpd/bakery.newdomain.com/kloxoscript/phpinfo.php
+03:46 Jun/06/2009: Chown /home/httpd/bakery.newdomain.com to admin:apache
+03:46 Jun/06/2009: Chown /home/httpd/bakery.newdomain.com to admin:apache
+03:46 Jun/06/2009: Chown /home/httpd/bakery.newdomain.com to apache:apache
+03:46 Jun/06/2009: Copying ../file/script/phpinfo.phps /home/httpd/blahtest.com/kloxoscript/phpinfo.php
+03:46 Jun/06/2009: Chown /home/httpd/blahtest.com to admin:apache
+03:46 Jun/06/2009: Chown /home/httpd/blahtest.com to admin:apache
+03:46 Jun/06/2009: Chown /home/httpd/blahtest.com to apache:apache
+03:46 Jun/06/2009: Copying ../file/script/phpinfo.phps /home/httpd/deeproot.com/kloxoscript/phpinfo.php
+03:46 Jun/06/2009: Chown /home/httpd/deeproot.com to admin:apache
+03:46 Jun/06/2009: Chown /home/httpd/deeproot.com to admin:apache
+03:46 Jun/06/2009: Chown /home/httpd/deeproot.com to apache:apache
+03:46 Jun/06/2009: Copying ../file/script/phpinfo.phps /home/httpd/domain.happy.com/kloxoscript/phpinfo.php
+03:47 Jun/06/2009: Copying ../file/script/phpinfo.phps /home/httpd/sadd.com/kloxoscript/phpinfo.php
+03:47 Jun/06/2009: Chown /home/httpd/sadd.com to newclientt:apache
+03:47 Jun/06/2009: Chown /home/httpd/sadd.com to newclientt:apache
+03:47 Jun/06/2009: Chown /home/httpd/sadd.com to apache:apache
+03:47 Jun/06/2009: Copying ../file/script/phpinfo.phps /home/httpd/backlog.com/kloxoscript/phpinfo.php
+03:47 Jun/06/2009: Chown /home/httpd/backlog.com to admin:apache
+03:47 Jun/06/2009: Chown /home/httpd/backlog.com to admin:apache
+03:47 Jun/06/2009: Chown /home/httpd/backlog.com to apache:apache
+03:47 Jun/06/2009: Copying ../file/script/phpinfo.phps /home/httpd/bakery.newdomain.com/kloxoscript/phpinfo.php
+03:47 Jun/06/2009: Chown /home/httpd/bakery.newdomain.com to admin:apache
+03:47 Jun/06/2009: Chown /home/httpd/bakery.newdomain.com to admin:apache
+03:50 Jun/06/2009: Chown /usr/local/lxlabs/kloxo/serverfile to lxlabs:lxlabs
+03:50 Jun/06/2009: Chown /usr/local/lxlabs/kloxo/serverfile/skeleton.zipJe3TTC to lxlabs
+03:50 Jun/06/2009: Chown /home/admin/merab.com to admin
+03:50 Jun/06/2009: Copying /home/kloxo/httpd/skeleton.zip /home/admin/merab.com/skeleton.zipJe3TTC
+03:50 Jun/06/2009: Moving /home/admin/merab.com/index.html.tmp /home/admin/merab.com/index.html
+03:50 Jun/06/2009: Copying /home/admin/merab.com/index.html.tmp /home/admin/merab.com/index.html
+03:50 Jun/06/2009: Chown /home/admin/merab.com to admin:apache
+03:50 Jun/06/2009: Chown /home/admin to admin:apache
+03:50 Jun/06/2009: Chown /home/httpd/merab.com/stats/ to apache:apache
+03:50 Jun/06/2009: Chown /home/httpd/merab.com to apache:apache
+03:50 Jun/06/2009: Linking /home/admin/merab.com to /home/httpd/merab.com/httpdocs
+03:50 Jun/06/2009: Chown /home/httpd/merab.com to apache:apache
+03:50 Jun/06/2009: Copying /etc/php.ini /home/httpd/merab.com/php.ini
+03:50 Jun/06/2009: Chown /home/httpd/merab.com to apache:apache
+03:50 Jun/06/2009: Copying ../file/script/phpinfo.phps /home/httpd/merab.com/kloxoscript/phpinfo.php
+03:50 Jun/06/2009: Chown /var/named/chroot/var/named/merab.com to named
+03:50 Jun/06/2009: Chown /var/named/chroot/etc/kloxo.named.conf to named
+03:50 Jun/06/2009: Chown /home/lxadmin/mail/domains/merab.com/postmaster/.maildroprc to 1057:1057
+03:50 Jun/06/2009: Chown /home/lxadmin/mail/domains/merab.com/postmaster/.qmail to 1057:1057
+03:50 Jun/06/2009: Chown /var/bogofilter/postmaster_merab_com.wordlist.db to 1057:1057
+03:57 Jun/06/2009: Removing /usr/local/lxlabs/kloxo/pid/collectquota.php.pid
+04:07 Jun/06/2009: Chown .. to lxlabs

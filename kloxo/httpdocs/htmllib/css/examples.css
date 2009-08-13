@@ -1,0 +1,47 @@
+/*
+ * Ext JS Library 1.1
+ * Copyright(c) 2006-2007, Ext JS, LLC.
+ * licensing@extjs.com
+ * 
+ * http://www.extjs.com/license
+ */
+
+p {
+	margin-bottom:1px;
+}
+h1 {
+	font-size:large; 
+	margin-bottom:0px;
+}
+.example-info{
+	width:150px;
+	border:1px solid #c3daf9;
+	border-top:1px solid #DCEAFB;
+	border-left:1px solid #DCEAFB;
+	background:#ecf5fe url(info-bg.gif) repeat-x;
+	font-size:10px;
+	padding:0px;
+}
+pre.code{
+	background: #F8F8F8;
+	border: 1px solid #e8e8e8;
+	padding:0px;
+	margin:0px;
+	margin-left:0px;
+	border-left:0px solid #e8e8e8;
+	font-size: 12px !important;
+	line-height:10px !important;
+}
+.msg .x-box-mc {
+    font-size:14px;
+}
+#msg-div {
+    position:absolute;
+    left:35%;
+    top:0px;
+    width:250px;
+    z-index:20000;
+}
+.x-grid3-row-body p {
+    margin:0px 0px 0px 0px !important;
+}

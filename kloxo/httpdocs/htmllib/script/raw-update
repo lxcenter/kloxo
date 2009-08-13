@@ -1,0 +1,6 @@
+#!/bin/sh
+. /script/directory
+lphp.exe ../bin/raw_update.phps
+
+
+

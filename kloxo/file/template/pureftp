@@ -1,0 +1,11 @@
+service ftp                                                                          
+{                                                                                    
+	disable = no                                                                 
+		socket_type     = stream                                                     
+		wait            = no                                                         
+		user            = root                                                       
+		server          = /usr/sbin/pure-ftpd                                  
+		server_args     = -A -c%maxclient% -C8 -D -fftp  -H -I15 -lpuredb:/etc/pure-ftpd/pureftpd.pdb -lunix -L2000:8 -m4 -s -p%lowport%:%highport% -U133:022 -u100 %anonymous% -Oclf:/var/log/kloxo/pureftpd.log -g/var/run/pure-ftpd.pid -k99 -Z -Y 1
+		groups          = yes                                                        
+		flags           = REUSE                                                      
+}                                       

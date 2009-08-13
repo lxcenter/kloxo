@@ -1,0 +1,104 @@
+#!/bin/bash
+#
+# Startup script for the Qmail Mail Server
+#
+# chkconfig: - 86 16
+# description: Courier Imap provides the pop/smtp servers.
+# processname: tcpserver
+# pidfile: /var/run/courier.pid
+
+# Source function library.
+. /etc/rc.d/init.d/functions
+
+
+# Path to the Qmailctl script, server binary, and short-form for messages.
+Qmailproc=/var/qmail/boot/proc
+prog=Courier-Imap
+RETVAL=0
+
+PATH=$PATH:/usr/local/bin
+
+# The semantics of these two functions differ from the way Qmailctl does
+# things -- attempting to start while running is a failure, and shutdown
+# when not running is also a failure.  So we just do it the way init scripts
+# are expected to behave here.
+start() {
+		pkill -x authdaemond
+		sleep 3
+        echo -n $"Starting $prog: "
+		cd /var/qmail/supervise/authlib/
+		chmod 755 run
+		./run >> /var/log/kloxo/courier 2>&1 &
+
+		cd /var/qmail/supervise/pop3/
+		chmod 755 run
+		./run >> /var/log/kloxo/courier 2>&1 &
+
+		cd /var/qmail/supervise/pop3-ssl/
+		chmod 755 run
+		./run >> /var/log/kloxo/courier 2>&1 &
+
+		cd /var/qmail/supervise/imap4/
+		chmod 755 run
+		./run >> /var/log/kloxo/courier 2>&1 &
+
+		cd /var/qmail/supervise/imap4-ssl/
+		chmod 755 run
+		./run >> /var/log/kloxo/courier 2>&1 &
+		RETVAL=$?
+        echo
+        exit $RETVAL
+}
+stop() {
+	echo -n $"Stopping $prog: "
+	pkill -x tcpserver
+	pkill -x authdaemond
+	RETVAL=$?
+	echo
+	[ $RETVAL = 0 ] && rm -f /var/lock/subsys/djbdns /var/run/Qmail.pid
+}
+reload() {
+	echo -n $"Reloading $prog: "
+	killproc $Qmailtcp -HUP
+		RETVAL=$?
+		echo
+	[ $RETVAL = 0 ] && rm -f /var/lock/subsys/djbdns /var/run/Qmail.pid
+}
+
+# See how we were called.
+case "$1" in
+  start)
+	start
+	;;
+  stop)
+	stop
+	;;
+  status)
+        status courier-imap
+		RETVAL=$?
+		RETVAL=$?
+	;;
+  restart)
+	stop
+	sleep 1
+	start
+	;;
+  condrestart)
+	if [ -f /var/run/Qmail.pid ] ; then
+		stop
+		start
+	fi
+	;;
+  reload)
+        reload
+	;;
+  graceful|help|configtest|fullstatus)
+        $Qmailtcp $@ 
+	RETVAL=$?
+	;;
+  *)
+	echo $"Usage: $prog {start|stop|restart|condrestart|reload|status|fullstatus|graceful|help|configtest}"
+	exit 1
+esac
+
+exit $RETVAL

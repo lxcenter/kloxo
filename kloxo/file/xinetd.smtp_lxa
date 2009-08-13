@@ -1,0 +1,15 @@
+service smtp 
+{
+	socket_type     = stream                                                                                 
+		protocol        = tcp                                                                                    
+		wait            = no                                                                                     
+		disable         = no                                                                                     
+		user            = root                                                                                   
+		env             = SENDER_NOCHECK=1 
+		instances       = UNLIMITED                                                                              
+		server          = /usr/bin/lxredirecter.sh
+		server_args     = /var/qmail/bin/tcp-env -Rt0 /var/qmail/bin/qmail-smtpd /home/lxadmin/mail/bin/vchkpw    true
+}
+
+
+

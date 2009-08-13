@@ -1,0 +1,140 @@
+12:25 Jun/01/2009: Removing /usr/local/lxlabs/kloxo/log/access_log
+12:25 Jun/01/2009: Removing /usr/local/lxlabs/kloxo/log/lighttpd_error.log
+12:25 Jun/01/2009: Chown /usr/local/lxlabs/kloxo/log to lxlabs:lxlabs
+12:25 Jun/01/2009: Removing /home/kloxo/lxguard/access.info
+20:48 Jun/01/2009: Copying htmllib/script/add /script/add
+20:48 Jun/01/2009: Copying htmllib/script/backup /script/backup
+20:48 Jun/01/2009: Copying htmllib/script/cleanup /script/cleanup
+20:48 Jun/01/2009: Copying htmllib/script/clearallowedblockedip /script/clearallowedblockedip
+20:48 Jun/01/2009: Copying htmllib/script/collectquota /script/collectquota
+20:48 Jun/01/2009: Copying htmllib/script/command /script/command
+20:48 Jun/01/2009: Copying htmllib/script/defaultport /script/defaultport
+20:48 Jun/01/2009: Copying htmllib/script/delete /script/delete
+20:48 Jun/01/2009: Copying htmllib/script/directory /script/directory
+20:48 Jun/01/2009: Copying htmllib/script/fixtraffic /script/fixtraffic
+20:48 Jun/01/2009: Copying htmllib/script/getproperty /script/getproperty
+20:48 Jun/01/2009: Copying htmllib/script/lang-set-to-en /script/lang-set-to-en
+20:48 Jun/01/2009: Copying htmllib/script/make-slave /script/make-slave
+20:48 Jun/01/2009: Copying htmllib/script/mebackup /script/mebackup
+20:48 Jun/01/2009: Copying htmllib/script/primary-start /script/primary-start
+20:48 Jun/01/2009: Copying htmllib/script/raw-update /script/raw-update
+20:48 Jun/01/2009: Copying htmllib/script/reflect /script/reflect
+20:48 Jun/01/2009: Copying htmllib/script/resetpassword /script/resetpassword
+20:48 Jun/01/2009: Copying htmllib/script/restart /script/restart
+20:48 Jun/01/2009: Copying htmllib/script/restore /script/restore
+20:48 Jun/01/2009: Copying htmllib/script/scavenge /script/scavenge
+20:48 Jun/01/2009: Copying htmllib/script/secondary-setup /script/secondary-setup
+20:48 Jun/01/2009: Copying htmllib/script/secondary-start /script/secondary-start
+20:48 Jun/01/2009: Copying htmllib/script/simplelist /script/simplelist
+20:48 Jun/01/2009: Copying htmllib/script/skin-set-all-client /script/skin-set-all-client
+20:48 Jun/01/2009: Copying htmllib/script/switchserver /script/switchserver
+20:48 Jun/01/2009: Copying htmllib/script/upcp /script/upcp
+20:48 Jun/01/2009: Copying htmllib/script/update /script/update
+20:48 Jun/01/2009: Copying htmllib/script/version /script/version
+20:48 Jun/01/2009: Copying ../pscript/centos5-postpostupgrade /script/centos5-postpostupgrade
+20:48 Jun/01/2009: Copying ../pscript/centos5-postupgrade /script/centos5-postupgrade
+20:48 Jun/01/2009: Copying ../pscript/cleanspamdyke /script/cleanspamdyke
+20:48 Jun/01/2009: Copying ../pscript/enable-admin /script/enable-admin
+20:48 Jun/01/2009: Copying ../pscript/fix-yum-install /script/fix-yum-install
+20:48 Jun/01/2009: Copying ../pscript/fixdns /script/fixdns
+20:48 Jun/01/2009: Copying ../pscript/fixdomainkey /script/fixdomainkey
+20:48 Jun/01/2009: Copying ../pscript/fixftpuser /script/fixftpuser
+20:48 Jun/01/2009: Copying ../pscript/fixhorde /script/fixhorde
+20:48 Jun/01/2009: Copying ../pscript/fixmail /script/fixmail
+20:48 Jun/01/2009: Copying ../pscript/fixphp /script/fixphp
+20:48 Jun/01/2009: Copying ../pscript/fixquota /script/fixquota
+20:48 Jun/01/2009: Copying ../pscript/fixvpop /script/fixvpop
+20:48 Jun/01/2009: Copying ../pscript/fixweb /script/fixweb
+20:48 Jun/01/2009: Copying ../pscript/fixwebmail /script/fixwebmail
+20:48 Jun/01/2009: Copying ../pscript/installapp-update /script/installapp-update
+20:48 Jun/01/2009: Copying ../pscript/installatron-install /script/installatron-install
+20:48 Jun/01/2009: Copying ../pscript/qmail-update /script/qmail-update
+20:48 Jun/01/2009: Copying ../pscript/ror-install /script/ror-install
+20:48 Jun/01/2009: Copying ../pscript/set-default-ssl /script/set-default-ssl
+20:48 Jun/01/2009: Copying ../pscript/xcache-install /script/xcache-install
+20:48 Jun/01/2009: Copying ../pscript/filter/client-in-client /script/filter/client-in-client
+20:48 Jun/01/2009: Copying ../pscript/filter/customer-in-client /script/filter/customer-in-client
+20:48 Jun/01/2009: Copying ../pscript/filter/domain-in-client /script/filter/domain-in-client
+20:48 Jun/01/2009: Copying ../pscript/filter/mysqldb-in-client /script/filter/mysqldb-in-client
+20:48 Jun/01/2009: Copying ../pscript/filter/reseller-in-client /script/filter/reseller-in-client
+20:48 Jun/01/2009: Copying htmllib/script/filter/class-in-object /script/filter/class-in-object
+20:48 Jun/01/2009: Copying htmllib/script/add /script/add
+20:48 Jun/01/2009: Copying htmllib/script/backup /script/backup
+20:48 Jun/01/2009: Copying htmllib/script/cleanup /script/cleanup
+20:48 Jun/01/2009: Copying htmllib/script/clearallowedblockedip /script/clearallowedblockedip
+20:48 Jun/01/2009: Copying htmllib/script/collectquota /script/collectquota
+20:48 Jun/01/2009: Copying htmllib/script/command /script/command
+20:48 Jun/01/2009: Copying htmllib/script/defaultport /script/defaultport
+20:48 Jun/01/2009: Copying htmllib/script/delete /script/delete
+20:48 Jun/01/2009: Copying htmllib/script/directory /script/directory
+20:48 Jun/01/2009: Copying htmllib/script/enable-admin /script/enable-admin
+20:48 Jun/01/2009: Copying htmllib/script/fixtraffic /script/fixtraffic
+20:48 Jun/01/2009: Copying htmllib/script/getproperty /script/getproperty
+20:48 Jun/01/2009: Copying htmllib/script/lang-set-to-en /script/lang-set-to-en
+20:48 Jun/01/2009: Copying htmllib/script/make-slave /script/make-slave
+20:48 Jun/01/2009: Copying htmllib/script/mebackup /script/mebackup
+20:48 Jun/01/2009: Copying htmllib/script/primary-start /script/primary-start
+20:48 Jun/01/2009: Copying htmllib/script/raw-update /script/raw-update
+20:48 Jun/01/2009: Copying htmllib/script/reflect /script/reflect
+20:48 Jun/01/2009: Copying htmllib/script/resetpassword /script/resetpassword
+20:48 Jun/01/2009: Copying htmllib/script/restart /script/restart
+20:48 Jun/01/2009: Copying htmllib/script/restore /script/restore
+20:48 Jun/01/2009: Copying htmllib/script/scavenge /script/scavenge
+20:48 Jun/01/2009: Copying htmllib/script/secondary-setup /script/secondary-setup
+20:48 Jun/01/2009: Copying htmllib/script/secondary-start /script/secondary-start
+20:48 Jun/01/2009: Copying htmllib/script/simplelist /script/simplelist
+20:48 Jun/01/2009: Copying htmllib/script/skin-set-all-client /script/skin-set-all-client
+20:48 Jun/01/2009: Copying htmllib/script/switchserver /script/switchserver
+20:48 Jun/01/2009: Copying htmllib/script/upcp /script/upcp
+20:48 Jun/01/2009: Copying htmllib/script/update /script/update
+20:48 Jun/01/2009: Copying htmllib/script/version /script/version
+20:48 Jun/01/2009: Copying ../pscript/centos5-postpostupgrade /script/centos5-postpostupgrade
+20:48 Jun/01/2009: Copying ../pscript/centos5-postupgrade /script/centos5-postupgrade
+20:48 Jun/01/2009: Copying ../pscript/cleanspamdyke /script/cleanspamdyke
+20:48 Jun/01/2009: Copying ../pscript/fix-yum-install /script/fix-yum-install
+20:48 Jun/01/2009: Copying ../pscript/fixdns /script/fixdns
+20:48 Jun/01/2009: Copying ../pscript/fixdomainkey /script/fixdomainkey
+20:48 Jun/01/2009: Copying ../pscript/fixftpuser /script/fixftpuser
+20:48 Jun/01/2009: Copying ../pscript/fixhorde /script/fixhorde
+20:48 Jun/01/2009: Copying ../pscript/fixmail /script/fixmail
+20:48 Jun/01/2009: Copying ../pscript/fixphp /script/fixphp
+20:48 Jun/01/2009: Copying ../pscript/fixquota /script/fixquota
+20:48 Jun/01/2009: Copying ../pscript/fixvpop /script/fixvpop
+20:48 Jun/01/2009: Copying ../pscript/fixweb /script/fixweb
+20:48 Jun/01/2009: Copying ../pscript/fixwebmail /script/fixwebmail
+20:48 Jun/01/2009: Copying ../pscript/installapp-update /script/installapp-update
+20:48 Jun/01/2009: Copying ../pscript/installatron-install /script/installatron-install
+20:48 Jun/01/2009: Copying ../pscript/qmail-update /script/qmail-update
+20:48 Jun/01/2009: Copying ../pscript/ror-install /script/ror-install
+20:48 Jun/01/2009: Copying ../pscript/set-default-ssl /script/set-default-ssl
+20:48 Jun/01/2009: Copying ../pscript/xcache-install /script/xcache-install
+20:48 Jun/01/2009: Copying ../pscript/filter/client-in-client /script/filter/client-in-client
+20:48 Jun/01/2009: Copying ../pscript/filter/customer-in-client /script/filter/customer-in-client
+20:48 Jun/01/2009: Copying ../pscript/filter/domain-in-client /script/filter/domain-in-client
+20:48 Jun/01/2009: Copying ../pscript/filter/mysqldb-in-client /script/filter/mysqldb-in-client
+20:48 Jun/01/2009: Copying ../pscript/filter/reseller-in-client /script/filter/reseller-in-client
+20:48 Jun/01/2009: Copying htmllib/script/filter/class-in-object /script/filter/class-in-object
+07:37 Jun/02/2009: Chown /usr/local/lxlabs/kloxo/serverfile to lxlabs:lxlabs
+07:37 Jun/02/2009: Chown /usr/local/lxlabs/kloxo/serverfile/skeleton.zipsYhzoF to lxlabs
+07:37 Jun/02/2009: Chown /home/admin/newd.com to admin
+07:37 Jun/02/2009: Copying /home/kloxo/httpd/skeleton.zip /home/admin/newd.com/skeleton.zipsYhzoF
+07:37 Jun/02/2009: Moving /home/admin/newd.com/index.html.tmp /home/admin/newd.com/index.html
+07:37 Jun/02/2009: Copying /home/admin/newd.com/index.html.tmp /home/admin/newd.com/index.html
+07:37 Jun/02/2009: Chown /home/admin/newd.com to admin:apache
+07:37 Jun/02/2009: Chown /home/admin to admin:apache
+07:37 Jun/02/2009: Chown /home/httpd/newd.com/stats/ to admin:apache
+07:37 Jun/02/2009: Chown /home/httpd/newd.com to admin:apache
+07:37 Jun/02/2009: Linking /home/admin/newd.com to /home/httpd/newd.com/httpdocs
+07:37 Jun/02/2009: Chown /home/httpd/newd.com to admin:apache
+07:37 Jun/02/2009: Copying /etc/php.ini /home/httpd/newd.com/php.ini
+07:37 Jun/02/2009: Chown /home/httpd/newd.com to admin:apache
+07:37 Jun/02/2009: Copying ../file/script/phpinfo.phps /home/httpd/newd.com/kloxoscript/phpinfo.php
+07:37 Jun/02/2009: Chown /var/named/chroot/var/named/newd.com to named
+07:37 Jun/02/2009: Chown /var/named/chroot/etc/kloxo.named.conf to named
+07:37 Jun/02/2009: Chown /home/lxadmin/mail/domains/newd.com/.qmail-default to 1057:1057
+07:37 Jun/02/2009: Chown /home/lxadmin/mail/domains/newd.com/postmaster/.qmail to 1057:1057
+07:37 Jun/02/2009: Chown /home/lxadmin/mail/domains/newd.com/postmaster/.maildroprc to 1057:1057
+07:37 Jun/02/2009: Chown /var/bogofilter/postmaster_newd_com.wordlist.db to 1057:1057
+07:37 Jun/02/2009: Chown /home/lxadmin/mail/domains/newd.com/postmaster/.bogopref.cf to 1057:1057
+12:15 Jun/02/2009: Removing /usr/local/lxlabs/kloxo/pid/collectquota.php.pid
+12:25 Jun/02/2009: Chown .. to lxlabs

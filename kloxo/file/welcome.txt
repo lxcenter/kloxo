@@ -1,0 +1,23 @@
+
+	Thank you for choosing our service to meet your web hosting needs.
+
+Your account has been created with the following details:
+
+Username:	%name%
+Password:	%password%
+
+To log in immediately, follow this link, using your username and password:
+
+Secure:
+https://%ipaddress%:7777
+
+Standard:
+http://%ipaddress%:7778
+
+Quota Information:
+%quota%
+
+
+Once again, thank you for choosing our hosting service
+Please dont hesitate to contact us if you have any questions
+

@@ -1,0 +1,12 @@
+[addcolumn] service servicename
+
+[addtable] lxupdate schedule
+
+
+[changecolumn] domain
+ser_domaindbpserverlist ser_domaindbpserver_qlist
+[endchangecolumn]
+
+[construct] uuser nname
+
+[dropcolumn] web frontpage_flag

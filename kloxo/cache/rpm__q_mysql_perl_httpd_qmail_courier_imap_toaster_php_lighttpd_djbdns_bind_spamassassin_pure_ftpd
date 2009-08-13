@@ -1,0 +1,11 @@
+mysql-5.0.45-7.el5
+perl-5.8.8-10
+httpd-2.2.3-22.el5.centos
+qmail-1.03-1.5.15
+courier-imap-toaster-4.1.2-1.8.7
+php-5.2.6-5
+package lighttpd is not installed
+package djbdns is not installed
+bind-9.3.4-6.0.2.P1.el5_2
+spamassassin-3.1.9-1.el5
+pure-ftpd-1.0.21-15.el5

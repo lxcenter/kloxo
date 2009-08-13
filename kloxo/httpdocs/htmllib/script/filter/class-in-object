@@ -1,0 +1,7 @@
+#!/bin/sh
+parent=$1
+child=$2
+prgm=`cat /script/programname`
+programdb="$prgm"db
+echo "select nname from $child where parent_clname = '$parent'" | $programdb | tail -n+2
+

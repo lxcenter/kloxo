@@ -1,0 +1,319 @@
+04:07 Jun/07/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) 'rm'  '-r' '../processed_log/proccessed-3']
+04:07 Jun/07/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) 'chown'  '-R' 'lxlabs:lxlabs' '../log']
+04:07 Jun/07/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) 'chmod'  '0700' '../log']
+04:07 Jun/07/2009: CLosed Exec /usr/local/lxlabs/kloxo/cexe/closeallinput '/etc/init.d/kloxo lxrestart' >/dev/null 2>&1 &
+04:07 Jun/07/2009: 11:  [(__system__:/home/root/work/software/kloxo/httpdocs) '/usr/local/lxlabs/ext/php/php'  '../bin/common/misc/checktotalmemory.php']
+04:07 Jun/07/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) '/usr/local/lxlabs/ext/php/bin/php_cgi'  '-v']
+04:07 Jun/07/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) '/usr/local/lxlabs/ext/lxlighttpd/sbin/kloxo.httpd'  '-v']
+00:09 Jan/01/2006: 11:  [(__system__:/home/root/work/software/kloxo/httpdocs) '/usr/local/lxlabs/ext/php/php'  '../bin/common/misc/checktotalmemory.php']
+00:09 Jan/01/2006: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) '/usr/local/lxlabs/ext/php/bin/php_cgi'  '-v']
+00:09 Jan/01/2006: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) '/usr/local/lxlabs/ext/lxlighttpd/sbin/kloxo.httpd'  '-v']
+00:09 Jan/01/2006: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) 'ifconfig' ]
+00:09 Jan/01/2006: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) 'ifconfig' ]
+00:09 Jan/01/2006: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) 'ifconfig' ]
+00:09 Jan/01/2006: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) '/usr/local/lxlabs/ext/php/php'  '../bin/misc/newInstallFixIpaddress.php']
+00:14 Jan/01/2006: 11:  [(__system__:/home/root/work/software/kloxo/httpdocs) '/usr/local/lxlabs/ext/php/php'  '../bin/common/misc/checktotalmemory.php']
+00:14 Jan/01/2006: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) '/usr/local/lxlabs/ext/php/bin/php_cgi'  '-v']
+00:14 Jan/01/2006: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) '/usr/local/lxlabs/ext/lxlighttpd/sbin/kloxo.httpd'  '-v']
+00:14 Jan/01/2006: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) 'ifconfig' ]
+00:14 Jan/01/2006: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) 'ifconfig' ]
+00:14 Jan/01/2006: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) 'ifconfig' ]
+00:14 Jan/01/2006: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) '/usr/local/lxlabs/ext/php/php'  '../bin/misc/newInstallFixIpaddress.php']
+12:22 Jun/18/2009: 11:  [(__system__:/home/root/work/software/kloxo/httpdocs) '/usr/local/lxlabs/ext/php/php'  '../bin/common/misc/checktotalmemory.php']
+12:22 Jun/18/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) '/usr/local/lxlabs/ext/php/bin/php_cgi'  '-v']
+12:22 Jun/18/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) '/usr/local/lxlabs/ext/lxlighttpd/sbin/kloxo.httpd'  '-v']
+12:22 Jun/18/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) 'ifconfig' ]
+12:22 Jun/18/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) 'ifconfig' ]
+12:22 Jun/18/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) 'ifconfig' ]
+12:22 Jun/18/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) '/usr/local/lxlabs/ext/php/php'  '../bin/misc/newInstallFixIpaddress.php']
+12:28 Jun/18/2009: CLosed Exec /usr/local/lxlabs/kloxo/cexe/closeallinput '/etc/init.d/courier-imap restart >/dev/null 2>&1' >/dev/null 2>&1 &
+12:28 Jun/18/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) 'chmod'  '700' '/tmp/background5wyFiN']
+12:28 Jun/18/2009: Background: (/home/root/work/software/kloxo/httpdocs) '/usr/local/lxlabs/ext/php/php'  '../bin/common/background.php' '/tmp/background5wyFiN' >/dev/null 2>&1 &
+12:28 Jun/18/2009: CLosed Exec /usr/local/lxlabs/kloxo/cexe/closeallinput '/etc/init.d/courier-imap restart >/dev/null 2>&1' >/dev/null 2>&1 &
+12:28 Jun/18/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) 'chmod'  '700' '/tmp/backgroundzvmwRZ']
+12:28 Jun/18/2009: Background: (/home/root/work/software/kloxo/httpdocs) '/usr/local/lxlabs/ext/php/php'  '../bin/common/background.php' '/tmp/backgroundzvmwRZ' >/dev/null 2>&1 &
+12:33 Jun/18/2009: CLosed Exec /usr/local/lxlabs/kloxo/cexe/closeallinput '/etc/init.d/courier-imap restart >/dev/null 2>&1' >/dev/null 2>&1 &
+12:33 Jun/18/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) 'chmod'  '700' '/tmp/backgroundlesokd']
+12:33 Jun/18/2009: Background: (/home/root/work/software/kloxo/httpdocs) '/usr/local/lxlabs/ext/php/php'  '../bin/common/background.php' '/tmp/backgroundlesokd' >/dev/null 2>&1 &
+12:33 Jun/18/2009: CLosed Exec /usr/local/lxlabs/kloxo/cexe/closeallinput '/etc/init.d/courier-imap restart >/dev/null 2>&1' >/dev/null 2>&1 &
+12:33 Jun/18/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) 'chmod'  '700' '/tmp/backgroundO468Qr']
+12:33 Jun/18/2009: Background: (/home/root/work/software/kloxo/httpdocs) '/usr/local/lxlabs/ext/php/php'  '../bin/common/background.php' '/tmp/backgroundO468Qr' >/dev/null 2>&1 &
+12:38 Jun/18/2009: CLosed Exec /usr/local/lxlabs/kloxo/cexe/closeallinput '/etc/init.d/courier-imap restart >/dev/null 2>&1' >/dev/null 2>&1 &
+12:38 Jun/18/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) 'chmod'  '700' '/tmp/backgroundZi8ZG0']
+12:38 Jun/18/2009: Background: (/home/root/work/software/kloxo/httpdocs) '/usr/local/lxlabs/ext/php/php'  '../bin/common/background.php' '/tmp/backgroundZi8ZG0' >/dev/null 2>&1 &
+12:38 Jun/18/2009: CLosed Exec /usr/local/lxlabs/kloxo/cexe/closeallinput '/etc/init.d/courier-imap restart >/dev/null 2>&1' >/dev/null 2>&1 &
+12:38 Jun/18/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) 'chmod'  '700' '/tmp/backgroundu3Pewd']
+12:38 Jun/18/2009: Background: (/home/root/work/software/kloxo/httpdocs) '/usr/local/lxlabs/ext/php/php'  '../bin/common/background.php' '/tmp/backgroundu3Pewd' >/dev/null 2>&1 &
+12:43 Jun/18/2009: CLosed Exec /usr/local/lxlabs/kloxo/cexe/closeallinput '/etc/init.d/courier-imap restart >/dev/null 2>&1' >/dev/null 2>&1 &
+12:43 Jun/18/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) 'chmod'  '700' '/tmp/background36vVEM']
+12:43 Jun/18/2009: Background: (/home/root/work/software/kloxo/httpdocs) '/usr/local/lxlabs/ext/php/php'  '../bin/common/background.php' '/tmp/background36vVEM' >/dev/null 2>&1 &
+12:43 Jun/18/2009: CLosed Exec /usr/local/lxlabs/kloxo/cexe/closeallinput '/etc/init.d/courier-imap restart >/dev/null 2>&1' >/dev/null 2>&1 &
+12:43 Jun/18/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) 'chmod'  '700' '/tmp/backgroundj05nW0']
+12:43 Jun/18/2009: Background: (/home/root/work/software/kloxo/httpdocs) '/usr/local/lxlabs/ext/php/php'  '../bin/common/background.php' '/tmp/backgroundj05nW0' >/dev/null 2>&1 &
+12:48 Jun/18/2009: CLosed Exec /usr/local/lxlabs/kloxo/cexe/closeallinput '/etc/init.d/courier-imap restart >/dev/null 2>&1' >/dev/null 2>&1 &
+12:48 Jun/18/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) 'chmod'  '700' '/tmp/backgroundGE1X2H']
+12:48 Jun/18/2009: Background: (/home/root/work/software/kloxo/httpdocs) '/usr/local/lxlabs/ext/php/php'  '../bin/common/background.php' '/tmp/backgroundGE1X2H' >/dev/null 2>&1 &
+12:48 Jun/18/2009: CLosed Exec /usr/local/lxlabs/kloxo/cexe/closeallinput '/etc/init.d/courier-imap restart >/dev/null 2>&1' >/dev/null 2>&1 &
+12:48 Jun/18/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) 'chmod'  '700' '/tmp/backgroundnMBugN']
+12:48 Jun/18/2009: Background: (/home/root/work/software/kloxo/httpdocs) '/usr/local/lxlabs/ext/php/php'  '../bin/common/background.php' '/tmp/backgroundnMBugN' >/dev/null 2>&1 &
+12:53 Jun/18/2009: CLosed Exec /usr/local/lxlabs/kloxo/cexe/closeallinput '/etc/init.d/courier-imap restart >/dev/null 2>&1' >/dev/null 2>&1 &
+12:53 Jun/18/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) 'chmod'  '700' '/tmp/backgroundvUAl8q']
+12:53 Jun/18/2009: Background: (/home/root/work/software/kloxo/httpdocs) '/usr/local/lxlabs/ext/php/php'  '../bin/common/background.php' '/tmp/backgroundvUAl8q' >/dev/null 2>&1 &
+12:53 Jun/18/2009: CLosed Exec /usr/local/lxlabs/kloxo/cexe/closeallinput '/etc/init.d/courier-imap restart >/dev/null 2>&1' >/dev/null 2>&1 &
+12:53 Jun/18/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) 'chmod'  '700' '/tmp/backgroundmbzVUw']
+12:53 Jun/18/2009: Background: (/home/root/work/software/kloxo/httpdocs) '/usr/local/lxlabs/ext/php/php'  '../bin/common/background.php' '/tmp/backgroundmbzVUw' >/dev/null 2>&1 &
+12:58 Jun/18/2009: CLosed Exec /usr/local/lxlabs/kloxo/cexe/closeallinput '/etc/init.d/courier-imap restart >/dev/null 2>&1' >/dev/null 2>&1 &
+12:58 Jun/18/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) 'chmod'  '700' '/tmp/backgroundftiMKe']
+12:58 Jun/18/2009: Background: (/home/root/work/software/kloxo/httpdocs) '/usr/local/lxlabs/ext/php/php'  '../bin/common/background.php' '/tmp/backgroundftiMKe' >/dev/null 2>&1 &
+12:58 Jun/18/2009: CLosed Exec /usr/local/lxlabs/kloxo/cexe/closeallinput '/etc/init.d/courier-imap restart >/dev/null 2>&1' >/dev/null 2>&1 &
+12:58 Jun/18/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) 'chmod'  '700' '/tmp/backgroundkaDGlk']
+12:58 Jun/18/2009: Background: (/home/root/work/software/kloxo/httpdocs) '/usr/local/lxlabs/ext/php/php'  '../bin/common/background.php' '/tmp/backgroundkaDGlk' >/dev/null 2>&1 &
+13:03 Jun/18/2009: CLosed Exec /usr/local/lxlabs/kloxo/cexe/closeallinput '/etc/init.d/courier-imap restart >/dev/null 2>&1' >/dev/null 2>&1 &
+13:03 Jun/18/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) 'chmod'  '700' '/tmp/backgroundU4yaJ0']
+13:03 Jun/18/2009: Background: (/home/root/work/software/kloxo/httpdocs) '/usr/local/lxlabs/ext/php/php'  '../bin/common/background.php' '/tmp/backgroundU4yaJ0' >/dev/null 2>&1 &
+13:03 Jun/18/2009: CLosed Exec /usr/local/lxlabs/kloxo/cexe/closeallinput '/etc/init.d/courier-imap restart >/dev/null 2>&1' >/dev/null 2>&1 &
+13:03 Jun/18/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) 'chmod'  '700' '/tmp/background1dKs9c']
+13:03 Jun/18/2009: Background: (/home/root/work/software/kloxo/httpdocs) '/usr/local/lxlabs/ext/php/php'  '../bin/common/background.php' '/tmp/background1dKs9c' >/dev/null 2>&1 &
+13:08 Jun/18/2009: CLosed Exec /usr/local/lxlabs/kloxo/cexe/closeallinput '/etc/init.d/courier-imap restart >/dev/null 2>&1' >/dev/null 2>&1 &
+13:08 Jun/18/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) 'chmod'  '700' '/tmp/backgroundMidOfM']
+13:08 Jun/18/2009: Background: (/home/root/work/software/kloxo/httpdocs) '/usr/local/lxlabs/ext/php/php'  '../bin/common/background.php' '/tmp/backgroundMidOfM' >/dev/null 2>&1 &
+13:08 Jun/18/2009: CLosed Exec /usr/local/lxlabs/kloxo/cexe/closeallinput '/etc/init.d/courier-imap restart >/dev/null 2>&1' >/dev/null 2>&1 &
+13:08 Jun/18/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) 'chmod'  '700' '/tmp/backgroundJclUgW']
+13:08 Jun/18/2009: Background: (/home/root/work/software/kloxo/httpdocs) '/usr/local/lxlabs/ext/php/php'  '../bin/common/background.php' '/tmp/backgroundJclUgW' >/dev/null 2>&1 &
+13:13 Jun/18/2009: CLosed Exec /usr/local/lxlabs/kloxo/cexe/closeallinput '/etc/init.d/courier-imap restart >/dev/null 2>&1' >/dev/null 2>&1 &
+13:13 Jun/18/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) 'chmod'  '700' '/tmp/backgroundKILdwv']
+13:13 Jun/18/2009: Background: (/home/root/work/software/kloxo/httpdocs) '/usr/local/lxlabs/ext/php/php'  '../bin/common/background.php' '/tmp/backgroundKILdwv' >/dev/null 2>&1 &
+13:13 Jun/18/2009: CLosed Exec /usr/local/lxlabs/kloxo/cexe/closeallinput '/etc/init.d/courier-imap restart >/dev/null 2>&1' >/dev/null 2>&1 &
+13:13 Jun/18/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) 'chmod'  '700' '/tmp/backgroundbKAQaK']
+13:13 Jun/18/2009: Background: (/home/root/work/software/kloxo/httpdocs) '/usr/local/lxlabs/ext/php/php'  '../bin/common/background.php' '/tmp/backgroundbKAQaK' >/dev/null 2>&1 &
+13:18 Jun/18/2009: CLosed Exec /usr/local/lxlabs/kloxo/cexe/closeallinput '/etc/init.d/courier-imap restart >/dev/null 2>&1' >/dev/null 2>&1 &
+13:18 Jun/18/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) 'chmod'  '700' '/tmp/backgroundlad9Jj']
+13:18 Jun/18/2009: Background: (/home/root/work/software/kloxo/httpdocs) '/usr/local/lxlabs/ext/php/php'  '../bin/common/background.php' '/tmp/backgroundlad9Jj' >/dev/null 2>&1 &
+13:18 Jun/18/2009: CLosed Exec /usr/local/lxlabs/kloxo/cexe/closeallinput '/etc/init.d/courier-imap restart >/dev/null 2>&1' >/dev/null 2>&1 &
+13:18 Jun/18/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) 'chmod'  '700' '/tmp/backgroundQ77YPw']
+13:18 Jun/18/2009: Background: (/home/root/work/software/kloxo/httpdocs) '/usr/local/lxlabs/ext/php/php'  '../bin/common/background.php' '/tmp/backgroundQ77YPw' >/dev/null 2>&1 &
+13:23 Jun/18/2009: CLosed Exec /usr/local/lxlabs/kloxo/cexe/closeallinput '/etc/init.d/courier-imap restart >/dev/null 2>&1' >/dev/null 2>&1 &
+13:23 Jun/18/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) 'chmod'  '700' '/tmp/backgroundXhJ5z5']
+13:23 Jun/18/2009: Background: (/home/root/work/software/kloxo/httpdocs) '/usr/local/lxlabs/ext/php/php'  '../bin/common/background.php' '/tmp/backgroundXhJ5z5' >/dev/null 2>&1 &
+13:23 Jun/18/2009: CLosed Exec /usr/local/lxlabs/kloxo/cexe/closeallinput '/etc/init.d/courier-imap restart >/dev/null 2>&1' >/dev/null 2>&1 &
+13:23 Jun/18/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) 'chmod'  '700' '/tmp/backgroundh1YMnj']
+13:23 Jun/18/2009: Background: (/home/root/work/software/kloxo/httpdocs) '/usr/local/lxlabs/ext/php/php'  '../bin/common/background.php' '/tmp/backgroundh1YMnj' >/dev/null 2>&1 &
+13:28 Jun/18/2009: CLosed Exec /usr/local/lxlabs/kloxo/cexe/closeallinput '/etc/init.d/courier-imap restart >/dev/null 2>&1' >/dev/null 2>&1 &
+13:28 Jun/18/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) 'chmod'  '700' '/tmp/background49E0MO']
+13:28 Jun/18/2009: Background: (/home/root/work/software/kloxo/httpdocs) '/usr/local/lxlabs/ext/php/php'  '../bin/common/background.php' '/tmp/background49E0MO' >/dev/null 2>&1 &
+13:28 Jun/18/2009: CLosed Exec /usr/local/lxlabs/kloxo/cexe/closeallinput '/etc/init.d/courier-imap restart >/dev/null 2>&1' >/dev/null 2>&1 &
+13:28 Jun/18/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) 'chmod'  '700' '/tmp/backgrounds4eWx1']
+13:28 Jun/18/2009: Background: (/home/root/work/software/kloxo/httpdocs) '/usr/local/lxlabs/ext/php/php'  '../bin/common/background.php' '/tmp/backgrounds4eWx1' >/dev/null 2>&1 &
+13:33 Jun/18/2009: CLosed Exec /usr/local/lxlabs/kloxo/cexe/closeallinput '/etc/init.d/courier-imap restart >/dev/null 2>&1' >/dev/null 2>&1 &
+13:33 Jun/18/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) 'chmod'  '700' '/tmp/backgroundQzXOgA']
+13:33 Jun/18/2009: Background: (/home/root/work/software/kloxo/httpdocs) '/usr/local/lxlabs/ext/php/php'  '../bin/common/background.php' '/tmp/backgroundQzXOgA' >/dev/null 2>&1 &
+13:33 Jun/18/2009: CLosed Exec /usr/local/lxlabs/kloxo/cexe/closeallinput '/etc/init.d/courier-imap restart >/dev/null 2>&1' >/dev/null 2>&1 &
+13:33 Jun/18/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) 'chmod'  '700' '/tmp/backgroundD7CylP']
+13:33 Jun/18/2009: Background: (/home/root/work/software/kloxo/httpdocs) '/usr/local/lxlabs/ext/php/php'  '../bin/common/background.php' '/tmp/backgroundD7CylP' >/dev/null 2>&1 &
+19:07 Jun/23/2009: 11:  [(__system__:/home/root/work/software/kloxo/httpdocs) '/usr/local/lxlabs/ext/php/php'  '../bin/common/misc/checktotalmemory.php']
+19:07 Jun/23/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) '/usr/local/lxlabs/ext/php/bin/php_cgi'  '-v']
+19:07 Jun/23/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) '/usr/local/lxlabs/ext/lxlighttpd/sbin/kloxo.httpd'  '-v']
+19:07 Jun/23/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) 'ifconfig' ]
+19:07 Jun/23/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) 'ifconfig' ]
+19:07 Jun/23/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) 'ifconfig' ]
+19:07 Jun/23/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) '/usr/local/lxlabs/ext/php/php'  '../bin/misc/newInstallFixIpaddress.php']
+19:18 Jun/23/2009: CLosed Exec /usr/local/lxlabs/kloxo/cexe/closeallinput '/etc/init.d/courier-imap restart >/dev/null 2>&1' >/dev/null 2>&1 &
+19:18 Jun/23/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) 'chmod'  '700' '/tmp/backgroundtw0eKA']
+19:18 Jun/23/2009: Background: (/home/root/work/software/kloxo/httpdocs) '/usr/local/lxlabs/ext/php/php'  '../bin/common/background.php' '/tmp/backgroundtw0eKA' >/dev/null 2>&1 &
+19:18 Jun/23/2009: CLosed Exec /usr/local/lxlabs/kloxo/cexe/closeallinput '/etc/init.d/courier-imap restart >/dev/null 2>&1' >/dev/null 2>&1 &
+19:18 Jun/23/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) 'chmod'  '700' '/tmp/backgroundXLKvRP']
+19:18 Jun/23/2009: Background: (/home/root/work/software/kloxo/httpdocs) '/usr/local/lxlabs/ext/php/php'  '../bin/common/background.php' '/tmp/backgroundXLKvRP' >/dev/null 2>&1 &
+19:23 Jun/23/2009: CLosed Exec /usr/local/lxlabs/kloxo/cexe/closeallinput '/etc/init.d/courier-imap restart >/dev/null 2>&1' >/dev/null 2>&1 &
+19:23 Jun/23/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) 'chmod'  '700' '/tmp/backgroundwskB01']
+19:23 Jun/23/2009: Background: (/home/root/work/software/kloxo/httpdocs) '/usr/local/lxlabs/ext/php/php'  '../bin/common/background.php' '/tmp/backgroundwskB01' >/dev/null 2>&1 &
+19:23 Jun/23/2009: CLosed Exec /usr/local/lxlabs/kloxo/cexe/closeallinput '/etc/init.d/courier-imap restart >/dev/null 2>&1' >/dev/null 2>&1 &
+19:23 Jun/23/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) 'chmod'  '700' '/tmp/backgroundAUn9Zg']
+19:23 Jun/23/2009: Background: (/home/root/work/software/kloxo/httpdocs) '/usr/local/lxlabs/ext/php/php'  '../bin/common/background.php' '/tmp/backgroundAUn9Zg' >/dev/null 2>&1 &
+19:28 Jun/23/2009: CLosed Exec /usr/local/lxlabs/kloxo/cexe/closeallinput '/etc/init.d/courier-imap restart >/dev/null 2>&1' >/dev/null 2>&1 &
+19:28 Jun/23/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) 'chmod'  '700' '/tmp/background7sj3QY']
+19:28 Jun/23/2009: Background: (/home/root/work/software/kloxo/httpdocs) '/usr/local/lxlabs/ext/php/php'  '../bin/common/background.php' '/tmp/background7sj3QY' >/dev/null 2>&1 &
+19:28 Jun/23/2009: CLosed Exec /usr/local/lxlabs/kloxo/cexe/closeallinput '/etc/init.d/courier-imap restart >/dev/null 2>&1' >/dev/null 2>&1 &
+19:28 Jun/23/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) 'chmod'  '700' '/tmp/background78GLl2']
+19:28 Jun/23/2009: Background: (/home/root/work/software/kloxo/httpdocs) '/usr/local/lxlabs/ext/php/php'  '../bin/common/background.php' '/tmp/background78GLl2' >/dev/null 2>&1 &
+19:33 Jun/23/2009: CLosed Exec /usr/local/lxlabs/kloxo/cexe/closeallinput '/etc/init.d/courier-imap restart >/dev/null 2>&1' >/dev/null 2>&1 &
+19:33 Jun/23/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) 'chmod'  '700' '/tmp/background4X9UpJ']
+19:33 Jun/23/2009: Background: (/home/root/work/software/kloxo/httpdocs) '/usr/local/lxlabs/ext/php/php'  '../bin/common/background.php' '/tmp/background4X9UpJ' >/dev/null 2>&1 &
+19:33 Jun/23/2009: CLosed Exec /usr/local/lxlabs/kloxo/cexe/closeallinput '/etc/init.d/courier-imap restart >/dev/null 2>&1' >/dev/null 2>&1 &
+19:33 Jun/23/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) 'chmod'  '700' '/tmp/backgroundelWd1L']
+19:33 Jun/23/2009: Background: (/home/root/work/software/kloxo/httpdocs) '/usr/local/lxlabs/ext/php/php'  '../bin/common/background.php' '/tmp/backgroundelWd1L' >/dev/null 2>&1 &
+19:38 Jun/23/2009: CLosed Exec /usr/local/lxlabs/kloxo/cexe/closeallinput '/etc/init.d/courier-imap restart >/dev/null 2>&1' >/dev/null 2>&1 &
+19:38 Jun/23/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) 'chmod'  '700' '/tmp/backgroundmOvONu']
+19:38 Jun/23/2009: Background: (/home/root/work/software/kloxo/httpdocs) '/usr/local/lxlabs/ext/php/php'  '../bin/common/background.php' '/tmp/backgroundmOvONu' >/dev/null 2>&1 &
+19:38 Jun/23/2009: CLosed Exec /usr/local/lxlabs/kloxo/cexe/closeallinput '/etc/init.d/courier-imap restart >/dev/null 2>&1' >/dev/null 2>&1 &
+19:38 Jun/23/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) 'chmod'  '700' '/tmp/backgroundez7Tey']
+19:38 Jun/23/2009: Background: (/home/root/work/software/kloxo/httpdocs) '/usr/local/lxlabs/ext/php/php'  '../bin/common/background.php' '/tmp/backgroundez7Tey' >/dev/null 2>&1 &
+19:43 Jun/23/2009: CLosed Exec /usr/local/lxlabs/kloxo/cexe/closeallinput '/etc/init.d/courier-imap restart >/dev/null 2>&1' >/dev/null 2>&1 &
+19:43 Jun/23/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) 'chmod'  '700' '/tmp/backgroundgNXaxf']
+19:43 Jun/23/2009: Background: (/home/root/work/software/kloxo/httpdocs) '/usr/local/lxlabs/ext/php/php'  '../bin/common/background.php' '/tmp/backgroundgNXaxf' >/dev/null 2>&1 &
+19:43 Jun/23/2009: CLosed Exec /usr/local/lxlabs/kloxo/cexe/closeallinput '/etc/init.d/courier-imap restart >/dev/null 2>&1' >/dev/null 2>&1 &
+19:43 Jun/23/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) 'chmod'  '700' '/tmp/backgroundzn61cs']
+19:43 Jun/23/2009: Background: (/home/root/work/software/kloxo/httpdocs) '/usr/local/lxlabs/ext/php/php'  '../bin/common/background.php' '/tmp/backgroundzn61cs' >/dev/null 2>&1 &
+19:49 Jun/23/2009: 11:  [(__system__:/home/root/work/software/kloxo/httpdocs) '/usr/local/lxlabs/ext/php/php'  '../bin/common/misc/checktotalmemory.php']
+19:49 Jun/23/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) '/usr/local/lxlabs/ext/php/bin/php_cgi'  '-v']
+19:49 Jun/23/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) '/usr/local/lxlabs/ext/lxlighttpd/sbin/kloxo.httpd'  '-v']
+19:49 Jun/23/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) 'ifconfig' ]
+19:49 Jun/23/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) 'ifconfig' ]
+19:49 Jun/23/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) 'ifconfig' ]
+19:49 Jun/23/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) '/usr/local/lxlabs/ext/php/php'  '../bin/misc/newInstallFixIpaddress.php']
+20:00 Jun/23/2009: CLosed Exec /usr/local/lxlabs/kloxo/cexe/closeallinput '/etc/init.d/courier-imap restart >/dev/null 2>&1' >/dev/null 2>&1 &
+20:00 Jun/23/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) 'chmod'  '700' '/tmp/backgrounddx0K0p']
+20:00 Jun/23/2009: Background: (/home/root/work/software/kloxo/httpdocs) '/usr/local/lxlabs/ext/php/php'  '../bin/common/background.php' '/tmp/backgrounddx0K0p' >/dev/null 2>&1 &
+20:00 Jun/23/2009: CLosed Exec /usr/local/lxlabs/kloxo/cexe/closeallinput '/etc/init.d/courier-imap restart >/dev/null 2>&1' >/dev/null 2>&1 &
+20:00 Jun/23/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) 'chmod'  '700' '/tmp/backgroundcmp7pC']
+20:00 Jun/23/2009: Background: (/home/root/work/software/kloxo/httpdocs) '/usr/local/lxlabs/ext/php/php'  '../bin/common/background.php' '/tmp/backgroundcmp7pC' >/dev/null 2>&1 &
+20:05 Jun/23/2009: CLosed Exec /usr/local/lxlabs/kloxo/cexe/closeallinput '/etc/init.d/courier-imap restart >/dev/null 2>&1' >/dev/null 2>&1 &
+20:05 Jun/23/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) 'chmod'  '700' '/tmp/backgroundJXX3s3']
+20:05 Jun/23/2009: Background: (/home/root/work/software/kloxo/httpdocs) '/usr/local/lxlabs/ext/php/php'  '../bin/common/background.php' '/tmp/backgroundJXX3s3' >/dev/null 2>&1 &
+20:05 Jun/23/2009: CLosed Exec /usr/local/lxlabs/kloxo/cexe/closeallinput '/etc/init.d/courier-imap restart >/dev/null 2>&1' >/dev/null 2>&1 &
+20:05 Jun/23/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) 'chmod'  '700' '/tmp/backgroundA2fjNn']
+20:05 Jun/23/2009: Background: (/home/root/work/software/kloxo/httpdocs) '/usr/local/lxlabs/ext/php/php'  '../bin/common/background.php' '/tmp/backgroundA2fjNn' >/dev/null 2>&1 &
+20:10 Jun/23/2009: CLosed Exec /usr/local/lxlabs/kloxo/cexe/closeallinput '/etc/init.d/courier-imap restart >/dev/null 2>&1' >/dev/null 2>&1 &
+20:10 Jun/23/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) 'chmod'  '700' '/tmp/backgroundt4exWK']
+20:10 Jun/23/2009: Background: (/home/root/work/software/kloxo/httpdocs) '/usr/local/lxlabs/ext/php/php'  '../bin/common/background.php' '/tmp/backgroundt4exWK' >/dev/null 2>&1 &
+20:10 Jun/23/2009: CLosed Exec /usr/local/lxlabs/kloxo/cexe/closeallinput '/etc/init.d/courier-imap restart >/dev/null 2>&1' >/dev/null 2>&1 &
+20:10 Jun/23/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) 'chmod'  '700' '/tmp/background33sPvZ']
+20:10 Jun/23/2009: Background: (/home/root/work/software/kloxo/httpdocs) '/usr/local/lxlabs/ext/php/php'  '../bin/common/background.php' '/tmp/background33sPvZ' >/dev/null 2>&1 &
+20:15 Jun/23/2009: CLosed Exec /usr/local/lxlabs/kloxo/cexe/closeallinput '/etc/init.d/courier-imap restart >/dev/null 2>&1' >/dev/null 2>&1 &
+20:29 Jun/23/2009: 11:  [(__system__:/home/root/work/software/kloxo/httpdocs) '/usr/local/lxlabs/ext/php/php'  '../bin/common/misc/checktotalmemory.php']
+20:29 Jun/23/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) '/usr/local/lxlabs/ext/php/bin/php_cgi'  '-v']
+20:29 Jun/23/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) '/usr/local/lxlabs/ext/lxlighttpd/sbin/kloxo.httpd'  '-v']
+20:29 Jun/23/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) 'ifconfig' ]
+20:29 Jun/23/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) 'ifconfig' ]
+20:29 Jun/23/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) 'ifconfig' ]
+20:29 Jun/23/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) '/usr/local/lxlabs/ext/php/php'  '../bin/misc/newInstallFixIpaddress.php']
+20:34 Jun/23/2009: 11:  [(__system__:/home/root/work/software/kloxo/httpdocs) '/usr/local/lxlabs/ext/php/php'  '../bin/common/misc/checktotalmemory.php']
+20:34 Jun/23/2009: 15:  [(__system__:/home/root/work/software/kloxo/httpdocs) '/usr/local/lxlabs/ext/php/bin/php_cgi'  '-v']
+20:34 Jun/23/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) '/usr/local/lxlabs/ext/lxlighttpd/sbin/kloxo.httpd'  '-v']
+20:34 Jun/23/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) 'ifconfig' ]
+20:34 Jun/23/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) 'ifconfig' ]
+20:34 Jun/23/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) 'ifconfig' ]
+20:34 Jun/23/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) '/usr/local/lxlabs/ext/php/php'  '../bin/misc/newInstallFixIpaddress.php']
+20:41 Jun/23/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) 'ifconfig' ]
+20:41 Jun/23/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) 'ifconfig' ]
+20:41 Jun/23/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) 'ifconfig' ]
+20:41 Jun/23/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) '/usr/local/lxlabs/ext/php/php'  '../bin/misc/newInstallFixIpaddress.php']
+20:48 Jun/23/2009: 11:  [(__system__:/home/root/work/software/kloxo/httpdocs) '/usr/local/lxlabs/ext/php/php'  '../bin/common/misc/checktotalmemory.php']
+20:48 Jun/23/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) '/usr/local/lxlabs/ext/php/bin/php_cgi'  '-v']
+20:48 Jun/23/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) '/usr/local/lxlabs/ext/lxlighttpd/sbin/kloxo.httpd'  '-v']
+20:48 Jun/23/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) 'ifconfig' ]
+20:48 Jun/23/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) 'ifconfig' ]
+20:48 Jun/23/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) 'ifconfig' ]
+20:48 Jun/23/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) '/usr/local/lxlabs/ext/php/php'  '../bin/misc/newInstallFixIpaddress.php']
+20:53 Jun/23/2009: 11:  [(__system__:/home/root/work/software/kloxo/httpdocs) '/usr/local/lxlabs/ext/php/php'  '../bin/common/misc/checktotalmemory.php']
+20:53 Jun/23/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) '/usr/local/lxlabs/ext/php/bin/php_cgi'  '-v']
+20:53 Jun/23/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) '/usr/local/lxlabs/ext/lxlighttpd/sbin/kloxo.httpd'  '-v']
+20:53 Jun/23/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) 'ifconfig' ]
+20:53 Jun/23/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) 'ifconfig' ]
+20:53 Jun/23/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) 'ifconfig' ]
+20:53 Jun/23/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) '/usr/local/lxlabs/ext/php/php'  '../bin/misc/newInstallFixIpaddress.php']
+21:04 Jun/23/2009: CLosed Exec /usr/local/lxlabs/kloxo/cexe/closeallinput '/etc/init.d/courier-imap restart >/dev/null 2>&1' >/dev/null 2>&1 &
+21:04 Jun/23/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) 'chmod'  '700' '/tmp/backgroundQa5h9I']
+21:04 Jun/23/2009: Background: (/home/root/work/software/kloxo/httpdocs) '/usr/local/lxlabs/ext/php/php'  '../bin/common/background.php' '/tmp/backgroundQa5h9I' >/dev/null 2>&1 &
+21:04 Jun/23/2009: CLosed Exec /usr/local/lxlabs/kloxo/cexe/closeallinput '/etc/init.d/courier-imap restart >/dev/null 2>&1' >/dev/null 2>&1 &
+21:04 Jun/23/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) 'chmod'  '700' '/tmp/backgroundcxYYiV']
+21:04 Jun/23/2009: Background: (/home/root/work/software/kloxo/httpdocs) '/usr/local/lxlabs/ext/php/php'  '../bin/common/background.php' '/tmp/backgroundcxYYiV' >/dev/null 2>&1 &
+21:09 Jun/23/2009: CLosed Exec /usr/local/lxlabs/kloxo/cexe/closeallinput '/etc/init.d/courier-imap restart >/dev/null 2>&1' >/dev/null 2>&1 &
+21:09 Jun/23/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) 'chmod'  '700' '/tmp/background11gJa4']
+21:09 Jun/23/2009: Background: (/home/root/work/software/kloxo/httpdocs) '/usr/local/lxlabs/ext/php/php'  '../bin/common/background.php' '/tmp/background11gJa4' >/dev/null 2>&1 &
+21:09 Jun/23/2009: CLosed Exec /usr/local/lxlabs/kloxo/cexe/closeallinput '/etc/init.d/courier-imap restart >/dev/null 2>&1' >/dev/null 2>&1 &
+21:09 Jun/23/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) 'chmod'  '700' '/tmp/backgroundYrAsRg']
+21:09 Jun/23/2009: Background: (/home/root/work/software/kloxo/httpdocs) '/usr/local/lxlabs/ext/php/php'  '../bin/common/background.php' '/tmp/backgroundYrAsRg' >/dev/null 2>&1 &
+21:14 Jun/23/2009: CLosed Exec /usr/local/lxlabs/kloxo/cexe/closeallinput '/etc/init.d/courier-imap restart >/dev/null 2>&1' >/dev/null 2>&1 &
+21:14 Jun/23/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) 'chmod'  '700' '/tmp/background0iqBnP']
+21:14 Jun/23/2009: Background: (/home/root/work/software/kloxo/httpdocs) '/usr/local/lxlabs/ext/php/php'  '../bin/common/background.php' '/tmp/background0iqBnP' >/dev/null 2>&1 &
+21:14 Jun/23/2009: CLosed Exec /usr/local/lxlabs/kloxo/cexe/closeallinput '/etc/init.d/courier-imap restart >/dev/null 2>&1' >/dev/null 2>&1 &
+21:14 Jun/23/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) 'chmod'  '700' '/tmp/backgroundzUOiP3']
+21:14 Jun/23/2009: Background: (/home/root/work/software/kloxo/httpdocs) '/usr/local/lxlabs/ext/php/php'  '../bin/common/background.php' '/tmp/backgroundzUOiP3' >/dev/null 2>&1 &
+21:19 Jun/23/2009: CLosed Exec /usr/local/lxlabs/kloxo/cexe/closeallinput '/etc/init.d/courier-imap restart >/dev/null 2>&1' >/dev/null 2>&1 &
+21:19 Jun/23/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) 'chmod'  '700' '/tmp/backgroundfiT8yH']
+21:19 Jun/23/2009: Background: (/home/root/work/software/kloxo/httpdocs) '/usr/local/lxlabs/ext/php/php'  '../bin/common/background.php' '/tmp/backgroundfiT8yH' >/dev/null 2>&1 &
+21:19 Jun/23/2009: CLosed Exec /usr/local/lxlabs/kloxo/cexe/closeallinput '/etc/init.d/courier-imap restart >/dev/null 2>&1' >/dev/null 2>&1 &
+21:19 Jun/23/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) 'chmod'  '700' '/tmp/background9wtKNK']
+21:19 Jun/23/2009: Background: (/home/root/work/software/kloxo/httpdocs) '/usr/local/lxlabs/ext/php/php'  '../bin/common/background.php' '/tmp/background9wtKNK' >/dev/null 2>&1 &
+21:24 Jun/23/2009: CLosed Exec /usr/local/lxlabs/kloxo/cexe/closeallinput '/etc/init.d/courier-imap restart >/dev/null 2>&1' >/dev/null 2>&1 &
+20:16 Jun/25/2009: 11:  [(__system__:/home/root/work/software/kloxo/httpdocs) '/usr/local/lxlabs/ext/php/php'  '../bin/common/misc/checktotalmemory.php']
+20:16 Jun/25/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) '/usr/local/lxlabs/ext/php/bin/php_cgi'  '-v']
+20:16 Jun/25/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) '/usr/local/lxlabs/ext/lxlighttpd/sbin/kloxo.httpd'  '-v']
+20:16 Jun/25/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) 'ifconfig' ]
+20:16 Jun/25/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) 'ifconfig' ]
+20:16 Jun/25/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) 'ifconfig' ]
+20:16 Jun/25/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) '/usr/local/lxlabs/ext/php/php'  '../bin/misc/newInstallFixIpaddress.php']
+20:27 Jun/25/2009: CLosed Exec /usr/local/lxlabs/kloxo/cexe/closeallinput '/etc/init.d/courier-imap restart >/dev/null 2>&1' >/dev/null 2>&1 &
+20:27 Jun/25/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) 'chmod'  '700' '/tmp/backgroundUFmPw5']
+20:27 Jun/25/2009: Background: (/home/root/work/software/kloxo/httpdocs) '/usr/local/lxlabs/ext/php/php'  '../bin/common/background.php' '/tmp/backgroundUFmPw5' >/dev/null 2>&1 &
+20:27 Jun/25/2009: CLosed Exec /usr/local/lxlabs/kloxo/cexe/closeallinput '/etc/init.d/courier-imap restart >/dev/null 2>&1' >/dev/null 2>&1 &
+20:27 Jun/25/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) 'chmod'  '700' '/tmp/background3ICPPh']
+20:27 Jun/25/2009: Background: (/home/root/work/software/kloxo/httpdocs) '/usr/local/lxlabs/ext/php/php'  '../bin/common/background.php' '/tmp/background3ICPPh' >/dev/null 2>&1 &
+20:32 Jun/25/2009: CLosed Exec /usr/local/lxlabs/kloxo/cexe/closeallinput '/etc/init.d/courier-imap restart >/dev/null 2>&1' >/dev/null 2>&1 &
+20:32 Jun/25/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) 'chmod'  '700' '/tmp/backgroundvY6e4t']
+20:32 Jun/25/2009: Background: (/home/root/work/software/kloxo/httpdocs) '/usr/local/lxlabs/ext/php/php'  '../bin/common/background.php' '/tmp/backgroundvY6e4t' >/dev/null 2>&1 &
+20:32 Jun/25/2009: CLosed Exec /usr/local/lxlabs/kloxo/cexe/closeallinput '/etc/init.d/courier-imap restart >/dev/null 2>&1' >/dev/null 2>&1 &
+20:32 Jun/25/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) 'chmod'  '700' '/tmp/backgroundVu4BIK']
+20:32 Jun/25/2009: Background: (/home/root/work/software/kloxo/httpdocs) '/usr/local/lxlabs/ext/php/php'  '../bin/common/background.php' '/tmp/backgroundVu4BIK' >/dev/null 2>&1 &
+18:17 Aug/01/2009: 11:  [(__system__:/home/root/work/software/kloxo/httpdocs) '/usr/local/lxlabs/ext/php/php'  '../bin/common/misc/checktotalmemory.php']
+18:17 Aug/01/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) '/usr/local/lxlabs/ext/php/bin/php_cgi'  '-v']
+18:17 Aug/01/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) '/usr/local/lxlabs/ext/lxlighttpd/sbin/kloxo.httpd'  '-v']
+18:17 Aug/01/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) 'ifconfig' ]
+18:17 Aug/01/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) 'ifconfig' ]
+18:17 Aug/01/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) 'ifconfig' ]
+18:17 Aug/01/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) '/usr/local/lxlabs/ext/php/php'  '../bin/misc/newInstallFixIpaddress.php']
+18:28 Aug/01/2009: CLosed Exec /usr/local/lxlabs/kloxo/cexe/closeallinput '/etc/init.d/courier-imap restart >/dev/null 2>&1' >/dev/null 2>&1 &
+18:28 Aug/01/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) 'chmod'  '700' '/tmp/backgroundGETGCd']
+18:28 Aug/01/2009: Background: (/home/root/work/software/kloxo/httpdocs) '/usr/local/lxlabs/ext/php/php'  '../bin/common/background.php' '/tmp/backgroundGETGCd' >/dev/null 2>&1 &
+18:28 Aug/01/2009: CLosed Exec /usr/local/lxlabs/kloxo/cexe/closeallinput '/etc/init.d/courier-imap restart >/dev/null 2>&1' >/dev/null 2>&1 &
+18:28 Aug/01/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) 'chmod'  '700' '/tmp/backgroundg2fq8n']
+18:28 Aug/01/2009: Background: (/home/root/work/software/kloxo/httpdocs) '/usr/local/lxlabs/ext/php/php'  '../bin/common/background.php' '/tmp/backgroundg2fq8n' >/dev/null 2>&1 &
+18:33 Aug/01/2009: CLosed Exec /usr/local/lxlabs/kloxo/cexe/closeallinput '/etc/init.d/courier-imap restart >/dev/null 2>&1' >/dev/null 2>&1 &
+18:33 Aug/01/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) 'chmod'  '700' '/tmp/backgroundzq8vIy']
+18:33 Aug/01/2009: Background: (/home/root/work/software/kloxo/httpdocs) '/usr/local/lxlabs/ext/php/php'  '../bin/common/background.php' '/tmp/backgroundzq8vIy' >/dev/null 2>&1 &
+18:33 Aug/01/2009: CLosed Exec /usr/local/lxlabs/kloxo/cexe/closeallinput '/etc/init.d/courier-imap restart >/dev/null 2>&1' >/dev/null 2>&1 &
+18:33 Aug/01/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) 'chmod'  '700' '/tmp/backgroundmuqU3M']
+18:33 Aug/01/2009: Background: (/home/root/work/software/kloxo/httpdocs) '/usr/local/lxlabs/ext/php/php'  '../bin/common/background.php' '/tmp/backgroundmuqU3M' >/dev/null 2>&1 &
+18:38 Aug/01/2009: CLosed Exec /usr/local/lxlabs/kloxo/cexe/closeallinput '/etc/init.d/courier-imap restart >/dev/null 2>&1' >/dev/null 2>&1 &
+18:38 Aug/01/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) 'chmod'  '700' '/tmp/backgroundbWC2lj']
+18:38 Aug/01/2009: Background: (/home/root/work/software/kloxo/httpdocs) '/usr/local/lxlabs/ext/php/php'  '../bin/common/background.php' '/tmp/backgroundbWC2lj' >/dev/null 2>&1 &
+18:38 Aug/01/2009: CLosed Exec /usr/local/lxlabs/kloxo/cexe/closeallinput '/etc/init.d/courier-imap restart >/dev/null 2>&1' >/dev/null 2>&1 &
+18:38 Aug/01/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) 'chmod'  '700' '/tmp/backgroundNqk2Mv']
+18:38 Aug/01/2009: Background: (/home/root/work/software/kloxo/httpdocs) '/usr/local/lxlabs/ext/php/php'  '../bin/common/background.php' '/tmp/backgroundNqk2Mv' >/dev/null 2>&1 &
+18:43 Aug/01/2009: CLosed Exec /usr/local/lxlabs/kloxo/cexe/closeallinput '/etc/init.d/courier-imap restart >/dev/null 2>&1' >/dev/null 2>&1 &
+18:43 Aug/01/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) 'chmod'  '700' '/tmp/backgroundGcBiS4']
+18:43 Aug/01/2009: Background: (/home/root/work/software/kloxo/httpdocs) '/usr/local/lxlabs/ext/php/php'  '../bin/common/background.php' '/tmp/backgroundGcBiS4' >/dev/null 2>&1 &
+18:43 Aug/01/2009: CLosed Exec /usr/local/lxlabs/kloxo/cexe/closeallinput '/etc/init.d/courier-imap restart >/dev/null 2>&1' >/dev/null 2>&1 &
+18:43 Aug/01/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) 'chmod'  '700' '/tmp/backgroundBgtWzk']
+18:43 Aug/01/2009: Background: (/home/root/work/software/kloxo/httpdocs) '/usr/local/lxlabs/ext/php/php'  '../bin/common/background.php' '/tmp/backgroundBgtWzk' >/dev/null 2>&1 &
+18:48 Aug/01/2009: CLosed Exec /usr/local/lxlabs/kloxo/cexe/closeallinput '/etc/init.d/courier-imap restart >/dev/null 2>&1' >/dev/null 2>&1 &
+18:48 Aug/01/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) 'chmod'  '700' '/tmp/backgroundegzIdS']
+18:48 Aug/01/2009: Background: (/home/root/work/software/kloxo/httpdocs) '/usr/local/lxlabs/ext/php/php'  '../bin/common/background.php' '/tmp/backgroundegzIdS' >/dev/null 2>&1 &
+18:48 Aug/01/2009: CLosed Exec /usr/local/lxlabs/kloxo/cexe/closeallinput '/etc/init.d/courier-imap restart >/dev/null 2>&1' >/dev/null 2>&1 &
+18:48 Aug/01/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) 'chmod'  '700' '/tmp/backgroundknh5x7']
+18:48 Aug/01/2009: Background: (/home/root/work/software/kloxo/httpdocs) '/usr/local/lxlabs/ext/php/php'  '../bin/common/background.php' '/tmp/backgroundknh5x7' >/dev/null 2>&1 &
+18:53 Aug/01/2009: CLosed Exec /usr/local/lxlabs/kloxo/cexe/closeallinput '/etc/init.d/courier-imap restart >/dev/null 2>&1' >/dev/null 2>&1 &
+18:53 Aug/01/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) 'chmod'  '700' '/tmp/backgroundhDR9oE']
+18:53 Aug/01/2009: Background: (/home/root/work/software/kloxo/httpdocs) '/usr/local/lxlabs/ext/php/php'  '../bin/common/background.php' '/tmp/backgroundhDR9oE' >/dev/null 2>&1 &
+18:53 Aug/01/2009: CLosed Exec /usr/local/lxlabs/kloxo/cexe/closeallinput '/etc/init.d/courier-imap restart >/dev/null 2>&1' >/dev/null 2>&1 &
+18:53 Aug/01/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) 'chmod'  '700' '/tmp/backgroundUPcx0O']
+18:53 Aug/01/2009: Background: (/home/root/work/software/kloxo/httpdocs) '/usr/local/lxlabs/ext/php/php'  '../bin/common/background.php' '/tmp/backgroundUPcx0O' >/dev/null 2>&1 &
+18:58 Aug/01/2009: CLosed Exec /usr/local/lxlabs/kloxo/cexe/closeallinput '/etc/init.d/courier-imap restart >/dev/null 2>&1' >/dev/null 2>&1 &
+18:58 Aug/01/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) 'chmod'  '700' '/tmp/backgroundJfu3Nn']
+18:58 Aug/01/2009: Background: (/home/root/work/software/kloxo/httpdocs) '/usr/local/lxlabs/ext/php/php'  '../bin/common/background.php' '/tmp/backgroundJfu3Nn' >/dev/null 2>&1 &
+18:58 Aug/01/2009: CLosed Exec /usr/local/lxlabs/kloxo/cexe/closeallinput '/etc/init.d/courier-imap restart >/dev/null 2>&1' >/dev/null 2>&1 &
+18:58 Aug/01/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) 'chmod'  '700' '/tmp/backgroundaSrFkA']
+18:58 Aug/01/2009: Background: (/home/root/work/software/kloxo/httpdocs) '/usr/local/lxlabs/ext/php/php'  '../bin/common/background.php' '/tmp/backgroundaSrFkA' >/dev/null 2>&1 &
+19:07 Aug/01/2009: 11:  [(__system__:/home/root/work/software/kloxo/httpdocs) '/usr/local/lxlabs/ext/php/php'  '../bin/common/misc/checktotalmemory.php']
+19:07 Aug/01/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) '/usr/local/lxlabs/ext/php/bin/php_cgi'  '-v']
+19:07 Aug/01/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) '/usr/local/lxlabs/ext/lxlighttpd/sbin/kloxo.httpd'  '-v']
+19:07 Aug/01/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) 'ifconfig' ]
+19:07 Aug/01/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) 'ifconfig' ]
+19:07 Aug/01/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) 'ifconfig' ]
+19:07 Aug/01/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) '/usr/local/lxlabs/ext/php/php'  '../bin/misc/newInstallFixIpaddress.php']
+19:18 Aug/01/2009: CLosed Exec /usr/local/lxlabs/kloxo/cexe/closeallinput '/etc/init.d/courier-imap restart >/dev/null 2>&1' >/dev/null 2>&1 &
+19:18 Aug/01/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) 'chmod'  '700' '/tmp/backgroundNMcgi5']
+19:18 Aug/01/2009: Background: (/home/root/work/software/kloxo/httpdocs) '/usr/local/lxlabs/ext/php/php'  '../bin/common/background.php' '/tmp/backgroundNMcgi5' >/dev/null 2>&1 &
+19:18 Aug/01/2009: CLosed Exec /usr/local/lxlabs/kloxo/cexe/closeallinput '/etc/init.d/courier-imap restart >/dev/null 2>&1' >/dev/null 2>&1 &
+19:18 Aug/01/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) 'chmod'  '700' '/tmp/backgroundLKL6Ah']
+19:18 Aug/01/2009: Background: (/home/root/work/software/kloxo/httpdocs) '/usr/local/lxlabs/ext/php/php'  '../bin/common/background.php' '/tmp/backgroundLKL6Ah' >/dev/null 2>&1 &

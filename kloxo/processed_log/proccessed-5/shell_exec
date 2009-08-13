@@ -1,0 +1,78 @@
+12:25 Jun/01/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) 'chown'  '-R' 'lxlabs:lxlabs' '../log']
+12:25 Jun/01/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) 'chmod'  '0700' '../log']
+12:25 Jun/01/2009: CLosed Exec /usr/local/lxlabs/kloxo/cexe/closeallinput '/etc/init.d/kloxo lxrestart' >/dev/null 2>&1 &
+12:25 Jun/01/2009: 11:  [(__system__:/home/root/work/software/kloxo/httpdocs) '/usr/local/lxlabs/ext/php/php'  '../bin/common/misc/checktotalmemory.php']
+12:25 Jun/01/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) '/usr/local/lxlabs/ext/php/bin/php_cgi'  '-v']
+12:25 Jun/01/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) '/usr/local/lxlabs/ext/lxlighttpd/sbin/kloxo.httpd'  '-v']
+17:10 Jun/01/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) '/usr/local/lxlabs/ext/php/php'  '../bin/misc/newInstallFixIpaddress.php']
+17:21 Jun/01/2009: CLosed Exec /usr/local/lxlabs/kloxo/cexe/closeallinput '/etc/init.d/mysqld restart >/dev/null 2>&1' >/dev/null 2>&1 &
+20:45 Jun/01/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) '/usr/local/lxlabs/ext/php/php'  '../bin/common/fixresourceplan.php']
+20:48 Jun/01/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) 'rm'  '-r' '/script']
+20:48 Jun/01/2009: Making directory /script
+20:48 Jun/01/2009: Making directory /script/filter
+20:48 Jun/01/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) 'chmod'  '-R' '0755' '/script']
+20:48 Jun/01/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) 'rm'  '-r' '/script']
+20:48 Jun/01/2009: Making directory /script
+20:48 Jun/01/2009: Making directory /script/filter
+20:48 Jun/01/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) 'chmod'  '-R' '0755' '/script']
+07:34 Jun/02/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) '/usr/local/lxlabs/ext/php/php'  '../bin/common/fixresourceplan.php']
+07:37 Jun/02/2009: Making directory /var/qmail/control/domainkeys/newd.com
+07:37 Jun/02/2009: 0: Generating RSA private key, 384 bit long modulus
+.......++++++++++++++++++
+...................++++++++++++++++++
+e is 65537 (0x10001)
+ [(__system__:/var/qmail/control/domainkeys/newd.com) 'openssl'  'genrsa' '-out' 'private' '384']
+07:37 Jun/02/2009: 0: writing RSA key
+ [(__system__:/var/qmail/control/domainkeys/newd.com) 'openssl'  'rsa' '-in' 'private' '-out' '/tmp/lxtmp_rsagenps4XUH' '-pubout' '-outform' 'PEM']
+07:37 Jun/02/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) 'pure-pw'  'useradd' 'newd.com' '-u' 'admin' '-d' '/home/admin/newd.com' '-m']
+07:37 Jun/02/2009: Making directory /home/admin/newd.com
+07:37 Jun/02/2009: pure-pw usermod newd.com -N '' -m
+07:37 Jun/02/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) 'pure-pw'  'usermod' 'newd.com' '-z' '0000-2359' '-m']
+07:37 Jun/02/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) 'file'  '-b' '/home/admin/newd.com/skeleton.zipsYhzoF']
+07:37 Jun/02/2009: 0:  [(__system__:/home/admin/newd.com) nice -n 15 unzip -oq /home/admin/newd.com/skeleton.zipsYhzoF ]
+07:37 Jun/02/2009: Making directory /home/httpd/newd.com/webstats
+07:37 Jun/02/2009: Making directory /home/admin/newd.com/cgi-bin/
+07:37 Jun/02/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) 'chmod'  '0755' '/home/httpd/newd.com']
+07:37 Jun/02/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) 'chmod'  '0755' '/home/admin/newd.com']
+07:37 Jun/02/2009: Making directory /home/httpd/newd.com/conf
+07:37 Jun/02/2009: Making directory /home/httpd/newd.com/stats
+07:37 Jun/02/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) 'chown'  '-R' 'admin:admin' '/home/admin/newd.com']
+07:37 Jun/02/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) 'chmod'  '-R' '755' '/home/admin/newd.com']
+07:37 Jun/02/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) 'chmod'  '750' '/home/admin']
+07:37 Jun/02/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) 'chmod'  '770' '/home/httpd/newd.com/stats/']
+07:37 Jun/02/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) 'chmod'  '0744' '/etc/webalizer/webalizer.newd.com.conf']
+07:37 Jun/02/2009: Making directory /var/lib/webalizer/newd.com
+07:37 Jun/02/2009: Making directory /home/httpd/newd.com/webstats/webalizer/
+07:37 Jun/02/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) 'chmod'  '0744' '/etc/awstats/awstats.newd.com.conf']
+07:37 Jun/02/2009: Making directory /home/kloxo/httpd/awstats/dirdata/newd.com
+07:37 Jun/02/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) 'ifconfig' ]
+07:37 Jun/02/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) 'ifconfig' ]
+07:37 Jun/02/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) 'chmod'  '0744' '/etc/webalizer/webalizer.newd.com.conf']
+07:37 Jun/02/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) 'chmod'  '0744' '/etc/awstats/awstats.newd.com.conf']
+07:37 Jun/02/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) 'chmod'  '0775' '/home/httpd/newd.com']
+07:37 Jun/02/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) 'ifconfig' ]
+07:37 Jun/02/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) 'chmod'  '0744' '/etc/webalizer/webalizer.newd.com.conf']
+07:37 Jun/02/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) 'chmod'  '0744' '/etc/awstats/awstats.newd.com.conf']
+07:37 Jun/02/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) 'chmod'  '0775' '/home/httpd/newd.com']
+07:37 Jun/02/2009: Making directory /home/httpd/newd.com/kloxoscript/
+07:37 Jun/02/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) 'chown'  '-R' 'admin:admin' '/home/httpd/newd.com/kloxoscript']
+07:37 Jun/02/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) 'ifconfig' ]
+07:37 Jun/02/2009: Making directory /home/httpd/newd.com/__dirprotect
+07:37 Jun/02/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) 'named-checkzone'  'newd.com' '/tmp/lxtmp__var_named_chroot_var_named_newd.comIHPY9y']
+07:37 Jun/02/2009: 1: rndc: 'reload' failed: not found
+ [(__system__:/home/root/work/software/kloxo/httpdocs) 'rndc'  'reload' 'newd.com']
+07:37 Jun/02/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) 'rndc'  'reload']
+07:37 Jun/02/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) '/home/lxadmin/mail/bin/vadddomain'  '-i' '1057' '-g' '1057' 'newd.com' '-e' 'postmaster' 'lxlabs']
+07:37 Jun/02/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) 'chmod'  '700' '/tmp/backgroundvGnVp7']
+07:37 Jun/02/2009: Background: (/home/root/work/software/kloxo/httpdocs) '/usr/local/lxlabs/ext/php/php'  '../bin/common/background.php' '/tmp/backgroundvGnVp7' >/dev/null 2>&1 &
+07:37 Jun/02/2009: 254:  [(__system__:/home/root/work/software/kloxo/httpdocs) '/home/lxadmin/mail/bin/vadduser'  'postmaster@newd.com' '-e' '$1$NN3v.jn0$j3WirLx0JB/mLV40Xgz8n0']
+07:37 Jun/02/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) 'maildirmake'  '-f' 'Spam' '/home/lxadmin/mail/domains/newd.com/postmaster/Maildir']
+07:37 Jun/02/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) 'chown'  '-R' '1057:1057' '/home/lxadmin/mail/domains/newd.com/postmaster/Maildir']
+07:37 Jun/02/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) 'chmod'  '700' '/home/lxadmin/mail/domains/newd.com/postmaster/.maildroprc']
+07:37 Jun/02/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) '/home/lxadmin/mail/bin/vsetuserquota'  'postmaster@newd.com' 'NOQUOTA']
+07:37 Jun/02/2009: Making directory /home/lxadmin/mail/domains/newd.com/postmaster/autorespond
+07:37 Jun/02/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) 'chown'  '-R' '1057:1057' '/home/lxadmin/mail/domains/newd.com/postmaster/autorespond']
+12:25 Jun/02/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) 'chmod'  '0700' '/tmp/mebackupfeSi2T']
+12:25 Jun/02/2009: 0:  [(__system__:/tmp/mebackupfeSi2T) nice -n 15 zip -y -rq /home/kloxo/selfbackup/self/__backup/kloxo-scheduled-masterselfbackup-2009-Jun-02-1243925728.zip 'mebackup.dump']
+12:25 Jun/02/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) 'rm'  '-r' '/tmp/mebackupfeSi2T']
+12:25 Jun/02/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) 'df'  '-P']

@@ -1,0 +1,256 @@
+12:26 May/31/2009: Removing /usr/local/lxlabs/kloxo/log/access_log
+12:26 May/31/2009: Removing /usr/local/lxlabs/kloxo/log/lighttpd_error.log
+12:26 May/31/2009: Chown /usr/local/lxlabs/kloxo/log to lxlabs:lxlabs
+12:26 May/31/2009: Removing /home/kloxo/lxguard/access.info
+17:43 May/31/2009: Copying ../file/script/phpinfo.phps /home/httpd/sadd.com/kloxoscript/phpinfo.php
+17:44 May/31/2009: Copying htmllib/script/add /script/add
+17:44 May/31/2009: Copying htmllib/script/backup /script/backup
+17:44 May/31/2009: Copying htmllib/script/cleanup /script/cleanup
+17:44 May/31/2009: Copying htmllib/script/clearallowedblockedip /script/clearallowedblockedip
+17:44 May/31/2009: Copying htmllib/script/collectquota /script/collectquota
+17:44 May/31/2009: Copying htmllib/script/command /script/command
+17:44 May/31/2009: Copying htmllib/script/defaultport /script/defaultport
+17:44 May/31/2009: Copying htmllib/script/delete /script/delete
+17:44 May/31/2009: Copying htmllib/script/directory /script/directory
+17:44 May/31/2009: Copying htmllib/script/fixtraffic /script/fixtraffic
+17:44 May/31/2009: Copying htmllib/script/getproperty /script/getproperty
+17:44 May/31/2009: Copying htmllib/script/lang-set-to-en /script/lang-set-to-en
+17:44 May/31/2009: Copying htmllib/script/make-slave /script/make-slave
+17:44 May/31/2009: Copying htmllib/script/mebackup /script/mebackup
+17:44 May/31/2009: Copying htmllib/script/primary-start /script/primary-start
+17:44 May/31/2009: Copying htmllib/script/raw-update /script/raw-update
+17:44 May/31/2009: Copying htmllib/script/reflect /script/reflect
+17:44 May/31/2009: Copying htmllib/script/resetpassword /script/resetpassword
+17:44 May/31/2009: Copying htmllib/script/restart /script/restart
+17:44 May/31/2009: Copying htmllib/script/restore /script/restore
+17:44 May/31/2009: Copying htmllib/script/scavenge /script/scavenge
+17:44 May/31/2009: Copying htmllib/script/secondary-setup /script/secondary-setup
+17:44 May/31/2009: Copying htmllib/script/secondary-start /script/secondary-start
+17:44 May/31/2009: Copying htmllib/script/simplelist /script/simplelist
+17:44 May/31/2009: Copying htmllib/script/skin-set-all-client /script/skin-set-all-client
+17:44 May/31/2009: Copying htmllib/script/switchserver /script/switchserver
+17:44 May/31/2009: Copying htmllib/script/upcp /script/upcp
+17:44 May/31/2009: Copying htmllib/script/update /script/update
+17:44 May/31/2009: Copying htmllib/script/version /script/version
+17:44 May/31/2009: Copying ../pscript/centos5-postpostupgrade /script/centos5-postpostupgrade
+17:44 May/31/2009: Copying ../pscript/centos5-postupgrade /script/centos5-postupgrade
+17:44 May/31/2009: Copying ../pscript/cleanspamdyke /script/cleanspamdyke
+17:44 May/31/2009: Copying ../pscript/fix-yum-install /script/fix-yum-install
+17:44 May/31/2009: Copying ../pscript/fixdns /script/fixdns
+17:44 May/31/2009: Copying ../pscript/fixdomainkey /script/fixdomainkey
+17:44 May/31/2009: Copying ../pscript/fixftpuser /script/fixftpuser
+17:44 May/31/2009: Copying ../pscript/fixhorde /script/fixhorde
+17:44 May/31/2009: Copying ../pscript/fixmail /script/fixmail
+17:44 May/31/2009: Copying ../pscript/fixphp /script/fixphp
+17:44 May/31/2009: Copying ../pscript/fixquota /script/fixquota
+17:44 May/31/2009: Copying ../pscript/fixvpop /script/fixvpop
+17:44 May/31/2009: Copying ../pscript/fixweb /script/fixweb
+17:44 May/31/2009: Copying ../pscript/fixwebmail /script/fixwebmail
+17:44 May/31/2009: Copying ../pscript/installapp-update /script/installapp-update
+17:44 May/31/2009: Copying ../pscript/installatron-install /script/installatron-install
+17:44 May/31/2009: Copying ../pscript/qmail-update /script/qmail-update
+17:44 May/31/2009: Copying ../pscript/ror-install /script/ror-install
+17:44 May/31/2009: Copying ../pscript/set-default-ssl /script/set-default-ssl
+17:44 May/31/2009: Copying ../pscript/xcache-install /script/xcache-install
+17:44 May/31/2009: Copying ../pscript/filter/client-in-client /script/filter/client-in-client
+17:44 May/31/2009: Copying ../pscript/filter/customer-in-client /script/filter/customer-in-client
+17:44 May/31/2009: Copying ../pscript/filter/domain-in-client /script/filter/domain-in-client
+17:44 May/31/2009: Copying ../pscript/filter/mysqldb-in-client /script/filter/mysqldb-in-client
+17:44 May/31/2009: Copying ../pscript/filter/reseller-in-client /script/filter/reseller-in-client
+17:44 May/31/2009: Copying htmllib/script/filter/class-in-object /script/filter/class-in-object
+17:44 May/31/2009: Copying /usr/local/lxlabs/kloxo/file/program.crt /home/kloxo/httpd/ssl/eth0_0___localhost.crt
+17:44 May/31/2009: Copying /usr/local/lxlabs/kloxo/file/program.key /home/kloxo/httpd/ssl/eth0_0___localhost.key
+17:44 May/31/2009: Copying /usr/local/lxlabs/kloxo/httpdocs/htmllib/filecore/program.ca /home/kloxo/httpd/ssl/eth0_0___localhost.ca
+17:44 May/31/2009: Copying /usr/local/lxlabs/kloxo/file/program.crt /home/kloxo/httpd/ssl/eth0_1___localhost.crt
+17:44 May/31/2009: Copying /usr/local/lxlabs/kloxo/file/program.key /home/kloxo/httpd/ssl/eth0_1___localhost.key
+17:44 May/31/2009: Copying /usr/local/lxlabs/kloxo/httpdocs/htmllib/filecore/program.ca /home/kloxo/httpd/ssl/eth0_1___localhost.ca
+17:44 May/31/2009: Copying /usr/local/lxlabs/kloxo/file/program.crt /home/kloxo/httpd/ssl/eth0___localhost.crt
+17:44 May/31/2009: Copying /usr/local/lxlabs/kloxo/file/program.key /home/kloxo/httpd/ssl/eth0___localhost.key
+17:44 May/31/2009: Copying /usr/local/lxlabs/kloxo/httpdocs/htmllib/filecore/program.ca /home/kloxo/httpd/ssl/eth0___localhost.ca
+17:44 May/31/2009: Copying /usr/local/lxlabs/kloxo/file/program.crt /home/kloxo/httpd/ssl/venet0___localhost.crt
+17:44 May/31/2009: Copying /usr/local/lxlabs/kloxo/file/program.key /home/kloxo/httpd/ssl/venet0___localhost.key
+17:44 May/31/2009: Copying /usr/local/lxlabs/kloxo/httpdocs/htmllib/filecore/program.ca /home/kloxo/httpd/ssl/venet0___localhost.ca
+17:44 May/31/2009: Copying /usr/local/lxlabs/kloxo/file/program.crt /home/kloxo/httpd/ssl/eth0_0___localhost.crt
+17:44 May/31/2009: Copying /usr/local/lxlabs/kloxo/file/program.key /home/kloxo/httpd/ssl/eth0_0___localhost.key
+17:44 May/31/2009: Copying /usr/local/lxlabs/kloxo/httpdocs/htmllib/filecore/program.ca /home/kloxo/httpd/ssl/eth0_0___localhost.ca
+17:44 May/31/2009: Copying /usr/local/lxlabs/kloxo/file/program.crt /home/kloxo/httpd/ssl/eth0_1___localhost.crt
+17:44 May/31/2009: Copying /usr/local/lxlabs/kloxo/file/program.key /home/kloxo/httpd/ssl/eth0_1___localhost.key
+17:44 May/31/2009: Copying /usr/local/lxlabs/kloxo/httpdocs/htmllib/filecore/program.ca /home/kloxo/httpd/ssl/eth0_1___localhost.ca
+17:44 May/31/2009: Copying /usr/local/lxlabs/kloxo/file/program.crt /home/kloxo/httpd/ssl/eth0___localhost.crt
+17:44 May/31/2009: Copying /usr/local/lxlabs/kloxo/file/program.key /home/kloxo/httpd/ssl/eth0___localhost.key
+17:44 May/31/2009: Copying /usr/local/lxlabs/kloxo/httpdocs/htmllib/filecore/program.ca /home/kloxo/httpd/ssl/eth0___localhost.ca
+17:44 May/31/2009: Copying /usr/local/lxlabs/kloxo/file/program.crt /home/kloxo/httpd/ssl/venet0___localhost.crt
+17:44 May/31/2009: Copying /usr/local/lxlabs/kloxo/file/program.key /home/kloxo/httpd/ssl/venet0___localhost.key
+17:44 May/31/2009: Copying /usr/local/lxlabs/kloxo/httpdocs/htmllib/filecore/program.ca /home/kloxo/httpd/ssl/venet0___localhost.ca
+17:44 May/31/2009: Copying ../file/script/phpinfo.phps /home/httpd/sadd.com/kloxoscript/phpinfo.php
+17:44 May/31/2009: Copying ../file/script/phpinfo.phps /home/httpd/sadd.com/kloxoscript/phpinfo.php
+17:46 May/31/2009: Copying ../file/script/phpinfo.phps /home/httpd/sadd.com/kloxoscript/phpinfo.php
+17:47 May/31/2009: Copying ../file/script/phpinfo.phps /home/httpd/sadd.com/kloxoscript/phpinfo.php
+17:47 May/31/2009: Copying ../file/script/phpinfo.phps /home/httpd/sadd.com/kloxoscript/phpinfo.php
+17:47 May/31/2009: Copying ../file/script/phpinfo.phps /home/httpd/sadd.com/kloxoscript/phpinfo.php
+17:48 May/31/2009: Copying /usr/local/lxlabs/kloxo/file/program.crt /home/kloxo/httpd/ssl/eth0_0___localhost.crt
+17:48 May/31/2009: Copying /usr/local/lxlabs/kloxo/file/program.key /home/kloxo/httpd/ssl/eth0_0___localhost.key
+17:48 May/31/2009: Copying /usr/local/lxlabs/kloxo/httpdocs/htmllib/filecore/program.ca /home/kloxo/httpd/ssl/eth0_0___localhost.ca
+17:48 May/31/2009: Copying /usr/local/lxlabs/kloxo/file/program.crt /home/kloxo/httpd/ssl/eth0_1___localhost.crt
+17:48 May/31/2009: Copying /usr/local/lxlabs/kloxo/file/program.key /home/kloxo/httpd/ssl/eth0_1___localhost.key
+17:48 May/31/2009: Copying /usr/local/lxlabs/kloxo/httpdocs/htmllib/filecore/program.ca /home/kloxo/httpd/ssl/eth0_1___localhost.ca
+17:48 May/31/2009: Copying /usr/local/lxlabs/kloxo/file/program.crt /home/kloxo/httpd/ssl/eth0___localhost.crt
+17:48 May/31/2009: Copying /usr/local/lxlabs/kloxo/file/program.key /home/kloxo/httpd/ssl/eth0___localhost.key
+17:48 May/31/2009: Copying /usr/local/lxlabs/kloxo/httpdocs/htmllib/filecore/program.ca /home/kloxo/httpd/ssl/eth0___localhost.ca
+17:48 May/31/2009: Copying /usr/local/lxlabs/kloxo/file/program.crt /home/kloxo/httpd/ssl/venet0___localhost.crt
+17:48 May/31/2009: Copying /usr/local/lxlabs/kloxo/file/program.key /home/kloxo/httpd/ssl/venet0___localhost.key
+17:48 May/31/2009: Copying /usr/local/lxlabs/kloxo/httpdocs/htmllib/filecore/program.ca /home/kloxo/httpd/ssl/venet0___localhost.ca
+17:48 May/31/2009: Copying ../file/script/phpinfo.phps /home/httpd/sadd.com/kloxoscript/phpinfo.php
+17:49 May/31/2009: Copying ../file/script/phpinfo.phps /home/httpd/sadd.com/kloxoscript/phpinfo.php
+17:49 May/31/2009: Copying /usr/local/lxlabs/kloxo/file/program.crt /home/kloxo/httpd/ssl/eth0_0___localhost.crt
+17:49 May/31/2009: Copying /usr/local/lxlabs/kloxo/file/program.key /home/kloxo/httpd/ssl/eth0_0___localhost.key
+17:49 May/31/2009: Copying /usr/local/lxlabs/kloxo/httpdocs/htmllib/filecore/program.ca /home/kloxo/httpd/ssl/eth0_0___localhost.ca
+17:49 May/31/2009: Copying /usr/local/lxlabs/kloxo/file/program.crt /home/kloxo/httpd/ssl/eth0_1___localhost.crt
+17:49 May/31/2009: Copying /usr/local/lxlabs/kloxo/file/program.key /home/kloxo/httpd/ssl/eth0_1___localhost.key
+17:49 May/31/2009: Copying /usr/local/lxlabs/kloxo/httpdocs/htmllib/filecore/program.ca /home/kloxo/httpd/ssl/eth0_1___localhost.ca
+17:49 May/31/2009: Copying /usr/local/lxlabs/kloxo/file/program.crt /home/kloxo/httpd/ssl/eth0___localhost.crt
+17:49 May/31/2009: Copying /usr/local/lxlabs/kloxo/file/program.key /home/kloxo/httpd/ssl/eth0___localhost.key
+17:49 May/31/2009: Copying /usr/local/lxlabs/kloxo/httpdocs/htmllib/filecore/program.ca /home/kloxo/httpd/ssl/eth0___localhost.ca
+17:49 May/31/2009: Copying /usr/local/lxlabs/kloxo/file/program.crt /home/kloxo/httpd/ssl/venet0___localhost.crt
+17:49 May/31/2009: Copying /usr/local/lxlabs/kloxo/file/program.key /home/kloxo/httpd/ssl/venet0___localhost.key
+17:49 May/31/2009: Copying /usr/local/lxlabs/kloxo/httpdocs/htmllib/filecore/program.ca /home/kloxo/httpd/ssl/venet0___localhost.ca
+17:49 May/31/2009: Copying ../file/script/phpinfo.phps /home/httpd/sadd.com/kloxoscript/phpinfo.php
+17:49 May/31/2009: Copying /usr/local/lxlabs/kloxo/file/program.crt /home/kloxo/httpd/ssl/eth0_0___localhost.crt
+17:49 May/31/2009: Copying /usr/local/lxlabs/kloxo/file/program.key /home/kloxo/httpd/ssl/eth0_0___localhost.key
+17:49 May/31/2009: Copying /usr/local/lxlabs/kloxo/httpdocs/htmllib/filecore/program.ca /home/kloxo/httpd/ssl/eth0_0___localhost.ca
+17:49 May/31/2009: Copying /usr/local/lxlabs/kloxo/file/program.crt /home/kloxo/httpd/ssl/eth0_1___localhost.crt
+17:49 May/31/2009: Copying /usr/local/lxlabs/kloxo/file/program.key /home/kloxo/httpd/ssl/eth0_1___localhost.key
+17:49 May/31/2009: Copying /usr/local/lxlabs/kloxo/httpdocs/htmllib/filecore/program.ca /home/kloxo/httpd/ssl/eth0_1___localhost.ca
+17:49 May/31/2009: Copying /usr/local/lxlabs/kloxo/file/program.crt /home/kloxo/httpd/ssl/eth0___localhost.crt
+17:49 May/31/2009: Copying /usr/local/lxlabs/kloxo/file/program.key /home/kloxo/httpd/ssl/eth0___localhost.key
+17:49 May/31/2009: Copying /usr/local/lxlabs/kloxo/httpdocs/htmllib/filecore/program.ca /home/kloxo/httpd/ssl/eth0___localhost.ca
+17:49 May/31/2009: Copying /usr/local/lxlabs/kloxo/file/program.crt /home/kloxo/httpd/ssl/venet0___localhost.crt
+17:49 May/31/2009: Copying /usr/local/lxlabs/kloxo/file/program.key /home/kloxo/httpd/ssl/venet0___localhost.key
+17:49 May/31/2009: Copying /usr/local/lxlabs/kloxo/httpdocs/htmllib/filecore/program.ca /home/kloxo/httpd/ssl/venet0___localhost.ca
+17:50 May/31/2009: Copying ../file/script/phpinfo.phps /home/httpd/sadd.com/kloxoscript/phpinfo.php
+17:51 May/31/2009: Copying ../file/script/phpinfo.phps /home/httpd/sadd.com/kloxoscript/phpinfo.php
+17:51 May/31/2009: Copying ../file/script/phpinfo.phps /home/httpd/sadd.com/kloxoscript/phpinfo.php
+17:52 May/31/2009: Copying ../file/script/phpinfo.phps /home/httpd/sadd.com/kloxoscript/phpinfo.php
+17:52 May/31/2009: Copying ../file/script/phpinfo.phps /home/httpd/sadd.com/kloxoscript/phpinfo.php
+17:54 May/31/2009: Copying ../file/script/phpinfo.phps /home/httpd/sadd.com/kloxoscript/phpinfo.php
+17:54 May/31/2009: Copying /usr/local/lxlabs/lxadmin/file/program.crt /home/kloxo/httpd/ssl/eth0_0___localhost.crt
+17:54 May/31/2009: Copying /usr/local/lxlabs/lxadmin/file/program.key /home/kloxo/httpd/ssl/eth0_0___localhost.key
+17:54 May/31/2009: Copying /usr/local/lxlabs/lxadmin/httpdocs/htmllib/filecore/program.ca /home/kloxo/httpd/ssl/eth0_0___localhost.ca
+17:54 May/31/2009: Copying /usr/local/lxlabs/lxadmin/file/program.crt /home/kloxo/httpd/ssl/eth0_1___localhost.crt
+17:54 May/31/2009: Copying /usr/local/lxlabs/lxadmin/file/program.key /home/kloxo/httpd/ssl/eth0_1___localhost.key
+17:54 May/31/2009: Copying /usr/local/lxlabs/lxadmin/httpdocs/htmllib/filecore/program.ca /home/kloxo/httpd/ssl/eth0_1___localhost.ca
+17:54 May/31/2009: Copying /usr/local/lxlabs/lxadmin/file/program.crt /home/kloxo/httpd/ssl/eth0___localhost.crt
+17:54 May/31/2009: Copying /usr/local/lxlabs/lxadmin/file/program.key /home/kloxo/httpd/ssl/eth0___localhost.key
+17:54 May/31/2009: Copying /usr/local/lxlabs/lxadmin/httpdocs/htmllib/filecore/program.ca /home/kloxo/httpd/ssl/eth0___localhost.ca
+17:54 May/31/2009: Copying /usr/local/lxlabs/lxadmin/file/program.crt /home/kloxo/httpd/ssl/venet0___localhost.crt
+17:54 May/31/2009: Copying /usr/local/lxlabs/lxadmin/file/program.key /home/kloxo/httpd/ssl/venet0___localhost.key
+17:54 May/31/2009: Copying /usr/local/lxlabs/lxadmin/httpdocs/htmllib/filecore/program.ca /home/kloxo/httpd/ssl/venet0___localhost.ca
+17:54 May/31/2009: Copying ../file/script/phpinfo.phps /home/httpd/sadd.com/kloxoscript/phpinfo.php
+17:55 May/31/2009: Copying ../file/script/phpinfo.phps /home/httpd/sadd.com/kloxoscript/phpinfo.php
+17:58 May/31/2009: Copying /usr/local/lxlabs/kloxo/file/program.crt /home/kloxo/httpd/ssl/eth0_0___localhost.crt
+17:58 May/31/2009: Copying /usr/local/lxlabs/kloxo/file/program.key /home/kloxo/httpd/ssl/eth0_0___localhost.key
+17:58 May/31/2009: Copying /usr/local/lxlabs/lxadmin/httpdocs/htmllib/filecore/program.ca /home/kloxo/httpd/ssl/eth0_0___localhost.ca
+17:58 May/31/2009: Copying /usr/local/lxlabs/kloxo/file/program.crt /home/kloxo/httpd/ssl/eth0_1___localhost.crt
+17:58 May/31/2009: Copying /usr/local/lxlabs/kloxo/file/program.key /home/kloxo/httpd/ssl/eth0_1___localhost.key
+17:58 May/31/2009: Copying /usr/local/lxlabs/lxadmin/httpdocs/htmllib/filecore/program.ca /home/kloxo/httpd/ssl/eth0_1___localhost.ca
+17:58 May/31/2009: Copying /usr/local/lxlabs/kloxo/file/program.crt /home/kloxo/httpd/ssl/eth0___localhost.crt
+17:58 May/31/2009: Copying /usr/local/lxlabs/kloxo/file/program.key /home/kloxo/httpd/ssl/eth0___localhost.key
+17:58 May/31/2009: Copying /usr/local/lxlabs/lxadmin/httpdocs/htmllib/filecore/program.ca /home/kloxo/httpd/ssl/eth0___localhost.ca
+17:58 May/31/2009: Copying /usr/local/lxlabs/kloxo/file/program.crt /home/kloxo/httpd/ssl/venet0___localhost.crt
+17:58 May/31/2009: Copying /usr/local/lxlabs/kloxo/file/program.key /home/kloxo/httpd/ssl/venet0___localhost.key
+17:58 May/31/2009: Copying /usr/local/lxlabs/lxadmin/httpdocs/htmllib/filecore/program.ca /home/kloxo/httpd/ssl/venet0___localhost.ca
+17:58 May/31/2009: Copying ../file/script/phpinfo.phps /home/httpd/sadd.com/kloxoscript/phpinfo.php
+17:58 May/31/2009: Chown /home/httpd/sadd.com to newclientt:apache
+17:58 May/31/2009: Chown /home/httpd/sadd.com to newclientt:apache
+17:58 May/31/2009: Chown /home/httpd/sadd.com to newclientt
+17:58 May/31/2009: Copying ../file/script/phpinfo.phps /home/httpd/bakery.newdomain.com/kloxoscript/phpinfo.php
+17:58 May/31/2009: Chown /home/httpd/bakery.newdomain.com to admin:apache
+17:58 May/31/2009: Chown /home/httpd/bakery.newdomain.com to admin:apache
+17:58 May/31/2009: Chown /home/httpd/bakery.newdomain.com to admin
+17:58 May/31/2009: Copying ../file/script/phpinfo.phps /home/httpd/happy.com/kloxoscript/phpinfo.php
+17:58 May/31/2009: Chown /home/httpd/happy.com to admin:apache
+17:58 May/31/2009: Chown /home/httpd/happy.com to admin:apache
+17:58 May/31/2009: Chown /home/httpd/happy.com to admin
+17:58 May/31/2009: Copying ../file/script/phpinfo.phps /home/httpd/mock.com/kloxoscript/phpinfo.php
+17:58 May/31/2009: Chown /home/httpd/mock.com to admin:apache
+17:58 May/31/2009: Chown /home/httpd/mock.com to admin:apache
+17:58 May/31/2009: Chown /home/httpd/mock.com to admin
+17:58 May/31/2009: Copying ../file/script/phpinfo.phps /home/httpd/newdomain.com/kloxoscript/phpinfo.php
+17:58 May/31/2009: Chown /home/httpd/newdomain.com to admin:apache
+17:58 May/31/2009: Chown /home/httpd/newdomain.com to admin:apache
+17:58 May/31/2009: Chown /home/httpd/newdomain.com to admin
+17:58 May/31/2009: Copying ../file/script/phpinfo.phps /home/httpd/newsub.happy.com/kloxoscript/phpinfo.php
+17:58 May/31/2009: Chown /home/httpd/newsub.happy.com to admin:apache
+17:58 May/31/2009: Chown /home/httpd/newsub.happy.com to admin:apache
+17:58 May/31/2009: Chown /home/httpd/newsub.happy.com to admin
+17:58 May/31/2009: Copying ../file/script/phpinfo.phps /home/httpd/nq.com/kloxoscript/phpinfo.php
+17:58 May/31/2009: Chown /home/httpd/nq.com to admin:apache
+17:58 May/31/2009: Chown /home/httpd/nq.com to admin:apache
+17:58 May/31/2009: Chown /home/httpd/nq.com to admin
+17:58 May/31/2009: Copying ../file/script/phpinfo.phps /home/httpd/test.com/kloxoscript/phpinfo.php
+17:58 May/31/2009: Chown /home/httpd/test.com to admin:apache
+17:58 May/31/2009: Chown /home/httpd/test.com to admin:apache
+17:58 May/31/2009: Chown /home/httpd/test.com to admin
+17:58 May/31/2009: Copying ../file/script/phpinfo.phps /home/httpd/tracker.com/kloxoscript/phpinfo.php
+17:58 May/31/2009: Chown /home/httpd/tracker.com to admin:apache
+17:58 May/31/2009: Chown /home/httpd/tracker.com to admin:apache
+17:58 May/31/2009: Chown /home/httpd/tracker.com to admin
+17:59 May/31/2009: Copying ../file/script/phpinfo.phps /home/httpd/sadd.com/kloxoscript/phpinfo.php
+17:59 May/31/2009: Chown /home/httpd/sadd.com to newclientt:apache
+17:59 May/31/2009: Chown /home/httpd/sadd.com to newclientt:apache
+17:59 May/31/2009: Chown /home/httpd/sadd.com to newclientt
+17:59 May/31/2009: Copying ../file/script/phpinfo.phps /home/httpd/bakery.newdomain.com/kloxoscript/phpinfo.php
+17:59 May/31/2009: Chown /home/httpd/bakery.newdomain.com to admin:apache
+17:59 May/31/2009: Chown /home/httpd/bakery.newdomain.com to admin:apache
+17:59 May/31/2009: Chown /home/httpd/bakery.newdomain.com to admin
+17:59 May/31/2009: Copying ../file/script/phpinfo.phps /home/httpd/happy.com/kloxoscript/phpinfo.php
+17:59 May/31/2009: Chown /home/httpd/happy.com to admin:apache
+17:59 May/31/2009: Chown /home/httpd/happy.com to admin:apache
+17:59 May/31/2009: Chown /home/httpd/happy.com to admin
+17:59 May/31/2009: Copying ../file/script/phpinfo.phps /home/httpd/mock.com/kloxoscript/phpinfo.php
+17:59 May/31/2009: Chown /home/httpd/mock.com to admin:apache
+17:59 May/31/2009: Chown /home/httpd/mock.com to admin:apache
+17:59 May/31/2009: Chown /home/httpd/mock.com to admin
+17:59 May/31/2009: Copying ../file/script/phpinfo.phps /home/httpd/newdomain.com/kloxoscript/phpinfo.php
+17:59 May/31/2009: Chown /home/httpd/newdomain.com to admin:apache
+17:59 May/31/2009: Chown /home/httpd/newdomain.com to admin:apache
+17:59 May/31/2009: Chown /home/httpd/newdomain.com to admin
+17:59 May/31/2009: Copying ../file/script/phpinfo.phps /home/httpd/newsub.happy.com/kloxoscript/phpinfo.php
+17:59 May/31/2009: Chown /home/httpd/newsub.happy.com to admin:apache
+17:59 May/31/2009: Chown /home/httpd/newsub.happy.com to admin:apache
+17:59 May/31/2009: Chown /home/httpd/newsub.happy.com to admin
+17:59 May/31/2009: Copying ../file/script/phpinfo.phps /home/httpd/nq.com/kloxoscript/phpinfo.php
+17:59 May/31/2009: Chown /home/httpd/nq.com to admin:apache
+17:59 May/31/2009: Chown /home/httpd/nq.com to admin:apache
+17:59 May/31/2009: Chown /home/httpd/nq.com to admin
+17:59 May/31/2009: Copying ../file/script/phpinfo.phps /home/httpd/test.com/kloxoscript/phpinfo.php
+17:59 May/31/2009: Chown /home/httpd/test.com to admin:apache
+17:59 May/31/2009: Chown /home/httpd/test.com to admin:apache
+17:59 May/31/2009: Chown /home/httpd/test.com to admin
+17:59 May/31/2009: Copying ../file/script/phpinfo.phps /home/httpd/tracker.com/kloxoscript/phpinfo.php
+17:59 May/31/2009: Chown /home/httpd/tracker.com to admin:apache
+17:59 May/31/2009: Chown /home/httpd/tracker.com to admin:apache
+17:59 May/31/2009: Chown /home/httpd/tracker.com to admin
+18:06 May/31/2009: Chown /var/named/chroot/var/named/tracker.com to named
+18:06 May/31/2009: Chown /var/named/chroot/etc/kloxo.named.conf to named
+18:06 May/31/2009: Chown /var/named/chroot/var/named/nq.com to named
+18:06 May/31/2009: Chown /var/named/chroot/etc/kloxo.named.conf to named
+18:06 May/31/2009: Chown /var/named/chroot/var/named/test.com to named
+18:06 May/31/2009: Chown /var/named/chroot/etc/kloxo.named.conf to named
+18:06 May/31/2009: Chown /var/named/chroot/var/named/tracker.com to named
+18:06 May/31/2009: Chown /var/named/chroot/etc/kloxo.named.conf to named
+18:06 May/31/2009: Chown /var/named/chroot/var/named/bakery.newdomain.com to named
+18:06 May/31/2009: Chown /var/named/chroot/etc/kloxo.named.conf to named
+18:06 May/31/2009: Chown /var/named/chroot/var/named/newsub.happy.com to named
+18:06 May/31/2009: Chown /var/named/chroot/etc/kloxo.named.conf to named
+18:06 May/31/2009: Chown /var/named/chroot/var/named/newdomain.com to named
+18:06 May/31/2009: Chown /var/named/chroot/etc/kloxo.named.conf to named
+18:06 May/31/2009: Chown /var/named/chroot/var/named/mock.com to named
+18:06 May/31/2009: Chown /var/named/chroot/etc/kloxo.named.conf to named
+18:06 May/31/2009: Chown /var/named/chroot/var/named/happy.com to named
+18:06 May/31/2009: Chown /var/named/chroot/etc/kloxo.named.conf to named
+21:28 May/31/2009: Removing /usr/local/lxlabs/kloxo/log/access_log
+21:28 May/31/2009: Removing /usr/local/lxlabs/kloxo/log/lighttpd_error.log
+21:28 May/31/2009: Chown /usr/local/lxlabs/kloxo/log to lxlabs:lxlabs
+12:15 Jun/01/2009: Removing /usr/local/lxlabs/kloxo/pid/collectquota.php.pid
+12:25 Jun/01/2009: Chown .. to lxlabs

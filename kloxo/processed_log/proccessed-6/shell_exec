@@ -1,0 +1,143 @@
+12:25 Jun/02/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) 'rm'  '-r' '../processed_log/proccessed-6']
+12:25 Jun/02/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) 'chown'  '-R' 'lxlabs:lxlabs' '../log']
+12:25 Jun/02/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) 'chmod'  '0700' '../log']
+12:25 Jun/02/2009: CLosed Exec /usr/local/lxlabs/kloxo/cexe/closeallinput '/etc/init.d/kloxo lxrestart' >/dev/null 2>&1 &
+12:25 Jun/02/2009: 11:  [(__system__:/home/root/work/software/kloxo/httpdocs) '/usr/local/lxlabs/ext/php/php'  '../bin/common/misc/checktotalmemory.php']
+12:25 Jun/02/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) '/usr/local/lxlabs/ext/php/bin/php_cgi'  '-v']
+12:25 Jun/02/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) '/usr/local/lxlabs/ext/lxlighttpd/sbin/kloxo.httpd'  '-v']
+18:16 Jun/02/2009: Making directory /var/qmail/control/domainkeys/domain.happy.com
+18:16 Jun/02/2009: 0: Generating RSA private key, 384 bit long modulus
+.....++++++++++++++++++
+......++++++++++++++++++
+e is 65537 (0x10001)
+ [(__system__:/var/qmail/control/domainkeys/domain.happy.com) 'openssl'  'genrsa' '-out' 'private' '384']
+18:16 Jun/02/2009: 0: writing RSA key
+ [(__system__:/var/qmail/control/domainkeys/domain.happy.com) 'openssl'  'rsa' '-in' 'private' '-out' '/tmp/lxtmp_rsagenrLPEzB' '-pubout' '-outform' 'PEM']
+18:16 Jun/02/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) 'pure-pw'  'useradd' 'domain.happy.com' '-u' 'admin' '-d' '/home/admin/domain.happy.com' '-m']
+18:16 Jun/02/2009: Making directory /home/admin/domain.happy.com
+18:16 Jun/02/2009: pure-pw usermod domain.happy.com -N '' -m
+18:16 Jun/02/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) 'pure-pw'  'usermod' 'domain.happy.com' '-z' '0000-2359' '-m']
+18:16 Jun/02/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) 'file'  '-b' '/home/admin/domain.happy.com/skeleton.zipxXe1tZ']
+18:16 Jun/02/2009: 0:  [(__system__:/home/admin/domain.happy.com) nice -n 15 unzip -oq /home/admin/domain.happy.com/skeleton.zipxXe1tZ ]
+18:16 Jun/02/2009: Making directory /home/httpd/domain.happy.com/webstats
+18:16 Jun/02/2009: Making directory /home/admin/domain.happy.com/cgi-bin/
+18:16 Jun/02/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) 'chmod'  '0755' '/home/httpd/domain.happy.com']
+18:16 Jun/02/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) 'chmod'  '0755' '/home/admin/domain.happy.com']
+18:16 Jun/02/2009: Making directory /home/httpd/domain.happy.com/conf
+18:16 Jun/02/2009: Making directory /home/httpd/domain.happy.com/stats
+18:16 Jun/02/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) 'chown'  '-R' 'admin:admin' '/home/admin/domain.happy.com']
+18:16 Jun/02/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) 'chmod'  '-R' '755' '/home/admin/domain.happy.com']
+18:16 Jun/02/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) 'chmod'  '750' '/home/admin']
+18:16 Jun/02/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) 'chmod'  '770' '/home/httpd/domain.happy.com/stats/']
+18:16 Jun/02/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) 'chmod'  '0744' '/etc/webalizer/webalizer.domain.happy.com.conf']
+18:16 Jun/02/2009: Making directory /var/lib/webalizer/domain.happy.com
+18:16 Jun/02/2009: Making directory /home/httpd/domain.happy.com/webstats/webalizer/
+18:16 Jun/02/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) 'chmod'  '0744' '/etc/awstats/awstats.domain.happy.com.conf']
+18:16 Jun/02/2009: Making directory /home/kloxo/httpd/awstats/dirdata/domain.happy.com
+18:16 Jun/02/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) 'ifconfig' ]
+18:16 Jun/02/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) 'ifconfig' ]
+18:16 Jun/02/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) 'chmod'  '0744' '/etc/webalizer/webalizer.domain.happy.com.conf']
+18:16 Jun/02/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) 'chmod'  '0744' '/etc/awstats/awstats.domain.happy.com.conf']
+18:16 Jun/02/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) 'chmod'  '0775' '/home/httpd/domain.happy.com']
+18:16 Jun/02/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) 'ifconfig' ]
+18:16 Jun/02/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) 'chmod'  '0744' '/etc/webalizer/webalizer.domain.happy.com.conf']
+18:16 Jun/02/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) 'chmod'  '0744' '/etc/awstats/awstats.domain.happy.com.conf']
+18:16 Jun/02/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) 'chmod'  '0775' '/home/httpd/domain.happy.com']
+18:16 Jun/02/2009: Making directory /home/httpd/domain.happy.com/kloxoscript/
+18:16 Jun/02/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) 'chown'  '-R' 'admin:admin' '/home/httpd/domain.happy.com/kloxoscript']
+18:16 Jun/02/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) 'ifconfig' ]
+18:16 Jun/02/2009: Making directory /home/httpd/domain.happy.com/__dirprotect
+18:16 Jun/02/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) 'named-checkzone'  'domain.happy.com' '/tmp/lxtmp__var_named_chroot_var_named_domain.happy.com6MMuyu']
+18:16 Jun/02/2009: 1: rndc: connection to remote host closed
+This may indicate that the remote server is using an older version of 
+the command protocol, this host is not authorized to connect,
+or the key is invalid.
+ [(__system__:/home/root/work/software/kloxo/httpdocs) 'rndc'  'reload' 'domain.happy.com']
+18:16 Jun/02/2009: 1: rndc: connect failed: 127.0.0.1#953: connection refused
+ [(__system__:/home/root/work/software/kloxo/httpdocs) 'rndc'  'reload']
+18:16 Jun/02/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) '/home/lxadmin/mail/bin/vadddomain'  '-i' '1057' '-g' '1057' 'domain.happy.com' '-e' 'postmaster' 'somethi']
+18:16 Jun/02/2009: 254:  [(__system__:/home/root/work/software/kloxo/httpdocs) '/home/lxadmin/mail/bin/vadduser'  'postmaster@domain.happy.com' '-e' '$1$oy8CPVAq$s2xMW80ZXp8MehihEvJg./']
+18:16 Jun/02/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) 'maildirmake'  '-f' 'Spam' '/home/lxadmin/mail/domains/domain.happy.com/postmaster/Maildir']
+18:16 Jun/02/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) 'chown'  '-R' '1057:1057' '/home/lxadmin/mail/domains/domain.happy.com/postmaster/Maildir']
+18:16 Jun/02/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) 'chmod'  '700' '/home/lxadmin/mail/domains/domain.happy.com/postmaster/.maildroprc']
+18:16 Jun/02/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) '/home/lxadmin/mail/bin/vsetuserquota'  'postmaster@domain.happy.com' 'NOQUOTA']
+18:16 Jun/02/2009: Making directory /home/lxadmin/mail/domains/domain.happy.com/postmaster/autorespond
+18:16 Jun/02/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) 'chown'  '-R' '1057:1057' '/home/lxadmin/mail/domains/domain.happy.com/postmaster/autorespond']
+18:17 Jun/02/2009: Making directory /var/qmail/control/domainkeys/domains.bakery.newdomain.com
+18:17 Jun/02/2009: 0: Generating RSA private key, 384 bit long modulus
+...++++++++++++++++++
+..........++++++++++++++++++
+e is 65537 (0x10001)
+ [(__system__:/var/qmail/control/domainkeys/domains.bakery.newdomain.com) 'openssl'  'genrsa' '-out' 'private' '384']
+18:17 Jun/02/2009: 0: writing RSA key
+ [(__system__:/var/qmail/control/domainkeys/domains.bakery.newdomain.com) 'openssl'  'rsa' '-in' 'private' '-out' '/tmp/lxtmp_rsageng97Pfz' '-pubout' '-outform' 'PEM']
+18:17 Jun/02/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) 'pure-pw'  'useradd' 'domains.bakery.newdomain.com' '-u' 'admin' '-d' '/home/admin/domains.bakery.newdomain.com' '-m']
+18:17 Jun/02/2009: Making directory /home/admin/domains.bakery.newdomain.com
+18:17 Jun/02/2009: pure-pw usermod domains.bakery.newdomain.com -N '' -m
+18:17 Jun/02/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) 'pure-pw'  'usermod' 'domains.bakery.newdomain.com' '-z' '0000-2359' '-m']
+18:17 Jun/02/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) 'file'  '-b' '/home/admin/domains.bakery.newdomain.com/skeleton.zipomELok']
+18:17 Jun/02/2009: 0:  [(__system__:/home/admin/domains.bakery.newdomain.com) nice -n 15 unzip -oq /home/admin/domains.bakery.newdomain.com/skeleton.zipomELok ]
+18:17 Jun/02/2009: Making directory /home/httpd/domains.bakery.newdomain.com/webstats
+18:17 Jun/02/2009: Making directory /home/admin/domains.bakery.newdomain.com/cgi-bin/
+18:17 Jun/02/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) 'chmod'  '0755' '/home/httpd/domains.bakery.newdomain.com']
+18:17 Jun/02/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) 'chmod'  '0755' '/home/admin/domains.bakery.newdomain.com']
+18:17 Jun/02/2009: Making directory /home/httpd/domains.bakery.newdomain.com/conf
+18:17 Jun/02/2009: Making directory /home/httpd/domains.bakery.newdomain.com/stats
+18:17 Jun/02/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) 'chown'  '-R' 'admin:admin' '/home/admin/domains.bakery.newdomain.com']
+18:17 Jun/02/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) 'chmod'  '-R' '755' '/home/admin/domains.bakery.newdomain.com']
+18:17 Jun/02/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) 'chmod'  '750' '/home/admin']
+18:17 Jun/02/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) 'chmod'  '770' '/home/httpd/domains.bakery.newdomain.com/stats/']
+18:17 Jun/02/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) 'chmod'  '0744' '/etc/webalizer/webalizer.domains.bakery.newdomain.com.conf']
+18:17 Jun/02/2009: Making directory /var/lib/webalizer/domains.bakery.newdomain.com
+18:17 Jun/02/2009: Making directory /home/httpd/domains.bakery.newdomain.com/webstats/webalizer/
+18:17 Jun/02/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) 'chmod'  '0744' '/etc/awstats/awstats.domains.bakery.newdomain.com.conf']
+18:17 Jun/02/2009: Making directory /home/kloxo/httpd/awstats/dirdata/domains.bakery.newdomain.com
+18:17 Jun/02/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) 'ifconfig' ]
+18:17 Jun/02/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) 'ifconfig' ]
+18:17 Jun/02/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) 'chmod'  '0744' '/etc/webalizer/webalizer.domains.bakery.newdomain.com.conf']
+18:17 Jun/02/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) 'chmod'  '0744' '/etc/awstats/awstats.domains.bakery.newdomain.com.conf']
+18:17 Jun/02/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) 'chmod'  '0775' '/home/httpd/domains.bakery.newdomain.com']
+18:17 Jun/02/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) 'ifconfig' ]
+18:17 Jun/02/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) 'chmod'  '0744' '/etc/webalizer/webalizer.domains.bakery.newdomain.com.conf']
+18:17 Jun/02/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) 'chmod'  '0744' '/etc/awstats/awstats.domains.bakery.newdomain.com.conf']
+18:17 Jun/02/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) 'chmod'  '0775' '/home/httpd/domains.bakery.newdomain.com']
+18:17 Jun/02/2009: Making directory /home/httpd/domains.bakery.newdomain.com/kloxoscript/
+18:17 Jun/02/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) 'chown'  '-R' 'admin:admin' '/home/httpd/domains.bakery.newdomain.com/kloxoscript']
+18:17 Jun/02/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) 'ifconfig' ]
+18:17 Jun/02/2009: Making directory /home/httpd/domains.bakery.newdomain.com/__dirprotect
+18:17 Jun/02/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) 'named-checkzone'  'domains.bakery.newdomain.com' '/tmp/lxtmp__var_named_chroot_var_named_domains.bakery.newdomain.comaPvbqG']
+18:17 Jun/02/2009: 1: rndc: connection to remote host closed
+This may indicate that the remote server is using an older version of 
+the command protocol, this host is not authorized to connect,
+or the key is invalid.
+ [(__system__:/home/root/work/software/kloxo/httpdocs) 'rndc'  'reload' 'domains.bakery.newdomain.com']
+18:17 Jun/02/2009: 1: rndc: connect failed: 127.0.0.1#953: connection refused
+ [(__system__:/home/root/work/software/kloxo/httpdocs) 'rndc'  'reload']
+18:17 Jun/02/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) '/home/lxadmin/mail/bin/vadddomain'  '-i' '1057' '-g' '1057' 'domains.bakery.newdomain.com' '-e' 'postmaster' 'lxlabs']
+18:17 Jun/02/2009: 254:  [(__system__:/home/root/work/software/kloxo/httpdocs) '/home/lxadmin/mail/bin/vadduser'  'postmaster@domains.bakery.newdomain.com' '-e' '$1$21YACXge$lQDHdXG53ovX0ApGKpfnZ.']
+18:17 Jun/02/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) 'maildirmake'  '-f' 'Spam' '/home/lxadmin/mail/domains/domains.bakery.newdomain.com/postmaster/Maildir']
+18:17 Jun/02/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) 'chown'  '-R' '1057:1057' '/home/lxadmin/mail/domains/domains.bakery.newdomain.com/postmaster/Maildir']
+18:17 Jun/02/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) 'chmod'  '700' '/home/lxadmin/mail/domains/domains.bakery.newdomain.com/postmaster/.maildroprc']
+18:17 Jun/02/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) '/home/lxadmin/mail/bin/vsetuserquota'  'postmaster@domains.bakery.newdomain.com' 'NOQUOTA']
+18:17 Jun/02/2009: Making directory /home/lxadmin/mail/domains/domains.bakery.newdomain.com/postmaster/autorespond
+18:17 Jun/02/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) 'chown'  '-R' '1057:1057' '/home/lxadmin/mail/domains/domains.bakery.newdomain.com/postmaster/autorespond']
+18:19 Jun/02/2009: 251:  [(__system__:/home/root/work/software/kloxo/httpdocs) '/home/lxadmin/mail/bin/vadduser'  'microsoft@bakery.newdomain.com' '-e' '$1$7BWe3pfb$DxYDYfkZPJZeMSpjR5VYv1']
+18:20 Jun/02/2009: 251:  [(__system__:/home/root/work/software/kloxo/httpdocs) '/home/lxadmin/mail/bin/vadduser'  'microsoft@bakery.newdomain.com' '-e' '$1$ZWr126vK$a72W1qpxCn04SRyY8QYJc/']
+18:24 Jun/02/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) '/home/lxadmin/mail/bin/vadduser'  'microsoft@domains.bakery.newdomain.com' '-e' '$1$nn.Jwl8X$cxkgtT8BcyHz25sx4HCrM1']
+18:24 Jun/02/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) 'maildirmake'  '-f' 'Spam' '/home/lxadmin/mail/domains/domains.bakery.newdomain.com/microsoft/Maildir']
+18:24 Jun/02/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) 'chown'  '-R' '1057:1057' '/home/lxadmin/mail/domains/domains.bakery.newdomain.com/microsoft/Maildir']
+18:24 Jun/02/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) 'chmod'  '700' '/home/lxadmin/mail/domains/domains.bakery.newdomain.com/microsoft/.maildroprc']
+18:24 Jun/02/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) '/home/lxadmin/mail/bin/vsetuserquota'  'microsoft@domains.bakery.newdomain.com' 'NOQUOTA']
+18:24 Jun/02/2009: Making directory /home/lxadmin/mail/domains/domains.bakery.newdomain.com/microsoft/autorespond
+18:24 Jun/02/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) 'chown'  '-R' '1057:1057' '/home/lxadmin/mail/domains/domains.bakery.newdomain.com/microsoft/autorespond']
+01:59 Jun/03/2009: 11:  [(__system__:/home/root/work/software/kloxo/httpdocs) '/usr/local/lxlabs/ext/php/php'  '../bin/common/misc/checktotalmemory.php']
+01:59 Jun/03/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) '/usr/local/lxlabs/ext/php/bin/php_cgi'  '-v']
+01:59 Jun/03/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) '/usr/local/lxlabs/ext/lxlighttpd/sbin/kloxo.httpd'  '-v']
+01:59 Jun/03/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) 'ifconfig' ]
+01:59 Jun/03/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) 'ifconfig' ]
+01:59 Jun/03/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) 'ifconfig' ]
+01:59 Jun/03/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) '/usr/local/lxlabs/ext/php/php'  '../bin/misc/newInstallFixIpaddress.php']
+12:25 Jun/03/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) 'chmod'  '0700' '/tmp/mebackupmIV677']
+12:25 Jun/03/2009: 0:  [(__system__:/tmp/mebackupmIV677) nice -n 15 zip -y -rq /home/kloxo/selfbackup/self/__backup/kloxo-scheduled-masterselfbackup-2009-Jun-03-1244012146.zip 'mebackup.dump']
+12:25 Jun/03/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) 'rm'  '-r' '/tmp/mebackupmIV677']
+12:25 Jun/03/2009: 0:  [(__system__:/home/root/work/software/kloxo/httpdocs) 'df'  '-P']
