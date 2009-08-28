@@ -71,9 +71,8 @@ function do_restore($docd)
 {
 	global $gbl, $sgbl, $login, $ghtml; 
 	$mailpath = self::getDir($this->main->nname);
-	$domain = $this->main->nname;
-	$sysuser =  mmail__qmail::getUserGroup($domain));
-	lxshell_unzip_with_throw($sysuser, $mailpath, $docd);
+	lxshell_unzip_with_throw($mailpath, $docd);
+	lxfile_unix_chown_rec($mailpath, mmail__qmail::getUserGroup($this->main->nname));
 }
 
 static function getDir($domain)
@@ -159,7 +158,7 @@ function addDomain()
 	global $gbl, $sgbl, $login, $ghtml; 
 	global $global_shell_error;
 	
-	$catchall = "postmaster";
+	//$catchall = "postmaster";
 
 	if ($this->main->ttype === 'forward') {
 		$sys_cmd =  "__path_mail_root/bin/vaddaliasdomain";
@@ -184,7 +183,8 @@ function addDomain()
 	}
 	$uid = os_get_uid_from_user($this->main->systemuser);
 	$gid = os_get_gid_from_user($this->main->systemuser);
-	$ret = lxshell_return($sys_cmd, '-i', $uid, '-g', $gid, $this->main->nname, "-e", $catchall, $password);
+	//$ret = lxshell_return($sys_cmd, '-i', $uid, '-g', $gid, $this->main->nname, "-e", $catchall, $password);
+	$ret = lxshell_return($sys_cmd, '-i', $uid, '-g', $gid, $this->main->nname, "-b", $password);
 
 	//$ret = lxshell_return($sys_cmd, $this->main->nname, "-e", $catchall, $password);
 
@@ -270,7 +270,8 @@ function updateQmaildefault()
 
 	dprint("{$this->main->catchall}\n");
 	dprint("$mailpath");
-	if ($this->main->isBounce('catchall')) {
+echo $this->main->catchall;
+	if ($this->main->catchall=="--bounce--") {
 		$catchallstring = 'bounce-no-mailbox';
 	} else {
 		$catchallstring = "$mailpath/{$this->main->catchall}";
@@ -280,7 +281,8 @@ function updateQmaildefault()
 	$fdata = "| /home/lxadmin/mail/bin/vdelivermail '' $catchallstring\n";
 
 
-	lfile_write_content($adminfile, $fdata, mmail__qmail::getUserGroup($this->main->nname));
+	lfile_put_contents($adminfile, $fdata);
+	//lfile_write_content($adminfile, $fdata, mmail__qmail::getUserGroup($this->main->nname));
 	
 }
 
