@@ -1,9 +1,0 @@
-source $HOME/.etc/screen/screenrc
-sorendition = db
-chdir /mnt/raid/midi
-split
-screen
-focus
-resize 7
-screen
-focus

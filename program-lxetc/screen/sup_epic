@@ -1,9 +1,0 @@
-#!/bin/bash
-
-screen -S abdict  -X select 4
-sleep 3
-screen -S abdict -X register p "su - irc -c 'epic-sup ligesh root'"
-sleep 3
-screen -S abdict -X paste p
-
-

@@ -1,2 +1,0 @@
-source $HOME/.etc/screen/screenrc
-bindkey "\346" screen "$HOME/.etc/bin/screen_list"

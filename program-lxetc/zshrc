@@ -1,225 +1,0 @@
-#!/bin/zsh
-
-#pst=`tty |  cut -d / -f 3`
-
-
-#if [ "$pst" = "pts" ]
-#then
-#	pstt=p`tty | cut -d / -f 4`
-#else 
-#	pstt=`echo $pst | cut -c 4`
-#fi
-
-
-if [ -n "$WINDOW" ]
-then
-	ps1=$WINDOW
-fi
-
-
-if [ "$USERNAME" != "root" ] && [ "$USERNAME" != "ligesh" ] && [ "$USERNAME" != "toor" ] && [ "$USERNAME" != "Administrator" ]
-then
-	user_var=$USERNAME@
-fi
-
-zmodload -i zsh/complist
-
-
-
-if [ -n "$VIM_PSE" ] 
-then 
-	ps1=${ps1}$VIM_PSE
-	PS1="$user_var%m.$VIM_PS:%1~[$ps1]%(!.#.$) "
-	RPROMPT="%~"
-else 
-#	send-tty `tty` 
-	PS1="$user_var%m:%1~[$ps1]%(!.#.$) "
-	RPROMPT="%~[$ps1]"
-fi
-export PS1 ps1
-
-setopt glob_complete
-setopt hist_ignore_all_dups
-setopt rm_star_silent
-setopt no_hup
-setopt no_check_jobs
-setopt nonomatch
-setopt globcomplete
-setopt append_history
-#setopt extendedglob
-#setopt share_history
-
-autoload -U compinit
-compinit -u
-
-export ZLS_COLORS="ex=00;32:di=0;36:ln=06;33:bd=00;34:cd=00;34:no=00:fi=00;38:pi=40;31:so=00;35:or=00;00;37;35:mi=00;00;37;00:*.cmd=00;32:*.exe=00;32:*.com=00;32:*.btm=00;32:*.bat=00;32:*.sh=00;32:*.csh=00;32:*.tar=00;34:*.tgz=00;34:*.arj=00;34:*.taz=00;34:*.lzh=00;34:*.zip=00;34:*.z=00;34:*.Z=00;34:*.gz=00;34:*.bz2=00;34:*.bz=00;34:*.tz=00;34:*.rpm=00;34:*.cpio=00;34:*.jpg=00;35:*.gif=00;35:*.bmp=00;35:*.xbm=00;35:*.xpm=00;35:*.png=00;35:*.tif=00;35:(g*)m*=36"
-fignore=(.o .c~ .old .pro)
-cdpath=()
-zstyle ':completion:*:*:(^rm):*:*files' ignored-patterns '*.o' '*.c~' '*.old' '*.pro'
-zstyle ':completion:*:default' list-colors ${(s.:.)ZLS_COLORS}
-#zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z}'
-unalias -m '*'
-
-alias -g '...'='../../'
-alias -g '....'='../../../'
-alias -g '.....'='../../../../'
-
-compctl -/ -g '*.wav' gogor
-compctl -/ -g '*.[zmMk][iaI][prdD]' timn
-compctl -/ -g '*.[zmMk][iaI][prdD]' timkn
-
-
-autoload incarg
-zle -N incarg
-
-
-#export LISTPROMPT=">"
-bindkey ¯  vi-history-search-backward
-bindkey ^E  end-line
-bindkey -a j backward-char
-bindkey -a h vi-insert
-bindkey -a i history-beginning-search-backward
-bindkey -a k history-beginning-search-forward
-bindkey -a ^G "\C-c"
-bindkey -a ^A incarg
-bindkey -v ^A vi-beginning-of-line
-bindkey -a s\; vi-beginning-of-line
-bindkey -v ^E vi-end-of-line
-bindkey -v "\M-Q" vi-cmd-mode
-bindkey -v ^H backward-delete-char
-bindkey -v ^X^i incremental-complete-word                                                        
-bindkey "\M-i" history-beginning-search-backward
-#bindkey ^I history-beginning-search-backward
-bindkey ^P history-beginning-search-backward
-bindkey "\M-k" history-beginning-search-forward
-#bindkey ^K history-beginning-search-forward
-bindkey ^N history-beginning-search-forward
-bindkey ^R history-incremental-search-backward
-bindkey ^L redisplay
-bindkey ^S history-incremental-search-forward
-bindkey "\M-l" forward-char
-bindkey "\M-j"  backward-char
-bindkey "\M-y" copy-prev-word
-bindkey -a Y vi-yank-eol
-bindkey -s "\M-q" "fortune "
-bindkey -s "[3~" "^H"
-bindkey -s "\M-e" "vi ~/.etc/"
-bindkey -s "\M-h" "~/"
-bindkey -s "\M-a" " 2>&1 | vip"
-bindkey  "\M-g" menu-complete
-bindkey -s "\M-c" "print -s "
-bindkey -s "\M-r" "é"
-bindkey ^U backward-kill-line
-bindkey ^O kill-line
-bindkey -a u undo
-bindkey -a ^R redo
-bindkey "\M-v" expand-history
-
-
-
-#TRAPINT () { zle widget vim-cmd-mode;  }
-TRAPINT () { }
-
-unset -f TRAPINT
-zle -N predict-on
-autoload predict-on
-autoload predict-off
-bindkey ^X^Z predict-on
-bindkey ^Z predict-on
-compdef _cd lc
-compdef _man mn
-compdef _killall ka
-compdef ssh-client-list host
-
-vimark-find () { reply=(`vihist`) ; }
-lf-find () { reply=(`scd -l`) ; }
-
-#ssh-client-list () { reply=(`wget -O - -o /dev/null lxlabs.net/clients/machinelist.lst`) ;}
-
-
-compctl -K vimark-find lv
-compctl -K vimark-find lvs
-compctl -K ssh-client-list sex
-compctl -K ssh-client-list host
-compctl -K ssh-client-list ping
-compctl -K ssh-client-list ssex
-compctl -K ssh-client-list scpid
-compctl -K ssh-client-list scpid-redir
-compctl -K lf-find lf
-
-_hosts () {  ssh-client-list $* ;}
-
-#_lv () { echo ; vimark ; echo -n 'lv ' ; return 0 ; }
-#_lc () { _cd ; ; return 0 ; }
-
-bindkey "\M-w" forward-word
-bindkey "\M-f" forward-word
-bindkey "\M-b" backward-word
-
-bindkey "\M-p" reverse-menu-complete
-bindkey  "\M-n" menu-complete
-
-ZSH_MIDDLE_VERSION=`echo $ZSH_VERSION | cut -d '.' -f 2`
-if [ $ZSH_MIDDLE_VERSION -lt 2 ] ; then
-for widget in kill-word backward-kill-word \
-      up-case-word down-case-word  transpose-words; do
-      autoload bash-$widget
-      zle -N $widget bash-$widget
-done
-else 
-autoload -U select-word-style
-select-word-style bash
-fi
-
-myclasslist () { reply=(${$(ls *.class)%.class}) }
-compctl -K myclasslist java
-
-bindkey ^W backward-kill-word
-setopt noautomenu
-#setopt bash_autolist
-setopt autolist
-setopt no_list_ambiguous
-setopt no_single_line_zle
-
-
-XTERM=xterm
-MHOST=lxlabs
-MPG=a
-bindkey -v
-
-#alias cp='cp -i'
-#alias mv='mv -i'
-
-
-DOMAIN=`echo $HOST | cut -d . -f 2-3`
-if [ $DOMAIN = "lxlabs.com" ] ; then
-	vi () {	vim "$@" ; }
-else
-	vi () { vim -X "$@" ; }
-fi
-
-source ~/.etc/commands.shell
-
-xbch-once () { pkill -f xbchat ; xbiff -name xbchat_once_only &; }
-xbch () { pkill -f xbchat ; xbiff -name xbchat&; }
-gln () { if pidof galeon-bin > /dev/null 2>&1 ;
-			then galeon -n "$@" ; 
-		else galeon --name=Galeon -n "$@" &; 
-		fi ; return 0 ; }
-rxnt    () { host=`hostname` ; X -ac & ; sleep 10 ; ssh $1 "(export DISPLAY=$host:0 ;  screen -D aamain; screen -D abdict ; zsh ~/.etc/xxwin/xinitrc)" ; }
-
-if [ x"$TERM" = x"eterm" ] ; then
- export EMACS=21.3.1
- #source ~/.etc/zsh/bind.zsh
-fi
-
-if [ x"$EMACS_NAME" = x"nemacs" ] ; then
- source ~/.etc/shell/commands.emacs
-	PS1="$user_var%m:%~[$ps1]%(!.#.$) "
-unset RPROMPT
- fi
-
-if [ -f ~/.etc/local-zshrc ] ; then
-	source ~/.etc/local-zshrc
-fi
-

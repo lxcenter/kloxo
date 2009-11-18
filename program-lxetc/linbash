@@ -1,2 +1,0 @@
-mn	() { 	man -C ~/.etc/mnrc "$@" ;		}
-ls	() {	`/usr/bin/which ls` -v --color "$@" ;				}

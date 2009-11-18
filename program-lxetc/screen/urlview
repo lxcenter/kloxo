@@ -1,9 +1,0 @@
-#!/bin/bash
-
-screen -S aamain  -X select 4
-screen -S aamain -X register p "g$1"
-screen -S aamain -X msgwait 0
-screen -S aamain -X paste p
-screen -S aamain -X msgwait 3
-
-

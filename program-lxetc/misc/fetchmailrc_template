@@ -1,9 +1,0 @@
-#set daemon 600
-set daemon 120
-set postmaster "postmaster"
-set bouncemail
-set properties ""
-
-
-
-poll %server% with proto POP3 user '%username%@lxlabs.com' password '%password%' is root here  mda "procmail -d %T"

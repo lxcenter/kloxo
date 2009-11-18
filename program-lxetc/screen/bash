@@ -1,1 +1,0 @@
-cd ; bash --rcfile .etc/f.bashrc ; cd -

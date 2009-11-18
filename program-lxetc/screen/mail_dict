@@ -1,15 +1,0 @@
-#!/bin/zsh
-source ~/.etc/zshrc
-screen -t adrs  0
-sleep 2
-screen -t chat 4 
-sleep 2
-scpaste abdict chat "run-chat ligesh"
-sleep 2
-screen -S abdict -X screen -t vmamp 3 vimamp --nostart
-sleep 2
-screen -t dict 4 
-sleep 2
-scpaste abdict NULL "dvi "
-sleep 1
-screen -S dict_mut -X title Dict

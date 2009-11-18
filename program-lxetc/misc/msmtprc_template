@@ -1,8 +1,0 @@
-account default
-logfile /var/log/msmtplog
-host lxlabs.com
-from %username%@lxlabs.com
-auth login
-user %username%@lxlabs.com
-password %password%
-

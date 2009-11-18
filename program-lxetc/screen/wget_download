@@ -1,5 +1,0 @@
-#!/bin/zsh
-source ~/.etc/zshrc 
-dxts sleep
-screen -S download -X screen ~/.etc/screen/download "$1"
-

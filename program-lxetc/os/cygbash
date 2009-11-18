@@ -1,7 +1,0 @@
-export PATH=$PATH:/cygdrive/c/WINNT/system32
-export TERM=cygwin
-export DISPLAY=root:0
-ls	() {	`which ls` --color "$@" ; 	}
-cc	() {	gcc -mno-cygwin "$@"	; }
-ka  	() {	ekillall "$@" ;					}
-gdb	() {	`which gdb` -nw "$@" ;  }

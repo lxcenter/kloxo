@@ -1,1 +1,0 @@
-hi gdbFuncDef ctermfg=Darkgreen

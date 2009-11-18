@@ -1,34 +1,0 @@
-#!/bin/zsh
-source ~/.etc/zshrc
-screen -t adrs  0
-sleep 2
-scpaste abdict adrs "vim -X ~/.etc/addressbook "
-sleep 2
-screen -t dict 2 zsh ~/.etc/screen/dictionary
-sleep 2
-screen -t chat 4 
-sleep 2
-scpaste abdict chat "run-chat ligesh"
-sleep 2
-screen -S abdict -X screen -t vmamp 3 vimamp --nostart
-sleep 2
-screen -S abdict -X screen -t mutm 1 
-sleep 3
-scpaste abdict mutm "mutm "
-sleep 1
-screen -S abdict -X select mutm
-sleep 1
-screen -S abdict -X number 1
-sleep 1
-scpaste dict_mut NULL "dvi "
-sleep 1
-screen -S dict_mut -X screen -t Mutlist
-sleep 1
-scpaste dict_mut NULL "mutcl "
-sleep 1
-screen -S dict_mut -X screen -t Mutlist
-sleep 1
-scpaste dict_mut NULL "mutl "
-sleep 1
-screen -S dict_mut -X select 0
-screen -S dict_mut -X title Dict

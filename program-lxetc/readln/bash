@@ -1,31 +1,0 @@
-#$include ~/.etc/readln/bashcor
-
-<M-q>: "fortune"
-"\eq": "fortune"
-<M-n>: ""
-"\en": ""
-<M-a>: " 2>&1 | vip"
-"\ea": " 2>&1 | vip"
-"\ev\ep": " >pp 2>&1"
-<M-r>: " | xargs estart /usr/bin/vi "
-"\er": " | xargs estart /usr/bin/vi "
-<M-m>: "mnt /mnt/" 
-"\em": "mnt /mnt/" 
-<M-d>: " & "
-"\ed": " & "
-"\ec": ""
-<M-c>: "'history -s '"
-<M-e>: "vi ~/.etc/"
-"\ee": "vi ~/.etc/"
-<M-E>: "~/.etc/"
-"\eE": "~/.etc/"
-<M-r>: "i"
-"\er": "i"
-<M-h>: "~/"
-"\eh": "~/"
-<M-n>: "nxte"
-"\en": "nxte"
-<M-o>: "` `ODOD"
-<M-s>: "sudo "
-
-
