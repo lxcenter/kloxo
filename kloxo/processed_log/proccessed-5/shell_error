@@ -1,5 +1,0 @@
-12:25 Jun/01/2009: : [(__system__:/home/root/work/software/kloxo/httpdocs) '/usr/local/lxlabs/ext/php/php'  '../bin/common/misc/checktotalmemory.php']
-07:37 Jun/02/2009: rndc: 'reload' failed: not found
-: [(__system__:/home/root/work/software/kloxo/httpdocs) 'rndc'  'reload' 'newd.com']
-07:37 Jun/02/2009: : [(__system__:/home/root/work/software/kloxo/httpdocs) '/home/lxadmin/mail/bin/vdominfo'  '-d' 'newd.com']
-07:37 Jun/02/2009: : [(__system__:/home/root/work/software/kloxo/httpdocs) '/home/lxadmin/mail/bin/vadduser'  'postmaster@newd.com' '-e' '$1$NN3v.jn0$j3WirLx0JB/mLV40Xgz8n0']
