@@ -1,6 +1,6 @@
-Credits to the new Kloxo from LxCenter:
+Credits to the new HyperVM from LxCenter:
 
-K.T. Ligesh original developer of Kloxo, rest in piece m8.. we miss you!
+K.T. Ligesh original developer of HyperVM, rest in piece m8.. we miss you!
 
 
 Consortium:
@@ -30,6 +30,60 @@ Arhur
 S. Bhargava
 -Registration new domains and old domain administration
 
- 
-Did we forget you? tell us!
+
+Info since Public OpenSourced
+
+System Operators LxCenter
+Danny Terweij
+Eduardo Silva
+
+Web Designers
+Mike Buderath
+
+Development leaders/management
+Andre Allen
+
+Developers (SVN name) (date added) (date left) [comments]
+Mohammed Naser (mnaser) (nov-15-2009)
+Sergey Ami (ser) (nov-15-2009)
+Peter Jones (pj1s) (nov-16-2009) [Maybe doing skins/themes]
+Reid Forrest (reidfo) (nov-16-2009) [Kloxo]
+Joko Frank Octo (JFOC) (nov-17-2009) [PHP, Security] 
+Deen Yusoff (DeenY) (nov-18-2009) [HyperVM & Kloxo]
+Andres Moya (andres) (nov-21-2009) [Kloxo, wants to implement nginx 
+webserver]
+Martin Sefcik (martin.sefcik) (feb-07-2010) [Kloxo]
+Edy Lam (edylam) (feb-07-2010)
+Paulo Abreu (pama) (feb-07-2010)
+Sumit Tiwari (sumittiwari) (feb-07-2010)
+Andy Jones (andyjay30) (feb-07-2010)
+Robert Zerer (robert.z) (feb-07-2010)
+Rajesh K R (rajesh_kr79) (feb-07-2010) [RPM packager]
+Levis Bakalinsky (lbakalinsky) (feb-07-2010)
+Azhari Ahmad (Azhari) (feb-07-2010)
+Keiran Smith (keiran) (feb-07-2010)
+Emre Yazici (senator) (feb-07-2010)
+Gerrie Mansur (Gmansur) (feb-07-2010)
+Michele ?? (artemedia) (feb-07-2010)
+Bilal ?? (c0der) (feb-07-2010)
+Behzad ?? (behzadfu) (feb-07-2010)
+Dariusz Rusiecki (dariuszr) (feb-07-2010) [RPM packager, security and more]
+
+Translators (Country) (SVN name) (date added)
+Mike Buderath (NL) (nov-15-2009)
+Michel Daggelinckx (?) (nightrid3r) (nov-18-2009)
+Tommaso F. (IT) (xaxak) (nov-19-2009)
+Daniel Ruppert (DE) (d4fseeker) (feb-07-2010)
+Mohammad Mozafary (Persian) (mozafary) (feb-07-2010)
+Razvan AVRAMESCU (RO) (avra911) (feb-07-2010)
+Carlos Braz (Brazilian) (mourabraz) (feb-07-2010)
+Sebastian ?? (DE) (suhlig) (feb-07-2010)
+Diego Rodriguez (ES) (Diego) (feb-07-2010)
+Hamid Reza Khanjani (Persian) (hamidrkh) (feb-07-2010)
+
+Developers, Translators,
+Please subscribe to the SVN mailinglists. More info on main website and 
+forum.
+
+
 
