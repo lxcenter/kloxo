@@ -1,2 +1,0 @@
-/img/image/collage/button//domainbackup_updateform_restore_from_file.gif
-/img/image/collage/button//domainbackup_updateform_restore_from_ftp.gif
