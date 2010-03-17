@@ -1,3 +1,7 @@
+/* 
+ * This file seems not in use anymore
+ * LxCenter, dterweij, march 17 2010
+ */
 
 
 /* Kloxo wrapper. Allows the php script - which runs as kloxo user to execute programs 
