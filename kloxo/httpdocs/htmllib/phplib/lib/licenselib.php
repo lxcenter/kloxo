@@ -52,7 +52,7 @@ function updateform($subaction, $param)
 				if (!$lic->lic_pserver_num) {
 					$vlist['__v_button'] = 'Get License From Lxlabs';
 				} else {
-					$vlist['__v_button'] = 'Update License From Lxlabs';
+					$vlist['__v_button'] = 'Update License to unlimited';
 				}
 				if ($login->isAdmin()) {
 					if (!isset($lic->lic_maindomain_num)) {
@@ -114,52 +114,48 @@ static function doupdateLicense()
 		throw new lxException ("not_admin", '');
 	}
 
-	$lic = $login->getObject('license');
-	//if (!$lic->licensecom_b->clientaccount) {
-		//throw new lxException ("license_login_needed", '');
-	//}
-	//$rmt->login = $lic->licensecom_b->clientaccount;
-	//$rmt->password = $lic->licensecom_b->password;
-
-	//$rmt->ipaddress = $param['licensecom_b_s_lic_ipaddress'];
-
-	//$res = send_to_some_http_server("localhost", "", "5558", $var);
+	$license = $login->getObject('license');
+	$license->parent_clname = $login->getClName();
 
 
-	//$res = unserialize(base64_decode($res));
-	$res = null;
+	$prilist = $login->getQuotaVariableList();
 
-	if (!$res) {
-		$res = send_to_some_http_server("client.lxlabs.com", "", "5558", $var);
-		$res = unserialize(base64_decode($res));
+	foreach($prilist as $k => $v) {
+		//echo $k .' '. $v.'<br>';
+		if (cse($k, "_flag")) {
+			$login->priv->$k = 'On';
+		} else if (cse($k, "_usage")) {
+			$login->priv->$k = 'Unlimited';
+		} else if (cse($k, "_num")) {
+			$login->priv->$k = 'Unlimited';
+		}
 	}
+	$login->setUpdateSubaction();
+	$login->write();
 
-	if (!$res) {
-		send_mail_to_admin("Could_not_connect_to_license_server", "License has been reset to default");
-		setLicenseTodefault();
-		throw new lxException("could_not_connect_to_license_server", '');
+
+	$lic = $license->licensecom_b;
+	if ($sgbl->isKloxo()) {
+		$def = array("maindomain_num" => "Unlimited", "domain_num" => 'Unlimited', "pserver_num" => "Unlimited", "client_num" => "Unlimited");
+	} else {
+		$def = array("vps_num" => 'Unlimited', "client_num" => "Unlimited");//Michele - not sure about hypervm values;
 	}
-
-	if ($res->exception) {
-		//$exc = new Exception("syncserver:$machine <br> " . $rmt->exception->getMessage());
-		//$res->exception->syncserver = $machine;
-		throw $res->exception;
-		//throw $exc;
+	//$list = get_license_resource();//original: this return only maindomain_num 
+	$list = array("maindomain_num","domain_num","pserver_num");
+	foreach($list as $l) {
+		$licv = "lic_$l";
+		$lic->$licv = $def[$l];
+//	echo "lic_$l.<br>";
 	}
+	$license->setUpdateSubaction();
+	$license->write();
+//exit;
 
-	$val = trim($res->content);
-
-	if (!$val) {
-		throw new lxException("blank_license", '');
-	}
-
-	decodeAndStoreLicense($res->ipaddress, $val);
-
-	// This is set so that the license alone feature - happens when the license expires - will properly redirect back to the original page. 
-	//$gbl->__this_redirect = '/display.php?frm_action=show';
 }
 
 function isSync() { return false ; }
 
 
 }
+?>
+
