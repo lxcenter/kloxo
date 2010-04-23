@@ -29,10 +29,16 @@ function init_global()
 	$gbl = new Gbl();
 	$gbl->get();
 
-
-	if (lfile_exists("__path_program_etc/demo")) {
-		$g_demo = 1;
-	}
+//
+// Turn on demo version by putting a empty file called demo in the etc 
+dir
+//
+        if (lfile_exists("__path_program_etc/demo")) {
+                $g_demo = 1;
+        }
+//
+// ### LxCenter
+//
 
 	//production version... No chance of setting debug outside of program...
 	//$sgbl->dbg = -1;
