@@ -1,3 +1,6 @@
+/*
+ * Could someone confirm that this is the closeallinput binary?
+ */
 #include <stdio.h>
 
 int main(int argc, char **argv)
