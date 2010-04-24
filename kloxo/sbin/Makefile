@@ -1,8 +1,14 @@
-#       Compiling and pre-installing(upcp and version update from GUI will do that also)
-#       lxrestart
-#       lxexec
-#       lxsuexec
-#       lxphpsu
+#	Compiling and pre-installing(upcp and version update from GUI will do that also)
+#	lxrestart
+#	lxexec
+#	lxsuexec
+#	lxphpsu
+#	kloxo.exe
+#.	kloxo.exe.core
+RM_FLAGS="-v"
+LIBS="-lssl"
+CC="gcc"
+
 all:
 	gcc -o lxrestart src/lxrestart.c
 	rm -f ../cexe/lxrestart
@@ -27,6 +33,10 @@ all:
 	gcc -o lxphpsu ../bin/suexec/kloxo/execwrap.c
 	cp lxphpsu ../cexe/lxphpsu
 	chmod 755 ../cexe/lxphpsu
-	chmod ug+s /cexe/lxphpsu
+	chmod ug+s ../cexe/lxphpsu
+
+	rm -f ../bin/common/program-backend.o
+	gcc -o kloxo.exe ../bin/common/program-backend.c ${LIBS}
+	cp kloxo.exe kloxo.exe.core
 
 	echo "######### Done."
