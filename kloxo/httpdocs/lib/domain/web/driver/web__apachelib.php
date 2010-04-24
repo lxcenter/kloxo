@@ -678,11 +678,17 @@ function getDirprotectCore($authname, $path, $file)
 {
 	global $gbl, $sgbl, $login, $ghtml; 
 	$string = null;
-	$path = remove_extra_slash("/{$path}");
+
+	// http://project.lxcenter.org/issues/74
+	$path = remove_extra_slash("\"/{$path}\"");
+
 	$string .= "<Location {$path}>\n";
 	$string .= "AuthType Basic\n";
 	$string .= "AuthName \"{$authname}\"\n";
-	$string .= "AuthUserFile {$sgbl->__path_httpd_root}/{$this->main->nname}/__dirprotect/{$file}\n";
+
+	// http://project.lxcenter.org/issues/74
+	$string .= "AuthUserFile \"{$sgbl->__path_httpd_root}/{$this->main->nname}/__dirprotect/{$file}\"\n";
+
 	$string .= "require  valid-user\n";
 	$string .= "</Location>\n";
 	return $string;

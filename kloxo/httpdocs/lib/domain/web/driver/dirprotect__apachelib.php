@@ -25,6 +25,9 @@ function createDiruserfile()
 	}
 	lxuser_put_contents($this->main->__var_username, $dirfile,  $fstr, $this->main->__var_username);
 	lxuser_chmod($this->main->__var_username, $dirfile, "0755");
+
+	// http://project.lxcenter.org/issues/74
+	lfile_put_contents($dirfile,$fstr);
 }
 
 
