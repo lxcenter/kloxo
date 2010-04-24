@@ -1,3 +1,0 @@
-/home/root/work/software/kloxo/httpdocs/htmllib/lib/lib.php:127: Missing argument 7 for file_put_between_comments(), called in /home/root/work/software/kloxo/httpdocs/htmllib/lib/lib.php on line 4394 and defined
-/home/root/work/software/kloxo/httpdocs/htmllib/lib/lib.php:167: implode(): Bad arguments.
-/home/root/work/software/kloxo/httpdocs/htmllib/lib/lib.php:168: Undefined variable: string
