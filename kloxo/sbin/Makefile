@@ -1,27 +1,14 @@
-include ../Rules.make
 
-PROGS = lxmisc
-
-
-all: $(PROGS)
-
-lxserver: lxserver.c commands.c
-	gcc -o lxserver src/lxserver.c ${INCLUDE_PATH}
-
-lxrestart: lxrestart.c
-	gcc -o lxrestart src/lxrestart.c ${INCLUDE_PATH}
-
-lxmisc: lxmisc.c
-	gcc -o lxmisc src/lxmisc.c ${INCLUDE_PATH}
-
-clean:
-	rm -f *.o $(PROGS)
-
-package:
-	-mkdir -p $(INSTALLDIR)/sbin/
-	/bin/cp $(PROGS) $(INSTALLDIR)/sbin/
-
-
-
-vim_run:
-	./lxserver
+#       Compiling and installing lxrestart
+#
+#
+all:
+        gcc -o lxrestart src/lxrestart.c
+        rm -f ../cexe/lxrestart
+        cp lxrestart ../cexe/lxrestart
+        rm -f lxrestart
+        cp ../cexe/lxrestart /usr/sbin/
+        chown root:root /usr/sbin/lxrestart
+        chmod 755 /usr/sbin/lxrestart
+        chmod ug+s /usr/sbin/lxrestart
+        echo "######### Done."
