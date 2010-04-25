@@ -1,5 +1,8 @@
 #!/bin/sh
-mkdir /home/root  
-yum -y install zsh vim-enhanced
-usermod -d /home/root root
-usermod -s /bin/zsh root
+#
+#
+# is this in use? (LxCenter april 25 2010)
+	mkdir /home/root
+	yum -y install zsh vim-enhanced
+	usermod -d /home/root root
+	usermod -s /bin/zsh root
