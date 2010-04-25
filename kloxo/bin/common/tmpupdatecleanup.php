@@ -26,10 +26,10 @@ function updatecleanup_main()
 	}
 
 	print("Executing UpdateCleanup. This will take a long time. Please be patient\n");
-	log_log("update", "Execing Updatecleanup");
+	log_log("update", "Executing Updatecleanup");
 
-	if (lxfile_exists("CVS")) {
-		print("Found CVS.. Exiting\n\n");
+	if (lxfile_exists(".svn")) {
+		print("SVN Found... Exiting\n\n");
 		exit;
 	}
 

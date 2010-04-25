@@ -122,8 +122,8 @@ function do_upgrade($upversion)
 	lxfile_mkdir("help");
 	lxfile_rm_rec("__path_program_htmlbase/htmllib/script");
 	lxfile_rm_rec("__path_program_root/pscript");
-	if (file_exists("CVS")) {
-		print("CVS exists... Development system.. Not upgrading...\n");
+	if (file_exists(".svn")) {
+		print("SVN exists... Development system.. Not upgrading...\n");
 		exit;
 	}
 
