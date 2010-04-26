@@ -1,6 +1,0 @@
-#!/bin/sh
-export DKSIGN=/var/qmail/control/domainkeys/%/private
-export RELAYCLIENT=
-exec /var/qmail/bin/sendmail "$@"
-
-

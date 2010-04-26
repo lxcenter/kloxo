@@ -1,5 +1,0 @@
-#!/bin/sh
-mkdir /home/root  
-yum -y install zsh vim-enhanced
-usermod -d /home/root root
-usermod -s /bin/zsh root

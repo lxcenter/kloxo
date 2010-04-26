@@ -1,7 +1,0 @@
-#!/bin/sh
-u=`id -u`
-if [ $u != "0" ] ; then  
-echo "need to be root" ; exit
-fi
-mysql -u kloxo -p`cat /usr/local/lxlabs/kloxo/etc/conf/kloxo.pass` kloxo
-
