@@ -1,8 +1,5 @@
 #!/bin/sh
-# ======================
-# BETA VERSION UNTESTED
-# april 25 2010
-# ======================
+#
 # This file creates kloxo-[version].zip for distribution from SVN.
 # 
 #
