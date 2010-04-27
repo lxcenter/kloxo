@@ -136,16 +136,27 @@ function lxshell_input($input, $cmd)
 	return $ret;
 }
 
-
+/**
+ * Deletes filename or empty directory. 
+ * 
+ * @param $file	(abstract) path to the file or to the directory
+ * @return TRUE on success or FALSE on failure.
+ *          
+ */ 
 function lxfile_rm($file)
 {
 	$file = expand_real_root($file);
 
 	log_filesys("Removing $file");
-	if (lis_dir($file)) {
-		return rmdir($file);
-	} else {
-		return unlink($file);
+	if (lxfile_exists($file)) {
+		if (lis_dir($file)) {
+			return rmdir($file);
+		} else {
+			return unlink($file);
+		}
+	}
+	else {
+		return FALSE;
 	}
 }
 
