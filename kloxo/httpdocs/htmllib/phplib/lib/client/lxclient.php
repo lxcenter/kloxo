@@ -205,7 +205,7 @@ function notifyObjects($type)
 		} else {
 			$txt = "$class {$this->nname} has been added to your account $parent->nname";
 		}
-		$txt .= "\n\n\n-----Welcome Message Sent to the User $this->contactemail-----\n";
+		$txt .= "\n\n\n----- Welcome Message Sent to the User $this->contactemail -----\n";
 		$txt .= $message;
 		log_message("Sending Notification $name Notice: Account $type $parent->nname $parent->contactemail");
 		$this->sendNotification($noto, $parent, "$name Notice: Account $type", $txt);
