@@ -7,7 +7,7 @@
 echo "################################"
 echo "### Start compiling"
 # Compile C files
-cd sbin/
+cd src/
 make
 echo "### Finished"
 echo "################################"

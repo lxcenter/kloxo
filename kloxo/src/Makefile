@@ -5,12 +5,10 @@
 #	lxphpsu
 #	kloxo.exe
 #.	kloxo.exe.core
-RM_FLAGS="-v"
 LIBS="-lssl"
-CC="gcc"
 
 all:
-	gcc -o lxrestart src/lxrestart.c
+	gcc -o lxrestart lxrestart.c
 	rm -f ../cexe/lxrestart
 	cp lxrestart ../cexe/lxrestart
 	rm -f lxrestart
@@ -19,8 +17,8 @@ all:
 	chmod 755 /usr/sbin/lxrestart
 	chmod ug+s /usr/sbin/lxrestart
 
-	gcc -o lxsuexec ../bin/suexec/execwrap.c
-	gcc -o lxexec ../bin/suexec/lxexec.c
+	gcc -o lxsuexec ./lxsuexec.c
+	gcc -o lxexec ./lxexec.c
 	cp lxsuexec ../cexe/lxsuexec
 	cp lxexec ../cexe/lxexec
 	cp ../cexe/lxsuexec /usr/bin/lxsuexec
@@ -30,13 +28,15 @@ all:
 	chmod 755 /usr/bin/lxexec
 	chmod ug+s /usr/bin/lxexec
 
-	gcc -o lxphpsu ../bin/suexec/kloxo/execwrap.c
+	gcc -o lxphpsu ./lxphpsu.c
 	cp lxphpsu ../cexe/lxphpsu
 	chmod 755 ../cexe/lxphpsu
 	chmod ug+s ../cexe/lxphpsu
 
-	rm -f ../bin/common/program-backend.o
-	gcc -o kloxo.exe ../bin/common/program-backend.c ${LIBS}
-	cp kloxo.exe kloxo.exe.core
+	rm -f kloxo.o
+	gcc -o kloxo.exe ./kloxo.c ${LIBS}
+	cp kloxo.exe ../sbin/kloxo.exe
+	cp kloxo.exe ../sbin/kloxo.exe.core
+	rm -f kloxo.exe
 
 	echo "######### Done."

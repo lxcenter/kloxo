@@ -23,12 +23,11 @@ version=`/script/version`
 rm -f kloxo-$version.zip
 #
 echo "### Compile c files..."
-cd sbin/
-cd ../
+/bin/sh ./development-create-binaries.sh
 #
 echo "### Create zip package..."
 # Package part
-zip -r9 kloxo-$version.zip ./bin ./cexe ./file ./httpdocs ./pscript ./sbin ./RELEASEINFO -x \
+zip -r9 kloxo-$version.zip ./bin ./cexe ./file ./httpdocs ./pscript ./sbin ./RELEASEINFO ./src -x \
 "*/CVS/*" \
 "*/.svn/*"
 #
