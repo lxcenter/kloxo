@@ -8,10 +8,25 @@
 LIBS="-lssl"
 
 all:
-	gcc -o lxrestart lxrestart.c
-	rm -f ../cexe/lxrestart
-	cp lxrestart ../cexe/lxrestart
+	rm -f lxsuexec
+	rm -f lxexec
 	rm -f lxrestart
+	rm -f lxphpsu
+	rm -f kloxo.exe
+	rm -f kloxo.o
+
+	rm -f /usr/bin/lxsuexec
+	rm -f /usr/bin/lxexec
+	rm -f /usr/sbin/lxrestart
+	rm -f ../cexe/lxrestart
+	rm -f ../cexe/lxsuexec
+	rm -f ../cexe/lxexec
+	rm -f ../cexe/lxphpsu
+	rm -f ../sbin/kloxo.exe
+	rm -f ../sbin/kloxo.exe.core
+
+	gcc -o lxrestart lxrestart.c
+	cp lxrestart ../cexe/lxrestart
 	cp ../cexe/lxrestart /usr/sbin/
 	chown root:root /usr/sbin/lxrestart
 	chmod 755 /usr/sbin/lxrestart
@@ -33,10 +48,15 @@ all:
 	chmod 755 ../cexe/lxphpsu
 	chmod ug+s ../cexe/lxphpsu
 
-	rm -f kloxo.o
 	gcc -o kloxo.exe ./kloxo.c ${LIBS}
 	cp kloxo.exe ../sbin/kloxo.exe
 	cp kloxo.exe ../sbin/kloxo.exe.core
+
+	rm -f lxsuexec
+	rm -f lxexec
+	rm -f lxrestart
+	rm -f lxphpsu
 	rm -f kloxo.exe
+	rm -f kloxo.o
 
 	echo "######### Done."
