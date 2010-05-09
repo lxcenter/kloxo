@@ -61,7 +61,7 @@ function updateform($subaction, $param)
 						$lo->write();
 					}
 					$vlist['lic_pserver_num_f'] = array('M', $lic->lic_pserver_num);
-					if (isset($lic->lic_client_num) {
+					if (isset($lic->lic_client_num)) {
 					$vlist['lic_client_num_f'] = array('M', $lic->lic_client_num);
 					}
 					if ($sgbl->isKloxo()) {
@@ -72,14 +72,14 @@ function updateform($subaction, $param)
 				} else {
 					$vlist['lic_node_num_f'] = array('M', $lic->node_num);
 				}
-				if (isset($lic->lic_livesupport_flag) {
+				if (isset($lic->lic_livesupport_flag)) {
 				$vlist['lic_live_support_f'] = array('M', $lic->lic_livesupport_flag);
 				}
 				//$vlist['lic_ipaddress_f'] = array('M', $lic->lic_ipaddress);
-				if (isset($lic->lic_client) {
+				if (isset($lic->lic_client)) {
 				$vlist['lic_client_f'] = array('M', $lic->lic_client);
 				}
-				if (isset($lic->lic_livesupport_name) {
+				if (isset($lic->lic_livesupport_name)) {
 				$vlist['lic_livesupport_name_f'] = array('M', $lic->lic_livesupport_name);
 				}
 				//$vlist['lic_current_f'] = array('t', lfile_get_contents('__path_program_etc/license.txt'));
