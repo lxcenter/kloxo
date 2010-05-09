@@ -17,10 +17,10 @@ function createNewcertificate()
 $ltemp["countryName" ] = "IN";
 $ltemp["stateOrProvinceName" ] = "Bn";
 $ltemp["localityName" ] = "Bn";
-$ltemp["organizationName" ] = "lxlabs";
+$ltemp["organizationName" ] = "LxCenter";
 $ltemp["organizationalUnitName" ] = "Kloxo";
-$ltemp["commonName" ] = "L";
-$ltemp["emailAddress" ] = "admin@lxlabs.com";
+$ltemp["commonName" ] = "Kloxo";
+$ltemp["emailAddress" ] = "kloxo@lxcenter.org";
  
  $privkey = openssl_pkey_new();
  openssl_pkey_export_to_file($privkey, $keypath);

@@ -1,11 +1,14 @@
 #!/bin/sh
+#
+# LxCenter note: uses an lxadmin path!
+#
 name=$1
 pass=$2
 dbuser=$3
 dbpass=$4
 MYSQLPR=`which mysql`
 if [ ! -f "$MYSQLPR" ]; then
-echo "mysql client is not there"
+echo "FATAL ERROR: MySQL client is not there. MySQL not installed?"
 exit 1
 fi
 if [ -f /var/lock/subsys/mysqld ] ;then
