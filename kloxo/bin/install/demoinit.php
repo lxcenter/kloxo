@@ -1,5 +1,7 @@
 <?php 
-
+// LxCenter:
+// Changed some demo values.
+//
 include_once "lib/include.php";
 
 
@@ -33,21 +35,21 @@ function install_main()
 function create_servername()
 {
 	return;
-	$servername = new pserver(null, null, "titan.lxlabs.com");
+	$servername = new pserver(null, null, "titan.lxcenter.net");
 	$servername->initThisDef();
 	$servername->syncserver = $servername->nname;
 	$servername->password = crypt('admin');
 	$servername->dbaction = "add";
 	$servername->write();
 
-	$servername = new pserver(null, null, "athena.lxlabs.com");
+	$servername = new pserver(null, null, "athena.lxcenter.net");
 	$servername->initThisDef();
 	$servername->servername = $servername->nname;
 	$servername->password = 'admin';
 	$servername->dbaction = "add";
 	$servername->write();
 
-	$servername = new pserver(null, null, "apollo.lxlabs.com");
+	$servername = new pserver(null, null, "apollo.lxcenter.net");
 	$servername->initThisDef();
 	$servername->servername = $servername->nname;
 	$servername->password = 'admin';
@@ -223,11 +225,11 @@ function add_domain_list()
 	$list = array(
 				  "adelia" => array("testtttttt.com", "hello.org"),
 				  
-				  "admin" => array("demo.lxlabs.com", "domaindomain.com", "example.com"),
+				  "admin" => array("demo.lxcenter.net", "domaindomain.com", "example.com"),
 				  
 				  "kerry" => array("program.com", "review.org"),
 
-				  "wholesale" => array("demo.lxlabs.org"),
+				  "wholesale" => array("demo.lxcenter.com"),
 				  
 				  "master" => array("master.com", "mmast.com"),
 				  
@@ -307,7 +309,7 @@ function add_domain($domain_name, $parent_name)
 	$dns = new Dns(null, null, $domain_name);
 	$dns->initThisDef();
 	$dns->syncserver = 'localhost';
-	$dns->createDefaultTemplate('192.168.1.1', 'ns.lxlabs.com');
+	$dns->createDefaultTemplate('192.168.1.1', 'dns22.lxcenter.net');
 	$dns->write();
 
 

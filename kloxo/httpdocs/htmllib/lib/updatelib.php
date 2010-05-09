@@ -71,7 +71,7 @@ function update_all_slave()
 			continue;
 		}
 		try {
-			print("Updgrading Slave {$l['nname']}...\n");
+			print("Upgrading Slave {$l['nname']}...\n");
 			rl_exec_get(null, $l['nname'], 'remotetestfunc', null);
 		} catch (exception $e) {
 			print($e->getMessage());

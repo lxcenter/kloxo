@@ -445,7 +445,7 @@ function installWithVersion($path, $file, $ver)
 		while (1) {
 			$count++;
 			if ($count > 20) { return true; }
-			system("cd /var/cache/kloxo/ ; rm -f $file*.tar.gz; wget download.lxlabs.com/download/$file$ver.tar.gz");
+			system("cd /var/cache/kloxo/ ; rm -f $file*.tar.gz; wget download.lxcenter.org/download/$file$ver.tar.gz");
 			lxfile_rm_rec($path);
 			lxfile_mkdir($path);
 			$ret = lxshell_unzip("__system__", $path, "/var/cache/kloxo/$file$ver.tar.gz");
@@ -470,7 +470,7 @@ function installWebmail($ver)
 	while (1) {
 		$count++;
 		if ($count > 1) { return true; }
-		system("cd /var/cache/kloxo/ ; rm -f lxwebmail*.tar.gz; wget download.lxlabs.com/download/lxwebmail$ver.tar.gz");
+		system("cd /var/cache/kloxo/ ; rm -f lxwebmail*.tar.gz; wget download.lxcenter.org/download/lxwebmail$ver.tar.gz");
 		if (!lxfile_exists("$path/roundcube")) {
 			$ret = lxshell_unzip("__system__", $path, "/var/cache/kloxo/lxwebmail$ver.tar.gz");
 			if (!$ret) { return true; }
@@ -498,7 +498,7 @@ function installAwstats($ver)
 	lxfile_mkdir("/var/cache/kloxo");
 	lxfile_mkdir("/home/kloxo/httpd/awstats/");
 	if (!lxfile_real("/var/cache/kloxo/lxawstats$ver.tar.gz")) {
-		system("cd /var/cache/kloxo/ ; rm -f lxawstats*.tar.gz; wget download.lxlabs.com/download/lxawstats$ver.tar.gz");
+		system("cd /var/cache/kloxo/ ; rm -f lxawstats*.tar.gz; wget download.lxcenter.org/download/lxawstats$ver.tar.gz");
 		lxfile_rm_rec("/home/kloxo/httpd/awstats/tools/");
 		lxfile_rm_rec("/home/kloxo/httpd/awstats/wwwroot/");
 		system("cd /home/kloxo/httpd/awstats/ ; tar -xzf /var/cache/kloxo/lxawstats$ver.tar.gz tools wwwroot docs");
@@ -514,7 +514,7 @@ function install_bogofilter()
 {
 	if (lxfile_exists("/var/bogofilter/kloxo.wordlist.db")) { return; }
 	lxfile_mkdir("/var/bogofilter");
-	system("cd /var/bogofilter/ ; rm wordlist.db ;  wget http://download.lxlabs.com/download/wordlist.db");
+	system("cd /var/bogofilter/ ; rm wordlist.db ;  wget http://download.lxcenter.org/download/wordlist.db");
 	lxfile_unix_chown_rec("/var/bogofilter", "lxpopuser:lxpopgroup");
 	system("cd /var/bogofilter/ ; cp wordlist.db kloxo.wordlist.db ");
 }

@@ -19,7 +19,7 @@ function installapp_update_main()
 function application_update()
 {
 
-	$string = file_get_contents("http://download.lxlabs.com/download/installapp/version.list");
+	$string = file_get_contents("http://download.lxcenter.org/download/installapp/version.list");
 	$rmt = unserialize($string);
 
 	if (!$rmt) { 
@@ -89,7 +89,7 @@ function update_application($appname)
 function do_update_application($appname)
 {
 	if (!$appname) { return; }
-	system("cd /tmp ; rm -f $appname.zip ; wget download.lxlabs.com/download/installapp/$appname.zip 2> /dev/null");
+	system("cd /tmp ; rm -f $appname.zip ; wget download.lxcenter.org/download/installapp/$appname.zip 2> /dev/null");
 	if (!lxfile_real("/tmp/$appname.zip")) { 
 		print("Could not download $appname\n");
 		return; 
@@ -103,7 +103,7 @@ function do_update_application($appname)
 function update_remote_application($appname)
 {
 	if (!$appname) { return; }
-	system("cd /tmp ; rm -f $appname.zip ; wget download.lxlabs.com/download/installapp/$appname.zip 2> /dev/null");
+	system("cd /tmp ; rm -f $appname.zip ; wget download.lxcenter.org/download/installapp/$appname.zip 2> /dev/null");
 	if (!lxfile_real("/tmp/$appname.zip")) { 
 		print("Could not download $appname\n");
 		return; 

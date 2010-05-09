@@ -1,5 +1,7 @@
 <?php 
-
+// LxCenter:
+// This should be worked out more so that it works for 100 percent.
+//
 include_once "htmllib/lib/include.php"; 
 
 

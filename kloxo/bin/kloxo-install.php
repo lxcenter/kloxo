@@ -1,12 +1,14 @@
 <?php 
-
+// LxCenter:
+// Migrate LxAdmin to Kloxo script
+//
 include_once "htmllib/lib/include.php"; 
 
 if (!$sgbl->is_this_slave()) {
 	$pass = slave_get_db_pass();
 	$res = mysql_connect("localhost", "root", $pass);
 	if (!$res) {
-		print("Could not connect to Mysql as root. Please login via lxadmin, go to admin home -> reset mysql password and reset the password and run this again.\n");
+		print("Could not connect to MySQL as root. Please login via webinterface, go to admin home -> reset mysql password and reset the password and run this again.\n");
 		exit;
 	}
 }
@@ -18,7 +20,7 @@ lxfile_rm("/etc/init.d/lxadmin");
 lxfile_mkdir("/usr/local/lxlabs/kloxo");
 chdir("/usr/local/lxlabs/kloxo/");
 lxfile_rm("kloxo-current.zip");
-system("wget http://download.lxlabs.com/download/kloxo/production/kloxo/kloxo-current.zip");
+system("wget http://download.lxcenter.org/download/kloxo/production/kloxo/kloxo-current.zip");
 system("unzip -oq kloxo-current.zip");
 lxfile_rm_rec("/usr/local/lxlabs/kloxo/etc/");
 lxfile_cp_rec("/usr/local/lxlabs/lxadmin/etc/", "/usr/local/lxlabs/kloxo/etc/");

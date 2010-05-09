@@ -1,4 +1,7 @@
 <?php 
+// LxCenter:
+// Migrate LxAdmin to Kloxo
+//
 
 @ mkdir("../pid");
 @ mkdir("../log");

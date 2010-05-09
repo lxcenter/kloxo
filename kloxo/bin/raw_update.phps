@@ -18,7 +18,7 @@ function download_file($url, $localfile = null)
 chdir("..");
 @ unlink("kloxo-current.zip");
 print("Downloading.... \n");
-download_file("http://download.lxlabs.com/download/kloxo/production/kloxo/kloxo-current.zip");
+download_file("http://download.lxcenter.org/download/kloxo/production/kloxo/kloxo-current.zip");
 print("download done...\n");
 if (WindowsOs()) {
 	system("c:/Progra~1/7-zip/7z.exe x -y kloxo-current.zip");
