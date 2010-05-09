@@ -1,4 +1,6 @@
 Changelog
 
 ##################################
-
+dterweij - Changed installer
+dterweij - Removed License server contact
+dterweij - Moved all C sources into one place
