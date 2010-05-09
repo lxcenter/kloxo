@@ -48,9 +48,11 @@ function updateform($subaction, $param)
 			{
 				$lo = $login->getObject('license');
 				$lic = $login->getObject('license')->licensecom_b;
+				if (isset($lic->lic_ipaddress)) {
 				$vlist['licensecom_b_s_lic_ipaddress'] = array('M', $lic->lic_ipaddress);
-				if (!$lic->lic_pserver_num) {
-					$vlist['__v_button'] = 'Get License From Lxlabs';
+				}
+				if (!isset($lic->lic_pserver_num)) {
+					$vlist['__v_button'] = 'Get License From LxCenter';
 				} else {
 					$vlist['__v_button'] = 'Update License to unlimited';
 				}
@@ -83,6 +85,7 @@ function updateform($subaction, $param)
 				$vlist['lic_livesupport_name_f'] = array('M', $lic->lic_livesupport_name);
 				}
 				//$vlist['lic_current_f'] = array('t', lfile_get_contents('__path_program_etc/license.txt'));
+				$vlist['lic_ipaddress_f'] = "000.000.000.000" ;
 				return $vlist;
 
 			}
