@@ -1,7 +1,5 @@
 <?php
 
-// PHp4, without the lxlabs infrastructure...
-
 include_once "../install_common.php";
 lxins_main();
 
@@ -34,7 +32,7 @@ function lxins_main()
 	}
 
 	if (!char_search_beg($osversion, "centos") && !char_search_beg($osversion, "rhel")) {
-		print("Kloxo is only supported on centos 5, rhel 5\n");
+		print("Kloxo is only supported on CentOS 5 and RHEL 5\n");
 		exit;
 	}
 
@@ -59,14 +57,17 @@ function lxins_main()
 	}
 */
 
-
+	print("Adding System users and groups (nouser, nogroup and lxlabs, lxlabs)\n");
 	system("groupadd nogroup");
 	system("useradd nouser -g nogroup -s '/sbin/nologin'");
 	system("groupadd lxlabs");
 	system("useradd lxlabs -g lxlabs -s '/sbin/nologin'");
+	print("Installing LxCenter yum repository for updates\n");
+
 	install_yum_repo($osversion);
-
-
+	
+	print("Removing sendmail, exim, vsftpd, postfix, vpopmail, qmail,\n");
+	print("Removing lxphp, lxzend, pure-ftpd and imap\n");
 	exec("rpm -e --nodeps sendmail");
 	exec("rpm -e --nodeps exim");
 	exec("rpm -e --nodeps sendmail vsftpd postfix vpopmail qmail lxphp lxzend pure-ftpd imap > /dev/null 2>&1");
@@ -91,11 +92,11 @@ function lxins_main()
 	chdir("/usr/local/lxlabs/kloxo");
 	system("mkdir -p /usr/local/lxlabs/kloxo/log");
 	@ unlink("kloxo-current.zip");
-	system("wget http://download.lxlabs.com/download/kloxo/production/kloxo/kloxo-current.zip");
+	system("wget http://download.lxcenter.org/download/kloxo/production/kloxo/kloxo-current.zip");
 	system("unzip -oq kloxo-current.zip", $return); 
 
 	if ($return) {
-		print("Unzipping the core Failed.. Most likely it is corrupted. Please contact the support personnel\n");
+		print("Unzipping the core Failed.. Most likely it is corrupted. Report it at http://forum.lxcenter.org/\n");
 		exit;
 	}
 

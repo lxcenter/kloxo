@@ -29,5 +29,5 @@ yum centos4-addons http://mirror.centos.org/centos/4/addons/$ARCH/
 yum centos4-centosplus http://mirror.centos.org/centos/4/centosplus/$ARCH/
 
 
-yum lxlabs-updates http://download.lxlabs.com/download/update/centos-4/$ARCH/
-yum lxlabs-lxupdates http://download.lxlabs.com/download/update/lxgeneral/
+yum lxcenter-updates http://download.lxcenter.org/download/update/centos-4/$ARCH/
+yum lxcenter-lxupdates http://download.lxcenter.org/download/update/lxgeneral/
