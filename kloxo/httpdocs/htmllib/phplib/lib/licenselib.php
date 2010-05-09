@@ -85,7 +85,7 @@ function updateform($subaction, $param)
 				$vlist['lic_livesupport_name_f'] = array('M', $lic->lic_livesupport_name);
 				}
 				//$vlist['lic_current_f'] = array('t', lfile_get_contents('__path_program_etc/license.txt'));
-				$vlist['lic_ipaddress_f'] = "000.000.000.000" ;
+				//$vlist['lic_ipaddress_f'] = "000.000.000.000" ;
 				return $vlist;
 
 			}
