@@ -350,6 +350,7 @@ function get_favorite($class)
 			$str = substr($str, 0, 18);
 			$str .= "..";
 		}
+		$str = htmlspecialchars($str);
 		$target = "mainframe";
 		if (is_object($h) && $h->isOn('external')) {
 			$target = "_blank";
@@ -372,7 +373,7 @@ function print_favorites()
 	$back = $login->getSkinDir();
 	$list = get_favorite("ndskshortcut");
 
-	$vvar_list = array('_t_image' , 'url' , 'target' , '__t_identity' , 'ac_descr' , 'str' , 'tag');
+	$vvar_list = array('ttype', '_t_image' , 'url' , 'target' , '__t_identity' , 'ac_descr' , 'str' , 'tag');
 
 	$res = null;
 	foreach((array)$list as $l) {
@@ -380,7 +381,12 @@ function print_favorites()
 		foreach($vvar_list as $vvar) {
 			$$vvar = $l[$vvar];
 		}
-		$res .= "<tr valign=top style=\"border-width:1; background:url($back/a.gif);\"> <td > <span title=\"$ac_descr[2] for $__t_identity\"> <img width=16 height=16 src=$_t_image> <a href=$url target=$target>  $str $tag</a></span></td> </tr>";
+		if ($ttype == 'separator') {
+			$res .= "<tr valign=top style=\"border-width:1; background:url($back/a.gif);\"> <td ></td> </tr>";
+		}
+		else {
+			$res .= "<tr valign=top style=\"border-width:1; background:url($back/a.gif);\"> <td > <span title=\"$ac_descr[2] for $__t_identity\"> <img width=16 height=16 src=$_t_image> <a href=$url target=$target>  $str $tag</a></span></td> </tr>";
+		}
 	}
 	return $res;
 }

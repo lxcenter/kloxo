@@ -74,9 +74,17 @@ static function add($parent, $class, $param)
 		$param['nname'] = "{$separatorid}___{$parent->getClName()}";
 		return $param;
 	}
+	
+	$url = base64_decode($param['url']);
 	if (isset($param['external']) && isOn($param['external'])) {
+		$url = $param['url'];
 		$param['url'] = base64_encode($param['url']);
 	}
+
+	if (trim($url) == '' || !isset($url)) {
+		throw new lxexception('url_is_not_defined', 'nname');
+	}
+	
 	$param['nname'] = "{$param['url']}___{$parent->getClName()}";
 	return $param;
 }
@@ -117,7 +125,7 @@ function display($var)
 			return "--Separator--";
 		}
 		if (isset($this->$var) && $this->$var) {
-			return $this->$var;
+			return htmlspecialchars($this->$var);
 		}
 		$url = base64_decode($this->url);
 		$buttonpath = get_image_path() . "/button/";
