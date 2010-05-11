@@ -1,22 +1,16 @@
 <?php 
 
 class licensecom_b extends Lxaclass {
-
-
 static $__desc_nname =  array("", "",  "license");
 static $__desc_lic_ipaddress =  array("n", "",  "Ipaddress");
 static $__desc_clientaccount =  array("", "",  "Client Account");
 static $__desc_password =  array("", "",  "Password");
-
 }
 
 class License extends Lxdb {
-
-
 static $__desc =  array("", "",  "license");
 static $__desc_nname =  array("", "",  "license");
 static $__desc_licensecom_b =  array("", "",  "license");
-
 static $__desc_lic_client_num_f =     array("","",  "number_of_clients");
 static $__desc_lic_pserver_num_f =     array("","",  "number_of_servers");
 static $__desc_lic_maindomain_num_f =     array("","",  "number_of_domains");
@@ -29,10 +23,8 @@ static $__desc_lic_client_f =     array("","",  "client_support");
 static $__desc_lic_node_num_f	 = array("", "",  "number_of_nodes");
 static $__desc_license_upload_f =     array("F","",  "upload_new_license");
 static $__desc_lic_livesupport_name_f =     array("F","",  "username");
-
 static $__acdesc_update_login_info = array("", "",  "login_info");
 static $__acdesc_update_license = array("", "",  "license_update");
-
 
 static function initThisObjectRule($parent, $class, $name = null)
 {
@@ -77,17 +69,13 @@ function updateform($subaction, $param)
 				if (isset($lic->lic_livesupport_flag)) {
 				$vlist['lic_live_support_f'] = array('M', $lic->lic_livesupport_flag);
 				}
-				//$vlist['lic_ipaddress_f'] = array('M', $lic->lic_ipaddress);
 				if (isset($lic->lic_client)) {
 				$vlist['lic_client_f'] = array('M', $lic->lic_client);
 				}
 				if (isset($lic->lic_livesupport_name)) {
 				$vlist['lic_livesupport_name_f'] = array('M', $lic->lic_livesupport_name);
 				}
-				//$vlist['lic_current_f'] = array('t', lfile_get_contents('__path_program_etc/license.txt'));
-				//$vlist['lic_ipaddress_f'] = "000.000.000.000" ;
 				return $vlist;
-
 			}
 
 		case "login_info":
@@ -132,7 +120,6 @@ static function doupdateLicense()
 	$prilist = $login->getQuotaVariableList();
 
 	foreach($prilist as $k => $v) {
-		//echo $k .' '. $v.'<br>';
 		if (cse($k, "_flag")) {
 			$login->priv->$k = 'On';
 		} else if (cse($k, "_usage")) {
@@ -149,24 +136,18 @@ static function doupdateLicense()
 	if ($sgbl->isKloxo()) {
 		$def = array("maindomain_num" => "Unlimited", "domain_num" => 'Unlimited', "pserver_num" => "Unlimited", "client_num" => "Unlimited");
 	} else {
-		$def = array("vps_num" => 'Unlimited', "client_num" => "Unlimited");//Michele - not sure about hypervm values;
+		$def = array("vps_num" => 'Unlimited', "client_num" => "Unlimited");
 	}
-	//$list = get_license_resource();//original: this return only maindomain_num 
 	$list = array("maindomain_num","domain_num","pserver_num");
 	foreach($list as $l) {
 		$licv = "lic_$l";
 		$lic->$licv = $def[$l];
-//	echo "lic_$l.<br>";
 	}
 	$license->setUpdateSubaction();
 	$license->write();
-//exit;
-
 }
 
 function isSync() { return false ; }
 
-
 }
 ?>
-

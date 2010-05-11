@@ -27,6 +27,12 @@ function updatecleanup_main()
 
 	print("Executing UpdateCleanup. This will take a long time. Please be patient\n");
 	log_log("update", "Executing Updatecleanup");
+//
+// Check for lxlabs yum repo file and if exists
+// Change to lxcenter repo file
+//
+// Code is here soon
+//
 
 	if (lxfile_exists(".svn")) {
 		print("SVN Found... Exiting\n\n");

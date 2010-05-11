@@ -39,21 +39,25 @@ function init_global()
 // ### LxCenter
 //
 
-	//production version... No chance of setting debug outside of program...
-	//$sgbl->dbg = -1;
-
+// Check for Development/Debug version
+// If file not exists, Production mode (-1)
+// If file exists it can have the following numbers to enable
+// 1  = Debug mode 1
+// 2  = Debug mode 2
+// 3  = Debug mode 3
+// 4  = Debug mode 4
+// 5  = Debug mode 5
+// -1 = Turn Off and go to production mode
 
 	check_for_debug("/commands.php");
 
-	$v = explode(".", PHP_VERSION);
-
-	if ($v[1] == "1" && $sgbl->isDebug()) {
-		date_default_timezone_set("UTC");
-	}
-
+// Disabled by LxCenter, we are not at PHP version with number 1 at postition N ( x.N.x )
+//	$v = explode(".", PHP_VERSION);
+//	if ($v[1] == "1" && $sgbl->isDebug()) {
+//		date_default_timezone_set("UTC");
+//	}
 
 	$sgbl->method = ($sgbl->dbg >= 1)? "get": "post";
-	//$sgbl->method = 'post';
 }
 
 function debug_for_backend()
@@ -69,10 +73,9 @@ function check_for_debug($file)
 	global $gbl, $sgbl, $login, $ghtml; 
 	if (file_exists(getreal($file))) {
 		$sgbl->dbg = file_get_contents(getreal($file));
-		if ($sgbl->dbg != "1" && $sgbl->dbg != "2" && $sgbl->dbg != "3" && $sgbl->dbg != 4 && $sgbl->dbg != 5) {
+		if ($sgbl->dbg != "1" && $sgbl->dbg != "2" && $sgbl->dbg != "3" && $sgbl->dbg != "4" && $sgbl->dbg != "5") {
 			$sgbl->dbg = -1;
 		}
-
 	} else {
 		$sgbl->dbg = -1;
 	}
@@ -80,6 +83,7 @@ function check_for_debug($file)
 		ini_set("error_reporting", E_ALL & ~E_STRICT);
 		ini_set("display_errors", "On");
 	} else {
+// LxCenter: Should it be wise to set both off by default? 
 		ini_set("error_reporting", E_ERROR);
 		ini_set("display_errors", "On");
 	}
@@ -2108,7 +2112,7 @@ function initProgramlib($ctype = null)
 {
 	global $gbl, $sgbl, $login, $ghtml; 
 
-	if ($sgbl->is_this_slave()) { print("Slave Server\n"); exit; }
+	if ($sgbl->is_this_slave()) { print("This is a Slave Server. Operate it at the Master server.\n"); exit; }
 	static $var = 0;
 	$var++;
 
@@ -2180,7 +2184,7 @@ function initProgramlib($ctype = null)
 			$ssl_param = $ssl['ssl_param'];
 			$encrypted_string = base64_decode($ssl['encrypted_string']);
 			if (!$string || !checkPublicKey($string, $encrypted_string)) {
-				print("Ssl Failed <br> \n");
+				print("SSL Connection Failed <br> \n");
 				exit;
 			}
 			$class = 'client';
@@ -2220,7 +2224,7 @@ function initProgramlib($ctype = null)
 	if ($login->getClName() !== $sessobj->parent_clname) {
 		dprint_r($login->ssession_l);
 		dprint(" <br> $session_id <br> <br> <br> ");
-		print("session error client Login Again");
+		print("Session error! Login again.");
 		clear_all_cookie();
 		$ghtml->print_redirect_self("/login/?frm_emessage=sessionname_not_client");
 	}
@@ -2475,27 +2479,9 @@ function delete_login()
 
 function save_login()
 {
-	global $gbl, $sgbl, $login, $ghtml; 
-	// NO saved..
-	return;
-
-	// Never ever save login... That was a very wrong idea actually, since the database will cache things better. And always a stateless system is more efficient, and easier to code.
-	return;
-
-	if ($login->__view === "guest") {
-		return;
-	}
-
-
- 	if($login->__force != "normal") {
-		return;
-	}
-
-	$class = lget_class($login);
-
-
-	//lfile_put_contents("__path_program_etc/$class:$login->nname", serialize($login));
-
+// Function removed by Ligesh earlier. (was saving login info)
+// Deleted the code after the first return.
+return;
 }
 
 
@@ -2894,7 +2880,7 @@ function add_superadmin($pass)
 		$res['cttype'] = 'superadmin';
 		$res['cpstatus'] = 'on';
 		if(if_demo()){
-			$res['email'] = "admin@lxlabs.com";
+			$res['email'] = "admin@example.org";
 		}
 		$client->create($res);
 		$client->write();
@@ -2913,7 +2899,7 @@ function add_slave($pass)
 		$res['password'] = $pass;
 		$res['cttype'] = 'slave';
 		if(if_demo()){
-			$res['email'] = "admin@lxlabs.com";
+			$res['email'] = "admin@example.org";
 		}
 		$client->create($res);
 		$client->write();
@@ -3464,14 +3450,14 @@ function if_demo_throw_exception($where = null)
 	}
 
 	if (if_demo()) {
-		throw new lxException("$where not_allowed_in_demo");
+		throw new lxException("$where not_allowed_in_demo_version");
 	}
 
 }
 
 function get_package_version($name)
 {
-	$cont = curl_general_get("http://download.lxlabs.com/download/version/$name");
+	$cont = curl_general_get("http://download.lxcenter.org/download/version/$name");
 	return trim($cont);
 }
 
