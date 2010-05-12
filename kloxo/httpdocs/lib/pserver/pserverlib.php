@@ -175,67 +175,49 @@ function createShowPropertyList(&$alist)
 
 function createShowAlist(&$alist, $subaction = null)
 {
+        global $gbl, $sgbl, $login, $ghtml;
 
-	//$alist[] = "a=show";
-	
-	global $gbl, $sgbl, $login, $ghtml; 
+// LxCenter:
+// No menu structures for Domain and Advanced here?
+//
 
-	$alist['__title_security'] = "Security";
-	$alist[] = "a=show&o=sshconfig";
-	$alist[] = "a=list&c=watchdog";
-	$alist[] = "a=show&o=lxguard";
-	$alist[] = "a=list&c=hostdeny"; 
-	$alist[] = "a=list&c=sshauthorizedkey";
+        $alist['__title_security'] = "Security";
+        $alist[] = "a=show&o=sshconfig";
+        $alist[] = "a=list&c=watchdog";
+        $alist[] = "a=show&o=lxguard";
+        $alist[] = "a=list&c=hostdeny";
+        $alist[] = "a=list&c=sshauthorizedkey";
 
-	$alist['__title_main_pserver'] = $this->getTitleWithSync();
-	if ($this->isLocalhost('nname')){
-		//$alist[] = "a=show&o=lxupdate";
-	}
-	//$this->getCPToggleUrl($alist);
-	//$alist[] = "a=updateform&sa=showused";
+        $alist['__title_main_pserver'] = $this->getTitleWithSync();
+        $alist[] = "a=list&c=service";
+        $alist[] = "a=list&c=cron";
+        $alist[] = "a=list&c=process";
+        $alist[] = "a=list&c=component";
+        $alist[] = "a=list&c=ipaddress";
+        $alist[] = "a=updateform&sa=commandcenter";
+        $alist[] = "a=updateform&sa=switchprogram";
+        $alist[] = "a=updateform&sa=timezone";
+        $alist[] = "a=show&o=sshclient";
+        $alist[] = "a=show&o=llog";
+        $alist[] = "a=show&l[class]=ffile&l[nname]=";
 
-	//$alist[] = "a=list&c=component";
-	
+        $alist['__title_webmailanddb'] = $login->getKeywordUc('webmailanddb');
+        $alist[] = "o=servermail&a=updateform&sa=update";
+        $alist[] = 'a=list&c=mailqueue';
+        $alist[] = 'a=list&c=clientmail';
+        $alist[] = "a=list&c=ftpsession";
+        $alist[] = "a=show&o=phpini";
+        $alist[] = "a=show&o=serverweb";
+        $alist[] = "a=show&o=serverftp";
+        $this->getMysqlDbAdmin($alist);
+        $alist[] = "a=updateform&sa=mysqlpasswordreset";
+        $alist[] = "a=list&c=dbadmin";
 
 
-	$alist[] = "a=list&c=service";
-	$alist[] = "a=list&c=cron";
-	$alist[] = "a=list&c=process";
-	$alist[] = "a=list&c=component";
-	$alist[] = "a=list&c=ipaddress";
-	$alist[] = "a=updateform&sa=commandcenter";
-	$alist[] = "a=updateform&sa=switchprogram";
-	$alist[] = "a=updateform&sa=timezone";
-	$alist[] = "a=show&o=sshclient";
-	$alist[] = "a=show&o=llog";
-	$alist[] = "a=show&l[class]=ffile&l[nname]=";
-
-	$alist['__title_webmailanddb'] = $login->getKeywordUc('webmailanddb');
-
-
-
-	$alist[] = "o=servermail&a=updateform&sa=update";
-	$alist[] = 'a=list&c=mailqueue';
-	$alist[] = 'a=list&c=clientmail';
-	//$alist[] = "a=updateform&sa=phpsmtp";
-	$alist[] = "a=list&c=ftpsession";
-	$alist[] = "a=show&o=phpini";
-	$alist[] = "a=show&o=serverweb";
-	$alist[] = "a=show&o=serverftp";
-
-	$this->getMysqlDbAdmin($alist);
-	$alist[] = "a=updateform&sa=mysqlpasswordreset";
-	$alist[] = "a=list&c=dbadmin";
-
-	//$alist[] = "a=list&c=firewall";
-	//$alist[] = "a=show&o=proxy";
-	//$alist[] = "a=updateform&sa=update&c=serverspam";
-	$alist['__title_nnn'] = 'Machine';
-	$alist['__v_dialog_driver'] = "a=updateform&sa=update&o=driver";
-	//$alist[] = "a=update&sa=loaddriverinfo";
-	$alist[] = "a=updateForm&sa=reboot";
-
-	$alist[] = "a=updateForm&sa=poweroff";
+        $alist['__title_nnn'] = 'Machine';
+        $alist['__v_dialog_driver'] = "a=updateform&sa=update&o=driver";
+        $alist[] = "a=updateForm&sa=reboot";
+        $alist[] = "a=updateForm&sa=poweroff";
 
 	return $alist;
 }
