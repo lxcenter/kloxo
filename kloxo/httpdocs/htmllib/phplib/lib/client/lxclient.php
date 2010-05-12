@@ -123,9 +123,6 @@ function getKeyword($var)
 	if (isset($g_language_mes->__keyword[$var])) {
 		return $g_language_mes->__keyword[$var];
 	}
-	if ($sgbl->isDebug()) {
-        dprint("Debug Language: " . $g_language_mes->__keyword[$var] . " - var: $var <br>");
-	}
 	return $var;
 }
 
