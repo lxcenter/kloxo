@@ -305,13 +305,13 @@ function __ac_desc_show($object)
 			}
 		}
 		if (!$gottitle) {
-			$nalist['__title_resource'] = 'resource';
+			$nalist['__title_resource'] = 'General_Get__Title_Error';
 		}
 
 		foreach((array) $aalist as $k => $a) {
 			if (csb($k, "__title")) {
 				if (!$a) {
-					$a = 'resource';
+					$a = 'General_get_title_error';
 				}
 				$nalist[$k] = $a;
 				continue;
