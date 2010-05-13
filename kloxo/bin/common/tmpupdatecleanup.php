@@ -25,13 +25,21 @@ function updatecleanup_main()
 		$login = new Client(null, null, 'update');
 	}
 
-	print("Executing UpdateCleanup. This will take a long time. Please be patient\n");
+	print("Executing UpdateCleanup. This can take some time. Please be patient.\n");
 	log_log("update", "Executing Updatecleanup");
 //
 // Check for lxlabs yum repo file and if exists
 // Change to lxcenter repo file
 //
-// Code is here soon
+	print("Delete old repo's\n");
+	if (lxfile_exists("/etc/yum.repos.d/lxlabs.repo")) {
+		lxfile_mv("/etc/yum.repos.d/lxlabs.repo","/etc/yum.repos.d/lxlabs.repo.lxsave");
+		system("rm -f /etc/yum.repos.d/lxlabs.repo");
+		print("Removed lxlabs.repo\n");
+		print("Installing lxcenter.repo\n");
+		system("wget -O /etc/yum.repos.d/lxcenter.repo http://download.lxcenter.org/lxcenter.repo");
+		print("Done.\n");
+	}
 //
 
 	if (lxfile_exists(".svn")) {
