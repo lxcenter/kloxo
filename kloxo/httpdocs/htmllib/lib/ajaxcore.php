@@ -67,7 +67,7 @@ function __ajax_desc_tree()
 	$object = $gbl->__c_object;
 	$icondir = get_image_path('/button/');
 	$rclist = $object->getResourceChildList();
-	$cid = $ghtml->node;
+	$cid = htmlspecialchars($ghtml->node);
 
 	if ($object->hasFileResource()) {
 		$u = "a=show&k[class]=ffile&k[nname]=/";

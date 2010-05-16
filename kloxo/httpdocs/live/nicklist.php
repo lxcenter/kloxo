@@ -20,7 +20,7 @@ if ($list) {
     $nicknames = split(":", $list);
     foreach($nicknames as $n) {
         if (strlen($n) > 0) {
-            echo "$n<BR />";
+            echo htmlspecialchars($n) . "<BR />";
         }
     }
 } else {

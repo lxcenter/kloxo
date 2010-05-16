@@ -37,7 +37,11 @@ function __construct()
 		ksort($tmp['frm_o_o']);
 
 		foreach($tmp['frm_o_o'] as $k => $v) {
-			if ($v['class']) {
+			if (isset($k)) {
+				self::checkForScript($k);
+			}
+
+			if (isset($v['class'])) {
 				self::checkForScript($v['class']);
 			}
 			if (isset($v['nname'])) {
@@ -46,6 +50,17 @@ function __construct()
 		}
 	}
 
+    if (isset($tmp['frm_dttype']) && $tmp['frm_dttype']) {
+		foreach($tmp['frm_dttype'] as $k => $v) {
+			if (isset($v)) {
+				self::checkForScript($v);
+			}
+		}
+	}
+
+	if (isset($tmp['frm_accountselect'])) {
+		self::checkForScript($tmp['frm_accountselect']);
+	}
 
 	if (isset($tmp['frm_hpfilter'])) {
 		foreach($tmp['frm_hpfilter'] as $k => $v) {
@@ -60,6 +75,10 @@ function __construct()
 
 	if (isset($tmp['frm_action'])) {
 		self::checkForScript($tmp['frm_action']);
+	}
+
+	if (isset($tmp['frm_subaction'])) {
+		self::checkForScript($tmp['frm_subaction']);
 	}
 
 	if (isset($tmp['frm_o_cname'])) {
