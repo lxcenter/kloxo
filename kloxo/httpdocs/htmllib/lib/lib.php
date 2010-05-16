@@ -379,7 +379,7 @@ function print_favorites()
 	foreach((array)$list as $l) {
 
 		foreach($vvar_list as $vvar) {
-			$$vvar = $l[$vvar];
+			$$vvar = isset($l[$vvar]) ? $l[$vvar] : '';
 		}
 		if ($ttype == 'separator') {
 			$res .= "<tr valign=top style=\"border-width:1; background:url($back/a.gif);\"> <td ></td> </tr>";
