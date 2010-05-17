@@ -75,9 +75,9 @@ function lxins_main()
 	
 	print("Removing sendmail, exim, vsftpd, postfix, vpopmail, qmail,\n");
 	print("Removing lxphp, lxzend, pure-ftpd and imap\n");
-	exec("rpm -e --nodeps sendmail");
+	exec("yum -y remove sendmail*");
 	exec("rpm -e --nodeps exim");
-	exec("rpm -e --nodeps sendmail vsftpd postfix vpopmail qmail lxphp lxzend pure-ftpd imap > /dev/null 2>&1");
+	exec("rpm -e --nodeps sendmail sendmail-cf sendmail-doc vsftpd postfix vpopmail qmail lxphp lxzend pure-ftpd imap > /dev/null 2>&1");
 
 
 	$package = array("php-mysql", "which", "gcc-c++", "php-imap", "php-pear", "php-devel", "lxlighttpd", "httpd", "mod_ssl", "zip","unzip","lxphp", "mysql", "mysql-server",  "mysqlclient10", "lxzend","curl","autoconf","automake","libtool", "bogofilter", "gcc", "cpp", "openssl", "pure-ftpd");
