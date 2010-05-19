@@ -94,7 +94,6 @@ function doUpdateExtraStuff()
 	}
 
 	copy_image();
-	lxfile_cp("tmpimg/custom_button.gif", "img/general/default/default.gif");
 
 	call_with_flag("fix_phpini");
 	call_with_flag("fix_awstats");
@@ -131,9 +130,6 @@ function doUpdateExtraStuff()
 		system("chkconfig freshclam off > /dev/null 2>&1");
 		system("service freshclam stop >/dev/null 2>&1");
 	}
-	lxfile_rm("title.img");
-
-
 
 }
 
@@ -545,7 +541,6 @@ function updateApplicableToSlaveToo()
 	lxfile_cp("../file/skeleton.zip", "__path_kloxo_httpd_root/skeleton.zip");
 	lxshell_unzip("__system__", "__path_kloxo_httpd_root/default/", "../file/skeleton.zip");
 	lxfile_cp("../file/default_index.html", "__path_kloxo_httpd_root/default/index.html");
-	lxfile_cp("tmpimg/feather.css", "img/skin/kloxo/feather/default");
 	lxfile_mkdir("__path_kloxo_httpd_root/disable/");
 	lxfile_cp("../file/disable.html", "__path_kloxo_httpd_root/disable/index.html");
 }
@@ -738,7 +733,7 @@ function changeValues($res, $tbl_name, $db, $newfields)
 
 function droptable($tbl_name) 
 { 
-	dprint("Droping table...............\n");
+	dprint("Dropping table...............\n");
 	$db = new Sqlite($tbl_name);
 	$db->rawQuery("drop table " . $tbl_name );
 }
@@ -746,7 +741,7 @@ function droptable($tbl_name)
 
 function dropcolumn($tbl_name, $column) 
 {
-	dprint("Droping Column...............\n");
+	dprint("Dropping Column...............\n");
 
 	$db = new Sqlite($tbl_name);
 	$columnold  = $db->getColumnTypes();

@@ -23,15 +23,12 @@ function update_main()
 		$type = 'master';
 	}
 
-	print("Connecting... Please wait....\n");
+	print("Connecting LxCenter download server...\nPlease wait....\n");
 
 	if ($upversion) {
 		do_upgrade($upversion);
-		//fix_database($upversion);
-		print("Upgrade Done.. Executing Cleanup....\n");
+		print("Upgrade Done.\nCleanup....\n");
 		flush();
-		//lxshell_return("__path_php_path", "../bin/update.php");
-		//Execute update once more... that's when everything gets done properly... 
 	} else {
 		print("$program is the latest version\n");
 	}
@@ -44,7 +41,7 @@ function update_main()
 
 	lxfile_cp("htmllib/filecore/php.ini", "/usr/local/lxlabs/ext/php/etc/php.ini");
 	$res = pcntl_exec("/bin/sh", array("../bin/common/updatecleanup.sh", "--type=$type"));
-	print("Done......\n");
+	print("Ready.\n");
 
 }
 
@@ -57,7 +54,6 @@ function updatecleanup()
 	os_fix_lxlabs_permission();
 	os_restart_program();
 	updateApplicableToSlaveToo();
-	//os_update_server();
 }
 
 function update_all_slave()
@@ -130,10 +126,9 @@ function do_upgrade($upversion)
 
 	$saveddir = getcwd();
 	lxfile_rm_rec("__path_program_htmlbase/download");
-	//lxfile_rm_rec("__path_program_htmlbase/img");
 	lxfile_mkdir("download");
 	chdir("download");
-	print("Downloading $programfile.....\n");
+	print("Downloading $programfile ...\n");
 	download_source("/$program/$programfile");
 	print("Download Done....\n");
 	$host = `hostname`;

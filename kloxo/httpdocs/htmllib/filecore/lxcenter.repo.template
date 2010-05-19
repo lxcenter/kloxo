@@ -1,0 +1,29 @@
+#
+# LxCenter Repository
+#
+[lxcenter-updates]
+name=%distro%-$releasever - LxCenter-Updates
+baseurl=http://download.lxcenter.org/download/update/%distro%/$basearch/
+gpgcheck=0
+enabled=1
+
+#packages used/produced in the build but not released
+[lxcenter-extra]
+name=%distro%-$releasever - LxCenter-Extra
+baseurl=http://download.lxcenter.org/download/update/lxgeneral
+gpgcheck=0
+enabled=1
+
+################################
+# LxCenter test packages
+# Do not enable/use this. Use it at your own risc.
+# It can damage your production server.
+#
+[lxcenter-test]
+name=%distro%-$releasever - LxCenter-Test
+baseurl=http://download.lxcenter.org/download/test/%distro%/$basearch/
+gpgcheck=0
+enabled=0
+#
+###############################
+
