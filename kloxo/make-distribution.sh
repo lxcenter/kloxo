@@ -27,7 +27,10 @@ echo "### Compile c files..."
 #
 echo "### Create zip package..."
 # Package part
-zip -r9 kloxo-$version.zip ./bin ./cexe ./file ./httpdocs ./pscript ./sbin ./RELEASEINFO ./src -x \
+zip -r9y kloxo-$version.zip ./bin ./cexe ./file ./httpdocs ./pscript ./sbin ./RELEASEINFO ./src -x \
+"*httpdocs/commands.php" \
+"*httpdocs/newpass" \
+"*httpdocs/.php.err" \
 "*/CVS/*" \
 "*/.svn/*"
 #
