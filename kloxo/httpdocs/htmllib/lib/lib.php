@@ -86,7 +86,7 @@ function core_installWithVersion($path, $file, $ver)
 	lxfile_mkdir("/var/cache/$prgm");
 	if (!lxfile_real("/var/cache/$prgm/$file.$ver.zip")) {
 		while (lxshell_return("unzip", "-t", "/var/cache/$prgm/$file.$ver.zip")) {
-			system("cd /var/cache/$prgm/ ; rm -f $file*.zip; wget download.lxlabs.com/download/$file.$ver.zip");
+			system("cd /var/cache/$prgm/ ; rm -f $file*.zip; wget download.lxcenter.org/download/$file.$ver.zip");
 		}
 		system("cd $path ; unzip -oq /var/cache/$prgm/$file.$ver.zip");
 	}
@@ -738,9 +738,9 @@ function validate_domain_name($name)
 {
 	global $gbl, $sgbl, $login, $ghtml; 
 
-	if ($name === 'lxlabs.com' || $name === 'key.lxlabs.com') {
+	if ($name === 'lxlabs.com' || $name === 'lxcenter.org') {
 		if (!$sgbl->isDebug()) {
-			throw new lxException('lxlabs.com_cannot_be_added', 'nname');
+			throw new lxException('lxlabs.com_or_lxcenter.org_cannot_be_added', 'nname');
 		}
 	}
 
@@ -1109,7 +1109,7 @@ function exec_with_all_closed($cmd)
 {
 	global $gbl, $sgbl, $login, $ghtml; 
 	$string = null;
-	log_shell("CLosed Exec $sgbl->__path_program_root/cexe/closeallinput '$cmd' >/dev/null 2>&1 &");
+	log_shell("Closed Exec $sgbl->__path_program_root/cexe/closeallinput '$cmd' >/dev/null 2>&1 &");
 	chmod("$sgbl->__path_program_root/cexe/closeallinput", 0755);
 	exec("$sgbl->__path_program_root/cexe/closeallinput '$cmd' >/dev/null 2>&1 &");
 }
@@ -1118,16 +1118,9 @@ function exec_with_all_closed($cmd)
 function exec_with_all_closed_output($cmd)
 {
 	global $gbl, $sgbl, $login, $ghtml; 
-	$string = null;
-	for($i = 1; $i < 60; $i++) {
-		$string .= " $i</dev/null";
-	}
-	//debugBacktrace();
-	//dprint($string);
 	chmod("$sgbl->__path_program_root/cexe/closeallinput", 0755);
-	//exec("$cmd > /dev/null 2>&1 &");
 	$res = shell_exec("$sgbl->__path_program_root/cexe/closeallinput '$cmd' 2>/dev/null");
-	log_shell("CLosed Exec output: $res :  $sgbl->__path_program_root/cexe/closeallinput '$cmd'");
+	log_shell("Closed Exec output: $res :  $sgbl->__path_program_root/cexe/closeallinput '$cmd'");
 	return trim($res);
 }
 
@@ -1646,7 +1639,7 @@ function redirect_to_https()
 {
 	global $gbl, $sgbl, $login, $ghtml; 
 
-	if ($sgbl->is_this_slave()) { print("Slave Server\n"); exit; }
+	if ($sgbl->is_this_slave()) { print("This is a Slave Server\n"); exit; }
 include_once "htmllib/phplib/lib/generallib.php";
 
 	$port = db_get_value("general", "admin", "ser_portconfig_b"); 
@@ -1724,7 +1717,7 @@ function rrd_graph_single($type, $file, $time)
 	$ret = lxshell_return('rrdtool', 'graph', $graphfile, '--start', "-$time", '-w', '600', '-h', '200', '--x-grid', $grid, "--vertical-label=$type", "DEF:dss1=$file:$dir:AVERAGE", "LINE1:dss1#FF0000:$dir\\r");
 
 	if ($ret) {
-		throw new lxexception("couldnt_get_graph_data", '', $global_shell_error);
+		throw new lxexception("could_not_get_graph_data", '', $global_shell_error);
 	}
 
 	$content = lfile_get_contents($graphfile);
@@ -1955,21 +1948,21 @@ function fix_rhn_sources_file()
 		if (!$l) {
 			continue;
 		}
-		if (csb($l, "yum lxlabs")) {
+		if (csb($l, "yum lxcenter")) {
 			continue;
 		}
 		$outlist[$k] = $l;
 	}
 
 	$outlist[] = "\n";
-	$outlist[] = "yum lxlabs-updates http://download.lxlabs.com/download/update/$os/\$ARCH/";
-	$outlist[] = "yum lxlabs-lxupdates http://download.lxlabs.com/download/update/lxgeneral/";
+	$outlist[] = "yum lxcenter-updates http://download.lxcenter.org/download/update/$os/\$ARCH/";
+	$outlist[] = "yum lxcenter-lxupdates http://download.lxcenter.org/download/update/lxgeneral/";
 
 	lfile_put_contents("/etc/sysconfig/rhn/sources", implode("\n", $outlist) . "\n");
-	$cont = lfile_get_contents( "__path_program_htmlbase/htmllib/filecore/lxlabs.repo.template");
+	$cont = lfile_get_contents( "__path_program_htmlbase/htmllib/filecore/lxcenter.repo.template");
 	
 	$cont = str_replace("%distro%", $os, $cont);
-	lfile_put_contents("/etc/yum.repos.d/lxlabs.repo", $cont);
+	lfile_put_contents("/etc/yum.repos.d/lxcenter.repo", $cont);
 }
 
 
@@ -2052,7 +2045,7 @@ function lx_core_lock($file = null)
 	if (lxfile_exists($pidfile)) {
 		$pid = lfile_get_contents($pidfile);
 	}
-	dprint($pid . "\n");
+	dprint("PID#:  ".$pid."\n");
 	if (!$pid) {
 		dprint("$prog:$file No pid file $pidfile detected..\n");
 		lfile_put_contents($pidfile, os_getpid());
@@ -2536,26 +2529,7 @@ function getDownloadServer()
 
 	$progname = $sgbl->__var_program_name;
 	$maj = $sgbl->__ver_major_minor;
-
-	if (!$local) {
-		if (lfile_exists("__path_program_etc/.local_download")) {
-			$local = 'on';
-		} else {
-			$local = 'off';
-		}
-	}
-
-	if (isOn($local)) {
-		$server = "http://192.168.1.100/download/$progname/$maj";
-	} else {
-		$server = "http://download.lxlabs.com/download/$progname/$maj";
-	}
-
-	/*
-	if ($sgbl->dbg < 0) {
-		$server = "http://download.lxlabs.com/download/$progname/$maj";
-	}
-*/
+	$server = "http://download.lxcenter.org/download/$progname/$maj";
 
 	return $server;
 }
@@ -2743,6 +2717,9 @@ function get_title()
 	} else {
 		$enterprise = "Single Server";
 	}
+	if (file_exists(".svn")) {
+		$enterprise .= " Development";
+	}
 	$title = "$host $progname $enterprise $title" ;
 	return $title;
 }
@@ -2854,6 +2831,8 @@ function copy_script()
 
 function copy_image()
 {
+	// Not needed anymore - LxCenter
+	return; 
 	global $gbl, $sgbl, $login, $ghtml; 
 	$prgm = $sgbl->__var_program_name;
 
@@ -2907,7 +2886,7 @@ function if_customer_complain_and_exit()
 		
 	print("You are trying to access Protected Area. This incident will be reported\n <br> ");
 
-	$message = "At " . lxgettime(time()) . " $login->nname tried to Access a region that is prohibited for Normal Users\n. Click here to See what this means. http://lxlabs.com/software/$progname/docs/security/unauthorized-access/\n";
+	$message = "At " . lxgettime(time()) . " $login->nname tried to Access a region that is prohibited for Normal Users\n";
 
 	send_mail_to_admin("$progname Warning: Unauthorized Access by $login->nname", $message);
 
@@ -2969,7 +2948,7 @@ function if_not_admin_complain_and_exit()
 	print("You are trying to access Protected Area. This incident will be reported\n <br> ");
 	debugBacktrace();
 
-	$message = "At " . lxgettime(time()) . " $login->nname tried to Access a region that is prohibited for Normal Users\n. Click here to See what this means. http://lxlabs.com/software/$progname/docs/security/unauthorized-access/\n";
+	$message = "At " . lxgettime(time()) . " $login->nname tried to Access a region that is prohibited for Normal Users\n";
 
 	send_mail_to_admin("$progname Warning: Unauthorized Access by $login->nname", $message);
 
@@ -2982,15 +2961,7 @@ function if_not_admin_complain_and_exit()
 function initProgram($ctype = NULL)
 {
 	global $gbl, $sgbl, $login, $ghtml;
-
-   // print(ini_get("error_log"));
-   // print(ini_set("error_log", getreal("Erros")));
-
-	// Hack arond the iis setcookie bug
-	if (WindowsOs() && $sgbl->isKloxo()) {
-		//setcookie("kloxo-classname", "client", time() + 379999999);
-		//setcookie("kloxo-clientname", "admin", time() + 379999999);
-	}
+  
 	initProgramlib($ctype);
 
 }
@@ -3984,6 +3955,7 @@ function checkClusterDiskQuota()
 
 function find_closest_mirror()
 {
+	dprint("find_closest_mirror htmllib>lib>lib.php\n"); 
 	$v = curl_general_get("lxlabs.com/mirrorlist/");
 	$v = trim($v);
 	$vv = explode("\n", $v);
