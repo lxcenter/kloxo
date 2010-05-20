@@ -1,9 +1,18 @@
 <?php 
-// LxCenter:
-// Changed some demo values.
+// 
+// Initialize Demo server
 //
+
+// This include stops with lxexception
 include_once "lib/include.php";
 
+// This is a proper one
+// remove the above one if u need this demoinit to run
+// run it within httpdocs as
+// lxphp.exe /usr/local/lxlabs/kloxo/bin/install/demoinit.php
+include_once "htmllib/lib/displayinclude.php";
+
+// Not everything is working. Need to be sorted out.
 
 install_main() ;
 
@@ -17,7 +26,6 @@ function install_main()
 		ob_end_flush();
 
 		create_servername();
-
 		add_client_template();
 		add_customer_reseller();
 		add_domain_list();
@@ -34,7 +42,6 @@ function install_main()
 
 function create_servername()
 {
-	return;
 	$servername = new pserver(null, null, "titan.lxcenter.net");
 	$servername->initThisDef();
 	$servername->syncserver = $servername->nname;
@@ -172,7 +179,7 @@ function add_customer_reseller()
 
 
 					$res['password'] = crypt('admin');
-					$res['email'] = $name."@lxlabs.com";
+					$res['email'] = $name."@lxcenter.net";
 					$res['status'] = "on";
 					$res['cpstatus'] = "on";
 					$res['cttype'] = $type[$val];
