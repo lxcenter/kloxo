@@ -82,10 +82,11 @@ function check_for_debug($file)
 	if ($sgbl->dbg > 0) {
 		ini_set("error_reporting", E_ALL & ~E_STRICT);
 		ini_set("display_errors", "On");
+		ini_set("log_errors", "Off");
 	} else {
-// LxCenter: Should it be wise to set both off by default? 
 		ini_set("error_reporting", E_ERROR);
-		ini_set("display_errors", "On");
+		ini_set("display_errors", "Off");
+		ini_set("log_errors", "On");
 	}
 }
 
