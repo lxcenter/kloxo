@@ -90,7 +90,7 @@ class HTTP_WebDAV_Server_Filesystem extends HTTP_WebDAV_Server
         }
                 
         // establish connection to property/locking db
-        mysql_connect($this->db_host, $this->db_user, $this->db_passwd) or die(mysql_error());
+        @mysql_connect($this->db_host, $this->db_user, $this->db_passwd) or die(mysql_error());
         mysql_select_db($this->db_name) or die(mysql_error());
         // TODO throw on connection problems
 
