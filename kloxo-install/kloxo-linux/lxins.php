@@ -60,7 +60,7 @@ function lxins_main()
 				print("Installation aborted.\n\n");
 				exit;
 			} else {
-				dprint("Installing Kloxo...\n\n");
+				print("Installing Kloxo...\n\n");
 			}
 	}
 
