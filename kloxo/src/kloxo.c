@@ -1,82 +1,23 @@
-/*
- * ++
- * FACILITY:
+/*    
+ *    Kloxo, Hosting Control Panel
  *
- *      Simplest SSL Server
+ *    Copyright (C) 2000-2009	LxLabs
+ *    Copyright (C) 2009-2010	LxCenter
  *
- * ABSTRACT:
+ *    This program is free software: you can redistribute it and/or modify
+ *    it under the terms of the GNU Affero General Public License as
+ *    published by the Free Software Foundation, either version 3 of the
+ *    License, or (at your option) any later version.
  *
- *   This is an example of a SSL server with minimum functionality.
- *    The socket APIs are used to handle TCP/IP operations. This SSL
- *    server loads its own certificate and key, but it does not verify
- *  the certificate of the SSL client.
+ *    This program is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *    GNU Affero General Public License for more details.
  *
+ *    You should have received a copy of the GNU Affero General Public License
+ *    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */ 
 
- */
-/* Assumptions, Build, Configuration, and Execution Instructions */
-/*
- *  ASSUMPTIONS:
- *
- *    The following are assumed to be true for the
- *    execution of this program to succeed:
- *
- *    - SSL is installed and started on this system.
- *
- *    - this server program, and its accompanying client
- *      program are run on the same system, but in different
- *      processes.
- *
- *    - the certificate and keys referenced by this program
- *      reside in the same directory as this program.  There
- *      is a command procedure, SSL$EXAMPLES_SETUP.COM, to
- *      help set up the certificates and keys.
- *
- *
- *  BUILD INSTRUCTIONS:
- *
- *    To build this example program use commands of the form,
- *
- *      For a 32-bit application using only SSL APIs needs to run the
- *      following commands for SSL_APP.C .
- *       -----------------------------------------------------------------
- *       $CC/POINTER_SIZE=32/PREFIX_LIBRARY_ENTRIES=ALL_ENTRIES SSL_APP.C
- *       $LINK SSL_APP.OBJ, VMS_DECC_OPTIONS.OPT/OPT
- *       -----------------------------------------------------------------
- *       VMS_DECC_OPTIONS.OPT should include the following lines.
- *       -------------------------------------------------
- *       SYS$LIBRARY:SSL$LIBCRYPTO_SHR32.EXE/SHARE
- *       SYS$LIBRARY:SSL$LIBSSL_SHR32.EXE/SHARE
- *       -------------------------------------------------
- *
- *       Creating a 64-bit application of SSL_APP.C should run the
- *       following commands.
- *       -----------------------------------------------------------------
- *       $CC/POINTER_SIZE=64/PREFIX_LIBRARY_ENTRIES=ALL_ENTRIES SSL_APP.C
- *       $LINK SSL_APP.OBJ, VMS_DECC_OPTIONS.OPT/OPT
- *       -----------------------------------------------------------------
- *       VMS_DECC_OPTIONS.OPT should include the following lines.
- *       -------------------------------------------------
- *       SYS$LIBRARY:SSL$LIBCRYPTO_SHR.EXE/SHARE
- *       SYS$LIBRARY:SSL$LIBSSL_SHR.EXE/SHARE
- *       -------------------------------------------------
- *
- *
- * CONFIGURATION INSTRUCTIONS:
- *
- *
- * RUN INSTRUCTIONS:
- *
- *    To run this example program:
- *
- *    1) Start the server program,
- *
- *       $ run server
- *
- *    2) Start the client program on this same system,
- *
- *       $ run client
- *
- */
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -152,10 +93,6 @@ int run_php_prog_ssl(SSL *ssl, int sock)
 	bzero(buf, sizeof(buf));
 	//printf ("Received %d chars:'%s'\n", err, buf);
 
-
-
-
-
 	strcpy(tmpname, "/tmp/lxlabs_backendXXXXXX");
 	mkstemp(tmpname);
 	fp = fopen(tmpname, "w");
@@ -230,10 +167,6 @@ SSL_CTX * ssl_init()
 	SSL            *ssl;
 	SSL_METHOD      *meth;
 
-
-
-
-
 	X509            *client_cert = NULL;
 
 	/*----------------------------------------------------------------*/
@@ -298,10 +231,7 @@ SSL_CTX * ssl_init()
 	}
 
 	return ctx;
-
-
 }
-
 
 char tcp_create_socket(short int s_port)
 {
@@ -327,7 +257,6 @@ char tcp_create_socket(short int s_port)
 	return listen_sock;
 }
 
-
 char * ssl_sock_read(int sock, SSL_CTX *ctx)
 {
 
@@ -345,12 +274,6 @@ char * ssl_sock_read(int sock, SSL_CTX *ctx)
 	SSL_METHOD      *meth;
 
 	X509            *client_cert = NULL;
-
-
-
-
-
-
 
 	/* ----------------------------------------------- */
 	/* TCP connection is ready. */
@@ -408,7 +331,6 @@ char * ssl_sock_read(int sock, SSL_CTX *ctx)
 	exit(0);
 }
 
-
 int tcp_sock_read(int sock)
 {
 	/* Wait for an incoming TCP connection. */
@@ -416,7 +338,6 @@ int tcp_sock_read(int sock)
 	close(sock);
 	exit(0);
 }
-
 
 int accept_and(int listen_sock)
 {
@@ -475,7 +396,6 @@ int process_timed(int counter)
 	int i;
 	char *position, *neededstring;
 
-
 	n = scandir("../etc/.restart/", &namelist, 0, alphasort);
 	if (n < 0)
 		perror("scandir");
@@ -516,9 +436,7 @@ int process_timed(int counter)
 	// Only for master
 	
 	exec_scavenge();
-
 }
-
 
 int exec_scavenge()
 {
@@ -570,7 +488,6 @@ int process_timed_in_child()
 	return 0;
 }
 
-
 int main(int argc, char **argv)
 {
 	int err;
@@ -588,7 +505,6 @@ int main(int argc, char **argv)
 		printf("Usage: %s master/slave\n", argv[0]);
 		exit(0);
 	}
-
 
 	if (!strcmp(argv[1], "master")) {
 		global_type = MASTER;
@@ -608,13 +524,8 @@ int main(int argc, char **argv)
 
 	ctx = ssl_init();
 
-	if (!strcmp(argv[0], "../sbin/hypervm.exe")) {
-		ssl_sock = tcp_create_socket(8889);
-		tcp_sock = tcp_create_socket(8886);
-	} else {
-		ssl_sock = tcp_create_socket(7779);
-		tcp_sock = tcp_create_socket(7776);
-	}
+	ssl_sock = tcp_create_socket(7779);
+	tcp_sock = tcp_create_socket(7776);
 
 	while (1) {
 		tv.tv_sec = 3;
@@ -646,6 +557,5 @@ int main(int argc, char **argv)
 			}
 		}
 	}
-
 }
 
