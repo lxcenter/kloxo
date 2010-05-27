@@ -113,7 +113,7 @@ function syncQmail()
 	}
 */
 
-	lxuser_return(mmail__qmail::, "maildirmake", "-f", "Spam", "$mailpath/$user/Maildir");
+	lxuser_return(mmail__qmail::getUserGroup($domain), "maildirmake", "-f", "Spam", "$mailpath/$user/Maildir");
 	$spamdirm = "$mailpath/$user/Maildir";
 	//lxfile_unix_chown_rec($spamdirm, mmail__qmail::getUserGroup($domain));
 
