@@ -40,7 +40,7 @@ function syncSpamUserPref()
 		$user = null;
 	}
 
-	$sysuser =  mmail__qmail::getUserGroup($domain));
+	$sysuser =  mmail__qmail::getUserGroup($domain);
 
 	/// Hakchackl... Checking for windows here itself. Very wrong. Instead shoudl use the mmail's driver object to get the proper value.
 	if (!WindowsOs()) {
