@@ -129,7 +129,7 @@ int run_php_prog_ssl(SSL *ssl, int sock)
 	bzero(buf, sizeof(buf));
 	while (1) {
 		err = ssl_or_tcp_read(ssl, sock, buf, sizeof(buf) - 1);
-		if (err == -1) {
+		if (err <= 0) {
 			printf("Got EOF\n");
 			break;
 		}
