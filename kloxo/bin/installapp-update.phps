@@ -8,7 +8,7 @@ installapp_update_main();
 
 function installapp_update_main()
 {
-	if (lxfile_exists("/usr/local/lxlabs/kloxo/httpdocs/installsoft") || lxfile_exists("/usr/local/lxlabs/kloxo/httpdocs/remote-installapp")) {
+	if (lxfile_exists("/usr/local/lxlabs/kloxo/httpdocs/installappdata") || lxfile_exists("/usr/local/lxlabs/kloxo/httpdocs/remote-installapp")) {
 		application_update();
 	}
 
