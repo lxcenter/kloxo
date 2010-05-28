@@ -33,6 +33,6 @@ function installapp_data_update()
 	}
 	lxfile_rm_rec("__path_kloxo_httpd_root/installappdata");
 	lxfile_mkdir("__path_kloxo_httpd_root/installappdata");
-	lxshell_unzip("__system__", "__path_kloxo_httpd_root/installappdata/", "/tmp/installappdata.zip");
+	lxshell_unzip("lxlabs", "__path_kloxo_httpd_root/installappdata/", "/tmp/installappdata.zip");
 	lxfile_rm("/tmp/installappdata.zip");
 }
