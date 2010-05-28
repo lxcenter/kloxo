@@ -8,7 +8,7 @@ installapp_update_main();
 
 function installapp_update_main()
 {
-	if (lxfile_exists("__path_kloxo_httpd_root/installsoft") || lxfile_exists("__path_kloxo_httpd_root/remote-installapp")) {
+	if (lxfile_exists("/usr/local/lxlabs/kloxo/httpdocs/installsoft") || lxfile_exists("/usr/local/lxlabs/kloxo/httpdocs/remote-installapp")) {
 		application_update();
 	}
 
@@ -39,13 +39,13 @@ function application_update()
 	foreach($rmt->applist as $k => $v) {
 		if ($k === 'installapp') { continue; }
 
-		if (lxfile_exists("__path_kloxo_httpd_root/remote-installapp")) {
-			if (!lxfile_exists("__path_kloxo_httpd_root/remote-installapp/$k.zip")) {
+		if (lxfile_exists("/usr/local/lxlabs/kloxo/httpdocs/remote-installapp")) {
+			if (!lxfile_exists("/usr/local/lxlabs/kloxo/httpdocs/remote-installapp/$k.zip")) {
 				$notexisting[$k] = true;
 				continue;
 			}
 		} else {
-			if (!lxfile_exists("__path_kloxo_httpd_root/installsoft/$k")) {
+			if (!lxfile_exists("/usr/local/lxlabs/kloxo/httpdocs/installsoft/$k")) {
 				$notexisting[$k] = true;
 				continue;
 			}
@@ -84,7 +84,7 @@ function application_update()
 
 function update_application($appname)
 {
-	if (lxfile_exists("__path_kloxo_httpd_root/remote-installapp/")) {
+	if (lxfile_exists("/usr/local/lxlabs/kloxo/httpdocs/remote-installapp/")) {
 		update_remote_application($appname);
 	} else {
 		do_update_application($appname);
@@ -100,8 +100,8 @@ function do_update_application($appname)
 		print("Could not download $appname\n");
 		return; 
 	}
-	lxfile_rm_rec("__path_kloxo_httpd_root/installsoft/$appname");
-	lxshell_unzip("__system__", "__path_kloxo_httpd_root/installsoft", "/tmp/$appname.zip");
+	lxfile_rm_rec("/usr/local/lxlabs/kloxo/httpdocs/installsoft/$appname");
+	lxshell_unzip("__system__", "/usr/local/lxlabs/kloxo/httpdocs/installsoft", "/tmp/$appname.zip");
 	lxfile_rm("/tmp/$appname.zip");
 	print("Download Done\n");
 }
@@ -114,7 +114,7 @@ function update_remote_application($appname)
 		print("Could not download $appname\n");
 		return; 
 	}
-	$app = "__path_kloxo_httpd_root/remote-installapp/$appname.zip";
+	$app = "/usr/local/lxlabs/kloxo/httpdocs/remote-installapp/$appname.zip";
 	lxfile_rm($app);
 	lxfile_mv("/tmp/$appname.zip", $app);
 	print("Download Done\n");
