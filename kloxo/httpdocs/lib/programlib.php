@@ -21,6 +21,29 @@ function get_local_application_version_list()
 
 function installapp_data_update()
 {
+        print(fill_string("Fetch current InstallApp version", 50));
+        $string = file_get_contents("http://download.lxcenter.org/download/installapp/version.list");
+        $rmt = unserialize($string);
+
+        if (!$rmt) {
+                throw new lxexception(" could_not_get_application_version_list", '', "");
+        }
+        print(" OK ");
+        $remver = $rmt->applist['installapp'];
+        print("version is $remver\n");
+
+ if (lxfile_exists("/home/kloxo/httpd/installappdata")) {
+        print(fill_string("Fetch local InstallApp version", 50));
+        $loc = get_local_application_version_list();
+        $locver = $loc->applist['installapp'];
+        print(" OK version is $locver\n");
+
+	if ($remver != $locver) {
+	 print(fill_string("New installapp found delete old one", 50));
+	  lxfile_rm_rec("/home/kloxo/httpd/installapp");
+	 print(" OK\n");
+	}
+ }
 	print(fill_string("Checking for old installappdata.zip", 50));
 	if (lxfile_exists("/tmp/installappdata.zip")) {
 		lxfile_rm("/tmp/installappdata.zip");
