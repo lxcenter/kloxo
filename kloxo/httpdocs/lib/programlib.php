@@ -21,18 +21,24 @@ function get_local_application_version_list()
 
 function installapp_data_update()
 {
-	print("Downloading InstallApp data\n");
+	print("Checking for old installappdata.zip...");
 	if (lxfile_exists("/tmp/installappdata.zip")) {
 		lxfile_rm("/tmp/installappdata.zip");
 	}
+	print("OK\n");
+	print("Downloading InstallApp data...");
 	system("cd /tmp ; wget -q http://download.lxcenter.org/download/installapp/installappdata.zip");
-
 	if (!lxfile_exists("/tmp/installappdata.zip")) {
+		print("ERROR:\n");
 		print("Could not download data from LxCenter.\nAborted.\n\n");
 		return;
 	}
+	print("OK\n");
+	print("Remove old InstallApp data\n");
 	lxfile_rm_rec("__path_kloxo_httpd_root/installappdata");
 	lxfile_mkdir("__path_kloxo_httpd_root/installappdata");
+	print("Unpack new InstallApp data\n");
 	lxshell_unzip("lxlabs", "__path_kloxo_httpd_root/installappdata/", "/tmp/installappdata.zip");
+	print("Remove downloaded InstallApp data zip file\n");
 	lxfile_rm("/tmp/installappdata.zip");
 }
