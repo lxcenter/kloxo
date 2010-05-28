@@ -35,10 +35,13 @@ function installapp_data_update()
 	}
 	print("OK\n");
 	print("Remove old InstallApp data\n");
-	lxfile_rm_rec("__path_kloxo_httpd_root/installappdata");
-	lxfile_mkdir("__path_kloxo_httpd_root/installappdata");
-	print("Unpack new InstallApp data\n");
-	lxshell_unzip("lxlabs", "__path_kloxo_httpd_root/installappdata/", "/tmp/installappdata.zip");
+//      lxfile_rm_rec("__path_kloxo_httpd_root/installappdata");
+//      lxfile_mkdir("__path_kloxo_httpd_root/installappdata");
+        lxfile_rm_rec("/usr/local/lxlabs/kloxo/httpdocs/installappdata");
+        lxfile_mkdir("/usr/local/lxlabs/kloxo/httpdocs/installappdata");
+        print("Unpack new InstallApp data\n");
+//      lxshell_unzip("lxlabs", "__path_kloxo_httpd_root/installappdata/", "/tmp/installappdata.zip");
+        system("cd /usr/local/lxlabs/kloxo/httpdocs/installappdata/ ; unzip /tmp/installappdata.zip");
 	print("Remove downloaded InstallApp data zip file\n");
 	lxfile_rm("/tmp/installappdata.zip");
 }
