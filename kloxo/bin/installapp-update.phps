@@ -8,32 +8,34 @@ installapp_update_main();
 
 function installapp_update_main()
 {
-	if (lxfile_exists("/home/kloxo/httpd/installappdata") || lxfile_exists("/home/kloxo/httpd/remote-installapp")) {
+	// check/install/update installapp data
+        installapp_data_update();
+
+	// check/install/update installapp applications
+	if (lxfile_exists("/home/kloxo/httpd/installapp") || lxfile_exists("/home/kloxo/httpd/remote-installapp")) {
 		application_update();
 	}
-
-	installapp_data_update();
 }
 
 
 function application_update()
 {
-	print("Fetch current InstallApp version\n");
+	print(fill_string("Fetch current InstallApp version", 50));
 	$string = file_get_contents("http://download.lxcenter.org/download/installapp/version.list");
 	$rmt = unserialize($string);
 
 	if (!$rmt) { 
-		throw new lxexception("could_not_get_application_version_list", '', "");
+		throw new lxexception(" could_not_get_application_version_list", '', "");
 	}
-	
-	print("Fetch local InstallApp version\n");
+	print(" OK ");
+ 	$remver = $rmt->applist['installapp'];
+        print("version is $remver\n");
+
+	print(fill_string("Fetch local InstallApp version", 50));
 	$loc = get_local_application_version_list();
-	print("Local InstallApp version is: $loc \n");
- 	foreach($rmt->applist as $appname => $vernum) {
-                if ($appname === 'installapp') {
-		print("Current InstallApp version is: $vernum \n"); 		
-		}
-	}
+	$locver = $loc->applist['installapp'];
+	print(" OK version is $locver\n");
+
 	$updatelist = null;
 	$notexisting = null;
 	foreach($rmt->applist as $k => $v) {
@@ -45,7 +47,7 @@ function application_update()
 				continue;
 			}
 		} else {
-			if (!lxfile_exists("/home/kloxo/httpd/installsoft/$k")) {
+			if (!lxfile_exists("/home/kloxo/httpd/installapp/$k")) {
 				$notexisting[$k] = true;
 				continue;
 			}
@@ -56,24 +58,24 @@ function application_update()
 
 		}
 
-		$string = "Checking $k";
-		$string = fill_string($string);
+		$string = "Checking application $k";
+		$string = fill_string($string, 50);
 		$string .= " ";
 		print($string);
-		print("Latest version\n");
+		print("Is latest version $v\n");
 
 	}
 
 	foreach((array) $updatelist as $k => $v) {
-		$string = "Updating $k";
-		$string = fill_string($string);
-		print("$string From {$loc->applist[$k]} to $v... ");
+		$string = "Updating application $k";
+		$string = fill_string($string, 50);
+		print("$string From {$loc->applist[$k]} to $v");
 		update_application($k);
 	}
 
 	foreach((array) $notexisting as $k => $v) {
-		$string = "Downloading new $k";
-		$string = fill_string($string);
+		$string = "Downloading new application $k";
+		$string = fill_string($string, 50);
 		print("$string "); 
 		update_application($k);
 	}
@@ -95,21 +97,27 @@ function update_application($appname)
 function do_update_application($appname)
 {
 	if (!$appname) { return; }
-	system("cd /tmp ; rm -f $appname.zip ; wget download.lxcenter.org/download/installapp/$appname.zip 2> /dev/null");
-	if (!lxfile_real("/tmp/$appname.zip")) { 
+	if (lxfile_exists("/tmp/".$appname.".zip")) {
+	lxfile_rm("/tmp/".$appname.".zip");
+	}
+	system("cd /tmp ;  wget -q http://download.lxcenter.org/download/installapp/".$appname.".zip");
+	if (!lxfile_real("/tmp/".$appname.".zip")) { 
 		print("Could not download $appname\n");
 		return; 
 	}
-	lxfile_rm_rec("/home/kloxo/httpd/installsoft/$appname");
-	lxshell_unzip("__system__", "/home/kloxo/httpd/installsoft", "/tmp/$appname.zip");
-	lxfile_rm("/tmp/$appname.zip");
+	lxfile_rm_rec("/home/kloxo/httpd/installapp/$appname");
+	system("cd /home/kloxo/httpd/installapp ; unzip -qq /tmp/".$appname.".zip");
+	lxfile_rm("/tmp/".$appname.".zip");
 	print("Download Done\n");
 }
 
 function update_remote_application($appname)
 {
 	if (!$appname) { return; }
-	system("cd /tmp ; rm -f $appname.zip ; wget download.lxcenter.org/download/installapp/$appname.zip 2> /dev/null");
+        if (lxfile_exists("/tmp/".$appname.".zip")) {
+        lxfile_rm("/tmp/".$appname.".zip");
+        }
+	system("cd /tmp ; wget -q http://download.lxcenter.org/download/installapp/$appname.zip");
 	if (!lxfile_real("/tmp/$appname.zip")) { 
 		print("Could not download $appname\n");
 		return; 
@@ -118,6 +126,5 @@ function update_remote_application($appname)
 	lxfile_rm($app);
 	lxfile_mv("/tmp/$appname.zip", $app);
 	print("Download Done\n");
-
 }
 
