@@ -21,27 +21,31 @@ function get_local_application_version_list()
 
 function installapp_data_update()
 {
-	print("Checking for old installappdata.zip...");
+	print(fill_string("Checking for old installappdata.zip", 50));
 	if (lxfile_exists("/tmp/installappdata.zip")) {
 		lxfile_rm("/tmp/installappdata.zip");
 	}
-	print("OK\n");
-	print("Downloading InstallApp data...");
+	print(" OK\n");
+	print(fill_string("Downloading InstallApp data...", 50));
 	system("cd /tmp ; wget -q http://download.lxcenter.org/download/installapp/installappdata.zip");
 	if (!lxfile_exists("/tmp/installappdata.zip")) {
-		print("ERROR:\n");
+		print(" ERROR\n");
 		print("Could not download data from LxCenter.\nAborted.\n\n");
 		return;
 	}
-	print("OK\n");
-	print("Remove old InstallApp data\n");
+	print(" OK\n");
+	print(fill_string("Remove old InstallApp data", 50));
 //      lxfile_rm_rec("__path_kloxo_httpd_root/installappdata");
 //      lxfile_mkdir("__path_kloxo_httpd_root/installappdata");
         lxfile_rm_rec("/home/kloxo/httpd/installappdata");
+        lxfile_mkdir("/home/kloxo/httpd/installapp");
         lxfile_mkdir("/home/kloxo/httpd/installappdata");
-        print("Unpack new InstallApp data\n");
+        print(" OK\n");
+        print(fill_string("Unpack new InstallApp data",50));
 //      lxshell_unzip("lxlabs", "__path_kloxo_httpd_root/installappdata/", "/tmp/installappdata.zip");
-        system("cd /home/kloxo/httpd/installappdata/ ; unzip /tmp/installappdata.zip");
-	print("Remove downloaded InstallApp data zip file\n");
+        system("cd /home/kloxo/httpd/installappdata/ ; unzip -qq /tmp/installappdata.zip");
+        print(" OK\n");
+ 	print(fill_string("Remove downloaded InstallApp data zip file", 50));
 	lxfile_rm("/tmp/installappdata.zip");
+        print(" OK\n");
 }
