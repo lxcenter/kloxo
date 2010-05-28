@@ -21,11 +21,14 @@ function get_local_application_version_list()
 
 function installapp_data_update()
 {
-	print("Downloading Installappdata\n");
-	system("cd /tmp ; rm -f installappdata.zip ; wget download.lxlabs.com/download/installapp/installappdata.zip 2>/dev/null");
+	print("Downloading InstallApp data\n");
+	if (lxfile_exists("/tmp/installappdata.zip")) {
+		lxfile_rm("/tmp/installappdata.zip");
+	}
+	system("cd /tmp ; wget -q http://download.lxcenter.org/download/installapp/installappdata.zip");
 
 	if (!lxfile_exists("/tmp/installappdata.zip")) {
-		print("could not download data\n");
+		print("Could not download data from LxCenter.\nAborted.\n\n");
 		return;
 	}
 	lxfile_rm_rec("__path_kloxo_httpd_root/installappdata");
