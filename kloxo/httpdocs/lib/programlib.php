@@ -43,7 +43,7 @@ function installapp_data_update()
         print(" OK\n");
         print(fill_string("Unpack new InstallApp data",50));
 //      lxshell_unzip("lxlabs", "__path_kloxo_httpd_root/installappdata/", "/tmp/installappdata.zip");
-        system("cd /home/kloxo/httpd/installappdata/ ; unzip -qq /tmp/installappdata.zip");
+        system("cd /home/kloxo/httpd/ ; unzip -qq /tmp/installappdata.zip");
         print(" OK\n");
  	print(fill_string("Remove downloaded InstallApp data zip file", 50));
 	lxfile_rm("/tmp/installappdata.zip");
