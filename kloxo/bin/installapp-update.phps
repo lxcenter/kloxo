@@ -6,7 +6,7 @@ include_once "htmllib/lib/include.php";
 installapp_update_main();
 
 
-function installapp_update_main()\
+function installapp_update_main()
 {
 	// check/install/update installapp applications
 	if (lxfile_exists("/home/kloxo/httpd/installapp") || lxfile_exists("/home/kloxo/httpd/remote-installapp")) {
