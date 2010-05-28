@@ -270,7 +270,6 @@ function updateQmaildefault()
 
 	dprint("{$this->main->catchall}\n");
 	dprint("$mailpath");
-echo $this->main->catchall;
 	if ($this->main->catchall=="--bounce--") {
 		$catchallstring = 'bounce-no-mailbox';
 	} else {
