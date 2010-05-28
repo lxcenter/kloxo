@@ -18,16 +18,22 @@ function installapp_update_main()
 
 function application_update()
 {
-
+	print("Fetch current InstallApp version\n");
 	$string = file_get_contents("http://download.lxcenter.org/download/installapp/version.list");
 	$rmt = unserialize($string);
 
 	if (!$rmt) { 
 		throw new lxexception("could_not_get_application_version_list", '', "");
 	}
-
+	
+	print("Fetch local InstallApp version\n");
 	$loc = get_local_application_version_list();
-
+	print("Local InstallApp version is: $loc \n");
+ 	foreach($rmt->applist as $appname => $vernum) {
+                if ($appname === 'installapp') {
+		print("Current InstallApp version is: $vernum \n"); 		
+		}
+	}
 	$updatelist = null;
 	$notexisting = null;
 	foreach($rmt->applist as $k => $v) {
