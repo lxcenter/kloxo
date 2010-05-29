@@ -106,6 +106,19 @@ function lxshell_user_return($username, $cmd)
 	return $ret;
 }
 
+/* temporary function until Martin can create a better one */
+function lxuser_return($userGroup, $cmd) {
+	global $sgbl;
+	$userGroup = explode(":", $userGroup);
+	posix_setuid($userGroup[0]);
+	posix_setgid($userGroup[1]);
+	eval($sgbl->arg_getting_string);
+	$cmd = getShellCommand($cmd, $arglist);
+	system($cmd, $ret);
+	return $ret;
+}
+/* end temporary function */
+
 function lxshell_return($cmd)
 {
 	global $sgbl;
