@@ -39,8 +39,7 @@ function installapp_data_update()
         print(" OK version is $locver\n");
 
 	if ($remver != $locver) {
-	 print(fill_string("New installapp found delete old one", 50));
-	  lxfile_rm_rec("/home/kloxo/httpd/installapp");
+	 print(fill_string("New installapp found", 50));
 	 print(" OK\n");
 	}
  }
