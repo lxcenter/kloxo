@@ -16,8 +16,6 @@ function installapp_update_main()
         // check/install/update installapp data
         installapp_data_update();
 
-	// make sure new app data is downloaded when installapp version is changed
-        application_update();
 }
 
 
