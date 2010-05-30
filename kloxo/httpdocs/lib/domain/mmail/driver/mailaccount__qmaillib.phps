@@ -158,7 +158,7 @@ function syncUserdel()
 	$domain = $quser[1];
 
 	$sys_cmd =  "__path_mail_root/bin/vdeluser" ;
-	lxuser_return(mmail__qmail::getUserGroup($domain)), $sys_cmd, $this->main->nname);
+	lxuser_return(mmail__qmail::getUserGroup($domain), $sys_cmd, $this->main->nname);
 }
 
 function createAutoResFile()
