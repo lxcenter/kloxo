@@ -322,8 +322,8 @@ static $__desc_odbc_l = array("db", "",  "");
 static $__desc_davuser_l = array("db", "",  "");
 static $__desc_phpini_o = array("db", "",  "");
 static $__desc_cron_l = array("db", "",  "");
-static $__desc_installsoft_l = array("db", "",  "");
-static $__desc_allinstallsoft_l = array("", "",  "");
+static $__desc_installapp_l = array("db", "",  "");
+static $__desc_allinstallapp_l = array("", "",  "");
 static $__desc_ftpsession_l = array("v", "",  "");
 
 static $__acdesc_update_permalink = array("", "",  "permalink");
@@ -1045,7 +1045,7 @@ static function get_full_alist()
 
 	$alist[] = "a=updateform&sa=permalink";
 
-	$alist[] = "a=show&k[class]=allinstallsoft&k[nname]=installapp";
+	$alist[] = "a=show&k[class]=allinstallapp&k[nname]=installapp";
 
 	/*
 	$alist['action'][] = "a=update&sa=backup";

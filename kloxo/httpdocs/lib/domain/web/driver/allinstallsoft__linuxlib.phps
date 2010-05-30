@@ -1,6 +1,6 @@
 <?php 
 
-class allinstallsoft__linux extends LxDriverclass {
+class allinstallapp__linux extends LxDriverclass {
 
 static function getListofApps()
 {

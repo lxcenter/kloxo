@@ -11,7 +11,7 @@ if (!isset($argv[2])) {
 	print("Example: How to add a customer to admin:\n");
 	print("/script/reflect --type=add --parent-class=client --parent-name=admin --class=client --v-var=ttype --v-val=customer\n\n");
 	print("Example: How to add a wordpress to a domain domain.com:\n");
-	print("/script/reflect --type=add --parent-class=web --parent-name=domain.com --class=installsoft --v-var=appname --v-val=wordpress\n");
+	print("/script/reflect --type=add --parent-class=web --parent-name=domain.com --class=installapp --v-var=appname --v-val=wordpress\n");
 	exit;
 }
 

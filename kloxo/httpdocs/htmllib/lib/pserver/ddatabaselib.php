@@ -9,9 +9,9 @@ static $__desc_username = array("n", "",  "user_name", "a=show");
 static $__desc_dbtype = array("", "",  "database_type");
 static $__desc_syncserver = array("", "",  "database_server");
 static $__desc_dbpassword = array("n", "",  "password");
-static $__desc_installsoft_flag = array("e", "",  "Used");
-static $__desc_installsoft_flag_v_dull = array("", "",  "Not Used by Application");
-static $__desc_installsoft_flag_v_on = array("", "",  "Used By Application");
+static $__desc_installapp_flag = array("e", "",  "Used");
+static $__desc_installapp_flag_v_dull = array("", "",  "Not Used by Application");
+static $__desc_installapp_flag_v_on = array("", "",  "Used By Application");
 //static $__desc_mysqldb_usage = array("q", "",  "database_disk_usage_(mb)");
 //static $__desc_mssqldb_usage = array("q", "",  "database_disk_usage_(mb)");
 static $__desc_phpmyadmin_f  = array("b", "",  "", "__stub_phpmyadmin_url");
@@ -99,7 +99,7 @@ function postAdd()
 
 Function display($var)
 {
-	if ($var === 'installsoft_flag') {
+	if ($var === 'installapp_flag') {
 		if ($this->$var === 'on') {
 			return 'on';
 		} else {
@@ -220,7 +220,7 @@ function isSelect()
 	} 
 	return true;
 
-	if ($this->isOn('installsoft_flag')) {
+	if ($this->isOn('installapp_flag')) {
 		return false;
 	}
 	return true;
@@ -228,7 +228,7 @@ function isSelect()
 }
 static function createListNlist($parent, $view)
 {
-	$nlist['installsoft_flag'] = '5%';
+	$nlist['installapp_flag'] = '5%';
 	$nlist['phpmyadmin_f'] = '5%';
 	$nlist['syncserver'] = '5%';
 	$nlist['username'] =  '10%';

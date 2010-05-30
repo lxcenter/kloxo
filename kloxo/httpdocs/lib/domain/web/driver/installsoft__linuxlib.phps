@@ -1,7 +1,7 @@
 <?php 
 
 
-class installsoft__linux extends LxDriverclass {
+class installapp__linux extends LxDriverclass {
 
 
 function dbactionAdd()
@@ -17,7 +17,7 @@ function dbactionAdd()
 		}
 	}
 
-	$res['src'] = "$sgbl->__path_kloxo_httpd_root/installsoft/{$this->main->appname}";
+	$res['src'] = "$sgbl->__path_kloxo_httpd_root/installapp/{$this->main->appname}";
 
 	/*
 	if (!lxfile_exists($res['src'])) {
@@ -26,17 +26,17 @@ function dbactionAdd()
 */
 
     
-	$res['title']=$this->main->installsoftmisc_b->title;
-	$res['email']=$this->main->installsoftmisc_b->admin_email;
-	$res['company']=$this->main->installsoftmisc_b->admin_company;
-	$res['realname']=$this->main->installsoftmisc_b->real_name;
+	$res['title']=$this->main->installappmisc_b->title;
+	$res['email']=$this->main->installappmisc_b->admin_email;
+	$res['company']=$this->main->installappmisc_b->admin_company;
+	$res['realname']=$this->main->installappmisc_b->real_name;
 	$res['appname'] = $this->main->appname;
 	$res['customer_name'] = $this->main->customer_name;
 	$res['full_document_root'] = $this->main->__var_full_documentroot;
 
-	$res['adminname']= $this->main->installsoftmisc_b->admin_name;
-	$res['adminpass']= $this->main->installsoftmisc_b->admin_password;
-	$res['admin_email_login']= $this->main->installsoftmisc_b->admin_email_login;
+	$res['adminname']= $this->main->installappmisc_b->admin_name;
+	$res['adminpass']= $this->main->installappmisc_b->admin_password;
+	$res['admin_email_login']= $this->main->installappmisc_b->admin_email_login;
 
 	$res['dbname'] = $this->main->dbname;
 	$res['dbuser'] = $this->main->dbuser;
@@ -48,7 +48,7 @@ function dbactionAdd()
 	$res['systemuser'] = $this->main->__var_username;
 	$res['installdir']=  $this->main->installdir;
 	$res['path'] =$this->main->__var_full_documentroot;
-	$res['src'] = "$sgbl->__path_kloxo_httpd_root/installsoft/{$this->main->appname}";
+	$res['src'] = "$sgbl->__path_kloxo_httpd_root/installapp/{$this->main->appname}";
 
 	if ($this->main->dbname) {
 		$__tmpr = mysql_connect($this->main->realhost, $this->main->dbuser, $this->main->dbpass);
@@ -164,7 +164,7 @@ function do_update()
 	$this->do_snapshot();
 
 	if (!function_exists("__lxupdater_{$this->main->appname}")) {
-		include_once  "$sgbl->__path_kloxo_httpd_root/installsoft/{$this->main->appname}/lxinstaller.inc";
+		include_once  "$sgbl->__path_kloxo_httpd_root/installapp/{$this->main->appname}/lxinstaller.inc";
 	}
 	if (!function_exists("__lxupdater_{$this->main->appname}")) {
 		return;

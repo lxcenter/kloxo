@@ -23,7 +23,7 @@ function createExtraVariables()
 
 function updateRevert($param)
 {
-	$ip = new InstallSoft(null, null, $this->app_real_nname);
+	$ip = new installapp(null, null, $this->app_real_nname);
 	$ip->get();
 	if ($ip->ddate !== $this->app_real_date) {
 		throw new lxexception("this_is_a_snapshot_of_an_older_installation", '', "");
@@ -36,8 +36,8 @@ function updateRevert($param)
 
 function createShowPropertyList(&$alist)
 {
-	$alist['property'][] = "goback=1&a=show&k[class]=allinstallsoft&k[nname]=installapp";
-	$alist['property'][] = "goback=1&a=list&c=installsoft";
+	$alist['property'][] = "goback=1&a=show&k[class]=allinstallapp&k[nname]=installapp";
+	$alist['property'][] = "goback=1&a=list&c=installapp";
 	$alist['property'][] = "goback=1&a=list&c=installappsnapshot";
 	
 }
@@ -50,7 +50,7 @@ function updateform($subaction, $param)
 
 static function createListAlist($parent, $class)
 {
-	return installsoft::createListAlist($parent, $class);
+	return installapp::createListAlist($parent, $class);
 }
 
 static function createListNlist($parent, $view)

@@ -239,14 +239,14 @@ function createDefaultDomain($name, $dnstemplate)
 
 function createDefaultApplication($dname, $appname)
 {
-	$p['class'] = 'installsoft';
+	$p['class'] = 'installapp';
 	$p['parent-class'] = "web";
 	$p['parent-name'] = $dname;
 	$p['v-appname'] = $appname;
 	$p['v-installdir'] = null;
-	$p['v-installsoftmisc_b_s_admin_email'] = $this->contactemail;
-	$p['v-installsoftmisc_b_s_admin_name'] = 'admin';
-	$p['v-installsoftmisc_b_s_admin_password'] = 'admin';
+	$p['v-installappmisc_b_s_admin_email'] = $this->contactemail;
+	$p['v-installappmisc_b_s_admin_name'] = 'admin';
+	$p['v-installappmisc_b_s_admin_password'] = 'admin';
 	try {
 		__cmd_desc_add($p, null);
 	}catch (exception $e) {

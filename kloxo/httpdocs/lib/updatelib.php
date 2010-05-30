@@ -62,7 +62,7 @@ function fixExtraDB()
 	$sq->rawQuery("alter table sslcert change text_crt_content text_crt_content longtext");
 	$sq->rawQuery("alter table mailaccount change ser_forward_a ser_forward_a longtext");
 	$sq->rawQuery("alter table dns change ser_dns_record_a ser_dns_record_a longtext");
-	$sq->rawQuery("alter table installsoft change ser_installsoftmisc_b ser_installsoftmisc_b longtext");
+	$sq->rawQuery("alter table installsoft change ser_installappmisc_b ser_installappmisc_b longtext");
 	$sq->rawQuery("alter table web change ser_redirect_a ser_redirect_a longtext");
 	initDbLoginPre();
 	lxshell_php("../bin/common/fixresourceplan.php");
@@ -391,7 +391,7 @@ function fixupDnsRec($l)
 }
 
 
-function installInstallSoft()
+function installinstallapp()
 {
 	global $gbl, $sgbl, $login, $ghtml; 
 
@@ -407,23 +407,23 @@ function installInstallSoft()
 	}
 
 	if (lfile_exists("../etc/remote_installapp")) {
-		lxfile_rm_rec("/home/kloxo/httpd/installsoft/");
-		system("cd /var/cache/kloxo/ ; rm -f installsoft*.tar.gz;");
+		lxfile_rm_rec("/home/kloxo/httpd/installapp/");
+		system("cd /var/cache/kloxo/ ; rm -f installapp*.tar.gz;");
 		return;
 	}
 
 
 	if ($diflag) {
-		lxfile_rm_rec("/home/kloxo/httpd/installsoft/");
-		system("cd /var/cache/kloxo/ ; rm -f installsoft*.tar.gz;");
+		lxfile_rm_rec("/home/kloxo/httpd/installapp/");
+		system("cd /var/cache/kloxo/ ; rm -f installapp*.tar.gz;");
 		return;
 	}
 
 	return;
 
-	lxfile_mkdir("__path_kloxo_httpd_root/installsoft");
+	lxfile_mkdir("__path_kloxo_httpd_root/installapp");
 
-	if (!lxfile_exists("__path_kloxo_httpd_root/installsoft/wordpress")) {
+	if (!lxfile_exists("__path_kloxo_httpd_root/installapp/wordpress")) {
 		lxshell_php("../bin/installapp-update.phps");
 	}
 	return;

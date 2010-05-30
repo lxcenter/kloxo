@@ -1,6 +1,6 @@
 <?php 
 
-class AllInstallSoft extends Lxclass {
+class Allinstallapp extends Lxclass {
 
 
 static $__desc  = array("P","",  "installApp"); 
@@ -41,9 +41,9 @@ function isSelect()
 
 function createShowPropertyList(&$alist)
 {
-	//$alist['property'][] = 'goback=1&a=list&c=allinstallsoft';
+	//$alist['property'][] = 'goback=1&a=list&c=allinstallapp';
 	$alist['property'][] = 'a=show';
-	$alist['property'][] = 'goback=1&a=list&c=installsoft';
+	$alist['property'][] = 'goback=1&a=list&c=installapp';
 	$alist['property'][] = 'goback=1&a=list&c=installappsnapshot';
 
 }
@@ -58,7 +58,7 @@ function display($var)
 
 function checkIfInstalled()
 {
-	$sq = new Sqlite($this->__masterserver, 'installsoft');
+	$sq = new Sqlite($this->__masterserver, 'installapp');
 	$res = $sq->getRowsWhere("appname = '$this->appname' AND parent_clname = '{$this->getParentO()->getClName()}'");
 	if ($res) {
 		return 'on';
@@ -133,14 +133,14 @@ static function showDescription($object, $name)
 {
 	global $gbl, $sgbl, $login, $ghtml; 
 	$col = $login->getSkinColor();
-	$list = $object->getParentO()->getList('allinstallsoft');
+	$list = $object->getParentO()->getList('allinstallapp');
 
 	$list = get_namelist_from_objectlist($list);
 
 	$searchstring = $ghtml->frm_searchstring;
 
 	$web = $object->getParentO();
-	$selflist = $object->getParentO()->getList('installsoft');
+	$selflist = $object->getParentO()->getList('installapp');
 	$installed = "No";
 	$installedpath = null;
 	foreach((array) $selflist as $s) {
@@ -172,7 +172,7 @@ static function showDescription($object, $name)
 	}
 
 
-	$paddurl = $ghtml->getFullUrl("goback=1&a=addform&c=installsoft&dta[var]=appname&dta[val]=$name");
+	$paddurl = $ghtml->getFullUrl("goback=1&a=addform&c=installapp&dta[var]=appname&dta[val]=$name");
 
 	$color = "$col";
 	$string = null;
@@ -184,7 +184,7 @@ static function showDescription($object, $name)
 		if ($searchstring && !csa($small, $searchstring)) {
 			continue;
 		}
-		$icon = "/img/installsoft/icon_$small.gif";
+		$icon = "/img/installapp/icon_$small.gif";
 		$count++;
 		$bgcolorvar = null;
 
@@ -204,7 +204,7 @@ static function showDescription($object, $name)
 			$textpropery = "font-weight:bold;";
 
 		} else {
-			$url = $ghtml->getFullUrl("goback=1&a=show&k[class]=allinstallsoft&k[nname]=$l");
+			$url = $ghtml->getFullUrl("goback=1&a=show&k[class]=allinstallapp&k[nname]=$l");
 			$urlstring = "<a href=\"$url\">";
 			$list = self::getAllInformation($l);
 			$__descr = $list['pdesc'];
@@ -272,7 +272,7 @@ static function showDescription($object, $name)
 <table cellpadding=0 width=100% cellspacing=15> <tr> <td colspan=3 valign=top>
 <?php	
 	$pimg = "$lowername.gif";
-	print "<img src=/img/installsoft/$pimg>";
+	print "<img src=/img/installapp/$pimg>";
 	?> 
 	</td>
 	</tr> 
@@ -303,7 +303,7 @@ static function showDescription($object, $name)
 	<td >Version</td>
 	<td ><?php echo $pversion?></td> 
 	</tr> 
-	<?php if ($lowername !== 'installsoft' && $lowername !== 'installapp') { ?> 
+	<?php if ($lowername !== 'installapp' && $lowername !== 'installapp') { ?> 
 
 	<tr> 
 	<td valign=top> Already Installed </td>
@@ -376,7 +376,7 @@ function showRawPrint($subaction = null)
 function createShowAlist(&$alist, $subaction = null)
 {
 	//$alist['__title_main'] = 'Add';
-	//$alist[] = "goback=1&a=addform&c=installsoft&dta[var]=appname&dta[val]=$this->nname";
+	//$alist[] = "goback=1&a=addform&c=installapp&dta[var]=appname&dta[val]=$this->nname";
 	if ($this->checkIfInstalled() === 'dull') {
 	}
 	return $alist;
@@ -385,14 +385,14 @@ function createShowAlist(&$alist, $subaction = null)
 
 static function createListAlist($parent, $class)
 {
-	return installsoft::createListAlist($parent, $class);
+	return installapp::createListAlist($parent, $class);
 }
 
 static function initThisList($parent, $class)
 {
 	global $gbl, $sgbl, $login, $ghtml; 
-	$driverapp = $gbl->getSyncClass($parent->__masterserver, $parent->__readserver, 'allinstallsoft');
-	$res = exec_class_method("allinstallsoft__$driverapp", "getListofApps");
+	$driverapp = $gbl->getSyncClass($parent->__masterserver, $parent->__readserver, 'allinstallapp');
+	$res = exec_class_method("allinstallapp__$driverapp", "getListofApps");
 
 	return $res;
 }

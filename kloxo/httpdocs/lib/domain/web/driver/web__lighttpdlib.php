@@ -460,7 +460,7 @@ function createShowAlist(&$alist, $subaction = null)
 
 
 	$gen = $login->getObject('general')->generalmisc_b;
-	//$alist[] = "a=show&k[class]=allinstallsoft&k[nname]=installsoft";
+	//$alist[] = "a=show&k[class]=allinstallapp&k[nname]=installapp";
 
 	return $alist;
 }

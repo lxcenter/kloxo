@@ -1865,7 +1865,7 @@ function get_image_without_host($path, $class, $variable, $extension)
 	$realv = $variable;
 
 	//hack hack...
-	if ($class === 'installsoft') {
+	if ($class === 'installapp') {
 		if (strstr($variable, "addform")) {
 			$variable = strfrom($variable, "_");
 		}
@@ -3376,7 +3376,7 @@ function getFullUrl($url, $p = "default")
 		}
 	}
 
-	// Ka has to come AFTER n. Otherwise it won't work in the getshowalist, especially for web/installsoft combo.
+	// Ka has to come AFTER n. Otherwise it won't work in the getshowalist, especially for web/installapp combo.
 	if(isset($post['k'])) {
 		$desc = get_classvar_description($post['k']['class']);
 		if (csa($desc[0], "N")) {

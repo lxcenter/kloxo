@@ -1,6 +1,6 @@
 <?php 
 
-class installsoftmisc_b extends Lxaclass {
+class installappmisc_b extends Lxaclass {
 
 static $__desc = array("", "",  "web");
 static $__desc_title = array("", "",  "title");
@@ -17,7 +17,7 @@ static $__desc_user_name = array("n", "",  "real_name");
 
 }
 
-class InstallSoft extends Lxdb {
+class installapp extends Lxdb {
 
 static $__desc  = array("","",  "installed_application"); 
 static $__desc_nname  = array("","",  "Application");
@@ -64,7 +64,7 @@ function updateform($subaction, $param)
 {
 	switch($subaction) {
 		case "update":
-			$v = allinstallsoft::getAllInformation($this->appname);
+			$v = allinstallapp::getAllInformation($this->appname);
 			$latest = $v['pversion'];
 			$vlist['appname'] = array('M', null);
 			$vlist['version'] = array('M', null);
@@ -89,7 +89,7 @@ static function perPage()
 function isSync()
 {
 	global $gbl, $sgbl, $login, $ghtml; 
-	// Don't do anything if it is syncadd or if it is restore... When restoring, installsoft is handled by the database, and then the web backup.
+	// Don't do anything if it is syncadd or if it is restore... When restoring, installapp is handled by the database, and then the web backup.
 	if ($this->dbaction === 'syncadd') {
 		return false;
 	}
@@ -115,7 +115,7 @@ function display($var)
 	}
 
 	if ($var === 'adminarea') {
-		$v = allinstallsoft::getAllInformation($this->appname);
+		$v = allinstallapp::getAllInformation($this->appname);
 
 		if ($v['padminarea']) {
 			$admin = $v['padminarea'];
@@ -131,7 +131,7 @@ function display($var)
 
 function showRawPrint($subaction = null)
 {
-	//allinstallsoft::showDescription($this->appname);
+	//allinstallapp::showDescription($this->appname);
 }
 
 function createExtraVariables()
@@ -161,17 +161,17 @@ static function createParentShowList($parent, $class)
 static function createAddformAlist($parent, $class, $typetd = null)
 {
 	dprintr($typetd);
-	//$alist[] = "a=list&c=allinstallsoft";
-	$alist[] = "a=show&k[class]=allinstallsoft&k[nname]={$typetd['val']}";
-	$alist[] = "a=list&c=installsoft";
+	//$alist[] = "a=list&c=allinstallapp";
+	$alist[] = "a=show&k[class]=allinstallapp&k[nname]={$typetd['val']}";
+	$alist[] = "a=list&c=installapp";
 	return $alist;
 }
 
 static function createListAlist($parent, $class)
 {
-	//$alist[] = "a=list&c=allinstallsoft";
-	$alist[] = "a=show&k[class]=allinstallsoft&k[nname]=installapp";
-	$alist[] = "a=list&c=installsoft";
+	//$alist[] = "a=list&c=allinstallapp";
+	$alist[] = "a=show&k[class]=allinstallapp&k[nname]=installapp";
+	$alist[] = "a=list&c=installapp";
 	$alist[] = "a=list&c=installappsnapshot";
 	return $alist;
 }
@@ -188,9 +188,9 @@ function createDatabase($dom, $dbhost, $dbtype, $dbname, $dbpass, $appname)
 	$res['dbtype'] = $dbtype;
 	$res['username'] = $dbname;
 	$res['dbpassword'] = $dbpass;
-	$res['installsoft_flag'] = 'on';
+	$res['installapp_flag'] = 'on';
 	$res['used_by'] = $appname;
-	$res['installsoft_app'] = $this->getClName();
+	$res['installapp_app'] = $this->getClName();
 	$res['parent_clname'] = $dom->getClientParentO()->getClName();
 	$ddatabase->create($res);
 	$dom->addToList('mysqldb', $ddatabase);
@@ -201,7 +201,7 @@ function createDatabase($dom, $dbhost, $dbtype, $dbname, $dbpass, $appname)
 function postAdd()
 {
 
-	$list = $this->getParentO()->getList('installsoft');
+	$list = $this->getParentO()->getList('installapp');
 
 	foreach($list as $l) {
 		if ($l->nname === $this->nname) {
@@ -212,16 +212,16 @@ function postAdd()
 		}
 	}
 
-	$list = allinstallsoft::getAllInformation($this->appname);
+	$list = allinstallapp::getAllInformation($this->appname);
 	$this->version = $list['pversion'];
 
-	$list = installsoft::getVariablelist($this->appname);
+	$list = installapp::getVariablelist($this->appname);
 	foreach($list as $l) {
 		if (csa($l, "_static_")) {
 			$var = strtil($l, "_static_");
 			$val = strfrom($l, "_static_");
 			$val = self::getRealMessage($val);
-			$this->installsoftmisc_b->$var = $val;
+			$this->installappmisc_b->$var = $val;
 		}
 	}
 
@@ -292,27 +292,27 @@ static function add($parent, $class, $param)
 
 
 
-	if (isset($param['installsoftmisc_b_s_admin_email'])) {
-		if (!validate_email($param['installsoftmisc_b_s_admin_email'])) {
-			throw new lxException('email_is_not_valid', 'installsoftmisc_b_s_admin_email', '');
+	if (isset($param['installappmisc_b_s_admin_email'])) {
+		if (!validate_email($param['installappmisc_b_s_admin_email'])) {
+			throw new lxException('email_is_not_valid', 'installappmisc_b_s_admin_email', '');
 		}
 	}
 	
-	if (isset($param['installsoftmisc_b_s_admin_email_login'])) {
-		if (!validate_email($param['installsoftmisc_b_s_admin_email_login'])) {
-			throw new lxException('email_is_not_valid', 'installsoftmisc_b_s_admin_email_login', '');
+	if (isset($param['installappmisc_b_s_admin_email_login'])) {
+		if (!validate_email($param['installappmisc_b_s_admin_email_login'])) {
+			throw new lxException('email_is_not_valid', 'installappmisc_b_s_admin_email_login', '');
 		}
 	}
 	
-	$list = allinstallsoft::getAllInformation($param['appname']);
+	$list = allinstallapp::getAllInformation($param['appname']);
 	$var = $list['pvar'];
 	if (csa($var, "__db")) {
 		$param['dbname'] = databasecore::getDbName($web->nname, $param['appname']);
 		$param['dbuser'] = $param['dbname'];
 	}
 
-	if (isset($param['installsoftmisc_b_s_admin_password_dbpass'])) {
-		$param['dbpass'] = $param['installsoftmisc_b_s_admin_password_dbpass'];
+	if (isset($param['installappmisc_b_s_admin_password_dbpass'])) {
+		$param['dbpass'] = $param['installappmisc_b_s_admin_password_dbpass'];
 	}
 
 
@@ -328,7 +328,7 @@ static function add($parent, $class, $param)
 static function getVariablelist($name)
 {
 
-	$list = allinstallsoft::getAllInformation($name);
+	$list = allinstallapp::getAllInformation($name);
 
 	$var = $list['pvar'];
 
@@ -358,21 +358,21 @@ static function getRealMessage($val)
 function postSync()
 {
 	if ($this->dbaction === 'add') {
-		$list = installsoft::getVariablelist($this->appname);
-		if (!isset($list['admin_message_static_password_sent_to_email']) && $this->installsoftmisc_b->admin_email) {
+		$list = installapp::getVariablelist($this->appname);
+		if (!isset($list['admin_message_static_password_sent_to_email']) && $this->installappmisc_b->admin_email) {
 			$string  = null;
 			$string .= "Application: $this->appname\n";
 			$string .= "Url: http://{$this->getParentO()->nname}/$this->installdir\n";
-			$v = allinstallsoft::getAllInformation($this->appname);
+			$v = allinstallapp::getAllInformation($this->appname);
 			if ($v['padminarea']) {
 				$ar = remove_extra_slash("{$this->getParentO()->nname}/$this->installdir/{$v['padminarea']}");
 				$string .= "Admin Area: http://$ar\n";
 			}
-			$string .= "Admin Username: {$this->installsoftmisc_b->admin_name}\n";
-			$string .= "Admin Password: {$this->installsoftmisc_b->admin_password}\n";
+			$string .= "Admin Username: {$this->installappmisc_b->admin_name}\n";
+			$string .= "Admin Password: {$this->installappmisc_b->admin_password}\n";
 
 			$subject = "Application $this->appname installed on {$this->getParentO()->nname}";
-			callInBackground("lx_mail", array(null, $this->installsoftmisc_b->admin_email, $subject, $string));
+			callInBackground("lx_mail", array(null, $this->installappmisc_b->admin_email, $subject, $string));
 		}
 	}
 }
@@ -390,12 +390,12 @@ static function addform($parent, $class, $typetd = null)
 	if (!$contact) {
 		$contact = $login->contactemail;
 	}
-	$infolist = allinstallsoft::getAllInformation($typetd['val']);
+	$infolist = allinstallapp::getAllInformation($typetd['val']);
 	$version = $infolist['pversion'];
 	$vlist['appname_f'] = array('M', $typetd['val']);
 	$vlist['installdir'] = array('m', array("pretext" => "http://$parent->nname/"));
 	$vlist['latest_f'] = array('M', $version);
-	$vlist["installsoftmisc_b_s_admin_email"] = array('m', $contact);
+	$vlist["installappmisc_b_s_admin_email"] = array('m', $contact);
 
 	$list = self::getVariablelist($typetd['val']);
 
@@ -412,27 +412,27 @@ static function addform($parent, $class, $typetd = null)
 			$var = strtil($l, "_static_");
 			$val = strfrom($l, "_static_");
 			$val = self::getRealMessage($val);
-			$vlist["installsoftmisc_b_s_{$var}"] = array('M', $val);
+			$vlist["installappmisc_b_s_{$var}"] = array('M', $val);
 		} else {
 			if ($l === 'admin_email') {
 				// admin email is set anyways.
 			} else if ($l === 'admin_username') {
-				$vlist["installsoftmisc_b_s_admin_name"] = array('m', 'admin');
+				$vlist["installappmisc_b_s_admin_name"] = array('m', 'admin');
 			} else if ($l === 'admin_password') {
-				$vlist["installsoftmisc_b_s_{$l}"] = array('m', 'admin');
+				$vlist["installappmisc_b_s_{$l}"] = array('m', 'admin');
 			} else {
-				$vlist["installsoftmisc_b_s_{$l}"] = null;
+				$vlist["installappmisc_b_s_{$l}"] = null;
 			}
 		}
 	}
 
 	if (isset($infolist['padminarea'])) {
-		//$vlist['installsoftmisc_b_s_adminarea'] = array('M', $infolist['padminarea']);
+		//$vlist['installappmisc_b_s_adminarea'] = array('M', $infolist['padminarea']);
 	}
 	
 	$vlist['__v_button'] = 'Install';
 
-	$vlist['__m_message_pre'] = "installsoft_addform__pre";
+	$vlist['__m_message_pre'] = "installapp_addform__pre";
 	$ret['variable'] = $vlist;
 	$ret['action'] = 'add';
 	return $ret;
@@ -447,7 +447,7 @@ function deleteSpecific()
 	$dom = $web->getParentO();
 	$client = $dom->getRealClientParentO();
 	$sq = new Sqlite($this->__masterserver, 'mysqldb');
-	$res = $sq->getRowsWhere("installsoft_app = '{$this->getClName()}'");
+	$res = $sq->getRowsWhere("installapp_app = '{$this->getClName()}'");
 	if (!$res) {
 		return;
 	}

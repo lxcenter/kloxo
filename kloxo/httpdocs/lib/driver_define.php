@@ -35,8 +35,8 @@ $gl_class_array['mailcontent__postfix'] =  "lib/domain/mmail/driver/mailcontent_
 $gl_class_array['autoresponder__postfix'] =  "lib/domain/mmail/driver/autoresponder__postfix.phps";
 
 
-$gl_class_array['installsoft__linux'] =  "lib/domain/web/driver/installsoft__linuxlib.phps";
-$gl_class_array['allinstallsoft__linux'] =  "lib/domain/web/driver/allinstallsoft__linuxlib.phps";
+$gl_class_array['installapp__linux'] =  "lib/domain/web/driver/installapp__linuxlib.phps";
+$gl_class_array['allinstallapp__linux'] =  "lib/domain/web/driver/allinstallapp__linuxlib.phps";
 $gl_class_array['autoresponder__mailenable'] =  "lib/domain/mmail/driver/autoresponder__mailenable.php";
 $gl_class_array['mailinglist__mailenable'] =  "lib/domain/mmail/driver/mailinglist__mailenablelib.php";
 $gl_class_array['mailaccount__mailenable'] =  "lib/domain/mmail/driver/mailaccount__mailenablelib.php";

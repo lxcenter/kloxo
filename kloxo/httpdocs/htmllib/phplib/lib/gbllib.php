@@ -141,7 +141,7 @@ function setHistory()
 		return;
 	}
 
-	if (cse($file, 'installsoft')) {
+	if (cse($file, 'installapp')) {
 		return;
 	}
 

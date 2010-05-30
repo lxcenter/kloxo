@@ -2,14 +2,14 @@
 
 function get_local_application_version_list()
 {
-	$list = allinstallsoft__linux::getListofApps();
+	$list = allinstallapp__linux::getListofApps();
 	$list = get_namelist_from_arraylist($list); 
 
 	foreach($list as $k => $v) {
 		if (csb($v, "__title")) {
 			continue;
 		}
-		$info = allinstallsoft::getAllInformation($v);
+		$info = allinstallapp::getAllInformation($v);
 		$ret[$v] = $info['pversion'];
 	}
 

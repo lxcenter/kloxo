@@ -1380,7 +1380,7 @@ function createShowAlist(&$alist, $subaction = null)
 	$alist['__v_dialog_comp'] = "n=web&a=list&c=component";
 
 	if (!$gen->isOn('disableinstallapp') && $this->getClientParentO()->priv->isOn('installapp_flag')) {
-		$alist[] = "n=web&a=show&k[class]=allinstallsoft&k[nname]=installapp";
+		$alist[] = "n=web&a=show&k[class]=allinstallapp&k[nname]=installapp";
 	}
 
 	/*

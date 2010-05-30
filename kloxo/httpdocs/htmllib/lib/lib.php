@@ -712,10 +712,10 @@ function installAppPHP($var, $cmd)
 	$domain = $var['domain'];
 	$appname = $var['appname'];
 
-	lxfile_mkdir("/home/httpd/$domain/httpdocs/__installsoftlog");
+	lxfile_mkdir("/home/httpd/$domain/httpdocs/__installapplog");
 	$i = 0;
 	while(1) {
-		$file = "/home/httpd/$domain/httpdocs/__installsoftlog/$appname$i.html";
+		$file = "/home/httpd/$domain/httpdocs/__installapplog/$appname$i.html";
 		if (!lxfile_exists($file)) {
 			break;
 		}
@@ -757,13 +757,13 @@ function validate_domain_name($name)
 	}
 }
 
-function execInstallSoftPhp($domain, $appname, $cmd)
+function execinstallappPhp($domain, $appname, $cmd)
 {
 	global $gbl, $sgbl, $login, $ghtml; 
-	lxfile_mkdir("/home/httpd/$domain/httpdocs/__installsoftlog");
+	lxfile_mkdir("/home/httpd/$domain/httpdocs/__installapplog");
 	$i = 0;
 	while(1) {
-		$file = "/home/httpd/$domain/httpdocs/__installsoftlog/$appname$i.html";
+		$file = "/home/httpd/$domain/httpdocs/__installapplog/$appname$i.html";
 		if (!lxfile_exists($file)) {
 			break;
 		}

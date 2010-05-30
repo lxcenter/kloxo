@@ -45,7 +45,7 @@ function application_upload()
 	}
 
 
-	chdir("/home/kloxo/httpd/installsoft/");
+	chdir("/home/kloxo/httpd/installapp/");
 	$uploadlist = null;
 	foreach($loc->applist as $k => $v) {
 		if (app_version_cmp($rmt->applist[$k], $v) === -1) {
