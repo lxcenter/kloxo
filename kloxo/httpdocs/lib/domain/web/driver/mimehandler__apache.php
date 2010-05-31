@@ -34,7 +34,7 @@ function mupdate()
 	$startstring = $stlist[0];
 	$endstring = $endlist[0];
 
-	file_put_between_comments($this->main->__var_username, , $stlist, $endlist, $startstring, $endstring, $this->main->__var_htp, $string);
+	file_put_between_comments($this->main->__var_username, $stlist, $endlist, $startstring, $endstring, $this->main->__var_htp, $string);
 }
 
 }

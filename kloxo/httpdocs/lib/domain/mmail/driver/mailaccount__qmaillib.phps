@@ -64,7 +64,7 @@ function syncQmail()
 
 		$mfile = "$mailpath/{$quser[0]}/autorespond/message";
 		if (!lxfile_exists($mfile)) {
-			lxuser_mkdir($syuser, dirname($mfile));
+			lxuser_mkdir($sysuser, dirname($mfile));
 			lxuser_put_contents($sysuser, $mfile, "Autoresponder");
 		}
 		if ($this->main->__var_autores_driver === 'qmail') {
