@@ -58,7 +58,7 @@ function display($var)
 
 function checkIfInstalled()
 {
-	$sq = new Sqlite($this->__masterserver, 'installapp');
+	$sq = new Sqlite($this->__masterserver, 'installsoft');
 	$res = $sq->getRowsWhere("appname = '$this->appname' AND parent_clname = '{$this->getParentO()->getClName()}'");
 	if ($res) {
 		return 'on';
@@ -391,7 +391,7 @@ static function createListAlist($parent, $class)
 static function initThisList($parent, $class)
 {
 	global $gbl, $sgbl, $login, $ghtml; 
-	$driverapp = $gbl->getSyncClass($parent->__masterserver, $parent->__readserver, 'allinstallapp');
+	$driverapp = $gbl->getSyncClass($parent->__masterserver, $parent->__readserver, 'allinstallsoft');
 	$res = exec_class_method("allinstallapp__$driverapp", "getListofApps");
 
 	return $res;
