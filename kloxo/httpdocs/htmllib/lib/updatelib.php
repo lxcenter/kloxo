@@ -133,7 +133,8 @@ function do_upgrade($upversion)
 	print("Download Done....\n");
 	$host = `hostname`;
 	$host = trim($host);
-	lxshell_unzip("__system__", "../..", $programfile);
+//	lxshell_unzip("__system__", "../..", $programfile);
+	system("cd ../../ ; unzip -o httpdocs/download/$programfile");
 	chdir($saveddir);
 }
 
