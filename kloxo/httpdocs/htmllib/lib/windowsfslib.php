@@ -24,7 +24,7 @@ function lxfile_symlink($src, $dst)
 }
 
 
-function lxshell_unzip($dir, $file, $filelist = null)
+function lxshell_unzip($username, $dir, $file, $filelist = null)
 {
 	$dir = expand_real_root($dir);
 	$file = expand_real_root($file);
@@ -67,6 +67,7 @@ function lxfile_generic_chmod($file, $mod) {
 function lxfile_generic_chmod_rec($file, $mod) { }
 
 function lxfile_generic_chown($file, $mod) { 
+	return true;
 }
 
 function lxfile_generic_chown_rec($file, $mod) { 

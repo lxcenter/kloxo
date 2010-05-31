@@ -663,7 +663,7 @@ static function createTmpDirIfitDoesntExist($file, $real)
 	lxfile_generic_chmod($vd, "0700");
 
 	if ($real) {
-		lxshell_unzip_with_throw("__system__", $vd, $file);
+		lxshell_unzip_with_throw($vd, $file);
 	} else {
 		if ($sgbl->isKloxoForRestore()) {
 			try {

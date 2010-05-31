@@ -1495,7 +1495,7 @@ function getFromRemote($server, $filepass, $dt, $p)
 		$tfile = lx_tmp_file("__path_tmp", "lx_$bp");
 		getFromFileserv($server, $filepass, $tfile);
 		lxfile_mkdir("$dt/$bp");
-		lxshell_unzip_with_throw("__system__", "$dt/$bp", $tfile);
+		lxshell_unzip_with_throw("$dt/$bp", $tfile);
 		lunlink($tfile);
 	} else {
 		getFromFileserv($server, $filepass, "$dt/$bp");

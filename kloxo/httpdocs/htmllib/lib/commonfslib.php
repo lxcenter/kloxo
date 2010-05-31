@@ -27,6 +27,7 @@ function lxshell_direct($cmd)
 	$username = '__system__';
 	do_exec_system($username, null, $cmd, $out, $err, $ret, null);
 }
+
 function lxfile_disk_free_space($dir)
 {
 	$dir = expand_real_root($dir);
@@ -37,7 +38,6 @@ function lxfile_disk_free_space($dir)
 	return $ret;
 }
 
-
 function lxshell_unzip_numeric_with_throw($dir, $file, $list = null)
 {
 	$ret = lxshell_unzip_numeric($dir, $file, $list);
@@ -45,16 +45,10 @@ function lxshell_unzip_numeric_with_throw($dir, $file, $list = null)
 		throw new lxException("could_not_unzip_file", '');
 	}
 }
-function lxshell_unzip_with_throw($username, $dir, $file, $list = null)
-{
-	$ret = lxshell_unzip($username, $dir, $file, $list);
-	if ($ret) {
-		throw new lxException("could_not_unzip_file", '');
-	}
-}
 
-function lxuser_unzip_with_throw($dir, $file, $list = null)
+function lxshell_unzip_with_throw($dir, $file, $list = null)
 {
+	lxuser_unzip_with_throw('__system__', $dir, $file, $list);
 }
 
 function lxshell_redirect($file, $cmd)
@@ -82,6 +76,7 @@ function lxshell_directory($dir, $cmd)
 	return $out;
 
 }
+
 function lxshell_output($cmd)
 {
 	global $gbl, $sgbl, $login, $ghtml; 
@@ -94,30 +89,6 @@ function lxshell_output($cmd)
 	do_exec_system($username, null, $cmd, $out, $err, $ret, null);
 	return $out;
 }
-
-
-function lxshell_user_return($username, $cmd)
-{
-	global $sgbl;
-	$start = 2;
-	eval($sgbl->arg_getting_string);
-	$cmd = getShellCommand($cmd, $arglist);
-	$ret = new_process_cmd($username, null, $cmd);
-	return $ret;
-}
-
-/* temporary function until Martin can create a better one */
-function lxuser_return($userGroup, $cmd) {
-	global $sgbl;
-	$userGroup = explode(":", $userGroup);
-	posix_setuid($userGroup[0]);
-	posix_setgid($userGroup[1]);
-	eval($sgbl->arg_getting_string);
-	$cmd = getShellCommand($cmd, $arglist);
-	system($cmd, $ret);
-	return $ret;
-}
-/* end temporary function */
 
 function lxshell_return($cmd)
 {
@@ -150,6 +121,148 @@ function lxshell_input($input, $cmd)
 }
 
 /**
+ * Unzip file to the given directory as given user
+ * 
+ * @param $username
+ * @param $dir path to the output directory
+ * @param $file file to unzip
+ * @param $list
+ */
+function lxuser_unzip_with_throw($username, $dir, $file, $list = null)
+{
+	$ret = lxshell_unzip($username, $dir, $file, $list);
+	if ($ret) {
+		throw new lxException("could_not_unzip_file", '');
+	}
+}
+
+/**
+ * Makes new directory and set directory owner
+ * 
+ * @param string $username directory owner
+ * @param string $dir path to the directory
+ * @return bool TRUE on success or FALSE on failure.
+ */
+function lxuser_mkdir($username, $dir)
+{
+	if (!lxfile_mkdir($dir)) {
+		return false;
+	}
+	
+	if (!lxfile_generic_chown($username)) {
+		lxfile_rm($dir);
+		return false;
+	}
+	
+	return true;
+}
+
+/**
+ * Copies file or directory and set owner
+ * 
+ * @param string $username file or directory owner
+ * @param string $src path to the source file or directory
+ * @param string $dst path to the destination file or directory
+ * @return bool TRUE on success or FALSE on failure.
+ */
+function lxuser_cp($username, $src, $dst)
+{
+	if (!lxfile_cp($src, $dst)) {
+		return false;
+	}
+	
+	if (!lxfile_generic_chown($dst, $username)) {
+		lxfile_rm($dst);	
+		return false;
+	}
+	
+	return true;
+}
+
+/**
+ * Moves file or directory and set owner
+ * 
+ * @param string $username file or directory owner
+ * @param string $src path to the file or directory
+ * @param string $dst new path to the file or directory
+ * @return bool TRUE on success or FALSE on failure. 
+ */
+function lxuser_mv($username, $src, $dst)
+{
+	if (!lxfile_mv($src, $dst)) {
+		return false;
+	}
+	
+	if (!lxfile_generic_chown($dst, $username)) {
+		lxfile_mv($dst, $src);
+		return false;
+	}
+	
+	return true;
+}
+
+/**
+ * Writes a string to a file
+ * 
+ * @param string $username  file owner
+ * @param string $file path to the file
+ * @param mixed $data the data to write
+ * @param int $flag
+ */
+function lxuser_put_contents($username, $file, $data, $flag = null)
+{
+	$file = expand_real_root($file);
+
+	if (is_soft_or_hardlink($file)) {
+		log_log("link_error", "$file is hard or symlink. Not writing\n");
+		return false;
+	}
+
+	if (!lxuser_mkdir($username, dirname($file))) {
+		return false;
+	}
+	
+	if (!lfile_put_contents($file, $data, $flag)) {
+		return false;
+	}
+	
+	return lxfile_generic_chown($file, $username);
+}
+
+/**
+ * Changes file mode
+ * 
+ * @param $username
+ * @param $file path to the file
+ * @param $mod mode of the specified file
+ */
+function lxuser_chmod($username, $file, $mod)
+{
+	// I'm not sure how we should implement this method ???
+	
+	lxfile_generic_chmod($file, $mod);
+	//lxfile_generic_chown($file, $username); ???
+}
+
+/**
+ * Executes an external program or command as given user 
+ * 
+ * @param $username
+ * @param $cmd command to execute
+ * @return depends on executed commnad
+ */
+function lxuser_return($username, $cmd) {
+	global $sgbl;
+	
+	$start = 2;
+	eval($sgbl->arg_getting_string);
+	$cmd = getShellCommand($cmd, $arglist);
+	
+	$ret = new_process_cmd($username, null, $cmd);
+	return $ret;
+}
+
+/**
  * Deletes filename or empty directory. 
  * 
  * @param $file	(abstract) path to the file or to the directory
@@ -168,9 +281,8 @@ function lxfile_rm($file)
 			return unlink($file);
 		}
 	}
-	else {
-		return FALSE;
-	}
+
+	return false;
 }
 
 

@@ -199,7 +199,7 @@ function do_restore($docd)
 
 
 	$docf = "$vd/mysql-{$this->main->dbname}.dump";
-	$ret = lxshell_unzip_with_throw("__system__", $vd, $docd);
+	$ret = lxshell_unzip_with_throw($vd, $docd);
 
 	if (!lxfile_exists($docf)) {
 		throw new lxException('could_not_find_matching_dumpfile_for_db', '', '');

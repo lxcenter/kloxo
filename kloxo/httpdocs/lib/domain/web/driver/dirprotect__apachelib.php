@@ -23,7 +23,7 @@ function createDiruserfile()
 	foreach($this->main->diruser_a as $v) {
 		$fstr .= $v->nname . ':' . crypt($v->param) . "\n";
 	}
-	lxuser_put_contents($this->main->__var_username, $dirfile,  $fstr, $this->main->__var_username);
+	lxuser_put_contents($this->main->__var_username, $dirfile,  $fstr);
 	lxuser_chmod($this->main->__var_username, $dirfile, "0755");
 
 	// http://project.lxcenter.org/issues/74

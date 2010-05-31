@@ -232,7 +232,7 @@ function do_restore($docd)
 	$vd = createTempDir("/tmp", "ezmlmdump");
 
 	$docf = "$vd/ezmlm-{$this->main->nname}.dump";
-	lxshell_unzip_with_throw($sysuser, $vd, $docd);
+	lxuser_unzip_with_throw($sysuser, $vd, $docd);
 
 	$cont = unserialize(lfile_get_contents($docf));
 	lunlink($docf);
