@@ -249,7 +249,7 @@ function lxuser_chmod($username, $file, $mod)
  * 
  * @param $username
  * @param $cmd command to execute
- * @return depends on executed commnad
+ * @return depends on executed command
  */
 function lxuser_return($username, $cmd) {
 	global $sgbl;
@@ -265,9 +265,8 @@ function lxuser_return($username, $cmd) {
 /**
  * Deletes filename or empty directory. 
  * 
- * @param $file	(abstract) path to the file or to the directory
+ * @param $file	path to the file or to the directory
  * @return TRUE on success or FALSE on failure.
- *          
  */ 
 function lxfile_rm($file)
 {
@@ -285,7 +284,13 @@ function lxfile_rm($file)
 	return false;
 }
 
-
+/**
+ * Renames/Moves file
+ * 
+ * @param $src path to the source file
+ * @param $dst destination path
+ * @return TRUE on success or FALSE on failure.
+ */
 function lxfile_mv($src, $dst)
 {
 	global $gbl, $sgbl, $login, $ghtml; 
@@ -305,7 +310,6 @@ function lxfile_mv($src, $dst)
 		return true;
 	}
 	return false;
-	
 }
 
 function lxfile_exists($file)
@@ -324,24 +328,30 @@ function lxfile_nonzero($file)
 	return lxfile_real($file);
 }
 
+/**
+ * Makes directory
+ * 
+ * @param $dir the directory path
+ * @return TRUE on success or FALSE on failure.
+ */
 function lxfile_mkdir($dir)
 {
 	$dir = expand_real_root($dir);
 	if (lxfile_exists($dir)) {
 		return true;
 	}
-	//dprint("Making directory... $dir\n");
-	if (WindowsOs()) {
-		$dir = preg_replace("/\//", "\\", $dir);
-	}
-	log_shell("Making directory $dir");
 
-	$ret = mkdir($dir, 0755, true);
-	if (!$ret) {
-		debugBacktrace();
-	}
+	log_filesys("Making directory $dir");
+	return mkdir($dir, 0755, true);
 }
 
+/**
+ * Copies file
+ * 
+ * @param $src path to the source file
+ * @param $dst destination path
+ * @return TRUE on success or FALSE on failure.
+ */
 function lxfile_cp($src, $dst)
 {
 	global $gbl, $sgbl, $login, $ghtml; 
@@ -350,9 +360,10 @@ function lxfile_cp($src, $dst)
 	if (is_dir($dst)) {
 		$dst = $dst . "/" . basename($src);
 	}
-	log_filesys("Copying $src $dst");
-	return system("cp $src $dst");
 
+	log_filesys("Copying $src $dst");
+	system("cp $src $dst", $ret);
+	return $ret == 0;
 }
 
 function lxfile_stat($file, $duflag)
