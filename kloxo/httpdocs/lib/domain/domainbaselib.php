@@ -118,6 +118,7 @@ function updateform($subaction, $param)
 		case "catchall":
 			$name[] = "--bounce--";
 			$name[] = "postmaster";
+			$name[] = "Delete";
 			$vlist['catchall'] = array('s', $name);
 			return $vlist;
 

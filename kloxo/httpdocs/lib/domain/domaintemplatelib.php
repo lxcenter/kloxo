@@ -117,7 +117,7 @@ static function addform($parent, $class, $typetd = null)
 	$qvlist = getQuotaListForClass('domain', array());
 	$vlist = lx_array_merge(array($vlist, $qvlist));
 	$vlist['__c_subtitle_mail'] = "Mail";
-	$vlist['catchall'] = array('s', array('--bounce--', 'postmaster'));
+	$vlist['catchall'] = array('s', array('--bounce--', 'postmaster', 'Delete'));
 	$ret['action'] = "add";
 	$ret['variable'] = $vlist;
 

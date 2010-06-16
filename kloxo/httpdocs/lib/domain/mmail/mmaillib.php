@@ -318,6 +318,7 @@ function updateform($subaction, $param)
 		case "catchall":
 			$list = $this->getList('mailaccount');
 			$name[] = "--bounce--";
+			$name[] = "Delete";
 			$nn = get_namelist_from_objectlist($list);
 
 			foreach($nn as &$___t) {

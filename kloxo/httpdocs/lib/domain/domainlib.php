@@ -634,7 +634,7 @@ function postAdd()
 	//$mmail->catchall = $domaindefault->catchall;
 
 	if (!$mmail->catchall) {
-		$mmail->catchall = '--bounce--';
+		$mmail->catchall = 'Delete';
 	}
 
 	$web->ipaddress = $dnstemplate->getIpForBaseDomain();
