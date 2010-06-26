@@ -53,27 +53,33 @@ function storeinGblvariables()
 
 	$login->loadAllObjects('client');
 
-
 	$clist = $login->getList('client');
-	
 	if (!$clist) {
 		return;
 	}
-
-	$mysqldblist = null;
+	
+	$mysqldblist = array();
+	$clientlist = array();
+	$weblist = array();
+	$mailaccountlist = array();
+	
 	foreach($clist as $c) {
 		$domlist = $c->getList('domaina');
 		$clientlist[$c->websyncserver][] = $c;
+		
+		$dblist = $c->getList('mysqldb');
+		foreach((array) $dblist as $db) {
+			$mysqldblist[$db->syncserver][] = $db;
+		}
+		
 		foreach((array) $domlist as $domain) {
 			if (!$domain->isDomainVirtual()) {
 				continue;
 			}
+
 			$web = $domain->getObject('web');
 			$mmail= $domain->getObject('mmail');
-			$dblist = $domain->getList('mysqldb');
-			foreach((array) $dblist as $db) {
-				$mysqldblist[$db->syncserver][] = $db;
-			}
+			
 			//$dns = $domain->getObject('dns');
 			$weblist[$web->syncserver][] = $web;
 			$mclist = $mmail->getList('mailaccount');
@@ -84,7 +90,6 @@ function storeinGblvariables()
 		}
 	}
 
-
 	$disk_usage = getTotalUsage('web', $weblist);
 	$maildisk_usage = getTotalUsage('mailaccount', $mailaccountlist);
 	$mysqldb_usage = getTotalUsage('mysqldb', $mysqldblist);
@@ -94,7 +99,6 @@ function storeinGblvariables()
 	$sgbl->__var_maildisk_usage = $maildisk_usage;
 	$sgbl->__var_mysqldb_usage = $mysqldb_usage;
 	$sgbl->__var_clientdisk_usage = $clientdisk_usage;
-
 
 
 
@@ -136,8 +140,6 @@ function getTotalUsage($class, $list)
 			$nlist = $dp->getQuotaNeedVar();
 			$needlist[$dp->getClName()] = $nlist;
 		}
-
-
 
 		//$userlist = get_namelist_from_objectlist($d, 'nname', 'username');
 		$driver = $gbl->getSyncClass(null, $k, $class);
