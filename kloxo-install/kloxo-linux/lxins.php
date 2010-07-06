@@ -50,13 +50,13 @@ function lxins_main()
 			exit;
 		}
 	} else {
-		print("Kloxo is using AGPL-V3.0 License, do you agree with the terms? (No/Yes):\n");
+		print("Kloxo is using AGPL-V3.0 license, do you agree with the terms? (No/Yes):\n");
 		flush();
 		$stdin = fopen('php://stdin','r');
 		$argq = fread($stdin, 5);
 		$arg=trim($argq);
 			if(!($arg=='y' ||$arg=='yes'||$arg=='Yes'||$arg=='Y'||$arg=='YES')) {
-				print("You did not agreed the AGPL-V3.0 License terms.\n");
+				print("You did not agree to the AGPL-V3.0 license terms.\n");
 				print("Installation aborted.\n\n");
 				exit;
 			} else {
@@ -146,6 +146,8 @@ function lxins_main()
     system("/etc/init.d/kloxo restart >/dev/null 2>&1 &");
 	chdir("/usr/local/lxlabs/kloxo/httpdocs/");
 	system("/usr/local/lxlabs/ext/php/php /usr/local/lxlabs/kloxo/bin/install/create.php --install-type=$installtype --db-rootuser=$dbroot --db-rootpassword=$dbpass");
+	system("/usr/local/lxlabs/ext/php/php /usr/local/lxlabs/kloxo/bin/misc/secure-webmail-mysql.phps");
+	system("/bin/rm /usr/local/lxlabs/kloxo/bin/misc/secure-webmail-mysql.phps");
 	system("/script/centos5-postpostupgrade");
 
 print("Congratulations. Kloxo has been installed succesfully on your server as $installtype \n");
