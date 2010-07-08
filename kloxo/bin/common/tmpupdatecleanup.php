@@ -42,6 +42,17 @@ function updatecleanup_main()
 	}
 //
 
+//
+// Fix vulnerability within webmail
+// If the flag isn't found, run the fix
+//
+
+if (!lxfile_exists("/usr/local/lxlabs/kloxo/file/webmailReset")) {
+	system("/usr/local/lxlabs/ext/php/php /usr/local/lxlabs/kloxo/bin/misc/secure-webmail-mysql.phps");
+	system("/bin/rm /usr/local/lxlabs/kloxo/bin/misc/secure-webmail-mysql.phps");
+}
+//
+
 	if (lxfile_exists(".svn")) {
 		print("SVN Found... Exiting\n\n");
 		exit;

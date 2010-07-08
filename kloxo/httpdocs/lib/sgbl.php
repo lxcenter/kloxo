@@ -40,7 +40,7 @@ function __construct()
 
 	$this->__ver_major = "6";
 	$this->__ver_minor = "0";
-	$this->__ver_release = "2083";
+	$this->__ver_release = "2084";
 	$this->__ver_enterprise = "Single Server Edition";
 	$this->__ver_type = "production";
 	$this->__ver_extra = "Stable";
