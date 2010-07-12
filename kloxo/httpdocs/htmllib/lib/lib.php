@@ -744,15 +744,15 @@ function validate_domain_name($name)
 		}
 	}
 
-	if (csb($name, "co.") && strlen($name) <= 5) {
-		throw new lxException('invalid_domain_name', 'nname');
-	}
-
 	if (csb($name, "www.")) {
 		throw new lxException('add_without_www', 'nname');
 	}
 
-	if(!eregi("^[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,6})$", $name)) { 
+	if(!eregi('^([a-z0-9]([a-z0-9-]{0,61}[a-z0-9])?\.)+([a-z]{2,6})$', $name)) { 
+		throw new lxException('invalid_domain_name', 'nname');
+	}
+	
+	if (strlen($name) > 255) {
 		throw new lxException('invalid_domain_name', 'nname');
 	}
 }
