@@ -156,7 +156,7 @@ function os_updateApplicableToSlaveToo()
 	call_with_flag("remove_host_deny");
 
 	
-	installInstallSoft();
+	installInstallApp();
 
 	if (!lxfile_exists("/etc/pure-ftpd/pureftpd.pdb")) {
 		lxfile_touch("/etc/pure-ftpd/pureftpd.passwd");
