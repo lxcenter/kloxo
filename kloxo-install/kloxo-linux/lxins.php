@@ -40,6 +40,7 @@ function lxins_main()
 	}
 
 	if(file_exists("/usr/local/lxlabs/kloxo")) {
+		// Ask Reinstall
 		print("Kloxo seems already installed do you wish to continue?(No/Yes):\n");
 		flush();
 		$stdin = fopen('php://stdin','r');
@@ -50,7 +51,8 @@ function lxins_main()
 			exit;
 		}
 	} else {
-		print("Kloxo is using AGPL-V3.0 license, do you agree with the terms? (No/Yes):\n");
+		// Ask License
+		print("Kloxo is using AGPL-V3.0 License, do you agree with the terms? (No/Yes):\n");
 		flush();
 		$stdin = fopen('php://stdin','r');
 		$argq = fread($stdin, 5);
@@ -60,9 +62,26 @@ function lxins_main()
 				print("Installation aborted.\n\n");
 				exit;
 			} else {
-				print("Installing Kloxo...\n\n");
+				print("Installing Kloxo = YES\n\n");
 			}
 	}
+		// Ask for InstallApp
+		print("InstallApp: PHP Applications like PHPBB, WordPress, Joomla etc");
+		print("When you choose Yes, be aware of downloading about 350Mb of data!");
+                print("Do you want to install the InstallAPP sotfware? (No/Yes):\n");
+                flush();
+                $stdin = fopen('php://stdin','r');
+                $argq = fread($stdin, 5);
+                $arg=trim($argq);
+		$installappinst = false; 
+                        if(!($arg=='y' ||$arg=='yes'||$arg=='Yes'||$arg=='Y'||$arg=='YES')) {
+                                print("Installing InstallApp = NO\n");
+                                print("You can install it later with /script/installapp-update\n\n");
+                        } else {
+                                print("Installing InstallApp = YES\n\n");
+				$installappinst = true;
+                        }
+
 
 	print("Adding System users and groups (nouser, nogroup and lxlabs, lxlabs)\n");
 	system("groupadd nogroup");
@@ -75,9 +94,9 @@ function lxins_main()
 	
 	print("Removing sendmail, exim, vsftpd, postfix, vpopmail, qmail,\n");
 	print("Removing lxphp, lxzend, pure-ftpd and imap\n");
-	exec("yum -y remove sendmail*");
-	exec("rpm -e --nodeps exim");
-	exec("rpm -e --nodeps sendmail sendmail-cf sendmail-doc vsftpd postfix vpopmail qmail lxphp lxzend pure-ftpd imap > /dev/null 2>&1");
+	exec("rpm -e --nodeps sendmail sendmail-cf sendmail-doc sendmail-devel  > /dev/null 2>&1");
+	exec("rpm -e --nodeps exim  > /dev/null 2>&1");
+	exec("rpm -e --nodeps vsftpd postfix vpopmail qmail lxphp lxzend pure-ftpd imap > /dev/null 2>&1");
 
 
 	$package = array("php-mysql", "which", "gcc-c++", "php-imap", "php-pear", "php-devel", "lxlighttpd", "httpd", "mod_ssl", "zip","unzip","lxphp", "mysql", "mysql-server",  "mysqlclient10", "lxzend","curl","autoconf","automake","libtool", "bogofilter", "gcc", "cpp", "openssl", "pure-ftpd");
@@ -149,6 +168,10 @@ function lxins_main()
 	system("/usr/local/lxlabs/ext/php/php /usr/local/lxlabs/kloxo/bin/misc/secure-webmail-mysql.phps");
 	system("/bin/rm /usr/local/lxlabs/kloxo/bin/misc/secure-webmail-mysql.phps");
 	system("/script/centos5-postpostupgrade");
+        if ($installappinst) {
+	 system("/script/installapp-update"); // First run (gets installappdata)
+	 system("/script/installapp-update"); // Second run (gets applications)
+	}
 
 print("Congratulations. Kloxo has been installed succesfully on your server as $installtype \n");
 	if ($installtype === 'master') {

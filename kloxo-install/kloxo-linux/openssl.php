@@ -8,11 +8,8 @@ function createNewcertificate()
 {
  global $gbl, $login, $ghtml;
  $cerpath = "server.crt";
- //$tcerpath = lx_tmp_file($cerpath);
  $keypath = "server.key";
- //$tkeypath =lx_tmp_file($keypath); 
  $requestpath = "a.csr"; 
- //$trequestpath = lx_tmp_file($requestpath); 
  
 $ltemp["countryName" ] = "IN";
 $ltemp["stateOrProvinceName" ] = "Bn";
@@ -20,7 +17,7 @@ $ltemp["localityName" ] = "Bn";
 $ltemp["organizationName" ] = "LxCenter";
 $ltemp["organizationalUnitName" ] = "Kloxo";
 $ltemp["commonName" ] = "Kloxo";
-$ltemp["emailAddress" ] = "kloxo@lxcenter.org";
+$ltemp["emailAddress" ] = "contact@lxcenter.org";
  
  $privkey = openssl_pkey_new();
  openssl_pkey_export_to_file($privkey, $keypath);
@@ -33,9 +30,9 @@ $ltemp["emailAddress" ] = "kloxo@lxcenter.org";
  $src = getcwd();
  $dest ='/usr/local/lxlabs/kloxo/ext/lxhttpd/conf';
  root_execsys("lxfilesys_mkdir",$dest."/ssl.crt/");
-  root_execsys("lxfilesys_mkdir",$dest."/ssl.key/");
-  root_execsys("lxfilesys_mv", "$src/$cerpath", $dest."/ssl.crt/".$cerpath);
-  root_execsys("lxfilesys_mv", "$src/$keypath", $dest."/ssl.key/".$cerpath);
-  root_execsys("lxfilesys_mv", "$src/$requestpath", "$dest/$requestpath");
+ root_execsys("lxfilesys_mkdir",$dest."/ssl.key/");
+ root_execsys("lxfilesys_mv", "$src/$cerpath", $dest."/ssl.crt/".$cerpath);
+ root_execsys("lxfilesys_mv", "$src/$keypath", $dest."/ssl.key/".$cerpath);
+ root_execsys("lxfilesys_mv", "$src/$requestpath", "$dest/$requestpath");
 
 }
