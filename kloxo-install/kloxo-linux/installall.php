@@ -1,4 +1,22 @@
 <?php 
+//
+//    Kloxo, Hosting Panel
+//
+//    Copyright (C) 2000-2009     LxLabs
+//    Copyright (C) 2009-2010     LxCenter
+//
+//    This program is free software: you can redistribute it and/or modify
+//    it under the terms of the GNU Affero General Public License as
+//    published by the Free Software Foundation, either version 3 of the
+//    License, or (at your option) any later version.
+//
+//    This program is distributed in the hope that it will be useful,
+//    but WITHOUT ANY WARRANTY; without even the implied warranty of
+//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//    GNU Affero General Public License for more details.
+//
+//    You should have received a copy of the GNU Affero General Public License
+//    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 include_once "htmllib/lib/include.php";
 
@@ -18,15 +36,14 @@ function install_general_mine($value)
 
 function installcomp_mail()
 {
-	system("pear upgrade pear");
-	system("pear upgrade archive_tar ");
-	system("pear upgrade structures_graph ");
+	system('pear channel-update "pear.php.net"'); // to remove old channel warning
+	system("pear upgrade --force pear"); // force is needed
+	system("pear upgrade --force Archive_Tar"); // force is needed
+	system("pear upgrade --force structures_graph"); // force is needed
 	system("pear install log");
-	//system("pecl install sqlite");
 }
 
 install_main();
-//os_fix_some_permissions();
 
 
 function install_main()

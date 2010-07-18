@@ -17,8 +17,10 @@
 #    You should have received a copy of the GNU Affero General Public License
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
+#
 # LxCenter - Kloxo Installer
 #
+
 if ! [ -f /usr/sbin/yum ] && ! [ -f /usr/bin/yum ] ; then
 	echo "You at least need yum installed for this to work..."
 	echo "                                "
@@ -28,7 +30,6 @@ fi
 yum -y install php php-mysql wget zip unzip
 rm -f kloxo-install.zip
 wget http://download.lxcenter.org/download/kloxo-install.zip
-
 export PATH=/usr/sbin:/sbin:$PATH
 unzip -oq kloxo-install.zip
 cd kloxo-install/kloxo-linux

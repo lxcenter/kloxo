@@ -1,9 +1,29 @@
-<?php 
-class remote { }
+<?php
+//
+//    Kloxo, Hosting Panel
+//
+//    Copyright (C) 2000-2009     LxLabs
+//    Copyright (C) 2009-2010     LxCenter
+//
+//    This program is free software: you can redistribute it and/or modify
+//    it under the terms of the GNU Affero General Public License as
+//    published by the Free Software Foundation, either version 3 of the
+//    License, or (at your option) any later version.
+//
+//    This program is distributed in the hope that it will be useful,
+//    but WITHOUT ANY WARRANTY; without even the implied warranty of
+//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//    GNU Affero General Public License for more details.
+//
+//    You should have received a copy of the GNU Affero General Public License
+//    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-function slave_get_db_pass($program = "lxadmin")
+class remote { }
+$downloadserver = "http://download.lxcenter.org/";
+
+function slave_get_db_pass()
 {
-	$file = "/usr/local/lxlabs/$program/etc/slavedb/dbadmin";
+	$file = "/usr/local/lxlabs/kloxo/etc/slavedb/dbadmin";
 	if (!file_exists($file)) { return null; }
 	$var = file_get_contents($file);
 	$rmt = unserialize($var);
@@ -21,9 +41,6 @@ function addLineIfNotExistTemp($filename, $pattern, $comment)
 	} else {
 		print("Pattern '$pattern' Already present in $filename\n");
 	}
-
-
-
 }
 
 function check_default_mysql($dbroot, $dbpass)
@@ -40,7 +57,7 @@ function check_default_mysql($dbroot, $dbpass)
 		print("Fatal Error: Could not connect to Mysql Localhost using user $dbroot and password \"$dbpass\"\n");
 		print("If this is a brand new install, you can completely remove mysql by running the commands below\n");
 		print("            rm -rf /var/lib/mysql\n");
-		print("            rpm -e mysql-server\n");
+		print("            rpm -e mysql-server\n\n");
 		print("And then run the installer again\n");
 		exit;
 	}
@@ -106,7 +123,7 @@ function our_file_put_contents($file, $contents, $appendflag = false)
 function password_gen()
 {
 	$data=mt_rand(2,30);
-	$pass="lx".$data;
+	$pass="lx".$data; // lx is a indentifier
 	return $pass;
 }
 
@@ -153,8 +170,8 @@ function install_rhn_sources($osversion)
 	}
 
 	$data = our_file_get_contents("/etc/sysconfig/rhn/sources");
-	if(!preg_match('/lxlabs/i', $data)) {
-		$ndata = "yum lxcenter-updates http://download.lxcenter.org/download/update/$osversion/\$ARCH/\nyum lxcenter-lxupdates http://download.lxcenter.org/download/update/lxgeneral";
+	if(!preg_match('/lxcenter/i', $data)) {
+		$ndata = "yum lxcenter-updates ".$downloadserver."download/update/$osversion/\$ARCH/\nyum lxcenter-lxupdates http://download.lxcenter.org/download/update/lxgeneral";
 		//append it to the file...
 		our_file_put_contents("/etc/sysconfig/rhn/sources","\n\n", true);
 		our_file_put_contents("/etc/sysconfig/rhn/sources", $ndata, true);
@@ -165,15 +182,17 @@ function install_rhn_sources($osversion)
 function install_yum_repo($osversion)
 {
 	if (!file_exists("/etc/yum.repos.d")) {
+  	print("No yum.repos.d dir detected!\n");
 		return;
 	}
+        if (file_exists("/etc/yum.repos.d/lxcenter.repo")) {
+	  print("LxCenter yum repository file already present.\n");
+                return;
+        }
 
 	$cont = our_file_get_contents("../lxcenter.repo.template");
 	$cont = str_replace("%distro%", $osversion, $cont);
 	our_file_put_contents("/etc/yum.repos.d/lxcenter.repo", $cont);
-	if ($osversion === 'centos-4') {
-		//system("cp ../CentOS-Base.repo /etc/yum.repos.d/");
-	}
 }
 
 

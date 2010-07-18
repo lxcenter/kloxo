@@ -18,7 +18,7 @@
 //    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 include_once "../install_common.php";
-$downloadserver = "http://download.lxcenter.org/";
+
 lxins_main();
 
 function lxins_main()
