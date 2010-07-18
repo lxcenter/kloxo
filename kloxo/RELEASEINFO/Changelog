@@ -1,6 +1,16 @@
 Changelog
 
+
+6.0.2083 - ?
+6.0.2084 - Fix Horde/Roundcube security issue
+6.0.2085 - Fix for fix 2084
+6.0.2086 - Fix for fix 2085
+
+6.1.0
 ##################################
 dterweij - Changed installer
 dterweij - Removed License server contact
 dterweij - Moved all C sources into one place
+dterweij - Fixed broken images
+dterweij - InstallApp new version 5.0.5000 (Mainly lxadmin to kloxo dir changes)
+various  - InstallApp software updates
