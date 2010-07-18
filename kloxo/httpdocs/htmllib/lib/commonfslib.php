@@ -149,10 +149,7 @@ function lxuser_mkdir($username, $dir)
 		return false;
 	}
 	
-	if (!lxfile_generic_chown($username)) {
-		lxfile_rm($dir);
-		return false;
-	}
+	lxfile_generic_chown($dir, $username);
 	
 	return true;
 }
@@ -209,7 +206,7 @@ function lxuser_mv($username, $src, $dst)
  * @param mixed $data the data to write
  * @param int $flag
  */
-function lxuser_put_contents($username, $file, $data, $flag = null)
+function lxuser_put_contents($username, $file, $data, $flag = 0)
 {
 	$file = expand_real_root($file);
 
@@ -222,11 +219,27 @@ function lxuser_put_contents($username, $file, $data, $flag = null)
 		return false;
 	}
 	
-	if (!lfile_put_contents($file, $data, $flag)) {
-		return false;
+	if ($flag == FILE_APPEND) {
+		$mode = 'a';
+	} else {
+		$mode = 'w';
 	}
 	
-	return lxfile_generic_chown($file, $username);
+	$f = fopen($file, $mode);
+	if (!$f) {
+    	return false;
+	} else {
+		if (flock($f, LOCK_EX)) {
+			$bytes = fwrite($f, $data);
+			lxfile_generic_chown($file, $username);
+			flock($f, LOCK_UN);
+			fclose($f);
+			return $bytes;
+		}
+		else {
+			return false;
+		}
+	}
 }
 
 /**
