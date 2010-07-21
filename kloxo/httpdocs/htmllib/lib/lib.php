@@ -81,22 +81,26 @@ function http_is_self_ssl()
 
 function core_installWithVersion($path, $file, $ver)
 {
-	global $gbl, $sgbl, $login, $ghtml; 
-	$prgm = $sgbl->__var_program_name;
-	lxfile_mkdir("/var/cache/$prgm");
-	if (!lxfile_real("/var/cache/$prgm/$file.$ver.zip")) {
-		while (lxshell_return("unzip", "-t", "/var/cache/$prgm/$file.$ver.zip")) {
-			system("cd /var/cache/$prgm/ ; rm -f $file*.zip; wget download.lxcenter.org/download/$file.$ver.zip");
-		}
-		system("cd $path ; unzip -oq /var/cache/$prgm/$file.$ver.zip");
-	}
+    global $sgbl;
+    $prgm = $sgbl->__var_program_name;
+    lxfile_mkdir("/var/cache/$prgm");
+    if (!lxfile_real("/var/cache/$prgm/$file.$ver.zip")) {
+        while (lxshell_return("unzip", "-t", "/var/cache/$prgm/$file.$ver.zip")) {
+            system("cd /var/cache/$prgm/ ; rm -f $file*.zip; wget download.lxcenter.org/download/$file.$ver.zip");
+        }
+        system("cd $path ; unzip -oq /var/cache/$prgm/$file.$ver.zip");
+    }
 }
 
-function download_thirdparty($ver)
+function download_thirdparty()
 {
-	global $gbl, $sgbl, $login, $ghtml; 
-	$prgm = $sgbl->__var_program_name;
-	core_installWithVersion("/usr/local/lxlabs/$prgm/", "$prgm-thirdparty", $ver);
+    global $sgbl;
+    $prgm = $sgbl->__var_program_name;
+    // Fixes #303 and #304
+    $string = file_get_contents("http://download.lxcenter.org/download/thirdparty/$prgm-version.list");
+    if ($string != "") {
+        core_installWithVersion("/usr/local/lxlabs/$prgm/", "$prgm-thirdparty", $string);
+    }
 }
 
 

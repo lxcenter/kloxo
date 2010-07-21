@@ -535,7 +535,9 @@ function removeOtherDriver()
 
 function updateApplicableToSlaveToo()
 {
-	download_thirdparty(2012);
+    // Fixes #303 and #304
+	download_thirdparty();
+
 	os_updateApplicableToSlaveToo();
 	lxfile_mkdir("__path_kloxo_httpd_root/default/");
 	lxfile_cp("../file/skeleton.zip", "__path_kloxo_httpd_root/skeleton.zip");
