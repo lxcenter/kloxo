@@ -47,7 +47,7 @@ fi
 eval $SELINUX_CHECK
 
 if [ "$?" -eq "127" ] ; then
-        echo -e "\nThe installer could not determine SELinux status.\nIf you are sure it is DISABLED, you may proceed.\n"
+        echo -e "\a\nThe installer could not determine SELinux status.\nIf you are sure it is DISABLED, you may proceed.\n"
         while :
         do
                 read -n 1 -p "Continue? (Y/N) " se_agree
@@ -60,7 +60,7 @@ if [ "$?" -eq "127" ] ; then
                 esac
         done
 elif [ "$?" -eq "0" ] ; then
-        echo -e "\n$APP_NAME cannot be installed or executed with SELinux enabled.\nPlease DISABLE it and try again.\nAborting ...\n"
+        echo -e "\a\n$APP_NAME cannot be installed or executed with SELinux enabled.\nPlease DISABLE it and try again.\nAborting ...\n"
         exit $E_SELINUX
 fi
 
@@ -81,7 +81,7 @@ fi
 
 # Check if yum is installed.
 if ! [ -f /usr/sbin/yum ] && ! [ -f /usr/bin/yum ] ; then
-        echo -e "\aThe installer requires YUM to continue. Please install it and try again.\nAborting ...\n"
+        echo -e "\a\nThe installer requires YUM to continue. Please install it and try again.\nAborting ...\n"
         exit $E_NOYUM
 fi
 
