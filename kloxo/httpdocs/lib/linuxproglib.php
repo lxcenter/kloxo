@@ -77,9 +77,6 @@ function fix_hordedb_proper()
 
 function os_updateApplicableToSlaveToo()
 {
-
-
-	fix_arch();
 	install_gd();
 	install_bogofilter();
 	move_clients_to_client();

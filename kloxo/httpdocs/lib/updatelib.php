@@ -78,7 +78,7 @@ function doUpdateExtraStuff()
 {
 	global $gbl, $sgbl, $login, $ghtml; 
 
-	fix_arch();
+
 	lxfile_mkdir("__path_program_etc/flag");
 	@ unlink("/home/kloxo/httpd/webmail/horde/Ligesh,");
 

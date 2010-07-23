@@ -712,6 +712,7 @@ function check_if_port_on($port)
 
 function installAppPHP($var, $cmd)
 {
+   // TODO LxCenter: The created dir and file should be owned by the user
 	global $gbl, $sgbl, $login, $ghtml; 
 	$domain = $var['domain'];
 	$appname = $var['appname'];
@@ -763,6 +764,7 @@ function validate_domain_name($name)
 
 function execinstallappPhp($domain, $appname, $cmd)
 {
+    // TODO LxCenter: The created dir and file should be owned by the user
 	global $gbl, $sgbl, $login, $ghtml; 
 	lxfile_mkdir("/home/httpd/$domain/httpdocs/__installapplog");
 	$i = 0;
@@ -3959,6 +3961,7 @@ function checkClusterDiskQuota()
 
 function find_closest_mirror()
 {
+    // TODO LxCenter: No call to this function found.
 	dprint("find_closest_mirror htmllib>lib>lib.php\n"); 
 	$v = curl_general_get("lxlabs.com/mirrorlist/");
 	$v = trim($v);
@@ -4162,19 +4165,6 @@ function get_last_month_and_year()
 	return array($month, $year);
 }
 
-
-function fix_arch()
-{
-	// Do it only for xen.
-
-	if (!lxfile_exists("/proc/xen")) {
-		return;
-	}
-
-	if (!lxfile_real("/etc/rpm/platform")) {
-		//lfile_put_contents("/etc/rpm/platform", "i686-redhat-linux"); 
-	}
-}
 
 function add_to_log($file)
 {
