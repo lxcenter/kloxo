@@ -29,7 +29,7 @@ scavenge_main();
 
 function scavenge_main() {
     global $gbl, $sgbl, $login, $ghtml;
-    log_shell("Scavenge: Start")
+    log_shell("Scavenge: Start");
     initProgramlib('admin');
     log_shell("Scavenge: Collect Traffic");
     passthru("$sgbl->__path_php_path ../bin/gettraffic.php");
