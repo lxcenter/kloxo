@@ -131,7 +131,10 @@ function csainlist($string, $ssl)
 function file_put_between_comments($username, $stlist, $endlist, $startstring, $endstring, $file, $string)
 {
 	global $gbl, $sgbl, $login, $ghtml; 
-
+    if (empty($string)) {
+    dprint("ERROR: Function file_put_between_comments\nERROR: File ". $file . " has empty \$string\n");
+    return;
+    }
 	$prgm = $sgbl->__var_program_name;
 
 	$startcomment =  "###Please Don't edit these comments or the content in between. $prgm uses this to recognize the lines it writes to the the file. If the above line is corrupted, it may fail to recognize them, leading to multiple lines.";
@@ -4337,7 +4340,7 @@ include_once "htmllib/lib/lxguardincludelib.php";
 
 	//dprintr($list['192.168.1.11']);
 
-	dprintr($total);
+	dprintr("Debug: Total: " . $total);
 	$deny = get_deny_list($total);
 	$hdn = lfile_get_unserialize("$lxgpath/hostdeny.info");
 	$deny = lx_array_merge(array($deny, $hdn));
@@ -4349,7 +4352,7 @@ include_once "htmllib/lib/lxguardincludelib.php";
 		$string .= "ALL : $k\n";
 	}
 
-	dprint($string);
+	dprint("Debug: \$string is:\n" . $string);
 
 	$stlist[] = "###Start Program Hostdeny config Area";
 	$stlist[] = "###Start Lxdmin Area";

@@ -2,27 +2,31 @@
 
 function get_deny_list($total)
 {
-	$lxgpath = "__path_home_root/lxguard";
-	$rmt = lfile_get_unserialize("$lxgpath/config.info");
-	$wht = lfile_get_unserialize("$lxgpath/whitelist.info");
-	$wht = $wht->data;
-	$disablehit = null;
-	if ($rmt) {
-		$disablehit = $rmt->data['disablehit'];
-	}
-	if (!($disablehit > 0)) { $disablehit = 20 ;}
-	$deny = null;
-	foreach($total as $k => $v) {
-		if (array_search_bool($k, $wht)) {
-			dprint("$k found in whitelist... not blocking..\n");
-			continue;
-		}
+    $lxgpath = "__path_home_root/lxguard";
+    $rmt = lfile_get_unserialize("$lxgpath/config.info");
+    $wht = lfile_get_unserialize("$lxgpath/whitelist.info");
+    if ($wht) {$wht = $wht->data;}
+    $disablehit = null;
+    if ($rmt) {
+        $disablehit = $rmt->data['disablehit'];
+    }
+    if (!($disablehit > 0)) { $disablehit = 20 ;}
+    $deny = null;
+    if ($total) {
+    foreach($total as $k => $v) {
+        if ($wht) {
+            if (array_search_bool($k, $wht)) {
+                dprint("$k found in whitelist... not blocking..\n");
+                continue;
+            }
+        }
 
-		if ($v > $disablehit) {
-			$deny[$k] = $v;
-		}
-	}
-	return $deny;
+        if ($v > $disablehit) {
+            $deny[$k] = $v;
+        }
+    }
+    }
+    return $deny;
 }
 
 function get_total($list, &$total)
@@ -30,11 +34,13 @@ function get_total($list, &$total)
 	$lxgpath = "__path_home_root/lxguard";
 	$rmt = lfile_get_unserialize("$lxgpath/hitlist.info");
 	if ($rmt) { $total = $rmt->hl; }
-	foreach($list as $k => $v) {
-		if (!isset($total[$k])) { $total[$k] = 0 ; }
-		$c = count_fail($v);
-		$total[$k] += $c;
-	}
+    if ($list) {
+        foreach($list as $k => $v) {
+            if (!isset($total[$k])) { $total[$k] = 0 ; }
+            $c = count_fail($v);
+            $total[$k] += $c;
+        }
+    }
 }
 
 function count_fail($v)
