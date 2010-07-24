@@ -22,13 +22,16 @@ function clearsession_main()
             }
         }
     }
-	$slist = $login->getList("ssessionlist");
 
-	foreach($slist as $s) {
-		if ($s->timeout < time()) {
-			$s->dbaction = 'delete';
-			$s->write();
-		}
-	}
+    $slist = $login->getList("ssessionlist");
+    if(!empty($slist))
+    {
+        foreach($slist as $s) {
+            if ($s->timeout < time()) {
+                $s->dbaction = 'delete';
+                $s->write();
+            }
+        }
+    }
 }
 sleep(600);
