@@ -4366,7 +4366,7 @@ include_once "htmllib/lib/lxguardincludelib.php";
 	$startstring = $stlist[0];
 	$endstring = $endlist[0];
 
-	file_put_between_comments($stlist, $endlist, $startstring, $endstring, "/etc/hosts.deny", $string);
+	file_put_between_comments("root",$stlist, $endlist, $startstring, $endstring, "/etc/hosts.deny", $string);
 
 	if ($clearflag) {
 		lxfile_rm("$lxgpath/access.info");
