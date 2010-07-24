@@ -11,15 +11,17 @@ function clearsession_main()
 	$login->__session_timeout = true;
 
 	$ulist = $login->getList('utmp');
-	foreach($ulist as $u) {
-		if ($u->timeout < time()) {
-			$u->setUpdateSubaction('');
-			$u->logouttime = time();
-			$u->logoutreason = 'Session Expired';
-			$u->write();
-		}
-	}
-
+    if(!empty($ulist))
+    {
+        foreach($ulist as $u) {
+            if ($u->timeout < time()) {
+                $u->setUpdateSubaction('');
+                $u->logouttime = time();
+                $u->logoutreason = 'Session Expired';
+                $u->write();
+            }
+        }
+    }
 	$slist = $login->getList("ssessionlist");
 
 	foreach($slist as $s) {
