@@ -193,7 +193,7 @@ static function createHitList($server)
 		$res['nname'] = $k;
 		$res['currentip_flag'] = 'dull';
 
-		if ($k === $_SERVER['REMOTE_ADDR']) {
+		if (isset($_SERVER['REMOTE_ADDR']) && $k === $_SERVER['REMOTE_ADDR']) {
 			$res['currentip_flag'] = 'on';
 		}
 		$res['ipaddress'] = $k;
