@@ -139,31 +139,34 @@ function display($var)
 	return $this->$var;
 }
 
+// overrides method in class Lxclass (lxclass.php)
 static function defaultSort() { return 'failcount' ; }
 static function defaultSortDir() { return "desc"; }
+//
 
-
-static function getDataFromServer($syncserver)
-{
-	$list = rl_exec_get(null, $syncserver, "lxguard_main", array(true));
-	foreach($list as $k => $v) {
-		foreach($v as $kk => $vv) {
-			$l['nname'] = "{$k}___$kk";
-			$l['ddate'] = $kk;
-			$l['ipaddress'] = $k;
-			$l['access'] = $vv['access'];
-			$l['user'] = $vv['user'];
-			$l['service'] = $vv['service'];
-			$l['syncserver'] = $syncserver;
-			$obj = new lxguardhit(null, null, $l['nname']);
-			$obj->get();
-			if ($obj->dbaction === 'add') {
-				$obj->create($l);
-				$obj->write();
-			}
-		}
-	}
-}
+    static function getDataFromServer($syncserver)
+    {
+        $list = rl_exec_get(null, $syncserver, "lxguard_main", array(true));
+        if ($list) {
+            foreach($list as $k => $v) {
+                foreach($v as $kk => $vv) {
+                    $l['nname'] = "{$k}___$kk";
+                    $l['ddate'] = $kk;
+                    $l['ipaddress'] = $k;
+                    $l['access'] = $vv['access'];
+                    $l['user'] = $vv['user'];
+                    $l['service'] = $vv['service'];
+                    $l['syncserver'] = $syncserver;
+                    $obj = new lxguardhit(null, null, $l['nname']);
+                    $obj->get();
+                    if ($obj->dbaction === 'add') {
+                        $obj->create($l);
+                        $obj->write();
+                    }
+                }
+            }
+        }
+    }
 
 static function initThisList($parent, $class)
 {

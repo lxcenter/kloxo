@@ -4340,7 +4340,7 @@ include_once "htmllib/lib/lxguardincludelib.php";
 
 	//dprintr($list['192.168.1.11']);
 
-	dprintr("Debug: Total: " . $total);
+	dprint_r("Debug: Total: " . $total .  "\n");
 	$deny = get_deny_list($total);
 	$hdn = lfile_get_unserialize("$lxgpath/hostdeny.info");
 	$deny = lx_array_merge(array($deny, $hdn));
@@ -4352,7 +4352,7 @@ include_once "htmllib/lib/lxguardincludelib.php";
 		$string .= "ALL : $k\n";
 	}
 
-	dprint("Debug: \$string is:\n" . $string);
+	dprint("Debug: \$string is:\n" . $string .  "\n");
 
 	$stlist[] = "###Start Program Hostdeny config Area";
 	$stlist[] = "###Start Lxdmin Area";
