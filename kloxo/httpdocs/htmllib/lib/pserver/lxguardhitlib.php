@@ -191,7 +191,7 @@ static function createHitList($server)
 			}
 		}
 
-        dprint("Debug: "$k . "\n");
+        dprint("Debug: " . $k . "\n");
 		$res['nname'] = $k;
 		$res['currentip_flag'] = 'null';
 
