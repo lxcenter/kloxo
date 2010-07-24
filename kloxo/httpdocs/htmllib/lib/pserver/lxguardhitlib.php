@@ -190,8 +190,10 @@ static function createHitList($server)
 				$successcount++;
 			}
 		}
+
+        dprint("Debug: "$k . "\n");
 		$res['nname'] = $k;
-		$res['currentip_flag'] = 'dull';
+		$res['currentip_flag'] = 'null';
 
 		if (isset($_SERVER['REMOTE_ADDR']) && $k === $_SERVER['REMOTE_ADDR']) {
 			$res['currentip_flag'] = 'on';
