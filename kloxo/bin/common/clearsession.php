@@ -1,16 +1,15 @@
-<?php 
+<?php
 
-include_once "htmllib/lib/displayinclude.php";
+include_once 'htmllib/lib/displayinclude.php';
 clearsession_main();
-
 
 function clearsession_main()
 {
-	global $gbl, $sgbl, $login, $ghtml; 
-	initProgramlib('admin');
-	$login->__session_timeout = true;
+    global $gbl, $sgbl, $login, $ghtml;
+    initProgramlib('admin');
+    $login->__session_timeout = true;
 
-	$ulist = $login->getList('utmp');
+    $ulist = $login->getList('utmp');
     if(!empty($ulist))
     {
         foreach($ulist as $u) {
