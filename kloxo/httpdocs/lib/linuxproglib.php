@@ -105,16 +105,9 @@ function os_updateApplicableToSlaveToo()
 	$ver = get_package_version("lxawstats");
 	installAwstats($ver);
 
-	if (!lxfile_exists("/home/kloxo/httpd/back.webmail.4310")) {
-		//lxfile_mv_rec("/home/kloxo/httpd/webmail/", "/home/kloxo/httpd/back.webmail.4310");
-	}
-
-
 	if (!lxfile_exists("/home/kloxo/httpd/webmail/roundcube/config/db.inc.php")) {
 	}
 	lxfile_cp("../file/webmail-chooser/db.inc.phps", "/home/kloxo/httpd/webmail/roundcube/config/db.inc.php");
-
-	//installWithVersion("/home/kloxo/httpd/awstats/", "lxawstats", "4320");
 	lxfile_mkdir("/etc/lighttpd/conf/kloxo");
 	lxfile_mkdir("/var/bogofilter");
 	lxfile_mkdir("/home/kloxo/httpd/lighttpd");
@@ -175,6 +168,7 @@ function os_updateApplicableToSlaveToo()
 	}
 
 	lxfile_touch("/var/named/chroot/etc/kloxo.named.conf");
+    lxfile_touch("/var/named/chroot/etc/global.options.named.conf");
 	lxshell_return("pkill", "-f", "gettraffic");
 
 
@@ -209,12 +203,10 @@ function os_updateApplicableToSlaveToo()
 		lxshell_return("sh", "../pscript/centos5-postpostupgrade");
 		lxfile_cp("../file/centos-5/CentOS-Base.repo", "/etc/yum.repos.d/CentOS-Base.repo");
 		lxfile_rm("/etc/yum.repos.d/epel.repo");
-		//lxfile_cp("../file/centos-5/epel.repo", "/etc/yum.repos.d/");
 	}
 
 	fix_rhn_sources_file();
 	lxfile_symlink("__path_php_path", "/usr/bin/lxphp.exe");
-	@ lxfile_rm("__path_program_htmlbase/ol.out");
 	lxfile_cp("../file/apache/kloxo.conf", "/etc/httpd/conf/kloxo/kloxo.conf");
 	lxfile_cp("../file/apache/default_ssl.conf", "/etc/httpd/conf.d/ssl.conf");
 	lxfile_touch("/etc/httpd/conf/kloxo/webmail_redirect.conf");
@@ -225,7 +217,7 @@ function os_updateApplicableToSlaveToo()
 	lunlink("../log/lighttpd_error.log");
 
 
-	@ lxfile_rm("/etc/init.d/pure-ftpd");
+	@lxfile_rm("/etc/init.d/pure-ftpd");
 
 	if (!lxfile_exists("/etc/xinetd.d/pureftp")) {
 		lxfile_cp("../file/xinetd.pureftp", "/etc/xinetd.d/pureftp");
