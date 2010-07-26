@@ -146,47 +146,52 @@ static function switchProgramPost($old, $new)
 
 static function removeOtherDriver($driverapp)
 {
-	global $gbl, $sgbl, $login, $ghtml; 
+    global $gbl, $sgbl, $login, $ghtml;
 
-	if ($driverapp === 'bind') {
-		lxshell_return("service", "djbdns", "stop");
+    if ($driverapp === 'bind') {
+        lxshell_return("service", "djbdns", "stop");
 		lxshell_return("chkconfig", "named", "on");
         $pattern = 'include "/etc/global.options.named.conf";';
         $file = "/var/named/chroot/etc/named.conf";
         $comment = "//Global_options_file";
         addLineIfNotExist($file, $pattern, $comment);
-        $example_options  = 'acl "lxcenter" {\n';
-        $example_options .= ' localhost;\n';
-        $example_options .= '};\n\n';
-        $example_options .= 'options {\n';
-        $example_options .= ' max-transfer-time-in 60;\n';
-        $example_options .= ' transfer-format many-answers;\n';
-        $example_options .= ' transfers-in 60;\n';
-        $example_options .= ' auth-nxdomain yes;\n';
-        $example_options .= ' allow-transfer { "lxcenter"; };\n';
-        $example_options .= ' allow-recursion { "lxcenter"; };\n';
-        $example_options .= ' recursion no;\n';
-        $example_options .= ' version "LxCenter-1.0";\n';
-        $example_options .= '};\n\n';
-        $example_options .= '# Remove # to see all DNS queries\n';
-        $example_options .= '#logging {\n';
-        $example_options .= '# channel query_logging {\n';
-        $example_options .= '# file "/var/log/named_query.log";\n';
-        $example_options .= '# versions 3 size 100M;\n';
-        $example_options .= '# print-time yes;\n';
-        $example_options .= '# };\n\n';
-        $example_options .= '# category queries {\n';
-        $example_options .= '# query_logging;\n';
-        $example_options .= '# };\n';
-        $example_options .= '#};\n';
+ $options_file = "/var/named/chroot/etc/global.options.named.conf";
 
-        $cont = lfile_get_contents("/var/named/chroot/etc/global.options.named.conf");
-        $pattern = "options";
-        if (!preg_match("+$pattern+i", $cont)) {
-        file_put_contents("/var/named/chroot/etc/global.options.named.conf", "$example_options\n", FILE_APPEND);
-        }
+    $example_options = "acl \"lxcenter\" {\n";
+    $example_options .= " localhost;\n";
+    $example_options .= "};\n\n";
+    $example_options .= "options {\n";
+    $example_options .= " max-transfer-time-in 60;\n";
+    $example_options .= " transfer-format many-answers;\n";
+    $example_options .= " transfers-in 60;\n";
+    $example_options .= " auth-nxdomain yes;\n";
+    $example_options .= " allow-transfer { \"lxcenter\"; };\n";
+    $example_options .= " allow-recursion { \"lxcenter\"; };\n";
+    $example_options .= " recursion no;\n";
+    $example_options .= " version "LxCenter - 1.0";\n";
+    $example_options .= "};\n\n";
+    $example_options .= "# Remove # to see all DNS queries\n";
+    $example_options .= "#logging {\n";
+    $example_options .= "# channel query_logging {\n";
+    $example_options .= "# file " /var/log / named_query . log";\n";
+    $example_options .= "# versions 3 size 100M;\n";
+    $example_options .= "# print-time yes;\n";
+    $example_options .= "# };\n\n";
+    $example_options .= "# category queries {\n";
+    $example_options .= "# query_logging;\n";
+    $example_options .= "# };\n";
+    $example_options .= "#};\n";
+    if (!lfile_exists($options_file)) {
+        touch($options_file);
+        chown($options_file, "named");
+    }
+    $cont = lfile_get_contents($options_file);
+    $pattern = "options";
+    if (!preg_match("+$pattern+i", $cont)) {
+        file_put_contents($options_file, "$example_options\n");
+    }
 
-		$pattern='include "/etc/kloxo.named.conf";';
+		$pattern = 'include "/etc/kloxo.named.conf";';
 		$file = "/var/named/chroot/etc/named.conf";
 		$comment = "//Kloxo";
 		addLineIfNotExistInside($file, $pattern, $comment);
@@ -194,12 +199,12 @@ static function removeOtherDriver($driverapp)
 		chown("/var/named/chroot/etc/kloxo.named.conf", "named");
 		lxshell_return("rpm", "-e", "djbdns");
 		lunlink("/etc/init.d/djbdns");
-	} else {
-		lxshell_return("service",  "named", "stop");
-		lxshell_return("rpm", "-e", "--nodeps", "bind");
-		lxshell_return("rpm", "-e", "--nodeps", "bind-chroot");
-		lxshell_return("chkconfig", "djbdns", "on");
-	}
+    } else {
+        lxshell_return("service", "named", "stop");
+        lxshell_return("rpm", "-e", "--nodeps", "bind");
+        lxshell_return("rpm", "-e", "--nodeps", "bind-chroot");
+        lxshell_return("chkconfig", "djbdns", "on");
+    }
 }
 
 function inheritSynserverFromParent() { return false; }
