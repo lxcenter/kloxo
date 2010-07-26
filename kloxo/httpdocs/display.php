@@ -1,19 +1,14 @@
-<?php 
+<?php
 $v = 0;
 include_once 'htmllib/coredisplaylib.php';
-
-
 sleep($v);
 
 //setcookie("XDEBUG_SESSION", "sess", time () +  36000);
 //setcookie("XDEBUG_SESSION", "sess");
 print_time("start");
 
-
 display_init();
 print_time("start", "Start");
-
-
 
 //dprint($gbl->__c_object->username);
 //$list = $gbl->__c_object->getList('domaintemplate');
@@ -21,7 +16,4 @@ print_time("start", "Start");
 //dprintr($gbl->__c_object->ls);
 //dprintr($gbl->__c_object->priv);
 display_exec();
-print("<br>");
-
-
-
+echo '<br />';
