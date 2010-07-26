@@ -2,70 +2,17 @@
 
 include_once 'htmllib/lib/include.php';
 
-initProgram('admin');
-init_language();
-
-if(!isset($argv[2]))
+function printUsage()
 {
-    print("Usage: reflect --type=add --parent-class= --parent-name= --class= [--v-var= --v-val=]\n");
-    print("Usage: reflect --type=update --subaction= --class= --name= \n\n");
-    print("Example: How to add a customer to admin:\n");
-    print("/script/reflect --type=add --parent-class=client --parent-name=admin --class=client --v-var=ttype --v-val=customer\n\n");
-    print("Example: How to add a wordpress to a domain domain.com:\n");
-    print("/script/reflect --type=add --parent-class=web --parent-name=domain.com --class=installapp --v-var=appname --v-val=wordpress\n");
-    exit;
-}
+    echo 'Usage: reflect --type=add --parent-class= --parent-name= --class= [--v-var= --v-val=]
+Usage: reflect --type=update --subaction= --class= --name=
 
-$list = parse_opt($argv);
-$class = $list['class'];
-$type = $list['type'];
+Example: How to add a customer to admin:
+    /script/reflect --type=add --parent-class=client --parent-name=admin --class=client --v-var=ttype --v-val=customer
 
-switch($type)
-{
-    case 'update':
-        $subaction = $list['subaction'];
-        $object = new $class(null, null, $list['name']);
-        $object->get();
-        if ($object->dbaction === 'add')
-        {
-            print("object {$object->getClName()} doesn't exist\n");
-            exit;
-        }
-        $param = null;
-        $param = $object->updateform($subaction, $param);
-    break;
-    case 'add':
-        $pc = $list['parent-class'];
-        $pn = $list['parent-name'];
-        $parent = new $pc(null, null, $pn);
-        $parent->get();
-        if ($parent->dbaction === 'add')
-        {
-            print("parent {$parent->getClName()} doesn't exist\n");
-            exit;
-        }
-        $typtd = null;
-        if (isset($list['v-val'])) $typtd['val'] = $list['v-val'];
-        if (isset($list['v-var'])) $typtd['var'] = $list['v-var'];
-        $parent->priv = new Priv(null, null, $pn);
-        $param = exec_class_method($class, 'addform', $parent, $class, $typtd);
-        $param = $param['variable'];
-    break;
-    default:
-        printProperty($class, $type);
-    break;
-}
-
-foreach($param as $k => $v)
-{
-    if(csb($k, "__v") || csb($k, "__c") || csb($k, "__m")) continue;
-    $desc = get_classvar_description($class, $k);
-    $c = null;
-    $prep = null;
-    if($v && is_array($v) && $v[0] === 'M') $c = "Static: {$v[1]}";
-    if(csa($desc[0], 'q')) $k = "priv-$k";
-
-    printf("%45s %s $c\n", $k, $desc[2]);
+Example: How to add a wordpress to a domain domain.com:
+    /script/reflect --type=add --parent-class=web --parent-name=domain.com --class=installapp --v-var=appname --v-val=wordpress
+';
 }
 
 function getModeFromType($type)
@@ -103,4 +50,64 @@ function printProperty($class, $type)
         if (cse($name, "_o")) continue;
         printf("%35s %s\n", $name, $descr['help']);
     }
+}
+
+initProgram('admin');
+init_language();
+
+if(!isset($argv[2]))
+{
+    printUsage();
+    exit;
+}
+
+$list = parse_opt($argv);
+$class = $list['class'];
+$type = $list['type'];
+
+switch($type)
+{
+    case 'update':
+        $subaction = $list['subaction'];
+        $object = new $class(null, null, $list['name']);
+        $object->get();
+        if ($object->dbaction === 'add')
+        {
+            print("object {$object->getClName()} doesn't exist\n");
+            exit;
+        }
+        $param = $object->updateform($subaction, $param);
+    break;
+    case 'add':
+        $pc = $list['parent-class'];
+        $pn = $list['parent-name'];
+        $parent = new $pc(null, null, $pn);
+        $parent->get();
+        if ($parent->dbaction === 'add')
+        {
+            print("parent {$parent->getClName()} doesn't exist\n");
+            exit;
+        }
+        $typtd = null;
+        if (isset($list['v-val'])) $typtd['val'] = $list['v-val'];
+        if (isset($list['v-var'])) $typtd['var'] = $list['v-var'];
+        $parent->priv = new Priv(null, null, $pn);
+        $param = exec_class_method($class, 'addform', $parent, $class, $typtd);
+        $param = $param['variable'];
+    break;
+    default:
+        printProperty($class, $type);
+    break;
+}
+
+foreach($param as $k => $v)
+{
+    if(csb($k, "__v") || csb($k, "__c") || csb($k, "__m")) continue;
+    $desc = get_classvar_description($class, $k);
+    $c = null;
+    $prep = null;
+    if($v && is_array($v) && $v[0] === 'M') $c = "Static: {$v[1]}";
+    if(csa($desc[0], 'q')) $k = "priv-$k";
+
+    printf("%45s %s $c\n", $k, $desc[2]);
 }
