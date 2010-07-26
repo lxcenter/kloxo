@@ -68,22 +68,33 @@ foreach($param as $k => $v)
     printf("%45s %s $c\n", $k, $desc[2]);
 }
 
+function getModeFromType($type)
+{
+    switch($type)
+    {
+        case 'action':
+            $istr = "__acdesc_";
+        break;
+        case 'property':
+            $istr = "__desc_";
+        break;
+        case 'type': # [TODO] Check this, temporal workaround
+            $istr = "__acdesc_";
+        break;
+        default:
+            $istr = "__acdesc_";
+        break;
+    }
+    return $istr;
+}
+
 function printProperty($class, $type)
 {
     $r = new ReflectionClass($class);
     foreach($r->getProperties() as $s)
     {
-        if ($type === 'action')
-        {
-            $istr = "__acdesc_";
-            if (!csb($s->name, "__acdesc_")) continue;
-        }
-        if ($type === 'property')
-        {
-            $istr = "__desc_";
-            if (!csb($s->name, "__desc_")) continue;
-        }
-
+        $istr = getModeFromType($type);
+        if(!csb($s->name, $istr)) continue;
         $descr = get_classvar_description($class, $s->name);
         $name = strfrom($s->name, $istr);
         if (csa($descr[0], "q")) continue;
