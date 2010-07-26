@@ -3295,16 +3295,14 @@ function getClassFromName($cgi_clientname)
 {
     $classname = "client";
 
-    if (csa($cgi_clientname, "@")) {
+    if (csa($cgi_clientname, "@"))
         $classname = "mailaccount";
-    } else if (csa($cgi_clientname, ".vps")) {
+    elseif(csa($cgi_clientname, ".vps"))
         $classname = "vps";
-    } else if (csa($cgi_clientname, ".vm")) {
+    elseif(csa($cgi_clientname, ".vm"))
         $classname = "vps";
-    } else if (csa($cgi_clientname, ".aux")) {
+    elseif(csa($cgi_clientname, ".aux"))
         $classname = "auxiliary";
-    }
-
     /*
     Domain user doesn't exist anymore....
     else if (csa($cgi_clientname, ".")) {
