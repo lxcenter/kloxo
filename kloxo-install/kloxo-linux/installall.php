@@ -41,8 +41,6 @@ function installcomp_mail() {
     system("pear install log");
 }
 
-install_main();
-
 
 function install_main() {
 
@@ -161,4 +159,4 @@ function getAcceptValue($soft) {
     return $arg;
 }
 
-
+install_main();
