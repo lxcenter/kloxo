@@ -27,7 +27,9 @@ function auto_update()
 			exec_with_all_closed("$sgbl->__path_php_path ../bin/update.php");
 		}
 	} else {
-		if ((date('d') == 10) && !checkIfLatest()) {
+        // Remove timezone warning
+        date_default_timezone_set("UTC");		
+        if ((date('d') == 10) && !checkIfLatest()) {
 			$latest = getLatestVersion();
 			$msg = "New Version $latest Available for $sgbl->__var_program_name";
 			send_mail_to_admin($msg, $msg);
