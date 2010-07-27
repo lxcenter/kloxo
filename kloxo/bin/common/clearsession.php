@@ -1,7 +1,6 @@
 <?php
 
 include_once 'htmllib/lib/displayinclude.php';
-clearsession_main();
 
 function clearsession_main()
 {
@@ -33,4 +32,15 @@ function clearsession_main()
         }
     }
 }
+
+clearsession_main();
+
+// I do not want to wait for 600 secs in debug mode :)
+// Altho why is there a sleep at all....
+if ($sgbl->dbg >= 0) {
+dprint("Sleeping for 10 seconds....\n");
+sleep(10);
+} else {
+dprint("Sleeping for 600 seconds....\n");
 sleep(600);
+}
