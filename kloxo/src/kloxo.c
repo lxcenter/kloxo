@@ -34,24 +34,30 @@
 #include <openssl/ssl.h>
 #include <openssl/err.h>
 
-#define RSA_SERVER_CERT     "/usr/local/lxlabs/kloxo/file/backend.crt"
-#define RSA_SERVER_KEY          "/usr/local/lxlabs/kloxo/file/backend.key"
+#define RSA_SERVER_CERT "/usr/local/lxlabs/kloxo/file/backend.crt"
+#define RSA_SERVER_KEY  "/usr/local/lxlabs/kloxo/file/backend.key"
 
 #define RSA_SERVER_CA_CERT "server_ca.crt"
-#define RSA_SERVER_CA_PATH   "sys$common:[syshlp.examples.ssl]"
+#define RSA_SERVER_CA_PATH "sys$common:[syshlp.examples.ssl]"
 
 #define MASTER 0
-#define SLAVE 1
-#define ON   1
-#define OFF        0
+#define SLAVE  1
+#define ON     1
+#define OFF    0
+
+#define RESTART_INTERVAL  60
+#define SCAVENGE_INTERVAL 60
+#define SISINFOC_INTERVAL 60 * 5 
 
 #define MAX(x,y) if ((x) > (y)) return x; else return y;
-
-#define RETURN_NULL(x) if ((x)==NULL) exit(1)
-#define RETURN_ERR(err,s) if ((err)==-1) { perror(s); exit(1); }
-#define RETURN_SSL(err) if ((err)==-1) { ERR_print_errors_fp(stderr); exit(1); }
+#define RETURN_NULL(x) if ((x) == NULL) exit(1)
+#define RETURN_ERR(err,s) if ((err) == -1) { perror(s); exit(1); }
+#define RETURN_SSL(err) if ((err) == -1) { ERR_print_errors_fp(stderr); exit(1); }
 
 int global_type;
+static time_t restart_timer  = (time_t)0;
+static time_t scavenge_timer = (time_t)0;
+static time_t sisinfoc_timer = (time_t)0;
 
 int run_php_prog_ssl(SSL *ssl, int sock)
 {
@@ -63,10 +69,9 @@ int run_php_prog_ssl(SSL *ssl, int sock)
 	int n, p, totaln;
 	int pipefd[2];
 	FILE *fp;
-
-
 	char *data = NULL;
 	char *data1 = NULL;
+
 	bzero(buf, sizeof(buf));
 	while (1) {
 		err = ssl_or_tcp_read(ssl, sock, buf, sizeof(buf) - 1);
@@ -145,29 +150,27 @@ int ssl_or_tcp_write(SSL *ssl, int sock, char * buf, int n)
 int ssl_or_tcp_read(SSL *ssl, int sock, char * buf, int n)
 {
 	int p;
+
 	if (sock) {
-		p =  read(sock, buf, n);
+		p = read(sock, buf, n);
 		printf("Read %d %s \n", p, buf);
 	} else {
-		p =  SSL_read(ssl, buf, n);
+		p = SSL_read(ssl, buf, n);
 	}
 	return p;
 }
 
 SSL_CTX * ssl_init()
 {
-	int     err;
-	int     verify_client = OFF; /* To verify a client certificate, set ON */
-
+	int err;
+	int verify_client = OFF; /* To verify a client certificate, set ON */
 	size_t client_len;
-	char    *str;
-	char     buf[4096];
-
-	SSL_CTX         *ctx;
-	SSL            *ssl;
-	SSL_METHOD      *meth;
-
-	X509            *client_cert = NULL;
+	char *str;
+	char buf[4096];
+	SSL_CTX *ctx;
+	SSL *ssl;
+	SSL_METHOD *meth;
+	X509 *client_cert = NULL;
 
 	/*----------------------------------------------------------------*/
 	/* Load encryption & hashing algorithms for the SSL program */
@@ -183,41 +186,31 @@ SSL_CTX * ssl_init()
 	ctx = SSL_CTX_new(meth);
 
 	if (!ctx) {
-
 		ERR_print_errors_fp(stderr);
-
 		exit(1);
-
 	}
 
 	/* Load the server certificate into the SSL_CTX structure */
 	if (SSL_CTX_use_certificate_file(ctx, RSA_SERVER_CERT, SSL_FILETYPE_PEM) <= 0) {
-
 		ERR_print_errors_fp(stderr);
-
 		exit(1);
-
 	}
 
 	/* Load the private-key corresponding to the server certificate */
 	if (SSL_CTX_use_PrivateKey_file(ctx, RSA_SERVER_KEY, SSL_FILETYPE_PEM) <= 0) {
-
 		ERR_print_errors_fp(stderr);
 		exit(1);
 	}
 
 	/* Check if the server certificate and private-key matches */
 	if (!SSL_CTX_check_private_key(ctx)) {
-
 		fprintf(stderr,"Private key does not match the certificate public key\n");
 		exit(1);
 	}
 
 	if(verify_client == ON) {
-
 		/* Load the RSA CA certificate into the SSL_CTX structure */
 		if (!SSL_CTX_load_verify_locations(ctx, RSA_SERVER_CA_CERT, NULL)) {
-
 			ERR_print_errors_fp(stderr);
 			exit(1);
 		}
@@ -226,8 +219,7 @@ SSL_CTX * ssl_init()
 		SSL_CTX_set_verify(ctx,SSL_VERIFY_PEER,NULL);
 
 		/* Set the verification depth to 1 */
-		SSL_CTX_set_verify_depth(ctx,1);
-
+		SSL_CTX_set_verify_depth(ctx, 1);
 	}
 
 	return ctx;
@@ -235,45 +227,39 @@ SSL_CTX * ssl_init()
 
 char tcp_create_socket(short int s_port)
 {
-	/* ----------------------------------------------- */
 	/* Set up a TCP socket */
-
-	int     err;
-	int     listen_sock;
-	int     sock;
+	int err;
+	int listen_sock;
+	int sock;
 	struct sockaddr_in sa_serv;
 	struct sockaddr_in sa_cli;
 
 	listen_sock = socket(PF_INET, SOCK_STREAM, IPPROTO_TCP);
 
 	RETURN_ERR(listen_sock, "socket");
-	memset (&sa_serv, '\0', sizeof(sa_serv));
-	sa_serv.sin_family      = AF_INET;
+	memset(&sa_serv, '\0', sizeof(sa_serv));
+	sa_serv.sin_family = AF_INET;
 	sa_serv.sin_addr.s_addr = INADDR_ANY;
-	sa_serv.sin_port        = htons (s_port);          /* Server Port number */
-	err = bind(listen_sock, (struct sockaddr*)&sa_serv,sizeof(sa_serv));
+	sa_serv.sin_port = htons(s_port); /* Server Port number */
+	err = bind(listen_sock, (struct sockaddr*)&sa_serv, sizeof(sa_serv));
 	RETURN_ERR(err, "bind");
 	err = listen(listen_sock, 500000);
 	return listen_sock;
 }
 
-char * ssl_sock_read(int sock, SSL_CTX *ctx)
+char* ssl_sock_read(int sock, SSL_CTX *ctx)
 {
-
-	int     err;
-	int     verify_client = OFF; /* To verify a client certificate, set ON */
-
+	int err;
+	int verify_client = OFF; /* To verify a client certificate, set ON */
 	int pid;
 	struct sockaddr_in sa_serv;
 	struct sockaddr_in sa_cli;
 	size_t client_len;
-	char    *str;
-	char     buf[4096];
-
-	SSL            *ssl;
-	SSL_METHOD      *meth;
-
-	X509            *client_cert = NULL;
+	char *str;
+	char buf[4096];
+	SSL *ssl;
+	SSL_METHOD *meth;
+	X509 *client_cert = NULL;
 
 	/* ----------------------------------------------- */
 	/* TCP connection is ready. */
@@ -301,14 +287,15 @@ char * ssl_sock_read(int sock, SSL_CTX *ctx)
 			str = X509_NAME_oneline(X509_get_subject_name(client_cert), 0, 0);
 			RETURN_NULL(str);
 			//printf ("\t subject: %s\n", str);
-			free (str);
+			free(str);
 			str = X509_NAME_oneline(X509_get_issuer_name(client_cert), 0, 0);
 			RETURN_NULL(str);
 			//printf ("\t issuer: %s\n", str);
-			free (str);
+			free(str);
 			X509_free(client_cert);
-		} else
+		} else {
 			printf("The SSL client does not have certificate.\n");
+		}
 	}
 
 	/*------- DATA EXCHANGE - Receive message and send reply. -------*/
@@ -341,10 +328,10 @@ int tcp_sock_read(int sock)
 
 int accept_and(int listen_sock)
 {
-
 	int sock;
 	struct sockaddr_in sa_cli;
 	size_t client_len;
+
 	client_len = sizeof(sa_cli);
 	/* Socket for a TCP/IP connection is created */
 	sock = accept(listen_sock, (struct sockaddr*)&sa_cli, &client_len);
@@ -360,7 +347,7 @@ ssl_or_tcp_fork(int listen_socket, SSL_CTX *ctx)
 	sock = accept_and(listen_socket);
 	pid = fork();
 	if (pid == 0) {
-		close (listen_socket);
+		close(listen_socket);
 		if (ctx) {
 			ssl_sock_read(sock, ctx);
 		} else {
@@ -374,35 +361,43 @@ ssl_or_tcp_fork(int listen_socket, SSL_CTX *ctx)
 int close_and_system(char *cmd)
 {
 	int i, pid;
+
 	pid = fork();
 	if (pid == 0) {
-		for(i = 3; i< 1024; i++) {
+		for (i = 3; i < 1024; i++) {
 			close(i);
 		}
 		system(cmd);
 		exit(9);
-	} else {
-		return;
 	}
 }
 
-int process_timed(int counter)
+int check_restart()
 {
 	struct dirent **namelist;
 	char cmd[BUFSIZ];
 	struct tm tms;
-	time_t tim;
+	time_t now;
 	int n;
 	int i;
 	char *position, *neededstring;
 
+	now = time(NULL);
+	if (now - restart_timer < RESTART_INTERVAL) {
+		return 1;
+	}
+
+	printf("Checking Restarts...\n");
+
 	n = scandir("../etc/.restart/", &namelist, 0, alphasort);
-	if (n < 0)
+	if (n < 0) {
 		perror("scandir");
-	else {
-		while(n--) {
-			position = strstr(namelist[n]->d_name, "._restart_");
-			if (!position) continue;
+		return 1;
+	}
+
+	while(n--) {
+		position = strstr(namelist[n]->d_name, "._restart_");
+		if (position) {
 			neededstring = position + 10;
 			if (!strcmp(neededstring, "lxcollectquota")) {
 				printf("Running CollectQuota\n");
@@ -417,39 +412,53 @@ int process_timed(int counter)
 			}
 			snprintf(cmd, sizeof(cmd), "../etc/.restart/%s", namelist[n]->d_name);
 			unlink(cmd);
-			free(namelist[n]);
 		}
-		free(namelist);
+		free(namelist[n]);
+	}
+	free(namelist);
+
+	restart_timer = now;
+}
+
+int exec_sisinfoc()
+{
+	time_t now;
+
+	now = time(NULL);
+	if (now - sisinfoc_timer < SISINFOC_INTERVAL) {
+		return 1;
 	}
 
-	printf("Counter %d\n", counter);
+	printf("Executing Sisinfoc...\n");
+	close_and_system("/usr/local/lxlabs/ext/php/php ../bin/sisinfoc.php >/dev/null 2>&1 &");
 
-	if (!(counter%5)) {
-		printf("Executing Sisinfoc\n");
-		close_and_system("/usr/local/lxlabs/ext/php/php ../bin/sisinfoc.php > /dev/null 2>&1 &");
-	}
-
-	if (global_type == SLAVE) {
-		return;
-	}
-
-	// Only for master
-	
-	exec_scavenge();
+	sisinfoc_timer = now;
 }
 
 int exec_scavenge()
 {
 	int hour, min;
-	int minmatch;
+	int time_match;
+	int interval;
 	struct tm tms;
-	time_t tim;
+	time_t now;
 	int i;
 	FILE *fp;
 
-	printf("Master Code...\n");
+	// Only for master
+	if (global_type != MASTER) {
+		return 1;
+	}
+
+	now = time(NULL);
+	if (now - scavenge_timer < SCAVENGE_INTERVAL) {
+		return 1;
+	}
+
 	hour = 3;
 	min = 35;
+
+	printf("Loading Scavenge time configuation...\n");
 
 	if (!access("../etc/conf/scavenge_time.conf", R_OK)) {
 		fp = fopen("../etc/conf/scavenge_time.conf", "r");
@@ -459,33 +468,33 @@ int exec_scavenge()
 		}
 	}
 
+	localtime_r(&now, &tms);
+	printf(" Now Value:  %02d:%02d\n", tms.tm_hour, tms.tm_min);
+	printf(" Read Value: %02d:%02d\n", hour, min);
 
-	time(&tim);
-	localtime_r(&tim, &tms);
-	printf("Now Value: %d %d\n", tms.tm_hour, tms.tm_min);
-	printf("Read Value: %d %d\n", hour, min);
-	minmatch = 0;
-	for(i = 0; i < 6; i++) {
-		if (tms.tm_min == (min + i)) {
-			minmatch = 1;
+	// check interval of 5 minutes
+	interval = 5;
+	time_match = 0;
+	for(i = 0; i <= interval; i++) {
+		if (tms.tm_hour == hour && tms.tm_min == min) {
+			time_match = 1;
 			break;
+		}
+		min++;
+		if (min == 60) {
+			min = 0;
+			hour = hour < 23 ? (hour + 1) : 0;
 		}
 	}
 
-	if ((tms.tm_hour == hour) && minmatch) {
-		printf("Execing scavenge...\n");
+	if (time_match) {
+		printf("Executing Scavenge...\n");
 		close_and_system("/usr/local/lxlabs/ext/php/php ../bin/scavenge.php >/dev/null 2>&1 &");
+		scavenge_timer = now + interval * 60;
 	}
-}
-
-int process_timed_in_child()
-{
-	int pid;
-	static int counter;
-	process_timed(counter);
-	if (counter == 999999) counter = 0;
-	counter += 1;
-	return 0;
+	else {
+		scavenge_timer = now;
+	}
 }
 
 int main(int argc, char **argv)
@@ -497,12 +506,14 @@ int main(int argc, char **argv)
 	int status;
 	int ssl_sock, tcp_sock, max_sock;
 	int select_ret;
-	int uid;
 	struct timeval tv;
 	SSL_CTX *ctx;
 
+	// disable stdout buffering
+	setvbuf(stdout, NULL, _IONBF, 0);
+
 	if (argc < 2) {
-		printf("Usage: %s master/slave\n", argv[0]);
+		printf("Usage: %s master|slave\n", argv[0]);
 		exit(0);
 	}
 
@@ -512,15 +523,12 @@ int main(int argc, char **argv)
 		global_type = SLAVE;
 	}
 
-	uid = getuid();
-
-	if (uid != 0) {
+	if (getuid() != 0) {
 		printf("Not root user\n");
 		exit(6);
 	}
 
-	system("/usr/local/lxlabs/ext/php/php ../bin/sisinfoc.php");
-	system("/usr/local/lxlabs/ext/php/php ../bin/execatstart.php");
+	exec_sisinfoc();
 
 	ctx = ssl_init();
 
@@ -528,14 +536,13 @@ int main(int argc, char **argv)
 	tcp_sock = tcp_create_socket(7776);
 
 	while (1) {
-		tv.tv_sec = 3;
 		tv.tv_sec = 60;
 		tv.tv_usec = 0;
 		FD_ZERO(&socklist); /* Always clear the structure first. */
 		FD_SET(ssl_sock, &socklist); 
 		FD_SET(tcp_sock, &socklist); 
 
-		max_sock = (tcp_sock > ssl_sock? tcp_sock : ssl_sock);
+		max_sock = (tcp_sock > ssl_sock ? tcp_sock : ssl_sock);
 
 		max_sock += 1;
 		select_ret = select(max_sock, &socklist, NULL, NULL, &tv);
@@ -545,7 +552,10 @@ int main(int argc, char **argv)
 		}
 		while (wait3(&status, WNOHANG, 0) > 0);
 
-		process_timed_in_child();
+		check_restart();
+		exec_sisinfoc();
+		exec_scavenge();
+
 		if (select_ret > 0) {
 			if (FD_ISSET(tcp_sock, &socklist)) {
 				//printf("TCP connection %d\n", select_ret);
