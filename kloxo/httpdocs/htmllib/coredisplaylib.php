@@ -742,7 +742,7 @@ function __ac_desc_Update($object)
         }
     }
 
-    if (!$class)
+    if (!$class) {
         $ret = do_update($object, $subaction, $list);
     }
     else
