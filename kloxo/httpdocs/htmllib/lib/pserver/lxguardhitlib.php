@@ -87,7 +87,7 @@ class lxguardhitdisplay extends lxclass {
 static $__desc = array("", "",  "connection");
 static $__desc_ipaddress = array("", "",  "ipaddress", "a=show");
 static $__desc_currentip_flag = array("e", "",  "Cur:current_ip_or_not");
-static $__desc_currentip_flag_v_dull = array("", "",  "");
+static $__desc_currentip_flag_v_null = array("", "", "");
 static $__desc_currentip_flag_v_on = array("", "", "this_is_your_current_ip");
 static $__desc_failcount = array("", "",  "fail");
 static $__desc_successcount = array("", "",  "success");
@@ -179,22 +179,11 @@ static function initThisList($parent, $class)
 static function createHitList($server)
 {
 	$sq = new Sqlite(null, "lxguardhit");
-	$res = $sq->getRowsWhere("syncserver = '$server'");
+	$res = $sq->rawQuery("SELECT ipaddress, access, count(*) FROM lxguardhit WHERE syncserver = '$server' GROUP BY ipaddress, access");
 	foreach($res as $r) {
-		$total[$r['ipaddress']][$r['ddate']] = $r;
+		$total[$r['ipaddress']][$r['access']] = $r['count(*)'];
 	}
 	foreach($total as $k => $t) {
-		$failcount = 0;
-		$successcount = 0;
-		foreach($t as $kk => $vv) {
-			if ($vv['access'] === 'fail') {
-				$failcount++;
-			} else {
-				$successcount++;
-			}
-		}
-
-        dprint("Debug: " . $k . "\n");
 		$res['nname'] = $k;
 		$res['currentip_flag'] = 'null';
 
@@ -202,8 +191,8 @@ static function createHitList($server)
 			$res['currentip_flag'] = 'on';
 		}
 		$res['ipaddress'] = $k;
-		$res['failcount'] = $failcount;
-		$res['successcount'] = $successcount;
+		$res['failcount'] = isset($t['fail']) ? $t['fail'] : 0;
+		$res['successcount'] = isset($t['success']) ? $t['success'] : 0;
 		$ret[] = $res;
 	}
 	return $ret;
