@@ -24,12 +24,12 @@ class Dns__Bind  extends lxDriverClass {
     $example_options .= " allow-transfer { \"lxcenter\"; };\n";
     $example_options .= " allow-recursion { \"lxcenter\"; };\n";
     $example_options .= " recursion no;\n";
-    $example_options .= " version "LxCenter-1.0";\n";
+    $example_options .= " version \"LxCenter-1.0\";\n";
     $example_options .= "};\n\n";
     $example_options .= "# Remove # to see all DNS queries\n";
     $example_options .= "#logging {\n";
     $example_options .= "# channel query_logging {\n";
-    $example_options .= "# file "/var/log/named_query.log";\n";
+    $example_options .= "# file \"/var/log/named_query.log\";\n";
     $example_options .= "# versions 3 size 100M;\n";
     $example_options .= "# print-time yes;\n";
     $example_options .= "# };\n\n";
