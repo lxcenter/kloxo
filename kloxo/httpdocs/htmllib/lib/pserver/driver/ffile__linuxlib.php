@@ -36,7 +36,6 @@ function dbactionUpdate($subaction)
 
 		case "rename":
 			$this->aux->reName();
-			//lxfile_unix_chown($new, $this->main->__username_o);
 			break;
 
 		case "paste":
@@ -56,7 +55,6 @@ function dbactionUpdate($subaction)
 
 		case "newdir":
 			$path = $this->aux->newDir();
-			lxfile_unix_chown($path, $this->main->__username_o);
 			lxfile_unix_chown($path, $chownug);
 			break;
 
@@ -78,8 +76,6 @@ function dbactionUpdate($subaction)
 
 		case "zip_file":
 			$zipfile = $this->aux->zipFile();
-			//lxfile_unix_chown($zipfile, $this->main->__username_o);
-			//lxfile_unix_chown($zipfile, $chownug);
 			break;
 
 		case "filedelete":
@@ -110,10 +106,6 @@ function dbactionUpdate($subaction)
 
 		case "zipextract":
 			$dir = $this->aux->zipExtract();
-			if ($sgbl->isKloxo() && $this->main->__username_o !== 'root') {
-				//lxfile_unix_chown_rec($dir, "{$this->main->__username_o}");
-				//lxfile_unix_chown_rec($dir, $chownug);
-			}
 			break;
 	}
 }
