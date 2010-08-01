@@ -142,7 +142,7 @@ function convertImage()
 	$this->throw_if_not_magick();
 	$fp = $this->main->getFullPath();
 	$file = coreFfile::getWithoutExtension($fp);
-	$newfile = "$file{$this->main->new_format_f}";
+	$newfile = "$file.{$this->main->new_format_f}";
 	lxuser_return($this->main->__username_o, "convert", $fp, $newfile);
 }
 

@@ -116,19 +116,14 @@ static function is_image($path)
 
 static function getExtension($path)
 {
-	$array = pathinfo($path);
-	return $array['extension'];
+	return pathinfo($path, PATHINFO_EXTENSION);
 }
 
 static function getWithoutExtension($path)
 {
 	$array = pathinfo($path);
-	$base = basename($path, $array['extension']);
-	return "{$array['dirname']}/$base";
+	return "{$array['dirname']}/{$array['filename']}";
 }
-
-
-
 
 static function getContent($__username_o, $root, $path, $stat, $numlines)
 {
