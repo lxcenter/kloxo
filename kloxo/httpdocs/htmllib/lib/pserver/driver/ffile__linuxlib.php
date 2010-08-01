@@ -100,12 +100,12 @@ function dbactionUpdate($subaction)
 
 		case "download_from_http":
 			$fullpath = $this->aux->downloadFromHttp();
-			lxfile_unix_chown($fullpath, $this->main->__username_o);
+			lxfile_unix_chown($fullpath, $chownug);
 			break;
 
 		case "download_from_ftp":
 			$fullpath = $this->aux->downloadFromFtp();
-			lxfile_unix_chown($fullpath, $this->main->__username_o);
+			lxfile_unix_chown($fullpath, $chownug);
 			break;
 
 		case "zipextract":
