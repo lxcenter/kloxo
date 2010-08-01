@@ -2959,7 +2959,7 @@ function check_file_if_owned_by($file, $user)
     } else {
         $ruser = $user;
     }
-    $stat = lxfile_stat($path, false);
+    $stat = lxfile_stat($file, false);
     $uid = $stat['uid'];
     $name = os_get_user_from_uid($uid);
     if ($name === $ruser) { return true; }
