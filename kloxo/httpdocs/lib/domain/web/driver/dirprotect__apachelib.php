@@ -1,41 +1,49 @@
 <?php 
 
-class dirprotect__apache extends lxDriverClass {
-
-
-function dbactionAdd()
+class dirprotect__apache extends lxDriverClass
 {
-	$this->createDiruserfile();
-}
 
-
-function createDiruserfile()
-{
-	global $gbl, $sgbl, $login, $ghtml; 
-	
-	$dir = "__path_httpd_root/{$this->main->getParentName()}/__dirprotect/";
-	$dirfile = $dir . "/" . $this->main->getFileName();
-	if (!lxfile_exists($dir)) {
-		lxuser_mkdir($this->main->__var_username, $dir);
-		//lxfile_unix_chown($dir, $this->main->__var_username);
+	function dbactionAdd()
+	{
+		$this->createDiruserfile();
 	}
-	$fstr = null;
-	foreach($this->main->diruser_a as $v) {
-		$fstr .= $v->nname . ':' . crypt($v->param) . "\n";
+
+	function dbactionUpdate($subaction)
+	{
+		$this->createDiruserfile();
 	}
-	lxuser_put_contents($this->main->__var_username, $dirfile,  $fstr);
-	lxuser_chmod($this->main->__var_username, $dirfile, "0755");
 
-	// http://project.lxcenter.org/issues/74
-	lfile_put_contents($dirfile,$fstr);
+	function dbactionDelete()
+	{
+		$dir = '__path_httpd_root/' . $this->main->getParentName() . '/__dirprotect';
+		$dirfile = $dir . '/' . $this->main->getFileName();
+
+		lxfile_rm($dirfile);
+	}
+
+	function createDiruserfile()
+	{
+		$dir = '__path_httpd_root/' . $this->main->getParentName() . '/__dirprotect';
+		$dirfile = $dir . '/' . $this->main->getFileName();
+
+		$chownug = $this->main->__var_username . ':apache';
+
+		if (!lxfile_exists($dir)) {
+			lxuser_mkdir($chownug, $dir);
+			lxfile_generic_chmod($dir, '0750');
+		}
+
+		lxfile_rm($dirfile);
+
+		if ($this->main->status == 'on') {
+			$fstr = '';
+			foreach ($this->main->diruser_a as $v) {
+				$fstr .= $v->nname . ':' . crypt($v->param) . "\n";
+			}
+
+			lxuser_put_contents($chownug, $dirfile, $fstr);
+			lxfile_generic_chmod($dirfile, '0750');
+		}
+	}
+
 }
-
-
-function dbactionUpdate($subaction)
-{
-	$this->createDiruserfile();
-}
-
-}
-
-
