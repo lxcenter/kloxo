@@ -19,12 +19,9 @@
 //
 include_once "../install_common.php";
 
-lxins_main();
-
 function lxins_main()
 {
-	global $argv;
-	global $downloadserver;
+	global $argv, $downloadserver;
 	$opt = parse_opt($argv);
 	$dir_name=dirname(__FILE__);
 	$installtype = $opt['install-type'];
@@ -57,30 +54,30 @@ function lxins_main()
 		$stdin = fopen('php://stdin','r');
 		$argq = fread($stdin, 5);
 		$arg=trim($argq);
-			if(!($arg=='y' ||$arg=='yes'||$arg=='Yes'||$arg=='Y'||$arg=='YES')) {
-				print("You did not agree to the AGPL-V3.0 license terms.\n");
-				print("Installation aborted.\n\n");
-				exit;
-			} else {
-				print("Installing Kloxo = YES\n\n");
-			}
+		if(!($arg=='y' ||$arg=='yes'||$arg=='Yes'||$arg=='Y'||$arg=='YES')) {
+			print("You did not agree to the AGPL-V3.0 license terms.\n");
+			print("Installation aborted.\n\n");
+			exit;
+		} else {
+			print("Installing Kloxo = YES\n\n");
+		}
 	}
-		// Ask for InstallApp
-		print("InstallApp: PHP Applications like PHPBB, WordPress, Joomla etc");
-		print("When you choose Yes, be aware of downloading about 350Mb of data!");
-                print("Do you want to install the InstallAPP sotfware? (No/Yes):\n");
-                flush();
-                $stdin = fopen('php://stdin','r');
-                $argq = fread($stdin, 5);
-                $arg=trim($argq);
-		$installappinst = false; 
-                        if(!($arg=='y' ||$arg=='yes'||$arg=='Yes'||$arg=='Y'||$arg=='YES')) {
-                                print("Installing InstallApp = NO\n");
-                                print("You can install it later with /script/installapp-update\n\n");
-                        } else {
-                                print("Installing InstallApp = YES\n\n");
-				$installappinst = true;
-                        }
+	// Ask for InstallApp
+	print("InstallApp: PHP Applications like PHPBB, WordPress, Joomla etc");
+	print("When you choose Yes, be aware of downloading about 350Mb of data!");
+	print("Do you want to install the InstallAPP sotfware? (No/Yes):\n");
+	flush();
+	$stdin = fopen('php://stdin','r');
+	$argq = fread($stdin, 5);
+	$arg=trim($argq);
+	$installappinst = false;
+	if(!($arg=='y' ||$arg=='yes'||$arg=='Yes'||$arg=='Y'||$arg=='YES')) {
+		print("Installing InstallApp = NO\n");
+		print("You can install it later with /script/installapp-update\n\n");
+	} else {
+		print("Installing InstallApp = YES\n\n");
+		$installappinst = true;
+	}
 
 
 	print("Adding System users and groups (nouser, nogroup and lxlabs, lxlabs)\n");
@@ -91,7 +88,7 @@ function lxins_main()
 
 	print("Installing LxCenter yum repository for updates\n");
 	install_yum_repo($osversion);
-	
+
 	print("Removing sendmail, exim, vsftpd, postfix, vpopmail, qmail,\n");
 	print("Removing lxphp, lxzend, pure-ftpd and imap\n");
 	exec("rpm -e --nodeps sendmail sendmail-cf sendmail-doc sendmail-devel  > /dev/null 2>&1");
@@ -99,7 +96,7 @@ function lxins_main()
 	exec("rpm -e --nodeps vsftpd postfix vpopmail qmail lxphp lxzend pure-ftpd imap > /dev/null 2>&1");
 
 
-	$package = array("php-mysql", "which", "gcc-c++", "php-imap", "php-pear", "php-devel", "lxlighttpd", "httpd", "mod_ssl", "zip","unzip","lxphp", "mysql", "mysql-server",  "mysqlclient10", "lxzend","curl","autoconf","automake","libtool", "bogofilter", "gcc", "cpp", "openssl", "pure-ftpd");
+	$package = array("php-mbstring", "php-mysql", "which", "gcc-c++", "php-imap", "php-pear", "php-devel", "lxlighttpd", "httpd", "mod_ssl", "zip","unzip","lxphp", "mysql", "mysql-server",  "mysqlclient10", "lxzend","curl","autoconf","automake","libtool", "bogofilter", "gcc", "cpp", "openssl", "pure-ftpd");
 
 	$list = implode(" ", $package);
 	while (true) {
@@ -119,7 +116,7 @@ function lxins_main()
 	print("Downloading latest Kloxo release\n");
 	system("wget ".$downloadserver."download/kloxo/production/kloxo/kloxo-current.zip");
 	print("\n\nInstalling Kloxo.....\n\n");
-	system("unzip -oq kloxo-current.zip", $return); 
+	system("unzip -oq kloxo-current.zip", $return);
 
 	if ($return) {
 		print("Unzipping the core Failed.. Most likely it is corrupted. Report it at http://forum.lxcenter.org/\n");
@@ -135,7 +132,7 @@ function lxins_main()
 		check_default_mysql($dbroot, $dbpass);
 	}
 	$mypass = password_gen();
-	
+
 	print("Prepare defaults and configurations...\n");
 	system("/usr/local/lxlabs/ext/php/php $dir_name/installall.php");
 	our_file_put_contents("/etc/sysconfig/spamassassin", "SPAMDOPTIONS=\" -v -d -p 783 -u lxpopuser\"");
@@ -162,18 +159,18 @@ function lxins_main()
 	chdir("/home/kloxo/httpd");
 	@ unlink("skeleton-disable.zip");
 	system("chown -R lxlabs:lxlabs /home/kloxo/httpd");
-    system("/etc/init.d/kloxo restart >/dev/null 2>&1 &");
+	system("/etc/init.d/kloxo restart >/dev/null 2>&1 &");
 	chdir("/usr/local/lxlabs/kloxo/httpdocs/");
 	system("/usr/local/lxlabs/ext/php/php /usr/local/lxlabs/kloxo/bin/install/create.php --install-type=$installtype --db-rootuser=$dbroot --db-rootpassword=$dbpass");
 	system("/usr/local/lxlabs/ext/php/php /usr/local/lxlabs/kloxo/bin/misc/secure-webmail-mysql.phps");
 	system("/bin/rm /usr/local/lxlabs/kloxo/bin/misc/secure-webmail-mysql.phps");
 	system("/script/centos5-postpostupgrade");
-        if ($installappinst) {
-	 system("/script/installapp-update"); // First run (gets installappdata)
-	 system("/script/installapp-update"); // Second run (gets applications)
+	if ($installappinst) {
+		system("/script/installapp-update"); // First run (gets installappdata)
+		system("/script/installapp-update"); // Second run (gets applications)
 	}
 
-print("Congratulations. Kloxo has been installed succesfully on your server as $installtype \n");
+	print("Congratulations. Kloxo has been installed succesfully on your server as $installtype \n");
 	if ($installtype === 'master') {
 		print("You can connect to the server at https://<ip-address>:7777 or http://<ip-address>:7778\n");
 		print("Please note that first is secure ssl connection, while the second is normal one.\n");
@@ -186,3 +183,5 @@ print("Congratulations. Kloxo has been installed succesfully on your server as $
 	}
 
 }
+
+lxins_main();
