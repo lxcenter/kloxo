@@ -8,7 +8,7 @@ function os_doUpdateExtraStuff()
 
 function os_update_server()
 {
-	system("yum -y install --nosig webalizer lxjailshell autorespond unzip lxlighttpd lxzend lxphp >/dev/null 2>&1 &");
+	system("yum -y install --nosig webalizer lxjailshell autorespond unzip lxlighttpd lxphp >/dev/null 2>&1 &");
 	os_fix_some_permissions();
 	lxfile_touch("../etc/flag/lowmem.flag");
 	os_createLowMem();
