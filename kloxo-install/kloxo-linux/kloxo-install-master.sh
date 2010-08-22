@@ -50,7 +50,7 @@ if [ "$UID" -ne "0" ] ; then
         exit $E_NOTROOT
 else
 		echo -en "Installing as \"root\"         " $C_OK
-#		su - root
+		su - root
 fi
 
 # Check if OS is RHEL/CENTOS/FEDORA.
