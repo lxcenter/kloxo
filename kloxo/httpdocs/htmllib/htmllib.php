@@ -486,13 +486,14 @@ class HtmlLib
         if($imagesrc) $imgstr = "<img width=$imageheight imageheight=$imageheight src=$imagesrc>";
 
         if($linkflag)
+        {
             if($login->getSpecialObject('sp_specialplay')->isOn('enable_ajax') && csb($key, "__v_dialog"))
                 $displaystring = "<span title='$help'>  $descr[2] </span>";
             else
                 $displaystring = "<span title='$help'> <a href=\"Javascript:document.form_$formname.submit()\"> $descr[2]</a> </span>";
 
-        } else
-            $displaystring = "<span title=\"You don't have permission\">$descr[2] </span>";
+        }
+        else $displaystring = "<span title=\"You don't have permission\">$descr[2] </span>";
 
         if($check){
             ?>
@@ -1759,7 +1760,7 @@ class HtmlLib
         if(csa($variable, "_nn_"))
             $variable = substr($variable, 0, strpos($variable, '_nn_'));
 
-        if $name = ($class)? $class . "_" . $variable: $variable;
+        $name = ($class)? $class . "_" . $variable: $variable;
 
         $fpath = $path . "/" . $name . $extension;
 
@@ -2191,7 +2192,7 @@ class HtmlLib
                 $postvar = new FormVar();
                 $postvar->option = $value['val'][1];
                 $postvar->name = "frm_{$class}_c_{$value['var']}";
-                $postvar->type = 'select'
+                $postvar->type = 'select';
                 $rvr->postvar = $postvar;
             }
             else $rvr->$key = $value;
@@ -2251,120 +2252,95 @@ class HtmlLib
         return $string;
     }
 
+    function do_object_variable_select($class, $variable, $desc, $list, $value, $assoc = false)
+    {
+        $rvr = new FormVar();
+        $rvr->name =  "frm_{$class}_c_$variable" ;
+        $rvr->desc = $desc ;
+        $rvr->type = 'select';
 
-function do_object_variable_select($class, $variable, $desc, $list, $value, $assoc = false)
-{
-    $rvr = new FormVar();
-    $rvr->name =  "frm_{$class}_c_$variable" ;
-    $rvr->desc = $desc ;
-    $rvr->type = "select";
+        $rvr->option = $this->object_variable_option(false, $list, $value, $assoc);
 
-    $rvr->option = $this->object_variable_option(false, $list, $value, $assoc);
-
-    return $rvr;
-}
-
-
-function object_variable_multiselect($stuff, $variable, $list)
-{
-    $value = null;
-
-    $this->fix_stuff_or_class($stuff, $variable,  $class, $value);
-
-    // This is done so that at the time of adding, the form will be filled in.
-    //if(!is_object($stuff)) { $value = $list; }
-
-    $descr = $this->get_classvar_description_after_overload($class, $variable);
-
-    $desc = $this->get_form_variable_name($descr[2]);
-
-    $string = $this->do_object_variable_multiselect($class, $variable, $desc, $list, $value);
-    //dprint(htmlspecialchars($string));
-    return $string;
-
-}
-
-
-
-function do_object_variable_multiselect($class, $variable, $desc, $list, $value)
-{
-    $ret = new FormVar();
-    $ret->name =  "frm_{$class}_c_$variable" ;
-    $ret->desc = $desc ;
-    $ret->type = "multiselect";
-
-
-    $rvr = new FormVar();
-    $rvr->name =  "frm_{$class}_a_$variable" ;
-    $rvr->option = $this->object_variable_option(true, $list);
-    $ret->variable1 = $rvr;
-
-
-    $rvr = new FormVar();
-    $rvr->name =  "frm_{$class}_b_$variable" ;
-    $rvr->option = $this->object_variable_option(true, $value);
-    $ret->variable2 = $rvr;
-
-
-    return $ret;
-}
-
-
-
-
-function object_variable_nomodify($stuff, $variable, $value = null)
-{
-
-    $this->fix_stuff_or_class($stuff, $variable,  $class, $svalue);
-    if($value === null) {
-        $value = $svalue;
+        return $rvr;
     }
 
-    if($this->is_special_variable($value)) {
-        $descr = $value->descr;
-        $value = $value->value;
-    } else {
+    function object_variable_multiselect($stuff, $variable, $list)
+    {
+        $value = null;
+
+        $this->fix_stuff_or_class($stuff, $variable,  $class, $value);
+
+        // This is done so that at the time of adding, the form will be filled in.
+        //if(!is_object($stuff)) { $value = $list; }
+
         $descr = $this->get_classvar_description_after_overload($class, $variable);
+
+        $desc = $this->get_form_variable_name($descr[2]);
+
+        $string = $this->do_object_variable_multiselect($class, $variable, $desc, $list, $value);
+        //dprint(htmlspecialchars($string));
+        return $string;
     }
 
-    $desc = $descr[2];
+    function do_object_variable_multiselect($class, $variable, $desc, $list, $value)
+    {
+        $ret = new FormVar();
+        $ret->name =  "frm_{$class}_c_$variable" ;
+        $ret->desc = $desc ;
+        $ret->type = 'multiselect';
 
-    if(is_array($value)) {
-        $value = implode("\n", $value);
+        $rvr = new FormVar();
+        $rvr->name =  "frm_{$class}_a_$variable" ;
+        $rvr->option = $this->object_variable_option(true, $list);
+        $ret->variable1 = $rvr;
+
+        $rvr = new FormVar();
+        $rvr->name =  "frm_{$class}_b_$variable" ;
+        $rvr->option = $this->object_variable_option(true, $value);
+        $ret->variable2 = $rvr;
+
+        return $ret;
     }
 
+    function object_variable_nomodify($stuff, $variable, $value = null)
+    {
+        $this->fix_stuff_or_class($stuff, $variable,  $class, $svalue);
+        if($value === null) $value = $svalue;
 
-    $rvr = new FormVar();
-    $rvr->name =  "frm_{$class}_c_$variable" ;
-    $rvr->desc =  $desc ;
-    $rvr->type =  "nomodify" ;
-    $rvr->value =  $value ;
+        if($this->is_special_variable($value))
+        {
+            $descr = $value->descr;
+            $value = $value->value;
+        }
+        else $descr = $this->get_classvar_description_after_overload($class, $variable);
 
-    return $rvr;
+        $desc = $descr[2];
 
+        if(is_array($value)) $value = implode('\n', $value);
 
-}
+        $rvr = new FormVar();
+        $rvr->name = "frm_{$class}_c_$variable" ;
+        $rvr->desc = $desc ;
+        $rvr->type = 'nomodify';
+        $rvr->value = $value;
 
+        return $rvr;
+    }
 
+    function xml_variable_endblock()
+    {
+        return ' </block> </start>';
+    }
 
-
-function xml_variable_endblock()
-{
-
-    $string = " </block> </start>";
-    return $string;
-}
-
-
-function object_variable_button($name)
-{
-    $name = ucfirst($name);
-    $rvr = new FormVar();
-    $rvr->type = "button";
-    $rvr->name = "frm_change";
-    $rvr->value = $name;
-    return $rvr;
-}
+    function object_variable_button($name)
+    {
+        $name = ucfirst($name);
+        $rvr = new FormVar();
+        $rvr->type = "button";
+        $rvr->name = "frm_change";
+        $rvr->value = $name;
+        return $rvr;
+    }
 
 
 function object_variable_check($stuff, $variable, $def = null)
