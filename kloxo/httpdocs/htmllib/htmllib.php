@@ -2100,94 +2100,73 @@ class HtmlLib
 
     }
 
+    function object_variable_file($stuff, $variable)
+    {
+        global $gbl, $sgbl, $login, $ghtml;
 
-function object_variable_file($stuff, $variable)
-{
+        $sgbl->method = 'post';
 
-    global $gbl, $sgbl, $login, $ghtml;
+        $this->fix_stuff_or_class($stuff, $variable, $class, $value);
+        $descr = $this->get_classvar_description_after_overload($class, $variable);
 
-    $sgbl->method = "post";
-
-    $this->fix_stuff_or_class($stuff,  $variable, $class, $value);
-    $descr = $this->get_classvar_description_after_overload($class,  $variable);
-
-    $rv = new FormVar();
-    $rv->name = $variable;
-    $rv->desc = $descr[2];
-    $rv->type = "file";
-    return $rv;
-
-}
-
-
-
-function object_variable_fileselect($stuff, $variable, $opt = null)
-{
-    $valstring = null;
-
-    $this->fix_stuff_or_class($stuff,  $variable, $class, $value);
-
-    $rvr = new formVar();
-
-    if ($value) {
-        $rvr->value = $value;
+        $rv = new FormVar();
+        $rv->name = $variable;
+        $rv->desc = $descr[2];
+        $rv->type = 'file';
+        return $rv;
     }
 
+    function object_variable_fileselect($stuff, $variable, $opt = null)
+    {
+        $valstring = null;
 
-    $needstr = null;
-    $descr = $this->get_classvar_description_after_overload($class,  $variable);
+        $this->fix_stuff_or_class($stuff, $variable, $class, $value);
 
-    $desc = getNthToken($descr[2], 1);
-    if (char_search_a($descr[0], "n")) {
-        $rvr->need = "yes";
+        $rvr = new formVar();
+
+        if($value) $rvr->value = $value;
+
+        $needstr = null;
+        $descr = $this->get_classvar_description_after_overload($class,  $variable);
+
+        $desc = getNthToken($descr[2], 1);
+        if(char_search_a($descr[0], 'n')) $rvr->need = 'yes';
+
+        $estring = null;
+        if($opt) foreach($opt as $key => $val) $rvr->$key = $val;
+
+        $rvr->name = "frm_{$class}_c_$variable";
+        $rvr->desc = $desc;
+        $rvr->type = 'fileselect';
+        return $rvr;
     }
 
+    function object_variable_image($stuff, $variable, $opt = null)
+    {
+        $valstring = null;
 
-    $estring = null;
-    if ($opt)
-    foreach($opt as $key => $val) {
-        $rvr->$key = $val;
+        $this->fix_stuff_or_class($stuff, $variable, $class, $value);
+
+        $needstr = null;
+        $descr = $this->get_classvar_description_after_overload($class, $variable);
+
+        $desc = getNthToken($descr[2], 1);
+
+        $rvr = new formVar();
+        $estring = null;
+        if($opt) foreach($opt as $key => $val) $rvr->$key = $val;
+
+        $rvr->name = "frm_{$class}_c_$variable";
+        $rvr->desc  = $desc;
+        $rvr->type = 'image';
+
+        return $rvr;
     }
 
-    $rvr->name = "frm_{$class}_c_$variable";
-    $rvr->desc = $desc;
-    $rvr->type = "fileselect";
-    return $rvr;
-}
-
-
-
-function object_variable_image($stuff, $variable, $opt = null)
-{
-    $valstring = null;
-
-    $this->fix_stuff_or_class($stuff,  $variable, $class, $value);
-
-
-    $needstr = null;
-    $descr = $this->get_classvar_description_after_overload($class,  $variable);
-
-    $desc = getNthToken($descr[2], 1);
-
-
-    $rvr = new formVar();
-    $estring = null;
-    if ($opt) foreach($opt as $key => $val) {
-        $rvr->$key = $val;
+    function url_encode($value) #[FIXME] Remove this useless function and rewrite the code
+    {
+        return urlencode($value);
     }
-
-    $rvr->name = "frm_{$class}_c_$variable";
-    $rvr->desc  = $desc;
-    $rvr->type = "image";
-
-    return $rvr;
-}
-
-
-function url_encode($value)
-{
-    return urlencode($value);
-}
 
 function object_variable_modify($stuff, $variable, $opt = null)
 {
