@@ -214,7 +214,7 @@ class HtmlLib
 
         $class = substr($string, 4);
 
-        //dprint("$class, $variable, $extra, $value       <br> ");
+        //dprint("$class, $variable, $extra, $value <br> ");
     }
 
     function getcgikey($key)
@@ -1922,7 +1922,7 @@ class HtmlLib
 
         $imgheadleft  = $login->getSkinDir() . '/top_lt.gif';
         $imgheadright = $login->getSkinDir() . '/top_rt.gif';
-        $imgheadbg    = $login->getSkinDir() . 'top_bg.gif';
+        $imgheadbg  = $login->getSkinDir() . 'top_bg.gif';
         $imgtopline   = $login->getSkinDir() . '/top_line.gif';
         $tablerow_head   = $login->getSkinDir() . '/tablerow_head.gif';
 
@@ -3920,7 +3920,7 @@ function printObjectTable($name_list, $parent, $class, $blist = array(),  $displ
     $imgheadleft  = $login->getSkinDir() . "/top_lt.gif" ;
     $imgheadleft2  = $login->getSkinDir() . "/top_lt.gif" ;
     $imgheadright = $login->getSkinDir() . "/top_slope_rt.gif" ;
-    $imgheadbg    = $login->getSkinDir() . "/top_bg.gif" ;
+    $imgheadbg  = $login->getSkinDir() . "/top_bg.gif" ;
     $imgbtnbg  = $login->getSkinDir() . "/btn_bg.gif" ;
     $imgtablerowhead  = $login->getSkinDir() . "/tablerow_head.gif" ;
     $imgtablerowheadselect  = $login->getSkinDir() . "/top_line_medium.gif" ;
@@ -4114,84 +4114,64 @@ function printObjectTable($name_list, $parent, $class, $blist = array(),  $displ
                 print('</td> ');
             }
         }
-        print("</tr></table>");
+        echo '</tr></table>';
     }
     ?>
 
-    <table width=100%> <tr> <td align=center style='border:0px solid black'>
-    <table cellspacing=2 cellpadding=2 width=97%  align=center>
-    <tr><td class=rowpoint></td><td colspan= <?=$nlcount; ?>>
+    <table width="100%"> <tr> <td align="center" style='border:0px solid black'>
+    <table cellspacing="2" cellpadding="2" width="97%"  align="center">
+    <tr><td class="rowpoint"></td><td colspan="<?=$nlcount; ?>">
 
 <!--    </td></tr><tr><td height=2 colspan=2></td></tr></table> -->
-    <tr height=25 valign=middle>
-
+    <tr height="25" valign="middle">
 
     <?php
-    if(!$sgbl->isBlackBackground()) {
-        print("<td bgcolor=$backgroundcolorstring> </td> ");
-    }
+        if(!$sgbl->isBlackBackground()) print("<td bgcolor=$backgroundcolorstring> </td> ");
     ?>
 
- <?php
+    <?php
 
     if(!$this->isResourceClass($class) && !$gbl->__inside_ajax){
         ?>
         <td width=10 background=<?=$imgtablerowhead ?> >   <form name="formselectall<?=$unique_name; ?>" value=hello> <?=$filteropacitystringspan ?>  <input <?=$filteropacitystring ?>   type=checkbox name="selectall<?=$unique_name; ?>" value=on <?php if($sellist) echo "checked disabled" ;  ?> onclick="javascript:calljselectall<?=$unique_name; ?> ()"> <?=$filteropacitystringspanend ?> </form> </td>
         <?php
     }
+    $imguparrow   = get_general_image_path() . '/button/uparrow.gif';
+    $imgdownarrow = get_general_image_path() . '/button/downarrow.gif';
 
-
-    $imguparrow   = get_general_image_path() . "/button/uparrow.gif" ;
-    $imgdownarrow = get_general_image_path() . "/button/downarrow.gif" ;
-
-
-
-
-    foreach($name_list as $name => $width) {
-
-
+    foreach($name_list as $name => $width)
+    {
         $desc = "__desc_{$name}" ;
 
-        if(csa($name, "abutton")) {
-            $descr[$name] = array("b", "", "", "", 'help' => "");
-        } else {
-            $descr[$name] = get_classvar_description($rclass, $desc);
-        }
+        if(csa($name, "abutton")) $descr[$name] = array("b", "", "", "", 'help' => "");
+        else $descr[$name] = get_classvar_description($rclass, $desc);
 
-
-        if(!$descr[$name]) {
+        if(!$descr[$name])
+        {
             print("Cannot access static variable $rclass::$desc");
             exit(0);
         }
 
-        if(csa($descr[$name][2], ':')) {
+        if(csa($descr[$name][2], ':'))
+        {
             $_tlist = explode(':', $descr[$name][2]);
             $descr[$name][2] = $_tlist[0];
         }
 
-        foreach($descr[$name] as &$d) {
-            if($this->is_special_url($d)) {
-                continue;
-            }
-            if(strstr($d, "%v") !== false) {
-                $d = str_replace("[%v]", $classdesc[2], $d);
-            }
+        foreach($descr[$name] as &$d)
+        {
+            if($this->is_special_url($d)) continue;
+            if(strstr($d, "%v") !== false) $d = str_replace("[%v]", $classdesc[2], $d);
         }
 
+        if($width === "100%") $wrapstr = "wrap";
+        else $wrapstr = "nowrap";
 
+        if($sortby && $sortby === $name)
+        {
+            if($sgbl->isBlackBackground()) $wrapstr .= " style='background:gray'";
+            else $wrapstr .= " style='background:url($skindir/listsort.gif)'";
 
-
-        if($width === "100%")
-            $wrapstr = "wrap";
-        else
-            $wrapstr = "nowrap";
-
-        if($sortby && $sortby === $name) {
-            if($sgbl->isBlackBackground()) {
-                $wrapstr .= " style='background:gray'";
-            } else {
-                $wrapstr .= " style='background:url($skindir/listsort.gif)'";
-            }
             print("<td width=$width $wrapstr ><table cellspacing=0 cellpadding=2  border=0> <tr> <td class=collist rowspan=2 $wrapstr>");
         } else {
             if($sgbl->isBlackBackground()) {
@@ -4201,53 +4181,36 @@ function printObjectTable($name_list, $parent, $class, $blist = array(),  $displ
             }
             print("<td width=$width $wrapstr class=collist>");
         }
-
-
-            ?>
+        ?>
         <b><?php $this->print_sortby($parent, $class, $unique_name, $name, $descr[$name])?> </b></font>
 
         <?php
-
-
         $imgarrow = ($sortdir === "desc")? $imgdownarrow: $imguparrow;
-
-
 
         if($sortby && $sortby === $name)
             print("</td> <td width=15><img src=".$imgarrow." ></td><td ></td></tr></table>");
 
-            ?>
+        ?>
 
  </td>
 
- <?php
+    <?php
     }
 
     $count = 0;
     $rowcount = 0;
-
-
-        print("</tr> ");
-
-
-
-
-        print_time('loop');
+    echo '</tr>';
+    print_time('loop');
 
     $n = 1;
-    foreach((array) $obj_list as $okey => $obj) {
+    foreach((array) $obj_list as $okey => $obj)
+    {
+        if(!$obj) continue;
 
-
-        if(!$obj) {
-            continue;
-        }
         // Admin object should not be listed ever.
-        if($obj->isAdmin() && $obj->isClient()) {
-            continue;
-        }
+        if($obj->isAdmin() && $obj->isClient()) continue;
 
         $checked = $obj->isSelect()? "": "disabled";
-
 
         // Fix This.
         if($sellist) {
@@ -4256,59 +4219,49 @@ function printObjectTable($name_list, $parent, $class, $blist = array(),  $displ
                 continue;
         }
 
-
         $imgpointer = get_general_image_path() . "/button/pointer.gif" ;
         $imgblank = get_general_image_path() . "/button/blank.gif" ;
-
 
         $rowuniqueid = "tr$unique_name$rowcount";
 
         ?>
-
-
         <script> loadImage('<?=$imgpointer?>') </script>
         <script> loadImage('<?=$imgblank?>') </script>
 
             <tr  height=22 id=<?=$rowuniqueid ?>  class=tablerow<?=$count; ?> onmouseover=" swapImage('imgpoint<?=$rowcount; ?>','','<?=$imgpointer; ?>',1);document.getElementById('<?=$rowuniqueid ?>').className='tablerowhilite';" onmouseout="swapImgRestore();restoreListOnMouseOver('<?=$rowuniqueid ?>', 'tablerow<?=$count ?>','ckbox<?=$unique_name.$rowcount ?>')">
         <?php
 
-        if(!$sgbl->isBlackBackground()) {
+        if(!$sgbl->isBlackBackground())
             print("<td $stylebackgroundstring id=td$unique_name.$rowcount width=5 class=rowpoint><img name=imgpoint$rowcount src=\"$imgblank\"></td>");
-        }
 
-
-        if(!$this->isResourceClass($class) && !$gbl->__inside_ajax){
+        if(!$this->isResourceClass($class) && !$gbl->__inside_ajax)
+        {
             ?>
             <td width=10 style='<?=$backgroundstring ?>'  > <?=$filteropacitystringspan ?>   <input <?=$filteropacitystring ?> id=ckbox<?=$unique_name.$rowcount; ?>  class=ch1 type=checkbox <?=$checked ?> name=frm_accountselect  onclick="hiliteRowColor('tr<?=$unique_name.$rowcount; ?>','tablerow<?=$count; ?>',document.formselectall<?=$unique_name; ?>.selectall<?=$unique_name; ?>)";  value="<?=$obj->nname ?>"> <?=$filteropacitystringspanend ?> </td>
             <?php
         }
 
         $colcount = 1;
-        foreach($name_list as $name => $width) {
-            try {
-                    $this->printObjectElement($parent, $class, $classdesc, $obj, $name, $width, $descr, $colcount . "_" . $rowcount);
-            } catch (exception $e) {
+        foreach($name_list as $name => $width)
+        {
+            try
+            {
+                $this->printObjectElement($parent, $class, $classdesc, $obj, $name, $width, $descr, $colcount . "_" . $rowcount);
+            }
+            catch (exception $e)
+            {
                 break;
             }
             $colcount++;
         }
 
-
         print("</tr> ");
         if($count===0) $count=1; else $count=0;
         $rowcount++;
 
-
-        if(!$sellist) {
-            if($n === ($pagesize * $cgi_pagenum)) {
-                break;
-            }
-        }
-
+        if(!$sellist) if($n === ($pagesize * $cgi_pagenum)) break;
         $n++;
-
     }
-
 
     print("<tr><td></td><td colspan=$nlcount>");
     if(!$rowcount) {
@@ -4344,14 +4297,9 @@ function calljselectall<?=$unique_name; ?>(){
     jselectall(document.formselectall<?=$unique_name; ?>.selectall<?=$unique_name; ?>,ckcount<?=$unique_name; ?>,'<?=$unique_name;?>')
 }
 </script>
-
-
 <?php
-
-
-
-    if($sellist ) {
-
+    if($sellist )
+    {
         print("<table $blackstyle> <tr> <td >");
         print("<form method=$sgbl->method action={$_SERVER["PHP_SELF"]}>");
 
@@ -4370,13 +4318,12 @@ function calljselectall<?=$unique_name; ?>(){
         print("</td> </tr> </table> ");
 
     }
-    if($sgbl->isBlackBackground()) {
-
+    if($sgbl->isBlackBackground())
+    {
         print("</td></tr></table>");
         print("</td></tr></table>");
         print("</td></tr></table>");
         return ;
-
     }
 
     if(!$sellist && !$this->isResourceClass($class) && !$gbl->__inside_ajax) {
@@ -4386,16 +4333,14 @@ function calljselectall<?=$unique_name; ?>(){
         $imgshow = get_general_image_path() . "/button/btn_show.gif" ;
 
         print("<table cellpadding=0 cellspacing=0 border=0 width=100%><tr><td >");
-
         print("<table cellpadding=0 cellspacing=0 border=0>");
         print("<form name=perpage_{$unique_name} method=$sgbl->method action=''>") ;
         print("<tr><td><img src='".$imgbtm1."'></td><td background='".$imgbtm2."'>");
         $rpagesize = exec_class_method($rclass, "perPage");
-        if($rpagesize > 1000) {
+        if($rpagesize > 1000)
             $width = 50;
-        } else {
+        else
             $width = 70;
-        }
 
         print("<table width=90% cellpadding=0 cellspacing=0><tr><td width=40><b>Show</b></td><td width=$width>");
         $this->print_current_input_var_unset_filter($filtername, array('pagesize', 'pagenum'));
@@ -4413,17 +4358,16 @@ function calljselectall<?=$unique_name; ?>(){
                 print("<option value=$l $sel> $l </option>");
             }
             print("</select>");
-        } else {
+        } else
             print("<input type=text class=textbox style='width:25' name=frm_hpfilter[$filtername][pagesize] value=$f_page>");
-        }
+
         print("<input type=image src='".$imgshow."'>");
         print("</td></tr></table>");
-
         print("</td><td><img src='".$imgbtm3."'></td></tr></form></table>");
-
         print("</td><td align=right >");
 
-        if($rpagesize < 1000) {
+        if($rpagesize < 1000)
+        {
             print("<form method=$sgbl->method action=''>") ;
             print("<table cellpadding=0 cellspacing=0  border=0 valign=middle><tr valign=middle><td><b> Page </b>");
             $this->print_current_input_var_unset_filter($filtername, array('pagenum'));
@@ -4441,7 +4385,7 @@ print("</td></tr></table>");
 print("</td> </tr></table>");
 //else {
 //
-//      $this->print_list_submit($blist);
+//  $this->print_list_submit($blist);
 //  }
 
 
@@ -4542,7 +4486,7 @@ function print_list_submit_middle($button, $uniquename)
 //  $fname = create_name($name);
 //  print("arr".$fname."= new Object();");
 //  foreach($post as $key => $value) {
-//      print("arr".$fname."['".$key."']"." ='". $value."'\n");
+//  print("arr".$fname."['".$key."']"." ='". $value."'\n");
 //  }
 //  print("</script>");
 
@@ -5818,7 +5762,7 @@ function show_graph($maxval, $val, $info, $tabwidth=null, $unit = "MB", $type = 
     $gorange = $path."g_orange.gif";
     $gyellow = $path."g_yellow.gif";
     $ggreen  = $path."g_green.gif";
-    $gred    = $path."g_red.gif";
+    $gred   = $path."g_red.gif";
 
     $percentage_val = 0;
     if(is_unlimited($maxval) || $maxval === 'Na') {
@@ -5833,10 +5777,10 @@ function show_graph($maxval, $val, $info, $tabwidth=null, $unit = "MB", $type = 
     $usedval = min(110, $usedval);
 
     $quotaimg = null;
-    if($usedval > 90)                        $quotaimg = $gred;
+    if($usedval > 90)                   $quotaimg = $gred;
     if($usedval > 75  && $usedval <= 90)     $quotaimg = $gorange;
-    if($usedval > 50  && $usedval <= 75 )    $quotaimg = $gyellow;
-    if($usedval >= 0 && $usedval <= 50)          $quotaimg = $ggreen;
+    if($usedval > 50  && $usedval <= 75 )   $quotaimg = $gyellow;
+    if($usedval >= 0 && $usedval <= 50) $quotaimg = $ggreen;
 
 
     $text = "<span class=last><font size=1 face=arial></font></span>";
@@ -5901,7 +5845,7 @@ function form_header($title)
 
     $imgheadleft  = $login->getSkinDir() . "/top_lt.gif" ;
     $imgheadright = $login->getSkinDir() . "/top_rt.gif" ;
-    $imgheadbg    = $login->getSkinDir() . "/top_bg.gif" ;
+    $imgheadbg  = $login->getSkinDir() . "/top_bg.gif" ;
     $imgtopline   = $login->getSkinDir() . "/top_line.gif" ;
 
 ?>
@@ -6485,13 +6429,13 @@ function print_variable($block, $variable, $count)
     $imgheadright = "{$login->getSkinDir()}top_rt.gif" ;
     $imgheadleft = "{$login->getSkinDir()}top_lt.gif" ;
     $imgtablerowhead = "{$login->getSkinDir()}tablerow_head.gif" ;
-    $imgheadbg    = "{$login->getSkinDir()}top_bg.gif" ;
+    $imgheadbg  = "{$login->getSkinDir()}top_bg.gif" ;
     $imgtopline   = "{$login->getSkinDir()}top_line.gif" ;
     $imgsubtitle1 = "{$login->getSkinDir()}subtitle1.gif" ;
     $imgsubtitle2 = "{$login->getSkinDir()}subtitle2.gif" ;
     $imgsubtitle3 = "{$login->getSkinDir()}subtitle3.gif" ;
     $imgpointer   = get_general_image_path("/button/pointer.gif");
-    $imgblank     = get_general_image_path("/button/blank.gif");
+    $imgblank   = get_general_image_path("/button/blank.gif");
 
     $prevvar = $gbl->getSessionV('__tmp_redirect_var');
     if($prevvar) {
@@ -8264,7 +8208,7 @@ function print_alternate_main_header()
     ?>
 
 
-    <table bgcolor=cccccc color=ffffff width=100% cellpadding=0 cellspacing=0 height=1> <tr>   <td > <a href=javascript:top.mainframe.window.location.reload()> zRefresh </a> </td><td width=10> &nbsp; </td> <td > <a href="/display.php?frm_action=show"> Home </a> </td>  <td > <a href=/display.php?frm_action=list&frm_o_cname=domain> Domain </a> </td> <td > <a href=/display.php?frm_action=show&frm_o_o[0][class]=pserver&frm_o_o[0][nname]=localhost> System </a>  </td>  <td ><a href=/display.php?frm_action=list&frm_o_cname=client> Client </a>  </td> </td>  <td ><a href=/display.php?frm_action=list&frm_o_cname=pserver> Server </a>  </td>    <td ><a href=/display.php?frm_action=list&frm_o_cname=ticket> Tickets </a> </td><td > <a href=/display.php?frm_action=list&frm_o_cname=ssession> Session</a> </td> <td > <a href=/htmllib/phplib/logout.php> Logout </a> </td> <td width=5%> </td>  </tr>
+    <table bgcolor=cccccc color=ffffff width=100% cellpadding=0 cellspacing=0 height=1> <tr>   <td > <a href=javascript:top.mainframe.window.location.reload()> zRefresh </a> </td><td width=10> &nbsp; </td> <td > <a href="/display.php?frm_action=show"> Home </a> </td>  <td > <a href=/display.php?frm_action=list&frm_o_cname=domain> Domain </a> </td> <td > <a href=/display.php?frm_action=show&frm_o_o[0][class]=pserver&frm_o_o[0][nname]=localhost> System </a>  </td>  <td ><a href=/display.php?frm_action=list&frm_o_cname=client> Client </a>  </td> </td>  <td ><a href=/display.php?frm_action=list&frm_o_cname=pserver> Server </a>  </td>   <td ><a href=/display.php?frm_action=list&frm_o_cname=ticket> Tickets </a> </td><td > <a href=/display.php?frm_action=list&frm_o_cname=ssession> Session</a> </td> <td > <a href=/htmllib/phplib/logout.php> Logout </a> </td> <td width=5%> </td>  </tr>
     </table>
 
     <?php
@@ -8461,8 +8405,6 @@ function getClass()
 
 }
 
-
-
 function oldlpanel_help()
 {
     global $gbl, $sgbl, $login;
@@ -8470,7 +8412,6 @@ function oldlpanel_help()
     $tbg = $img_path . "/lp_bg.gif";
 
     $helpimg = $img_path . "/";
-
 
     /*
 <script>
