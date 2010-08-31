@@ -447,1416 +447,1368 @@ class HtmlLib
     }
 
 
-function compare_urls($a, $b)
-{
-
-    $rvar = array("frm_o_o", "frm_dttype", "frm_o_nname", "frm_o_parent", "frm_action", "frm_o_cname", "frm_subaction");
-
-    $this->get_post_from_get($a, $path, $pa);
-    $this->get_post_from_get($b, $path, $pb);
-
-    if (isset($pb["frm_o_cname"]))
+    function compare_urls($a, $b)
     {
-        if (exec_class_method($pb['frm_o_cname'], "consumeUnderParent"))
+
+        $rvar = array("frm_o_o", "frm_dttype", "frm_o_nname", "frm_o_parent", "frm_action", "frm_o_cname", "frm_subaction");
+
+        $this->get_post_from_get($a, $path, $pa);
+        $this->get_post_from_get($b, $path, $pb);
+
+        if (isset($pb["frm_o_cname"]))
         {
-            if ($pb['frm_action'] === 'list') {
-                $pb["frm_o_cname"] = null;
-                $pb['frm_action'] = 'show';
+            if (exec_class_method($pb['frm_o_cname'], "consumeUnderParent"))
+            {
+                if ($pb['frm_action'] === 'list') {
+                    $pb["frm_o_cname"] = null;
+                    $pb['frm_action'] = 'show';
+                }
             }
         }
+
+        foreach($rvar as $k)
+        {
+            if (!isset($pa[$k])) $pa[$k] = null;
+            if (!isset($pb[$k])) $pb[$k] = null;
+        }
+
+        foreach($rvar as $k)
+            if($pa[$k] != $pb[$k]) return false;
+        return true;
     }
 
-    foreach($rvar as $k)
+    function printTabForTabButton($key, $linkflag, $height, $imageheight, $sel, $imgbg, $formname, $name, $imagesrc, $descr, $check)
     {
-        if (!isset($pa[$k])) $pa[$k] = null;
-        if (!isset($pb[$k])) $pb[$k] = null;
-    }
+        global $gbl, $sgbl, $login;
 
-    foreach($rvar as $k)
-        if($pa[$k] != $pb[$k]) return false;
-    return true;
-}
+        $help = $descr['help'];
+        $imgstr = null;
+        if ($imagesrc) $imgstr = "<img width=$imageheight imageheight=$imageheight src=$imagesrc>";
 
-function printTabForTabButton($key, $linkflag, $height, $imageheight, $sel, $imgbg, $formname, $name, $imagesrc, $descr, $check)
-{
-    global $gbl, $sgbl, $login;
+        if ($linkflag)
+            if ($login->getSpecialObject('sp_specialplay')->isOn('enable_ajax') && csb($key, "__v_dialog"))
+                $displaystring = "<span title='$help'>  $descr[2] </span>";
+            else
+                $displaystring = "<span title='$help'> <a href=\"Javascript:document.form_$formname.submit()\"> $descr[2]</a> </span>";
 
-    $help = $descr['help'];
-    $imgstr = null;
-    if ($imagesrc) $imgstr = "<img width=$imageheight imageheight=$imageheight src=$imagesrc>";
+        } else
+            $displaystring = "<span title=\"You don't have permission\">$descr[2] </span>";
 
-    if ($linkflag)
-        if ($login->getSpecialObject('sp_specialplay')->isOn('enable_ajax') && csb($key, "__v_dialog"))
-            $displaystring = "<span title='$help'>  $descr[2] </span>";
+        if($check){
+            ?>
+            <td height="34" wrap class="alink"  style='cursor:pointer;padding:3 0 0 0;vertical-align:middle'><?=$imgstr ?> </td>
+            <td height="height" nowrap class="alink"  style='cursor:pointer;padding:3 0 0 0;vertical-align:middle'> <font size=-1><?=$displaystring ?></td>
+            <?
+        }
         else
-            $displaystring = "<span title='$help'> <a href=\"Javascript:document.form_$formname.submit()\"> $descr[2]</a> </span>";
-
-    } else
-        $displaystring = "<span title=\"You don't have permission\">$descr[2] </span>";
-
-    if($check){
+        {
         ?>
-        <td height="34" wrap class="alink"  style='cursor:pointer;padding:3 0 0 0;vertical-align:middle'><?=$imgstr ?> </td>
-        <td height="height" nowrap class="alink"  style='cursor:pointer;padding:3 0 0 0;vertical-align:middle'> <font size=-1><?=$displaystring ?></td>
-        <?
+            <td height=34 wrap class=alink  style='cursor:pointer;background:url(<?=$imgbg ?>);padding:3 0 0 0; vertical-align:middle'><?=$imgstr ?> </td> <td height=height nowrap class=alink  style='cursor:pointer;background:url(<?=$imgbg ?>);padding:3 0 0 0;vertical-align:middle'> <font size=-1><?=$displaystring ?></td><?php
+        }
     }
-    else
+
+    function print_object_action_block($obj, $alist, $num)
     {
-    ?>
-        <td height=34 wrap class=alink  style='cursor:pointer;background:url(<?=$imgbg ?>);padding:3 0 0 0; vertical-align:middle'><?=$imgstr ?> </td> <td height=height nowrap class=alink  style='cursor:pointer;background:url(<?=$imgbg ?>);padding:3 0 0 0;vertical-align:middle'> <font size=-1><?=$displaystring ?></td><?php
+        global $gbl, $sgbl, $login, $ghtml;
+
+        $syncserver = $this->get_server_string($obj);
+        $buttonpath = get_image_path() . "/button/";
+        $image = $ghtml->get_image($buttonpath, '', 'resource', '.gif');
+        $this->print_action_block($obj, $obj->get__table(), $alist, $num);
     }
-}
 
-function print_object_action_block($obj, $alist, $num)
-{
-    global $gbl, $sgbl, $login, $ghtml;
-
-    $syncserver = $this->get_server_string($obj);
-    $buttonpath = get_image_path() . "/button/";
-    $image = $ghtml->get_image($buttonpath, '', 'resource', '.gif');
-    $this->print_action_block($obj, $obj->get__table(), $alist, $num);
-}
-
-function print_action_block_old($title, $alist)
-{
-    $i = 0;
-    /* This is a mighty hack... The first element of $alist is
-    supposed to be the main title. You use it as the first title and
-    unset the variable. This is a hack from the previous code where
-    the first title was preset here itself. */
-
-    if (!$title)
+    function print_action_block_old($title, $alist)
     {
-        $title = $alist['__title_main'];
-        unset($alist['__title_main']);
-    }
+        $i = 0;
+        /* This is a mighty hack... The first element of $alist is
+        supposed to be the main title. You use it as the first title and
+        unset the variable. This is a hack from the previous code where
+        the first title was preset here itself. */
 
-    ?>
-    <table cellpadding="0" width="100%" cellspacing="0" border="1">
-        <tr>
-            <td >
-                <table cellpadding="2" cellspacing="7" border="0" width="25%" >
-                    <tr align="left">
-                        <td align="left">
-                            <?php
-                            $t = 2;
-                            foreach($alist as $k => $u)
-                            {
-                                $i++;
-                                if (csb($k, "__title")) {
-                                    $i = 0;
-                                    $t++;
-                                    ?>
-                                    </td> </tr> </table> </td> <td >
-                                    <table cellpadding=0 border=0 cellspacing=0> <tr> <td >
-                                    <?php
-                                    continue;
-                                }
-
-
-                                if ($t%4 === 1) {
-                                    ?>
-                                    </td> </tr> </table> </tr> <tr> <table cellpadding=0 cellspacing=0 border=2> <tr> <td >
-                                    <?php
-                                }
-
-                                if ($i %2) {
-                                    ?>
-                                    </td> </tr> <tr> <td >
-                                    <?php
-                                }
-                                $this->print_div_button(null, "block", false, $k, $u);
-                            }
-                            if ($i <= 7)
-                                for(; $i <=7 ; $i++)
-                                    print("</td><td width=40>&nbsp;");
-
-
-
-
-                            ?>
-                                </td>
-                            </tr>
-                        </table>
-                    </td>
-                </tr>
-            </table>
-            </fieldset>
-            <br />
-            <br />
-            <?php
-}
-
-function print_action_block_dumb($title, $alist)
-{
-    global $gbl, $sgbl, $login, $ghtml;
-    $getskin = $login->getSkinDir();
-    $i = 0;
-
-    /// This is a mighty hack... The first element of $alist is supposed to be the main title. You use it as the first title and unset the variable. This is a hack from the previous code where the first title was preset here itself.
-
-
-    if (!$title) {
-        $title = $alist['__title_main'];
-        unset($alist['__title_main']);
-    }
-
-    ?>
-    <table valign=top cellpadding=3 cellspacing=3> <tr> <td valign=top width=33% >
-    <table cellpadding=0 cellspacing=0 border=1> <tr> <td >
-    <table cellpadding=0 cellspacing=0 border=0 height=13 width=98% style="background:url('<?php echo
-    $getskin?>/bar.gif')"> <tr> <td > <?=$title ?>  </td> </table>
-        <table cellpadding="2" cellspacing="7" border="0" height=100% width="90%" >
-        <tr align=left> <td align=left>
-        <?php
-    $n = 1;
-    foreach($alist as $k => $u) {
-        $i++;
-        if ($i%3 === 1) {
-            print("</td> </tr> <tr align=left> <td align=left>");
-        }
-
-        if (csb($k, "__title")) {
-            $i = 0;
-            $n++;
-
-            $tr = null;
-            if ($n%3 == 1) {
-                $tr = "</tr> <tr> ";
-            }
-            ?>
-            </td> </tr> </table>
-
-            </td> </tr> </table> </td> <?=$tr ?>  <td width=33% valign=top> <table cellpadding=0 cellspacing=0 border=1> <tr> <td >
-    <table cellpadding=2 cellspacing=2 border=0 height=13 width=98% style="background:url('<?=$getskin?>/bar.gif')"> <tr> <td > <?=$u ?>  </td> </table>
-
-            <table cellspacing=7 width=90% border=0> <tr align=left> <td align=left >
-            <?php
-            continue;
-        }
-        $this->print_div_button(null, "block", true, $k, $u);
-    }
-    if ($i <= 7) {
-
-        for(; $i <=7 ; $i++) {
-            print("</td><td width=40>&nbsp;");
-        }
-    }
-
-
-    ?>
-    </td> </tr> </table>
-    </td> </tr> </table>
-        </td> </tr>
-        </table>
-            </fieldset>
-        <br> <br>
-        <?php
-}
-
-function create_action_block($class, $alist)
-{
-    global $gbl, $sgbl, $login, $ghtml;
-
-    if (!$alist) {
-        return null;
-    }
-    $title = "main";
-    $i = 0;
-    $n = 0;
-    foreach($alist as $k => $a) {
-        if (csb($k, "__title")) {
-            $title = $k;
-            $ret[$k][$k] = $a;
-        }
-        $ret[$title][$k] = $a;
-        $ret[$title]['open'] = true;
-    }
-
-    if (isset($login->boxpos["{$class}_show"])) {
-        foreach($login->boxpos["{$class}_show"] as $k => $v) {
-            if (!isset($ret[$k])) {
-                continue;
-            }
-            $nret[$k] = $ret[$k];
-            $nret[$k]['open'] = $v;
-        }
-        foreach($ret as $k => $v) {
-            if (!isset($nret[$k])) {
-                $nret[$k] = $ret[$k];
-            }
-        }
-    } else {
-        $nret = $ret;
-    }
-    return $nret;
-
-}
-
-function print_style_desktop()
-{
-    global $gbl, $sgbl, $login, $ghtml;
-    $skindir = $login->getSkinDir();
-    $col = $login->getSkinColor();
-    ?>
-<style type="text/css">
-.expanded a:hover {cursor:pointer;}
-.trigger a:hover {cursor:poiner;}
-.trigger {cursor:pointer;background:url(<?=$skindir?>/expand.gif);border:1px solid #<?=$col?>;}
-.expanded {cursor:pointer;background:url(<?=$skindir?>/expand.gif);border:1px solid #<?=$col?>;}
-.show {position:static; display:table; }
-.hide {position:absolute; left:-999em; height:1px; width:100px; overflow:hidden;}
-
-body {font-family:arial,sans-serif; color:#333;}#boundary{border-left:1px solid #<?=$col?>; border-right:1px solid #<?=$col?>; border-bottom:1px solid #<?=$col?>;} a{color:#369;} h1{ font-family:"trebuchet ms",verdana,sans-serif; font-size:130%; border-bottom:1px solid #999; } h2{ font-family:"trebuchet ms",verdana,sans-serif; font-size:130%; color:#003360; background:url(<?=$skindir?>/expand.gif); margin-bottom:0} h3{ font-family:"trebuchet ms",verdana,sans-serif; font-size:100%; } p code{ font-size:110%; color:#666; font-weight:bold; } pre{ background:#eee; padding:.5em 1em; border:1px solid #<?=$col?>; } h1 code, h2 code, h3 code{ font-family:"trebuchet ms",verdana,sans-serif; } h1 code{font-family:"Trebuchet MS",Arial,Sans-serif; } #header{ background:#69c; border-top:1px solid #9cf; border-bottom:1px solid #369; } #content{font-size:90%;} #download{ position:absolute; top:9em; width:15em; right:4em;} #download ul{background:#ccf; padding:.5em 0 .5em 1.5em; } #download h2{ background:#369; color:#fff; font-size:90%; padding:0.5em; margin:.5em 0 0 0; border-bottom:1px solid #036; border-right:1px solid #036; border-top:1px solid #69c; border-left:1px solid #<?=$col?>; } #download li{ list-style-type:square; } #header a img{padding:5px 1em;}
-</style>
-<?
-}
-
-
-function print_style_home()
-{
-    global $gbl, $sgbl, $login, $ghtml;
-    $skindir = $login->getSkinDir();
-    $col = $login->getSkinColor();
-
-?>
-<style type="text/css">
-.expanded a:hover {cursor:pointer;}
-.trigger a:hover {cursor:pointer;}
-.trigger {cursor:pointer;background:url(<?=$skindir?>/expand.gif);border:1px solid #<?=$col?>;height:25px;}
-.expanded {cursor:pointer;background:url(<?=$skindir?>/expand.gif);border:1px solid #<?=$col?>;height:25px;}
-.show {position:static; display:table; }
-.hide {position:absolute; left:-999em; height:1px; width:100px; overflow:hidden;}
-
-body {font-family:arial,sans-serif; color:#333; margin:0; padding:0; }#boundary{margin-left:20px;margin-right:100px; border-left:1px solid #<?=$col?>; border-right:1px solid #<?=$col?>; border-bottom:1px solid #<?=$col?>;} a{color:#369;} h1{ font-family:"trebuchet ms",verdana,sans-serif; font-size:130%; border-bottom:1px solid #999; } h2{ font-family:"trebuchet ms",verdana,sans-serif; font-size:130%;color:#003370; background:url(<?=$skindir?>/expand.gif);margin-bottom:10px; margin-top:10px} h3{ font-family:"trebuchet ms",verdana,sans-serif; font-size:100%; } p code{ font-size:110%; color:#666; font-weight:bold; } pre{ background:#eee; padding:.5em 1em; border:1px solid #<?=$col?>; } h1 code, h2 code, h3 code{ font-family:"trebuchet ms",verdana,sans-serif; } h1 code{font-family:"Trebuchet MS",Arial,Sans-serif; } #header{ padding:0; left:0; top:0; background:#69c; margin:0; border-top:1px solid #9cf; border-bottom:1px solid #369; } #content{font-size:90%; margin-top:0;} #download{ position:absolute; top:9em; width:15em; right:4em;} #download ul{background:#ccf; margin:0; padding:.5em 0 .5em 1.5em; } #download h2{ background:#369; color:#fff; font-size:90%; padding:0 .5em; margin:.5em 0 0 0; border-bottom:1px solid #036; border-right:1px solid #036; border-top:1px solid #69c; border-left:1px solid #<?=$col?>; } #download li{ list-style-type:square; } #header a img{ border:0; padding:5px 1em;}
-</style>
-<?
-}
-
-
-function drag_drop()
-{
-    global $gbl, $sgbl, $login, $ghtml;
-?>
-    <script type="text/javascript" src="wz_dragdrop.js"></script>
-    <div id="name" style="position:absolute;...">
-<?
-}
-
-
-function print_domcollapse($sel)
-{
-    global $gbl, $sgbl, $login, $ghtml;
-    $skinget = $login->getSkinDir();
-    if($sel=="des")
-    $style = $ghtml->print_style_desktop();
-    if($sel=="hom")
-    $style = $ghtml->print_style_home();
-?>
-<script type="text/javascript">
-dc={
-    triggerElements:'*',    // elements to trigger the effect
-    parentElementId:null,   // ID of the parent element (keep null if none)
-    uniqueCollapse:false,   // is set to true only one element can be open at a time
-
-    // CSS class names
-    trigger:'trigger',
-    triggeropen:'expanded',
-    hideClass:'hide',
-    showClass:'show',
-    // pictures and text alternatives
-    closedPic:'<?=$skinget?>/plus.gif',
-    closedAlt:'expand section',
-    openPic:'<?=$skinget?>/minus.gif',
-    openAlt:'collapse section',
-    right:'right',
-    center:'center',
-    /* Doesn't work with Safari
-        hoverClass:'hover',
-    */
-    init:function(e){
-        var temp;
-        if(!document.getElementById || !document.createTextNode){return;}
-        if(!dc.parentElementId){
-            temp=document.getElementsByTagName(dc.triggerElements);
-        } else if(document.getElementById(dc.parentElementId)){
-            temp=document.getElementById(dc.parentElementId).getElementsByTagName(dc.triggerElements);
-        }else{
-            return;
-        }
-        dc.tempLink=document.createElement('a');
-        dc.tempLink.setAttribute('href','#');
-        dc.tempLink.appendChild(document.createElement('img'));
-        for(var i=0;i<temp.length;i++){
-            if(dc.cssjs('check',temp[i],dc.trigger) || dc.cssjs('check',temp[i],dc.triggeropen)){
-                dc.makeTrigger(temp[i],e);
-            }
-        }
-    },
-    makeTrigger:function(o,e){
-        var tl=dc.tempLink.cloneNode(true);
-        var tohide=o.nextSibling;
-        while(tohide.nodeType!=1)
+        if (!$title)
         {
-            tohide=tohide.nextSibling;
+            $title = $alist['__title_main'];
+            unset($alist['__title_main']);
         }
-        o.tohide=tohide;
-        if(!dc.cssjs('check',o,dc.triggeropen)){
-            dc.cssjs('add',tohide,dc.hideClass);
-            tl.getElementsByTagName('img')[0].setAttribute('align',dc.right);
-            tl.getElementsByTagName('img')[0].setAttribute('src',dc.closedPic);
-            tl.getElementsByTagName('img')[0].setAttribute('alt',dc.closedAlt);
-            tl.getElementsByTagName('img')[0].setAttribute('title',dc.closedAlt);
-            //o.setAttribute('title',dc.closedAlt);
-        }else{
-            dc.cssjs('add',tohide,dc.showClass);
-            tl.getElementsByTagName('img')[0].setAttribute('align',dc.right);
-            tl.getElementsByTagName('img')[0].setAttribute('src',dc.openPic);
-            tl.getElementsByTagName('img')[0].setAttribute('alt',dc.openAlt);
-            tl.getElementsByTagName('img')[0].setAttribute('title',dc.openAlt);
-            //o.setAttribute('title',dc.openAlt);
-            dc.currentOpen=o;
-        }
-    //  dc.addEvent(o,'click',dc.addCollapse,false);
-        /* Doesn't work with Safari
-        dc.addEvent(o,'mouseover',dc.hover,false);
-        dc.addEvent(o,'mouseout',dc.hover,false);
-        */
-        o.insertBefore(tl,o.firstChild);
-        dc.addEvent(tl,'click',dc.addCollapse,false);
-        // Safari hacks
-        tl.onclick=function(){return false;}
-        o.onclick=function(){return false;}
-    },
-    /* Doesn't work with Safari
-    hover:function(e){
-        var o=dc.getTarget(e);
-        var action=dc.cssjs('check',o,dc.hoverClass)?'remove':'add';
-        dc.cssjs(action,o,dc.hoverClass)
-    },
-    */
-    addCollapse:function(e){
-        var action,pic;
-        // hack to fix safari's redraw bug
-        // as mentioned on http://en.wikipedia.org/wiki/Wikipedia:Browser_notes#Mac_OS_X
-        if (self.screenTop && self.screenX){
-            window.resizeTo(self.outerWidth + 1, self.outerHeight);
-            window.resizeTo(self.outerWidth - 1, self.outerHeight);
-        }
-        if(dc.uniqueCollapse && dc.currentOpen){
-            dc.currentOpen.getElementsByTagName('img')[0].setAttribute('align',dc.right);
-            dc.currentOpen.getElementsByTagName('img')[0].setAttribute('src',dc.closedPic);
-            dc.currentOpen.getElementsByTagName('img')[0].setAttribute('alt',dc.closedAlt);
-            dc.currentOpen.setAttribute('img',dc.closedAlt);
-            dc.cssjs('swap',dc.currentOpen.tohide,dc.showClass,dc.hideClass);
-            dc.cssjs('remove',dc.currentOpen,dc.triggeropen);
-            dc.cssjs('add',dc.currentOpen,dc.trigger);
-        }
-        var o=dc.getTarget(e);
-        if(o.tohide){
-            if(dc.cssjs('check',o.tohide,dc.hideClass)){
-                o.getElementsByTagName('img')[0].setAttribute('align',dc.right);
-                o.getElementsByTagName('img')[0].setAttribute('src',dc.openPic);
-                o.getElementsByTagName('img')[0].setAttribute('alt',dc.openAlt);
-                o.getElementsByTagName('img')[0].setAttribute('title',dc.openAlt);
-                //o.setAttribute('title',dc.openAlt);
-                dc.cssjs('swap',o.tohide,dc.hideClass,dc.showClass);
-                dc.cssjs('add',o,dc.triggeropen);
-                dc.cssjs('remove',o,dc.trigger);
-            }else{
-                o.getElementsByTagName('img')[0].setAttribute('align',dc.right);
-                o.getElementsByTagName('img')[0].setAttribute('src',dc.closedPic);
-                o.getElementsByTagName('img')[0].setAttribute('alt',dc.closedAlt);
-                o.getElementsByTagName('img')[0].setAttribute('title',dc.closedAlt);
-                //o.setAttribute('title',dc.closedAlt);
-                dc.cssjs('swap',o.tohide,dc.showClass,dc.hideClass);
-                dc.cssjs('remove',o,dc.triggeropen);
-                dc.cssjs('add',o,dc.trigger);
-            }
-            dc.currentOpen=o;
-            dc.cancelClick(e);
-            //document.getElementById('debug').innerHTML=o.tohide.className;
-        }
-        else{
-            dc.cancelClick(e);
-        }
-    },
-    /* helper methods */
-    getTarget:function(e){
-        var target = window.event ? window.event.srcElement : e ? e.target : null;
-        if (!target){return false;}
-        while(!target.tohide && target.nodeName.toLowerCase()!='body')
-        {
-            target=target.parentNode;
-        }
-        // if (target.nodeName.toLowerCase() != 'a'){target = target.parentNode;} Safari fix not needed here
-        return target;
-    },
-    cancelClick:function(e){
-        if (window.event){
-            window.event.cancelBubble = true;
-            window.event.returnValue = false;
-            return;
-        }
-        if (e){
-            e.stopPropagation();
-            e.preventDefault();
-        }
-    },
-    addEvent: function(elm, evType, fn, useCapture){
-        if (elm.addEventListener)
-        {
-            elm.addEventListener(evType, fn, useCapture);
-            return true;
-        } else if (elm.attachEvent) {
-            var r = elm.attachEvent('on' + evType, fn);
-            return r;
-        } else {
-            elm['on' + evType] = fn;
-        }
-    },
-    cssjs:function(a,o,c1,c2){
-        switch (a){
-            case 'swap':
-                o.className=!dc.cssjs('check',o,c1)?o.className.replace(c2,c1):o.className.replace(c1,c2);
-            break;
-            case 'add':
-                if(!dc.cssjs('check',o,c1)){o.className+=o.className?' '+c1:c1;}
-            break;
-            case 'remove':
-                var rep=o.className.match(' '+c1)?' '+c1:c1;
-                o.className=o.className.replace(rep,'');
-            break;
-            case 'check':
-                return new RegExp("(^|\\s)" + c1 + "(\\s|$)").test(o.className)
-            break;
-        }
-    }
-}
-dc.addEvent(window, 'load', dc.init, false);
-</script>
-<?
-}
 
-function print_dialog($alist, $obj)
-{
+        ?>
+        <table cellpadding="0" width="100%" cellspacing="0" border="1">
+            <tr>
+                <td >
+                    <table cellpadding="2" cellspacing="7" border="0" width="25%" >
+                        <tr align="left">
+                            <td align="left">
+                                <?php
+                                $t = 2;
+                                foreach($alist as $k => $u)
+                                {
+                                    $i++;
+                                    if (csb($k, "__title")) {
+                                        $i = 0;
+                                        $t++;
+                                        ?>
+                                        </td> </tr> </table> </td> <td >
+                                        <table cellpadding=0 border=0 cellspacing=0> <tr> <td >
+                                        <?php
+                                        continue;
+                                    }
 
-    global $gbl, $sgbl, $login, $ghtml;
-    $buttonpath = get_image_path("/button");
-    $lclass  = $login->get__table();
-    $talist = null;
 
-    $dwidth = "600";
-    $dheight = "400";
-    if ($login->dialogsize) {
-        list($dwidth, $dheight) = explode("x", $login->dialogsize);
-    }
+                                    if ($t%4 === 1) {
+                                        ?>
+                                        </td> </tr> </table> </tr> <tr> <table cellpadding=0 cellspacing=0 border=2> <tr> <td >
+                                        <?php
+                                    }
 
-    foreach($alist as $k => $a) {
-        if (!csb($k, "__v_dialog")) {
-            continue;
-        }
-        $talist[$k] = $a;
-    }
-    if (!$talist) {
-        return;
-    }
-    $buttonpath = get_image_path("/button");
-    ?>
-
-    <div id="comments-dlg" style="visibility:hidden;">
-        <div class="x-dlg-hd"><?=$obj->getId()?></div>
-        <div class="x-dlg-bd">
-
-        <?php
-    $count = 0;
-    $first_tab = null;
-    foreach($talist as $k => $a) {
-            $descr = $this->getActionDetails($a, null, $buttonpath, $path, $post, $file, $name, $image, $__t_identity);
-            if ($count === 0) {
-                $first_tab = $k;
-            }
-            $count++;
-            ?>
-            <div id="<?=$k?>-tab" class="x-dlg-tab" title="<?=$descr[2]?>"> <div id="<?=$k?>-list" class="inner-tab"> </div> </div>
-            <?php } ?>
-        </div>
-        <div class="x-dlg-ft">
-            <div id="dlg-msg">
-                <span id="post-error" class="posting-msg"><img src="/img/extjs/warning.gif" width="16" height="16" align="absmiddle" />&nbsp;<span id="post-error-msg"></span></span>
-                <span id="post-wait"  class="posting-msg"><img src="/img/extjs/default/grid/loading.gif" width="16" height="16" align="absmiddle" />&nbsp;Updating...</span>
-            </div>
-        </div>
-    </div>
+                                    if ($i %2) {
+                                        ?>
+                                        </td> </tr> <tr> <td >
+                                        <?php
+                                    }
+                                    $this->print_div_button(null, "block", false, $k, $u);
+                                }
+                                if ($i <= 7)
+                                    for(; $i <=7 ; $i++)
+                                        print("</td><td width=40>&nbsp;");
 
 
 
-<link rel="stylesheet" type="text/css" href="/htmllib/extjs/examples/dialog/post.css" />
 
-<script>
-var global_formname;
-var Comments = function(){
-    var dialog, postLink, viewLink, txtComment;
-    var tabs, commentsList,  renderer;
-    var wait, error, errorMsg;
-    var posting = false;
-
-    var global_tabid = '<?=$first_tab?>-tab';
-
-    return {
-
-        init : function(){
-             // cache some elements for quick access
-            // txtComment = Ext.get('comment');
-             wait = Ext.get('post-wait');
-             error = Ext.get('post-error');
-             errorMsg = Ext.get('post-error-msg');
-
-             this.createDialog();
-
-             <?php foreach($talist as $k => $a) {
-                 $na = str_replace("display.php", "ajax.php", $a);
-                 ?>
-             <?=$k?>Link = Ext.get('<?=$k?>-comment');
-             <?=$k?>Link.on('click', function(e){
-                 e.stopEvent();
-                 var tabname = global_tabid.substr(0, global_tabid.length - 4);
-
-                 if (tabname == '<?=$k?>') {
-                     var tList = Ext.get('<?=$k?>-list');
-                     // set up the comment renderer, all ajax requests for commentsList
-                     // go through this render
-                     var tum = tList.getUpdateManager();
-                        //tum.update('/ajax.php?frm_action=updateform&frm_subaction=password');
-                     tum.update('<?=$na?>&r=' + Math.random());
-                 }
-                 tabs.activate('<?=$k?>-tab');
-                 dialog.show(<?=$k?>Link);
-             });
-             <?php } ?>
-
-        },
-
-        okComment : function(){
-            this.submitComment('ok');
-        },
-
-        allComment : function(){
-            if (confirm("Do you really want to apply the above settings to all the objects visible in the top right selectbox?")) {
-                this.submitComment('all');
-            } else {
-                return;
-            }
-        },
-
-        // submit the comment to the server
-        submitComment : function(x){
-
-            if (!check_for_needed_variables(global_formname)) {
-                return;
-            }
-            g_postBtn.disable();
-            g_okBtn.disable();
-            //g_allBtn.disable();
-            wait.radioClass('active-msg');
-
-            var commentSuccess = function(o){
-                g_postBtn.enable();
-                g_okBtn.enable();
-                //g_allBtn.enable();
-
-                var data = renderer.parse(o.responseText);
-                //alert(o.responseText);
-                data = eval('(' + o.responseText + ')');
-                // if we got a comment back
-                if(data){
-                    if (data.returnvalue == 'success') {
-                        if (data.refresh) {
-                            top.mainframe.window.location.reload();
-                        }
-                        if (x == 'ok' || x == 'all') {
-                            dialog.hide();
-                        }
-                    } else {
-                        var tabname = global_tabid.substr(0, global_tabid.length - 4);
-                        var tList = Ext.get(tabname + '-list');
-                        // set up the comment renderer, all ajax requests for commentsList
-                        // go through this render
-                        var tum = tList.getUpdateManager();
-                        //tum.update('/ajax.php?frm_action=updateform&frm_subaction=password');
-                        tum.update('/ajax.php?r=' + Math.random() + "&" + data.url );
-                    }
-                    wait.removeClass('active-msg');
-                    renderer.append(data.message);
-                    return data.returnvalue;
-                }else{
-                    error.radioClass('active-msg');
-                    errorMsg.update(o.responseText);
-                    //eval(tabname + "um.update('/ajax.php?frm_action=updateform&frm_subaction=password');");
-
-                }
-            };
-
-            var commentFailure = function(o){
-                g_postBtn.enable();
-                g_allBtn.enable();
-                g_okBtn.enable();
-                error.radioClass('active-msg');
-                errorMsg.update('Unable to connect.');
-            };
-
-            if (x == 'all') {
-                var ur = '/ajax.php?frm_change=updateall'
-            } else {
-                var ur = '/ajax.php'
-            }
-
-            Ext.lib.Ajax.formRequest(global_formname, ur, {success: commentSuccess, failure: commentFailure});
-        },
-
-        createDialog : function(){
-            dialog = new Ext.BasicDialog("comments-dlg", {
-                    autoTabs:true,
-                    width:<?=$dwidth?>,
-                    height:<?=$dheight?>,
-                    shadow:true,
-                    minWidth:300,
-                    minHeight:300
-            });
-            dialog.addKeyListener(27, dialog.hide, dialog);
-            g_okBtn = dialog.addButton('OK', this.okComment, this);
-            dialog.addButton('Cancel', dialog.hide, dialog);
-            g_postBtn = dialog.addButton('Apply', this.submitComment, this);
-            g_allBtn = dialog.addButton('All Update', this.allComment, this);
-
-
-            // clear any messages and indicators when the dialog is closed
-            dialog.on('hide', function(){
-                wait.removeClass('active-msg');
-                error.removeClass('active-msg');
-                //txtComment.dom.value = '';
-            });
-
-            // stoe a refeence to the tabs
-            tabs = dialog.getTabs();
-
-            // auto fit the comment box to the dialog size
-            var sizeTextBox = function(x){
-                //txtComment.setSize(dialog.size.width-44, dialog.size.height-264);
-                if (x != 'init') {
-                    Ext.lib.Ajax.request('post', '/ajax.php', {success: null, failure: null }, 'frm_action=update&frm_subaction=dialogsize&frm_<?=$lclass?>_c_dialogsize=' + dialog.size.width + 'x' + dialog.size.height);
-                }
-            };
-            sizeTextBox('init');
-            dialog.on('resize', sizeTextBox);
-
-            // hide the post button if not on Post tab
-            tabs.on('tabchange', function(panel, tab){
-               // postBtn.setVisible(tab.id == 'post-tab');
-                global_tabid = tab.id;
-            });
-
-            <?php foreach($talist as $k => $a) {
-                if (!csb($k, "__v_dialog")) {
-                    continue;
-                }
-                $na = str_replace("display.php", "ajax.php", $a);
-                ?>
-                <?=$k?>List = Ext.get('<?=$k?>-list');
-                // set up the comment renderer, all ajax requests for commentsList
-                // go through this render
-                renderer = new CommentRenderer(<?=$k?>List);
-                var <?=$k?>um = <?=$k?>List.getUpdateManager();
-                <?=$k?>um.setRenderer(renderer);
-
-                // lazy load the comments when the view tab is activated
-                tabs.getTab('<?=$k?>-tab').on('activate', function(){
-                    <?=$k?>um.update('<?=$na?>&r=' + Math.random());
-                });
+                                ?>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+                </fieldset>
+                <br />
+                <br />
                 <?php
-            }
-            ?>
+    }
 
-        }
-    };
-}();
+    function print_action_block_dumb($title, $alist)
+    {
+        global $gbl, $sgbl, $login, $ghtml;
+        $getskin = $login->getSkinDir();
+        $i = 0;
 
-// This class handles rendering JSON into comments
-var CommentRenderer = function(list){
-    // create a template for each JSON object
-    var tpl = new Ext.DomHelper.Template(
-          '{lx__form}'
-    );
+        /// This is a mighty hack... The first element of $alist is supposed to be the main title. You use it as the first title and unset the variable. This is a hack from the previous code where the first title was preset here itself.
 
-    this.parse = function(json){
-        try{
-            return eval('(' + json + ')');
-        }catch(e){}
-        return null;
-    };
 
-    // public render function for use with UpdateManager
-    this.render = function(el, response){
-        var data = this.parse(response.responseText);
-        if(!data || !data.lx__form || data.lx__form.length < 1){
-            el.update('the_server_didnt_return_a_form: error:' + response.responseText);
-            return;
-        }
-        // clear loading
-        el.update('');
-
-        if (data.allbutton) {
-            g_allBtn.enable();
-        } else {
-            g_allBtn.disable();
+        if (!$title) {
+            $title = $alist['__title_main'];
+            unset($alist['__title_main']);
         }
 
-        if (data.ajax_dismiss) {
-            g_allBtn.setVisible(false);
-            g_okBtn.setVisible(false);
-            g_postBtn.setVisible(false);
-        } else {
-            g_allBtn.setVisible(true);
-            g_okBtn.setVisible(true);
-            g_postBtn.setVisible(true);
-        }
-
-        global_need_list = new Array();
-        global_match_list = new Array();
-        for (v in data.ajax_need_var) {
-            global_need_list[v] = data.ajax_need_var[v];
-        }
-        for (v in data.ajax_match_var) {
-            global_match_list[v] = data.ajax_match_var[v];
-        }
-        global_formname = data.ajax_form_name;
-
-        this.append(data);
-    };
-
-    // appends a comment
-    this.append = function(data){
-        tpl.append(list.dom, data);
-    };
-};
-
-Ext.EventManager.onDocumentReady(Comments.init, Comments, true);
-</script>
-<?php
-
-}
-
-function print_drag_drop($obj, $ret, $class)
-{
-    global $gbl, $sgbl, $login, $ghtml;
-    $lclass = $login->get__table();
-    $skindir = $login->getSkinDir();
-    $col = $login->getSkinColor();
-    $plus = "$skindir/plus.gif";
-    $minus = "$skindir/minus.gif";
-    $buttonpath = get_image_path() . "/button/";
-
-    ?>
-
-    <script>
-(function() {
-
-var Dom = YAHOO.util.Dom;
-var Event = YAHOO.util.Event;
-var DDM = YAHOO.util.DragDropMgr;
-
-//////////////////////////////////////////////////////////////////////////////
-// example app
-//////////////////////////////////////////////////////////////////////////////
-YAHOO.example.DDApp = {
-    init: function() {
-
-        var dd;
-
-        dd = new  YAHOO.util.DDTarget("mainbody");
-
-        <?php foreach($ret as $title => $a) {
-            $nametitle = strfrom($title, "__title_");
-            print("dd = new YAHOO.example.DDList('item_$nametitle');\n");
-            print("dd.setXConstraint(0, 0, 0);\n");
-            print("dd.setHandleElId('handle_$nametitle' );");
-        }
         ?>
-
-        //Event.on("showButton", "click", this.showOrder);
-        //Event.on("switchButton", "click", this.switchStyles);
-    },
-
-    showOrder: function() {
-    },
-
-    switchStyles: function() {
-    }
-};
-
-//////////////////////////////////////////////////////////////////////////////
-// custom drag and drop implementation
-//////////////////////////////////////////////////////////////////////////////
-
-YAHOO.example.DDList = function(id, sGroup, config) {
-
-    YAHOO.example.DDList.superclass.constructor.call(this, id, sGroup, config);
-
-    this.logger = this.logger || YAHOO;
-    var el = this.getDragEl();
-    Dom.setStyle(el, "opacity", 0.67); // The proxy is slightly transparent
-
-    this.goingUp = false;
-    this.lastY = 0;
-};
-
-YAHOO.extend(YAHOO.example.DDList, YAHOO.util.DDProxy, {
-
-    startDrag: function(x, y) {
-        this.logger.log(this.id + " startDrag");
-
-        // make the proxy look like the source element
-        var dragEl = this.getDragEl();
-        var clickEl = this.getEl();
-       Dom.setStyle(clickEl, "visibility", "hidden");
-
-        //dragEl.innerHTML = clickEl.innerHTML;
-        Dom.setStyle(dragEl, "color", Dom.getStyle(clickEl, "color"));
-        Dom.setStyle(dragEl, "backgroundColor", Dom.getStyle(clickEl, "backgroundColor"));
-        Dom.setStyle(dragEl, "border", "1px solid #<?echo $col?>");
-    },
-
-    endDrag: function(e) {
-
-        var srcEl = this.getEl();
-        var proxy = this.getDragEl();
-
-        // Show the proxy element and animate it to the src element's location
-        Dom.setStyle(proxy, "visibility", "");
-        var a = new YAHOO.util.Motion(
-            proxy, {
-                points: {
-                    to: Dom.getXY(srcEl)
-                }
-            },
-            0.2,
-            YAHOO.util.Easing.easeOut
-        )
-        var proxyid = proxy.id;
-        var thisid = this.id;
-
-        // Hide the proxy and show the source element when finished with the animation
-        a.onComplete.subscribe(function() {
-                Dom.setStyle(proxyid, "visibility", "hidden");
-                Dom.setStyle(thisid, "visibility", "");
-            });
-        a.animate();
-    },
-
-    onDragDrop: function(e, id) {
-
-        // If there is one drop interaction, the li was dropped either on the list,
-        // or it was dropped on the current location of the source element.
-
-
-        var page = document.getElementById('show_page');
-        var out = parseList(page, "List 1");
-        var url = 'frm_<?=$lclass?>_c_title_class=<?=$class ?>\&frm_action=update\&frm_subaction=boxpos\&frm_<?=$lclass?>_c_page=' + out
-        var request = YAHOO.util.Connect.asyncRequest('post', "/ajax.php", callback, url);
-
-    },
-
-    onDrag: function(e) {
-
-        // Keep track of the direction of the drag for use during onDragOver
-        var y = Event.getPageY(e);
-
-        if (y < this.lastY) {
-            this.goingUp = true;
-        } else if (y > this.lastY) {
-            this.goingUp = false;
-        }
-
-        this.lastY = y;
-    },
-
-    onDragOver: function(e, id) {
-
-        var srcEl = this.getEl();
-        var destEl = Dom.get(id);
-
-        // We are only concerned with list items, we ignore the dragover
-        // notifications for the list.
-        if (destEl.id == 'mainbody') {
-            return;
-        }
-        if (destEl.nodeName.toLowerCase() == "div") {
-            var orig_p = srcEl.parentNode;
-            var p = destEl.parentNode;
-
-            if (this.goingUp) {
-                p.insertBefore(srcEl, destEl); // insert above
-            } else {
-                p.insertBefore(srcEl, destEl.nextSibling); // insert below
+        <table valign=top cellpadding=3 cellspacing=3> <tr> <td valign=top width=33% >
+        <table cellpadding=0 cellspacing=0 border=1> <tr> <td >
+        <table cellpadding=0 cellspacing=0 border=0 height=13 width=98% style="background:url('<?php echo
+        $getskin?>/bar.gif')"> <tr> <td > <?=$title ?>  </td> </table>
+            <table cellpadding="2" cellspacing="7" border="0" height=100% width="90%" >
+            <tr align=left> <td align=left>
+            <?php
+        $n = 1;
+        foreach($alist as $k => $u) {
+            $i++;
+            if ($i%3 === 1) {
+                print("</td> </tr> <tr align=left> <td align=left>");
             }
 
-            DDM.refreshCache();
-        }
-    }
-});
+            if (csb($k, "__title")) {
+                $i = 0;
+                $n++;
 
-Ext.EventManager.onDocumentReady(YAHOO.example.DDApp.init, YAHOO.example.DDApp, true);
+                $tr = null;
+                if ($n%3 == 1) {
+                    $tr = "</tr> <tr> ";
+                }
+                ?>
+                </td> </tr> </table>
 
-})();
+                </td> </tr> </table> </td> <?=$tr ?>  <td width=33% valign=top> <table cellpadding=0 cellspacing=0 border=1> <tr> <td >
+        <table cellpadding=2 cellspacing=2 border=0 height=13 width=98% style="background:url('<?=$getskin?>/bar.gif')"> <tr> <td > <?=$u ?>  </td> </table>
 
-</script>
-<?php
-}
-
-function print_div_button($actionlist, $type, $imgflag, $key, $url, $ddate = null)
-{
-    global $gbl, $sgbl, $login, $ghtml;
-    $obj = $gbl->__c_object;
-    $psuedourl = NULL;
-    $target = NULL;
-
-    $buttonpath = get_image_path() . "/button/";
-
-    $linkflag = true;
-    if (csa($key, "__var_")) {
-        $privar = strfrom($key, "__var_");
-        if (!$obj->checkButton($privar)) {
-            $linkflag = false;
-        }
-    }
-
-    $complete = $this->resolve_int_ext($url, $psuedourl, $target);
-
-    if ($complete) {
-        $this->get_post_from_get($url, $path, $post);
-        $descr  = $this->getActionDescr($path, $post, $class, $name, $identity);
-        $complete['name'] = str_replace("<", "&lt;", $complete['name']);
-        $complete['name'] = str_replace(">", "&gt;", $complete['name']);
-        $name = $complete['name'];
-        $bname = $complete['bname'];
-        $descr[1] = $complete['name'];
-        $descr[2] = $complete['name'];
-        $descr['desc'] = $complete['name'];
-        $file = $class;
-        if (lxfile_exists("img/custom/$bname.gif")) {
-            $image = "/img/custom/$bname.gif";
-        } else {
-            $image = "/img/image/collage/button/custom_button.gif";
-        }
-        $__t_identity = $identity;
-    } else {
-        $url = str_replace("[%s]", $obj->nname, $url);
-
-        $descr = $this->getActionDetails($url, $psuedourl, $buttonpath, $path, $post, $file, $name, $image, $__t_identity);
-    }
-
-    $this->save_non_existant_image($image);
-
-    $str = randomString(8);
-    $form_name = $this->createEncForm_name("{$file}_{$name}_$str");
-    $form_name = fix_nname_to_be_variable($form_name);
-
-    if (csb($url, "http:/")) {
-        $formmethod = "get";
-    } else {
-        $formmethod = $sgbl->method;
-    }
-    // Use get always. Only in forms should post be used.
-    $formmethod = 'get';
-
-    $dividentity = "searchdiv_{$descr['desc']}";
-
-    $dividentity = str_replace(" ", "_", $dividentity);
-    $dividentity = strtolower($dividentity);
-    for($i = 0; $i < 10; $i++) {
-        if (!isset($actionlist[$dividentity])) {
-            break;
-        }
-        $dividentity = "{$dividentity}$i";
-    }
-    ?>
-
-        <td  valign="middle"  align="left" width=5>
-    <div id="<?php echo $dividentity ?>" style="visibility:visible;display:block">
-
-        <form method=<?=$formmethod ?> name=form_<?=$form_name ?> action=<?=$path?> <?=$target ?>  >
-    <?php
-    $this->print_input_vars($post);
-?>
-<?
-    $this->print_div_for_divbutton($key, $imgflag, $linkflag, $form_name, $name, $image, $descr);
-
-    ?>
-    </form>
-        </div>
-        </td>
-    <?php
-
-    return $dividentity;
-}
-
-function print_action_block($obj, $class, $alist, $num)
-{
-    global $gbl, $sgbl, $login, $ghtml;
-    $lclass = $login->get__table();
-    $skindir = $login->getSkinDir();
-    $talist = $alist;
-    $ret = $this->create_action_block($class, $alist);
-    $col = $login->getSkinColor();
-    $plus = "$skindir/plus.gif";
-    $minus = "$skindir/minus.gif";
-    $buttonpath = get_image_path() . "/button/";
-
-    if ($sgbl->isDebug()) $outputdisplay = 'inline';
-    else $outputdisplay = 'none';
-
-    if ($login->getSpecialObject('sp_specialplay')->isOn('enable_ajax')) {
-        $this->print_dialog($talist, $obj);
-        $this->print_drag_drop($obj, $ret, $class);
-    }
-
-    if ($sgbl->isBlackBackground()) {
-        $backgimage = "$skindir/black.gif";
-        $minus = "$skindir/black.gif";
-        $plus = "$skindir/black.gif";
-        $col = "333";
-    } else
-        $backgimage = "$skindir/expand.gif";
-
-
-    ?>
-
-    <style>
-
-    div.section,div#createNew {
-        border: 1px solid #<?echo $col?>;
-        margin: 9px 5px;
-        padding: 0px 0px 10px 0px;
-        width: 520;
-        }
-
-    div#createNew input { margin-left: 5px; }
-
-    div#createNew h3, div.section h3{
-        font-size: 12px;
-        padding: 2px 5px;
-        margin: 0 0 10px 0;
-        display: block;
-        font-family:"trebuchet ms",verdana,sans-serif;
-        color:#003360;
-        background:url(<?=$skindir?>/expand.gif);
-        border-bottom: 1px solid #<?echo $col?>;
-    }
-
-    div.section h3 {
-        cursor: move;
-    }
-
-    div.demo div.example span {
-        margin:0px;
-        margin-bottom:0px;
-        padding:0px;
-        font-size:  1.0em;
-        text-align: center;
-        display: block;
-    }
-
-    div.demo {
-          margin:0px;
-          overflow:visible;
-          position:relative;
-          width:100%;
-    }
-
-
-    h1 {
-        margin-bottom: 0;
-        font-size: 18px;
-    }
-</style>
-<div id="show_page" >
-    <?php
-
-    if (!$login->getSpecialObject('sp_specialplay')->isOn('enable_ajax'))
-        $dragstring = "Enable Ajax to Drag";
-    else
-        $dragstring = "Drag";
-
-    $div_id_list = null;
-    $completedivlist = null;
-
-    $count = 1;
-
-    foreach($ret as $title => $a) {
-        $count++;
-            if (!isset($a[$title])) {
+                <table cellspacing=7 width=90% border=0> <tr align=left> <td align=left >
+                <?php
                 continue;
             }
-            $dispstring = "display:none";
-            if ($a['open']) {
-                $dispstring = "";
-            }
-            unset($a['open']);
-            $nametitle = strfrom($title, "__title_");
-    ?>
+            $this->print_div_button(null, "block", true, $k, $u);
+        }
+        if ($i <= 7) {
 
-    <div id="item_<?="$nametitle" ?>" class="section">
-
-<table cellpadding=0 cellspacing=0> <tr class=handle id="handle_<?=$nametitle ?>" style="background:url(<?=$backgimage?>)" onMouseover="document.getElementById('font_<?=$nametitle ?>').style.visibility='visible'; this.style.background='url<?=$backgimage?>()'" onMouseout="document.getElementById('font_<?=$nametitle?>').style.visibility='hidden'; this.style.background='url(<?=$backgimage?>)'"> <td nowrap style='cursor: move' > <font id=font_<?=$nametitle?> style='visibility:hidden'>&nbsp;<?=$dragstring?> </font></td><td width=100%  style="cursor: move; " align=center ><font style='font-weight: bold'><?= $a[$title]?></font> </td> <td nowrap style='cursor: move' > <font id=font_<?=$nametitle?> style='visibility:hidden'>&nbsp;<?=$dragstring?> </font></td><td class=handle style='cursor: pointer' onclick="blindUpOrDown('<?=$lclass?>', '<?=$class ?>', '<?=$skindir?>', '<?=$nametitle ?>')"><img id=img_<?=$nametitle?> name=img_<?=$nametitle ?> src=<?=$minus?>></td> </tr> </table>
-    <div   style="<?=$dispstring?>;" id="internal_<?=$nametitle?>" >
-        <table cellpadding="10" cellspacing="4" style="padding:1 2 1 1"><tr>
-        <?
-            array_shift($a);
-            $n = 0;
-            foreach($a as $k => $u) {
-                $n++;
-                if ($n === $num) {
-                    print("</tr><tr>");
-                    $n = 1;
-                }
-                print("<td>");
-                $ret = $this->print_div_button($completedivlist, "block", true, $k, $u);
-                $completedivlist[$ret] = $ret;
-                $div_id_list[$nametitle][$ret] = $ret;
-                print("</td>");
+            for(; $i <=7 ; $i++) {
+                print("</td><td width=40>&nbsp;");
             }
-    ?>
-            </td></tr></table>
-            </div>
-    </div>
+        }
+
+
+        ?>
+        </td> </tr> </table>
+        </td> </tr> </table>
+            </td> </tr>
+            </table>
+                </fieldset>
+            <br> <br>
+            <?php
+    }
+
+    function create_action_block($class, $alist)
+    {
+        global $gbl, $sgbl, $login, $ghtml;
+
+        if (!$alist) return null;
+
+        $title = "main";
+        $i = 0;
+        $n = 0;
+        foreach($alist as $k => $a)
+        {
+            if (csb($k, "__title")) {
+                $title = $k;
+                $ret[$k][$k] = $a;
+            }
+            $ret[$title][$k] = $a;
+            $ret[$title]['open'] = true;
+        }
+
+        if (isset($login->boxpos["{$class}_show"]))
+        {
+            foreach($login->boxpos["{$class}_show"] as $k => $v)
+            {
+                if (!isset($ret[$k])) continue;
+                $nret[$k] = $ret[$k];
+                $nret[$k]['open'] = $v;
+            }
+            foreach($ret as $k => $v)
+                if (!isset($nret[$k]))
+                    $nret[$k] = $ret[$k];
+        }
+        else  $nret = $ret;
+
+        return $nret;
+
+    }
+
+    function print_style_desktop()
+    {
+        global $gbl, $sgbl, $login, $ghtml;
+        $skindir = $login->getSkinDir();
+        $col = $login->getSkinColor();
+        #[FIXME] Put this css code on a file, NOT inline
+        ?>
+    <style type="text/css">
+    .expanded a:hover {cursor:pointer;}
+    .trigger a:hover {cursor:poiner;}
+    .trigger {cursor:pointer;background:url(<?=$skindir?>/expand.gif);border:1px solid #<?=$col?>;}
+    .expanded {cursor:pointer;background:url(<?=$skindir?>/expand.gif);border:1px solid #<?=$col?>;}
+    .show {position:static; display:table; }
+    .hide {position:absolute; left:-999em; height:1px; width:100px; overflow:hidden;}
+
+    body {font-family:arial,sans-serif; color:#333;}#boundary{border-left:1px solid #<?=$col?>; border-right:1px solid #<?=$col?>; border-bottom:1px solid #<?=$col?>;} a{color:#369;} h1{ font-family:"trebuchet ms",verdana,sans-serif; font-size:130%; border-bottom:1px solid #999; } h2{ font-family:"trebuchet ms",verdana,sans-serif; font-size:130%; color:#003360; background:url(<?=$skindir?>/expand.gif); margin-bottom:0} h3{ font-family:"trebuchet ms",verdana,sans-serif; font-size:100%; } p code{ font-size:110%; color:#666; font-weight:bold; } pre{ background:#eee; padding:.5em 1em; border:1px solid #<?=$col?>; } h1 code, h2 code, h3 code{ font-family:"trebuchet ms",verdana,sans-serif; } h1 code{font-family:"Trebuchet MS",Arial,Sans-serif; } #header{ background:#69c; border-top:1px solid #9cf; border-bottom:1px solid #369; } #content{font-size:90%;} #download{ position:absolute; top:9em; width:15em; right:4em;} #download ul{background:#ccf; padding:.5em 0 .5em 1.5em; } #download h2{ background:#369; color:#fff; font-size:90%; padding:0.5em; margin:.5em 0 0 0; border-bottom:1px solid #036; border-right:1px solid #036; border-top:1px solid #69c; border-left:1px solid #<?=$col?>; } #download li{ list-style-type:square; } #header a img{padding:5px 1em;}
+    </style>
     <?
     }
-    print("</td></tr></table>");
+
+    function print_style_home()
+    {
+        global $gbl, $sgbl, $login, $ghtml;
+        $skindir = $login->getSkinDir();
+        $col = $login->getSkinColor();
+        #[FIXME] Put this css code on a file, NOT inline
     ?>
-</div>
+    <style type="text/css">
+    .expanded a:hover {cursor:pointer;}
+    .trigger a:hover {cursor:pointer;}
+    .trigger {cursor:pointer;background:url(<?=$skindir?>/expand.gif);border:1px solid #<?=$col?>;height:25px;}
+    .expanded {cursor:pointer;background:url(<?=$skindir?>/expand.gif);border:1px solid #<?=$col?>;height:25px;}
+    .show {position:static; display:table; }
+    .hide {position:absolute; left:-999em; height:1px; width:100px; overflow:hidden;}
 
-<?php
-
-    print("<script>");
-    $count = 0;
-    print("global_action_box = new Array()\n");
-    foreach($div_id_list as $k => $v) {
-        print("global_action_box[$count] = new Array();\n");
-        print("global_action_box[$count][0] = '$k';\n");
-        $j = 1;
-        foreach($v as $kk => $vv) {
-            print("global_action_box[$count][$j] = '$vv';\n");
-            $j++;
-        }
-        $count++;
-    }
-    print("</script>");
-}
-
-function print_action_blockold($title, $alist, $num)
-{
-
-    $i = 0;
-    $total = $num;
-
-    /// This is a mighty hack... The first element of $alist is supposed to be the main title. You use it as the first title and unset the variable. This is a hack from the previous code where the first title was preset here itself.
-
-    foreach($alist as $k => $a) {
-        if (csb($k, "__title")) {
-            $title = $a;
-            unset($alist[$k]);
-            break;
-        }
+    body {font-family:arial,sans-serif; color:#333; margin:0; padding:0; }#boundary{margin-left:20px;margin-right:100px; border-left:1px solid #<?=$col?>; border-right:1px solid #<?=$col?>; border-bottom:1px solid #<?=$col?>;} a{color:#369;} h1{ font-family:"trebuchet ms",verdana,sans-serif; font-size:130%; border-bottom:1px solid #999; } h2{ font-family:"trebuchet ms",verdana,sans-serif; font-size:130%;color:#003370; background:url(<?=$skindir?>/expand.gif);margin-bottom:10px; margin-top:10px} h3{ font-family:"trebuchet ms",verdana,sans-serif; font-size:100%; } p code{ font-size:110%; color:#666; font-weight:bold; } pre{ background:#eee; padding:.5em 1em; border:1px solid #<?=$col?>; } h1 code, h2 code, h3 code{ font-family:"trebuchet ms",verdana,sans-serif; } h1 code{font-family:"Trebuchet MS",Arial,Sans-serif; } #header{ padding:0; left:0; top:0; background:#69c; margin:0; border-top:1px solid #9cf; border-bottom:1px solid #369; } #content{font-size:90%; margin-top:0;} #download{ position:absolute; top:9em; width:15em; right:4em;} #download ul{background:#ccf; margin:0; padding:.5em 0 .5em 1.5em; } #download h2{ background:#369; color:#fff; font-size:90%; padding:0 .5em; margin:.5em 0 0 0; border-bottom:1px solid #036; border-right:1px solid #036; border-top:1px solid #69c; border-left:1px solid #<?=$col?>; } #download li{ list-style-type:square; } #header a img{ border:0; padding:5px 1em;}
+    </style>
+    <?
     }
 
+    function drag_drop()
+    {
+        global $gbl, $sgbl, $login, $ghtml;
     ?>
-    <fieldset width=100% style='border: 0px; border-top: 1px solid #d0d0d0'><legend style='font-weight:normal;border:0px'><b> <font color=#303030 style='font-weight:normal'><?=$title ?> </font></b> </legend>
-        <table cellpadding="2" cellspacing="7" border="0" width="95%" >
-        <tr align=left> <td align=left>
-        <?php
-    foreach($alist as $k => $u) {
-        $i++;
-        if ($i% $total === 1) {
-            print("</td> </tr> <tr align=left> <td align=left>");
-        }
+        <script type="text/javascript" src="wz_dragdrop.js"></script>
+        <div id="name" style="position:absolute;...">
+    <?
+    }
 
-        if (csb($k, "__title")) {
-            if ($i <= $total) {
-                for(; $i <=$total ; $i++) {
-                    print("</td><td width=60>&nbsp;");
+    function print_domcollapse($sel)
+    {
+        global $gbl, $sgbl, $login, $ghtml;
+        $skinget = $login->getSkinDir();
+        if($sel=="des")
+        $style = $ghtml->print_style_desktop();
+        if($sel=="hom")
+        $style = $ghtml->print_style_home();
+    ?>
+    <script type="text/javascript">
+    dc={
+        triggerElements:'*',    // elements to trigger the effect
+        parentElementId:null,   // ID of the parent element (keep null if none)
+        uniqueCollapse:false,   // is set to true only one element can be open at a time
+
+        // CSS class names
+        trigger:'trigger',
+        triggeropen:'expanded',
+        hideClass:'hide',
+        showClass:'show',
+        // pictures and text alternatives
+        closedPic:'<?=$skinget?>/plus.gif',
+        closedAlt:'expand section',
+        openPic:'<?=$skinget?>/minus.gif',
+        openAlt:'collapse section',
+        right:'right',
+        center:'center',
+        /* Doesn't work with Safari
+            hoverClass:'hover',
+        */
+        init:function(e){
+            var temp;
+            if(!document.getElementById || !document.createTextNode){return;}
+            if(!dc.parentElementId){
+                temp=document.getElementsByTagName(dc.triggerElements);
+            } else if(document.getElementById(dc.parentElementId)){
+                temp=document.getElementById(dc.parentElementId).getElementsByTagName(dc.triggerElements);
+            }else{
+                return;
+            }
+            dc.tempLink=document.createElement('a');
+            dc.tempLink.setAttribute('href','#');
+            dc.tempLink.appendChild(document.createElement('img'));
+            for(var i=0;i<temp.length;i++){
+                if(dc.cssjs('check',temp[i],dc.trigger) || dc.cssjs('check',temp[i],dc.triggeropen)){
+                    dc.makeTrigger(temp[i],e);
                 }
             }
-            $i = 0;
-            ?>
-            </td> </tr> </table>
-            </fieldset><fieldset style='font-weight:normal;border: 0px; border-top: 1px solid #d0d0d0'><legend style='font-weight:normal'> <b> <font color=#303030 style='font-weight:normal'><?=$u ?> </font> </b> </legend>
-            <table cellspacing=7 width=95% border=0> <tr align=left> <td align=left >
+        },
+        makeTrigger:function(o,e){
+            var tl=dc.tempLink.cloneNode(true);
+            var tohide=o.nextSibling;
+            while(tohide.nodeType!=1)
+            {
+                tohide=tohide.nextSibling;
+            }
+            o.tohide=tohide;
+            if(!dc.cssjs('check',o,dc.triggeropen)){
+                dc.cssjs('add',tohide,dc.hideClass);
+                tl.getElementsByTagName('img')[0].setAttribute('align',dc.right);
+                tl.getElementsByTagName('img')[0].setAttribute('src',dc.closedPic);
+                tl.getElementsByTagName('img')[0].setAttribute('alt',dc.closedAlt);
+                tl.getElementsByTagName('img')[0].setAttribute('title',dc.closedAlt);
+                //o.setAttribute('title',dc.closedAlt);
+            }else{
+                dc.cssjs('add',tohide,dc.showClass);
+                tl.getElementsByTagName('img')[0].setAttribute('align',dc.right);
+                tl.getElementsByTagName('img')[0].setAttribute('src',dc.openPic);
+                tl.getElementsByTagName('img')[0].setAttribute('alt',dc.openAlt);
+                tl.getElementsByTagName('img')[0].setAttribute('title',dc.openAlt);
+                //o.setAttribute('title',dc.openAlt);
+                dc.currentOpen=o;
+            }
+        //  dc.addEvent(o,'click',dc.addCollapse,false);
+            /* Doesn't work with Safari
+            dc.addEvent(o,'mouseover',dc.hover,false);
+            dc.addEvent(o,'mouseout',dc.hover,false);
+            */
+            o.insertBefore(tl,o.firstChild);
+            dc.addEvent(tl,'click',dc.addCollapse,false);
+            // Safari hacks
+            tl.onclick=function(){return false;}
+            o.onclick=function(){return false;}
+        },
+        /* Doesn't work with Safari
+        hover:function(e){
+            var o=dc.getTarget(e);
+            var action=dc.cssjs('check',o,dc.hoverClass)?'remove':'add';
+            dc.cssjs(action,o,dc.hoverClass)
+        },
+        */
+        addCollapse:function(e){
+            var action,pic;
+            // hack to fix safari's redraw bug
+            // as mentioned on http://en.wikipedia.org/wiki/Wikipedia:Browser_notes#Mac_OS_X
+            if (self.screenTop && self.screenX){
+                window.resizeTo(self.outerWidth + 1, self.outerHeight);
+                window.resizeTo(self.outerWidth - 1, self.outerHeight);
+            }
+            if(dc.uniqueCollapse && dc.currentOpen){
+                dc.currentOpen.getElementsByTagName('img')[0].setAttribute('align',dc.right);
+                dc.currentOpen.getElementsByTagName('img')[0].setAttribute('src',dc.closedPic);
+                dc.currentOpen.getElementsByTagName('img')[0].setAttribute('alt',dc.closedAlt);
+                dc.currentOpen.setAttribute('img',dc.closedAlt);
+                dc.cssjs('swap',dc.currentOpen.tohide,dc.showClass,dc.hideClass);
+                dc.cssjs('remove',dc.currentOpen,dc.triggeropen);
+                dc.cssjs('add',dc.currentOpen,dc.trigger);
+            }
+            var o=dc.getTarget(e);
+            if(o.tohide){
+                if(dc.cssjs('check',o.tohide,dc.hideClass)){
+                    o.getElementsByTagName('img')[0].setAttribute('align',dc.right);
+                    o.getElementsByTagName('img')[0].setAttribute('src',dc.openPic);
+                    o.getElementsByTagName('img')[0].setAttribute('alt',dc.openAlt);
+                    o.getElementsByTagName('img')[0].setAttribute('title',dc.openAlt);
+                    //o.setAttribute('title',dc.openAlt);
+                    dc.cssjs('swap',o.tohide,dc.hideClass,dc.showClass);
+                    dc.cssjs('add',o,dc.triggeropen);
+                    dc.cssjs('remove',o,dc.trigger);
+                }else{
+                    o.getElementsByTagName('img')[0].setAttribute('align',dc.right);
+                    o.getElementsByTagName('img')[0].setAttribute('src',dc.closedPic);
+                    o.getElementsByTagName('img')[0].setAttribute('alt',dc.closedAlt);
+                    o.getElementsByTagName('img')[0].setAttribute('title',dc.closedAlt);
+                    //o.setAttribute('title',dc.closedAlt);
+                    dc.cssjs('swap',o.tohide,dc.showClass,dc.hideClass);
+                    dc.cssjs('remove',o,dc.triggeropen);
+                    dc.cssjs('add',o,dc.trigger);
+                }
+                dc.currentOpen=o;
+                dc.cancelClick(e);
+                //document.getElementById('debug').innerHTML=o.tohide.className;
+            }
+            else{
+                dc.cancelClick(e);
+            }
+        },
+        /* helper methods */
+        getTarget:function(e){
+            var target = window.event ? window.event.srcElement : e ? e.target : null;
+            if (!target){return false;}
+            while(!target.tohide && target.nodeName.toLowerCase()!='body')
+            {
+                target=target.parentNode;
+            }
+            // if (target.nodeName.toLowerCase() != 'a'){target = target.parentNode;} Safari fix not needed here
+            return target;
+        },
+        cancelClick:function(e){
+            if (window.event){
+                window.event.cancelBubble = true;
+                window.event.returnValue = false;
+                return;
+            }
+            if (e){
+                e.stopPropagation();
+                e.preventDefault();
+            }
+        },
+        addEvent: function(elm, evType, fn, useCapture){
+            if (elm.addEventListener)
+            {
+                elm.addEventListener(evType, fn, useCapture);
+                return true;
+            } else if (elm.attachEvent) {
+                var r = elm.attachEvent('on' + evType, fn);
+                return r;
+            } else {
+                elm['on' + evType] = fn;
+            }
+        },
+        cssjs:function(a,o,c1,c2){
+            switch (a){
+                case 'swap':
+                    o.className=!dc.cssjs('check',o,c1)?o.className.replace(c2,c1):o.className.replace(c1,c2);
+                break;
+                case 'add':
+                    if(!dc.cssjs('check',o,c1)){o.className+=o.className?' '+c1:c1;}
+                break;
+                case 'remove':
+                    var rep=o.className.match(' '+c1)?' '+c1:c1;
+                    o.className=o.className.replace(rep,'');
+                break;
+                case 'check':
+                    return new RegExp("(^|\\s)" + c1 + "(\\s|$)").test(o.className)
+                break;
+            }
+        }
+    }
+    dc.addEvent(window, 'load', dc.init, false);
+    </script>
+    <?
+    }
+
+    function print_dialog($alist, $obj)
+    {
+
+        global $gbl, $sgbl, $login, $ghtml;
+        $buttonpath = get_image_path("/button");
+        $lclass  = $login->get__table();
+        $talist = null;
+
+        $dwidth = "600";
+        $dheight = "400";
+        if ($login->dialogsize) {
+            list($dwidth, $dheight) = explode("x", $login->dialogsize);
+        }
+
+        foreach($alist as $k => $a) {
+            if (!csb($k, "__v_dialog")) {
+                continue;
+            }
+            $talist[$k] = $a;
+        }
+        if (!$talist) {
+            return;
+        }
+        $buttonpath = get_image_path("/button");
+        ?>
+
+        <div id="comments-dlg" style="visibility:hidden;">
+            <div class="x-dlg-hd"><?=$obj->getId()?></div>
+            <div class="x-dlg-bd">
+
             <?php
-            continue;
-        }
-        $this->print_div_button(null, "block", true, $k, $u);
+        $count = 0;
+        $first_tab = null;
+        foreach($talist as $k => $a) {
+                $descr = $this->getActionDetails($a, null, $buttonpath, $path, $post, $file, $name, $image, $__t_identity);
+                if ($count === 0) {
+                    $first_tab = $k;
+                }
+                $count++;
+                ?>
+                <div id="<?=$k?>-tab" class="x-dlg-tab" title="<?=$descr[2]?>"> <div id="<?=$k?>-list" class="inner-tab"> </div> </div>
+                <?php } ?>
+            </div>
+            <div class="x-dlg-ft">
+                <div id="dlg-msg">
+                    <span id="post-error" class="posting-msg"><img src="/img/extjs/warning.gif" width="16" height="16" align="absmiddle" />&nbsp;<span id="post-error-msg"></span></span>
+                    <span id="post-wait"  class="posting-msg"><img src="/img/extjs/default/grid/loading.gif" width="16" height="16" align="absmiddle" />&nbsp;Updating...</span>
+                </div>
+            </div>
+        </div>
+
+
+
+    <link rel="stylesheet" type="text/css" href="/htmllib/extjs/examples/dialog/post.css" />
+
+    <script>
+    var global_formname;
+    var Comments = function(){
+        var dialog, postLink, viewLink, txtComment;
+        var tabs, commentsList,  renderer;
+        var wait, error, errorMsg;
+        var posting = false;
+
+        var global_tabid = '<?=$first_tab?>-tab';
+
+        return {
+
+            init : function(){
+                 // cache some elements for quick access
+                // txtComment = Ext.get('comment');
+                 wait = Ext.get('post-wait');
+                 error = Ext.get('post-error');
+                 errorMsg = Ext.get('post-error-msg');
+
+                 this.createDialog();
+
+                 <?php foreach($talist as $k => $a) {
+                     $na = str_replace("display.php", "ajax.php", $a);
+                     ?>
+                 <?=$k?>Link = Ext.get('<?=$k?>-comment');
+                 <?=$k?>Link.on('click', function(e){
+                     e.stopEvent();
+                     var tabname = global_tabid.substr(0, global_tabid.length - 4);
+
+                     if (tabname == '<?=$k?>') {
+                         var tList = Ext.get('<?=$k?>-list');
+                         // set up the comment renderer, all ajax requests for commentsList
+                         // go through this render
+                         var tum = tList.getUpdateManager();
+                            //tum.update('/ajax.php?frm_action=updateform&frm_subaction=password');
+                         tum.update('<?=$na?>&r=' + Math.random());
+                     }
+                     tabs.activate('<?=$k?>-tab');
+                     dialog.show(<?=$k?>Link);
+                 });
+                 <?php } ?>
+
+            },
+
+            okComment : function(){
+                this.submitComment('ok');
+            },
+
+            allComment : function(){
+                if (confirm("Do you really want to apply the above settings to all the objects visible in the top right selectbox?")) {
+                    this.submitComment('all');
+                } else {
+                    return;
+                }
+            },
+
+            // submit the comment to the server
+            submitComment : function(x){
+
+                if (!check_for_needed_variables(global_formname)) {
+                    return;
+                }
+                g_postBtn.disable();
+                g_okBtn.disable();
+                //g_allBtn.disable();
+                wait.radioClass('active-msg');
+
+                var commentSuccess = function(o){
+                    g_postBtn.enable();
+                    g_okBtn.enable();
+                    //g_allBtn.enable();
+
+                    var data = renderer.parse(o.responseText);
+                    //alert(o.responseText);
+                    data = eval('(' + o.responseText + ')');
+                    // if we got a comment back
+                    if(data){
+                        if (data.returnvalue == 'success') {
+                            if (data.refresh) {
+                                top.mainframe.window.location.reload();
+                            }
+                            if (x == 'ok' || x == 'all') {
+                                dialog.hide();
+                            }
+                        } else {
+                            var tabname = global_tabid.substr(0, global_tabid.length - 4);
+                            var tList = Ext.get(tabname + '-list');
+                            // set up the comment renderer, all ajax requests for commentsList
+                            // go through this render
+                            var tum = tList.getUpdateManager();
+                            //tum.update('/ajax.php?frm_action=updateform&frm_subaction=password');
+                            tum.update('/ajax.php?r=' + Math.random() + "&" + data.url );
+                        }
+                        wait.removeClass('active-msg');
+                        renderer.append(data.message);
+                        return data.returnvalue;
+                    }else{
+                        error.radioClass('active-msg');
+                        errorMsg.update(o.responseText);
+                        //eval(tabname + "um.update('/ajax.php?frm_action=updateform&frm_subaction=password');");
+
+                    }
+                };
+
+                var commentFailure = function(o){
+                    g_postBtn.enable();
+                    g_allBtn.enable();
+                    g_okBtn.enable();
+                    error.radioClass('active-msg');
+                    errorMsg.update('Unable to connect.');
+                };
+
+                if (x == 'all') {
+                    var ur = '/ajax.php?frm_change=updateall'
+                } else {
+                    var ur = '/ajax.php'
+                }
+
+                Ext.lib.Ajax.formRequest(global_formname, ur, {success: commentSuccess, failure: commentFailure});
+            },
+
+            createDialog : function(){
+                dialog = new Ext.BasicDialog("comments-dlg", {
+                        autoTabs:true,
+                        width:<?=$dwidth?>,
+                        height:<?=$dheight?>,
+                        shadow:true,
+                        minWidth:300,
+                        minHeight:300
+                });
+                dialog.addKeyListener(27, dialog.hide, dialog);
+                g_okBtn = dialog.addButton('OK', this.okComment, this);
+                dialog.addButton('Cancel', dialog.hide, dialog);
+                g_postBtn = dialog.addButton('Apply', this.submitComment, this);
+                g_allBtn = dialog.addButton('All Update', this.allComment, this);
+
+
+                // clear any messages and indicators when the dialog is closed
+                dialog.on('hide', function(){
+                    wait.removeClass('active-msg');
+                    error.removeClass('active-msg');
+                    //txtComment.dom.value = '';
+                });
+
+                // stoe a refeence to the tabs
+                tabs = dialog.getTabs();
+
+                // auto fit the comment box to the dialog size
+                var sizeTextBox = function(x){
+                    //txtComment.setSize(dialog.size.width-44, dialog.size.height-264);
+                    if (x != 'init') {
+                        Ext.lib.Ajax.request('post', '/ajax.php', {success: null, failure: null }, 'frm_action=update&frm_subaction=dialogsize&frm_<?=$lclass?>_c_dialogsize=' + dialog.size.width + 'x' + dialog.size.height);
+                    }
+                };
+                sizeTextBox('init');
+                dialog.on('resize', sizeTextBox);
+
+                // hide the post button if not on Post tab
+                tabs.on('tabchange', function(panel, tab){
+                   // postBtn.setVisible(tab.id == 'post-tab');
+                    global_tabid = tab.id;
+                });
+
+                <?php foreach($talist as $k => $a) {
+                    if (!csb($k, "__v_dialog")) {
+                        continue;
+                    }
+                    $na = str_replace("display.php", "ajax.php", $a);
+                    ?>
+                    <?=$k?>List = Ext.get('<?=$k?>-list');
+                    // set up the comment renderer, all ajax requests for commentsList
+                    // go through this render
+                    renderer = new CommentRenderer(<?=$k?>List);
+                    var <?=$k?>um = <?=$k?>List.getUpdateManager();
+                    <?=$k?>um.setRenderer(renderer);
+
+                    // lazy load the comments when the view tab is activated
+                    tabs.getTab('<?=$k?>-tab').on('activate', function(){
+                        <?=$k?>um.update('<?=$na?>&r=' + Math.random());
+                    });
+                    <?php
+                }
+                ?>
+
+            }
+        };
+    }();
+
+    // This class handles rendering JSON into comments
+    var CommentRenderer = function(list){
+        // create a template for each JSON object
+        var tpl = new Ext.DomHelper.Template(
+              '{lx__form}'
+        );
+
+        this.parse = function(json){
+            try{
+                return eval('(' + json + ')');
+            }catch(e){}
+            return null;
+        };
+
+        // public render function for use with UpdateManager
+        this.render = function(el, response){
+            var data = this.parse(response.responseText);
+            if(!data || !data.lx__form || data.lx__form.length < 1){
+                el.update('the_server_didnt_return_a_form: error:' + response.responseText);
+                return;
+            }
+            // clear loading
+            el.update('');
+
+            if (data.allbutton) {
+                g_allBtn.enable();
+            } else {
+                g_allBtn.disable();
+            }
+
+            if (data.ajax_dismiss) {
+                g_allBtn.setVisible(false);
+                g_okBtn.setVisible(false);
+                g_postBtn.setVisible(false);
+            } else {
+                g_allBtn.setVisible(true);
+                g_okBtn.setVisible(true);
+                g_postBtn.setVisible(true);
+            }
+
+            global_need_list = new Array();
+            global_match_list = new Array();
+            for (v in data.ajax_need_var) {
+                global_need_list[v] = data.ajax_need_var[v];
+            }
+            for (v in data.ajax_match_var) {
+                global_match_list[v] = data.ajax_match_var[v];
+            }
+            global_formname = data.ajax_form_name;
+
+            this.append(data);
+        };
+
+        // appends a comment
+        this.append = function(data){
+            tpl.append(list.dom, data);
+        };
+    };
+
+    Ext.EventManager.onDocumentReady(Comments.init, Comments, true);
+    </script>
+    <?php
+
     }
-    if ($i <= $total) {
 
-        for(; $i <=$total ; $i++) {
-            print("</td><td width=40>&nbsp;");
+    function print_drag_drop($obj, $ret, $class)
+    {
+        global $gbl, $sgbl, $login, $ghtml;
+        $lclass = $login->get__table();
+        $skindir = $login->getSkinDir();
+        $col = $login->getSkinColor();
+        $plus = "$skindir/plus.gif";
+        $minus = "$skindir/minus.gif";
+        $buttonpath = get_image_path() . "/button/";
+
+        ?>
+
+        <script>
+    (function() {
+
+    var Dom = YAHOO.util.Dom;
+    var Event = YAHOO.util.Event;
+    var DDM = YAHOO.util.DragDropMgr;
+
+    //////////////////////////////////////////////////////////////////////////////
+    // example app
+    //////////////////////////////////////////////////////////////////////////////
+    YAHOO.example.DDApp = {
+        init: function() {
+
+            var dd;
+
+            dd = new  YAHOO.util.DDTarget("mainbody");
+
+            <?php foreach($ret as $title => $a) {
+                $nametitle = strfrom($title, "__title_");
+                print("dd = new YAHOO.example.DDList('item_$nametitle');\n");
+                print("dd.setXConstraint(0, 0, 0);\n");
+                print("dd.setHandleElId('handle_$nametitle' );");
+            }
+            ?>
+
+            //Event.on("showButton", "click", this.showOrder);
+            //Event.on("switchButton", "click", this.switchStyles);
+        },
+
+        showOrder: function() {
+        },
+
+        switchStyles: function() {
         }
+    };
+
+    //////////////////////////////////////////////////////////////////////////////
+    // custom drag and drop implementation
+    //////////////////////////////////////////////////////////////////////////////
+
+    YAHOO.example.DDList = function(id, sGroup, config) {
+
+        YAHOO.example.DDList.superclass.constructor.call(this, id, sGroup, config);
+
+        this.logger = this.logger || YAHOO;
+        var el = this.getDragEl();
+        Dom.setStyle(el, "opacity", 0.67); // The proxy is slightly transparent
+
+        this.goingUp = false;
+        this.lastY = 0;
+    };
+
+    YAHOO.extend(YAHOO.example.DDList, YAHOO.util.DDProxy, {
+
+        startDrag: function(x, y) {
+            this.logger.log(this.id + " startDrag");
+
+            // make the proxy look like the source element
+            var dragEl = this.getDragEl();
+            var clickEl = this.getEl();
+           Dom.setStyle(clickEl, "visibility", "hidden");
+
+            //dragEl.innerHTML = clickEl.innerHTML;
+            Dom.setStyle(dragEl, "color", Dom.getStyle(clickEl, "color"));
+            Dom.setStyle(dragEl, "backgroundColor", Dom.getStyle(clickEl, "backgroundColor"));
+            Dom.setStyle(dragEl, "border", "1px solid #<?echo $col?>");
+        },
+
+        endDrag: function(e) {
+
+            var srcEl = this.getEl();
+            var proxy = this.getDragEl();
+
+            // Show the proxy element and animate it to the src element's location
+            Dom.setStyle(proxy, "visibility", "");
+            var a = new YAHOO.util.Motion(
+                proxy, {
+                    points: {
+                        to: Dom.getXY(srcEl)
+                    }
+                },
+                0.2,
+                YAHOO.util.Easing.easeOut
+            )
+            var proxyid = proxy.id;
+            var thisid = this.id;
+
+            // Hide the proxy and show the source element when finished with the animation
+            a.onComplete.subscribe(function() {
+                    Dom.setStyle(proxyid, "visibility", "hidden");
+                    Dom.setStyle(thisid, "visibility", "");
+                });
+            a.animate();
+        },
+
+        onDragDrop: function(e, id) {
+
+            // If there is one drop interaction, the li was dropped either on the list,
+            // or it was dropped on the current location of the source element.
+
+
+            var page = document.getElementById('show_page');
+            var out = parseList(page, "List 1");
+            var url = 'frm_<?=$lclass?>_c_title_class=<?=$class ?>\&frm_action=update\&frm_subaction=boxpos\&frm_<?=$lclass?>_c_page=' + out
+            var request = YAHOO.util.Connect.asyncRequest('post', "/ajax.php", callback, url);
+
+        },
+
+        onDrag: function(e) {
+
+            // Keep track of the direction of the drag for use during onDragOver
+            var y = Event.getPageY(e);
+
+            if (y < this.lastY) {
+                this.goingUp = true;
+            } else if (y > this.lastY) {
+                this.goingUp = false;
+            }
+
+            this.lastY = y;
+        },
+
+        onDragOver: function(e, id) {
+
+            var srcEl = this.getEl();
+            var destEl = Dom.get(id);
+
+            // We are only concerned with list items, we ignore the dragover
+            // notifications for the list.
+            if (destEl.id == 'mainbody') {
+                return;
+            }
+            if (destEl.nodeName.toLowerCase() == "div") {
+                var orig_p = srcEl.parentNode;
+                var p = destEl.parentNode;
+
+                if (this.goingUp) {
+                    p.insertBefore(srcEl, destEl); // insert above
+                } else {
+                    p.insertBefore(srcEl, destEl.nextSibling); // insert below
+                }
+
+                DDM.refreshCache();
+            }
+        }
+    });
+
+    Ext.EventManager.onDocumentReady(YAHOO.example.DDApp.init, YAHOO.example.DDApp, true);
+
+    })();
+
+    </script>
+    <?php
     }
 
+    function print_div_button($actionlist, $type, $imgflag, $key, $url, $ddate = null)
+    {
+        global $gbl, $sgbl, $login, $ghtml;
+        $obj = $gbl->__c_object;
+        $psuedourl = NULL;
+        $target = NULL;
 
-    ?>
-        </td> </tr>
-        </table>
-            </fieldset>
-        <br> <br>
+        $buttonpath = get_image_path() . "/button/";
+
+        $linkflag = true;
+        if (csa($key, "__var_")) {
+            $privar = strfrom($key, "__var_");
+            if (!$obj->checkButton($privar)) {
+                $linkflag = false;
+            }
+        }
+
+        $complete = $this->resolve_int_ext($url, $psuedourl, $target);
+
+        if ($complete) {
+            $this->get_post_from_get($url, $path, $post);
+            $descr  = $this->getActionDescr($path, $post, $class, $name, $identity);
+            $complete['name'] = str_replace("<", "&lt;", $complete['name']);
+            $complete['name'] = str_replace(">", "&gt;", $complete['name']);
+            $name = $complete['name'];
+            $bname = $complete['bname'];
+            $descr[1] = $complete['name'];
+            $descr[2] = $complete['name'];
+            $descr['desc'] = $complete['name'];
+            $file = $class;
+            if (lxfile_exists("img/custom/$bname.gif")) {
+                $image = "/img/custom/$bname.gif";
+            } else {
+                $image = "/img/image/collage/button/custom_button.gif";
+            }
+            $__t_identity = $identity;
+        } else {
+            $url = str_replace("[%s]", $obj->nname, $url);
+
+            $descr = $this->getActionDetails($url, $psuedourl, $buttonpath, $path, $post, $file, $name, $image, $__t_identity);
+        }
+
+        $this->save_non_existant_image($image);
+
+        $str = randomString(8);
+        $form_name = $this->createEncForm_name("{$file}_{$name}_$str");
+        $form_name = fix_nname_to_be_variable($form_name);
+
+        if (csb($url, "http:/")) {
+            $formmethod = "get";
+        } else {
+            $formmethod = $sgbl->method;
+        }
+        // Use get always. Only in forms should post be used.
+        $formmethod = 'get';
+
+        $dividentity = "searchdiv_{$descr['desc']}";
+
+        $dividentity = str_replace(" ", "_", $dividentity);
+        $dividentity = strtolower($dividentity);
+        for($i = 0; $i < 10; $i++)
+        {
+            if (!isset($actionlist[$dividentity])) break;
+            $dividentity = "{$dividentity}$i";
+        }
+        ?>
+            <td  valign="middle"  align="left" width=5>
+                <div id="<?php echo $dividentity ?>" style="visibility:visible;display:block">
+                    <form method=<?=$formmethod ?> name=form_<?=$form_name ?> action=<?=$path?> <?=$target ?>  >
         <?php
-}
+        $this->print_input_vars($post);
+    ?>
+    <?
+        $this->print_div_for_divbutton($key, $imgflag, $linkflag, $form_name, $name, $image, $descr);
 
-function cginum($key)
-{
-    if (isset($this->__http_vars[$key]))
-        return $this->__http_vars[$key];
-    else
-        return 0;
-}
+        ?>
+                    </form>
+                </div>
+            </td>
+        <?php
 
-function cgiset($key, $value)
-{
-    // Needs to be Fixed.
-    $this->__http_vars[$key] = $value;
-}
-
-function frmiset($key)
-{
-    if (isset($this->__http_vars[$key]))
-        return 1;
-    else
-        return 0;
-}
-
-function iset($key)
-{
-    if (isset($this->__http_vars[$key]))
-        return 1;
-    else
-        return 0;
-}
-
-
-function get_image($path,$class, $variable, $extension)
-{
-
-    return add_http_host($this->get_image_without_host($path,$class, $variable, $extension));
-
-}
-
-function createMissingName($name)
-{
-    global $gbl, $sgbl, $login, $ghtml;
-    $val = 0;
-    if ($sgbl->isKloxo()) {
-        return "/img/general/default/default.gif";
-    }
-    for($i = 0; $i < strlen($name); $i++) {
-        //dprint($name[$i]);
-        $val += ord($name[$i]);
+        return $dividentity;
     }
 
-    $val = $val % 10;
+    function print_action_block($obj, $class, $alist, $num)
+    {
+        global $gbl, $sgbl, $login, $ghtml;
+        $lclass = $login->get__table();
+        $skindir = $login->getSkinDir();
+        $talist = $alist;
+        $ret = $this->create_action_block($class, $alist);
+        $col = $login->getSkinColor();
+        $plus = "$skindir/plus.gif";
+        $minus = "$skindir/minus.gif";
+        $buttonpath = get_image_path() . "/button/";
 
-    return "/img/general/default/default_$val.gif";
-}
+        if ($sgbl->isDebug()) $outputdisplay = 'inline';
+        else $outputdisplay = 'none';
 
-
-function get_image_without_host($path, $class, $variable, $extension)
-{
-
-    global $gbl, $sgbl, $login, $ghtml;
-
-    $variable = strtolower($variable);
-    $class = strtolower($class);
-
-
-    $realv = $variable;
-
-    //hack hack...
-    if ($class === 'installapp') {
-        if (strstr($variable, "addform")) {
-            $variable = strfrom($variable, "_");
+        if ($login->getSpecialObject('sp_specialplay')->isOn('enable_ajax'))
+        {
+            $this->print_dialog($talist, $obj);
+            $this->print_drag_drop($obj, $ret, $class);
         }
+
+        if ($sgbl->isBlackBackground())
+        {
+            $backgimage = "$skindir/black.gif";
+            $minus = "$skindir/black.gif";
+            $plus = "$skindir/black.gif";
+            $col = "333";
+        }
+        else $backgimage = "$skindir/expand.gif";
+        ?>
+
+        <style>
+
+        div.section,div#createNew {
+            border: 1px solid #<?echo $col?>;
+            margin: 9px 5px;
+            padding: 0px 0px 10px 0px;
+            width: 520;
+            }
+
+        div#createNew input { margin-left: 5px; }
+
+        div#createNew h3, div.section h3{
+            font-size: 12px;
+            padding: 2px 5px;
+            margin: 0 0 10px 0;
+            display: block;
+            font-family:"trebuchet ms",verdana,sans-serif;
+            color:#003360;
+            background:url(<?=$skindir?>/expand.gif);
+            border-bottom: 1px solid #<?echo $col?>;
+        }
+
+        div.section h3 {
+            cursor: move;
+        }
+
+        div.demo div.example span {
+            margin:0px;
+            margin-bottom:0px;
+            padding:0px;
+            font-size:  1.0em;
+            text-align: center;
+            display: block;
+        }
+
+        div.demo {
+              margin:0px;
+              overflow:visible;
+              position:relative;
+              width:100%;
+        }
+        h1{margin-bottom:0;font-size:18px}
+    </style>
+    <div id="show_page" >
+        <?php
+
+        if (!$login->getSpecialObject('sp_specialplay')->isOn('enable_ajax'))
+            $dragstring = "Enable Ajax to Drag";
+        else $dragstring = "Drag";
+
+        $div_id_list = null;
+        $completedivlist = null;
+
+        $count = 1;
+
+        foreach($ret as $title => $a)
+        {
+            $count++;
+                if (!isset($a[$title])) {
+                    continue;
+                }
+                $dispstring = "display:none";
+                if ($a['open']) {
+                    $dispstring = "";
+                }
+                unset($a['open']);
+                $nametitle = strfrom($title, "__title_");
+        ?>
+
+        <div id="item_<?="$nametitle" ?>" class="section">
+            <table cellpadding=0 cellspacing=0> <tr class=handle id="handle_<?=$nametitle ?>" style="background:url(<?=$backgimage?>)" onMouseover="document.getElementById('font_<?=$nametitle ?>').style.visibility='visible'; this.style.background='url<?=$backgimage?>()'" onMouseout="document.getElementById('font_<?=$nametitle?>').style.visibility='hidden'; this.style.background='url(<?=$backgimage?>)'"> <td nowrap style='cursor: move' > <font id=font_<?=$nametitle?> style='visibility:hidden'>&nbsp;<?=$dragstring?> </font></td><td width=100%  style="cursor: move; " align=center ><font style='font-weight: bold'><?= $a[$title]?></font> </td> <td nowrap style='cursor: move' > <font id=font_<?=$nametitle?> style='visibility:hidden'>&nbsp;<?=$dragstring?> </font></td><td class=handle style='cursor: pointer' onclick="blindUpOrDown('<?=$lclass?>', '<?=$class ?>', '<?=$skindir?>', '<?=$nametitle ?>')"><img id=img_<?=$nametitle?> name=img_<?=$nametitle ?> src=<?=$minus?>></td> </tr> </table>
+                <div style="<?=$dispstring?>;" id="internal_<?=$nametitle?>" >
+                    <table cellpadding="10" cellspacing="4" style="padding:1 2 1 1">
+                        <tr>
+            <?
+                array_shift($a);
+                $n = 0;
+                foreach($a as $k => $u) {
+                    $n++;
+                    if ($n === $num) {
+                        print("</tr><tr>");
+                        $n = 1;
+                    }
+                    print("<td>");
+                    $ret = $this->print_div_button($completedivlist, "block", true, $k, $u);
+                    $completedivlist[$ret] = $ret;
+                    $div_id_list[$nametitle][$ret] = $ret;
+                    print("</td>");
+                }
+        ?>
+                </td></tr></table>
+                </div>
+        </div>
+        <?
+        }
+        print("</td></tr></table>");
+        ?>
+    </div>
+
+    <?php
+
+        print("<script>");
+        $count = 0;
+        print("global_action_box = new Array()\n");
+        foreach($div_id_list as $k => $v) {
+            print("global_action_box[$count] = new Array();\n");
+            print("global_action_box[$count][0] = '$k';\n");
+            $j = 1;
+            foreach($v as $kk => $vv) {
+                print("global_action_box[$count][$j] = '$vv';\n");
+                $j++;
+            }
+            $count++;
+        }
+        print("</script>");
     }
 
-    if (csa($variable, "_nn_")) {
-        $variable = substr($variable, 0, strpos($variable, '_nn_'));
+    function print_action_blockold($title, $alist, $num)
+    {
+        $i = 0;
+        $total = $num;
+
+        /// This is a mighty hack... The first element of $alist is supposed to be the main title. You use it as the first title and unset the variable. This is a hack from the previous code where the first title was preset here itself.
+
+        foreach($alist as $k => $a) {
+            if (csb($k, "__title")) {
+                $title = $a;
+                unset($alist[$k]);
+                break;
+            }
+        }
+
+        ?>
+        <fieldset width=100% style='border: 0px; border-top: 1px solid #d0d0d0'><legend style='font-weight:normal;border:0px'><b> <font color=#303030 style='font-weight:normal'><?=$title ?> </font></b> </legend>
+            <table cellpadding="2" cellspacing="7" border="0" width="95%" >
+            <tr align=left> <td align=left>
+            <?php
+        foreach($alist as $k => $u) {
+            $i++;
+            if ($i% $total === 1) {
+                print("</td> </tr> <tr align=left> <td align=left>");
+            }
+
+            if (csb($k, "__title")) {
+                if ($i <= $total) {
+                    for(; $i <=$total ; $i++) {
+                        print("</td><td width=60>&nbsp;");
+                    }
+                }
+                $i = 0;
+                ?>
+                </td> </tr> </table>
+                </fieldset><fieldset style='font-weight:normal;border: 0px; border-top: 1px solid #d0d0d0'><legend style='font-weight:normal'> <b> <font color=#303030 style='font-weight:normal'><?=$u ?> </font> </b> </legend>
+                <table cellspacing=7 width=95% border=0> <tr align=left> <td align=left >
+                <?php
+                continue;
+            }
+            $this->print_div_button(null, "block", true, $k, $u);
+        }
+        if ($i <= $total) {
+
+            for(; $i <=$total ; $i++) {
+                print("</td><td width=40>&nbsp;");
+            }
+        }
+
+
+        ?>
+            </td> </tr>
+            </table>
+                </fieldset>
+            <br> <br>
+            <?php
     }
 
-    if ($class) {
-        $name = $class . "_" . $variable;
-    } else {
+    function cginum($key)
+    {
+        return (isset($this->__http_vars[$key]))? $this->__http_vars[$key]: 0;
+    }
+
+    function cgiset($key, $value)
+    {
+        // Needs to be Fixed.
+        $this->__http_vars[$key] = $value;
+    }
+
+    function frmiset($key)
+    {
+        return (isset($this->__http_vars[$key]))?1:0;
+    }
+
+    function iset($key)
+    {
+        return (isset($this->__http_vars[$key]))?1:0;
+    }
+
+
+    function get_image($path,$class, $variable, $extension)
+    {
+        return add_http_host($this->get_image_without_host($path,$class, $variable, $extension));
+    }
+
+    function createMissingName($name)
+    {
+        global $gbl, $sgbl, $login, $ghtml;
+        $val = 0;
+        if ($sgbl->isKloxo()) return '/img/general/default/default.gif';
+
+        for($i = 0; $i < strlen($name); $i++) {
+            //dprint($name[$i]);
+            $val += ord($name[$i]);
+        }
+
+        $val = $val % 10;
+
+        return "/img/general/default/default_$val.gif";
+    }
+
+    function get_image_without_host($path, $class, $variable, $extension)
+    {
+        global $gbl, $sgbl, $login, $ghtml;
+
+        $variable = strtolower($variable);
+        $class = strtolower($class);
+
+        $realv = $variable;
+
+        //hack hack...
+        if ($class === 'installapp')
+            if (strstr($variable, "addform"))
+                $variable = strfrom($variable, "_");
+
+        if (csa($variable, "_nn_"))
+            $variable = substr($variable, 0, strpos($variable, '_nn_'));
+
+        if $name = ($class)? $class . "_" . $variable: $variable;
+
+        $fpath = $path . "/" . $name . $extension;
+
+
+        if (lfile_exists(getreal($fpath))) return $fpath;
+
         $name = $variable;
-    }
 
+        $fnpath = $path . "/" . $name . $extension;
 
-    $fpath = $path . "/" . $name . $extension;
+        if (lfile_exists(getreal($fnpath))) return $fnpath;
 
+        $name = substr($variable, 0, strpos($variable, "_"));
+        $fnpath = $path . "/" . $name . $extension;
 
-    if (lfile_exists(getreal($fpath))) {
+        if (lfile_exists(getreal($fnpath))) return $fnpath;
+
+        $name = substr($variable, strrpos($variable, "_") + 1) ;
+        $fnpath = $path . "/" . $name . $extension;
+
+        if (lfile_exists(getreal($fnpath))) return $fnpath;
+
+        if ($realv === 'show')
+            return $this->get_image_without_host($path, $class, "list", $extension);
+
+        if (csb($realv, "update_"))
+        {
+            $qname = strfrom($realv, "update_");
+            $qname = "updateform_$qname";
+            return $this->get_image_without_host($path, $class, $qname, $extension);
+        }
+
+        $name = strfrom("{$class}_$variable", "all_");
+        $fnpath = "$path/$name$extension";
+
+        if (lfile_exists(getreal($fnpath))) return $fnpath;
+
+        if ($sgbl->dbg < 0)
+        {
+            $imgname = $this->createMissingName($fpath);
+            return $imgname;
+        }
+
         return $fpath;
+
     }
-
-    $name = $variable;
-
-    $fnpath = $path . "/" . $name . $extension;
-
-    if (lfile_exists(getreal($fnpath))) {
-        return $fnpath;
-    }
-
-    $name = substr($variable, 0, strpos($variable, "_"));
-    $fnpath = $path . "/" . $name . $extension;
-
-    if (lfile_exists(getreal($fnpath))) {
-        return $fnpath;
-    }
-
-    $name = substr($variable, strrpos($variable, "_") + 1) ;
-    $fnpath = $path . "/" . $name . $extension;
-
-
-    if (lfile_exists(getreal($fnpath))) {
-        return $fnpath;
-    }
-
-    if ($realv === 'show') {
-        return $this->get_image_without_host($path, $class, "list", $extension);
-    }
-
-    if (csb($realv, "update_")) {
-        $qname = strfrom($realv, "update_");
-        $qname = "updateform_$qname";
-        return $this->get_image_without_host($path, $class, $qname, $extension);
-    }
-
-    $name = strfrom("{$class}_$variable", "all_");
-    $fnpath = "$path/$name$extension";
-
-    if (lfile_exists(getreal($fnpath))) {
-        return $fnpath;
-    }
-
-
-    if ($sgbl->dbg < 0) {
-        $imgname = $this->createMissingName($fpath);
-        return $imgname;
-    }
-
-    return $fpath;
-
-}
 
 function save_non_existant_image($path)
 {
-
     global $gbl, $sgbl, $login, $ghtml;
 
     return;
