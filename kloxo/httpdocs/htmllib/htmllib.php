@@ -1909,108 +1909,196 @@ class HtmlLib
         if(!is_array($value)) $value = htmlspecialchars($value);
     }
 
-function print_file_permissions($ffile)
-{
+    function print_file_permissions($ffile)
+    {
+        global $gbl, $sgbl, $login, $ghtml;
 
-    global $gbl, $sgbl, $login, $ghtml;
+        $ffile->getPermissions($perm);
 
-    $ffile->getPermissions($perm);
+        if($perm[0]==='') $user = 0;  else $user  = $perm[0];
+        if($perm[1]==='') $group = 0; else $group = $perm[1];
+        if($perm[2]==='') $other = 0 ; else $other = $perm[2];
 
-    if($perm[0]==="") $user=0;  else $user  = $perm[0];
-    if($perm[1]==="") $group=0; else $group = $perm[1];
-    if($perm[2]==="") $other=0; else $other = $perm[2];
+        $imgheadleft  = $login->getSkinDir() . '/top_lt.gif';
+        $imgheadright = $login->getSkinDir() . '/top_rt.gif';
+        $imgheadbg    = $login->getSkinDir() . 'top_bg.gif';
+        $imgtopline   = $login->getSkinDir() . '/top_line.gif';
+        $tablerow_head   = $login->getSkinDir() . '/tablerow_head.gif';
 
-    $imgheadleft  = $login->getSkinDir() . "/top_lt.gif" ;
-    $imgheadright = $login->getSkinDir() . "/top_rt.gif" ;
-    $imgheadbg    = $login->getSkinDir() . "/top_bg.gif" ;
-    $imgtopline   = $login->getSkinDir() . "/top_line.gif" ;
-    $tablerow_head   = $login->getSkinDir() . "/tablerow_head.gif" ;
-
-    ?>
-
-<br><br>
-<script>
-function sendchmode(a,b) {
-    b.frm_ffile_c_file_permission_f.value = a.user.value + a.group.value + a.other.value;
-    if (a.frm_ffile_c_recursive_f.checked) {
-        if (confirm("Do You Really want to set this permission Recursively?")) {
-            b.frm_ffile_c_recursive_f.value = 'on';
-        } else {
-            b.frm_ffile_c_recursive_f.value = 'off';
+        ?>
+        <br />
+        <br />
+        <script>
+        function sendchmode(a,b)
+        {
+            b.frm_ffile_c_file_permission_f.value = a.user.value + a.group.value + a.other.value;
+            if (a.frm_ffile_c_recursive_f.checked)
+                if(confirm("Do You Really want to set this permission Recursively?")) /* [FIXME] Harcode string translate */
+                    b.frm_ffile_c_recursive_f.value = 'on';
+                else b.frm_ffile_c_recursive_f.value = 'off';
+            else b.frm_ffile_c_recursive_f.value = 'off';
+            b.submit();
         }
-    } else {
-        b.frm_ffile_c_recursive_f.value = 'off';
+        </script>
+
+        <form name="frmsendchmod" action="display.php">
+            <input type="hidden" name="frm_ffile_c_file_permission_f">
+            <?php
+                $post['frm_o_o'] = $this->__http_vars['frm_o_o'];
+                $ghtml->print_input_vars($post);
+            ?>
+            <input type="hidden" name="frm_ffile_c_recursive_f" value="Off">
+            <input type="hidden" name="frm_action" value="update">
+            <input type="hidden" name="frm_subaction" value="perm">
+        </form>
+
+
+        <table cellpadding="0" cellspacing="0" border="0" width="325">
+            <tr>
+                <td width="60%" valign="bottom">
+                    <table cellpadding="0" cellspacing="0" border="0" width="100%">
+                        <tr>
+                            <td width="100%" height="2" background="<?=$imgtopline; ?>"></td>
+                        </tr>
+                    </table>
+                </td>
+                <td align="right">
+                    <table cellpadding="0" cellspacing="0" border="0" width="100%" >
+                        <tr>
+                            <td>
+                                <img src="<?=$imgheadleft; ?>">
+                            </td>
+                            <td nowrap width="100%" background="<?=$imgheadbg; ?>" >
+                                <b><font color="#ffffff">Change Permissions</font></b> <? #[FIXME] Harcode translation string ?>
+                            </td>
+                            <td>
+                                <img src="<?=$imgheadright; ?>">
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+        </table>
+
+        <form name="chmod" method=<?=$sgbl->method ?> action="">
+            <table cellpadding="0" cellspacing="0" border="0" width="325">
+                <tr style='background:url(<?=$tablerow_head ?>)'>
+                    <td width="100" class="col"></td>
+                    <td width=75 align=center >User</td><? #[FIXME] Harcode translation string ?>
+                    <td width=75 align=center>Group</td><? #[FIXME] Harcode translation string ?>
+                    <td align=center width=75 >Others</td><? #[FIXME] Harcode translation string ?>
+                </tr>
+                <tr style='background:url(<?=$tablerow_head ?>)'>
+                    <td width=100 class="col"></td>
+                    <td align="center">
+                        <input type="checkbox" name="userall" onclick="allrights(document.chmod,this,'user');">
+                    </td>
+                    <td align="center">
+                        <input type="checkbox" name="groupall" onclick="allrights(document.chmod,this,'group');">
+                    </td>
+                    <td align="center">
+                        <input type="checkbox" name="otherall" onclick="allrights(document.chmod,this,'other');">
+                    </td>
+                </tr>
+            </table>
+            <table cellpadding="0" cellspacing="0" border="0" width="325">
+                <tr class="tablerow0">
+                    <td class="col" width="100">Write</td><? #[FIXME] Harcode translation string ?>
+                    <td align="center">
+                        <input type="checkbox" name="wu" onclick="changerights(document.chmod,this,'user',2);" >
+                    </td>
+                    <td align="center">
+                        <input type="checkbox" name="wg" onclick="changerights(document.chmod,this,'group',2);">
+                    </td>
+                    <td align="center">
+                        <input type="checkbox" name="wo" onclick="changerights(document.chmod,this,'other',2);" >
+                    </td>
+                </tr>
+                <tr class="tablerow1">
+                    <td class="col" width="100">Execute</td><? #[FIXME] Harcode translation string ?>
+                    <td width="75" align="center">
+                        <input type="checkbox" name="eu" onclick="changerights(document.chmod,this,'user',1);">
+                    </td>
+                    <td width="75" align="center" >
+                        <input type="checkbox" name="eg" onclick="changerights(document.chmod,this,'group',1);">
+                    </td>
+                    <td width="75" align="center" >
+                        <input type="checkbox" name="eo" onclick="changerights(document.chmod,this,'other',1);">
+                    </td>
+                </tr>
+                <tr class="tablerow0">
+                    <td class="col" width="100">Read</td><? #[FIXME] Harcode translation string ?>
+                    <td align="center">
+                        <input type="checkbox" name="ru" onclick="changerights(document.chmod,this,'user',4);">
+                    </td>
+                    <td align="center">
+                        <input type="checkbox" name="rg" onclick="changerights(document.chmod,this,'group',4);">
+                    </td>
+                    <td align="center">
+                        <input type="checkbox" name="ro" onclick="changerights(document.chmod,this,'other',4);" >
+                    </td>
+                </tr>
+            </table>
+            <table cellpadding="0" cellspacing="0" border="0" width="325">
+                <!--<tr><td colspan=4 bgcolor="#ffffff" height=2></td></tr>
+                <tr><td colspan=4 bgcolor="#a5c7e7" height=1></td></tr>-->
+                <tr>
+                    <td colspan="4" bgcolor="#ffffff" height="2"></td>
+                </tr>
+                <tr class="tablerow1">
+                    <td class="tableheadtext" width="100">&nbsp;&nbsp;Total</td> <? #[FIXME] Harcode translation string ?>
+                    <td align="center" width="75">
+                        <input type="text" size="1" name="user" class="textchmoddisable" value="<?=$user; ?>">
+                    </td>
+                    <td width="75" align="center">
+                        <input type="text" size="1" name="group" class="textchmoddisable" value="<?=$group; ?>">
+                    </td>
+                    <td width="75" align="center">
+                        <input type="text" size="1" name="other" class="textchmoddisable" value="<?=$other; ?>">
+                    </td>
+                </tr>
+                <!--<tr><td colspan=4 bgcolor="#ffffff" height=2></td></tr>
+                <tr><td colspan=4 bgcolor="#a5c7e7" height=1></td></tr>-->
+
+                <tr>
+                    <td colspan="3">
+                     &nbsp; <b>  Change Permssion Recursively <b> <? #[FIXME] Harcode translation string ?>
+                    </td>
+                    <td >
+                        <input type="checkbox" name="frm_ffile_c_recursive_f">
+                    </td>
+                </tr>
+
+                <tr>
+                    <td colspan="4" bgcolor="#ffffff" height="4"></td>
+                </tr>
+                <tr>
+                    <td colspan="4" align="right">
+                        <input type="button" onclick="sendchmode(document.chmod,document.frmsendchmod)" class="submitbutton" name="change" value="Change">
+                        </td>
+                    </tr>
+                <tr>
+                    <td colspan="2" bgcolor="#ffffff" height="4"></td>
+                </tr>
+                <tr>
+                    <td colspan="4" style='background:url(<?=$imgtopline?>)' height="1"></td>
+                </tr>
+            </table>
+    </form>
+
+    <script>
+        document.chmod.user.disabled = true;
+        document.chmod.group.disabled = true;
+        document.chmod.other.disabled = true;
+
+        setpermission(document.chmod,'user',<?=$user;?>);
+        setpermission(document.chmod,'group',<?=$group; ?>);
+        setpermission(document.chmod,'other',<?=$other; ?>);
+    </script>
+
+    <?php
+
     }
-
-    b.submit();
-}
-</script>
-
-<form name=frmsendchmod action="display.php">
-<input type=hidden name=frm_ffile_c_file_permission_f>
-<?php
-    $post['frm_o_o'] = $this->__http_vars['frm_o_o'];
-    $ghtml->print_input_vars($post);
-
-    ?>
-<input type=hidden name=frm_ffile_c_recursive_f value=Off>
-<input type=hidden name=frm_action value="update">
-<input type=hidden name=frm_subaction value="perm">
-</form>
-
-
-<table cellpadding=0 cellspacing=0 border=0 width=325>
-<tr><td width=60% valign=bottom><table cellpadding=0 cellspacing=0 border=0 width=100%><tr><td width=100% height=2 background="<?=$imgtopline; ?>"></td></tr></table></td><td align=right>
-<table cellpadding=0 cellspacing=0 border=0 width=100% >
-<tr><td><img src="<?=$imgheadleft; ?>"></td><td nowrap width=100% background="<?=$imgheadbg; ?>" ><b><font color="#ffffff">Change Permissions</font></b></td><td><img src="<?=$imgheadright; ?>"></td></tr>
-</table>
-</td></tr></table>
-<form name="chmod" method=<?=$sgbl->method ?> action="">
-<table cellpadding=0 cellspacing=0 border=0 width=325>
-<tr style='background:url(<?=$tablerow_head ?>)'><td width=100 class=col></td><td width=75 align=center >User</td><td width=75 align=center>Group</td><td align=center width=75 >Others</td></tr>
-<tr style='background:url(<?=$tablerow_head ?>)'><td width=100 class=col></td><td align=center  ><input type=checkbox name="userall" onclick="allrights(document.chmod,this,'user');"></td><td align=center ><input type=checkbox name="groupall"  onclick="allrights(document.chmod,this,'group');"></td><td align=center ><input type=checkbox name="otherall"  onclick="allrights(document.chmod,this,'other');"></td></tr>
-
-</table>
-<table cellpadding=0 cellspacing=0 border=0 width=325>
-
-<tr class=tablerow0><td class=col width=100>Write</td><td align=center ><input type=checkbox name=wu   onclick="changerights(document.chmod,this,'user',2);" ></td><td align=center ><input type=checkbox name=wg   onclick="changerights(document.chmod,this,'group',2);"></td><td align=center ><input type=checkbox name=wo   onclick="changerights(document.chmod,this,'other',2);" ></td></tr>
-
-<tr class=tablerow1><td class=col width=100>Execute</td><td  width=75 align=center ><input type=checkbox name=eu onclick="changerights(document.chmod,this,'user',1);"></td><td width=75 align=center ><input type=checkbox name=eg  onclick="changerights(document.chmod,this,'group',1);"></td><td width=75  align=center ><input type=checkbox name=eo   onclick="changerights(document.chmod,this,'other',1);"></td></tr>
-
-<tr class=tablerow0><td class=col width=100>Read</td><td align=center ><input type=checkbox name=ru   onclick="changerights(document.chmod,this,'user',4);"></td><td align=center ><input type=checkbox name=rg   onclick="changerights(document.chmod,this,'group',4);"></td><td align=center ><input type=checkbox name=ro   onclick="changerights(document.chmod,this,'other',4);" > </td></tr>
-</table>
-<table cellpadding=0 cellspacing=0 border=0 width=325>
-<!--<tr><td colspan=4 bgcolor="#ffffff" height=2></td></tr>
-<tr><td colspan=4 bgcolor="#a5c7e7" height=1></td></tr>-->
-<tr><td colspan=4 bgcolor="#ffffff" height=2></td></tr>
-<tr class=tablerow1><td class=tableheadtext width=100 >&nbsp;&nbsp;Total</td><td align=center width=75 ><input type=text size=1 name=user class=textchmoddisable value="<?=$user; ?>"></td><td width=75 align=center ><input type=text size=1 name=group class=textchmoddisable value="<?=$group; ?>"></td><td width=75 align=center ><input type=text size=1 name=other class=textchmoddisable value="<?=$other; ?>"></td></tr>
-<!--<tr><td colspan=4 bgcolor="#ffffff" height=2></td></tr>
-<tr><td colspan=4 bgcolor="#a5c7e7" height=1></td></tr>-->
-
-<tr> <td colspan=3> &nbsp; <b>  Change Permssion Recursively <b>  </td> <td >
-<input type=checkbox name=frm_ffile_c_recursive_f >
-</td></tr>
-
-<tr><td colspan=4 bgcolor="#ffffff" height=4></td></tr>
-<tr><td colspan=4 align=right ><input type=button onclick="sendchmode(document.chmod,document.frmsendchmod)" class=submitbutton name=change value=Change> </td></tr>
-<tr><td colspan=2 bgcolor="#ffffff" height=4></td></tr>
-<tr><td colspan=4 style='background:url(<?=$imgtopline?>)' height=1></td></tr>
-</table>
-</form>
-
-<script>
-    document.chmod.user.disabled = true;
-    document.chmod.group.disabled = true;
-    document.chmod.other.disabled = true;
-
-    setpermission(document.chmod,'user',<?=$user;?>);
-    setpermission(document.chmod,'group',<?=$group; ?>);
-    setpermission(document.chmod,'other',<?=$other; ?>);
-</script>
-
-<?php
-
-}
 
 
 function object_variable_file($stuff, $variable)
