@@ -1785,7 +1785,7 @@ class HtmlLib
         if ($realv === 'show')
             return $this->get_image_without_host($path, $class, "list", $extension);
 
-        if (csb($realv, "update_"))
+        if(csb($realv, "update_"))
         {
             $qname = strfrom($realv, "update_");
             $qname = "updateform_$qname";
@@ -1795,9 +1795,9 @@ class HtmlLib
         $name = strfrom("{$class}_$variable", "all_");
         $fnpath = "$path/$name$extension";
 
-        if (lfile_exists(getreal($fnpath))) return $fnpath;
+        if(lfile_exists(getreal($fnpath))) return $fnpath;
 
-        if ($sgbl->dbg < 0)
+        if($sgbl->dbg < 0)
         {
             $imgname = $this->createMissingName($fpath);
             return $imgname;
@@ -1807,62 +1807,43 @@ class HtmlLib
 
     }
 
-function save_non_existant_image($path)
-{
-    global $gbl, $sgbl, $login, $ghtml;
+    function save_non_existant_image($path)
+    {
+        global $gbl, $sgbl, $login, $ghtml;
 
-    return;
+        return; #[FIXME]
 
-    // We need only the form images, and the normal non form action images need not be saved.
-    if (!csa($path, "list") && !csa($path, "form")) {
-        return;
-    }
+        // We need only the form images, and the normal non form action images need not be saved.
+        if (!csa($path, "list") && !csa($path, "form")) return;
 
-    if ($sgbl->dbg <= 1) {
-        return;
-    }
+        if ($sgbl->dbg <= 1) return;
 
-    if (lfile_exists(getreal($path))) {
-        return;
-    }
+        if (lfile_exists(getreal($path))) return;
 
-    $cont = null;
-    $icon = $login->getSpecialObject('sp_specialplay')->icon_name;
+        $cont = null;
+        $icon = $login->getSpecialObject('sp_specialplay')->icon_name;
 
-    $file = "__path_program_htmlbase/$icon.missing_image.txt";
+        $file = "__path_program_htmlbase/$icon.missing_image.txt";
 
-    if (lfile_exists($file)) {
-        $cont = lfile($file);
-        foreach($cont as $k => &$__c) {
-            $__c = trim($__c);
-            if (!$__c) {
-                unset ($cont[$k]);
+        if(lfile_exists($file))
+        {
+            $cont = lfile($file);
+            foreach($cont as $k => &$__c)
+            {
+                $__c = trim($__c);
+                if (!$__c) unset($cont[$k]);
             }
         }
+        $cont = array_push_unique($cont, $path);
+        $cont = implode("\n", $cont);
+        $cont .= "\n";
+        lfile_put_contents($file, $cont);
     }
-    $cont = array_push_unique($cont, $path);
-    $cont = implode("\n", $cont);
-    $cont .= "\n";
-    lfile_put_contents($file, $cont);
-}
 
-
-function get_date()
-{
-    $day = date("d");
-    $month = date("m");
-    $year = date("Y");
-
-  $date[0] = $day;
-  $date[1] = $month;
-  $date[2] = $year;
-
-  return $date;
-
-}
-
-
-
+    function get_date()
+    {
+        return array(date('d'), date('m'), date('Y'));
+    }
 
 function get_post_from_get($url, &$path, &$post)
 {
