@@ -1858,66 +1858,56 @@ class HtmlLib
         return $post;
     }
 
-function createCurrentParam($class)
-{
-    $param = null;
+    function createCurrentParam($class)
+    {
+        $param = null;
 
-    foreach($this->__http_vars as $key => $val) {
-
-        if (csb($key, "__m_")) {
-            $param[$key] = $val;
-            continue;
-        }
-        if (!csa($key, "_c_")) {
-            continue;
-        }
-
-        $realname = substr($key, strlen('frm_'));
-        $this->get_htmlvar_details($key, $newclass, $variable, $extra, $htmlvalue);
-
-
-        $param[$variable] = $val;
-
-    }
-    check_for_select_one($param);
-    return $param;
-}
-
-
-function get_form_variable_name($descr)
-{
-    return getNthToken($descr, 1);
-}
-
-function fix_stuff_or_class($stuff, $variable,  &$class, &$value)
-{
-    $value = null;
-    if (is_object($stuff)) {
-        $class = lget_class($stuff);
-        lxclass::resolve_class_differences($class, $variable, $dclass, $dvariable);
-        if ($dclass != $class) {
-            if (cse($dclass, "_b")) {
-                $value = $stuff->$dclass->$dvariable;
+        foreach($this->__http_vars as $key => $val)
+        {
+            if (csb($key, "__m_"))
+            {
+                $param[$key] = $val;
+                continue;
             }
-        } else {
-            if ($stuff->isQuotaVariable($variable)) {
-                $value = $stuff->priv->$variable;
-            } else if ($stuff->isListQuotaVariable($variable)) {
-                $value = $stuff->listpriv->$variable;
-            } else {
-                if (!cse($variable, "_f")) {
-                    $value = $stuff->getVariable($variable);
-                }
+            if (!csa($key, "_c_")) continue;
+
+            $realname = substr($key, strlen('frm_'));
+            $this->get_htmlvar_details($key, $newclass, $variable, $extra, $htmlvalue);
+
+            $param[$variable] = $val;
+        }
+        check_for_select_one($param);
+        return $param;
+    }
+
+    function get_form_variable_name($descr)
+    {
+        return getNthToken($descr, 1);
+    }
+
+    function fix_stuff_or_class($stuff, $variable,  &$class, &$value)
+    {
+        $value = null;
+        if(is_object($stuff))
+        {
+            $class = lget_class($stuff);
+            lxclass::resolve_class_differences($class, $variable, $dclass, $dvariable);
+            if($dclass != $class && cse($dclass, "_b"))
+                    $value = $stuff->$dclass->$dvariable;
+            else
+            {
+                if($stuff->isQuotaVariable($variable))
+                    $value = $stuff->priv->$variable;
+                elseif($stuff->isListQuotaVariable($variable))
+                    $value = $stuff->listpriv->$variable;
+                elseif(!cse($variable, "_f"))
+                        $value = $stuff->getVariable($variable);
             }
         }
-    } else {
-        $class = $stuff;
-    }
+        else $class = $stuff;
 
-    if (!is_array($value)) {
-        $value = htmlspecialchars($value);
+        if(!is_array($value)) $value = htmlspecialchars($value);
     }
-}
 
 function print_file_permissions($ffile)
 {
