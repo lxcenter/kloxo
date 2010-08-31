@@ -2336,242 +2336,202 @@ class HtmlLib
     {
         $name = ucfirst($name);
         $rvr = new FormVar();
-        $rvr->type = "button";
-        $rvr->name = "frm_change";
+        $rvr->type = 'button';
+        $rvr->name = 'frm_change';
         $rvr->value = $name;
         return $rvr;
     }
 
+    function object_variable_check($stuff, $variable, $def = null)
+    {
+        $value = null;
 
-function object_variable_check($stuff, $variable, $def = null)
-{
-    $value = null;
+        $this->fix_stuff_or_class($stuff, $variable, $class, $value);
 
-    $this->fix_stuff_or_class($stuff, $variable,  $class, $value);
+        /*
+        if(char_search_a($class, "template")) {
+            $class = substr($class, 0, strpos($class, "template"));
+        }
+        */
 
-    /*
-    if(char_search_a($class, "template")) {
-        $class = substr($class, 0, strpos($class, "template"));
+        //Hack Hack... Handling used separately...
+        if(csb($variable, 'used_s_'))
+        {
+            $nclass = $class;
+            $nvariable = strfrom($variable, 'used_s_');
+            $value = $stuff->used->$nvariable;
+        }
+        else
+        {
+            $nvariable = $variable;
+            $nclass = $class;
+        }
+
+        if($value === 'on') $value = 'yes';
+
+        $descr = $this->get_classvar_description_after_overload($nclass, $nvariable);
+
+        $rvr = new FormVar();
+        $rvr->name = "frm_{$class}_c_{$variable}_aaa_checkname";
+        $rvr->desc = $descr[2];
+        $rvr->type = 'hidden';
+        $rvr->value = 'off';
+        $ret[] = $rvr;
+
+        $rvr = new FormVar();
+        $rvr->name = "frm_{$class}_c_{$variable}_aaa_checked";
+        $rvr->desc =  $descr[2];
+        $rvr->type = 'checkbox';
+        $rvr->checked =  $value;
+        $rvr->value = 'on';
+        $ret[] = $rvr;
+        return $ret;
     }
-*/
 
-    //Hack Hack... Handling used separately...
-    if(csb($variable, "used_s_")) {
-        $nclass = $class;
-        $nvariable =  strfrom($variable, 'used_s_');
-        $value = $stuff->used->$nvariable;
-    } else {
-        $nvariable = $variable;
-        $nclass = $class;
-    }
+    function object_variable_hidden($key, $value)
+    {
+        $string = null;
 
-    if($value === 'on') {
-        $value = 'yes';
-    }
-
-    $descr = $this->get_classvar_description_after_overload($nclass, $nvariable);
-
-    $rvr = new FormVar();
-    $rvr->name = "frm_{$class}_c_{$variable}_aaa_checkname";
-    $rvr->desc = $descr[2];
-    $rvr->type = "hidden";
-    $rvr->value = "off";
-    $ret[] = $rvr;
-
-    $rvr = new FormVar();
-    $rvr->name = "frm_{$class}_c_{$variable}_aaa_checked";
-    $rvr->desc =  $descr[2];
-    $rvr->type = "checkbox";
-    $rvr->checked =  $value;
-    $rvr->value = "on";
-    $ret[] = $rvr;
-    return $ret;
-
-}
-
-
-
-
-function object_variable_hidden($key, $value)
-{
-    $string = null;
-
-    if(is_array($value)) {
-        foreach($value as $k => $v) {
-            $str = "{$key}" . "[$k]";
+        if(is_array($value))
+        {
+            foreach($value as $k => $v)
+            {
+                $str = "{$key}" . "[$k]";
+                $rvr = new FormVar();
+                $rvr->name = $str;
+                $rvr->value = $v;
+                $rvr->type = 'hidden';
+                $ret[] = $rvr;
+            }
+        }
+        else
+        {
             $rvr = new FormVar();
-            $rvr->name =  $str ;
-            $rvr->value =  $v ;
-            $rvr->type =  "hidden" ;
+            $rvr->name = $key;
+            $rvr->value = $value;
+            $rvr->type = 'hidden';
             $ret[] = $rvr;
         }
-    } else {
+        return $ret;
+    }
+
+    function object_variable_hiddenlist($hlist)
+    {
+        foreach($hlist as $key => $val)
+            $a[] = $this->object_variable_hidden($key, $val);
+
+        return lx_array_merge($a);
+    }
+
+    function object_variable_htmltextarea($stuff, $variable, $value = null, $nonameflag = false)
+    {
+        $this->fix_stuff_or_class($stuff, $variable,  $class, $nvalue);
+        $name = "frm_{$class}_c_{$variable}";
+
+        if(!$value) $value = $nvalue;
+
+        if($nonameflag) $name = null;
+
+        $descr = $this->get_classvar_description_after_overload($class, $variable);
+        $val = exec_class_method($class, 'getTextAreaProperties', $variable);
+
+        /*
+        if($value) {
+            $value = htmlspecialchars($value);
+        }
+        */
         $rvr = new FormVar();
-        $rvr->name =  $key ;
-        $rvr->value =  $value ;
-        $rvr->type =  "hidden" ;
-        $ret[] = $rvr;
-    }
-    return $ret;
+        $rvr->name = $name;
+        $rvr->desc = $descr[2] ;
+        $rvr->height = $val['height'];
+        $rvr->width = $val['width'];
+        $rvr->value = $value;
+        $rvr->type = 'htmltextarea';
 
-
-}
-
-
-function object_variable_hiddenlist($hlist)
-{
-
-    foreach($hlist as $key => $val)
-        $a[] = $this->object_variable_hidden($key, $val);
-
-    return lx_array_merge($a);
-
-}
-
-
-
-function object_variable_htmltextarea($stuff, $variable, $value = null, $nonameflag = false)
-{
-
-
-    $this->fix_stuff_or_class($stuff, $variable,  $class, $nvalue);
-    $name = "frm_{$class}_c_{$variable}";
-
-    if(!$value) {
-        $value = $nvalue;
+        return $rvr;
     }
 
-    if($nonameflag) {
-        $name = null;
-    }
+    function object_variable_textarea($stuff, $variable, $value = null, $nonameflag = false)
+    {
+        $this->fix_stuff_or_class($stuff, $variable, $class, $nvalue);
+        $name = "frm_{$class}_c_{$variable}";
 
-    $descr = $this->get_classvar_description_after_overload($class, $variable);
-    $val = exec_class_method($class, "getTextAreaProperties", $variable);
+        if(!$value) $value = $nvalue;
+        if($nonameflag) $name = null;
 
-    /*
-    if($value) {
-        $value = htmlspecialchars($value);
-    }
-*/
-    $rvr = new FormVar();
-    $rvr->name = $name;
-    $rvr->desc =  $descr[2] ;
-    $rvr->height = $val['height'];
-    $rvr->width = $val['width'];
-    $rvr->value = $value;
-    $rvr->type =  "htmltextarea" ;
+        $descr = $this->get_classvar_description_after_overload($class, $variable);
+        $val = exec_class_method($class, 'getTextAreaProperties', $variable);
 
-    return $rvr;
-
-}
-
-
-function object_variable_textarea($stuff, $variable, $value = null, $nonameflag = false)
-{
-
-
-    $this->fix_stuff_or_class($stuff, $variable,  $class, $nvalue);
-    $name = "frm_{$class}_c_{$variable}";
-
-    if(!$value) {
-        $value = $nvalue;
-    }
-
-    if($nonameflag) {
-        $name = null;
-    }
-
-    $descr = $this->get_classvar_description_after_overload($class, $variable);
-    $val = exec_class_method($class, "getTextAreaProperties", $variable);
-
-    /*
-    if($value) {
-        $value = htmlspecialchars($value);
-    }
-*/
-    $rvr = new FormVar();
-    $rvr->name = $name;
-    $rvr->desc =  $descr[2] ;
-    $rvr->height = $val['height'];
-    $rvr->width = $val['width'];
-    $rvr->value = $value;
-    $rvr->type =  "textarea" ;
-
-    return $rvr;
-
-}
-
-
-function object_variable_command($type, $desc)
-{
-    $rvr = new FormVar();
-    $rvr->type =  $type ;
-    $rvr->desc =  $desc ;
-    return $rvr;
-}
-
-function object_inherit_filter()
-{
-    // Don't inherit hpfilter.
-    return null;
-}
-
-
-
-function object_inherit_accountselect()
-{
-    return $this->object_variable_inherit("frm_accountselect");
-
-}
-
-
-function object_inherit_classpath()
-{
-    $a1 = $this->object_variable_inherit("frm_o_o");
-    $a2 = $this->object_variable_inherit("frm_consumedlogin");
-    return lx_merge_good($a1, $a2);
-
-}
-
-
-
-function html_variable_inherit($var = null)
-{
-    $string = null;
-    foreach($this->__http_vars as $key => $value) {
-        if($var) {
-            if($var != $key) {
-                continue;
-            }
-        } else {
-            if(!char_search_a($key, "_c_")) {
-                continue;
-            }
+        /*
+        if($value) {
+            $value = htmlspecialchars($value);
         }
-        if(is_array($value)) {
-            foreach($value as $k => $v) {
-                if(is_array($v)) {
-                    foreach($v as $nk => $nv) {
-                        $str = "{$key}" . "[$k][$nk]";
-                        print("<input type=hidden name=$str value=$nv>");
+        */
+        $rvr = new FormVar();
+        $rvr->name = $name;
+        $rvr->desc = $descr[2] ;
+        $rvr->height = $val['height'];
+        $rvr->width = $val['width'];
+        $rvr->value = $value;
+        $rvr->type = 'textarea';
+
+        return $rvr;
+    }
+
+    function object_variable_command($type, $desc)
+    {
+        $rvr = new FormVar();
+        $rvr->type = $type;
+        $rvr->desc = $desc;
+        return $rvr;
+    }
+
+    function object_inherit_filter()
+    {
+        return null;// Don't inherit hpfilter.
+    }
+
+    function object_inherit_accountselect()
+    {
+        return $this->object_variable_inherit('frm_accountselect');
+    }
+
+    function object_inherit_classpath()
+    {
+        $a1 = $this->object_variable_inherit('frm_o_o');
+        $a2 = $this->object_variable_inherit('frm_consumedlogin');
+        return lx_merge_good($a1, $a2);
+    }
+
+    function html_variable_inherit($var = null)
+    {
+        $string = null;
+        foreach($this->__http_vars as $key => $value)
+        {
+            if($var && $var != $key) continue;
+            elseif(!char_search_a($key, "_c_")) continue;
+
+            if(is_array($value))
+                foreach($value as $k => $v)
+                    if(is_array($v))
+                        foreach($v as $nk => $nv)
+                        {
+                            $str = "{$key}" . "[$k][$nk]";
+                            print("<input type=hidden name=$str value=$nv>");
+                        }
+                    else
+                    {
+                        $str = "{$key}" . "[$k]";
+                        print("<input type=hidden name=$str value=$v>");
                     }
-
-                } else {
-                    $str = "{$key}" . "[$k]";
-                    print("<input type=hidden name=$str value=$v>");
-                }
+            else
+            {
+                if(!$value) continue;
+                print("<input type=hidden name=$str value=$value>");
             }
-        } else {
-            if(!$value) {
-                continue;
-            }
-            print("<input type=hidden name=$str value=$value>");
-
         }
-
+        return $string;
     }
-    return $string;
-}
 
 function object_variable_inherit($var = null)
 {
@@ -2632,7 +2592,6 @@ function object_variable_listquota($parent, $stuff, $variable, $list = null)
 
     global $gbl, $sgbl, $ghtml;
 
-
     $value = null;
 
     $this->fix_stuff_or_class($stuff, $variable,  $class, $value);
@@ -2686,17 +2645,16 @@ function object_variable_quota($parent, $stuff, $variable)
     if(char_search_a($class, "template")) {
         $class = substr($class, 0, strpos($class, "template"));
     }
-*/
+    */
 
     $descr = $this->get_classvar_description_after_overload($class, $variable);
 
     $cvar = $variable;
 
-    if($value === "Unlimited") {
-        $value = null;
-    }
+    if($value === 'Unlimited') $value = null;
 
-    $check = (trim($value) !== "")? "no": "yes";
+
+    $check = (trim($value) !== "")? 'no': 'yes';
 
 
     if(is_object($stuff)) {
@@ -2742,10 +2700,8 @@ function object_variable_quota($parent, $stuff, $variable)
         return $ret;
     }
 
-
-    if(is_unlimited($parent->priv->$cvar)) {
-
-
+    if(is_unlimited($parent->priv->$cvar))
+    {
         $rvr = new FormVar();
         $rvr->name =  "frm_{$class}_c_$variable" ;
         $rvr->type = "checkboxwithtext";
@@ -2770,15 +2726,13 @@ function object_variable_quota($parent, $stuff, $variable)
         $rvr->value =  "Unlimited" ;
         $rvr->name = "frm_{$class}_c_priv_s_{$variable}_aaa_quotamax";
         $ret[] = $rvr;
-
-
-    } else {
-
+    }
+    else
+    {
         $quotaleft = $parent->getEffectivePriv($cvar, $class);
 
-        if(isHardQuotaVariableInClass($class, $cvar)) {
+        if(isHardQuotaVariableInClass($class, $cvar))
             $quotaleft += $value;
-        }
 
         $totalstring = null;
         $totalstring = "Total: " . $parent->priv->$cvar;
@@ -2815,21 +2769,9 @@ function object_variable_quota($parent, $stuff, $variable)
 
 function object_variable_startblock($obj, $class, $title, $url = null)
 {
-
-
-    if(!$url) {
-        $url = $_SERVER['PHP_SELF'];
-    }
-
-    if(!$class) {
-        $class = get_class($obj);
-    }
-
-
+    if(!$url) $url = $_SERVER['PHP_SELF'];
+    if(!$class) $class = get_class($obj);
     $domdesc = get_classvar_description($class);
-
-
-
     $server = $this->print_machine($obj);
 
     //$formname = fix_nname_to_be_variable("$title{$obj->getId()}");
@@ -2840,20 +2782,16 @@ function object_variable_startblock($obj, $class, $title, $url = null)
     $header->form = $formname;
     $header->formtype = "enctype=\"multipart/form-data\"";
 
-    if($title) {
+    if($title)
         $header->title =  "$title for {$obj->getId()} $server";
-    } else {
-        $header->title =  null;
-    }
+    else $header->title =  null;
+
     $header->url = $url;
     return $header;
-
 }
-
 
 function object_variable_oldpassword($class, $var, $descr)
 {
-
     $rvr = new FormVar();
     $rvr->name = "frm_{$class}_c_{$var}";
     $rvr->desc = $descr[2];
@@ -2864,19 +2802,13 @@ function object_variable_oldpassword($class, $var, $descr)
     return $rvr;
 }
 
-
-
-
 function printbr($val = 2)
 {
-    for ($i = 0; $i < $val ; $i++) {
-        print("<br> ");
-    }
+    for($i = 0; $i < $val ; $i++) print("<br> ");
 }
 
 function object_variable_password($class, $var)
 {
-
     $desc = get_classvar_description($class, $var);
 
     $rvr = new FormVar();
@@ -2901,57 +2833,37 @@ function object_variable_password($class, $var)
     $ret[] = $rvr;
 
     return $ret;
-
 }
 
 
 function object_variable_option($multi, $list, $select = null, $assoc = null)
 {
     $string = null;
-
     $sel = null;
-
-    if(!$list) {
-        return null;
-    }
-
+    if(!$list) return null;
 
     $match = false;
-    foreach((array) $list as $k => $l) {
+    foreach((array) $list as $k => $l)
+    {
+        $value = ($assoc)? $k: $l;
 
-        if($assoc) {
-            $value = $k;
-        } else {
-            $value = $l;
-        }
-
-
-        if($l === '--Disabled--') {
-            $match = true;
-        }
-
-
+        if($l === '--Disabled--') $match = true;
 
         if($select !== "" && "$value" === "$select") {
             $match = true;
             $option["__v_selected_$value"] = $l;
-        } else {
-            $option[$value] = $l;
         }
+        else $option[$value] = $l;
     }
 
     // IF the select is nonnull and the the damn thing doesn't match, then there is some problem. That is the current value isn't in the list of acceptable values.
-    if(!$match && !$multi) {
-        if($select) {
+    if(!$match && !$multi)
+        if($select)
             $sel['--Select One--'] = "--Select One ($select not in List)--";
-        } else {
+        else
             $sel['--Select One--'] = '--Select One--';
-        }
-    }
 
-    if($sel) {
-        $option = $sel + $option;
-    }
+    if($sel) $option = $sel + $option;
 
     //dprintr($option);
     /*
@@ -2959,21 +2871,19 @@ function object_variable_option($multi, $list, $select = null, $assoc = null)
         $string = "<option><desc>--Select One--</desc><value>--Select One--value</value></option>" . $string;
     }
 */
-
     return $option;
 }
 
 
-function isSelectOne($var)
-{
-    return ($var === '--Select One--');
-}
+    function isSelectOne($var)
+    {
+        return ($var === '--Select One--');
+    }
 
-function print_current_input_vars($ignore)
-{
-
-    $this->print_input_vars($this->__http_vars, $ignore);
-}
+    function print_current_input_vars($ignore)
+    {
+        $this->print_input_vars($this->__http_vars, $ignore);
+    }
 
 function print_current_input_var_unset_filter($key1, $arr)
 {
@@ -2993,9 +2903,9 @@ function print_input_vars($post, $ignore = array())
 {
     foreach((array) $post as $key => $value) {
         //$key = urlencode($key);
-        if(array_search_bool($key, $ignore)) {
+        if(array_search_bool($key, $ignore))
             continue;
-        }
+
 
         if(is_array($value)) {
             foreach($value as $k => $v) {
@@ -3022,9 +2932,8 @@ function print_input_vars($post, $ignore = array())
 function get_get_from_post($ignore, $list)
 {
     $string = "";
-    if(!$list) {
-        return $string;
-    }
+    if(!$list) return $string;
+
     foreach($list as $key => $value) {
         if($ignore && array_search_bool($key, $ignore)) {
             continue;
@@ -3055,10 +2964,10 @@ function get_get_from_post($ignore, $list)
     return $string;
 }
 
-function get_get_from_current_post($ignore)
-{
-    return $this->get_get_from_post($ignore, $this->__http_vars);
-}
+    function get_get_from_current_post($ignore)
+    {
+        return $this->get_get_from_post($ignore, $this->__http_vars);
+    }
 
 
 function get_classvar_description_after_overload($class, $property)
@@ -3067,8 +2976,6 @@ function get_classvar_description_after_overload($class, $property)
 
     lxclass::resolve_class_differences($class, $property, $dclass, $dproperty);
 
-
-
     $classdesc =  get_classvar_description($dclass);
     $prop_descr = get_classvar_description($dclass, $dproperty);
     $this->fix_variable_overload($prop_descr, $classdesc[2]);
@@ -3076,14 +2983,12 @@ function get_classvar_description_after_overload($class, $property)
     return $prop_descr;
 }
 
-function fix_variable_overload(&$descr, $classdesc)
-{
-    foreach($descr as &$d) {
-        if(strstr($d, "[%v]") !== false) {
-            $d = str_replace("[%v]", $classdesc, $d);
-        }
+    function fix_variable_overload(&$descr, $classdesc)
+    {
+        foreach($descr as &$d)
+            if(strstr($d, "[%v]") !== false)
+                $d = str_replace("[%v]", $classdesc, $d);
     }
-}
 
 function generateParentListUrl($nobject)
 {
@@ -3169,8 +3074,6 @@ function generateEntireUrl($nobject, $top)
 
 }
 
-
-
 function getFullUrl($url, $p = "default")
 {
 
@@ -3251,7 +3154,6 @@ function getFullUrl($url, $p = "default")
         $p[$k]['nname'] = $post['l']['nname'];
     }
 
-
     $npost['frm_action'] = $post['a'];
 
     if(isset($post['sa'])) {
@@ -3268,15 +3170,10 @@ function getFullUrl($url, $p = "default")
             $npost[$k] = $v;
         }
     }
+    if($p) $npost['frm_o_o'] = $p;
 
+    if(isset($post['c'])) $npost['frm_o_cname'] = $post['c'];
 
-    if($p) {
-        $npost['frm_o_o'] = $p;
-    }
-
-    if(isset($post['c'])) {
-        $npost['frm_o_cname'] = $post['c'];
-    }
 
     if(isset($post['frm_filter'])) {
         $npost['frm_filter'] = $post['frm_filter'];
@@ -3292,22 +3189,17 @@ function getFullUrl($url, $p = "default")
     return $url;
 }
 
-
-
 function printObjectElement($parent, $class, $classdesc, $obj, $name, $width, $descr, $colcount)
 {
-
     global $gbl, $sgbl, $login;
-
 
     //list($iclass, $mclass, $rclass) = get_composite($class);
     $rclass = $class;
 
     list($graphtype, $graphwidth)  = exec_class_method($rclass, "getGraphType");
 
-    if($name === 'syncserver') {
+    if($name === 'syncserver')
         $serverdiscr = pserver::createServerInfo(array($obj->syncserver), $class);
-    }
 
     $__external = 0;
     $iconpath = get_image_path() . "/button/";
@@ -3363,7 +3255,8 @@ function printObjectElement($parent, $class, $classdesc, $obj, $name, $width, $d
         $__full_url_t_identity = $__t_identity;
     }
 
-    if(isset($descr[$name][3]) || csa($name, "abutton_")) {
+    if(isset($descr[$name][3]) || csa($name, "abutton_"))
+    {
         if(csa($name, "abutton_")) {
             $urlname = $obj->nname;
             $str = strfrom($name, "abutton_");
@@ -3408,20 +3301,17 @@ function printObjectElement($parent, $class, $classdesc, $obj, $name, $width, $d
 
     }
 
-
-
-    $align = "left";
-    $valign  = "middle" ;
+    $align = 'left';
+    $valign  = 'middle';
     $image = 0;
     if(csa($descr[$name][0], "e")) {
         $pname = strtolower($pname);
         $property = "{$name}_v_$pname";
         $prop_descr = get_classvar_description($rclass, $property);
 
-
-        if(!$prop_descr) {
+        if(!$prop_descr)
             dprint("Property Description for $rclass $property not Found <br> \n");
-        }
+
         $this->fix_variable_overload($prop_descr, $classdesc[2]);
         $image = $this->get_image($iconpath ,  $class,  $property,  ".gif");
         $help = $this->get_full_help($prop_descr['help'], $obj->getId());
@@ -3437,10 +3327,8 @@ function printObjectElement($parent, $class, $classdesc, $obj, $name, $width, $d
         $image = 1;
     }
 
-    if(!$obj->isAction($name) && char_search_a($descr[$name][0], "b")) {
+    if(!$obj->isAction($name) && char_search_a($descr[$name][0], "b"))
         $pname = "";
-    }
-
 
     $bgcolorstring = null; $forecolorstring = null; if($sgbl->isBlackBackground()) { $bgcolorstring = "bgcolor=#000"; $forecolorstring = "color=#999999"; }
 
@@ -3477,10 +3365,7 @@ function printObjectElement($parent, $class, $classdesc, $obj, $name, $width, $d
         $method = ($__external)? "get" : $sgbl->method;
 
         ?>
-
             <form name=form<?=$colcount ?>  method=<?=$method?> action=<?=$path ?> <?=$target ?> >
-
-
             <?php
         if($this->frm_action  === 'selectshow') {
             $post['frm_action'] = 'selectshow';
@@ -3489,7 +3374,6 @@ function printObjectElement($parent, $class, $classdesc, $obj, $name, $width, $d
         $this->print_input_vars($post);
         ?>
             </form>
-
         <a class=insidelist href="javascript:document.form<?=$colcount ?>.submit()" <?=$urlhelp ?> > <?=$pname ?>   </a>  </span> </td>
         <?php
 
@@ -3515,10 +3399,10 @@ function printObjectElement($parent, $class, $classdesc, $obj, $name, $width, $d
     }
 }
 
-function print_input($type, $name, $value, $extra = null)
-{
-    print("<input type=$type name=$name value=\"$value\" $extra>");
-}
+    function print_input($type, $name, $value, $extra = null)
+    {
+        echo '<input type="'.$type.'" name="'.$name.'" value="'.$value.'" '.$extra.' />';
+    }
 
 function print_next_previous_link($object, $class, $place, $iconpath, $name, $page_value)
 {
@@ -3550,7 +3434,6 @@ function print_next_previous($object, $class, $place,$cgi_pagenum, $total_num, $
     $search_brack_o = "<b> ";
     $search_brack_c = " </b> ";
 
-
     $prev_link = NULL;
     $first_link = NULL;
     $rewind_link = NULL;
@@ -3561,12 +3444,11 @@ function print_next_previous($object, $class, $place,$cgi_pagenum, $total_num, $
     $rewind_link = $this->print_next_previous_link($object, $class, $place, $iconpath, "rewind", ($cgi_pagenum + $cgi_pagenum %2)/2);
     $prev_link = $this->print_next_previous_link($object, $class, $place, $iconpath, "prev", max(1, ($cgi_pagenum  - 1)));
 
-
     $next_link = NULL;
     $forward_link = NULL;
     $last_link = NULL;
-    if($total_num > $pagesize) {
-
+    if($total_num > $pagesize)
+    {
         $page = $total_num/$pagesize;
         $page = explode('.', $page);
         $page = (isset($page[1]))? $page[0] + 1 : $page[0];
@@ -3593,14 +3475,10 @@ function print_next_previous($object, $class, $place,$cgi_pagenum, $total_num, $
 
 function print_machine($object)
 {
-
-    if(!$object->isClass('client') && !$object->isLocalhost() && $object->syncserver != $object->nname) {
+    if(!$object->isClass('client') && !$object->isLocalhost() && $object->syncserver != $object->nname)
         return "(on $object->syncserver)";
-    }
-    return "";
+    return '';
 }
-
-
 
 function printSearchTable($name_list, $parent, $class)
 {
@@ -3608,9 +3486,6 @@ function printSearchTable($name_list, $parent, $class)
     $this->print_real_search($name_list, $parent, $class);
 
 }
-
-
-
 
 function get_class_description($class, $display = null)
 {
@@ -3649,7 +3524,6 @@ function display_count(&$obj_list, $disp)
     return $n;
 }
 
-
 function print_crappy_header()
 {
     if(0 && !$sellist && $class !== 'permission' && $class !== 'resource' && $class !== 'information') {
@@ -3659,15 +3533,12 @@ function print_crappy_header()
 
             <tr width=20% nowrap valign=top><td><img src="<?=$imgheadleft; ?>"></td><td  nowrap valign=middle background="<?=$imgheadbg; ?>"><b><font color="#234355" style="font-weight: bold"><?=get_plural($classdesc[2])?> <?=$showvar ?> <?=$login->getKeyword('under')?> <?="{$parent->getId()} $filterundermes" ?> </b> <?=$this->print_machine($parent) ?> <b>  (<?=$total_num ?>)</b></font></td><td><img src="<?=$imgheadright; ?>"></td>
 
-
-
             <td align=right width=100%> <?php $this->print_next_previous($parent, $class, "top", $cgi_pagenum, $total_num, $pagesize); ?> </td>
 
             </tr>
             </table>
             </td>
             </tr>
-
 
             <tr><td colspan=3> <table cellpadding=0 cellspacing=0 border=0 width=100% height=35 background="<?=$imgbtnbg; ?>">
             <tr><td width=80% align=left >
@@ -3679,8 +3550,7 @@ function print_crappy_header()
 
         $descr = $this->getActionDescr($_SERVER['PHP_SELF'], $this->__http_vars, $class, $var, $identity);
         ?>
-<table cellpadding=0 cellspacing=0 border=0 width=100%><tr><td align=left><table cellpadding=0 cellspacing=0 border=0 width=100% ><tr><td><img src="<?=$imgheadleft; ?>"></td><td nowrap width=100% background="<?=$imgheadbg; ?>" ><b><font color="#000000">  Confirm <?=$descr[1] ?>:  </b><?=get_plural($classdesc[2])?> from <?=$parent->display("nname"); ?></font></td><td><img src="<?=$imgheadright; ?>"></td></tr></table></td><td width=100%> &nbsp; </td> </tr></table>
-
+<table cellpadding="0" cellspacing="0" border="0" width="100%"><tr><td align=left><table cellpadding=0 cellspacing=0 border=0 width=100% ><tr><td><img src="<?=$imgheadleft; ?>"></td><td nowrap width=100% background="<?=$imgheadbg; ?>" ><b><font color="#000000">  Confirm <?=$descr[1] ?>:  </b><?=get_plural($classdesc[2])?> from <?=$parent->display("nname"); ?></font></td><td><img src="<?=$imgheadright; ?>"></td></tr></table></td><td width=100%> &nbsp; </td> </tr></table>
 
         <?php
     }
@@ -3712,7 +3582,6 @@ function printListAddFormBad($parent, $class)
     }
 
     print("<td > </td> <td width=10> &nbsp; </td> </tr> <tr> <td width=10> </td> <td > <img src=$buttonpath/{$class}_list.gif height=20 width=20> </td> ");
-
 
     foreach($vlist as $k => $v) {
         print("<td >");
@@ -3748,7 +3617,6 @@ function printListAddFormBad($parent, $class)
 
 function printListAddForm($parent, $class)
 {
-
     global $gbl, $sgbl, $login, $ghtml;
     $vlist = exec_class_method($class, "addListForm", $parent, $class);
     if(!$vlist) { return; }
@@ -3762,18 +3630,17 @@ function printListAddForm($parent, $class)
         $visiblity = "visibility:visible;display:block";
     }
 
-
     $cdesc = get_description($class);
     $cdesc .= " for $parent->nname";
 
     $backgroundstring = "background:#fff;";
     $fontcolor = "black";
     $bordertop = "#d0d0d0";
-    if($sgbl->isBlackBackground()) {
+    if($sgbl->isBlackBackground())
+    {
         $backgroundstring = "background:#000;";
         $fontcolor = "#333333";
         $bordertop = "#444444";
-
     }
 
     ?>
@@ -3811,9 +3678,6 @@ function print_real_search($name_list, $parent, $class)
     $buttonpath = get_image_path() . "/button/";
     $img = $this->get_image($buttonpath, $rclass, "list", ".gif");
 
-
-
-
     $global_visible = false;
     $value = null;
     foreach($name_list as $name => $width) {
@@ -3832,11 +3696,13 @@ function print_real_search($name_list, $parent, $class)
         }
     }
 
-    if($global_visible) {
+    if($global_visible)
+    {
         $visiblity = "visibility:visible;display:block";
         $showstring = null;
         $show_all_string = "(Click on show-all to hide)";
-    } else {
+    } else
+    {
         $showstring = "Show/Hide";
         $show_all_string = null;
         $visiblity = "visibility:hidden;display:none";
@@ -3845,7 +3711,8 @@ function print_real_search($name_list, $parent, $class)
     $backgroundstring =  "background:#fffafa;";
     $backgroundnullstring = null;
     $bordertop = "#d0d0d0";
-    if($sgbl->isBlackBackground()) {
+    if($sgbl->isBlackBackground())
+    {
         $backgroundstring = "background:gray;";
         $backgroundnullstring = "background:gray;";
         $bordertop = "#333";
@@ -3933,9 +3800,8 @@ function print_real_search($name_list, $parent, $class)
             }
         }
 
-
-        if($width) {
-
+        if($width)
+        {
             if($width[0] === 's') {
                 print("<select name=frm_hpfilter[$filtername][{$name}_o_cont]  class=searchbox size=1 width=10 maxlength=30>");
                 foreach($width[1] as $v) {
@@ -3946,8 +3812,6 @@ function print_real_search($name_list, $parent, $class)
                     print("<option value='$v' $sel> $v </option>");
                 }
                 print("</select>");
-
-
             }
         } else {
             print("<input type=text name=frm_hpfilter[$filtername][{$name}_o_cont] value='$value'  class=searchbox size=11 maxlength=30>");
@@ -3964,27 +3828,24 @@ function print_real_search($name_list, $parent, $class)
 
     $this->print_current_input_var_unset_filter($filtername, $filarr);
     $this->print_current_input_vars(array('frm_hpfilter'));
-
-
     ?>
 
     </td> </tr>
    </table>
 
-  </td> <td >
-
-        <input type=submit class=submitbutton name=Search value=Search></form>
-
+  </td>
+  <td >
+        <input type=submit class=submitbutton name=Search value=Search>
+    </form>
   </td>  </tr> <tr> <td width=10> &nbsp; </td> </tr>  </table> </div>  </td> </tr> </table>
 
         <?php
 }
 
-
-function isResourceClass($class)
-{
-    return ($class === 'permission' || $class === 'resource' || $class === 'information');
-}
+    function isResourceClass($class)
+    {
+        return ($class === 'permission' || $class === 'resource' || $class === 'information');
+    }
 
 function checkIfFilter($filter)
 {
@@ -4004,49 +3865,39 @@ function printObjectTable($name_list, $parent, $class, $blist = array(),  $displ
 
     $view = null;
 
-
     if(exec_class_method($class, "hasViews")) {
         $blist[] = array($ghtml->getFullUrl("a=list&c=$class&frm_filter[view]=quota"), 1);
         $blist[] = array($ghtml->getFullUrl("a=list&c=$class&frm_filter[view]=normal"), 1);
     }
-
 
     print_time("$class.objecttable");
 
     //list($iclass, $mclass, $rclass) = get_composite($class);
     $rclass = $class;
 
-    if($this->frm_accountselect !== null) {
-        $sellist = explode(',', $this->frm_accountselect);
-    } else {
-        $sellist = null;
-    }
+    if($this->frm_accountselect !== null) $sellist = explode(',', $this->frm_accountselect);
+    else $sellist = null;
 
     $filtername = $parent->getFilterVariableForThis($class);
     $sortdir = null;
     $sortby = null;
     $fil = $login->getHPFilter();
-    if(isset($fil[$filtername]['sortby'])) {
-        $sortby = $fil[$filtername]['sortby'];
-    }
-    if(isset($fil[$filtername]['sortdir'])) {
-        $sortdir = $fil[$filtername]['sortdir'];
-    }
+    if(isset($fil[$filtername]['sortby'])) $sortby = $fil[$filtername]['sortby'];
+    if(isset($fil[$filtername]['sortdir'])) $sortdir = $fil[$filtername]['sortdir'];
 
     $pagesize = (int) $login->issetHpFilter($filtername, 'pagesize')? $login->getHPFilter($filtername, 'pagesize'): exec_class_method($rclass, "perPage");
 
-    if(!(int)$pagesize) {
-        $pagesize = 10;
-    }
+    if(!(int)$pagesize) $pagesize = 10;
 
     $view = null;
-    if(isset($fil[$filtername]['view'])) {
+    if(isset($fil[$filtername]['view']))
+    {
         $view = $fil[$filtername]['view'];
         dprintr($view);
     }
 
-
-    if(!$name_list) {
+    if(!$name_list)
+    {
         if(csa($class, "all_")) {
             $__tcl = strfrom($class, "all_");
             $name_list = exec_class_method($__tcl, "createListNlist", $parent, $view);
@@ -4060,13 +3911,6 @@ function printObjectTable($name_list, $parent, $class, $blist = array(),  $displ
             $name_list = exec_class_method($class, "createListNlist", $parent, $view);
         }
     }
-
-
-
-
-
-
-
 
     $iconpath = get_image_path() . "/button";
 
@@ -4083,7 +3927,6 @@ function printObjectTable($name_list, $parent, $class, $blist = array(),  $displ
     $imgbtncrv  = $login->getSkinDir() . "/btn_crv_right.gif" ;
     $imgtopline  = $login->getSkinDir() . "/top_line.gif" ;
     $skindir = $login->getSkinDir();
-
 
     $classdesc = $this->get_class_description($rclass, $display);
 
@@ -4125,8 +3968,6 @@ function printObjectTable($name_list, $parent, $class, $blist = array(),  $displ
         $cgi_pagenum = 1;
     }
 
-
-
     $showvar = null;
     if($login->issetHpFilter($filtername, 'show')) {
         $showvar = $login->getHPFilter($filtername, 'show');
@@ -4158,7 +3999,6 @@ function printObjectTable($name_list, $parent, $class, $blist = array(),  $displ
     $total_page = strtil($total_num/ $pagesize, ".") + 1;
     $perpageof = "$lower to $upper of ";
 
-
     if($sgbl->isBlackBackground()) {
         $backgroundstring = "background:#222222;";
         $stylebackgroundstring = "style='background-color:#000000; background:#000000;'";
@@ -4184,7 +4024,6 @@ function printObjectTable($name_list, $parent, $class, $blist = array(),  $displ
         $bordertop = "#d0d0d0";
     }
 
-
     if(!$sellist && !$this->isResourceClass($class)) {
         print(" <fieldset style='$backgroundstring padding: 0 ; text-align: middle ; margin: 0; border: 0px; border-top: 1px solid $bordertop'><legend><font style='font-weight:bold'>$pluraldesc $showvar  {$login->getKeyword('under')} {$parent->getId()} <font color=red>$filterundermes </font> {$this->print_machine($parent)} ({$perpageof}$total_num)</font> </legend> </fieldset> ");
     }
@@ -4203,15 +4042,12 @@ function printObjectTable($name_list, $parent, $class, $blist = array(),  $displ
     if(!$sellist && !$this->isResourceClass($class) && !$gbl->__inside_ajax) {
         $imgshow = get_general_image_path() . "/button/btn_show.gif" ;
 
-
         print("<table cellpadding=0 cellspacing=0 width=95% border=0  valign=middle> <tr> <td colspan=100 height=6></td> </tr> <tr valign=middle >");
-
 
         $imgbtm1 = get_general_image_path() . "/button/btm_01.gif" ;
         $imgbtm2 = get_general_image_path() . "/button/btm_02.gif" ;
         $imgbtm3 = get_general_image_path() . "/button/btm_03.gif" ;
         $imgshow = get_general_image_path() . "/button/btn_show.gif" ;
-
 
         $rpagesize = exec_class_method($rclass, "perPage");
         if($rpagesize > 1000) {
@@ -4221,9 +4057,6 @@ function printObjectTable($name_list, $parent, $class, $blist = array(),  $displ
         }
 
         print("<td nowrap> &nbsp;&nbsp;</td>");
-
-
-
         print("<td ><b>Page</b>&nbsp;</td> ");
 
         $last = false;
@@ -4257,13 +4090,7 @@ function printObjectTable($name_list, $parent, $class, $blist = array(),  $displ
             }
         }
 
-
-
         print("<td width=100%> </td>");
-
-
-
-
 
         print("<td nowrap> <b>Show</b> &nbsp;</td>\n");
         $f_page = (int) $login->issetHpFilter($filtername, 'pagesize')? $login->getHPFilter($filtername, 'pagesize'): $pagesize;
@@ -4287,16 +4114,8 @@ function printObjectTable($name_list, $parent, $class, $blist = array(),  $displ
                 print('</td> ');
             }
         }
-
-
-
-
-
-
-
         print("</tr></table>");
     }
-
     ?>
 
     <table width=100%> <tr> <td align=center style='border:0px solid black'>
