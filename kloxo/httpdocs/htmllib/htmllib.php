@@ -1845,30 +1845,18 @@ class HtmlLib
         return array(date('d'), date('m'), date('Y'));
     }
 
-function get_post_from_get($url, &$path, &$post)
-{
+    function get_post_from_get($url, &$path, &$post)
+    {
+        $post = NULL;
+        $array = parse_url($url);
+        $path = '';
+        if (isset($array['host'])) $path .= $array['scheme'] . '://' . $array['host'];
+        if (isset($array['port'])) $path .= ':' . $array['port'];
+        if (isset($array['path'])) $path .= $array['path'];
+        if (isset($array['query'])) parse_str($array['query'], $post);
 
-    $post = NULL;
-    $array = parse_url($url);
-    $path = "";
-    if (isset($array["host"])) {
-        $path .= $array['scheme'] . "://" . $array["host"];
+        return $post;
     }
-
-    if (isset($array["port"])) {
-        $path .= ":" . $array["port"];
-    }
-
-    if (isset($array["path"])) {
-        $path .= $array["path"];
-    }
-
-    if (isset($array["query"])) {
-        parse_str($array["query"], $post);
-    }
-    return $post;
-
-}
 
 function createCurrentParam($class)
 {
