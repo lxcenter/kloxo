@@ -1334,21 +1334,26 @@ static function getSelectList($parent, $var)
 
 function doStatsPageProtection()
 {
-	$dirfile = $this->getStatsProtectFileName();
-	$crypt = crypt($this->stats_password);
-	$fstr = "{$this->stats_username}:$crypt\n";
-	lxfile_mkdir(dirname($dirfile));
-	lfile_put_contents($dirfile,  $fstr);
+	$filename = $this->getStatsProtectFileName();
+	$dir = dirname($filename);
+	$owner = "{$this->username}:apache";
+
+	$password = crypt($this->stats_password);
+	$content = "{$this->stats_username}:$password\n";
+
+	lxuser_mkdir($owner, $dir);
+	lxfile_generic_chmod($dir, '750');
+	lxuser_put_contents($owner, $filename,  $content);
+	lxfile_generic_chmod($filename, '750');
 }
 
 function getStatsProtectFileName()
 {
-	global $gbl, $sgbl, $login, $ghtml; 
-	$dir = "$sgbl->__path_httpd_root/{$this->nname}/__dirprotect";
-	$dirfile = "$dir/__stats";
-	return $dirfile;
+	global $sgbl; 
+	$dir = "{$sgbl->__path_httpd_root}/{$this->nname}/__dirprotect";
+	$filename = "$dir/__stats";
+	return $filename;
 }
-
 
 function getAndUnzipSkeleton($ip, $filepass, $dir)
 {
