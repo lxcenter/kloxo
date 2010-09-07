@@ -441,16 +441,21 @@ function new_process_cp_rec($user, $src, $dst)
 
 function new_process_cmd($user, $dir, $cmd)
 {
+	if (csa($user, ':')) {
+		list($user, $group) = explode(':', $user);
+	} else {
+		$group = $user;
+	}
 
-    if ($user === "root") $user = "__system__";
+    if ($user === 'root') $user = '__system__';
 
-    $tmpfile = ltempnam("/tmp", "cmd_exec");
-    lxfile_unix_chown($tmpfile, $user);
+    $tmpfile = ltempnam('/tmp', 'cmd_exec');
+    lxfile_unix_chown($tmpfile, "$user:$group");
 
     $v = pcntl_fork();
     if ($v === 0) {
-        $uid = os_get_uid_from_user($user);
-        $gid = os_get_gid_from_user($user);
+		$uid = is_numeric($user) ? (int)$user : os_get_uid_from_user($user);
+        $gid = is_numeric($group) ? (int)$group : os_get_gid_from_user($user);
         dprint("Execing as: $uid: $gid\n");
         if ($user !== '__system__') {
             posix_setgid($gid);
@@ -465,10 +470,9 @@ function new_process_cmd($user, $dir, $cmd)
         pcntl_waitpid($v, $status);
         $cont = lfile_get_contents($tmpfile);
         lxfile_rm($tmpfile);
-        log_log("user_cmd", "($dir) $user $cmd $cont");
+        log_log('user_cmd', "($dir) $user $cmd $cont");
     }
     return $status;
-
 }
 
 
