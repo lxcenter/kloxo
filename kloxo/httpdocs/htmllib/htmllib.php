@@ -3645,14 +3645,32 @@ function printListAddForm($parent, $class)
 
     ?>
 
-    <table cellpadding=0 cellspacing=0 background=img/skin/kloxo/default/default/expand.gif> <tr> <td ><font align=left style='color:<?= $fontcolor ?> ;font-weight:bold'><a style='color:<?= $fontcolor ?> ;font-weight:bold' href="javascript:toggleVisibility('listaddform_<?=$unique_name?>');"> &nbsp; &nbsp;  Click Here to Add <?=$cdesc?> (<?=$showstring?>) </a> <?=$show_all_string?> </font> &nbsp; &nbsp; &nbsp; </td> </tr> </table>
+    <table cellpadding="0" cellspacing="0" background="img/skin/kloxo/default/default/expand.gif">
+		<tr>
+			<td >
+				<font align=left style='color:<?=$fontcolor;?>;font-weight:bold'>
+					<a style='color:<?=$fontcolor; ?> ;font-weight:bold' href="javascript:toggleVisibility('listaddform_<?=$unique_name?>');"> &nbsp; &nbsp;  Click Here to Add <?=$cdesc?> (<?=$showstring?>) </a> <?=$show_all_string?>
+				</font> &nbsp; &nbsp; &nbsp;
+			</td>
+		</tr>
+	</table>
 
-    <div id=listaddform_<?=$unique_name?> style='<?=$visiblity?>'>
-        <table width=100% border=0  cellpadding=0 style=' border: 0px solid '> <tr> <td width=10> </td> <td > <table cellpadding=0 align=center cellspacing=0 width=90%> <tr> <td >
-    <?php
-    do_addform($parent, $class, null, true);
-    ?>
- </td> </tr> </table> </td> </tr> </table>  </div>
+    <div id="listaddform_<?=$unique_name?>" style="<?=$visiblity?>">
+        <table width="100%" border="0"  cellpadding=0 style=' border: 0px solid '>
+			<tr>
+				<td width="10"></td>
+				<td >
+					<table cellpadding=0 align=center cellspacing=0 width=90%>
+						<tr>
+							<td >
+								<?php do_addform($parent, $class, null, true); ?>
+ 							</td>
+						</tr>
+					</table>
+				</td>
+			</tr>
+		</table>
+	</div>
     <?php
 }
 
@@ -8291,7 +8309,7 @@ function print_end()
 -->
 
     </td><td width=5 rowspan=2>&nbsp;</td> </tr>
-    <tr><td background="<?=$tbg; ?>"></td> <td height=20 class=copyright valign=top align=right> © 2007 Copyright Lxlabs</td></tr>
+    <tr><td background="<?=$tbg; ?>"></td> <td height=20 class=copyright valign=top align=right> ï¿½ 2007 Copyright Lxlabs</td></tr>
     <tr><td colspan=3 background=<?=$imgbordermain ?> height=5> </td></tr>
     </table>
 
