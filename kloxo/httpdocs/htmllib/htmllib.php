@@ -4719,53 +4719,46 @@ function print_include_jscript($header = NULL)
     ?>
     <meta http-equiv="expires" content="Wed, 26 Feb 1997 08:21:57 GMT">
 
-    <?php $this->print_refresh_key(); ?>
-
-
     <?php
-
+	$this->print_refresh_key();
     $this->print_jscript_source("/htmllib/js/lxa.js");
     $this->print_jscript_source("/htmllib/js/helptext.js");
     $this->print_jscript_source("/htmllib/js/preop.js");
 
 
     if(!$login->getSpecialObject('sp_specialplay')->isOn('enable_ajax') &&  ($header !== 'left_panel')) {
-    } else {
+    }
+	else
+	{
         $this->print_jscript_source("/htmllib/extjs/adapter/yui/yui-utilities.js");
         $this->print_jscript_source("/htmllib/extjs/adapter/yui/ext-yui-adapter.js");
         $this->print_jscript_source("/htmllib/extjs/ext-all.js");
         $this->print_jscript_source("/htmllib/yui-dragdrop/dragdrop.js");
     }
     /*
-$this->print_jscript_source("/htmllib/jui/build/yahoo/yahoo-min.js" );
-$this->print_jscript_source("/htmllib/jui/build/event/event-min.js" );
-$this->print_jscript_source("/htmllib/jui/build/connection/connection-min.js");
-$this->print_jscript_source("/htmllib/jui/build/dom/dom-min.js");
-$this->print_jscript_source("/htmllib/jui/build/dragdrop/dragdrop.js" );
-$this->print_jscript_source("/htmllib/jui/build/animation/animation-min.js");
-*/
+	$this->print_jscript_source("/htmllib/jui/build/yahoo/yahoo-min.js" );
+	$this->print_jscript_source("/htmllib/jui/build/event/event-min.js" );
+	$this->print_jscript_source("/htmllib/jui/build/connection/connection-min.js");
+	$this->print_jscript_source("/htmllib/jui/build/dom/dom-min.js");
+	$this->print_jscript_source("/htmllib/jui/build/dragdrop/dragdrop.js" );
+	$this->print_jscript_source("/htmllib/jui/build/animation/animation-min.js");
+	*/
     $this->print_jscript_source("/htmllib/js/drag.js");
 
-
     $func = null;
-    if(!$header) {
-        $func = "onLoad='lxLoadBody();'";
-    }
+    if(!$header) $func = "onLoad='lxLoadBody();'";
 
-    if(!$header) {
+    if(!$header)
+	{
         $descr = $this->getActionDescr($_SERVER['PHP_SELF'], $this->__http_vars, $class, $var, $identity);
-
         $help = $this->get_full_help($descr[2]);
-
         $help = $this->get_action_or_display_help($help, "display");
         $this->print_defintion($help);
     }
 
     $skin = $login->getSkinDir();
     $css = "$skin/css.css";
-    if(!lfile_exists(getreal($css))) {
-        $css = "/htmllib/css/skin/base.css";
-    }
+    if(!lfile_exists(getreal($css))) $css = "/htmllib/css/skin/base.css";
     $this->print_css_source("/htmllib/css/common.css");
     $this->print_css_source($css);
     $this->print_css_source("/htmllib/css/ext-all.css");
@@ -4776,7 +4769,7 @@ $this->print_jscript_source("/htmllib/jui/build/animation/animation-min.js");
 
     if($header === 'left_panel') {
         ?>
-        <script language=javascript>
+        <script type="text/javascript">
         var gl_helpUrl;
         gl_tDate = new Date();
         var clockTimeZoneMinutes = <?=$l['minutes'] ?> - gl_tDate.getMinutes() ;
@@ -4794,11 +4787,8 @@ $this->print_jscript_source("/htmllib/jui/build/animation/animation-min.js");
         </head>
         <?php
     }
-
-
-        ?>
+	?>
         <script>
-
         function jsFindFilterVar()
         {
             gl_filtervar = '<?=$this->get_filter_var() ?>';
@@ -4816,24 +4806,20 @@ $this->print_jscript_source("/htmllib/jui/build/animation/animation-min.js");
         function lxLoadBody()
         {
             //alert('hello');
-        //splashScreen(0);
-        //coverScreen(0);
-            if(top.topframe) {
-                top.topframe.changeLogo(0);
-            }
+			//splashScreen(0);
+			//coverScreen(0);
+            if(top.topframe) top.topframe.changeLogo(0);
             changeContent('help', 'helparea');
         }
         </script>
         <?php
     ?>
-<script>
-    var gl_skin_directory = '<?=$login->getSkinDir() ?>';
-    //document.onmouseup = this.hideMenuInFrame; </script>
-<?php
-
-    if($header === 'left_panel') {
-        print("<script> lxCallEnd(); </script>");
-    }
+	<script>
+		var gl_skin_directory = '<?=$login->getSkinDir();?>';
+		//document.onmouseup = this.hideMenuInFrame;
+	</script>
+	<?php
+    if($header === 'left_panel') echo "<script>lxCallEnd();</script>"; #[FIXME] This call a lxCallEnd a empty function
 }
 
 function print_refresh()
@@ -8115,18 +8101,12 @@ function splashScreen(flag)
 
 }
 
-function print_splash()
-{
-
-    ?>
-    <script>
-    if(top.topframe) {
-        top.topframe.changeLogo(1);
-    }
-    </script>
-    <?php
-
-}
+	function print_splash()
+	{
+		?>
+		<script>if(top.topframe) top.topframe.changeLogo(1);</script>
+		<?php
+	}
 
 // This function is no longer used.
 function print_splash_old()
