@@ -4808,7 +4808,7 @@ function print_include_jscript($header = NULL)
             //alert('hello');
 			//splashScreen(0);
 			//coverScreen(0);
-            if(top.topframe) top.topframe.changeLogo(0);
+            if(top.topframe && typeof top.topframe.changeLogo == 'function') top.topframe.changeLogo(0);
             changeContent('help', 'helparea');
         }
         </script>
@@ -8104,7 +8104,7 @@ function splashScreen(flag)
 	function print_splash()
 	{
 		?>
-		<script>if(top.topframe) top.topframe.changeLogo(1);</script>
+		<script>if(top.topframe && typeof top.topframe.changeLogo == 'function') top.topframe.changeLogo(1);</script>
 		<?php
 	}
 
