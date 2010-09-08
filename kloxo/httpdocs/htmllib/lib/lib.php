@@ -102,6 +102,14 @@ function download_thirdparty()
     $string = file_get_contents("http://download.lxcenter.org/download/thirdparty/$prgm-version.list");
     if ($string != "") {
         core_installWithVersion("/usr/local/lxlabs/$prgm/", "$prgm-thirdparty", $string);
+    $prgm = $sgbl->__var_program_name;
+    lxfile_mkdir("/var/cache/$prgm");
+    if (!lxfile_real("/var/cache/$prgm/$file.$ver.zip")) {
+        while (lxshell_return("unzip", "-t", "/var/cache/$prgm/$file.$ver.zip")) {
+            system("cd /var/cache/$prgm/ ; rm -f $file*.zip; wget download.lxcenter.org/download/thirdparty/$file.$ver.zip");
+        }
+        system("cd $path ; unzip -oq /var/cache/$prgm/$file.$ver.zip");
+    }
     }
 }
 
