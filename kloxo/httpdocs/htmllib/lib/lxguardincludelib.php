@@ -95,13 +95,13 @@ function sshLogString($string, &$list)
 	$time = getTimeFromSysLogString($string);
 
 
-	preg_match("/.*password for ([^ ]*) from ([^ ]*).*/", $string, $match);
+	preg_match("/.*Failed password for( invalid user)? (.*) from ([^ ]*).*/", $string, $match);
 	if (!$match) { return; }
-	$ip = $match[2];
+	$ip = $match[3];
 	if (csb($ip, "::ffff:")) {
 		$ip = strfrom($ip, "::ffff:");
 	}
-	$user = $match[1];
+	$user = $match[2];
 	if (csb($ip, "127")) { return; }
 
 	$list[$ip][$time] = array('service' => 'ssh', 'user' => $user, 'access' => $access);
