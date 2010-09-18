@@ -2237,8 +2237,10 @@ class HtmlLib
 
         $this->fix_stuff_or_class($stuff, $variable, $class, $value);
 
-        if(!is_object($stuff))
-            $value = getFirstFromList(($assoc)? array_keys($list):$list);
+		if (!is_object($stuff)) {
+			$flist = $assoc ? array_keys($list) : $list;
+			$value = getFirstFromList($flist);
+		}
 
         if($this->is_special_variable($list))
         {
