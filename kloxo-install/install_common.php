@@ -216,3 +216,30 @@ function find_os_version() {
 
 }
 
+/**
+ * Get Yes/No answer from stdin
+ * @param string $question question text
+ * @param char $default default answer (optional)
+ * @return char 'y' for Yes or 'n' for No
+ */
+function get_yes_no($question, $default = 'n') {
+	if ($default != 'y') {
+		$default = 'n';
+		$question .= ' [y/N]: ';
+	} else {
+		$question .= ' [Y/n]: ';
+	}
+	for (;;) {
+		print $question;
+		flush();
+		$input = fgets(STDIN, 255);
+		$input = trim($input);
+		$input = strtolower($input);
+		if ($input == 'y' || $input == 'yes' || ($default == 'y' && $input == '')) {
+			return 'y';
+		}
+		else if ($input == 'n' || $input == 'no' || ($default == 'n' && $input == '')) {
+			return 'n';
+		}
+	}
+}

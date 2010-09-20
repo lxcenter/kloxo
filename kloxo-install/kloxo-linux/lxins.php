@@ -38,23 +38,13 @@ function lxins_main()
 
 	if(file_exists("/usr/local/lxlabs/kloxo")) {
 		// Ask Reinstall
-		print("Kloxo seems already installed do you wish to continue?(No/Yes):\n");
-		flush();
-		$stdin = fopen('php://stdin','r');
-		$argq = fread($stdin, 5);
-		$arg=trim($argq);
-		if(!($arg=='y' ||$arg=='yes'||$arg=='Yes'||$arg=='Y'||$arg=='YES')) {
+		if (get_yes_no("Kloxo seems already installed do you wish to continue?") == 'n') {
 			print("Installation Aborted.\n");
 			exit;
 		}
 	} else {
 		// Ask License
-		print("Kloxo is using AGPL-V3.0 License, do you agree with the terms? (No/Yes):\n");
-		flush();
-		$stdin = fopen('php://stdin','r');
-		$argq = fread($stdin, 5);
-		$arg=trim($argq);
-		if(!($arg=='y' ||$arg=='yes'||$arg=='Yes'||$arg=='Y'||$arg=='YES')) {
+		if (get_yes_no("Kloxo is using AGPL-V3.0 License, do you agree with the terms?") == 'n') {
 			print("You did not agree to the AGPL-V3.0 license terms.\n");
 			print("Installation aborted.\n\n");
 			exit;
@@ -63,22 +53,16 @@ function lxins_main()
 		}
 	}
 	// Ask for InstallApp
-	print("InstallApp: PHP Applications like PHPBB, WordPress, Joomla etc");
-	print("When you choose Yes, be aware of downloading about 350Mb of data!");
-	print("Do you want to install the InstallAPP sotfware? (No/Yes):\n");
-	flush();
-	$stdin = fopen('php://stdin','r');
-	$argq = fread($stdin, 5);
-	$arg=trim($argq);
-	$installappinst = false;
-	if(!($arg=='y' ||$arg=='yes'||$arg=='Yes'||$arg=='Y'||$arg=='YES')) {
+	print("InstallApp: PHP Applications like PHPBB, WordPress, Joomla etc\n");
+	print("When you choose Yes, be aware of downloading about 350Mb of data!\n");
+	if(get_yes_no("Do you want to install the InstallAPP sotfware?") == 'n') {
 		print("Installing InstallApp = NO\n");
 		print("You can install it later with /script/installapp-update\n\n");
+		$installappinst = false;
 	} else {
 		print("Installing InstallApp = YES\n\n");
 		$installappinst = true;
 	}
-
 
 	print("Adding System users and groups (nouser, nogroup and lxlabs, lxlabs)\n");
 	system("groupadd nogroup");
@@ -181,7 +165,6 @@ function lxins_main()
 		print("You should open the port 7779 on this server, since this is used for the communication between master and slave\n");
 		print("To access this slave, to go admin->servers->add server, give the ip/machine name of this server. The password is 'admin'. The slave will appear in the list of slaves, and you can access it just like you access localhost\n\n");
 	}
-
 }
 
 lxins_main();
