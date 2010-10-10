@@ -653,6 +653,22 @@ function getFullDocRoot()
 	return $path;
 }
 
+function getParentFullDocRoot()
+{
+	if (!$this->docroot) {
+		$parent = $this->nname;
+	} else {
+		$parent = $this->docroot;
+		$pos = strpos($parent, '/');
+		if ($pos > 0) {
+			$parent = substr($parent, 0, $pos);
+		}
+	}
+	$path = "__path_customer_root/$this->customer_name/$parent";
+	$path = expand_real_root($path);
+	return $path;
+}
+
 function getCustomerRoot()
 {
 	$path = "__path_customer_root/$this->customer_name";
@@ -794,7 +810,6 @@ function createDir()
 	lxfile_mkdir("$user_home/");
 
 
-
 	lxfile_generic_chmod($user_home, "0755");
 
 
@@ -805,7 +820,12 @@ function createDir()
 	lxfile_mkdir("__path_apache_path/kloxo");
 	lxfile_touch("__path_apache_path/kloxo/virtualhost.conf");
 
-	lxfile_generic_chown_rec($user_home, "{$this->username}:{$this->username}");
+	$parent_doc_root = $this->getParentFullDocRoot();
+	if ($user_home != $parent_doc_root) {
+		lxfile_generic_chown_rec($parent_doc_root, "{$this->username}:{$this->username}");
+	} else {
+		lxfile_generic_chown_rec($user_home, "{$this->username}:{$this->username}");
+	}
 	if ($new_user_dir) {
 		lxfile_generic_chmod_rec($user_home, "755");
 	}
@@ -1370,18 +1390,17 @@ function getAndUnzipSkeleton($ip, $filepass, $dir)
 	lxshell_unzip($this->username, $dir, "$dir/$file");
 	lunlink("$dir/$file");
 
-	$this->filterthrough("$dir/index.html", "$dir/index.html.tmp");
-	lxuser_mv($this->username, "$dir/index.html.tmp", "$dir/index.html");
+	$this->replaceVariables("$dir/index.html");
 }
 
 // Please note that this function is executed in the backend and thus the parent is not available.
-function filterthrough($inp, $outp)
+function replaceVariables($filename)
 {
-	$cont = lfile_get_contents($inp);
+	$cont = lfile_get_contents($filename);
 	$cont = str_replace("<%domainname%>", $this->nname, $cont);
 	$cont = str_replace("<%contactemail%>", $this->__var_parent_contactemail, $cont);
 	$cont = str_replace("<%clientname%>", $this->__var_clientname, $cont);
-	lxuser_put_contents($this->username, $outp, $cont);
+	lxuser_put_contents($this->username, $filename, $cont);
 }
 
 
