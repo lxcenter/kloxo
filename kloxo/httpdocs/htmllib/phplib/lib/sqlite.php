@@ -473,20 +473,23 @@ function getToArray($object)
 {
 	$col = $this->getColumnTypes();
 
-
-	//dprint_r($array);
 	foreach($col as $key => $val) {
 		if (csb($key, "coma_")) {
 			$cvar = substr($key, 5);
 			$value = $object->$cvar;
-			if (cse($key, "_list")) {
-				$namelist = $value;
-			} else {
-				$namelist = get_namelist_from_objectlist($value);
+			if ($value) {
+				if (cse($key, "_list")) {
+					$namelist = $value;
+				} else {
+					$namelist = get_namelist_from_objectlist($value);
+				}
+				$ret[$key] = implode(",", $namelist);
+				dprint("in COma $key {$ret[$key]}<br> ");
+				$ret[$key] = ",$ret[$key],";
 			}
-			$ret[$key] = implode(",", $namelist);
-			dprint("in COma $key {$ret[$key]}<br> ");
-			$ret[$key] = ",$ret[$key],";
+			else {
+				$ret[$key] = '';
+			}
 		} else if (csb($key, "ser_")) {
 			$cvar = substr($key, 4);
 			$value = $object->$cvar;
