@@ -30,7 +30,10 @@ function syncUseradd()
 		$password = crypt('something');
 	}
 
-	$res = lxuser_return($this->main->systemuser, "__path_mail_root/bin/vadduser", $this->main->nname, '-e', $password);
+	$quser = explode("@", $this->main->nname);
+	$domain = $quser[1];
+
+	$res = lxuser_return(mmail__qmail::getUserGroup($domain), "__path_mail_root/bin/vadduser", $this->main->nname, '-e', $password);
 
 	if ($res) {
 		if (!csb($this->main->nname, "postmaster")) {
