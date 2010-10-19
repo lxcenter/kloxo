@@ -6343,7 +6343,7 @@ function print_modify($form, $variable, $rowuniqueid, $rowclass, $rowcount)
 
     print("$variable_description $myneedstring <br>  ");
     print("$variable->pretext\n");
-    print("<input $blackstyle class=textbox type=\"$texttype\"  width=60%  name=$variable->name value=\"$m_value\"  size=\"$tbsize\"> $variable->posttext");
+    print("<input $blackstyle class=\"$variable->name textbox\" type=\"$texttype\"  width=60%  name=$variable->name value=\"$m_value\"  size=\"$tbsize\"> $variable->posttext");
 
 
     if($variable->type === 'fileselect') {

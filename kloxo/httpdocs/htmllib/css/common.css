@@ -558,3 +558,7 @@ div#quotameter div{border-width:0; border-color:#ffffff;}
 #quotausagebar span.first{position:absolute;height:100%;}
 #quotausagebar span.last{width:100%;text-align:center;font:normal 78% verdana;}
 html>body #quotausagebar span.last{display:block;width:auto;}
+
+.frm_cron_c_command {
+	width: 450px;
+}
