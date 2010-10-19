@@ -1387,6 +1387,7 @@ function getAndUnzipSkeleton($ip, $filepass, $dir)
 	} catch (exception $e) {
 		return;
 	}
+	lxfile_generic_chown("$dir/$file", $this->username);
 	lxshell_unzip($this->username, $dir, "$dir/$file");
 	lunlink("$dir/$file");
 
