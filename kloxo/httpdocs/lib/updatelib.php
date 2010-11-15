@@ -508,11 +508,20 @@ function restart_xinetd_for_pureftp()
 
 function install_bogofilter()
 {
-	if (lxfile_exists("/var/bogofilter/kloxo.wordlist.db")) { return; }
-	lxfile_mkdir("/var/bogofilter");
-	system("cd /var/bogofilter/ ; rm wordlist.db ;  wget http://download.lxcenter.org/download/wordlist.db");
-	lxfile_unix_chown_rec("/var/bogofilter", "lxpopuser:lxpopgroup");
-	system("cd /var/bogofilter/ ; cp wordlist.db kloxo.wordlist.db ");
+	$dir = "/var/bogofilter";
+	$wordlist = "$dir/wordlist.db";
+	$kloxo_wordlist = "$dir/kloxo.wordlist.db";
+
+	if (lxfile_exists($kloxo_wordlist)) {
+		return;
+	}
+	lxfile_mkdir($dir);
+
+	lxfile_rm($wordlist);
+	$content = file_get_contents("http://download.lxcenter.org/download/wordlist.db");
+	file_put_contents($wordlist, $content);
+	lxfile_unix_chown_rec($dir, "lxpopuser:lxpopgroup");
+	lxfile_cp($wordlist, $kloxo_wordlist);
 }
 
 function removeOtherDriver()
@@ -589,8 +598,8 @@ function installRoundCube()
 
 function fix_suexec()
 {
-	system("unlink /usr/bin/lxsuexec");
-	system("unlink /usr/bin/lxexec");
+	lxfile_rm("/usr/bin/lxsuexec");
+	lxfile_rm("/usr/bin/lxexec");
 	lxfile_cp("../cexe/lxsuexec", "/usr/bin");
 	lxfile_cp("../cexe/lxexec", "/usr/bin");
 	lxshell_return("chmod", "755", "/usr/bin/lxsuexec");
