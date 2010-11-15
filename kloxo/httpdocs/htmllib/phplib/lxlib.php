@@ -427,6 +427,8 @@ function new_process_cp_rec($user, $src, $dst)
 
 function new_process_cmd($user, $dir, $cmd)
 {
+	global $sgbl;
+
 	if (csa($user, ':')) {
 		list($user, $group) = explode(':', $user);
 	} else {
@@ -437,32 +439,26 @@ function new_process_cmd($user, $dir, $cmd)
 		$user = '__system__';
 	}
 
-	$tmpfile = ltempnam('/tmp', 'cmd_exec');
-	lxfile_unix_chown($tmpfile, "$user:$group");
-
-	$v = pcntl_fork();
-	if ($v === 0) {
+	if ($dir) {
+		$olddir = getcwd();
+		chdir($dir);
+	}
+	if ($user !== '__system__') {
 		$uid = is_numeric($user) ? (int) $user : os_get_uid_from_user($user);
 		$gid = is_numeric($group) ? (int) $group : os_get_gid_from_user($user);
-		dprint("Execing as: $uid: $gid\n");
-		if ($user !== '__system__') {
-			posix_setgid($gid);
-			posix_setuid($uid);
-		}
-		if ($dir) {
-			chdir($dir);
-		}
-		$list = posix_getgroups();
-		dprintr($list);
-		system("$cmd > $tmpfile 2>&1");
-		exit;
+		exec("{$sgbl->__path_php_path} {$sgbl->__path_program_root}/bin/phpexec.php $uid $gid $cmd 2>&1", $output, $retval);
 	} else {
-		pcntl_waitpid($v, $status);
-		$cont = lfile_get_contents($tmpfile);
-		lxfile_rm($tmpfile);
-		log_log('user_cmd', "($dir) $user $cmd $cont");
+		exec("$cmd 2>&1", $output, $retval);
 	}
-	return $status;
+
+	if ($dir) {
+		chdir($olddir);
+	}
+
+	$output = implode("\n", $output);
+	log_log('user_cmd', "($dir) $user $cmd $output");
+
+	return $retval;
 }
 
 function lfile_put_contents($file, $data, $flag = null)
