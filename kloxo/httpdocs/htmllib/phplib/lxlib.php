@@ -2106,8 +2106,11 @@ function initProgramlib($ctype = null)
 	//print_time('login_get', "Login Get");
 	//dprintr($login);
 
-	$gbl->client = $login->nname;
-	$gbl->client_ttype = $login->cttype;
+   //avoid some php warnings
+   if (isset($login)) {
+      $gbl->client = $login->nname;
+      $gbl->client_ttype = $login->cttype;
+   }
 
 	//dprintr($login->hpfilter);
 
