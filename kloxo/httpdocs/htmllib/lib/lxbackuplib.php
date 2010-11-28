@@ -561,6 +561,9 @@ static function clear_extra_backups($class, $name, $object)
 
 	if (!$fn) { return; }
 
+	# Issue 366
+	ftp_pasv($fn, true); 
+
 	$list = ftp_nlist($fn, $object->rm_directory);
 
 	print("Total list of files in ftp server\n");
