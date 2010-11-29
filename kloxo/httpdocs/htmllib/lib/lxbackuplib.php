@@ -718,6 +718,10 @@ function download_from_server($file, $localfile)
 		$p = error_get_last();
 		throw new lxException('could_not_connect_to_ftp_server', '', $p);
 	}
+
+   // using a PASV connection is more likely to succeed
+	ftp_pasv($fn, true);
+
 	$fp = lfopen($localfile, "w");
 	if (!ftp_fget($fn, $fp, $file, FTP_BINARY)) {
 		throw new lxException('file_download_failed', '', $file);
