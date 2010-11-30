@@ -31,7 +31,7 @@ function __construct($readserver, $table, $force = false)
 		$pass = getAdminDbPass();
 
 		if ($sgbl->__var_database_type === 'mysql') {
-			$gbl->$fdbvar = mysql_pconnect($readserver, $user, $pass);
+			$gbl->$fdbvar = mysql_connect($readserver, $user, $pass);
 			mysql_select_db($db);
 			self::$__database = 'mysql';
 		} else if ($sgbl->__var_database_type === 'mssql') {
@@ -84,7 +84,7 @@ function reconnect()
 	log_log("database_reconnect", "Reconnecting again");
 
 	if ($sgbl->__var_database_type === 'mysql') {
-		$gbl->$fdbvar = mysql_pconnect($readserver, $user, $pass);
+		$gbl->$fdbvar = mysql_connect($readserver, $user, $pass);
 		mysql_select_db($db);
 		self::$__database = 'mysql';
 	} else if ($sgbl->__var_database_type === 'mssql') {
@@ -165,6 +165,20 @@ function database_fetch_array($query)
 	}
 
 
+}
+
+static function close()
+{
+	global $gbl, $sgbl, $login, $ghtml; 
+	$fdbvar = "__fdb_" . $this->__readserver;
+	if (self::$__database == 'mysql') {
+		//mysql_close($gbl->$fdbvar);
+	} else 	if (self::$__database == 'mssql') {
+		//mssql_close($gbl->$fdbvar);
+	} else {
+	}
+
+	$gbl->$fdbvar = NULL;
 }
 
 function rl_query($string)
