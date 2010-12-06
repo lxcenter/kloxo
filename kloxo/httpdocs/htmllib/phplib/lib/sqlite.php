@@ -4,6 +4,7 @@
 class Sqlite {
 
 private $__sqtable;
+private $__force;
 static $__database  = NULL;
 
 private $__column_type;
@@ -11,92 +12,72 @@ private $__column_type;
 
 function __construct($readserver, $table, $force = false)
 {
-	global $gbl, $sgbl, $ghtml;
+	global $gbl;
 
-	$name = $sgbl->__var_program_name;
+	//$name = $sgbl->__var_program_name;
 
 	$this->__sqtable = $table;
-	$this->__readserver = 'localhost';
-	$readserver = $this->__readserver;
+	$this->__force = $force;
+
+	if (! empty ($readserver)) {
+		$this->__readserver = 'localhost';
+	}
+	else {
+		$this->__readserver = $readserver;
+	}
+
+	$this->connect();
+}
+
+// Moved connecting to a new function
+function connect()
+{
+	global $gbl, $sgbl;
 
 	$fdbvar = "__fdb_{$this->__readserver}";
-
-	if (!isset($gbl->$fdbvar) || $force) {
+	
+	if (! isset($gbl->$fdbvar) || $this->__force) {
 		if (is_running_secondary()) {
 			throw new lxexception("this_is_a_running_secondary_master", '', "");
 		}
+	}
 
-		$user = $sgbl->__var_admin_user;
-		$db = $sgbl->__var_dbf;
-		$pass = getAdminDbPass();
 
-		if ($sgbl->__var_database_type === 'mysql') {
-			$gbl->$fdbvar = mysql_connect($readserver, $user, $pass);
-			mysql_select_db($db);
-			self::$__database = 'mysql';
-		} else if ($sgbl->__var_database_type === 'mssql') {
-			//print("$user, $pass <br> \n");
-			//$gbl->$fdbvar = mssql_connect('\\.\pipe\MSSQL$LXLABS\sql\query');
-			$gbl->$fdbvar = mssql_pconnect("$readserver,$sgbl->__var_mssqlport");
-			mssql_select_db($db);
-			self::$__database = 'mssql';
-		} else {
+	$user = $sgbl->__var_admin_user;
+	$db = $sgbl->__var_dbf;
+	$pass = getAdminDbPass();
+
+	if ($sgbl->__var_database_type === 'mysql') {
+		$gbl->$fdbvar = mysql_connect($this->__readserver, $user, $pass) or dprint("Could not connect to the MySql server.\n");
+		mysql_select_db($db) or dprint("Could not select $db MySQL database.\n");
+		self::$__database = 'mysql';
+	} else if ($sgbl->__var_database_type === 'mssql') {
+		//print("$user, $pass <br> \n");
+		//$gbl->$fdbvar = mssql_connect('\\.\pipe\MSSQL$LXLABS\sql\query');
+		$gbl->$fdbvar = mssql_pconnect("$this->__readserver,$sgbl->__var_mssqlport") or dprint("Could not connect to the MSSQL server.\n");
+		mssql_select_db($db) or dprint("Could not select $db MSSQL database.\n");
+		self::$__database = 'mssql';
+	}
+	else {
+		try {
 			$gbl->$fdbvar = new PDO("sqlite:$db");
 			self::$__database = 'sqlite';
 		}
-
-	} 
-
-
-
-	if (!$gbl->$fdbvar) {
-		print("Could not connect to Mysql server... <br> ");
-		//rl_exec_get("localhost", "localhost", "restart_mysql", null);
-		//sleep(8);
-		//print("<script> window.location.reload(false); </script>");
-		exit;
-
+		catch (PDOException $e) {
+      	dprint("PDO Error: " . $e->getMessage() ."\n");
+		}
 	}
 
-
-
-	if (!$gbl->$fdbvar) {
-		die("could not Open Database Connection.... Exiting... <br> \n\n");
+	if (! $gbl->$fdbvar) {
+		die("Could not open database connection.");
 	}
-
 }
 
 
 function reconnect()
 {
-
-	global $gbl, $sgbl, $login, $ghtml; 
-
-	$this->__readserver = 'localhost';
-	$user = $sgbl->__var_admin_user;
-	$db = $sgbl->__var_dbf;
-	$pass = getAdminDbPass();
-
-	$readserver = $this->__readserver;
-
-	$fdbvar = "__fdb_" . $this->__readserver;
-
-	log_log("database_reconnect", "Reconnecting again");
-
-	if ($sgbl->__var_database_type === 'mysql') {
-		$gbl->$fdbvar = mysql_connect($readserver, $user, $pass);
-		mysql_select_db($db);
-		self::$__database = 'mysql';
-	} else if ($sgbl->__var_database_type === 'mssql') {
-		//print("$user, $pass <br> \n");
-		//$gbl->$fdbvar = mssql_connect('\\.\pipe\MSSQL$LXLABS\sql\query');
-		$gbl->$fdbvar = mssql_pconnect("$readserver,$sgbl->__var_mssqlport");
-		mssql_select_db($db);
-		self::$__database = 'mssql';
-	} else {
-		$gbl->$fdbvar = new PDO("sqlite:$db");
-		self::$__database = 'sqlite';
-	}
+	log_log("database_reconnect", "Reconnecting ...");
+	$this->connect();
 }
 
 
@@ -104,9 +85,11 @@ final function isLocalhost($var = "__readserver")
 {
 
 	global $gbl, $sgbl, $login, $ghtml; 
-	if (isset($this->$var) && $this->$var && $this->$var != "localhost") {
-		return false;
-	}
+	if (isset($this->$var)) {
+   	if ($this->$var != "localhost") {
+			return false;
+		}
+   }
 	return true;
 }
 
@@ -126,32 +109,38 @@ function setPassword($newp)
 
 function database_query($res, $string)
 {
+   $error_message = 'unknown';
+   
 	//log_log("dbquery", $string);
 	if (self::$__database == 'mysql') {
 		//print($string . "\n");
-		$res = mysql_query($string, $res);
-		if (!$res) {
-			dprint("Mysql connection broken. Reconnecting..\n");
-			debugBacktrace();
-			$this->reconnect();
-			$res = mysql_query($string, $res);
+
+      // the old behavior was to reconnect. Not needed anymore. 
+		$result = mysql_query($string, $res);
+		if (! $result) {
+			$error_message = mysql_error();
 		}
-		dprint(mysql_error());
-		return $res;
+
+		return $result;
 	} else if (self::$__database == "mssql") {
-		return mssql_query($string, $res);
+      $result = mssql_query($string, $res);
 	} else {
 		//return $res->query($string);
-		$st = $res->prepare($string);
-		if ($st) {
-			$v = $st->execute();
+		$result = $res->prepare($string);
+		if ($result) {
+			$v = $result->execute();
 		} else {
-			dprint($string);
-			dprintr($res->errorInfo());
+			$pdo_error_info = $res->errorInfo();
+			$error_message = $pdo_error_info[2];
 		}
-		return $st;
 	}
 
+   if (! $result) {
+		dprint("Query error: $error_message\n");
+		log_database("Query failed: $string");
+	}
+
+	return $result;
 }
 
 function database_fetch_array($query)
@@ -172,9 +161,9 @@ static function close()
 	global $gbl, $sgbl, $login, $ghtml; 
 	$fdbvar = "__fdb_" . $this->__readserver;
 	if (self::$__database == 'mysql') {
-		//mysql_close($gbl->$fdbvar);
+		mysql_close($gbl->$fdbvar);
 	} else 	if (self::$__database == 'mssql') {
-		//mssql_close($gbl->$fdbvar);
+		mssql_close($gbl->$fdbvar);
 	} else {
 	}
 
@@ -324,34 +313,27 @@ function getTable($list = null)
 function getColumnTypes()
 {
 
-	//return getDbvariable("fieldvar", $this->__sqtable);
 	global $gbl, $sgbl, $login, $ghtml; 
 	$fdbvar = "__fdb_" . $this->__readserver;
 
 
 	if (!$this->__column_type) {
 		if ($sgbl->__var_database_type === 'mysql') {
-			$result = mysql_query("SHOW COLUMNS FROM $this->__sqtable", $gbl->$fdbvar);
-			if (!$result) {
-				dprint("Mysql connection broken. Reconnecting..\n");
-				$this->reconnect();
-				$result = mysql_query("SHOW COLUMNS FROM $this->__sqtable", $gbl->$fdbvar);
-			}
+         $query = "SHOW COLUMNS FROM $this->__sqtable";
 		} else if ($sgbl->__var_database_type === 'mssql') {
-			$result = mssql_query("sp_columns $this->__sqtable", $gbl->$fdbvar);
+			$query = "sp_columns $this->__sqtable";
 		} else {
-			$f = $gbl->$fdbvar;
-			$result = $f->prepare("select * from $this->__sqtable where nname = '__dummy__dummy__' ");
-			if ($result) {
-				$result->execute();
-			}
+			$query = "select * from $this->__sqtable where nname = '__dummy__dummy__' ";
 		}
 
-
-		if (!$result) {
+		$result = $this->database_query($gbl->$fdbvar, $query);
+		
+		if (! $result) {
 			return null;
 		}
 		
+      $res = NULL;
+      
 		if ($sgbl->__var_database_type === 'mysql') {
 			while(($row = mysql_fetch_assoc($result))) {
 				$res[$row['Field']] = $row['Field'];
@@ -372,9 +354,6 @@ function getColumnTypes()
 
 
 		$this->__column_type = $res;
-	
-		//Fucking Buggy.
-		 //$this->__column_type = mssql_fetch_column_types($this->__sqtable, self::$__fdb);
 	}
 
 	return $this->__column_type;
@@ -492,7 +471,13 @@ function getToArray($object)
 			}
 		} else if (csb($key, "ser_")) {
 			$cvar = substr($key, 4);
-			$value = $object->$cvar;
+			if (isset($object->$cvar)) {
+				$value = $object->$cvar;
+			}
+			else {
+				$value = NULL;
+			}
+
 			if ($value && isset($value->driverApp)) {
 				unset($value->driverApp);
 			}
@@ -503,14 +488,25 @@ function getToArray($object)
 				}
 			}
 
-			$ret[$key] = base64_encode(serialize($object->$cvar));
+			if (isset($object->$cvar)) {
+				$ret[$key] = base64_encode(serialize($object->$cvar));
+			}
+			else {
+            $ret[$key] = NULL;
+			}
+
 			//$ret[$key] = serialize($object->$cvar);
 		} else if (csb($key, "priv_q_") || csb($key, "used_q_")) {
 			$qob = strtil($key, "_q_");
 			$qkey = strfrom($key, "_q_");
-			if ($object->get__table() === 'uuser') {
+			//if ($object->get__table() === 'uuser') {
+			//}
+			if (isset ($object->$qob->$qkey)) {
+            $ret[$key] = $object->$qob->$qkey;
 			}
-			$ret[$key] = $object->$qob->$qkey;
+			else
+				$ret[$key] = NULL;
+
 		} else {
 			if (!isset($object->$key)) {
 				$object->$key = null;

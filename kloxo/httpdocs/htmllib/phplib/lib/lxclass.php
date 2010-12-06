@@ -719,7 +719,7 @@ function syncEntireObject()
 		$obj = $this->$objname;
 		//dprint("my parent: {$this->__parent_o->nname}\n");
 		// Big hack. When restoring parent_o is getting lost...
-		if (!$obj->__parent_o) {
+		if (!isset($obj->__parent_o) || !$obj->__parent_o) {
 			$obj->__parent_o = $this;
 		}
 		if (is_object($obj) && $obj->metadbaction !== 'writeonly') {
@@ -3262,7 +3262,9 @@ final protected function writeAChildList($class, $flag = NULL)
 		if (!$element)
 			continue;
 		//dprint("Inside: {$element->getClName()} {$element->dbaction} <br> ");
-		if (!$element->__parent_o) { $element->__parent_o = $this; }
+		if (! isset($element->__parent_o) || !$element->__parent_o) {
+			$element->__parent_o = $this;
+		}
 		$element->was();
 		if ($element->dbaction === "delete_done") {
 			unset($this->{$list}[$element->nname]);
