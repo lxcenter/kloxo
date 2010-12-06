@@ -2116,7 +2116,7 @@ function initProgramlib($ctype = null)
 
 	// This means the session object got created fresh.
 	if (!$sessobj || $sessobj->dbaction === 'add') {
-		dprint("no session <br> $session_id ");
+		dprint("no session id");
 		clear_all_cookie();
 		$ghtml->print_redirect_self("/login/");
 	}
