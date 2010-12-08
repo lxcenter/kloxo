@@ -2,7 +2,8 @@
 /* vim: set expandtab sw=4 ts=4 sts=4: */
 /**
  * @todo    too much die here, or?
- * @version $Id: export.php 11626 2008-10-01 20:48:40Z lem9 $
+ * @version $Id$
+ * @package phpMyAdmin
  */
 
 /**
@@ -271,27 +272,14 @@ if ($asfile) {
     $filename  .= '.' . $export_list[$type]['extension'];
     $mime_type  = $export_list[$type]['mime_type'];
 
-    // If dump is going to be compressed, set correct encoding or mime_type and add
+    // If dump is going to be compressed, set correct mime_type and add
     // compression to extension
-    $content_encoding = '';
     if ($compression == 'bzip') {
         $filename  .= '.bz2';
-        // browsers don't like this:
-        //$content_encoding = 'x-bzip2';
         $mime_type = 'application/x-bzip2';
     } elseif ($compression == 'gzip') {
         $filename  .= '.gz';
-        // Needed to avoid recompression by server modules like mod_gzip.
-        // It seems necessary to check about zlib.output_compression
-        // to avoid compressing twice
-        if (!@ini_get('zlib.output_compression')) {
-            // On Firefox 3, sending this content encoding corrupts the .gz
-            // (as tested on Windows and Linux) but detect GECKO 1.9
-            if (! (PMA_USR_BROWSER_AGENT == 'GECKO' && PMA_USR_BROWSER_VER == '1.9')) {
-                $content_encoding = 'x-gzip';
-            }
-            $mime_type = 'application/x-gzip';
-        }
+        $mime_type = 'application/x-gzip';
     } elseif ($compression == 'zip') {
         $filename  .= '.zip';
         $mime_type = 'application/zip';
@@ -344,9 +332,6 @@ if (!$save_on_server) {
         // this was reported to happen under Plesk)
         @ini_set('url_rewriter.tags','');
 
-        if (!empty($content_encoding)) {
-            header('Content-Encoding: ' . $content_encoding);
-        }
         header('Content-Type: ' . $mime_type);
         header('Expires: ' . gmdate('D, d M Y H:i:s') . ' GMT');
         // lem9: Tested behavior of
@@ -362,7 +347,7 @@ if (!$save_on_server) {
         } else {
             header('Pragma: no-cache');
             // test case: exporting a database into a .gz file with Safari
-            // would produce files not having the current time 
+            // would produce files not having the current time
             // (added this header for Safari but should not harm other browsers)
             header('Last-Modified: ' . gmdate('D, d M Y H:i:s') . ' GMT');
         }
@@ -453,10 +438,18 @@ if ($export_type == 'server') {
                         break 3;
                     }
                 }
-                if (isset($GLOBALS[$what . '_data']) && ! $is_view) {
+                // if this is a view or a merge table, don't export data
+                if (isset($GLOBALS[$what . '_data']) && !($is_view || PMA_Table::isMerge($current_db, $table))) {
                     $local_query  = 'SELECT * FROM ' . PMA_backquote($current_db) . '.' . PMA_backquote($table);
                     if (!PMA_exportData($current_db, $table, $crlf, $err_url, $local_query)) {
                         break 3;
+                    }
+                }
+                // now export the triggers (needs to be done after the data because
+                // triggers can modify already imported tables)
+                if (isset($GLOBALS[$what . '_structure'])) {
+                    if (!PMA_exportStructure($current_db, $table, $crlf, $err_url, $do_relation, $do_comments, $do_mime, $do_dates, 'triggers', $export_type)) {
+                        break 2;
                     }
                 }
             }
@@ -494,9 +487,17 @@ if ($export_type == 'server') {
                 break 2;
             }
         }
-        if (isset($GLOBALS[$what . '_data']) && ! $is_view) {
+        // if this is a view or a merge table, don't export data
+        if (isset($GLOBALS[$what . '_data']) && !($is_view || PMA_Table::isMerge($db, $table))) {
             $local_query  = 'SELECT * FROM ' . PMA_backquote($db) . '.' . PMA_backquote($table);
             if (!PMA_exportData($db, $table, $crlf, $err_url, $local_query)) {
+                break 2;
+            }
+        }
+        // now export the triggers (needs to be done after the data because
+        // triggers can modify already imported tables)
+        if (isset($GLOBALS[$what . '_structure'])) {
+            if (!PMA_exportStructure($db, $table, $crlf, $err_url, $do_relation, $do_comments, $do_mime, $do_dates, 'triggers', $export_type)) {
                 break 2;
             }
         }
@@ -518,8 +519,8 @@ if ($export_type == 'server') {
         break;
     }
     // We export just one table
-
-    if ($limit_to > 0 && $limit_from >= 0) {
+    // $allrows comes from the form when "Dump all rows" has been selected
+    if ($allrows == '0' && $limit_to > 0 && $limit_from >= 0) {
         $add_query  = ' LIMIT '
                     . (($limit_from > 0) ? $limit_from . ', ' : '')
                     . $limit_to;
@@ -535,7 +536,8 @@ if ($export_type == 'server') {
     }
     // If this is an export of a single view, we have to export data;
     // for example, a PDF report
-    if (isset($GLOBALS[$what . '_data'])) {
+    // if it is a merge table, no data is exported
+    if (isset($GLOBALS[$what . '_data']) && ! PMA_Table::isMerge($db, $table)) {
         if (!empty($sql_query)) {
             // only preg_replace if needed
             if (!empty($add_query)) {
@@ -549,6 +551,13 @@ if ($export_type == 'server') {
         }
         if (!PMA_exportData($db, $table, $crlf, $err_url, $local_query)) {
             break;
+        }
+    }
+    // now export the triggers (needs to be done after the data because
+    // triggers can modify already imported tables)
+    if (isset($GLOBALS[$what . '_structure'])) {
+        if (!PMA_exportStructure($db, $table, $crlf, $err_url, $do_relation, $do_comments, $do_mime, $do_dates, 'triggers', $export_type)) {
+            break 2;
         }
     }
     if (!PMA_exportDBFooter($db)) {
@@ -604,7 +613,7 @@ if (!empty($asfile)) {
     }
     // 3. as a gzipped file
     elseif ($compression == 'gzip') {
-        if (@function_exists('gzencode')) {
+        if (@function_exists('gzencode') && !@ini_get('zlib.output_compression')) {
             // without the optional parameter level because it bug
             $dump_buffer = gzencode($dump_buffer);
         }

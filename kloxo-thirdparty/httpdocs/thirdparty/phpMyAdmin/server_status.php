@@ -4,11 +4,13 @@
  * displays status variables with descriptions and some hints an optmizing
  *  + reset status variables
  *
- * @version $Id: server_status.php 10871 2007-10-22 12:15:53Z lem9 $
+ * @version $Id$
+ * @package phpMyAdmin
  */
 
 /**
- *
+ * no need for variables importing
+ * @ignore
  */
 if (! defined('PMA_NO_VARIABLES_IMPORT')) {
     define('PMA_NO_VARIABLES_IMPORT', true);
@@ -26,6 +28,11 @@ require './libraries/server_common.inc.php';
  */
 require './libraries/server_links.inc.php';
 
+/**
+ * Replication library
+ */
+require './libraries/replication.inc.php';
+require_once './libraries/replication_gui.lib.php';
 
 /**
  * Displays the sub-page heading
@@ -62,12 +69,10 @@ if (isset($_REQUEST['flush'])) {
  */
 $server_status = PMA_DBI_fetch_result('SHOW GLOBAL STATUS', 0, 1);
 
-
 /**
  * for some calculations we require also some server settings
  */
 $server_variables = PMA_DBI_fetch_result('SHOW GLOBAL VARIABLES', 0, 1);
-
 
 /**
  * starttime calculation
@@ -138,6 +143,10 @@ if (isset($server_status['Threads_created'])
       * 100;
 }
 
+// Format Uptime_since_flush_status : show as days, hours, minutes, seconds
+if (isset($server_status['Uptime_since_flush_status'])) {
+    $server_status['Uptime_since_flush_status'] = PMA_timespanFormat($server_status['Uptime_since_flush_status']);
+}
 
 /**
  * define some alerts
@@ -252,7 +261,6 @@ $sections = array(
     'tc'            => array('title' => $strTransactionCoordinator),
 );
 
-
 /**
  * define some needfull links/commands
  */
@@ -265,12 +273,16 @@ $links['table'][$strShowOpenTables]
     = 'sql.php?sql_query=' . urlencode('SHOW OPEN TABLES') .
       '&amp;goto=server_status.php&amp;' . PMA_generate_common_url();
 
-$links['repl'][$strShowSlaveHosts]
+if ($server_master_status) {
+  $links['repl'][$strShowSlaveHosts]
     = 'sql.php?sql_query=' . urlencode('SHOW SLAVE HOSTS') .
       '&amp;goto=server_status.php&amp;' . PMA_generate_common_url();
-$links['repl'][$strShowSlaveStatus]
-    = 'sql.php?sql_query=' . urlencode('SHOW SLAVE STATUS') .
-      '&amp;goto=server_status.php&amp;' . PMA_generate_common_url();
+  $links['repl'][$strShowMasterStatus] = '#replication_master';
+}
+if ($server_slave_status) {
+  $links['repl'][$strShowSlaveStatus] = '#replication_slave';
+}
+      
 $links['repl']['doc'] = 'replication';
 
 $links['qcache'][$strFlushQueryCache]
@@ -339,6 +351,23 @@ echo sprintf($strServerStatusUptime,
     PMA_localisedDate($start_time)) . "\n";
 ?>
 </p>
+
+<?php
+if ($server_master_status || $server_slave_status)
+{
+    $replicationOut = "";
+    foreach ($replication_types as $type)
+    {
+        if (${"server_{$type}_status"})
+        {
+            if ($replicationOut != "")
+                $replicationOut .= $strAndSmall . ' ';
+            $replicationOut .= '<b>' . $type . '</b> ';
+        }
+    }
+    echo sprintf('<p>' . $strReplicationStatusInfo . '</p>', $replicationOut);
+}
+?>
 
 <div id="sectionlinks">
 <?php
@@ -492,20 +521,31 @@ foreach ($sections as $section_name => $section) {
 
 <div id="serverstatusqueriesdetails">
 <?php
+
+$used_queries = $sections['com']['vars'];
+// reverse sort by value to show most used statements first
+arsort($used_queries);
+// remove all zero values from the end
+while (end($used_queries) == 0) {
+    array_pop($used_queries);
+}
+
 // number of tables to split values into
-$tables         = 2;
-$rows_per_table = (int) ceil(count($sections['com']['vars']) / $tables);
+$tables         = 3;
+$max_rows_per_table = (int) ceil(count($used_queries) / $tables);
 $current_table  = 0;
 $odd_row        = true;
-$countRows      = 0;
+$count_displayed_rows      = 0;
 $perc_factor    = 100 / ($server_status['Questions'] - $server_status['Connections']);
-foreach ($sections['com']['vars'] as $name => $value) {
+
+foreach ($used_queries as $name => $value) {
     $current_table++;
-    if ($countRows === 0 || $countRows === $rows_per_table) {
+    if ($count_displayed_rows === 0 || $count_displayed_rows === $max_rows_per_table) {
         $odd_row = true;
-        if ($countRows === $rows_per_table) {
+        if ($count_displayed_rows === $max_rows_per_table) {
             echo '    </tbody>' . "\n";
             echo '    </table>' . "\n";
+            $count_displayed_rows = 0;
         }
 ?>
     <table id="serverstatusqueriesdetails<?php echo $current_table; ?>" class="data">
@@ -522,7 +562,7 @@ foreach ($sections['com']['vars'] as $name => $value) {
     } else {
         $odd_row = !$odd_row;
     }
-    $countRows++;
+    $count_displayed_rows++;
 
 // For the percentage column, use Questions - Connections, because
 // the number of connections is not an item of the Query types
@@ -534,7 +574,7 @@ foreach ($sections['com']['vars'] as $name => $value) {
             <th class="name"><?php echo htmlspecialchars($name); ?></th>
             <td class="value"><?php echo PMA_formatNumber($value, 4, 0); ?></td>
             <td class="value"><?php echo
-                PMA_formatNumber($value * $hour_factor, 4, 2); ?></td>
+                PMA_formatNumber($value * $hour_factor, 3, 3); ?></td>
             <td class="value"><?php echo
                 PMA_formatNumber($value * $perc_factor, 0, 2); ?>%</td>
         </tr>
@@ -549,12 +589,13 @@ foreach ($sections['com']['vars'] as $name => $value) {
 <?php
 //Unset used variables
 unset(
-    $tables, $rows_per_table, $current_table, $countRows, $perc_factor,
+    $tables, $max_rows_per_table, $current_table, $count_displayed_rows, $perc_factor,
     $hour_factor, $sections['com'],
     $server_status['Aborted_clients'], $server_status['Aborted_connects'],
     $server_status['Max_used_connections'], $server_status['Bytes_received'],
     $server_status['Bytes_sent'], $server_status['Connections'],
-    $server_status['Questions'], $server_status['Uptime']
+    $server_status['Questions'], $server_status['Uptime'],
+    $used_queries
 );
 
 foreach ($sections as $section_name => $section) {
@@ -670,11 +711,30 @@ if (! empty($section['title'])) {
 }
 unset($section_name, $section, $sections, $server_status, $odd_row, $alerts);
 ?>
-</div>
-</div>
+</div> 
 <?php
+/* if the server works as master or slave in replication process, display useful information */
+if ($server_master_status || $server_slave_status)
+{
+?>
+  <hr class="clearfloat" />
 
+  <h3><a name="replication"></a><?php echo $strReplicationStatus; ?></h3>
+<?php 
 
+    foreach ($replication_types as $type)
+    {
+        if (${"server_{$type}_status"}) {
+            PMA_replication_print_status_table($type);
+        }
+    }
+    unset($types);
+}
+?>
+
+</div>
+
+<?php
 /**
  * Sends the footer
  */

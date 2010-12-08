@@ -5,7 +5,8 @@
  *
  * register_globals_save (mark this file save for disabling register globals)
  *
- * @version $Id: tbl_change.php 12341 2009-04-09 15:08:47Z helmo $
+ * @version $Id$
+ * @package phpMyAdmin
  */
 
 /**
@@ -18,21 +19,19 @@ require_once './libraries/common.inc.php';
  */
 require_once './libraries/db_table_exists.lib.php';
 
-
 /**
  * Sets global variables.
  * Here it's better to use a if, instead of the '?' operator
  * to avoid setting a variable to '' when it's not present in $_REQUEST
  */
-/**
- * @todo this one is badly named, it's really a WHERE condition
- *       and exists even for tables not having a primary key or unique key
- */
-if (isset($_REQUEST['primary_key'])) {
-    $primary_key = $_REQUEST['primary_key'];
+if (isset($_REQUEST['where_clause'])) {
+    $where_clause = $_REQUEST['where_clause'];
+}
+if (isset($_REQUEST['clause_is_unique'])) {
+    $clause_is_unique = $_REQUEST['clause_is_unique'];
 }
 if (isset($_SESSION['edit_next'])) {
-    $primary_key = $_SESSION['edit_next'];
+    $where_clause = $_SESSION['edit_next'];
     unset($_SESSION['edit_next']);
     $after_insert = 'edit_next';
 }
@@ -153,39 +152,42 @@ PMA_DBI_select_db($db);
 $table_fields = PMA_DBI_fetch_result('SHOW FIELDS FROM ' . PMA_backquote($table) . ';',
     null, null, null, PMA_DBI_QUERY_STORE);
 $rows               = array();
-if (isset($primary_key)) {
+if (isset($where_clause)) {
     // when in edit mode load all selected rows from table
     $insert_mode = false;
-    if (is_array($primary_key)) {
-        $primary_key_array = $primary_key;
+    if (is_array($where_clause)) {
+        $where_clause_array = $where_clause;
     } else {
-        $primary_key_array = array(0 => $primary_key);
+        $where_clause_array = array(0 => $where_clause);
     }
 
     $result             = array();
     $found_unique_key   = false;
-    foreach ($primary_key_array as $key_id => $primary_key) {
-        $local_query           = 'SELECT * FROM ' . PMA_backquote($db) . '.' . PMA_backquote($table) . ' WHERE ' . str_replace('&#93;', ']', $primary_key) . ';';
+    $where_clauses      = array();
+
+    foreach ($where_clause_array as $key_id => $where_clause) {
+        $local_query           = 'SELECT * FROM ' . PMA_backquote($db) . '.' . PMA_backquote($table) . ' WHERE ' . $where_clause . ';';
         $result[$key_id]       = PMA_DBI_query($local_query, null, PMA_DBI_QUERY_STORE);
         $rows[$key_id]         = PMA_DBI_fetch_assoc($result[$key_id]);
-        $primary_keys[$key_id] = str_replace('\\', '\\\\', $primary_key);
+        $where_clauses[$key_id] = str_replace('\\', '\\\\', $where_clause);
 
         // No row returned
         if (! $rows[$key_id]) {
-            unset($rows[$key_id], $primary_key_array[$key_id]);
+            unset($rows[$key_id], $where_clause_array[$key_id]);
             PMA_showMessage($strEmptyResultSet, $local_query);
             echo "\n";
             require_once './libraries/footer.inc.php';
-        } else { // end if (no record returned)
+        } else { // end if (no row returned)
             $meta = PMA_DBI_get_fields_meta($result[$key_id]);
-            if ($tmp = PMA_getUniqueCondition($result[$key_id], count($meta), $meta, $rows[$key_id], true)) {
+            list($unique_condition, $tmp_clause_is_unique) = PMA_getUniqueCondition($result[$key_id], count($meta), $meta, $rows[$key_id], true);
+            if (! empty($unique_condition)) {
                 $found_unique_key = true;
             }
-            unset($tmp);
+            unset($unique_condition, $tmp_clause_is_unique);
         }
     }
 } else {
-    // no primary key given, just load first row - but what happens if tbale is empty?
+    // no primary key given, just load first row - but what happens if table is empty?
     $insert_mode = true;
     $result = PMA_DBI_query('SELECT * FROM ' . PMA_backquote($db) . '.' . PMA_backquote($table) . ' LIMIT 1;', null, PMA_DBI_QUERY_STORE);
     $rows = array_fill(0, $cfg['InsertRows'], false);
@@ -227,10 +229,13 @@ $_form_params = array(
     'err_url'   => $err_url,
     'sql_query' => $sql_query,
 );
-if (isset($primary_keys)) {
-    foreach ($primary_key_array as $key_id => $primary_key) {
-        $_form_params['primary_key[' . $key_id . ']'] = trim($primary_key);
+if (isset($where_clauses)) {
+    foreach ($where_clause_array as $key_id => $where_clause) {
+        $_form_params['where_clause[' . $key_id . ']'] = trim($where_clause);
     }
+}
+if (isset($clause_is_unique)) {
+    $_form_params['clause_is_unique'] = $clause_is_unique;
 }
 
 ?>
@@ -256,8 +261,8 @@ $biggest_max_file_size = 0;
 // (currently does not work for multi-edits)
 $url_params['db'] = $db;
 $url_params['table'] = $table;
-if (isset($primary_key)) {
-    $url_params['primary_key'] = trim($primary_key);
+if (isset($where_clause)) {
+    $url_params['where_clause'] = trim($where_clause);
 }
 if (! empty($sql_query)) {
     $url_params['sql_query'] = $sql_query;
@@ -265,7 +270,7 @@ if (! empty($sql_query)) {
 
 if (! $cfg['ShowFunctionFields']) {
     $this_url_params = array_merge($url_params,
-        array('ShowFunctionFields' => 1));
+        array('ShowFunctionFields' => 1, 'goto' => 'sql.php'));
     echo $strShow . ' : <a href="tbl_change.php' . PMA_generate_common_url($this_url_params) . '">' . $strFunction . '</a>' . "\n";
 }
 
@@ -292,7 +297,7 @@ foreach ($rows as $row_id => $vrow) {
 <?php
     if ($cfg['ShowFunctionFields']) {
         $this_url_params = array_merge($url_params,
-            array('ShowFunctionFields' => 0));
+            array('ShowFunctionFields' => 0, 'goto' => 'sql.php'));
         echo '          <th><a href="tbl_change.php' . PMA_generate_common_url($this_url_params) . '" title="' . $strHide . '">' . $strFunction . '</a></th>' . "\n";
     }
 ?>
@@ -392,9 +397,11 @@ foreach ($rows as $row_id => $vrow) {
         }
 
         $unnullify_trigger = $chg_evt_handler . "=\"return unNullify('"
-            . PMA_escapeJsString($field['Field_html']) . "', '"
+            . PMA_escapeJsString($field['Field_md5']) . "', '"
             . PMA_escapeJsString($jsvkey) . "')\"";
-        $field_name_appendix =  $vkey . '[' . $field['Field_html'] . ']';
+
+        // Use an MD5 as an array index to avoid having special characters in the name atttibute (see bug #1746964 )
+        $field_name_appendix =  $vkey . '[' . $field['Field_md5'] . ']';
         $field_name_appendix_md5 = $field['Field_md5'] . $vkey . '[]';
 
 
@@ -408,7 +415,10 @@ foreach ($rows as $row_id => $vrow) {
         }
         ?>
         <tr class="<?php echo $odd_row ? 'odd' : 'even'; ?>">
-            <td <?php echo ($cfg['LongtextDoubleTextarea'] && strstr($field['True_Type'], 'longtext') ? 'rowspan="2"' : ''); ?> align="center"><?php echo $field['Field_title']; ?></td>
+            <td <?php echo ($cfg['LongtextDoubleTextarea'] && strstr($field['True_Type'], 'longtext') ? 'rowspan="2"' : ''); ?> align="center">
+                <?php echo $field['Field_title']; ?>
+                <input type="hidden" name="fields_name<?php echo $field_name_appendix; ?>" value="<?php echo $field['Field_html']; ?>"/>
+            </td>
             <td align="center"<?php echo $field['wrap']; ?>>
                 <?php echo $field['pma_type']; ?>
             </td>
@@ -419,10 +429,7 @@ foreach ($rows as $row_id => $vrow) {
         $real_null_value = FALSE;
         $special_chars_encoded = '';
         if (isset($vrow)) {
-            // On a BLOB that can have a NULL value, the is_null() returns
-            // true if it has no content but for me this is different than
-            // having been set explicitely to NULL so I put an exception here
-            if (! $field['is_blob'] && is_null($vrow[$field['Field']])) {
+            if (is_null($vrow[$field['Field']])) {
                 $real_null_value = TRUE;
                 $vrow[$field['Field']]    = '';
                 $special_chars   = '';
@@ -431,11 +438,16 @@ foreach ($rows as $row_id => $vrow) {
                 $special_chars = PMA_printable_bit_value($vrow[$field['Field']], $extracted_fieldspec['spec_in_brackets']);
             } else {
                 // loic1: special binary "characters"
-                if ($field['is_binary'] || $field['is_blob']) {
-                    $vrow[$field['Field']] = PMA_replace_binary_contents($vrow[$field['Field']]); 
+                if ($field['is_binary'] || ($field['is_blob'] && ! $cfg['ProtectBinary'])) {
+                	if ($_SESSION['tmp_user_values']['display_binary_as_hex'] && $cfg['ShowFunctionFields']) {
+                		$vrow[$field['Field']] = bin2hex($vrow[$field['Field']]);
+                		$field['display_binary_as_hex'] = true;
+					} else {
+                    	$vrow[$field['Field']] = PMA_replace_binary_contents($vrow[$field['Field']]);
+					}
                 } // end if
                 $special_chars   = htmlspecialchars($vrow[$field['Field']]);
-		
+
 		//We need to duplicate the first \n or otherwise we will lose the first newline entered in a VARCHAR or TEXT column
 	        $special_chars_encoded = PMA_duplicateFirstNewline($special_chars);
 
@@ -449,6 +461,7 @@ foreach ($rows as $row_id => $vrow) {
                 . $field_name_appendix . '" value="'
                 . htmlspecialchars($vrow[$field['Field']]) . '" />';
         } else {
+            // (we are inserting)
             // loic1: display default values
             if (!isset($field['Default'])) {
                 $field['Default'] = '';
@@ -458,12 +471,16 @@ foreach ($rows as $row_id => $vrow) {
                 $data                     = $field['Default'];
             }
             if ($field['True_Type'] == 'bit') {
-                $special_chars = PMA_printable_bit_value($field['Default'], $extracted_fieldspec['spec_in_brackets']); 
+                $special_chars = PMA_convert_bit_default_value($field['Default']);
             } else {
                 $special_chars = htmlspecialchars($field['Default']);
             }
             $backup_field  = '';
             $special_chars_encoded = PMA_duplicateFirstNewline($special_chars);
+            // this will select the UNHEX function while inserting
+            if (($field['is_binary'] || ($field['is_blob'] && ! $cfg['ProtectBinary'])) && $_SESSION['tmp_user_values']['display_binary_as_hex'] && $cfg['ShowFunctionFields']) {
+                $field['display_binary_as_hex'] = true;
+            }
         }
 
         $idindex  = ($o_rows * $fields_cnt) + $i + 1;
@@ -480,7 +497,7 @@ foreach ($rows as $row_id => $vrow) {
             if (($cfg['ProtectBinary'] && $field['is_blob'] && !$is_upload)
              || ($cfg['ProtectBinary'] == 'all' && $field['is_binary'])) {
                 echo '        <td align="center">' . $strBinary . '</td>' . "\n";
-            } elseif (strstr($field['True_Type'], 'enum') || strstr($field['True_Type'], 'set')) {
+            } elseif (strstr($field['True_Type'], 'enum') || strstr($field['True_Type'], 'set') || 'geometry' == $field['pma_type']) {
                 echo '        <td align="center">--</td>' . "\n";
             } else {
                 ?>
@@ -519,10 +536,19 @@ foreach ($rows as $row_id => $vrow) {
                     $default_function = $cfg['DefaultFunctions']['first_timestamp'];
                 }
 
-                if ($field['Key'] == 'PRI'
-                 && ($field['Type'] == 'char(36)' || $field['Type'] == 'varchar(36)')) {
+                // For primary keys of type char(36) or varchar(36) UUID if the default function
+                // Only applies to insert mode, as it would silently trash data on updates.
+                if ($insert_mode
+                    && $field['Key'] == 'PRI'
+                    && ($field['Type'] == 'char(36)' || $field['Type'] == 'varchar(36)')
+                ) {
                      $default_function = $cfg['DefaultFunctions']['pk_char36'];
                 }
+
+                // this is set only when appropriate and is always true
+				if (isset($field['display_binary_as_hex'])) {
+                	$default_function = 'UNHEX';
+				}
 
                 // garvin: loop on the dropdown array and print all available options for that field.
                 foreach ($dropdown as $each_dropdown){
@@ -597,7 +623,7 @@ foreach ($rows as $row_id => $vrow) {
                     // foreign key in a drop-down
                     $onclick     .= '4, ';
                 } elseif ($foreigners && isset($foreigners[$field['Field']]) && $foreignData['foreign_link'] == true) {
-                    // foreign key with a browsing icon 
+                    // foreign key with a browsing icon
                     $onclick     .= '6, ';
                 } else {
                     $onclick     .= '5, ';
@@ -726,7 +752,7 @@ foreach ($rows as $row_id => $vrow) {
                     echo '<option value="' . $enum_value['html'] . '"';
                     if ($data == $enum_value['plain']
                      || ($data == ''
-                      && (! isset($primary_key) || $field['Null'] != 'YES')
+                      && (! isset($where_clause) || $field['Null'] != 'YES')
                       && isset($field['Default'])
                       && $enum_value['plain'] == $field['Default'])) {
                         echo ' selected="selected"';
@@ -744,14 +770,10 @@ foreach ($rows as $row_id => $vrow) {
                     echo '<input type="radio" name="field_' . $field_name_appendix_md5 . '"';
                     echo ' value="' . $enum_value['html'] . '"';
                     echo ' id="field_' . ($idindex) . '_3_'  . $j . '"';
-                    echo ' onclick="';
-                    echo "if (typeof(document.forms['insertForm'].elements['fields_null"
-                        . $field_name_appendix . "']) != 'undefined') {document.forms['insertForm'].elements['fields_null"
-                        . $field_name_appendix . "'].checked = false}";
-                    echo '"';
+                    echo $unnullify_trigger;
                     if ($data == $enum_value['plain']
                      || ($data == ''
-                      && (! isset($primary_key) || $field['Null'] != 'YES')
+                      && (! isset($where_clause) || $field['Null'] != 'YES')
                       && isset($field['Default'])
                       && $enum_value['plain'] == $field['Default'])) {
                         echo ' checked="checked"';
@@ -852,8 +874,8 @@ foreach ($rows as $row_id => $vrow) {
 
                     if ($bs_reference_exists)
                     {
-                        echo '<input type="hidden" name="remove_blob_ref_' . $field['Field_html'] . $vkey . '" value="' . $data . '" />';
-                        echo '<input type="checkbox" name="remove_blob_repo_' . $field['Field_html'] . $vkey . '" /> ' . $strBLOBRepositoryRemove . "<br />";
+                        echo '<input type="hidden" name="remove_blob_ref_' . $field['Field_md5'] . $vkey . '" value="' . $data . '" />';
+                        echo '<input type="checkbox" name="remove_blob_repo_' . $field['Field_md5'] . $vkey . '" /> ' . $strBLOBRepositoryRemove . "<br />";
                         echo PMA_BS_CreateReferenceLink($data, $db);
                         echo "<br />";
                     }
@@ -936,7 +958,7 @@ foreach ($rows as $row_id => $vrow) {
                                         if (!empty($bs_tables) && strlen($db) > 0)
                                         {
                                             $bs_tables = $bs_tables[$db];
-                                
+
                                             // check if reference to BLOBStreaming tables exists
                                             if (isset($bs_tables))
                                             {
@@ -953,7 +975,7 @@ foreach ($rows as $row_id => $vrow) {
                                                 if ($allBSTablesExist)
                                                 {
                                                     echo '<br />';
-                                                    echo '<input type="checkbox" name="upload_blob_repo_' . $field['Field_html'] . $vkey . '" /> ' . $strBLOBRepositoryUpload;
+                                                    echo '<input type="checkbox" name="upload_blob_repo_' . $field['Field_md5'] . $vkey . '" /> ' . $strBLOBRepositoryUpload;
                                                 }   // end if ($allBSTablesExist)
                                             }   // end if (isset($bs_tables)
                                         }   // end if (!empty($bs_tables) && strlen ($db) > 0)
@@ -965,7 +987,7 @@ foreach ($rows as $row_id => $vrow) {
                 }
 
                 echo '<br />';
-                echo '<input type="file" name="fields_upload_' . $field['Field_html'] . $vkey . '" class="textfield" id="field_' . $idindex . '_3" size="10" />&nbsp;';
+                echo '<input type="file" name="fields_upload_' . $field['Field_md5'] . $vkey . '" class="textfield" id="field_' . $idindex . '_3" size="10" />&nbsp;';
 
                 // find maximum upload size, based on field type
                 /**
@@ -998,13 +1020,17 @@ foreach ($rows as $row_id => $vrow) {
                 } elseif (!empty($files)) {
                     echo "<br />\n";
                     echo '    <i>' . $strOr . '</i>' . ' ' . $strWebServerUploadDirectory . ':<br />' . "\n";
-                    echo '        <select size="1" name="fields_uploadlocal_' . $field['Field_html'] . $vkey . '">' . "\n";
+                    echo '        <select size="1" name="fields_uploadlocal_' . $field['Field_md5'] . $vkey . '">' . "\n";
                     echo '            <option value="" selected="selected"></option>' . "\n";
                     echo $files;
                     echo '        </select>' . "\n";
                 }
             } // end if (web-server upload directory)
         } // end elseif (binary or blob)
+
+        elseif ('geometry' == $field['pma_type']) {
+            // ignore this column to avoid changing it
+        }
         else {
             // field size should be at least 4 and max 40
             $fieldsize = min(max($field['len'], 4), 40);
@@ -1045,11 +1071,13 @@ foreach ($rows as $row_id => $vrow) {
                     <?php
                 }
                 if ($field['pma_type'] == 'date' || $field['pma_type'] == 'datetime' || substr($field['pma_type'], 0, 9) == 'timestamp') {
+                    // the _3 suffix points to the date field
+                    // the _2 suffix points to the corresponding NULL checkbox
                     ?>
                     <script type="text/javascript">
                     //<![CDATA[
                     document.write('<a title="<?php echo $strCalendar;?>"');
-                    document.write(' href="javascript:openCalendar(\'<?php echo PMA_generate_common_url();?>\', \'insertForm\', \'field_<?php echo ($idindex); ?>_3\', \'<?php echo (substr($field['pma_type'], 0, 9) == 'timestamp') ? 'datetime' : substr($field['pma_type'], 0, 9); ?>\')">');
+                    document.write(' href="javascript:openCalendar(\'<?php echo PMA_generate_common_url();?>\', \'insertForm\', \'field_<?php echo ($idindex); ?>_3\', \'<?php echo (substr($field['pma_type'], 0, 9) == 'timestamp') ? 'datetime' : substr($field['pma_type'], 0, 9); ?>\', \'field_<?php echo ($idindex); ?>_2\')">');
                     document.write('<img class="calendar"');
                     document.write(' src="<?php echo $pmaThemeImage; ?>b_calendar.png"');
                     document.write(' alt="<?php echo $strCalendar; ?>"/></a>');
@@ -1077,7 +1105,7 @@ foreach ($rows as $row_id => $vrow) {
         <td valign="middle" nowrap="nowrap">
             <select name="submit_type" tabindex="<?php echo ($tabindex + $tabindex_for_value + 1); ?>">
 <?php
-if (isset($primary_key)) {
+if (isset($where_clause)) {
     ?>
                 <option value="<?php echo $strSave; ?>"><?php echo $strSave; ?></option>
     <?php
@@ -1101,15 +1129,15 @@ if (!isset($after_insert)) {
                 <option value="back" <?php echo ($after_insert == 'back' ? 'selected="selected"' : ''); ?>><?php echo $strAfterInsertBack; ?></option>
                 <option value="new_insert" <?php echo ($after_insert == 'new_insert' ? 'selected="selected"' : ''); ?>><?php echo $strAfterInsertNewInsert; ?></option>
 <?php
-if (isset($primary_key)) {
+if (isset($where_clause)) {
     ?>
                 <option value="same_insert" <?php echo ($after_insert == 'same_insert' ? 'selected="selected"' : ''); ?>><?php echo $strAfterInsertSame; ?></option>
     <?php
     // If we have just numeric primary key, we can also edit next
     // in 2.8.2, we were looking for `field_name` = numeric_value
-    //if (preg_match('@^[\s]*`[^`]*` = [0-9]+@', $primary_key)) {
+    //if (preg_match('@^[\s]*`[^`]*` = [0-9]+@', $where_clause)) {
     // in 2.9.0, we are looking for `table_name`.`field_name` = numeric_value
-    if ($found_unique_key && preg_match('@^[\s]*`[^`]*`[\.]`[^`]*` = [0-9]+@', $primary_key)) {
+    if ($found_unique_key && preg_match('@^[\s]*`[^`]*`[\.]`[^`]*` = [0-9]+@', $where_clause)) {
         ?>
     <option value="edit_next" <?php echo ($after_insert == 'edit_next' ? 'selected="selected"' : ''); ?>><?php echo $strAfterInsertNext; ?></option>
         <?php
@@ -1145,9 +1173,9 @@ if ($insert_mode) {
     <input type="hidden" name="err_url" value="<?php echo htmlspecialchars($err_url); ?>" />
     <input type="hidden" name="sql_query" value="<?php echo htmlspecialchars($sql_query); ?>" />
 <?php
-    if (isset($primary_keys)) {
-        foreach ($primary_key_array as $key_id => $primary_key) {
-            echo '<input type="hidden" name="primary_key[' . $key_id . ']" value="' . htmlspecialchars(trim($primary_key)) . '" />'. "\n";
+    if (isset($where_clauses)) {
+        foreach ($where_clause_array as $key_id => $where_clause) {
+            echo '<input type="hidden" name="where_clause[' . $key_id . ']" value="' . htmlspecialchars(trim($where_clause)) . '" />'. "\n";
         }
     }
     $tmp = '<select name="insert_rows" id="insert_rows" onchange="this.form.submit();" >' . "\n";

@@ -1,7 +1,8 @@
 <?php
 /* vim: set expandtab sw=4 ts=4 sts=4: */
 /**
- * @version $Id: csv.php 12158 2008-12-25 14:52:28Z lem9 $
+ * @package phpMyAdmin-Export-CSV
+ * @version $Id$
  */
 if (! defined('PHPMYADMIN')) {
     exit;
@@ -22,6 +23,7 @@ if (isset($plugin_list)) {
             array('type' => 'text', 'name' => 'escaped', 'text' => 'strFieldsEscapedBy'),
             array('type' => 'text', 'name' => 'terminated', 'text' => 'strLinesTerminatedBy'),
             array('type' => 'text', 'name' => 'null', 'text' => 'strReplaceNULLBy'),
+            array('type' => 'bool', 'name' => 'removeCRLF', 'text' => 'strRemoveCRLF'),
             array('type' => 'bool', 'name' => 'columns', 'text' => 'strPutColNames'),
             array('type' => 'hidden', 'name' => 'data'),
             ),
@@ -68,7 +70,18 @@ function PMA_exportHeader() {
     // Here we just prepare some values for export
     if ($what == 'excel') {
         $csv_terminated      = "\015\012";
-        $csv_separator          = isset($GLOBALS['excel_edition']) && $GLOBALS['excel_edition'] == 'mac_excel2003' ? ';' : ',';
+        switch($GLOBALS['excel_edition']) {
+        case 'win':
+            // as tested on Windows with Excel 2002 and Excel 2007
+            $csv_separator = ';';
+            break;
+        case 'mac_excel2003':
+            $csv_separator = ';';
+            break;
+        case 'mac_excel2008':
+            $csv_separator = ',';
+            break;
+        }
         $csv_enclosed           = '"';
         $csv_escaped            = '"';
         if (isset($GLOBALS['excel_columns'])) {
@@ -179,6 +192,10 @@ function PMA_exportData($db, $table, $crlf, $error_url, $sql_query) {
                 // loic1 : always enclose fields
                 if ($what == 'excel') {
                     $row[$j]       = preg_replace("/\015(\012)?/", "\012", $row[$j]);
+                }
+                // remove CRLF characters within field
+                if (isset($GLOBALS[$what . '_removeCRLF']) && $GLOBALS[$what . '_removeCRLF']) {
+                    $row[$j] = str_replace("\n", "", str_replace("\r", "", $row[$j]));
                 }
                 if ($csv_enclosed == '') {
                     $schema_insert .= $row[$j];

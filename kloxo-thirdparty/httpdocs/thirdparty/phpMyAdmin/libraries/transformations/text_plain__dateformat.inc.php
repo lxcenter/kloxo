@@ -1,8 +1,8 @@
 <?php
 /* vim: set expandtab sw=4 ts=4 sts=4: */
 /**
- *
- * @version $Id: text_plain__dateformat.inc.php 11084 2008-01-27 14:07:50Z lem9 $
+ * @package phpMyAdmin-Transformation
+ * @version $Id$
  */
 
 /**

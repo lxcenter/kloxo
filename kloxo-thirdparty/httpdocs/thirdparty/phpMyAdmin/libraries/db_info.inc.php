@@ -31,7 +31,8 @@
  * @uses    strnatcasecmp()
  * @uses    count()
  * @uses    addslashes()
- * @version $Id: db_info.inc.php 11602 2008-09-21 13:02:41Z lem9 $
+ * @version $Id$
+ * @package phpMyAdmin
  */
 if (! defined('PHPMYADMIN')) {
     exit;
@@ -45,14 +46,14 @@ require_once './libraries/common.inc.php';
 /**
  * limits for table list
  */
-if (! isset($_SESSION['userconf']['table_limit_offset']) || $_SESSION['userconf']['table_limit_offset_db'] != $db) {
-    $_SESSION['userconf']['table_limit_offset'] = 0;
-    $_SESSION['userconf']['table_limit_offset_db'] = $db;
+if (! isset($_SESSION['tmp_user_values']['table_limit_offset']) || $_SESSION['tmp_user_values']['table_limit_offset_db'] != $db) {
+    $_SESSION['tmp_user_values']['table_limit_offset'] = 0;
+    $_SESSION['tmp_user_values']['table_limit_offset_db'] = $db;
 }
 if (isset($_REQUEST['pos'])) {
-    $_SESSION['userconf']['table_limit_offset'] = (int) $_REQUEST['pos'];
+    $_SESSION['tmp_user_values']['table_limit_offset'] = (int) $_REQUEST['pos'];
 }
-$pos = $_SESSION['userconf']['table_limit_offset'];
+$pos = $_SESSION['tmp_user_values']['table_limit_offset'];
 
 /**
  * fills given tooltip arrays
@@ -196,13 +197,37 @@ if (true === $cfg['SkipLockedTables']) {
 }
 
 if (! isset($sot_ready)) {
+
+    // Set some sorting defaults
+    $sort = 'Name';
+    $sort_order = 'ASC';
+
+    if (isset($_REQUEST['sort'])) {
+        $sortable_name_mappings = array(
+            'table'     => 'Name',
+            'records'   => 'Rows',
+            'type'      => 'Engine',
+            'collation' => 'Collation',
+            'size'      => 'Data_length',
+            'overhead'  => 'Data_free'
+        );
+
+        // Make sure the sort type is implemented
+        if (isset($sortable_name_mappings[$_REQUEST['sort']])) {
+            $sort = $sortable_name_mappings[$_REQUEST['sort']];
+            if ($_REQUEST['sort_order'] == 'DESC') {
+                $sort_order = 'DESC';
+            }
+        }
+    }
+
     if (! empty($tbl_group) && ! $cfg['ShowTooltipAliasTB']) {
         // only tables for selected group
-        $tables = PMA_DBI_get_tables_full($db, $tbl_group, true);
+        $tables = PMA_DBI_get_tables_full($db, $tbl_group, true, null, 0, false, $sort, $sort_order);
     } elseif (! empty($tbl_group) && $cfg['ShowTooltipAliasTB']) {
         // only tables for selected group,
         // but grouping is done on comment ...
-        $tables = PMA_DBI_get_tables_full($db, $tbl_group, 'comment');
+        $tables = PMA_DBI_get_tables_full($db, $tbl_group, 'comment', null, 0, false, $sort, $sort_order);
     } else {
         // all tables in db
         // - get the total number of tables
@@ -217,10 +242,10 @@ if (! isset($sot_ready)) {
              *
              * @todo Page selector for table names?
              */
-            $tables = PMA_DBI_get_tables_full($db, false, false, null, 0, false);
+            $tables = PMA_DBI_get_tables_full($db, false, false, null, 0, false, $sort, $sort_order);
         } else {
             // fetch the details for a possible limited subset
-            $tables = PMA_DBI_get_tables_full($db, false, false, null, $pos, true);
+            $tables = PMA_DBI_get_tables_full($db, false, false, null, $pos, true, $sort, $sort_order);
         }
     }
 

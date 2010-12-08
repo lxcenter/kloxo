@@ -7,7 +7,8 @@
  * All directives are explained in Documentation.html and on phpMyAdmin
  * wiki <http://wiki.phpmyadmin.net>.
  *
- * @version $Id: config.sample.inc.php 12304 2009-03-24 12:56:58Z nijel $
+ * @version $Id$
+ * @package phpMyAdmin
  */
 
 /*
@@ -33,6 +34,7 @@ $cfg['Servers'][$i]['connect_type'] = 'tcp';
 $cfg['Servers'][$i]['compress'] = false;
 /* Select mysqli if your server has it */
 $cfg['Servers'][$i]['extension'] = 'mysql';
+$cfg['Servers'][$i]['AllowNoPassword'] = false;
 
 /* rajk - for blobstreaming */
 $cfg['Servers'][$i]['bs_garbage_threshold'] = 50;
@@ -52,6 +54,7 @@ $cfg['Servers'][$i]['bs_temp_log_threshold'] = '32M';
 // $cfg['Servers'][$i]['pdf_pages'] = 'pma_pdf_pages';
 // $cfg['Servers'][$i]['column_info'] = 'pma_column_info';
 // $cfg['Servers'][$i]['history'] = 'pma_history';
+// $cfg['Servers'][$i]['tracking'] = 'pma_tracking';
 // $cfg['Servers'][$i]['designer_coords'] = 'pma_designer_coords';
 /* Contrib / Swekey authentication */
 // $cfg['Servers'][$i]['auth_swekey_config'] = '/etc/swekey-pma.conf';

@@ -2,7 +2,8 @@
 /* vim: set expandtab sw=4 ts=4 sts=4: */
 /**
  *
- * @version $Id: db_structure.php 12239 2009-02-16 10:56:11Z lem9 $
+ * @version $Id$
+ * @package phpMyAdmin
  */
 
 /**
@@ -23,7 +24,14 @@ if (empty($is_info)) {
       || isset($mult_btn)) {
         $action = 'db_structure.php';
         $err_url = 'db_structure.php?'. PMA_generate_common_url($db);
-        require './libraries/mult_submits.inc.php';
+
+        // see bug #2794840; in this case, code path is:
+        // db_structure.php -> libraries/mult_submits.inc.php -> sql.php
+        // -> db_structure.php and if we got an error on the multi submit,
+        // we must display it here and not call again mult_submits.inc.php
+        if (! isset($error) || FALSE === $error) {
+            require './libraries/mult_submits.inc.php';
+        }
         if (empty($message)) {
             $message = PMA_Message::success();
         }
@@ -34,86 +42,17 @@ if (empty($is_info)) {
     // Gets the database structure
     $sub_part = '_structure';
     require './libraries/db_info.inc.php';
+
+    require_once './libraries/replication.inc.php';
 }
-
-// 1. No tables
-if ($num_tables == 0) {
-    echo '<p>' . $strNoTablesFound . '</p>' . "\n";
-
-    if (empty($db_is_information_schema)) {
-        require './libraries/display_create_table.lib.php';
-    } // end if (Create Table dialog)
-
-    /**
-     * Displays the footer
-     */
-    require_once './libraries/footer.inc.php';
-    exit;
-}
-
-// else
-// 2. Shows table informations - staybyte - 11 June 2001
 
 require_once './libraries/bookmark.lib.php';
 
 require_once './libraries/mysql_charsets.lib.php';
 $db_collation = PMA_getDbCollation($db);
 
-// Display function
-/**
- * void PMA_TableHeader([bool $db_is_information_schema = false])
- * display table header (<table><thead>...</thead><tbody>)
- *
- * @uses    PMA_showHint()
- * @uses    $GLOBALS['cfg']['PropertiesNumColumns']
- * @uses    $GLOBALS['is_show_stats']
- * @uses    $GLOBALS['strTable']
- * @uses    $GLOBALS['strAction']
- * @uses    $GLOBALS['strRecords']
- * @uses    $GLOBALS['strApproximateCount']
- * @uses    $GLOBALS['strType']
- * @uses    $GLOBALS['strCollation']
- * @uses    $GLOBALS['strSize']
- * @uses    $GLOBALS['strOverhead']
- * @uses    $GLOBALS['structure_tbl_col_cnt']
- * @param   boolean $db_is_information_schema
- */
-function PMA_TableHeader($db_is_information_schema = false)
-{
-    $cnt = 0; // Let's count the columns...
-
-    if ($db_is_information_schema) {
-        $action_colspan = 3;
-    } else {
-        $action_colspan = 6;
-    }
-
-    echo '<table class="data" style="float: left;">' . "\n"
-        .'<thead>' . "\n"
-        .'<tr><td></td>' . "\n"
-        .'    <th>' . $GLOBALS['strTable'] . '</th>' . "\n"
-        .'    <th colspan="' . $action_colspan . '">' . "\n"
-        .'        ' . $GLOBALS['strAction'] . "\n"
-        .'    </th>'
-        .'    <th>' . $GLOBALS['strRecords']
-        .PMA_showHint(PMA_sanitize($GLOBALS['strApproximateCount'])) . "\n"
-        .'    </th>' . "\n";
-    if (!($GLOBALS['cfg']['PropertiesNumColumns'] > 1)) {
-        echo '    <th>' . $GLOBALS['strType'] . '</th>' . "\n";
-        $cnt++;
-        echo '    <th>' . $GLOBALS['strCollation'] . '</th>' . "\n";
-        $cnt++;
-    }
-    if ($GLOBALS['is_show_stats']) {
-        echo '    <th>' . $GLOBALS['strSize'] . '</th>' . "\n"
-           . '    <th>' . $GLOBALS['strOverhead'] . '</th>' . "\n";
-        $cnt += 2;
-    }
-    echo '</tr>' . "\n";
-    echo '</thead>' . "\n";
-    echo '<tbody>' . "\n";
-    $GLOBALS['structure_tbl_col_cnt'] = $cnt + $action_colspan + 3;
-} // end function PMA_TableHeader()
+// in a separate file to avoid redeclaration of functions in some code paths
+require_once './libraries/db_structure.lib.php';
 
 $titles = array();
 if (true == $cfg['PropertiesIconic']) {
@@ -156,13 +95,47 @@ if (true == $cfg['PropertiesIconic']) {
     $titles['NoEmpty']    = $strEmpty;
 }
 
+// 1. No tables
+if ($num_tables == 0) {
+	echo '<p>' . $strNoTablesFound . '</p>' . "\n";
+
+	// Routines
+	require './libraries/db_routines.inc.php';
+
+	// Events
+	if (PMA_MYSQL_INT_VERSION > 50100) {
+	    require './libraries/db_events.inc.php';
+	}
+
+	if (empty($db_is_information_schema)) {
+		require './libraries/display_create_table.lib.php';
+	} // end if (Create Table dialog)
+
+	/**
+	 * Displays the footer
+	 */
+	require_once './libraries/footer.inc.php';
+	exit;
+}
+
+// else
+// 2. Shows table informations
+
 /**
  * Displays the tables list
  */
-
 $_url_params = array(
     'pos' => $pos,
     'db'  => $db);
+
+// Add the sort options if they exists
+if (isset($_REQUEST['sort'])) {
+    $_url_params['sort'] = $_REQUEST['sort'];
+}
+
+if (isset($_REQUEST['sort_order'])) {
+    $_url_params['sort_order'] = $_REQUEST['sort_order'];
+}
 
 PMA_listNavigator($total_num_tables, $pos, $_url_params, 'db_structure.php', 'frame_content', $GLOBALS['cfg']['MaxTableList']);
 
@@ -171,7 +144,7 @@ PMA_listNavigator($total_num_tables, $pos, $_url_params, 'db_structure.php', 'fr
 <?php
 echo PMA_generate_common_hidden_inputs($db);
 
-PMA_TableHeader($db_is_information_schema);
+PMA_TableHeader($db_is_information_schema, $server_slave_status);
 
 $i = $sum_entries = 0;
 $sum_size       = (double) 0;
@@ -189,7 +162,7 @@ $sum_row_count_pre = '';
 // added by rajk - for blobstreaming
 $PMA_Config = $_SESSION['PMA_Config'];
 
-if (!empty ($PMA_Config))
+if (!empty($PMA_Config))
     $session_bs_tables = $PMA_Config->get('BLOBSTREAMING_TABLES'); // list of blobstreaming tables
 
 $tableReductionCount = 0;   // the amount to reduce the table count by
@@ -220,16 +193,17 @@ foreach ($tables as $keyname => $each_table) {
 
     switch ( $each_table['ENGINE']) {
         // MyISAM, ISAM or Heap table: Row count, data size and index size
-        // are accurate.
+        // are accurate; data size is accurate for ARCHIVE
         case 'MyISAM' :
         case 'ISAM' :
         case 'HEAP' :
         case 'MEMORY' :
+        case 'ARCHIVE' :
             if ($db_is_information_schema) {
                 $each_table['Rows'] = PMA_Table::countRecords($db,
-                    $each_table['Name'], $return = true);
+                    $each_table['Name']);
             }
-             
+                
             if ($is_show_stats) {
                 $tblsize                    =  doubleval($each_table['Data_length']) + doubleval($each_table['Index_length']);
                 $sum_size                   += $tblsize;
@@ -247,11 +221,11 @@ foreach ($tables as $keyname => $each_table) {
             if ($each_table['TABLE_ROWS'] < $GLOBALS['cfg']['MaxExactCount']) {
                 $each_table['COUNTED'] = true;
                 $each_table['TABLE_ROWS'] = PMA_Table::countRecords($db,
-                    $each_table['TABLE_NAME'], $return = true, $force_exact = true,
+                    $each_table['TABLE_NAME'], $force_exact = true,
                     $is_view = false);
             } else {
                 $each_table['COUNTED'] = false;
-            } 
+            }
 
             if ($is_show_stats) {
                 $tblsize                    =  $each_table['Data_length'] + $each_table['Index_length'];
@@ -260,7 +234,11 @@ foreach ($tables as $keyname => $each_table) {
             }
             //$display_rows                   =  ' - ';
             break;
+	    // Mysql 5.0.x (and lower) uses MRG_MyISAM and MySQL 5.1.x (and higher) uses MRG_MYISAM
+        // Both are aliases for MERGE
         case 'MRG_MyISAM' :
+        case 'MRG_MYISAM' :
+        case 'MERGE' :
         case 'BerkeleyDB' :
             // Merge or BerkleyDB table: Only row count is accurate.
             if ($is_show_stats) {
@@ -268,14 +246,18 @@ foreach ($tables as $keyname => $each_table) {
                 $unit          =  '';
             }
             break;
-        // for a view, the ENGINE is null 
+            // for a view, the ENGINE is sometimes reported as null,
+            // or on some servers it's reported as "SYSTEM VIEW"
         case null :
         case 'SYSTEM VIEW' :
-            // countRecords() takes care of $cfg['MaxExactCountViews']
-            $each_table['TABLE_ROWS'] = PMA_Table::countRecords($db,
-                    $each_table['TABLE_NAME'], $return = true, $force_exact = true,
+            // if table is broken, Engine is reported as null, so one more test
+            if ($each_table['TABLE_TYPE'] == 'VIEW') {
+                // countRecords() takes care of $cfg['MaxExactCountViews']
+                $each_table['TABLE_ROWS'] = PMA_Table::countRecords($db,
+                    $each_table['TABLE_NAME'], $force_exact = true,
                     $is_view = true);
-            $table_is_view = true;
+                $table_is_view = true;
+            }
             break;
         default :
             // Unknown table type.
@@ -284,7 +266,10 @@ foreach ($tables as $keyname => $each_table) {
                 $unit          =  '';
             }
     } // end switch
-    $sum_entries += $each_table['TABLE_ROWS'];
+
+    if (! PMA_Table::isMerge($db, $each_table['TABLE_NAME'])) {
+        $sum_entries += $each_table['TABLE_ROWS'];
+    }
 
     if (isset($each_table['Collation'])) {
         $collation = '<dfn title="'
@@ -318,7 +303,7 @@ foreach ($tables as $keyname => $each_table) {
 
     $row_count++;
     if ($table_is_view) {
-        $hidden_fields[] = '<input type="hidden" name="views[]" value="' .  $each_table['TABLE_NAME'] . '" />';
+        $hidden_fields[] = '<input type="hidden" name="views[]" value="' .  htmlspecialchars($each_table['TABLE_NAME']) . '" />';
     }
 
     if ($each_table['TABLE_ROWS'] > 0) {
@@ -349,6 +334,15 @@ foreach ($tables as $keyname => $each_table) {
             str_replace(' ', '&nbsp;', htmlspecialchars($each_table['TABLE_NAME'])));
     }
 
+    $tracking_icon = '';
+    if (PMA_Tracker::isActive()) {
+        if (PMA_Tracker::isTracked($GLOBALS["db"], $truename)) {
+            $tracking_icon = '<a href="tbl_tracking.php?' . $url_query.'&amp;table=' . $truename . '"><img class="icon" width="14" height="14" src="' . $pmaThemeImage . 'eye.png" alt="' . $strTrackingIsActive . '" title="' . $strTrackingIsActive . '" /></a>';
+        } elseif (PMA_Tracker::getVersion($GLOBALS["db"], $truename) > 0) {
+            $tracking_icon = '<a href="tbl_tracking.php?' . $url_query . '&amp;table=' . $truename . '"><img class="icon" width="14" height="14" src="' . $pmaThemeImage . 'eye_grey.png" alt="' . $strTrackingIsNotActive . '" title="' . $strTrackingIsNotActive . '" /></a>';
+        }
+    }
+
     if ($num_columns > 0 && $num_tables > $num_columns
       && (($row_count % $num_columns) == 0)) {
         $row_count = 1;
@@ -358,17 +352,50 @@ foreach ($tables as $keyname => $each_table) {
 </tbody>
 </table>
         <?php
-        PMA_TableHeader();
+        PMA_TableHeader(false, $server_slave_status);
     }
+    
+    $ignored = false;
+    $do = false;
+
+    if ($server_slave_status) {
+        ////////////////////////////////////////////////////////////////
+
+        if ((strlen(array_search($truename, $server_slave_Do_Table)) > 0) 
+            || (strlen(array_search($db, $server_slave_Do_DB)) > 0) 
+            || (count($server_slave_Do_DB) == 1 && count($server_slave_Ignore_DB) == 1)
+        ) {
+            $do = true;
+        }
+        foreach ($server_slave_Wild_Do_Table as $table) {
+            if (($db == PMA_replication_strout($table)) && (preg_match("@^" . substr(PMA_replication_strout($table, true), 0, strlen(PMA_replication_strout($table, true)) - 1) . "@", $truename)))
+                $do = true;
+        }
+        ////////////////////////////////////////////////////////////////////
+        if ((strlen(array_search($truename, $server_slave_Ignore_Table)) > 0)  || (strlen(array_search($db, $server_slave_Ignore_DB)) > 0)) {
+            $ignored = true;
+        }
+        foreach ($server_slave_Wild_Ignore_Table as $table) {
+            if (($db == PMA_replication_strout($table)) && (preg_match("@^" . substr(PMA_replication_strout($table, true), 0, strlen(PMA_replication_strout($table, true)) - 1) . "@", $truename)))
+                $ignored = true;
+        }
+    }/* elseif ($server_master_status) {
+        if ((strlen(array_search($db, $server_master_Do_DB))>0) || count($server_master_Do_DB)==1)
+            $do = true;
+        elseif ((strlen(array_search($db, $server_master_Ignore_DB))>0) || count($server_master_Ignore_DB)==1)
+            $ignored = true;
+    }*/
     ?>
 <tr class="<?php echo $odd_row ? 'odd' : 'even'; $odd_row = ! $odd_row; ?>">
     <td align="center">
         <input type="checkbox" name="selected_tbl[]"
-            value="<?php echo $each_table['TABLE_NAME']; ?>"
+            value="<?php echo htmlspecialchars($each_table['TABLE_NAME']); ?>"
             id="checkbox_tbl_<?php echo $i; ?>"<?php echo $checked; ?> /></td>
     <th><label for="checkbox_tbl_<?php echo $i; ?>"
-            title="<?php echo $alias; ?>"><?php echo $truename; ?></label>
+            title="<?php echo $alias; ?>" style="<?php echo $ignored ? ' ignored' : ''; ?>"><?php echo $truename; ?></label>
+        <?php echo (! empty($tracking_icon) ? $tracking_icon : ''); ?>
     </th>
+   <?php if ($server_slave_status) { ?><td align="center"><?php echo $ignored ? ' <img class="icon" src="' . $pmaThemeImage . 's_cancel.png" width="16" height="16"  alt="NOT REPLICATED" />' : ''. $do ? ' <img class="icon" src="' . $pmaThemeImage . 's_success.png" width="16" height="16"  alt="REPLICATED" />' : ''; ?></td><?php } ?>
     <td align="center"><?php echo $browse_table; ?></td>
     <td align="center">
         <a href="tbl_structure.php?<?php echo $tbl_url_query; ?>">
@@ -450,7 +477,7 @@ if ($is_show_stats) {
 ?>
 </tbody>
 <tbody>
-<tr><td></td>
+<tr><th></th>
     <th align="center" nowrap="nowrap">
         <?php
             // for blobstreaming - if the number of tables is 0, set tableReductionCount to 0
@@ -461,6 +488,11 @@ if ($is_show_stats) {
             echo sprintf($strTables, PMA_formatNumber($num_tables - $tableReductionCount, 0));
         ?>
     </th>
+    <?php
+        if ($server_slave_status) {
+            echo '    <th>' . $GLOBALS['strReplication'] . '</th>' . "\n";
+        }
+    ?>
     <th colspan="<?php echo ($db_is_information_schema ? 3 : 6) ?>" align="center">
         <?php echo $strSum; ?></th>
     <th class="value"><?php echo $sum_row_count_pre . PMA_formatNumber($sum_entries, 0); ?></th>
@@ -530,6 +562,8 @@ echo '    <option value="' . $strRepairTable . '" >'
      . $strRepairTable . '</option>' . "\n";
 echo '    <option value="' . $strAnalyzeTable . '" >'
      . $strAnalyzeTable . '</option>' . "\n";
+echo '    <option value="' . $strExport . '" >'
+     . $strExport . '</option>' . "\n";
 ?>
 </select>
 <script type="text/javascript">

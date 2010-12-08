@@ -3,12 +3,19 @@
 /**
  *
  *
- * @version $Id: Config.class.php 12379 2009-04-25 11:28:17Z lem9 $
+ * @version $Id$
+ * @package phpMyAdmin
  */
+
+/**
+ * Load vendor configuration.
+ */
+require_once('./libraries/vendor_config.php');
 
 /**
  * Configuration class
  *
+ * @package phpMyAdmin
  */
 class PMA_Config
 {
@@ -85,7 +92,7 @@ class PMA_Config
      */
     function checkSystem()
     {
-        $this->set('PMA_VERSION', '3.1.4');
+        $this->set('PMA_VERSION', '3.3.8.1');
         /**
          * @deprecated
          */
@@ -297,7 +304,8 @@ class PMA_Config
      */
     function __wakeup()
     {
-        if (! $this->checkConfigSource()
+        if (SKIP_MTIME_CONFIG_CHECK
+          || ! $this->checkConfigSource()
           || $this->source_mtime !== filemtime($this->getSource())
           || $this->default_source_mtime !== filemtime($this->default_source)
           || $this->error_config_file
@@ -481,7 +489,7 @@ class PMA_Config
     }
 
     /**
-     * verifies the permissions on config file (if asked by configuration) 
+     * verifies the permissions on config file (if asked by configuration)
      * (must be called after config.inc.php has been merged)
      */
     function checkPermissions()
@@ -546,7 +554,7 @@ class PMA_Config
      */
     function getThemeUniqueValue()
     {
-        return intval((null !== $_SESSION['PMA_Config']->get('fontsize') ? $_SESSION['PMA_Config']->get('fontsize') : (isset($_COOKIE['pma_fontsize']) ? $_COOKIE['pma_fontsize'] : 0))) + ($this->source_mtime + $this->default_source_mtime + $_SESSION['PMA_Theme']->mtime_info + $_SESSION['PMA_Theme']->filesize_info) . (isset($_SESSION['userconf']['custom_color']) ? substr($_SESSION['userconf']['custom_color'],1,6) : '');
+        return intval((null !== $_SESSION['PMA_Config']->get('fontsize') ? $_SESSION['PMA_Config']->get('fontsize') : (isset($_COOKIE['pma_fontsize']) ? $_COOKIE['pma_fontsize'] : 0))) + ($this->source_mtime + $this->default_source_mtime + $_SESSION['PMA_Theme']->mtime_info + $_SESSION['PMA_Theme']->filesize_info) . (isset($_SESSION['tmp_user_values']['custom_color']) ? substr($_SESSION['tmp_user_values']['custom_color'],1,6) : '');
     }
 
     /**
@@ -595,9 +603,10 @@ class PMA_Config
 
                 // Host and port
                 if (PMA_getenv('HTTP_HOST')) {
-                    if (strpos(PMA_getenv('HTTP_HOST'), ':') !== false) {
-                        list($url['host'], $url['port']) =
-                            explode(':', PMA_getenv('HTTP_HOST'));
+                    // Prepend the scheme before using parse_url() since this is not part of the RFC2616 Host request-header
+                    $parsed_url = parse_url($url['scheme'] . '://' . PMA_getenv('HTTP_HOST'));
+                    if (!empty($parsed_url['host'])) {
+                        $url = $parsed_url;
                     } else {
                         $url['host'] = PMA_getenv('HTTP_HOST');
                     }
@@ -653,6 +662,7 @@ class PMA_Config
             // Backslashes returned by Windows have to be changed.
             // Only replace backslashes by forward slashes if on Windows,
             // as the backslash could be valid on a non-Windows system.
+            $this->checkWebServerOs();
             if ($this->get('PMA_IS_WINDOWS') == 1) {
                 $path = str_replace("\\", "/", dirname($url['path'] . 'a'));
             } else {
@@ -666,6 +676,11 @@ class PMA_Config
                 } else {
                     $path = dirname(dirname($path));
                 }
+            }
+
+            // PHP's dirname function would have returned a dot when $path contains no slash
+            if ($path == '.') {
+                $path = '';
             }
             // in vhost situations, there could be already an ending slash
             if (substr($path, -1) != '/') {

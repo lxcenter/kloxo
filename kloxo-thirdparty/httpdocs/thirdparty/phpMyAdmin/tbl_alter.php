@@ -6,7 +6,8 @@
  * linked from table_structure, uses libraries/tbl_properties.inc.php to display
  * form and handles this form data
  *
- * @version $Id: tbl_alter.php 11242 2008-05-07 12:44:28Z cybot_tm $
+ * @version $Id$
+ * @package phpMyAdmin
  */
 
 /**
@@ -43,27 +44,27 @@ if (isset($_REQUEST['do_save_data'])) {
     $field_cnt = count($_REQUEST['field_orig']);
     $key_fields = array();
     $changes = array();
-    
+
     for ($i = 0; $i < $field_cnt; $i++) {
         $changes[] = 'CHANGE ' . PMA_Table::generateAlter(
-            $_REQUEST['field_orig'][$i], 
+            $_REQUEST['field_orig'][$i],
             $_REQUEST['field_name'][$i],
-            $_REQUEST['field_type'][$i], 
-            $_REQUEST['field_length'][$i], 
+            $_REQUEST['field_type'][$i],
+            $_REQUEST['field_length'][$i],
             $_REQUEST['field_attribute'][$i],
-            isset($_REQUEST['field_collation'][$i]) 
-                ? $_REQUEST['field_collation'][$i] 
+            isset($_REQUEST['field_collation'][$i])
+                ? $_REQUEST['field_collation'][$i]
                 : '',
-            isset($_REQUEST['field_null'][$i]) 
-                ? $_REQUEST['field_null'][$i] 
+            isset($_REQUEST['field_null'][$i])
+                ? $_REQUEST['field_null'][$i]
                 : 'NOT NULL',
-            $_REQUEST['field_default_type'][$i], 
+            $_REQUEST['field_default_type'][$i],
             $_REQUEST['field_default_value'][$i],
             isset($_REQUEST['field_extra'][$i])
                 ? $_REQUEST['field_extra'][$i]
                 : false,
-            isset($_REQUEST['field_comments'][$i]) 
-                ? $_REQUEST['field_comments'][$i] 
+            isset($_REQUEST['field_comments'][$i])
+                ? $_REQUEST['field_comments'][$i]
                 : '',
             $key_fields,
             $i,
@@ -75,7 +76,7 @@ if (isset($_REQUEST['do_save_data'])) {
     $key_query = '';
     /**
      * this is a little bit more complex
-     * 
+     *
      * @todo if someone selects A_I when altering a column we need to check:
      *  - no other column with A_I
      *  - the column has an index, if not create one
@@ -90,7 +91,7 @@ if (isset($_REQUEST['do_save_data'])) {
         $key_query = ', ADD KEY (' . implode(', ', $fields) . ') ';
     }
      */
-    
+
     // To allow replication, we first select the db to use and then run queries
     // on this db.
     PMA_DBI_select_db($db) or PMA_mysqlDie(PMA_DBI_getError(), 'USE ' . PMA_backquote($db) . ';', '', $err_url);
@@ -103,7 +104,9 @@ if (isset($_REQUEST['do_save_data'])) {
         $message->addParam($table);
         $btnDrop = 'Fake';
 
-        // garvin: If comments were sent, enable relation stuff
+        /**
+         * If comments were sent, enable relation stuff
+         */
         require_once './libraries/relation.lib.php';
         require_once './libraries/transformations.lib.php';
 
@@ -111,7 +114,7 @@ if (isset($_REQUEST['do_save_data'])) {
         if (isset($_REQUEST['field_orig']) && is_array($_REQUEST['field_orig'])) {
             foreach ($_REQUEST['field_orig'] as $fieldindex => $fieldcontent) {
                 if ($_REQUEST['field_name'][$fieldindex] != $fieldcontent) {
-                    PMA_REL_renameField($db, $table, $fieldcontent, 
+                    PMA_REL_renameField($db, $table, $fieldcontent,
                         $_REQUEST['field_name'][$fieldindex]);
                 }
             }
@@ -119,14 +122,14 @@ if (isset($_REQUEST['do_save_data'])) {
 
         // update mime types
         if (isset($_REQUEST['field_mimetype'])
-         && is_array($_REQUEST['field_mimetype']) 
+         && is_array($_REQUEST['field_mimetype'])
          && $cfg['BrowseMIME']) {
             foreach ($_REQUEST['field_mimetype'] as $fieldindex => $mimetype) {
                 if (isset($_REQUEST['field_name'][$fieldindex])
                  && strlen($_REQUEST['field_name'][$fieldindex])) {
-                    PMA_setMIME($db, $table, $_REQUEST['field_name'][$fieldindex], 
-                        $mimetype, 
-                        $_REQUEST['field_transformation'][$fieldindex], 
+                    PMA_setMIME($db, $table, $_REQUEST['field_name'][$fieldindex],
+                        $mimetype,
+                        $_REQUEST['field_transformation'][$fieldindex],
                         $_REQUEST['field_transformation_options'][$fieldindex]);
                 }
             }
@@ -149,7 +152,7 @@ if (isset($_REQUEST['do_save_data'])) {
 
 /**
  * No modifications yet required -> displays the table fields
- * 
+ *
  * $selected comes from multi_submits.inc.php
  */
 if ($abort == false) {
@@ -173,27 +176,26 @@ if ($abort == false) {
     $num_fields  = count($fields_meta);
     $action      = 'tbl_alter.php';
 
-    // Get more complete field information
-    // For now, this is done just for MySQL 4.1.2+ new TIMESTAMP options
-    // but later, if the analyser returns more information, it
-    // could be executed for any MySQL version and replace
-    // the info given by SHOW FULL FIELDS FROM.
+    // Get more complete field information.
+    // For now, this is done to obtain MySQL 4.1.2+ new TIMESTAMP options
+    // and to know when there is an empty DEFAULT value.
+    // Later, if the analyser returns more information, it
+    // could be executed to replace the info given by SHOW FULL FIELDS FROM.
     /**
      * @todo put this code into a require()
      * or maybe make it part of PMA_DBI_get_fields();
      */
 
-    if (PMA_MYSQL_INT_VERSION < 50025) {
-        // We also need this to correctly learn if a TIMESTAMP is NOT NULL, since
-        // SHOW FULL FIELDS says NULL and SHOW CREATE TABLE says NOT NULL (tested
-        // in MySQL 4.0.25).
+    // We also need this to correctly learn if a TIMESTAMP is NOT NULL, since
+    // SHOW FULL FIELDS says NULL and SHOW CREATE TABLE says NOT NULL (tested
+    // in MySQL 4.0.25).
 
-        $show_create_table = PMA_DBI_fetch_value(
-            'SHOW CREATE TABLE ' . PMA_backquote($db) . '.' . PMA_backquote($table),
-            0, 1);
-        $analyzed_sql = PMA_SQP_analyze(PMA_SQP_parse($show_create_table));
-    }
-
+    $show_create_table = PMA_DBI_fetch_value('SHOW CREATE TABLE ' . PMA_backquote($db) . '.' . PMA_backquote($table), 0, 1);
+    $analyzed_sql = PMA_SQP_analyze(PMA_SQP_parse($show_create_table));
+    unset($show_create_table);
+    /**
+     * Form for changing properties.
+     */
     require './libraries/tbl_properties.inc.php';
 }
 

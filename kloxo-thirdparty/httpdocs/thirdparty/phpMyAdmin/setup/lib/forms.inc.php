@@ -15,7 +15,7 @@
  * @package    phpMyAdmin-setup
  * @author     Piotr Przybylski <piotrprz@gmail.com>
  * @license    http://www.gnu.org/licenses/gpl.html GNU GPL 2.0
- * @version    $Id: forms.inc.php 11875 2008-11-13 20:02:18Z crackpl $
+ * @version    $Id$
  */
 
 $forms = array();
@@ -44,7 +44,7 @@ $forms['Server_config'] = array('Servers' => array(1 => array(
     'only_db',
     'hide_db',
     'AllowRoot',
-    'AllowNoPasswordRoot',
+    'AllowNoPassword',
     'DisableIS',
     'AllowDeny/order',
     'AllowDeny/rules',
@@ -62,7 +62,7 @@ $forms['Server_pmadb'] = array('Servers' => array(1 => array(
     'pdf_pages' => 'pma_pdf_pages',
     'column_info' => 'pma_column_info',
     'history' => 'pma_history',
-    'designer_coords' => 'designer_coords')));
+    'designer_coords' => 'pma_designer_coords')));
 $forms['Import_export'] = array(
     'UploadDir',
     'SaveDir',

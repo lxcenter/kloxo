@@ -3,7 +3,8 @@
 /**
  * Contributed by Maxime Delorme and merged by lem9
  *
- * @version $Id: pdf_schema.php 11625 2008-09-29 17:13:53Z lem9 $
+ * @version $Id$
+ * @package phpMyAdmin
  */
 
 /**
@@ -47,6 +48,7 @@ require_once './libraries/tcpdf/tcpdf.php';
  *
  * @access public
  * @see FPDF
+ * @package phpMyAdmin
  */
 class PMA_PDF extends TCPDF {
     /**
@@ -265,7 +267,7 @@ class PMA_PDF extends TCPDF {
             $test_query = 'SELECT * FROM ' . PMA_backquote($GLOBALS['cfgRelation']['db']) . '.' . PMA_backquote($cfgRelation['pdf_pages'])
              . ' WHERE db_name = \'' . PMA_sqlAddslashes($db) . '\''
              . ' AND page_nr = \'' . $pdf_page_number . '\'';
-            $test_rs = PMA_query_as_cu($test_query);
+            $test_rs = PMA_query_as_controluser($test_query);
             $pages = @PMA_DBI_fetch_assoc($test_rs);
             $this->SetFont('', 'B', 14);
             $this->Cell(0, 6, ucfirst($pages['page_descr']), 'B', 1, 'C');
@@ -495,6 +497,7 @@ class PMA_PDF extends TCPDF {
  *
  * @access private
  * @see PMA_RT
+ * @package phpMyAdmin
  */
 class PMA_RT_Table {
     /**
@@ -508,7 +511,18 @@ class PMA_RT_Table {
     var $height_cell = 6;
     var $x, $y;
     var $primary = array();
+    var $show_info = false;
 
+    /**
+     * Returns title of the current table,
+     * title can have the dimensions of the table
+     *
+     * @access private
+     */
+    function getTitle()
+    {
+        return ($this->show_info ? sprintf('%.0f', $this->width) . 'x' . sprintf('%.0f', $this->height) : '') . ' ' . $this->table_name;
+    } // end of the "getTitle" function
     /**
      * Sets the width of the table
      *
@@ -519,8 +533,6 @@ class PMA_RT_Table {
      */
     function PMA_RT_Table_setWidth($ff)
     {
-        // this looks buggy to me... does it really work if
-        // there are fields that require wider cells than the name of the table?
         global $pdf;
 
         foreach ($this->fields AS $field) {
@@ -528,7 +540,11 @@ class PMA_RT_Table {
         }
         $this->width += $pdf->GetStringWidth('  ');
         $pdf->SetFont($ff, 'B');
-        $this->width = max($this->width, $pdf->GetStringWidth('  ' . $this->table_name));
+        // it is unknown what value must be added, because
+        // table title is affected by the tabe width value
+        while ($this->width < $pdf->GetStringWidth($this->getTitle())) {
+            $this->width += 5;
+        }
         $pdf->SetFont($ff, '');
     } // end of the "PMA_RT_Table_setWidth()" method
     /**
@@ -543,7 +559,6 @@ class PMA_RT_Table {
     /**
      * Do draw the table
      *
-     * @param boolean $ Whether to display table position or not
      * @param integer $ The font size
      * @param boolean $ Whether to display color
      * @param integer $ The max. with among tables
@@ -551,7 +566,7 @@ class PMA_RT_Table {
      * @access private
      * @see PMA_PDF
      */
-    function PMA_RT_Table_draw($show_info, $ff, $setcolor = 0)
+    function PMA_RT_Table_draw($ff, $setcolor = 0)
     {
         global $pdf, $with_doc;
 
@@ -567,11 +582,7 @@ class PMA_RT_Table {
             $pdf->PMA_links['doc'][$this->table_name]['-'] = '';
         }
 
-        if ($show_info) {
-            $pdf->PMA_PDF_cellScale($this->width, $this->height_cell, sprintf('%.0f', $this->width) . 'x' . sprintf('%.0f', $this->height) . ' ' . $this->table_name, 1, 1, 'C', $setcolor, $pdf->PMA_links['doc'][$this->table_name]['-']);
-        } else {
-            $pdf->PMA_PDF_cellScale($this->width, $this->height_cell, $this->table_name, 1, 1, 'C', $setcolor, $pdf->PMA_links['doc'][$this->table_name]['-']);
-        }
+        $pdf->PMA_PDF_cellScale($this->width, $this->height_cell, $this->getTitle(), 1, 1, 'C', $setcolor, $pdf->PMA_links['doc'][$this->table_name]['-']);
         $pdf->PMA_PDF_setXScale($this->x);
         $pdf->SetFont($ff, '');
         $pdf->SetTextColor(0);
@@ -608,6 +619,8 @@ class PMA_RT_Table {
      * @param string $ The table name
      * @param integer $ The font size
      * @param integer $ The max. with among tables
+     * @param boolean $ Whether to display keys or not
+     * @param boolean $ Whether to display table position or not
      * @global object    The current PDF document
      * @global integer   The current page number (from the
      *                     $cfg['Servers'][$i]['table_coords'] table)
@@ -617,7 +630,7 @@ class PMA_RT_Table {
      * @see PMA_PDF, PMA_RT_Table::PMA_RT_Table_setWidth,
           PMA_RT_Table::PMA_RT_Table_setHeight
      */
-    function __construct($table_name, $ff, &$same_wide_width, $show_keys)
+    function __construct($table_name, $ff, &$same_wide_width, $show_keys = false, $show_info = false)
     {
         global $pdf, $pdf_page_number, $cfgRelation, $db;
 
@@ -629,21 +642,26 @@ class PMA_RT_Table {
         }
         // load fields
         //check to see if it will load all fields or only the foreign keys
-		if ($show_keys) {
-			$indexes = PMA_Index::getFromTable($this->table_name, $db);
-			$all_columns = array();
-			foreach ($indexes as $index) {
-			   $all_columns = array_merge($all_columns, array_flip(array_keys($index->getColumns())));
-			}
-			$this->fields = array_keys($all_columns);
-		} else {
-	        while ($row = PMA_DBI_fetch_row($result)) {
-	            $this->fields[] = $row[0];
-	        }
-		}
+        if ($show_keys) {
+            $indexes = PMA_Index::getFromTable($this->table_name, $db);
+            $all_columns = array();
+            foreach ($indexes as $index) {
+            $all_columns = array_merge($all_columns, array_flip(array_keys($index->getColumns())));
+            }
+            $this->fields = array_keys($all_columns);
+        } else {
+            while ($row = PMA_DBI_fetch_row($result)) {
+                $this->fields[] = $row[0];
+            }
+        }
+
+        $this->show_info = $show_info;
+
         // height and width
-        $this->PMA_RT_Table_setWidth($ff);
         $this->PMA_RT_Table_setHeight();
+        // setWidth must me after setHeight, because title
+        // can include table height which changes table width
+        $this->PMA_RT_Table_setWidth($ff);
         if ($same_wide_width < $this->width) {
             $same_wide_width = $this->width;
         }
@@ -653,7 +671,7 @@ class PMA_RT_Table {
          . ' WHERE db_name = \'' . PMA_sqlAddslashes($db) . '\''
          . ' AND   table_name = \'' . PMA_sqlAddslashes($table_name) . '\''
          . ' AND   pdf_page_number = ' . $pdf_page_number;
-        $result = PMA_query_as_cu($sql, false, PMA_DBI_QUERY_STORE);
+        $result = PMA_query_as_controluser($sql, false, PMA_DBI_QUERY_STORE);
 
         if (!$result || !PMA_DBI_num_rows($result)) {
             $pdf->PMA_PDF_die(sprintf($GLOBALS['strConfigureTableCoord'], $table_name));
@@ -679,6 +697,7 @@ class PMA_RT_Table {
  *
  * @access private
  * @see PMA_RT
+ * @package phpMyAdmin
  */
 class PMA_RT_Relation {
     /**
@@ -805,6 +824,7 @@ class PMA_RT_Relation {
  *
  * @access public
  * @see PMA_PDF
+ * @package phpMyAdmin
  */
 class PMA_RT {
     /**
@@ -845,17 +865,18 @@ class PMA_RT {
      * @param string $ The relation field in the master table
      * @param string $ The foreign table name
      * @param string $ The relation field in the foreign table
+     * @param boolean $ Whether to display table position or not
      * @access private
      * @see PMA_RT_setMinMax
      */
-    function PMA_RT_addRelation($master_table, $master_field, $foreign_table, $foreign_field)
+    function PMA_RT_addRelation($master_table, $master_field, $foreign_table, $foreign_field, $show_info)
     {
         if (!isset($this->tables[$master_table])) {
-            $this->tables[$master_table] = new PMA_RT_Table($master_table, $this->ff, $this->tablewidth);
+            $this->tables[$master_table] = new PMA_RT_Table($master_table, $this->ff, $this->tablewidth, false, $show_info);
             $this->PMA_RT_setMinMax($this->tables[$master_table]);
         }
         if (!isset($this->tables[$foreign_table])) {
-            $this->tables[$foreign_table] = new PMA_RT_Table($foreign_table, $this->ff, $this->tablewidth);
+            $this->tables[$foreign_table] = new PMA_RT_Table($foreign_table, $this->ff, $this->tablewidth, false, $show_info);
             $this->PMA_RT_setMinMax($this->tables[$foreign_table]);
         }
         $this->relations[] = new PMA_RT_Relation($this->tables[$master_table], $master_field, $this->tables[$foreign_table], $foreign_field);
@@ -875,7 +896,7 @@ class PMA_RT {
         $pdf->SetDrawColor(200, 200, 200);
         // Draws horizontal lines
         for ($l = 0; $l < 21; $l++) {
-            $pdf->line(0, $l * 10, $pdf->fh, $l * 10);
+            $pdf->line(0, $l * 10, $pdf->getFh(), $l * 10);
             // Avoid duplicates
             if ($l > 0) {
                 $pdf->SetXY(0, $l * 10);
@@ -885,7 +906,7 @@ class PMA_RT {
         } // end for
         // Draws vertical lines
         for ($j = 0; $j < 30 ;$j++) {
-            $pdf->line($j * 10, 0, $j * 10, $pdf->fw);
+            $pdf->line($j * 10, 0, $j * 10, $pdf->getFw());
             $pdf->SetXY($j * 10, 0);
             $label = (string) sprintf('%.0f', ($j * 10 - $this->l_marg) * $this->scale + $this->x_min);
             $pdf->Cell(5, 7, $label);
@@ -913,10 +934,10 @@ class PMA_RT {
      * @access private
      * @see PMA_RT_Table::PMA_RT_Table_draw()
      */
-    function PMA_RT_drawTables($show_info, $draw_color = 0)
+    function PMA_RT_drawTables($draw_color = 0)
     {
         foreach ($this->tables AS $table) {
-            $table->PMA_RT_Table_draw($show_info, $this->ff, $draw_color);
+            $table->PMA_RT_Table_draw($this->ff, $draw_color);
         }
     } // end of the "PMA_RT_drawTables()" method
     /**
@@ -939,7 +960,7 @@ class PMA_RT {
         // Get the name of this pdfpage to use as filename (Mike Beck)
         $_name_sql = 'SELECT page_descr FROM ' . PMA_backquote($GLOBALS['cfgRelation']['db']) . '.' . PMA_backquote($cfgRelation['pdf_pages'])
          . ' WHERE page_nr = ' . $pdf_page_number;
-        $_name_rs = PMA_query_as_cu($_name_sql);
+        $_name_rs = PMA_query_as_controluser($_name_sql);
         if ($_name_rs) {
             $_name_row = PMA_DBI_fetch_row($_name_rs);
             $filename = $_name_row[0] . '.pdf';
@@ -993,7 +1014,7 @@ class PMA_RT {
         $tab_sql = 'SELECT table_name FROM ' . PMA_backquote($GLOBALS['cfgRelation']['db']) . '.' . PMA_backquote($cfgRelation['table_coords'])
          . ' WHERE db_name = \'' . PMA_sqlAddslashes($db) . '\''
          . ' AND pdf_page_number = ' . $which_rel;
-        $tab_rs = PMA_query_as_cu($tab_sql, null, PMA_DBI_QUERY_STORE);
+        $tab_rs = PMA_query_as_controluser($tab_sql, null, PMA_DBI_QUERY_STORE);
         if (!$tab_rs || !PMA_DBI_num_rows($tab_rs) > 0) {
             $pdf->PMA_PDF_die($GLOBALS['strPdfNoTables']);
             // die('No tables');
@@ -1024,7 +1045,7 @@ class PMA_RT {
 
         foreach ($alltables AS $table) {
             if (!isset($this->tables[$table])) {
-                $this->tables[$table] = new PMA_RT_Table($table, $this->ff, $this->tablewidth, $show_keys);
+                $this->tables[$table] = new PMA_RT_Table($table, $this->ff, $this->tablewidth, $show_keys, $show_info);
             }
 
             if ($this->same_wide) {
@@ -1053,7 +1074,7 @@ class PMA_RT {
         // .   ' AND foreign_db    = \'' . PMA_sqlAddslashes($db) . '\' '
         // .   ' AND master_table  IN (' . $intable . ')'
         // .   ' AND foreign_table IN (' . $intable . ')';
-        // $result =  PMA_query_as_cu($sql);
+        // $result =  PMA_query_as_controluser($sql);
 
         // lem9:
         // previous logic was checking master tables and foreign tables
@@ -1070,7 +1091,7 @@ class PMA_RT {
                     // (do not use array_search() because we would have to
                     // to do a === FALSE and this is not PHP3 compatible)
                     if (in_array($rel['foreign_table'], $alltables)) {
-                        $this->PMA_RT_addRelation($one_table, $master_field, $rel['foreign_table'], $rel['foreign_field']);
+                        $this->PMA_RT_addRelation($one_table, $master_field, $rel['foreign_table'], $rel['foreign_field'], $show_info);
                     }
                 } // end while
             } // end if
@@ -1088,7 +1109,7 @@ class PMA_RT {
             $this->PMA_RT_drawRelations($change_color);
         }
 
-        $this->PMA_RT_drawTables($show_info, $change_color);
+        $this->PMA_RT_drawTables($change_color);
 
         $this->PMA_RT_showRt();
     } // end of the "PMA_RT()" method
@@ -1106,7 +1127,7 @@ function PMA_RT_DOC($alltables)
         $pdf->PMA_links['doc'][$table]['-'] = $pdf->AddLink();
         $pdf->SetX(10);
         // $pdf->Ln(1);
-        $pdf->Cell(0, 6, $GLOBALS['strPageNumber'] . ' {' . sprintf("%02d", $i) . '}', 0, 0, 'R', 0, $pdf->PMA_links['doc'][$table]['-']);
+        $pdf->Cell(0, 6, $GLOBALS['strPageNumber'] . ' {' . sprintf("%02d", $i + 1) . '}', 0, 0, 'R', 0, $pdf->PMA_links['doc'][$table]['-']);
         $pdf->SetX(10);
         $pdf->Cell(0, 6, $i . ' ' . $table, 0, 1, 'L', 0, $pdf->PMA_links['doc'][$table]['-']);
         // $pdf->Ln(1);
@@ -1122,9 +1143,9 @@ function PMA_RT_DOC($alltables)
     }
     $pdf->PMA_links['RT']['-'] = $pdf->AddLink();
     $pdf->SetX(10);
-    $pdf->Cell(0, 6, $GLOBALS['strPageNumber'] . ' {00}', 0, 0, 'R', 0, $pdf->PMA_links['doc'][$lasttable]['-']);
+    $pdf->Cell(0, 6, $GLOBALS['strPageNumber'] . ' {' . sprintf("%02d", $i + 1) . '}', 0, 0, 'R', 0, $pdf->PMA_links['doc'][$lasttable]['-']);
     $pdf->SetX(10);
-    $pdf->Cell(0, 6, $i . ' ' . $GLOBALS['strRelationalSchema'], 0, 1, 'L', 0, $pdf->PMA_links['RT']['-']);
+    $pdf->Cell(0, 6, $i + 1 . ' ' . $GLOBALS['strRelationalSchema'], 0, 1, 'L', 0, $pdf->PMA_links['RT']['-']);
     $z = 0;
     foreach ($alltables AS $table) {
         $z++;
@@ -1147,16 +1168,12 @@ function PMA_RT_DOC($alltables)
         /**
          * Gets table informations
          */
-        $result = PMA_DBI_query('SHOW TABLE STATUS LIKE \'' . PMA_sqlAddslashes($table, true) . '\';', null, PMA_DBI_QUERY_STORE);
-        $showtable = PMA_DBI_fetch_assoc($result);
-        $num_rows = (isset($showtable['Rows']) ? $showtable['Rows'] : 0);
+        $showtable    = PMA_Table::sGetStatusInfo($db, $table);
+        $num_rows     = (isset($showtable['Rows']) ? $showtable['Rows'] : 0);
         $show_comment = (isset($showtable['Comment']) ? $showtable['Comment'] : '');
-        $create_time = (isset($showtable['Create_time']) ? PMA_localisedDate(strtotime($showtable['Create_time'])) : '');
-        $update_time = (isset($showtable['Update_time']) ? PMA_localisedDate(strtotime($showtable['Update_time'])) : '');
-        $check_time = (isset($showtable['Check_time']) ? PMA_localisedDate(strtotime($showtable['Check_time'])) : '');
-
-        PMA_DBI_free_result($result);
-        unset($result);
+        $create_time  = (isset($showtable['Create_time']) ? PMA_localisedDate(strtotime($showtable['Create_time'])) : '');
+        $update_time  = (isset($showtable['Update_time']) ? PMA_localisedDate(strtotime($showtable['Update_time'])) : '');
+        $check_time   = (isset($showtable['Check_time']) ? PMA_localisedDate(strtotime($showtable['Check_time'])) : '');
 
         /**
          * Gets table keys and retains them

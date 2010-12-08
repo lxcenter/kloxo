@@ -2,7 +2,8 @@
 /* vim: set expandtab sw=4 ts=4 sts=4: */
 /**
  *
- * @version $Id: calendar.php 11412 2008-07-20 15:23:40Z lem9 $
+ * @version $Id$
+ * @package phpMyAdmin
  */
 
 /**
@@ -12,6 +13,7 @@ require_once './libraries/common.inc.php';
 require_once './libraries/header_http.inc.php';
 $page_title = $strCalendar;
 require './libraries/header_meta_style.inc.php';
+$GLOBALS['js_include'][] = 'common.js';
 $GLOBALS['js_include'][] = 'tbl_change.js';
 require './libraries/header_scripts.inc.php';
 ?>

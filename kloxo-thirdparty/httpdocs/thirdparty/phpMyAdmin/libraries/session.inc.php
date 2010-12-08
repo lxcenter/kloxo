@@ -3,13 +3,14 @@
 /**
  * session handling
  *
- * @version $Id: session.inc.php 12014 2008-11-28 13:25:26Z nijel $
+ * @version $Id$
  * @todo    add failover or warn if sessions are not configured properly
  * @todo    add an option to use mm-module for session handler
  * @see     http://www.php.net/session
  * @uses    session_name()
  * @uses    session_start()
  * @uses    ini_set()
+ * @package phpMyAdmin
  */
 if (! defined('PHPMYADMIN')) {
     exit;
@@ -70,8 +71,8 @@ $session_name = 'phpMyAdmin';
 if (! isset($_COOKIE[$session_name])) {
     // on first start of session we check for errors
     // f.e. session dir cannot be accessed - session file not created
-    $r = session_start();
     $orig_error_count = $GLOBALS['error_handler']->countErrors();
+    $r = session_start();
     if ($r !== true || $orig_error_count != $GLOBALS['error_handler']->countErrors()) {
         setcookie($session_name, '', 1);
         PMA_fatalError('strSessionStartupErrorGeneral');
@@ -100,5 +101,6 @@ function PMA_secureSession()
 {
     // prevent session fixation and XSS
     session_regenerate_id(true);
+    $_SESSION[' PMA_token '] = md5(uniqid(rand(), true));
 }
 ?>

@@ -2,7 +2,8 @@
 /* vim: set expandtab sw=4 ts=4 sts=4: */
 /**
  *
- * @version $Id: db_sql.php 10965 2007-12-05 17:53:52Z lem9 $
+ * @version $Id$
+ * @package phpMyAdmin
  */
 
 /**
@@ -36,7 +37,7 @@ if ($num_tables == 0 && empty($db_query_force)) {
 /**
  * Query box, bookmark, insert data from textfile
  */
-PMA_sqlQueryForm(true, false, isset($_REQUEST['delimiter']) ? $_REQUEST['delimiter'] : ';');
+PMA_sqlQueryForm(true, false, isset($_REQUEST['delimiter']) ? htmlspecialchars($_REQUEST['delimiter']) : ';');
 
 /**
  * Displays the footer

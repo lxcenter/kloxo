@@ -9,7 +9,8 @@
  *
  * 2002/2/22 - by Yukihiro Kawada <kawada@den.fujifilm.co.jp>
  *
- * @version $Id: kanji-encoding.lib.php 11336 2008-06-21 15:01:27Z lem9 $
+ * @version $Id$
+ * @package phpMyAdmin
  */
 if (! defined('PHPMYADMIN')) {
     exit;

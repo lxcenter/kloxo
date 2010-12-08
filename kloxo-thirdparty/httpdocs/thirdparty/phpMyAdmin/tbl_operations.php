@@ -2,7 +2,8 @@
 /* vim: set expandtab sw=4 ts=4 sts=4: */
 /**
  *
- * @version $Id: tbl_operations.php 12154 2008-12-23 18:15:56Z lem9 $
+ * @version $Id$
+ * @package phpMyAdmin
  */
 
 /**
@@ -48,11 +49,11 @@ PMA_DBI_select_db($GLOBALS['db']);
 require './libraries/tbl_info.inc.php';
 
 // define some globals here, for improved syntax in the conditionals
-$is_myisam_or_maria = $is_isam = $is_innodb = $is_berkeleydb = $is_maria = $is_pbxt = false;
+$is_myisam_or_aria = $is_isam = $is_innodb = $is_berkeleydb = $is_aria = $is_pbxt = false;
 // set initial value of these globals, based on the current table engine
 PMA_set_global_variables_for_engine($tbl_type);
 
-if ($is_maria) {
+if ($is_aria) {
     // the value for transactional can be implicit
     // (no create option found, in this case it means 1)
     // or explicit (option found with a value of 0 or 1)
@@ -94,6 +95,10 @@ if (isset($_REQUEST['submitoptions'])) {
         $tbl_type = $_REQUEST['new_tbl_type'];
         // reset the globals for the new engine
         PMA_set_global_variables_for_engine($tbl_type);
+        if ($is_aria) {
+            $transactional = (isset($transactional) && $transactional == '0') ? '0' : '1';
+            $page_checksum = (isset($page_checksum)) ? $page_checksum : '';
+        }
     }
 
     if (! empty($_REQUEST['tbl_collation'])
@@ -101,7 +106,7 @@ if (isset($_REQUEST['submitoptions'])) {
         $table_alters[] = 'DEFAULT ' . PMA_generateCharsetQueryPart($_REQUEST['tbl_collation']);
     }
 
-    if (($is_myisam_or_maria || $is_isam)
+    if (($is_myisam_or_aria || $is_isam)
       && isset($_REQUEST['new_pack_keys'])
       && $_REQUEST['new_pack_keys'] != (string)$pack_keys) {
         $table_alters[] = 'pack_keys = ' . $_REQUEST['new_pack_keys'];
@@ -109,37 +114,37 @@ if (isset($_REQUEST['submitoptions'])) {
 
     $checksum = empty($checksum) ? '0' : '1';
     $_REQUEST['new_checksum'] = empty($_REQUEST['new_checksum']) ? '0' : '1';
-    if ($is_myisam_or_maria
+    if ($is_myisam_or_aria
       && $_REQUEST['new_checksum'] !== $checksum) {
         $table_alters[] = 'checksum = ' . $_REQUEST['new_checksum'];
     }
 
     $_REQUEST['new_transactional'] = empty($_REQUEST['new_transactional']) ? '0' : '1';
-    if ($is_maria
+    if ($is_aria
       && $_REQUEST['new_transactional'] !== $transactional) {
         $table_alters[] = 'TRANSACTIONAL = ' . $_REQUEST['new_transactional'];
     }
 
     $_REQUEST['new_page_checksum'] = empty($_REQUEST['new_page_checksum']) ? '0' : '1';
-    if ($is_maria
+    if ($is_aria
       && $_REQUEST['new_page_checksum'] !== $page_checksum) {
         $table_alters[] = 'PAGE_CHECKSUM = ' . $_REQUEST['new_page_checksum'];
     }
 
     $delay_key_write = empty($delay_key_write) ? '0' : '1';
     $_REQUEST['new_delay_key_write'] = empty($_REQUEST['new_delay_key_write']) ? '0' : '1';
-    if ($is_myisam_or_maria
+    if ($is_myisam_or_aria
       && $_REQUEST['new_delay_key_write'] !== $delay_key_write) {
         $table_alters[] = 'delay_key_write = ' . $_REQUEST['new_delay_key_write'];
     }
 
-    if (($is_myisam_or_maria || $is_innodb || $is_pbxt)
+    if (($is_myisam_or_aria || $is_innodb || $is_pbxt)
       &&  ! empty($_REQUEST['new_auto_increment'])
       && (! isset($auto_increment) || $_REQUEST['new_auto_increment'] !== $auto_increment)) {
         $table_alters[] = 'auto_increment = ' . PMA_sqlAddslashes($_REQUEST['new_auto_increment']);
     }
 
-    if (($is_myisam_or_maria || $is_innodb || $is_pbxt)
+    if (($is_myisam_or_aria || $is_innodb || $is_pbxt)
       &&  ! empty($_REQUEST['new_row_format'])
       && (! isset($row_format) || strtolower($_REQUEST['new_row_format']) !== strtolower($row_format))) {
         $table_alters[] = 'ROW_FORMAT = ' . PMA_sqlAddslashes($_REQUEST['new_row_format']);
@@ -152,8 +157,16 @@ if (isset($_REQUEST['submitoptions'])) {
         $reread_info    = true;
         unset($table_alters);
         foreach (PMA_DBI_get_warnings() as $warning) {
-            $warning_messages[] = $warning['Level'] . ': #' . $warning['Code']
-                            . ' ' . $warning['Message'];
+            // In MariaDB 5.1.44, when altering a table from Maria to MyISAM 
+            // and if TRANSACTIONAL was set, the system reports an error;
+            // I discussed with a Maria developer and he agrees that this
+            // should not be reported with a Level of Error, so here
+            // I just ignore it. But there are other 1478 messages
+            // that it's better to show.
+            if (! ($_REQUEST['new_tbl_type'] == 'MyISAM' && $warning['Code'] == '1478' && $warning['Level'] == 'Error')) {
+                $warning_messages[] = $warning['Level'] . ': #' . $warning['Code']
+                    . ' ' . $warning['Message'];
+            }
         }
     }
 }
@@ -179,6 +192,9 @@ if (isset($_REQUEST['submit_partition']) && ! empty($_REQUEST['partition_operati
 } // end if
 
 if ($reread_info) {
+    // to avoid showing the old value (for example the AUTO_INCREMENT) after
+    // a change, clear the cache
+    PMA_Table::$cache = array(); 
     $page_checksum = $checksum = $delay_key_write = 0;
     require './libraries/tbl_info.inc.php';
 }
@@ -189,8 +205,8 @@ unset($reread_info);
  */
 require_once './libraries/tbl_links.inc.php';
 
-if (isset($result)) {
-    // set to success by default, because result set could be empty 
+if (isset($result) && empty($zero_rows)) {
+    // set to success by default, because result set could be empty
     // (for example, a table rename)
     $_type = 'success';
     if (empty($_message)) {
@@ -348,7 +364,7 @@ if (strstr($show_comment, '; InnoDB free') === false) {
         </td>
     </tr>
 <?php
-if ($is_myisam_or_maria || $is_isam) {
+if ($is_myisam_or_aria || $is_isam) {
     ?>
     <tr>
         <td><label for="new_pack_keys">PACK_KEYS</label></td>
@@ -368,7 +384,7 @@ if ($is_myisam_or_maria || $is_isam) {
     <?php
 } // end if (MYISAM|ISAM)
 
-if ($is_myisam_or_maria) {
+if ($is_myisam_or_aria) {
     ?>
     <tr><td><label for="new_checksum">CHECKSUM</label></td>
         <td><input type="checkbox" name="new_checksum" id="new_checksum"
@@ -391,7 +407,7 @@ if ($is_myisam_or_maria) {
     <?php
 } // end if (MYISAM)
 
-if ($is_maria) {
+if ($is_aria) {
     ?>
     <tr><td><label for="new_transactional">TRANSACTIONAL</label></td>
         <td><input type="checkbox" name="new_transactional" id="new_transactional"
@@ -412,10 +428,10 @@ if ($is_maria) {
     </tr>
 
     <?php
-} // end if (MARIA)
+} // end if (ARIA)
 
 if (isset($auto_increment) && strlen($auto_increment) > 0
-  && ($is_myisam_or_maria || $is_innodb || $is_pbxt)) {
+  && ($is_myisam_or_aria || $is_innodb || $is_pbxt)) {
     ?>
     <tr><td><label for="auto_increment_opt">AUTO_INCREMENT</label></td>
         <td><input type="text" name="new_auto_increment" id="auto_increment_opt"
@@ -424,12 +440,46 @@ if (isset($auto_increment) && strlen($auto_increment) > 0
     <?php
 } // end if (MYISAM|INNODB)
 
+// the outer array is for engines, the inner array contains the dropdown
+// option values as keys then the dropdown option labels
+
 $possible_row_formats = array(
-    'MARIA'  => array('FIXED','DYNAMIC','PAGE'),
-    'MYISAM' => array('FIXED','DYNAMIC'),
-    'PBXT'   => array('FIXED','DYNAMIC'),
-    'INNODB' => array('COMPACT','REDUNDANT')
+     'ARIA'  => array(
+        'FIXED'     => 'FIXED',
+        'DYNAMIC'   => 'DYNAMIC',
+        'PAGE'      => 'PAGE'
+            ),
+     'MARIA'  => array(
+        'FIXED'     => 'FIXED',
+        'DYNAMIC'   => 'DYNAMIC',
+        'PAGE'      => 'PAGE'
+            ),
+     'MYISAM' => array(
+         'FIXED'    => 'FIXED',
+         'DYNAMIC'  => 'DYNAMIC'
+     ),
+     'PBXT'   => array(
+         'FIXED'    => 'FIXED',
+         'DYNAMIC'  => 'DYNAMIC'
+     ),
+     'INNODB' => array(
+         'COMPACT'  => 'COMPACT',
+         'REDUNDANT' => 'REDUNDANT')
 );
+
+$innodb_engine_plugin = PMA_StorageEngine::getEngine('innodb');
+$innodb_plugin_version = $innodb_engine_plugin->getInnodbPluginVersion();
+if (!empty($innodb_plugin_version)) {
+    $innodb_file_format = $innodb_engine_plugin->getInnodbFileFormat();
+}  else {
+    $innodb_file_format = '';
+}
+if ('Barracuda' == $innodb_file_format && $innodb_engine_plugin->supportsFilePerTable()) {
+    $possible_row_formats['INNODB']['DYNAMIC'] = 'DYNAMIC';
+    $possible_row_formats['INNODB']['COMPRESSED'] = 'COMPRESSED';
+}
+unset($innodb_engine_plugin, $innodb_plugin_version, $innodb_file_format);
+
 // for MYISAM there is also COMPRESSED but it can be set only by the
 // myisampack utility, so don't offer here the choice because if we
 // try it inside an ALTER TABLE, MySQL (at least in 5.1.23-maria)
@@ -440,7 +490,7 @@ if (isset($possible_row_formats[$tbl_type])) {
     $current_row_format = strtoupper($showtable['Row_format']);
     echo '<tr><td><label for="new_row_format">ROW_FORMAT</label></td>';
     echo '<td>';
-    PMA_generate_html_dropdown('new_row_format', $possible_row_formats[$tbl_type], $current_row_format);
+    echo PMA_generate_html_dropdown('new_row_format', $possible_row_formats[$tbl_type], $current_row_format, 'new_row_format');
     unset($possible_row_formats, $current_row_format);
     echo '</td>';
     echo '</tr>';
@@ -481,7 +531,7 @@ if (isset($possible_row_formats[$tbl_type])) {
             'structure' => $strStrucOnly,
             'data'      => $strStrucData,
             'dataonly'  => $strDataOnly);
-        PMA_generate_html_radio('what', $choices, 'data', true);
+        PMA_display_html_radio('what', $choices, 'data', true);
         unset($choices);
 ?>
 
@@ -525,8 +575,8 @@ if (isset($possible_row_formats[$tbl_type])) {
 <ul>
 <?php
 // Note: BERKELEY (BDB) is no longer supported, starting with MySQL 5.1
-if ($is_myisam_or_maria || $is_innodb || $is_berkeleydb) {
-    if ($is_myisam_or_maria || $is_innodb) {
+if ($is_myisam_or_aria || $is_innodb || $is_berkeleydb) {
+    if ($is_myisam_or_aria || $is_innodb) {
         $this_url_params = array_merge($url_params,
             array('sql_query' => 'CHECK TABLE ' . PMA_backquote($GLOBALS['table'])));
         ?>
@@ -546,7 +596,7 @@ if ($is_myisam_or_maria || $is_innodb || $is_berkeleydb) {
     </li>
         <?php
     }
-    if ($is_myisam_or_maria || $is_berkeleydb) {
+    if ($is_myisam_or_aria || $is_berkeleydb) {
         $this_url_params = array_merge($url_params,
             array('sql_query' => 'ANALYZE TABLE ' . PMA_backquote($GLOBALS['table'])));
         ?>
@@ -556,7 +606,7 @@ if ($is_myisam_or_maria || $is_innodb || $is_berkeleydb) {
     </li>
         <?php
     }
-    if ($is_myisam_or_maria) {
+    if ($is_myisam_or_aria) {
         $this_url_params = array_merge($url_params,
             array('sql_query' => 'REPAIR TABLE ' . PMA_backquote($GLOBALS['table'])));
         ?>
@@ -566,7 +616,7 @@ if ($is_myisam_or_maria || $is_innodb || $is_berkeleydb) {
     </li>
         <?php
     }
-    if ($is_myisam_or_maria || $is_innodb || $is_berkeleydb) {
+    if ($is_myisam_or_aria || $is_innodb || $is_berkeleydb) {
         $this_url_params = array_merge($url_params,
             array('sql_query' => 'OPTIMIZE TABLE ' . PMA_backquote($GLOBALS['table'])));
         ?>
@@ -617,7 +667,7 @@ $this_url_params = array_merge($url_params,
             'OPTIMIZE' => $strOptimize,
             'REBUILD' => $strRebuild,
             'REPAIR' => $strRepair);
-        PMA_generate_html_radio('partition_operation', $choices, '', false);
+        PMA_display_html_radio('partition_operation', $choices, '', false);
         unset($choices);
         echo PMA_showMySQLDocu('partitioning_maintenance', 'partitioning_maintenance');
         // I'm not sure of the best way to display that; this link does
@@ -701,16 +751,16 @@ if ($cfgRelation['relwork'] && ! $is_innodb) {
 require_once './libraries/footer.inc.php';
 
 
-function PMA_set_global_variables_for_engine($tbl_type) 
+function PMA_set_global_variables_for_engine($tbl_type)
 {
-    global $is_myisam_or_maria, $is_innodb, $is_isam, $is_berkeleydb, $is_maria, $is_pbxt;
+    global $is_myisam_or_aria, $is_innodb, $is_isam, $is_berkeleydb, $is_aria, $is_pbxt;
 
-    $is_myisam_or_maria = $is_isam = $is_innodb = $is_berkeleydb = $is_maria = $is_pbxt = false;
+    $is_myisam_or_aria = $is_isam = $is_innodb = $is_berkeleydb = $is_aria = $is_pbxt = false;
     $upper_tbl_type = strtoupper($tbl_type);
-    
-    //Options that apply to MYISAM usually apply to MARIA
-    $is_myisam_or_maria = ($upper_tbl_type == 'MYISAM' || $upper_tbl_type == 'MARIA');
-    $is_maria = ($upper_tbl_type == 'MARIA');
+
+    //Options that apply to MYISAM usually apply to ARIA
+    $is_myisam_or_aria = ($upper_tbl_type == 'MYISAM' || $upper_tbl_type == 'ARIA' || $upper_tbl_type == 'MARIA');
+    $is_aria = ($upper_tbl_type == 'ARIA');
 
     $is_isam = ($upper_tbl_type == 'ISAM');
     $is_innodb = ($upper_tbl_type == 'INNODB');

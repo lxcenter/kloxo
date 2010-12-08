@@ -2,7 +2,8 @@
 /* vim: set expandtab sw=4 ts=4 sts=4: */
 /**
  *
- * @version $Id: header.inc.php 10719 2007-10-04 15:03:44Z cybot_tm $
+ * @version $Id$
+ * @package phpMyAdmin
  */
 if (! defined('PHPMYADMIN')) {
     exit;
@@ -18,6 +19,7 @@ require_once './libraries/common.inc.php';
 if ( false === $GLOBALS['cfg']['AllowThirdPartyFraming']) {
 ?>
 <script type="text/javascript">
+//<![CDATA[
 try {
     // can't access this if on a different domain
     var topdomain = top.document.domain;
@@ -31,6 +33,7 @@ catch(e) {
     alert("Redirecting... (error: " + e);
     top.location.replace(self.document.URL.substring(0, self.document.URL.lastIndexOf("/")+1));
 }
+//]]>
 </script>
 <?php
 }
@@ -65,6 +68,8 @@ $is_superuser    = function_exists('PMA_isSuperuser') && PMA_isSuperuser();
 if (in_array('functions.js', $GLOBALS['js_include'])) {
     $GLOBALS['js_messages']['strFormEmpty'] = $GLOBALS['strFormEmpty'];
     $GLOBALS['js_messages']['strNotNumber'] = $GLOBALS['strNotNumber'];
+    $GLOBALS['js_messages']['strClickToSelect'] = $GLOBALS['strClickToSelect'];
+    $GLOBALS['js_messages']['strClickToUnselect'] = $GLOBALS['strClickToUnselect'];
 
     if (!$is_superuser && !$GLOBALS['cfg']['AllowUserDropDatabase']) {
         $GLOBALS['js_messages']['strNoDropDatabases'] = $GLOBALS['strNoDropDatabases'];
@@ -107,6 +112,8 @@ $GLOBALS['js_events'][] = array(
     'function'  => 'PMA_TT_init',
 );
 
+// avoid loading twice a js file
+$GLOBALS['js_include'] = array_unique($GLOBALS['js_include']);
 foreach ($GLOBALS['js_include'] as $js_script_file) {
     echo '<script src="./js/' . $js_script_file . '" type="text/javascript"></script>' . "\n";
 }

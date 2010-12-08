@@ -3,7 +3,8 @@
 /**
  * CSV import plugin for phpMyAdmin
  *
- * @version $Id: ldi.php 11336 2008-06-21 15:01:27Z lem9 $
+ * @version $Id$
+ * @package phpMyAdmin-Import
  */
 if (! defined('PHPMYADMIN')) {
     exit;
@@ -89,13 +90,14 @@ if ($skip_queries > 0) {
 }
 if (strlen($ldi_columns) > 0) {
     $sql .= ' (';
-    $tmp   = split(',( ?)', $ldi_columns);
+    $tmp   = preg_split('/,( ?)/', $ldi_columns);
     $cnt_tmp = count($tmp);
     for ($i = 0; $i < $cnt_tmp; $i++) {
         if ($i > 0) {
             $sql .= ', ';
         }
-        $sql     .= PMA_backquote(trim($tmp[$i]));
+        /* Trim also `, if user already included backquoted fields */
+        $sql     .= PMA_backquote(trim($tmp[$i], " \t\r\n\0\x0B`"));
     } // end for
     $sql .= ')';
 }

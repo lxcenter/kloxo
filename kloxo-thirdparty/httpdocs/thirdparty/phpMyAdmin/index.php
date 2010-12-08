@@ -3,7 +3,7 @@
 /**
  * forms frameset
  *
- * @version $Id: index.php 12022 2008-11-28 14:35:17Z nijel $
+ * @version $Id$
  * @uses    $GLOBALS['strNoFrames']
  * @uses    $GLOBALS['cfg']['QueryHistoryDB']
  * @uses    $GLOBALS['cfg']['Server']['user']
@@ -26,6 +26,7 @@
  * @uses    time()
  * @uses    PMA_getenv()
  * @uses    header()                to send charset
+ * @package phpMyAdmin
  */
 
 /**
@@ -66,7 +67,7 @@ $drops = array('lang', 'server', 'convcharset', 'collation_connection',
     'db', 'table');
 
 foreach ($drops as $each_drop) {
-    if (! array_key_exists($each_drop, $_GET)) {
+    if (array_key_exists($each_drop, $_GET)) {
         unset($_GET[$each_drop]);
     }
 }

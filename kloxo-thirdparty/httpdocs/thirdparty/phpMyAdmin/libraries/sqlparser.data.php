@@ -19,10 +19,15 @@
  * It's easier to use only uppercase for proper sorting. In case of
  * doubt, use the DEBUG code after this function's definition.
  *
- * @version$Id: sqlparser.data.php 11345 2008-06-24 17:51:49Z lem9 $
+ * @version $Id$
+ * @package phpMyAdmin
  */
 if (! defined('PHPMYADMIN')) {
     exit;
+}
+
+if (! isset($GLOBALS['sql_delimiter'])) {
+        $GLOBALS['sql_delimiter'] = ';';
 }
 
 /**
@@ -206,7 +211,6 @@ $PMA_SQPdata_function_name = array (
     'MOD',
     'MONTH',
     'MONTHNAME',
-    'NOW',
     'MPOINTFROMTEXT',           // MPointFromText()
     'MPOINTFROMWKB',            // MPointFromWKB()
     'MPOLYFROMTEXT',            // MPolyFromText()
@@ -334,7 +338,7 @@ $PMA_SQPdata_function_name = array (
  *
  * @global integer MySQL attributes count
  */
-$PMA_SQPdata_function_name_cnt = 299;
+$PMA_SQPdata_function_name_cnt = 298;
 
 /*
  * DEBUG
@@ -442,7 +446,6 @@ $PMA_SQPdata_reserved_word = array (
     'CREATE',
     'CROSS',
     'CURRENT_TIMESTAMP',
-    'DATA',
     'DATABASE',
     'DATABASES',
     'DAY',
@@ -515,6 +518,7 @@ $PMA_SQPdata_reserved_word = array (
     'INSERT_METHOD',
     'INTERVAL',
     'INTO',
+    'INVOKER',
     'IS',
     'ISOLATION',
     'JOIN',
@@ -695,7 +699,7 @@ $PMA_SQPdata_reserved_word = array (
  */
 $PMA_SQPdata_reserved_word_cnt = 288;
 /**
- * The previous array must be sorted so that the binary search work. 
+ * The previous array must be sorted so that the binary search work.
  * Sometimes a word is not added in the correct order, so
  * this debugging code shows the problem. The same should be
  * done for all arrays.
@@ -1042,9 +1046,9 @@ $PMA_SQPdata_forbidden_word = array (
     'RAID_TYPE',
     'RANGE',                // 5.1
     'READ',
+    'READS',
     'READ_ONLY',            // 5.1
     'READ_WRITE',           // 5.1
-    'READS',
     'REAL',
     'RECOVER',
     'REDUNDANT',
@@ -1261,7 +1265,7 @@ $PMA_SQPdata_column_type = array (
     'POINT',                // spatial
     'POLYGON',              // spatial
     'REAL',
-    'SERIAL',               // alsias for BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY
+    'SERIAL',               // alias for BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY
     'SET',
     'SMALLINT',
     'TEXT',

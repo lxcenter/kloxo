@@ -2,15 +2,16 @@
 /**
  * function used in table data manipulation pages
  *
- * @version $Id: tbl_change.js 12093 2008-12-07 12:37:05Z lem9 $
+ * @version $Id$
  */
 
 /**
  * Modify from controls when the "NULL" checkbox is selected
  *
  * @param   string   the MySQL field type
- * @param   string   the urlencoded field name
+ * @param   string   the urlencoded field name - OBSOLETE 
  * @param   string   the md5 hashed field name
+ * @param   string   the multi_edit row sequence number
  *
  * @return  boolean  always true
  */
@@ -18,8 +19,8 @@ function nullify(theType, urlField, md5Field, multi_edit)
 {
     var rowForm = document.forms['insertForm'];
 
-    if (typeof(rowForm.elements['funcs' + multi_edit + '[' + urlField + ']']) != 'undefined') {
-        rowForm.elements['funcs' + multi_edit + '[' + urlField + ']'].selectedIndex = -1;
+    if (typeof(rowForm.elements['funcs' + multi_edit + '[' + md5Field + ']']) != 'undefined') {
+        rowForm.elements['funcs' + multi_edit + '[' + md5Field + ']'].selectedIndex = -1;
     }
 
     // "SET" field , "ENUM" field with more than 20 characters
@@ -47,7 +48,7 @@ function nullify(theType, urlField, md5Field, multi_edit)
     }
     // Other field types
     else /*if (theType == 5)*/ {
-        rowForm.elements['fields' + multi_edit + '[' + urlField + ']'].value = '';
+        rowForm.elements['fields' + multi_edit + '[' + md5Field + ']'].value = '';
     } // end if... else if... else
 
     return true;
@@ -59,6 +60,7 @@ function nullify(theType, urlField, md5Field, multi_edit)
  * entered
  *
  * @param   string   the urlencoded field name
+ * @param   string   the multi_edit row sequence number
  *
  * @return  boolean  always true
  */
@@ -90,13 +92,17 @@ var clock_set = 0;
  *
  * @param   string      calendar.php parameters
  * @param   string      form name
- * @param   string      field name
+ * @param   string      id of field name
  * @param   string      edit type - date/timestamp
+ * @param   string      id of the corresponding checkbox for NULL 
  */
-function openCalendar(params, form, field, type) {
+function openCalendar(params, form, field, type, fieldNull) {
     window.open("./calendar.php?" + params, "calendar", "width=400,height=200,status=yes");
     dateField = eval("document." + form + "." + field);
     dateType = type;
+    if (fieldNull != '') {
+        dateFieldNull = eval("document." + form + "." + fieldNull);
+    }
 }
 
 /**
@@ -345,5 +351,8 @@ function returnDate(d) {
     }
 
     window.opener.dateField.value = txt;
+    if (typeof(window.opener.dateFieldNull) != 'undefined') {
+        window.opener.dateFieldNull.checked = false;
+    }
     window.close();
 }

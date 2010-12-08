@@ -28,7 +28,8 @@
  * - db connection
  * - authentication work
  *
- * @version $Id: common.inc.php 12202 2009-01-20 18:04:20Z lem9 $
+ * @version $Id$
+ * @package phpMyAdmin
  */
 
 /**
@@ -40,8 +41,8 @@ if (version_compare(PHP_VERSION, '5.2.0', 'lt')) {
 }
 
 /**
- * Backward compatibility for PHP 5.2
- */
+  * Backward compatibility for PHP 5.2
+  */
 if (!defined('E_DEPRECATED')) {
     define('E_DEPRECATED', 8192);
 }
@@ -99,6 +100,16 @@ require_once './libraries/Theme_Manager.class.php';
  * the PMA_Config class
  */
 require_once './libraries/Config.class.php';
+
+/**
+ * the relation lib, tracker needs it
+ */
+require_once './libraries/relation.lib.php';
+
+/**
+ * the PMA_Tracker class
+ */
+require_once './libraries/Tracker.class.php';
 
 /**
  * the PMA_Table class
@@ -205,7 +216,7 @@ unset($key, $value, $variables_whitelist);
  * ... main form elments ...
  * <input type="submit" name="main_action" value="submit form" />
  * </form>
- * </code
+ * </code>
  *
  * so we now check if a subform is submitted
  */
@@ -239,9 +250,7 @@ if (isset($_POST['usesubform'])) {
 // end check if a subform is submitted
 
 // remove quotes added by php
-// (get_magic_quotes_gpc() is deprecated in PHP 5.3, but compare with 5.2.99
-// to be able to test with 5.3.0-dev)
-if (function_exists('get_magic_quotes_gpc') && -1 == version_compare(PHP_VERSION, '5.2.99') && get_magic_quotes_gpc()) {
+if (function_exists('get_magic_quotes_gpc') && get_magic_quotes_gpc()) {
     PMA_arrayWalkRecursive($_GET, 'stripslashes', true);
     PMA_arrayWalkRecursive($_POST, 'stripslashes', true);
     PMA_arrayWalkRecursive($_COOKIE, 'stripslashes', true);
@@ -654,11 +663,11 @@ unset($default_server);
 /* setup themes                                          LABEL_theme_setup    */
 
 if (isset($_REQUEST['custom_color_reset'])) {
-    unset($_SESSION['userconf']['custom_color']);
-    unset($_SESSION['userconf']['custom_color_rgb']);
+    unset($_SESSION['tmp_user_values']['custom_color']);
+    unset($_SESSION['tmp_user_values']['custom_color_rgb']);
 } elseif (isset($_REQUEST['custom_color'])) {
-    $_SESSION['userconf']['custom_color'] = $_REQUEST['custom_color'];
-    $_SESSION['userconf']['custom_color_rgb'] = $_REQUEST['custom_color_rgb'];
+    $_SESSION['tmp_user_values']['custom_color'] = $_REQUEST['custom_color'];
+    $_SESSION['tmp_user_values']['custom_color_rgb'] = $_REQUEST['custom_color_rgb'];
 }
 /**
  * @global PMA_Theme_Manager $_SESSION['PMA_Theme_Manager']
@@ -809,6 +818,8 @@ if (! defined('PMA_MINIMUM_COMMON')) {
          */
         require_once './libraries/database_interface.lib.php';
 
+        require_once './libraries/logging.lib.php';
+
         // Gets the authentication library that fits the $cfg['Server'] settings
         // and run authentication
 
@@ -869,7 +880,8 @@ if (! defined('PMA_MINIMUM_COMMON')) {
 
             // Ejects the user if banished
             if ($allowDeny_forbidden) {
-               PMA_auth_fails();
+                PMA_log_user($cfg['Server']['user'], 'allow-denied');
+                PMA_auth_fails();
             }
             unset($allowDeny_forbidden); //Clean up after you!
         } // end if
@@ -877,15 +889,17 @@ if (! defined('PMA_MINIMUM_COMMON')) {
         // is root allowed?
         if (!$cfg['Server']['AllowRoot'] && $cfg['Server']['user'] == 'root') {
             $allowDeny_forbidden = true;
+            PMA_log_user($cfg['Server']['user'], 'root-denied');
             PMA_auth_fails();
             unset($allowDeny_forbidden); //Clean up after you!
         }
 
-        // is root without password allowed?
-        if (!$cfg['Server']['AllowNoPasswordRoot'] && $cfg['Server']['user'] == 'root' && $cfg['Server']['password'] == '') {
-            $allowDeny_forbidden = true;
+        // is a login without password allowed?
+        if (!$cfg['Server']['AllowNoPassword'] && $cfg['Server']['password'] == '') {
+            $login_without_password_is_forbidden = true;
+            PMA_log_user($cfg['Server']['user'], 'empty-denied');
             PMA_auth_fails();
-            unset($allowDeny_forbidden); //Clean up after you!
+            unset($login_without_password_is_forbidden); //Clean up after you!
         }
 
         // Try to connect MySQL with the control user profile (will be used to
@@ -905,6 +919,9 @@ if (! defined('PMA_MINIMUM_COMMON')) {
         if (! $controllink) {
             $controllink = $userlink;
         }
+
+        /* Log success */
+        PMA_log_user($cfg['Server']['user']);
 
         /**
          * with phpMyAdmin 3 we support MySQL >=5
@@ -936,10 +953,10 @@ if (! defined('PMA_MINIMUM_COMMON')) {
         /**
          * some resetting has to be done when switching servers
          */
-        if (isset($_SESSION['userconf']['previous_server']) && $_SESSION['userconf']['previous_server'] != $GLOBALS['server']) {
-            unset($_SESSION['userconf']['navi_limit_offset']);
+        if (isset($_SESSION['tmp_user_values']['previous_server']) && $_SESSION['tmp_user_values']['previous_server'] != $GLOBALS['server']) {
+            unset($_SESSION['tmp_user_values']['navi_limit_offset']);
         }
-        $_SESSION['userconf']['previous_server'] = $GLOBALS['server'];
+        $_SESSION['tmp_user_values']['previous_server'] = $GLOBALS['server'];
 
     } // end server connecting
 
@@ -959,14 +976,18 @@ if (! defined('PMA_MINIMUM_COMMON')) {
 
     // rajk - checks for blobstreaming plugins and databases that support
     // blobstreaming (by having the necessary tables for blobstreaming)
-    if (checkBLOBStreamingPlugins())
+    if (checkBLOBStreamingPlugins()) {
         checkBLOBStreamableDatabases();
+    }
 } // end if !defined('PMA_MINIMUM_COMMON')
 
 // remove sensitive values from session
 $_SESSION['PMA_Config']->set('blowfish_secret', '');
 $_SESSION['PMA_Config']->set('Servers', '');
 $_SESSION['PMA_Config']->set('default_server', '');
+
+/* Tell tracker that it can actually work */
+PMA_Tracker::enable();
 
 if (!empty($__redirect) && in_array($__redirect, $goto_whitelist)) {
     /**

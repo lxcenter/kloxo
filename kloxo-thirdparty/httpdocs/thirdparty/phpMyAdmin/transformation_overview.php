@@ -2,11 +2,13 @@
 /* vim: set expandtab sw=4 ts=4 sts=4: */
 /**
  *
- * @version $Id: transformation_overview.php 11253 2008-05-09 10:52:01Z cybot_tm $
+ * @version $Id$
+ * @package phpMyAdmin
  */
 
 /**
  * Don't display the page heading
+ * @ignore
  */
 define('PMA_DISPLAY_HEADING', 0);
 

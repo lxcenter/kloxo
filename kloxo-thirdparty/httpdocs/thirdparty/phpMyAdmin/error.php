@@ -3,10 +3,13 @@
 /**
  * phpMyAdmin fatal error display page
  *
- * @version $Id: error.php 10289 2007-04-16 13:32:45Z cybot_tm $
+ * @version $Id$
+ * @package phpMyAdmin
  */
 
-/* Input sanitizing */
+/**
+ * Input sanitizing.
+ */
 require_once './libraries/sanitizing.lib.php';
 
 /* Get variables */
@@ -73,10 +76,14 @@ header('Content-Type: text/html; charset=' . $charset);
 <body>
 <h1>phpMyAdmin - <?php echo $type; ?></h1>
 <p><?php
-if (function_exists('get_magic_quotes_gpc') && get_magic_quotes_gpc()) {
-    echo PMA_sanitize(stripslashes($_REQUEST['error']));
+if (!empty($_REQUEST['error'])) {
+    if (function_exists('get_magic_quotes_gpc') && get_magic_quotes_gpc()) {
+        echo PMA_sanitize(stripslashes($_REQUEST['error']));
+    } else {
+        echo PMA_sanitize($_REQUEST['error']);
+    }
 } else {
-    echo PMA_sanitize($_REQUEST['error']);
+    echo 'No error message!';
 }
 ?></p>
 </body>

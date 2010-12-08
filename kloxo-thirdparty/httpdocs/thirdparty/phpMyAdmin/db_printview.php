@@ -2,7 +2,8 @@
 /* vim: set expandtab sw=4 ts=4 sts=4: */
 /**
  *
- * @version $Id: db_printview.php 11334 2008-06-21 13:16:05Z lem9 $
+ * @version $Id$
+ * @package phpMyAdmin
  */
 
 /**
@@ -116,7 +117,7 @@ else {
     $sum_entries = $sum_size = 0;
     $odd_row = true;
     foreach ($tables as $sts_data) {
-        if (strtoupper($sts_data['ENGINE']) == 'MRG_MYISAM'
+        if (PMA_Table::isMerge($db, $sts_data['TABLE_NAME'])
          || strtoupper($sts_data['ENGINE']) == 'FEDERATED') {
             $merged_size = true;
         } else {
@@ -236,7 +237,7 @@ else {
         <?php
     }
     ?>
-    <th>&nbsp;</th>
+    <th></th>
 </tr>
 </tbody>
 </table>

@@ -7,7 +7,8 @@
  * - reversed the right modify links: 1. drop, 2. edit, 3. checkbox
  * - also changes made in js/functions.js
  *
- * @version $Id: display_tbl_links.lib.php 11336 2008-06-21 15:01:27Z lem9 $
+ * @version $Id$
+ * @package phpMyAdmin
  */
 if (! defined('PHPMYADMIN')) {
     exit;
@@ -20,7 +21,7 @@ if ($doWriteModifyAt == 'left') {
 
     if (!empty($del_url) && $is_display['del_lnk'] != 'kp') {
         echo '    <td align="center">' . "\n"
-           . '        <input type="checkbox" id="id_rows_to_delete' . $row_no . '" name="rows_to_delete[' . $unique_condition_html . ']"'
+           . '        <input type="checkbox" id="id_rows_to_delete' . $row_no . '" name="rows_to_delete[' . $where_clause_html . ']"'
            . ' onclick="copyCheckboxesRange(\'rowsDeleteForm\', \'id_rows_to_delete' . $row_no . '\',\'l\');"'
            . ' value="' . htmlspecialchars($del_query) . '" ' . (isset($GLOBALS['checkall']) ? 'checked="checked"' : '') . ' />' . "\n"
            . '    </td>' . "\n";
@@ -50,7 +51,7 @@ if ($doWriteModifyAt == 'left') {
     }
     if (!empty($del_url) && $is_display['del_lnk'] != 'kp') {
         echo '    <td align="center">' . "\n"
-           . '        <input type="checkbox" id="id_rows_to_delete' . $row_no . 'r" name="rows_to_delete[' . $unique_condition_html . ']"'
+           . '        <input type="checkbox" id="id_rows_to_delete' . $row_no . 'r" name="rows_to_delete[' . $where_clause_html . ']"'
            . ' onclick="copyCheckboxesRange(\'rowsDeleteForm\', \'id_rows_to_delete' . $row_no . '\',\'r\');"'
            . ' value="' . htmlspecialchars($del_query) . '" ' . (isset($GLOBALS['checkall']) ? 'checked="checked"' : '') . ' />' . "\n"
            . '    </td>' . "\n";

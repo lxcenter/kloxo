@@ -1,11 +1,17 @@
 <?php
 /**
+ * Config file management and generation
+ *
+ * @author     Piotr Przybylski <piotrprz@gmail.com>
+ * @license    http://www.gnu.org/licenses/gpl.html GNU GPL 2.0
+ * @version    $Id$
+ * @package    phpMyAdmin-setup
+ */
+
+/**
  * Config file management and generation class
  *
  * @package    phpMyAdmin-setup
- * @author     Piotr Przybylski <piotrprz@gmail.com>
- * @license    http://www.gnu.org/licenses/gpl.html GNU GPL 2.0
- * @version    $Id: ConfigFile.class.php 12342 2009-04-10 07:29:13Z nijel $
  */
 class ConfigFile
 {
@@ -280,10 +286,10 @@ class ConfigFile
         if ($this->getServerCount() > 0) {
             $ret .= "/* Servers configuration */$crlf\$i = 0;" . $crlf . $crlf;
             foreach ($c['Servers'] as $id => $server) {
-                $k = preg_replace('/[^A-Za-z0-9_]/', '_', $k);
                 $ret .= '/* Server: ' . strtr($this->getServerName($id), '*/', '-') . " [$id] */" . $crlf
                     . '$i++;' . $crlf;
                 foreach ($server as $k => $v) {
+                    $k = preg_replace('/[^A-Za-z0-9_]/', '_', $k);
                     $ret .= "\$cfg['Servers'][\$i]['$k'] = "
                         . var_export($v, true) . ';' . $crlf;
                 }
