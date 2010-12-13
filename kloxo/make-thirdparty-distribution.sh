@@ -33,21 +33,20 @@
 #
 ###############################
 
-printUsage() {
- echo "Usage:"
- echo "make-thirdparty-distribution.sh --version number (Where number is the version to be created)"
- echo "make-thirdparty-distribution.sh --help (To show this help)"
-return
-}
-
-StartPackaging() {
 	echo "################################"
 	echo "### Start packaging Kloxo Thirdparty tools."
 	echo "### Read version..."
 	VERSION=$1
-	if [ $VERSION == "" ] ; then
-	 echo "## Could not read version, please add a number after --version"
+	if [ "$VERSION" == "" ] ; then
+	 echo "## Could not read version from commandline, please add a number on commandline"
+         echo "## Using current version plus one"
+	 CURRENT=`curl --silent http://download.lxcenter.org/download/thirdparty/kloxo-version.list`
+         if [ "$CURRENT" == "" ] ; then
+         echo "## Could not read version from download center, please add a number on commandline"
 	 exit 1
+	 fi
+        ((CURRENT++))
+        VERSION=$CURRENT
 	fi
 	echo "### Packaging version: kloxo-thirdparty.$VERSION.zip"
 	rm -f kloxo-thirdparty.$VERSION.zip
@@ -62,17 +61,5 @@ StartPackaging() {
 	echo "### Finished!"
 	echo "################################"
 	ls -lh kloxo-thirdparty.*.zip
-return
-}
 
-if [ $# -eq 0 ] ; then
-printUsage
-exit 1
-fi
-
-case $1 in
---version) StartPackaging $2;;
---help) printUsage; exit 1;;
-*) printUsage; exit 1;;
-esac
 
