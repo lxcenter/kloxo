@@ -1,5 +1,10 @@
 <?php
-
+/*
+* Note #1
+* kloxo relies on isset in other scripts
+* if we set here vars to NULL to avoid PHP warnings, we will break other scripts
+* so we should first properly get the vars then remove these warnings
+*/
 
 class Sqlite {
 
@@ -471,12 +476,13 @@ function getToArray($object)
 			}
 		} else if (csb($key, "ser_")) {
 			$cvar = substr($key, 4);
-			if (isset($object->$cvar)) {
+			// see note #1 on top
+			//if (isset($object->$cvar)) {
 				$value = $object->$cvar;
-			}
+/*			}
 			else {
 				$value = NULL;
-			}
+			}*/
 
 			if ($value && isset($value->driverApp)) {
 				unset($value->driverApp);
@@ -488,12 +494,13 @@ function getToArray($object)
 				}
 			}
 
-			if (isset($object->$cvar)) {
+			// See note #1 on top
+			//if (isset($object->$cvar)) {
 				$ret[$key] = base64_encode(serialize($object->$cvar));
-			}
+			/*}
 			else {
-            $ret[$key] = NULL;
-			}
+            	$ret[$key] = NULL;
+			}   */
 
 			//$ret[$key] = serialize($object->$cvar);
 		} else if (csb($key, "priv_q_") || csb($key, "used_q_")) {
@@ -501,11 +508,12 @@ function getToArray($object)
 			$qkey = strfrom($key, "_q_");
 			//if ($object->get__table() === 'uuser') {
 			//}
-			if (isset ($object->$qob->$qkey)) {
-            $ret[$key] = $object->$qob->$qkey;
-			}
+			// See note #1 on top
+			//if (isset ($object->$qob->$qkey)) {
+            	$ret[$key] = $object->$qob->$qkey;
+/*			}
 			else
-				$ret[$key] = NULL;
+				$ret[$key] = NULL;*/
 
 		} else {
 			if (!isset($object->$key)) {
