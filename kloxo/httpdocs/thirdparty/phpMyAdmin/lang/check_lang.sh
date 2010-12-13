@@ -1,5 +1,5 @@
 #!/bin/sh
-# $Id: check_lang.sh 10648 2007-09-15 23:31:45Z lem9 $
+# $Id$
 ##
 # Shell script to check that all language files are syncronized
 # Catches duplicate/missing strings

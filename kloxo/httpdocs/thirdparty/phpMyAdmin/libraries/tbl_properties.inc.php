@@ -4,7 +4,8 @@
  * Display form for changing/adding table fields/columns
  *
  * included by tbl_addfield.php, -_alter.php, -_create.php
- * @version $Id: tbl_properties.inc.php 12212 2009-01-24 17:32:16Z lem9 $
+ * @version $Id$
+ * @package phpMyAdmin
  */
 if (! defined('PHPMYADMIN')) {
     exit;
@@ -95,8 +96,8 @@ $content_cells = array();
 
 $header_cells[] = $strField;
 $header_cells[] = $strType
-     . ($GLOBALS['cfg']['ReplaceHelpImg'] 
-        ? PMA_showMySQLDocu('SQL-Syntax', 'data-types') 
+     . ($GLOBALS['cfg']['ReplaceHelpImg']
+        ? PMA_showMySQLDocu('SQL-Syntax', 'data-types')
         : '<br /><span style="font-weight: normal">' . PMA_showMySQLDocu('SQL-Syntax', 'data-types')
      . '</span>');
 $header_cells[] = $strLengthSet . PMA_showHint($strSetEnumVal);
@@ -139,7 +140,7 @@ if ($cfgRelation['mimework'] && $cfg['BrowseMIME']) {
 
     $header_cells[] = $strMIME_MIMEtype;
     $header_cells[] = $strMIME_transformation;
-    $header_cells[] = $strMIME_transformation_options 
+    $header_cells[] = $strMIME_transformation_options
         . PMA_showHint($strMIME_transformation_options_note . $hint);
 }
 
@@ -174,7 +175,7 @@ for ($i = 0; $i < $num_fields; $i++) {
             $row['Key'] = '';
         }
 
-        // put None in the drop-down for Default, when someone adds a field 
+        // put None in the drop-down for Default, when someone adds a field
         $row['DefaultType']  = (isset($_REQUEST['field_default_type'][$i]) ? $_REQUEST['field_default_type'][$i] : 'NONE');
         $row['DefaultValue'] = (isset($_REQUEST['field_default_value'][$i]) ? $_REQUEST['field_default_value'][$i] : '');
 
@@ -190,7 +191,7 @@ for ($i = 0; $i < $num_fields; $i++) {
                 $row['Default'] = $row['DefaultType'];
                 break;
         }
-        
+
         $row['Extra']     = (isset($_REQUEST['field_extra'][$i]) ? $_REQUEST['field_extra'][$i] : false);
         $row['Comment']   = (isset($submit_fulltext[$i]) && ($submit_fulltext[$i] == $i) ? 'FULLTEXT' : false);
 
@@ -221,10 +222,16 @@ for ($i = 0; $i < $num_fields; $i++) {
             case null:
                 if ($row['Null'] == 'YES') {
                     $row['DefaultType']  = 'NULL';
+                    $row['DefaultValue'] = '';
+    // SHOW FULL FIELDS does not report the case when there is a DEFAULT value
+    // which is empty so we need to use the results of SHOW CREATE TABLE
+                } elseif (isset($row) && isset($analyzed_sql[0]['create_table_fields'][$row['Field']]['default_value'])) {
+                    $row['DefaultType']  = 'USER_DEFINED';
+                    $row['DefaultValue'] = $row['Default'];
                 } else {
                     $row['DefaultType']  = 'NONE';
+                    $row['DefaultValue'] = '';
                 }
-                $row['DefaultValue'] = '';
                 break;
             case 'CURRENT_TIMESTAMP':
                 $row['DefaultType']  = 'CURRENT_TIMESTAMP';
@@ -240,7 +247,7 @@ for ($i = 0; $i < $num_fields; $i++) {
     if (isset($row['Type'])) {
         $extracted_fieldspec = PMA_extractFieldSpec($row['Type']);
         if ($extracted_fieldspec['type'] == 'bit') {
-            $row['Default'] = PMA_printable_bit_value($row['Default'], $extracted_fieldspec['spec_in_brackets']);
+            $row['Default'] = PMA_convert_bit_default_value($row['Default']);
         }
     }
     // Cell index: If certain fields get left out, the counter shouldn't change.
@@ -268,7 +275,7 @@ for ($i = 0; $i < $num_fields; $i++) {
         . ' value="' . (isset($row['Field']) ? htmlspecialchars($row['Field']) : '') . '"'
         . ' />';
     $ci++;
-    
+
     // column type
     $content_cells[$i][$ci] = '<select name="field_type[' . $i . ']"'
         .' id="field_' . $i . '_' . ($ci - $ci_offset) . '" >';
@@ -348,13 +355,12 @@ for ($i = 0; $i < $num_fields; $i++) {
         $binary           = 0;
         $unsigned         = 0;
         $zerofill         = 0;
-        $length_to_display = htmlspecialchars($length);
     } else {
-        $length_to_display = $length;
         $binary           = false;
         $unsigned         = stristr($row['Type'], 'unsigned');
         $zerofill         = stristr($row['Type'], 'zerofill');
     }
+    $length_to_display = $length;
 
     $content_cells[$i][$ci] = '<input id="field_' . $i . '_' . ($ci - $ci_offset) . '"'
         . ' type="text" name="field_length[' . $i . ']" size="' . $length_values_input_size . '"'
@@ -374,26 +380,30 @@ for ($i = 0; $i < $num_fields; $i++) {
 
     // old column default
     if ($is_backup) {
-        $_form_params['field_default_orig[' . $i . ']'] = 
-            (isset($row['Default']) ? $row['Default'] : ''); 
+        $_form_params['field_default_orig[' . $i . ']'] =
+            (isset($row['Default']) ? $row['Default'] : '');
     }
-    
+
     // here we put 'NONE' as the default value of drop-down; otherwise
     // users would have problems if they forget to enter the default
     // value (example, for an INT)
     $default_options = array(
-        'NONE'              =>  $strNone,
+        'NONE'              =>  $strNoneDefault,
         'USER_DEFINED'      =>  $strAsDefined,
         'NULL'              => 'NULL',
         'CURRENT_TIMESTAMP' => 'CURRENT_TIMESTAMP',
     );
 
-    // for a TIMESTAMP, do not show CURRENT_TIMESTAMP as a default value
+    // for a TIMESTAMP, do not show the string "CURRENT_TIMESTAMP" as a default value
     if ($type_upper == 'TIMESTAMP'
-     && $default_current_timestamp
+     && ! empty($default_current_timestamp)
      && isset($row['Default'])) {
         $row['Default'] = '';
     }
+
+    if ($type_upper == 'BIT') {
+        $row['DefaultValue'] = PMA_convert_bit_default_value($row['DefaultValue']);
+    } 
 
     $content_cells[$i][$ci] = '<select name="field_default_type[' . $i . ']">';
     foreach ($default_options as $key => $value) {
@@ -415,7 +425,7 @@ for ($i = 0; $i < $num_fields; $i++) {
     // column collation
     $tmp_collation          = empty($row['Collation']) ? null : $row['Collation'];
     $content_cells[$i][$ci] = PMA_generateCharsetDropdownBox(
-        PMA_CSDROPDOWN_COLLATION, 'field_collation[' . $i . ']', 
+        PMA_CSDROPDOWN_COLLATION, 'field_collation[' . $i . ']',
         'field_' . $i . '_' . ($ci - $ci_offset), $tmp_collation, false);
     unset($tmp_collation);
     $ci++;
@@ -730,9 +740,9 @@ if ($action == 'tbl_create.php') {
     </tr>
     <tr>
         <td>
-            <textarea name="partition_definition" id="partitiondefinition" 
-                cols="<?php echo $GLOBALS['cfg']['TextareaCols'];?>" 
-                rows="<?php echo $GLOBALS['cfg']['TextareaRows'];?>" 
+            <textarea name="partition_definition" id="partitiondefinition"
+                cols="<?php echo $GLOBALS['cfg']['TextareaCols'];?>"
+                rows="<?php echo $GLOBALS['cfg']['TextareaRows'];?>"
                 dir="<?php echo $GLOBALS['text_dir'];?>"><?php echo (isset($_REQUEST['partition_definition']) ? htmlspecialchars($_REQUEST['partition_definition']) : ''); ?></textarea>
         </td>
     </tr>
@@ -746,7 +756,7 @@ if ($action == 'tbl_create.php') {
 ?>
 
 <fieldset class="tblFooters">
-    <input type="submit" name="do_save_data" value="<?php echo $strSave; ?>" 
+    <input type="submit" name="do_save_data" value="<?php echo $strSave; ?>"
         onclick="return checkTableEditForm(this.form, <?php echo $num_fields; ?>)" />
 <?php if ($action == 'tbl_create.php' || $action == 'tbl_addfield.php') { ?>
     <?php echo $GLOBALS['strOr']; ?>

@@ -9,7 +9,8 @@
  *  - adding tables
  *  - viewing PDF schemas
  *
- * @version $Id: db_operations.php 12011 2008-11-28 12:47:41Z nijel $
+ * @version $Id$
+ * @package phpMyAdmin
  */
 
 /**
@@ -52,92 +53,17 @@ if (strlen($db) && (! empty($db_rename) || ! empty($db_copy))) {
             }
             $local_query .= ';';
             $sql_query = $local_query;
+            // save the original db name because Tracker.class.php which
+            // may be called under PMA_DBI_query() changes $GLOBALS['db']
+            // for some statements, one of which being CREATE DATABASE
+            $original_db = $db;
             PMA_DBI_query($local_query);
+            $db = $original_db;
+            unset($original_db);
 
             // rebuild the database list because PMA_Table::moveCopy
             // checks in this list if the target db exists
             $GLOBALS['pma']->databases->build();
-        }
-
-        if (isset($GLOBALS['add_constraints'])) {
-            $GLOBALS['sql_constraints_query_full_db'] = '';
-        }
-
-        $tables_full = PMA_DBI_get_tables_full($db);
-        $views = array();
-        foreach ($tables_full as $each_table => $tmp) {
-            // to be able to rename a db containing views, we
-            // first collect in $views all the views we find and we
-            // will handle them after the tables
-            /**
-             * @todo support a view of a view
-             * @todo support triggers 
-             */
-            if (PMA_Table::isView($db, $each_table)) {
-                $views[] = $each_table;
-                continue;
-            }
-
-            $back = $sql_query;
-            $sql_query = '';
-
-            // value of $what for this table only
-            $this_what = $what;
-
-            // do not copy the data from a Merge table
-            // note: on the calling FORM, 'data' means 'structure and data'
-            if ($tables_full[$each_table]['Engine'] == 'MRG_MyISAM') {
-                if ($this_what == 'data') {
-                    $this_what = 'structure';
-                }
-                if ($this_what == 'dataonly') {
-                    $this_what = 'nocopy';
-                }
-            }
-
-            if ($this_what != 'nocopy') {
-                if (! PMA_Table::moveCopy($db, $each_table, $newname, $each_table,
-                    isset($this_what) ? $this_what : 'data', $move, 'db_copy'))
-                {
-                    $_error = true;
-                    // $sql_query is filled by PMA_Table::moveCopy()
-                    $sql_query = $back . $sql_query;
-                    break;
-                }
-                if (isset($GLOBALS['add_constraints'])) {
-                    $GLOBALS['sql_constraints_query_full_db'] .= $GLOBALS['sql_constraints_query'];
-                    unset($GLOBALS['sql_constraints_query']);
-                }
-            }
-            // $sql_query is filled by PMA_Table::moveCopy()
-            $sql_query = $back . $sql_query;
-        } // end (foreach)
-        unset($each_table);
-
-        // handle the views
-        if (! $_error) {
-            foreach ($views as $view) {
-                if (! PMA_Table::moveCopy($db, $view, $newname, $view,
-                 'structure', $move, 'db_copy')) {
-                    $_error = true;
-                    break;
-                }
-            }
-        }
-        unset($view, $views);
-
-        // now that all tables exist, create all the accumulated constraints
-        if (! $_error && isset($GLOBALS['add_constraints'])) {
-            /**
-             * @todo this works with mysqli but not with mysql, because
-             * mysql extension does not accept more than one statement; maybe
-             * interface with the sql import plugin that handles statement delimiter
-             */
-            PMA_DBI_query($GLOBALS['sql_constraints_query_full_db']);
-
-            // and prepare to display them
-            $GLOBALS['sql_query'] .= "\n" . $GLOBALS['sql_constraints_query_full_db'];
-            unset($GLOBALS['sql_constraints_query_full_db']);
         }
 
         if (PMA_MYSQL_INT_VERSION >= 50000) {
@@ -174,6 +100,118 @@ if (strlen($db) && (! empty($db_rename) || ! empty($db_copy))) {
         // go back to current db, just in case
         PMA_DBI_select_db($db);
 
+        if (isset($GLOBALS['add_constraints']) || $move) {
+            $GLOBALS['sql_constraints_query_full_db'] = array();
+        }
+
+        $tables_full = PMA_DBI_get_tables_full($db);
+        $views = array();
+
+        // remove all foreign key constraints, otherwise we can get errors
+        require_once './libraries/export/sql.php';
+        foreach ($tables_full as $each_table => $tmp) {
+            $sql_constraints = '';
+            $sql_drop_foreign_keys = '';
+            $sql_structure = PMA_getTableDef($db, $each_table, "\n", '', false, false);
+            if ($move && ! empty($sql_drop_foreign_keys)) {
+                PMA_DBI_query($sql_drop_foreign_keys);
+            }
+            // keep the constraint we just dropped
+            if (! empty($sql_constraints)) {
+                $GLOBALS['sql_constraints_query_full_db'][] = $sql_constraints;
+            }
+        }
+        unset($sql_constraints, $sql_drop_foreign_keys, $sql_structure);
+
+
+        foreach ($tables_full as $each_table => $tmp) {
+            // to be able to rename a db containing views, we
+            // first collect in $views all the views we find and we
+            // will handle them after the tables
+            /**
+             * @todo support a view of a view
+             */
+            if (PMA_Table::isView($db, $each_table)) {
+                $views[] = $each_table;
+                continue;
+            }
+
+            $back = $sql_query;
+            $sql_query = '';
+
+            // value of $what for this table only
+            $this_what = $what;
+
+            // do not copy the data from a Merge table
+            // note: on the calling FORM, 'data' means 'structure and data'
+            if (PMA_Table::isMerge($db, $each_table)) {
+                if ($this_what == 'data') {
+                    $this_what = 'structure';
+                }
+                if ($this_what == 'dataonly') {
+                    $this_what = 'nocopy';
+                }
+            }
+
+            if ($this_what != 'nocopy') {
+                // keep the triggers from the original db+table
+                // (third param is empty because delimiters are only intended 
+                //  for importing via the mysql client or our Import feature)
+                $triggers = PMA_DBI_get_triggers($db, $each_table, '');
+
+                if (! PMA_Table::moveCopy($db, $each_table, $newname, $each_table,
+                    isset($this_what) ? $this_what : 'data', $move, 'db_copy'))
+                {
+                    $_error = true;
+                    // $sql_query is filled by PMA_Table::moveCopy()
+                    $sql_query = $back . $sql_query;
+                    break;
+                }
+                // apply the triggers to the destination db+table
+                if ($triggers) {
+                    PMA_DBI_select_db($newname);
+                    foreach ($triggers as $trigger) {
+                        PMA_DBI_query($trigger['create']);
+                    }
+                    unset($trigger);
+                }
+                unset($triggers); 
+
+                // this does not apply to a rename operation
+                if (isset($GLOBALS['add_constraints']) && !empty($GLOBALS['sql_constraints_query'])) {
+                    $GLOBALS['sql_constraints_query_full_db'][] = $GLOBALS['sql_constraints_query'];
+                    unset($GLOBALS['sql_constraints_query']);
+                }
+            }
+            // $sql_query is filled by PMA_Table::moveCopy()
+            $sql_query = $back . $sql_query;
+        } // end (foreach)
+        unset($each_table);
+
+        // handle the views
+        if (! $_error) {
+            foreach ($views as $view) {
+                if (! PMA_Table::moveCopy($db, $view, $newname, $view,
+                 'structure', $move, 'db_copy')) {
+                    $_error = true;
+                    break;
+                }
+            }
+        }
+        unset($view, $views);
+
+        // now that all tables exist, create all the accumulated constraints
+        if (! $_error && count($GLOBALS['sql_constraints_query_full_db']) > 0) {
+            PMA_DBI_select_db($newname);
+            foreach ($GLOBALS['sql_constraints_query_full_db'] as $one_query) {
+                PMA_DBI_query($one_query);
+            // and prepare to display them
+                $GLOBALS['sql_query'] .= "\n" . $one_query;
+            }
+
+            unset($GLOBALS['sql_constraints_query_full_db'], $one_query);
+        }
+
         // Duplicate the bookmarks for this db (done once for each db)
         if (! $_error && $db != $newname) {
             $get_fields = array('user', 'label', 'query');
@@ -184,7 +222,9 @@ if (strlen($db) && (! empty($db_rename) || ! empty($db_copy))) {
         }
 
         if (! $_error && $move) {
-            // cleanup pmadb stuff for this db
+            /**
+             * cleanup pmadb stuff for this db
+             */
             require_once './libraries/relation_cleanup.lib.php';
             PMA_relationsCleanupDatabase($db);
 
@@ -416,9 +456,9 @@ if (!$is_information_schema) {
 <?php
         $choices = array(
             'structure' => $strStrucOnly,
-            'data'      => $strStrucData, 
+            'data'      => $strStrucData,
             'dataonly'  => $strDataOnly);
-        PMA_generate_html_radio('what', $choices, 'data', true);
+        PMA_display_html_radio('what', $choices, 'data', true);
         unset($choices);
 ?>
         <input type="checkbox" name="create_database_before_copying" value="1"
@@ -493,7 +533,7 @@ if (!$is_information_schema) {
                     <?php echo PMA_getIcon('b_edit.png', $strBLOBRepository, false, true); ?>
                     </legend>
 
-                    <?php echo $strBLOBRepositoryStatus; ?>:
+                    <?php echo $strStatus; ?>:
 
                     <?php
 
@@ -589,7 +629,7 @@ if ($cfgRelation['pdfwork'] && $num_tables > 0) { ?>
          SELECT *
            FROM ' . PMA_backquote($GLOBALS['cfgRelation']['db']) . '.' . PMA_backquote($cfgRelation['pdf_pages']) . '
           WHERE db_name = \'' . PMA_sqlAddslashes($db) . '\'';
-    $test_rs    = PMA_query_as_cu($test_query, null, PMA_DBI_QUERY_STORE);
+    $test_rs    = PMA_query_as_controluser($test_query, null, PMA_DBI_QUERY_STORE);
 
     if ($test_rs && PMA_DBI_num_rows($test_rs) > 0) { ?>
     <!-- PDF schema -->
@@ -610,7 +650,7 @@ if ($cfgRelation['pdfwork'] && $num_tables > 0) { ?>
         <?php
         while ($pages = @PMA_DBI_fetch_assoc($test_rs)) {
             echo '                <option value="' . $pages['page_nr'] . '">'
-                . $pages['page_nr'] . ': ' . $pages['page_descr'] . '</option>' . "\n";
+                . $pages['page_nr'] . ': ' . htmlspecialchars($pages['page_descr']) . '</option>' . "\n";
         } // end while
         PMA_DBI_free_result($test_rs);
         unset($test_rs);

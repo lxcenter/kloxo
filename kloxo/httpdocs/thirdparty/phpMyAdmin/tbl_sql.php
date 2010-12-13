@@ -2,7 +2,8 @@
 /* vim: set expandtab sw=4 ts=4 sts=4: */
 /**
  *
- * @version $Id: tbl_sql.php 10965 2007-12-05 17:53:52Z lem9 $
+ * @version $Id$
+ * @package phpMyAdmin
  */
 
 /**
@@ -37,7 +38,7 @@ require_once './libraries/tbl_links.inc.php';
 /**
  * Query box, bookmark, insert data from textfile
  */
-PMA_sqlQueryForm(true, false, isset($_REQUEST['delimiter']) ? $_REQUEST['delimiter'] : ';');
+PMA_sqlQueryForm(true, false, isset($_REQUEST['delimiter']) ? htmlspecialchars($_REQUEST['delimiter']) : ';');
 
 /**
  * Displays the footer

@@ -2,13 +2,12 @@
 /* vim: set expandtab sw=4 ts=4 sts=4: */
 /**
  *
- * @version $Id: db_events.inc.php 11582 2008-09-10 16:53:28Z lem9 $
+ * @version $Id$
+ * @package phpMyAdmin
  */
 if (! defined('PHPMYADMIN')) {
     exit;
 }
-
-$url_query .= '&amp;goto=db_structure.php';
 
 $events = PMA_DBI_fetch_result('SELECT EVENT_NAME, EVENT_TYPE FROM information_schema.EVENTS WHERE EVENT_SCHEMA= \'' . PMA_sqlAddslashes($db,true) . '\';');
 
@@ -29,7 +28,7 @@ if ($events) {
     $delimiter = '//';
     foreach ($events as $event) {
 
-        // information_schema (at least in MySQL 5.1.22) does not return 
+        // information_schema (at least in MySQL 5.1.22) does not return
         // the full CREATE EVENT statement in a way that could be useful for us
         // so we rely on PMA_DBI_get_definition() which uses SHOW CREATE EVENT
 
@@ -46,8 +45,8 @@ if ($events) {
                      </tr>',
                      ($ct%2 == 0) ? 'even' : 'odd',
                      $event['EVENT_NAME'],
-                     ! empty($definition) ? PMA_linkOrButton('db_sql.php?' . $url_query . '&amp;sql_query=' . urlencode($definition) . '&amp;show_query=1&amp;delimiter=' . urlencode($delimiter), $titles['Structure']) : '&nbsp;',
-                     '<a href="sql.php?' . $url_query . '&sql_query=' . urlencode($sqlDrop) . '" onclick="return confirmLink(this, \'' . PMA_jsFormat($sqlDrop, false) . '\')">' . $titles['Drop'] . '</a>',
+                     ! empty($definition) ? PMA_linkOrButton('db_sql.php?' . $url_query . '&amp;sql_query=' . urlencode($definition) . '&amp;show_query=1&amp;db_query_force=1&amp;delimiter=' . urlencode($delimiter), $titles['Structure']) : '&nbsp;',
+                     '<a href="sql.php?' . $url_query . '&amp;sql_query=' . urlencode($sqlDrop) . '" onclick="return confirmLink(this, \'' . PMA_jsFormat($sqlDrop, false) . '\')">' . $titles['Drop'] . '</a>',
                      $event['EVENT_TYPE']);
         $ct++;
     }

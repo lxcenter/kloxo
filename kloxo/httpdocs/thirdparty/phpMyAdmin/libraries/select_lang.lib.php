@@ -3,7 +3,8 @@
 /**
  * phpMyAdmin Language Loading File
  *
- * @version $Id: select_lang.lib.php 12137 2008-12-14 13:58:06Z lem9 $
+ * @version $Id$
+ * @package phpMyAdmin
  */
 if (! defined('PHPMYADMIN')) {
     exit;
@@ -67,9 +68,9 @@ function PMA_langCheck()
     if (! empty($_COOKIE['pma_lang'])) {
         if (PMA_langSet($_COOKIE['pma_lang'])) {
             return true;
-        } elseif (!is_string($_COOKIE['lang'])) {
+        } elseif (!is_string($_COOKIE['pma_lang'])) {
             /* Faked request, don't care on localisation */
-            $GLOBALS['lang_failed_request'] = 'Yes';
+            $GLOBALS['lang_failed_cookie'] = 'Yes';
         } else {
             $GLOBALS['lang_failed_cookie'] = $_COOKIE['pma_lang'];
         }
@@ -124,11 +125,11 @@ function PMA_langSet(&$lang)
  *
  * @return  bool    true on success, otherwise false
  *
- * @global  $available_languages
+ * @global  array $available_languages
  *
  * @access  private
  */
-function PMA_langDetect(&$str, $envType)
+function PMA_langDetect($str, $envType)
 {
     if (empty($str)) {
         return false;
@@ -243,6 +244,8 @@ function PMA_langList()
         'tr-utf-8'    => array('tr|turkish', 'turkish-utf-8', 'tr', 'T&uuml;rk&ccedil;e'),
         'tt-utf-8'    => array('tt|tatarish', 'tatarish-utf-8', 'tt', 'Tatar&ccedil;a'),
         'uk-utf-8'    => array('uk|ukrainian', 'ukrainian-utf-8', 'uk', '&#1059;&#1082;&#1088;&#1072;&#1111;&#1085;&#1089;&#1100;&#1082;&#1072;'),
+        'uzlat-utf-8' => array('uz[-_]lat|uzbek-latin', 'uzbek_latin-utf-8', 'uz-lat', 'O&lsquo;zbekcha'),
+        'uzcyr-utf-8' => array('uz[-_]cyr|uzbek-cyrillic', 'uzbek_cyrillic-utf-8', 'uz-cyr', '&#1038;&#1079;&#1073;&#1077;&#1082;&#1095;&#1072;'),
         'zhtw-utf-8'  => array('zh[-_](tw|hk)|chinese traditional', 'chinese_traditional-utf-8', 'zh-TW', '&#20013;&#25991;'),
         'zh-utf-8'    => array('zh|chinese simplified', 'chinese_simplified-utf-8', 'zh', '&#20013;&#25991;'),
     );

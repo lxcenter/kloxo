@@ -16,7 +16,8 @@
  *
  * All directives are explained in Documentation.html
  *
- * @version $Id: config.default.php 12152 2008-12-22 17:32:17Z lem9 $
+ * @version $Id$
+ * @package phpMyAdmin
  */
 
 /**
@@ -52,6 +53,14 @@ $cfg['PmaNoRelation_DisableWarning'] = false;
  * @global boolean $cfg['SuhosinDisableWarning']
  */
 $cfg['SuhosinDisableWarning'] = false;
+
+/**
+ * Disable the default warning that is displayed if mcrypt is missing for
+ * cookie authentication.
+ *
+ * @global boolean $cfg['McryptDisableWarning']
+ */
+$cfg['McryptDisableWarning'] = false;
 
 /**
  * Allows phpMyAdmin to be included from a document located on
@@ -244,7 +253,7 @@ $cfg['Servers'][$i]['verbose'] = '';
  * Database used for Relation, Bookmark and PDF Features
  * (see scripts/create_tables.sql)
  *   - leave blank for no support
- *     DEFAULT: 'phpmyadmin'
+ *     SUGGESTED: 'phpmyadmin'
  *
  * @global string $cfg['Servers'][$i]['pmadb']
  */
@@ -253,7 +262,7 @@ $cfg['Servers'][$i]['pmadb'] = '';
 /**
  * Bookmark table
  *   - leave blank for no bookmark support
- *     DEFAULT: 'pma_bookmark'
+ *     SUGGESTED: 'pma_bookmark'
  *
  * @global string $cfg['Servers'][$i]['bookmarktable']
  */
@@ -262,7 +271,7 @@ $cfg['Servers'][$i]['bookmarktable'] = '';
 /**
  * table to describe the relation between links (see doc)
  *   - leave blank for no relation-links support
- *     DEFAULT: 'pma_relation'
+ *     SUGGESTED: 'pma_relation'
  *
  * @global string $cfg['Servers'][$i]['relation']
  */
@@ -271,7 +280,7 @@ $cfg['Servers'][$i]['relation'] = '';
 /**
  * table to describe the display fields
  *   - leave blank for no display fields support
- *     DEFAULT: 'pma_table_info'
+ *     SUGGESTED: 'pma_table_info'
  *
  * @global string $cfg['Servers'][$i]['table_info']
  */
@@ -280,7 +289,7 @@ $cfg['Servers'][$i]['table_info'] = '';
 /**
  * table to describe the tables position for the PDF schema
  *   - leave blank for no PDF schema support
- *     DEFAULT: 'pma_table_coords'
+ *     SUGGESTED: 'pma_table_coords'
  *
  * @global string $cfg['Servers'][$i]['table_coords']
  */
@@ -289,7 +298,7 @@ $cfg['Servers'][$i]['table_coords'] = '';
 /**
  * table to describe pages of relationpdf
  *   - leave blank if you don't want to use this
- *     DEFAULT: 'pma_pdf_pages'
+ *     SUGGESTED: 'pma_pdf_pages'
  *
  * @global string $cfg['Servers'][$i]['pdf_pages']
  */
@@ -298,7 +307,7 @@ $cfg['Servers'][$i]['pdf_pages'] = '';
 /**
  * table to store column information
  *   - leave blank for no column comments/mime types
- *     DEFAULT: 'pma_column_info'
+ *     SUGGESTED: 'pma_column_info'
  *
  * @global string $cfg['Servers'][$i]['column_info']
  */
@@ -307,7 +316,7 @@ $cfg['Servers'][$i]['column_info'] = '';
 /**
  * table to store SQL history
  *   - leave blank for no SQL query history
- *     DEFAULT: 'pma_history'
+ *     SUGGESTED: 'pma_history'
  *
  * @global string $cfg['Servers'][$i]['history']
  */
@@ -316,11 +325,20 @@ $cfg['Servers'][$i]['history'] = '';
 /**
  * table to store the coordinates for Designer
  *   - leave blank for no Designer feature
- *     DEFAULT: 'pma_designer_coords'
+ *     SUGGESTED: 'pma_designer_coords'
  *
  * @global string $cfg['Servers'][$i]['designer_coords']
  */
 $cfg['Servers'][$i]['designer_coords'] = '';
+
+/**
+ * table to store SQL tracking
+ *   - leave blank for no SQL tracking
+ *     SUGGESTED: 'pma_tracking'
+ *
+ * @global string $cfg['Servers'][$i]['tracking']
+ */
+$cfg['Servers'][$i]['tracking'] = '';
 
 /**
  * set to false if you know that your pma_* tables are up to date.
@@ -338,11 +356,11 @@ $cfg['Servers'][$i]['verbose_check'] = true;
 $cfg['Servers'][$i]['AllowRoot'] = true;
 
 /**
- * whether to allow login of root user with no password (MySQL default)
+ * whether to allow login of any user without a password
  *
- * @global boolean $cfg['Servers'][$i]['AllowNoPasswordRoot']
+ * @global boolean $cfg['Servers'][$i]['AllowNoPassword']
  */
-$cfg['Servers'][$i]['AllowNoPasswordRoot'] = false;
+$cfg['Servers'][$i]['AllowNoPassword'] = false;
 
 /**
  * Host authentication order, leave blank to not use
@@ -352,6 +370,13 @@ $cfg['Servers'][$i]['AllowNoPasswordRoot'] = false;
 $cfg['Servers'][$i]['AllowDeny']['order'] = '';
 
 /**
+ * Host authentication rules, leave blank for defaults
+ *
+ * @global array $cfg['Servers'][$i]['AllowDeny']['rules']
+ */
+$cfg['Servers'][$i]['AllowDeny']['rules'] = array();
+
+/**
  * Disable use of INFORMATION_SCHEMA
  *
  * @see http://sf.net/support/tracker.php?aid=1849494
@@ -359,13 +384,6 @@ $cfg['Servers'][$i]['AllowDeny']['order'] = '';
  * @global boolean $cfg['Servers'][$i]['DisableIS']
  */
 $cfg['Servers'][$i]['DisableIS'] = true;
-
-/**
- * Host authentication rules, leave blank for defaults
- *
- * @global array $cfg['Servers'][$i]['AllowDeny']['rules']
- */
-$cfg['Servers'][$i]['AllowDeny']['rules'] = array();
 
 /**
  * SQL command to fetch available databases
@@ -399,6 +417,58 @@ $cfg['Servers'][$i]['ShowDatabasesCommand'] = 'SHOW DATABASES';
  * @global array $cfg['Servers'][$i]['CountTables']
  */
 $cfg['Servers'][$i]['CountTables'] = true;
+
+/**
+ * Whether the tracking mechanism creates versions for tables and views automatically.
+ *
+ * @global bool $cfg['Servers'][$i]['tracking_version_auto_create']
+ */
+
+$cfg['Servers'][$i]['tracking_version_auto_create'] = false;
+
+/**
+ * Defines the list of statements the auto-creation uses for new versions.
+ *
+ * @global string $cfg['Servers'][$i]['tracking_default_statements']
+ */
+
+$cfg['Servers'][$i]['tracking_default_statements'] = 'CREATE TABLE,ALTER TABLE,DROP TABLE,RENAME TABLE,' .
+                                          'CREATE INDEX,DROP INDEX,' .
+                                          'INSERT,UPDATE,DELETE,TRUNCATE,REPLACE,' .
+                                          'CREATE VIEW,ALTER VIEW,DROP VIEW,' .
+                                          'CREATE DATABASE,ALTER DATABASE,DROP DATABASE';
+
+/**
+ * Whether a DROP VIEW IF EXISTS statement will be added as first line to the log when creating a view.
+ *
+ * @global bool $cfg['Servers'][$i]['tracking_add_drop_view']
+ */
+
+$cfg['Servers'][$i]['tracking_add_drop_view'] = true;
+
+/**
+ * Whether a DROP TABLE IF EXISTS statement will be added as first line to the log when creating a table.
+ *
+ * @global bool $cfg['Servers'][$i]['tracking_add_drop_table']
+ */
+
+$cfg['Servers'][$i]['tracking_add_drop_table'] = true;
+
+/**
+ * Whether a DROP DATABASE IF EXISTS statement will be added as first line to the log when creating a database.
+ *
+ * @global bool $cfg['Servers'][$i]['tracking_add_drop_database']
+ */
+
+$cfg['Servers'][$i]['tracking_add_drop_database'] = true;
+
+/**
+ * Whether a DROP DATABASE IF EXISTS statement will be added as first line to the log when creating a database.
+ *
+ * @global bool $cfg['Servers'][$i]['tracking_version_drop_database']
+ */
+
+$cfg['Servers'][$i]['tracking_version_drop_database'] = true;
 
 /**
  * Default server (0 = no default server)
@@ -466,11 +536,13 @@ $cfg['ForceSSL'] = false;
 $cfg['ExecTimeLimit'] = 300;
 
 /**
- * maximum allocated bytes (0 for no limit)
+ * maximum allocated bytes ('0' for no limit)
+ * this is a string because '16M' is a valid value; we must put here
+ * a string as the default value so that /setup accepts strings 
  *
- * @global integer $cfg['MemoryLimit']
+ * @global string $cfg['MemoryLimit']
  */
-$cfg['MemoryLimit'] = 0;
+$cfg['MemoryLimit'] = '0';
 
 /**
  * mark used tables, make possible to show locked tables (since MySQL 3.23.30)
@@ -508,11 +580,12 @@ $cfg['Confirm'] = true;
 $cfg['LoginCookieRecall'] = true;
 
 /**
- * validity of cookie login (in seconds)
+ * validity of cookie login (in seconds; 1440 matches php.ini's
+ * session.gc_maxlifetime)
  *
  * @global integer $cfg['LoginCookieValidity']
  */
-$cfg['LoginCookieValidity'] = 1800;
+$cfg['LoginCookieValidity'] = 1440;
 
 /**
  * how long login cookie should be stored (in seconds)
@@ -747,7 +820,7 @@ $cfg['ShowStats'] = true;
 $cfg['ShowPhpInfo'] = false;
 
 /**
- * show MySQL server information
+ * show MySQL server and web server information
  *
  * @global boolean $cfg['ShowServerInfo']
  */
@@ -785,7 +858,7 @@ $cfg['SuggestDBName'] = true;
  *
  * @global string $cfg['NavigationBarIconic']
  */
-$cfg['NavigationBarIconic'] = 'both';
+$cfg['NavigationBarIconic'] = true;
 
 /**
  * allows to display all the rows
@@ -809,6 +882,13 @@ $cfg['MaxRows'] = 30;
  * @global string $cfg['Order']
  */
 $cfg['Order'] = 'ASC';
+
+/**
+ * default for 'Show binary contents as HEX' 
+ *
+ * @global string $cfg['DisplayBinaryAsHex']
+ */
+$cfg['DisplayBinaryAsHex'] = true;
 
 
 /*******************************************************************************
@@ -962,6 +1042,28 @@ $cfg['DefaultTabDatabase'] = 'db_structure.php';
  */
 $cfg['DefaultTabTable'] = 'sql.php';
 
+/**
+ * Mapping between script filenames and translation keys
+ *
+ * Lookup can be performed by PMA_getTitleForTarget()
+ *
+ * @global string $cfg['DefaultTabTranslationMapping']
+ */
+$cfg['DefaultTabTranslationMapping'] = array(
+
+	// Values for $cfg['DefaultTabTable']
+	'tbl_structure.php' =>  'strStructure',
+	'tbl_sql.php' => 'strSQL',
+	'tbl_select.php' => 'strSearch',
+	'tbl_change.php' => 'strInsert',
+	'sql.php' => 'strBrowse',
+
+	// Values for $cfg['DefaultTabDatabase']
+	'db_structure.php' => 'strStructure',
+	'db_sql.php' => 'strSQL',
+	'db_search.php' => 'strSearch',
+	'db_operations.php' => 'strOperations',
+);
 
 /*******************************************************************************
  * Export defaults
@@ -987,7 +1089,7 @@ $cfg['Export']['compression'] = 'none';
  *
  * @global boolean $cfg['Export']['asfile']
  */
-$cfg['Export']['asfile'] = false;
+$cfg['Export']['asfile'] = true;
 
 /**
  *
@@ -1104,20 +1206,6 @@ $cfg['Export']['odt_null'] = 'NULL';
 /**
  *
  *
- * @global boolean $cfg['Export']['htmlexcel_columns']
- */
-$cfg['Export']['htmlexcel_columns'] = false;
-
-/**
- *
- *
- * @global string $cfg['Export']['htmlexcel_null']
- */
-$cfg['Export']['htmlexcel_null'] = 'NULL';
-
-/**
- *
- *
  * @global boolean $cfg['Export']['htmlword_structure']
  */
 $cfg['Export']['htmlword_structure'] = true;
@@ -1184,6 +1272,20 @@ $cfg['Export']['xls_columns'] = false;
  * @global string $cfg['Export']['xls_null']
  */
 $cfg['Export']['xls_null'] = 'NULL';
+
+/**
+ *
+ *
+ * @global boolean $cfg['Export']['xlsx_columns']
+ */
+$cfg['Export']['xlsx_columns'] = false;
+
+/**
+ *
+ *
+ * @global string $cfg['Export']['xlsx_null']
+ */
+$cfg['Export']['xlsx_null'] = 'NULL';
 
 /**
  *
@@ -1405,9 +1507,9 @@ $cfg['Export']['sql_drop_table'] = false;
 /**
  *
  *
- * @global boolean $cfg['Export']['sql_if_not_exists']
  * true by default for correct behavior when dealing with exporting
  * of VIEWs and the stand-in table
+ * @global boolean $cfg['Export']['sql_if_not_exists']
  */
 $cfg['Export']['sql_if_not_exists'] = true;
 
@@ -1537,6 +1639,55 @@ $cfg['Export']['pdf_data'] = true;
  */
 $cfg['Export']['pdf_report_title'] = '';
 
+/**
+ * Export schema for each structure
+ *
+ * @global string $cfg['Export']['xml_export_struc']
+ */
+$cfg['Export']['xml_export_struc'] = true;
+
+/**
+ * Export functions
+ *
+ * @global string $cfg['Export']['xml_export_functions']
+ */
+$cfg['Export']['xml_export_functions'] = true;
+
+/**
+ * Export procedures
+ *
+ * @global string $cfg['Export']['xml_export_procedures']
+ */
+$cfg['Export']['xml_export_procedures'] = true;
+
+/**
+ * Export schema for each table
+ *
+ * @global string $cfg['Export']['xml_export_tables']
+ */
+$cfg['Export']['xml_export_tables'] = true;
+
+/**
+ * Export triggers
+ *
+ * @global string $cfg['Export']['xml_export_triggers']
+ */
+$cfg['Export']['xml_export_triggers'] = true;
+
+/**
+ * Export views
+ *
+ * @global string $cfg['Export']['xml_export_views']
+ */
+$cfg['Export']['xml_export_views'] = true;
+
+/**
+ * Export contents data
+ *
+ * @global string $cfg['Export']['xml_export_contents']
+ */
+$cfg['Export']['xml_export_contents'] = true;
+
 
 /*******************************************************************************
  * Import defaults
@@ -1549,6 +1700,13 @@ $cfg['Import'] = array();
  * @global string $cfg['Import']['format']
  */
 $cfg['Import']['format'] = 'sql';
+
+/**
+ * Default charset for import.
+ *
+ * @global string $cfg['Import']['charset']
+ */
+$cfg['Import']['charset'] = '';
 
 /**
  *
@@ -1570,6 +1728,13 @@ $cfg['Import']['skip_queries'] = '0';
  * @global string $cfg['Import']['sql_compatibility']
  */
 $cfg['Import']['sql_compatibility'] = 'NONE';
+
+/**
+ *
+ *
+ * @global string $cfg['Import']['sql_no_auto_value_on_zero']
+ */
+$cfg['Import']['sql_no_auto_value_on_zero'] = true;
 
 /**
  *
@@ -1612,6 +1777,13 @@ $cfg['Import']['csv_new_line'] = 'auto';
  * @global string $cfg['Import']['csv_columns']
  */
 $cfg['Import']['csv_columns'] = '';
+
+/**
+ *
+ *
+ * @global string $cfg['Import']['csv_col_names']
+ */
+$cfg['Import']['csv_col_names'] = false;
 
 /**
  *
@@ -1661,6 +1833,48 @@ $cfg['Import']['ldi_columns'] = '';
  * @global string $cfg['Import']['ldi_local_option']
  */
 $cfg['Import']['ldi_local_option'] = 'auto';
+
+/**
+ *
+ *
+ * @global string $cfg['Import']['ods_col_names']
+ */
+$cfg['Import']['ods_col_names'] = false;
+
+/**
+ *
+ *
+ * @global string $cfg['Import']['ods_empty_rows']
+ */
+$cfg['Import']['ods_empty_rows'] = true;
+
+/**
+ *
+ *
+ * @global string $cfg['Import']['ods_recognize_percentages']
+ */
+$cfg['Import']['ods_recognize_percentages'] = true;
+
+/**
+ *
+ *
+ * @global string $cfg['Import']['ods_recognize_currency']
+ */
+$cfg['Import']['ods_recognize_currency'] = true;
+
+/**
+ *
+ *
+ * @global string $cfg['Import']['xml_col_names']
+ */
+$cfg['Import']['xls_col_names'] = false;
+
+/**
+ *
+ *
+ * @global string $cfg['Import']['xml_empty_rows']
+ */
+$cfg['Import']['xls_empty_rows'] = true;
 
 /**
  * Link to the official MySQL documentation.
@@ -1868,7 +2082,7 @@ $cfg['TextareaCols'] = 40;
  *
  * @global integer $cfg['TextareaRows']
  */
-$cfg['TextareaRows'] = 7;
+$cfg['TextareaRows'] = 15;
 
 /**
  * double size of textarea size for LONGTEXT fields
@@ -2275,7 +2489,7 @@ $cfg['TempDir'] = '';
 $cfg['GD2Available'] = 'auto';
 
 /**
- * List of trusted proxies for IP allow/deny
+ * Lists proxy IP and HTTP header combinations which are trusted for IP allow/deny
  *
  * @global array $cfg['TrustedProxies']
  */
@@ -2289,6 +2503,13 @@ $cfg['TrustedProxies'] = array();
  * a sysadmin would set the following to false.
  */
 $cfg['CheckConfigurationPermissions'] = true;
+
+/**
+ * Limit for length of URL in links. When length would be above this limit, it
+ * is replaced by form with button.
+ * This is required as some web servers (IIS) have problems with long URLs.
+ */
+$cfg['LinkLengthLimit'] = 1000;
 
 /*******************************************************************************
  * SQL Parser Settings
@@ -2362,7 +2583,7 @@ $cfg['DBG'] = array();
 /**
  * Output executed queries and their execution times
  *
- * @global boolean $cfg['DBG']['enable']
+ * @global boolean $cfg['DBG']['sql']
  */
 $cfg['DBG']['sql'] = false;
 
@@ -2370,7 +2591,7 @@ $cfg['DBG']['sql'] = false;
  * Make the DBG stuff available
  * To use the following, please install the DBG extension from http://dd.cron.ru/dbg/
  *
- * @global boolean $cfg['DBG']['enable']
+ * @global boolean $cfg['DBG']['php']
  */
 $cfg['DBG']['php'] = false;
 
@@ -2421,7 +2642,7 @@ $cfg['ColumnTypes'] = array(
         'REAL',
         '-',
         'BIT',
-        'BOOL',
+        'BOOLEAN',
         'SERIAL',
     ),
 
@@ -2577,7 +2798,7 @@ if ($cfg['ShowFunctionFields']) {
         'DOUBLE'    => 'FUNC_NUMBER',
         'REAL'      => 'FUNC_NUMBER',
         'BIT'       => 'FUNC_NUMBER',
-        'BOOL'      => 'FUNC_NUMBER',
+        'BOOLEAN'   => 'FUNC_NUMBER',
         'SERIAL'    => 'FUNC_NUMBER',
 
         'DATE'      => 'FUNC_DATE',

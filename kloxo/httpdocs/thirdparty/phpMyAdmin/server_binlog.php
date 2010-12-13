@@ -35,7 +35,8 @@
  * @uses    array_key_exists()
  * @uses    implode()
  * @uses    htmlspecialchars()
- * @version $Id: server_binlog.php 10818 2007-10-17 09:06:00Z cybot_tm $
+ * @version $Id$
+ * @package phpMyAdmin
  */
 
 /**

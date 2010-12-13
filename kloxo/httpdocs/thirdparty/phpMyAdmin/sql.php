@@ -3,7 +3,8 @@
 /**
  * @todo    we must handle the case if sql.php is called directly with a query
  *          that returns 0 rows - to prevent cyclic redirects or includes
- * @version $Id: sql.php 12340 2009-04-09 14:20:44Z nijel $
+ * @version $Id$
+ * @package phpMyAdmin
  */
 
 /**
@@ -95,8 +96,8 @@ PMA_displayTable_checkConfigParams();
  * Need to find the real end of rows?
  */
 if (isset($find_real_end) && $find_real_end) {
-    $unlim_num_rows = PMA_Table::countRecords($db, $table, true, true);
-    $_SESSION['userconf']['pos'] = @((ceil($unlim_num_rows / $_SESSION['userconf']['max_rows']) - 1) * $_SESSION['userconf']['max_rows']);
+    $unlim_num_rows = PMA_Table::countRecords($db, $table, $force_exact = true);
+    $_SESSION['tmp_user_values']['pos'] = @((ceil($unlim_num_rows / $_SESSION['tmp_user_values']['max_rows']) - 1) * $_SESSION['tmp_user_values']['max_rows']);
 }
 
 
@@ -174,14 +175,14 @@ if ($do_confirm) {
         .PMA_generate_common_hidden_inputs($db, $table);
     ?>
     <input type="hidden" name="sql_query" value="<?php echo htmlspecialchars($sql_query); ?>" />
-    <input type="hidden" name="zero_rows" value="<?php echo isset($zero_rows) ? PMA_sanitize($zero_rows) : ''; ?>" />
+    <input type="hidden" name="zero_rows" value="<?php echo isset($zero_rows) ? PMA_sanitize($zero_rows, true) : ''; ?>" />
     <input type="hidden" name="goto" value="<?php echo $goto; ?>" />
-    <input type="hidden" name="back" value="<?php echo isset($back) ? PMA_sanitize($back) : ''; ?>" />
-    <input type="hidden" name="reload" value="<?php echo isset($reload) ? PMA_sanitize($reload) : 0; ?>" />
-    <input type="hidden" name="purge" value="<?php echo isset($purge) ? PMA_sanitize($purge) : ''; ?>" />
-    <input type="hidden" name="cpurge" value="<?php echo isset($cpurge) ? PMA_sanitize($cpurge) : ''; ?>" />
-    <input type="hidden" name="purgekey" value="<?php echo isset($purgekey) ? PMA_sanitize($purgekey) : ''; ?>" />
-    <input type="hidden" name="show_query" value="<?php echo isset($show_query) ? PMA_sanitize($show_query) : ''; ?>" />
+    <input type="hidden" name="back" value="<?php echo isset($back) ? PMA_sanitize($back, true) : ''; ?>" />
+    <input type="hidden" name="reload" value="<?php echo isset($reload) ? PMA_sanitize($reload, true) : 0; ?>" />
+    <input type="hidden" name="purge" value="<?php echo isset($purge) ? PMA_sanitize($purge, true) : ''; ?>" />
+    <input type="hidden" name="cpurge" value="<?php echo isset($cpurge) ? PMA_sanitize($cpurge, true) : ''; ?>" />
+    <input type="hidden" name="purgekey" value="<?php echo isset($purgekey) ? PMA_sanitize($purgekey, true) : ''; ?>" />
+    <input type="hidden" name="show_query" value="<?php echo isset($show_query) ? PMA_sanitize($show_query, true) : ''; ?>" />
     <?php
     echo '<fieldset class="confirmation">' . "\n"
         .'    <legend>' . $strDoYouReally . '</legend>'
@@ -251,13 +252,13 @@ if ($is_select) { // see line 141
 }
 
 // Do append a "LIMIT" clause?
-if ((! $cfg['ShowAll'] || $_SESSION['userconf']['max_rows'] != 'all')
+if ((! $cfg['ShowAll'] || $_SESSION['tmp_user_values']['max_rows'] != 'all')
  && ! ($is_count || $is_export || $is_func || $is_analyse)
  && isset($analyzed_sql[0]['queryflags']['select_from'])
  && ! isset($analyzed_sql[0]['queryflags']['offset'])
  && empty($analyzed_sql[0]['limit_clause'])
  ) {
-    $sql_limit_to_append = ' LIMIT ' . $_SESSION['userconf']['pos'] . ', ' . $_SESSION['userconf']['max_rows'] . " ";
+    $sql_limit_to_append = ' LIMIT ' . $_SESSION['tmp_user_values']['pos'] . ', ' . $_SESSION['tmp_user_values']['max_rows'] . " ";
 
     $full_sql_query  = $analyzed_sql[0]['section_before_limit'] . "\n" . $sql_limit_to_append . $analyzed_sql[0]['section_after_limit'];
     /**
@@ -310,9 +311,15 @@ if (isset($GLOBALS['show_as_php']) || !empty($GLOBALS['validatequery'])) {
                 $table = '';
             }
             $active_page = $goto;
-            $message = PMA_Message::rawError($error);
+            $message = htmlspecialchars(PMA_Message::rawError($error));
+            /**
+             * Go to target path.
+             */
             require './' . PMA_securePath($goto);
         } else {
+            /**
+             * HTML header.
+             */
             require_once './libraries/header.inc.php';
             $full_err_url = (preg_match('@^(db|tbl)_@', $err_url))
                           ? $err_url . '&amp;show_query=1&amp;sql_query=' . urlencode($sql_query)
@@ -366,18 +373,17 @@ if (isset($GLOBALS['show_as_php']) || !empty($GLOBALS['validatequery'])) {
         $unlim_num_rows         = $num_rows;
         // if we did not append a limit, set this to get a correct
         // "Showing rows..." message
-        //$_SESSION['userconf']['max_rows'] = 'all';
+        //$_SESSION['tmp_user_values']['max_rows'] = 'all';
     } elseif ($is_select) {
 
         //    c o u n t    q u e r y
 
         // If we are "just browsing", there is only one table,
-        // and no where clause (or just 'WHERE 1 '),
-        // so we do a quick count (which uses MaxExactCount)
-        // because SQL_CALC_FOUND_ROWS
-        // is not quick on large InnoDB tables
+        // and no WHERE clause (or just 'WHERE 1 '),
+        // we do a quick count (which uses MaxExactCount) because 
+        // SQL_CALC_FOUND_ROWS is not quick on large InnoDB tables
 
-        // but do not count again if we did it previously
+        // However, do not count again if we did it previously
         // due to $find_real_end == true
 
         if (!$is_group
@@ -389,7 +395,7 @@ if (isset($GLOBALS['show_as_php']) || !empty($GLOBALS['validatequery'])) {
         ) {
 
             // "j u s t   b r o w s i n g"
-            $unlim_num_rows = PMA_Table::countRecords($db, $table, true);
+            $unlim_num_rows = PMA_Table::countRecords($db, $table);
 
         } else { // n o t   " j u s t   b r o w s i n g "
 
@@ -446,10 +452,16 @@ if (isset($GLOBALS['show_as_php']) || !empty($GLOBALS['validatequery'])) {
 
     // garvin: if a table or database gets dropped, check column comments.
     if (isset($purge) && $purge == '1') {
+        /**
+         * Cleanup relations.
+         */
         require_once './libraries/relation_cleanup.lib.php';
 
         if (strlen($table) && strlen($db)) {
             PMA_relationsCleanupTable($db, $table);
+            // this is to avoid counting rows for nothing, below
+            // (do not unset as $table is used further down in the logic) 
+            $table = '';
         } elseif (strlen($db)) {
             PMA_relationsCleanupDatabase($db);
         } else {

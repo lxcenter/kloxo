@@ -3,11 +3,14 @@
 /**
  * Interface to the classic MySQL extension
  *
- * @version $Id: mysql.dbi.lib.php 11435 2008-07-26 15:18:59Z lem9 $
+ * @package phpMyAdmin-DBI-MySQL
+ * @version $Id$
  */
 if (! defined('PHPMYADMIN')) {
     exit;
 }
+
+require_once './libraries/logging.lib.php';
 
 /**
  * MySQL client API
@@ -18,18 +21,18 @@ if (! defined('PMA_MYSQL_CLIENT_API')) {
     unset($client_api);
 }
 
-function PMA_DBI_real_connect($server, $user, $password, $client_flags)
+function PMA_DBI_real_connect($server, $user, $password, $client_flags, $persistant=false)
 {
     global $cfg;
 
     if (empty($client_flags)) {
-        if ($cfg['PersistentConnections']) {
+        if ($cfg['PersistentConnections'] || $persistant) {
             $link = @mysql_pconnect($server, $user, $password);
         } else {
             $link = @mysql_connect($server, $user, $password);
         }
     } else {
-        if ($cfg['PersistentConnections']) {
+        if ($cfg['PersistentConnections'] || $persistant) {
             $link = @mysql_pconnect($server, $user, $password, $client_flags);
         } else {
             $link = @mysql_connect($server, $user, $password, false, $client_flags);
@@ -38,22 +41,40 @@ function PMA_DBI_real_connect($server, $user, $password, $client_flags)
 
     return $link;
 }
-
-function PMA_DBI_connect($user, $password, $is_controluser = false)
+/**
+ * @param   string  $user           mysql user name
+ * @param   string  $password       mysql user password
+ * @param   boolean $is_controluser
+ * @param   array   $server host/port/socket/persistant
+ * @param   boolean $auxiliary_connection (when true, don't go back to login if connection fails)
+ * @return  mixed   false on error or a mysqli object on success
+ */
+function PMA_DBI_connect($user, $password, $is_controluser = false, $server = null, $auxiliary_connection = false)
 {
     global $cfg, $php_errormsg;
-
-    $server_port   = (empty($cfg['Server']['port']))
+  
+    if ($server) {
+        $server_port = (empty($server['port']))
+            ? ''
+            : ':' . (int)$server['port'];
+        $server_socket = (empty($server['socket']))
+            ? ''
+            : ':' . $server['socket'];
+        $server_persistant = (empty($server['persistant']))
+            ? false
+            : true;
+    } else {
+	  $server_port   = (empty($cfg['Server']['port']))
                    ? ''
-                   : ':' . $cfg['Server']['port'];
+                   : ':' . (int)$cfg['Server']['port'];
+	  $server_socket = (empty($cfg['Server']['socket']))
+                   ? ''
+                   : ':' . $cfg['Server']['socket'];
+    }
 
     if (strtolower($cfg['Server']['connect_type']) == 'tcp') {
         $cfg['Server']['socket'] = '';
     }
-
-    $server_socket = (empty($cfg['Server']['socket']))
-                   ? ''
-                   : ':' . $cfg['Server']['socket'];
 
     $client_flags = 0;
 
@@ -71,24 +92,39 @@ function PMA_DBI_connect($user, $password, $is_controluser = false)
     if (defined('MYSQL_CLIENT_SSL') && $cfg['Server']['ssl']) {
         $client_flags |= MYSQL_CLIENT_SSL;
     }
+    
+    if (!$server) {
+        $link = PMA_DBI_real_connect($cfg['Server']['host'] . $server_port . $server_socket, $user, $password, empty($client_flags) ? NULL : $client_flags);
 
-    $link = PMA_DBI_real_connect($cfg['Server']['host'] . $server_port . $server_socket, $user, $password, empty($client_flags) ? NULL : $client_flags);
-
-    // Retry with empty password if we're allowed to
-    if (empty($link) && $cfg['Server']['nopassword'] && !$is_controluser) {
-        $link = PMA_DBI_real_connect($cfg['Server']['host'] . $server_port . $server_socket, $user, '', empty($client_flags) ? NULL : $client_flags);
+      // Retry with empty password if we're allowed to
+        if (empty($link) && $cfg['Server']['nopassword'] && !$is_controluser) {
+	        $link = PMA_DBI_real_connect($cfg['Server']['host'] . $server_port . $server_socket, $user, '', empty($client_flags) ? NULL : $client_flags);
+        }
+    } else {
+        if (!isset($server['host'])) {
+	        $link = PMA_DBI_real_connect($server_socket, $user, $password, NULL, $server_persistant); 
+        } else {
+            $link = PMA_DBI_real_connect($server['host'] . $server_port . $server_socket, $user, $password, NULL, $server_persistant);
+        }
     }
-
     if (empty($link)) {
         if ($is_controluser) {
             trigger_error($GLOBALS['strControluserFailed'], E_USER_WARNING);
             return false;
         }
-        PMA_auth_fails();
+        // we could be calling PMA_DBI_connect() to connect to another
+        // server, for example in the Synchronize feature, so do not
+        // go back to main login if it fails
+        if (! $auxiliary_connection) {
+            PMA_log_user($user, 'mysql-denied');
+            PMA_auth_fails();
+        } else {
+            return false;
+        }
     } // end if
-
-    PMA_DBI_postConnect($link, $is_controluser);
-
+    if (! $server) {
+        PMA_DBI_postConnect($link, $is_controluser);
+    }
     return $link;
 }
 
@@ -153,10 +189,10 @@ function PMA_DBI_try_query($query, $link = null, $options = 0)
             $_SESSION['debug']['queries'][$hash]['query'] = $query;
             $_SESSION['debug']['queries'][$hash]['time'] = $time;
         }
-        
+
         $trace = array();
         foreach (debug_backtrace() as $trace_step) {
-            $trace[] = PMA_Error::relPath($trace_step['file']) . '#' 
+            $trace[] = PMA_Error::relPath($trace_step['file']) . '#'
                 . $trace_step['line'] . ': '
                 . (isset($trace_step['class']) ? $trace_step['class'] : '')
                 //. (isset($trace_step['object']) ? get_class($trace_step['object']) : '')
@@ -168,6 +204,9 @@ function PMA_DBI_try_query($query, $link = null, $options = 0)
                 ;
         }
         $_SESSION['debug']['queries'][$hash]['trace'][] = $trace;
+    }
+    if ($r != FALSE && PMA_Tracker::isActive() == TRUE ) {
+        PMA_Tracker::handleQuery($query); 
     }
 
     return $r;
@@ -271,15 +310,23 @@ function PMA_DBI_get_client_info()
  * @uses    $GLOBALS['userlink']
  * @uses    $GLOBALS['strServerNotResponding']
  * @uses    $GLOBALS['strSocketProblem']
+ * @uses    $GLOBALS['strDetails']
  * @uses    mysql_errno()
  * @uses    mysql_error()
  * @uses    defined()
+ * @uses    PMA_generate_common_url()
  * @param   resource        $link   mysql link
  * @return  string|boolean  $error or false
  */
 function PMA_DBI_getError($link = null)
 {
     $GLOBALS['errno'] = 0;
+
+    /* Treat false same as null because of controllink */
+    if ($link === false) {
+        $link = null;
+    }
+
     if (null === $link && isset($GLOBALS['userlink'])) {
         $link =& $GLOBALS['userlink'];
 
@@ -307,11 +354,20 @@ function PMA_DBI_getError($link = null)
         $error_message = PMA_DBI_convert_message($error_message);
     }
 
+    $error_message = htmlspecialchars($error_message);
+
     // Some errors messages cannot be obtained by mysql_error()
     if ($error_number == 2002) {
         $error = '#' . ((string) $error_number) . ' - ' . $GLOBALS['strServerNotResponding'] . ' ' . $GLOBALS['strSocketProblem'];
     } elseif ($error_number == 2003) {
         $error = '#' . ((string) $error_number) . ' - ' . $GLOBALS['strServerNotResponding'];
+    } elseif ($error_number == 1005) {
+        /* InnoDB contraints, see
+         * http://dev.mysql.com/doc/refman/5.0/en/innodb-foreign-key-constraints.html
+         */
+        $error = '#' . ((string) $error_number) . ' - ' . $error_message .
+            ' (<a href="server_engines.php' . PMA_generate_common_url(array('engine' => 'InnoDB', 'page' => 'Status')).
+            '">' . $GLOBALS['strDetails'] . '</a>)';
     } else {
         $error = '#' . ((string) $error_number) . ' - ' . $error_message;
     }

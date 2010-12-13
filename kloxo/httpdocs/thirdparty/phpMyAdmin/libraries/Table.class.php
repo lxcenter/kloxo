@@ -2,17 +2,19 @@
 /* vim: set expandtab sw=4 ts=4 sts=4: */
 /**
  *
- * @version $Id: Table.class.php 12267 2009-03-01 13:05:35Z lem9 $
+ * @version $Id$
+ * @package phpMyAdmin
  */
 
 /**
  * @todo make use of PMA_Message and PMA_Error
+ * @package phpMyAdmin
  */
 class PMA_Table
 {
 
     static $cache = array();
-    
+
     /**
      * @var string  table name
      */
@@ -96,9 +98,9 @@ class PMA_Table
      * @param   boolean whether to quote name with backticks ``
      * @return  string  table name
      */
-    function getName($quoted = false)
+    function getName($backquoted = false)
     {
-        if ($quoted) {
+        if ($backquoted) {
             return PMA_backquote($this->name);
         }
         return $this->name;
@@ -122,9 +124,9 @@ class PMA_Table
      * @param   boolean whether to quote name with backticks ``
      * @return  string  database name for this table
      */
-    function getDbName($quoted = false)
+    function getDbName($backquoted = false)
     {
-        if ($quoted) {
+        if ($backquoted) {
             return PMA_backquote($this->db_name);
         }
         return $this->db_name;
@@ -135,9 +137,9 @@ class PMA_Table
      *
      * @param   boolean whether to quote name with backticks ``
      */
-    function getFullName($quoted = false)
+    function getFullName($backquoted = false)
     {
-        return $this->getDbName($quoted) . '.' . $this->getName($quoted);
+        return $this->getDbName($backquoted) . '.' . $this->getName($backquoted);
     }
 
     static public function isView($db = null, $table = null)
@@ -197,7 +199,7 @@ class PMA_Table
 
         if ($this->get('TABLE_ROWS') === null) {
             $this->set('TABLE_ROWS', PMA_Table::countRecords($this->getDbName(),
-                $this->getName(), true, true));
+                $this->getName(), true));
         }
 
         $create_options = explode(' ', $this->get('TABLE_ROWS'));
@@ -231,43 +233,79 @@ class PMA_Table
             return true;
         }
 
-        // This would be the correct way of doing the check but at least in
-        // MySQL 5.0.33 it's too slow when there are hundreds of databases
-        // and/or tables (more than 3 minutes for 400 tables)
-        /*if (false === PMA_DBI_fetch_value('SELECT TABLE_NAME FROM `information_schema`.`VIEWS` WHERE `TABLE_SCHEMA` = \'' . $db . '\' AND `TABLE_NAME` = \'' . $table . '\';')) {
-            return false;
-        } else {
-            return true;
-        } */
-        // A more complete verification would be to check if all columns
-        // from the result set are NULL except Name and Comment.
-        // MySQL from 5.0.0 to 5.0.12 returns 'view',
-        // from 5.0.13 returns 'VIEW'.
-        // use substr() because the comment might contain something like:
-        // (VIEW 'BASE2.VTEST' REFERENCES INVALID TABLE(S) OR COLUMN(S) OR FUNCTION)
-        $comment = strtoupper(PMA_Table::sGetStatusInfo($db, $table, 'Comment'));
-        return substr($comment, 0, 4) == 'VIEW';
-    }
-    
-    static public function sGetToolTip($db, $table)
-    {
-        return PMA_Table::sGetStatusInfo($db, $table, 'Comment') 
-            . ' (' . PMA_Table::countRecords($db, $table, true) . ')';
+        // Since phpMyAdmin 3.2 the field TABLE_TYPE is properly filled by PMA_DBI_get_tables_full()
+        $type = PMA_Table::sGetStatusInfo($db, $table, 'TABLE_TYPE');
+        return $type == 'VIEW';
     }
 
-    static public function sGetStatusInfo($db, $table, $info = null, $force_read = false)
+    /**
+     * Checks if this is a merge table
+     *
+     * If the ENGINE of the table is MERGE or MRG_MYISAM (alias), this is a merge table.
+     *
+     * @param   string   the database name
+     * @param   string   the table name
+     * @return  boolean  true if it is a merge table 
+     * @access  public
+     */
+    static public function isMerge($db = null, $table = null)
+    {
+        // if called static, with parameters
+        if (! empty($db) && ! empty($table)) {
+            $engine = PMA_Table::sGetStatusInfo($db, $table, 'ENGINE', null, true);
+        }
+        // if called as an object
+        // does not work yet, because $this->settings[] is not filled correctly
+        else if (! empty($this)) {
+            $engine = $this->get('ENGINE');
+        }
+
+        return (! empty($engine) && ((strtoupper($engine) == 'MERGE') || (strtoupper($engine) == 'MRG_MYISAM')));
+    }
+
+    static public function sGetToolTip($db, $table)
+    {
+        return PMA_Table::sGetStatusInfo($db, $table, 'Comment')
+            . ' (' . PMA_Table::countRecords($db, $table) . ')';
+    }
+
+    /**
+     * Returns full table status info, or specific if $info provided
+     *
+     * this info is collected from information_schema
+     *
+     * @todo PMA_DBI_get_tables_full needs to be merged somehow into this class or at least better documented
+     * @param string $db
+     * @param string $table
+     * @param string $info
+     * @param boolean $force_read
+     * @param boolean if true, disables error message
+     * @return mixed
+     */
+    static public function sGetStatusInfo($db, $table, $info = null, $force_read = false, $disable_error = false)
     {
         if (! isset(PMA_Table::$cache[$db][$table]) || $force_read) {
-            PMA_Table::$cache[$db][$table] = PMA_DBI_fetch_single_row('SHOW TABLE STATUS FROM ' . PMA_backquote($db) . ' LIKE \'' . $table . '\'');
+            PMA_DBI_get_tables_full($db, $table);
         }
-        
+
+        if (! isset(PMA_Table::$cache[$db][$table])) {
+            // happens when we enter the table creation dialog
+            // or when we really did not get any status info, for example
+            // when $table == 'TABLE_NAMES' after the user tried SHOW TABLES
+            return '';
+        }
+
         if (null === $info) {
             return PMA_Table::$cache[$db][$table];
         }
-        
-        if (! isset(PMA_Table::$cache[$db][$table][$info]) || $force_read) {
-            PMA_Table::$cache[$db][$table] = PMA_DBI_fetch_single_row('SHOW TABLE STATUS FROM ' . PMA_backquote($db) . ' LIKE \'' . $table . '\'');
+
+        if (! isset(PMA_Table::$cache[$db][$table][$info])) {
+            if (! $disable_error) {
+                trigger_error('unknown table status: ' . $info, E_USER_WARNING);
+            }
+            return false;
         }
+
         return PMA_Table::$cache[$db][$table][$info];
     }
 
@@ -327,7 +365,7 @@ class PMA_Table
                 $query .= ' NOT NULL';
             }
         }
-        
+
         switch ($default_type) {
             case 'USER_DEFINED' :
                 if ($is_timestamp && $default_value === '0') {
@@ -352,7 +390,7 @@ class PMA_Table
         if (!empty($extra)) {
             $query .= ' ' . $extra;
             // Force an auto_increment field to be part of the primary key
-            // even if user did not tick the PK box; 
+            // even if user did not tick the PK box;
             if ($extra == 'AUTO_INCREMENT') {
                 $primary_cnt = count($field_primary);
                 if (1 == $primary_cnt) {
@@ -393,7 +431,6 @@ class PMA_Table
      *
      * @param   string   the current database name
      * @param   string   the current table name
-     * @param   boolean  whether to retain or to displays the result
      * @param   boolean  whether to force an exact count
      *
      * @return  mixed    the number of records if "retain" param is true,
@@ -401,25 +438,25 @@ class PMA_Table
      *
      * @access  public
      */
-    static public function countRecords($db, $table, $ret = false, 
-        $force_exact = false, $is_view = null)
+    static public function countRecords($db, $table, $force_exact = false, $is_view = null)
     {
         if (isset(PMA_Table::$cache[$db][$table]['ExactRows'])) {
             $row_count = PMA_Table::$cache[$db][$table]['ExactRows'];
         } else {
             $row_count = false;
-            
+
             if (null === $is_view) {
                 $is_view = PMA_Table::isView($db, $table);
             }
-            
+
             if (! $force_exact) {
                 if (! isset(PMA_Table::$cache[$db][$table]['Rows']) && ! $is_view) {
-                    PMA_Table::$cache[$db][$table] = PMA_DBI_fetch_single_row('SHOW TABLE STATUS FROM ' . PMA_backquote($db) . ' LIKE \'' . PMA_sqlAddslashes($table, true) . '\'');
+                    $tmp_tables = PMA_DBI_get_tables_full($db, $table);
+                    PMA_Table::$cache[$db][$table] = $tmp_tables[$table];
                 }
                 $row_count = PMA_Table::$cache[$db][$table]['Rows'];
             }
-    
+
             // for a VIEW, $row_count is always false at this point
             if (false === $row_count || $row_count < $GLOBALS['cfg']['MaxExactCount']) {
                 if (! $is_view) {
@@ -431,14 +468,14 @@ class PMA_Table
                     // count could bring down a server, so we offer an
                     // alternative: setting MaxExactCountViews to 0 will bypass
                     // completely the record counting for views
-    
+
                     if ($GLOBALS['cfg']['MaxExactCountViews'] == 0) {
                         $row_count = 0;
                     } else {
                         // Counting all rows of a VIEW could be too long, so use
                         // a LIMIT clause.
-                        // Use try_query because it can fail (a VIEW is based on
-                        // a table that no longer exists)
+                        // Use try_query because it can fail (when a VIEW is 
+                        // based on a table that no longer exists)
                         $result = PMA_DBI_try_query(
                             'SELECT 1 FROM ' . PMA_backquote($db) . '.'
                                 . PMA_backquote($table) . ' LIMIT '
@@ -454,22 +491,7 @@ class PMA_Table
             }
         }
 
-        if ($ret) {
-            return $row_count;
-        }
-
-        /**
-         * @deprecated at the moment nowhere is $return = false used
-         */
-        // Note: as of PMA 2.8.0, we no longer seem to be using
-        // PMA_Table::countRecords() in display mode.
-        echo PMA_formatNumber($row_count, 0);
-        if ($is_view) {
-            echo '&nbsp;'
-                . sprintf($GLOBALS['strViewHasAtLeast'],
-                    $GLOBALS['cfg']['MaxExactCount'],
-                    '[a@./Documentation.html#cfg_MaxExactCount@_blank]', '[/a]');
-        }
+        return $row_count;
     } // end of the 'PMA_Table::countRecords()' function
 
     /**
@@ -537,7 +559,7 @@ class PMA_Table
 
             // must use PMA_DBI_QUERY_STORE here, since we execute another
             // query inside the loop
-            $table_copy_rs    = PMA_query_as_cu($table_copy_query, true,
+            $table_copy_rs    = PMA_query_as_controluser($table_copy_query, true,
                 PMA_DBI_QUERY_STORE);
 
             while ($table_copy_row = @PMA_DBI_fetch_assoc($table_copy_rs)) {
@@ -557,7 +579,7 @@ class PMA_Table
                     (\'' . implode('\', \'', $value_parts) . '\',
                      \'' . implode('\', \'', $new_value_parts) . '\')';
 
-                PMA_query_as_cu($new_table_query);
+                PMA_query_as_controluser($new_table_query);
                 $last_id = PMA_DBI_insert_id();
             } // end while
 
@@ -777,7 +799,7 @@ class PMA_Table
                               . '        db_name    = \'' . PMA_sqlAddslashes($target_db) . '\''
                               . ' WHERE db_name  = \'' . PMA_sqlAddslashes($source_db) . '\''
                               . ' AND table_name = \'' . PMA_sqlAddslashes($source_table) . '\'';
-                PMA_query_as_cu($remove_query);
+                PMA_query_as_controluser($remove_query);
                 unset($remove_query);
             }
 
@@ -790,7 +812,7 @@ class PMA_Table
                                 . '         table_name = \'' . PMA_sqlAddslashes($target_table) . '\''
                                 . ' WHERE db_name  = \'' . PMA_sqlAddslashes($source_db) . '\''
                                 . ' AND table_name = \'' . PMA_sqlAddslashes($source_table) . '\'';
-                PMA_query_as_cu($table_query);
+                PMA_query_as_controluser($table_query);
                 unset($table_query);
             }
 
@@ -800,7 +822,7 @@ class PMA_Table
                                 . '         foreign_db = \'' . PMA_sqlAddslashes($target_db) . '\''
                                 . ' WHERE foreign_db  = \'' . PMA_sqlAddslashes($source_db) . '\''
                                 . ' AND foreign_table = \'' . PMA_sqlAddslashes($source_table) . '\'';
-                PMA_query_as_cu($table_query);
+                PMA_query_as_controluser($table_query);
                 unset($table_query);
 
                 $table_query = 'UPDATE ' . PMA_backquote($GLOBALS['cfgRelation']['db']) . '.' . PMA_backquote($GLOBALS['cfgRelation']['relation'])
@@ -808,7 +830,7 @@ class PMA_Table
                                 . '         master_db = \'' . PMA_sqlAddslashes($target_db) . '\''
                                 . ' WHERE master_db  = \'' . PMA_sqlAddslashes($source_db) . '\''
                                 . ' AND master_table = \'' . PMA_sqlAddslashes($source_table) . '\'';
-                PMA_query_as_cu($table_query);
+                PMA_query_as_controluser($table_query);
                 unset($table_query);
             }
 
@@ -825,21 +847,21 @@ class PMA_Table
                                 . '         db_name = \'' . PMA_sqlAddslashes($target_db) . '\''
                                 . ' WHERE db_name  = \'' . PMA_sqlAddslashes($source_db) . '\''
                                 . ' AND table_name = \'' . PMA_sqlAddslashes($source_table) . '\'';
-                PMA_query_as_cu($table_query);
+                PMA_query_as_controluser($table_query);
                 unset($table_query);
                 /*
                 $pdf_query = 'SELECT pdf_page_number '
                            . ' FROM ' . PMA_backquote($GLOBALS['cfgRelation']['db']) . '.' . PMA_backquote($GLOBALS['cfgRelation']['table_coords'])
                            . ' WHERE db_name  = \'' . PMA_sqlAddslashes($target_db) . '\''
                            . ' AND table_name = \'' . PMA_sqlAddslashes($target_table) . '\'';
-                $pdf_rs = PMA_query_as_cu($pdf_query);
+                $pdf_rs = PMA_query_as_controluser($pdf_query);
 
                 while ($pdf_copy_row = PMA_DBI_fetch_assoc($pdf_rs)) {
                     $table_query = 'UPDATE ' . PMA_backquote($GLOBALS['cfgRelation']['db']) . '.' . PMA_backquote($GLOBALS['cfgRelation']['pdf_pages'])
                                     . ' SET     db_name = \'' . PMA_sqlAddslashes($target_db) . '\''
                                     . ' WHERE db_name  = \'' . PMA_sqlAddslashes($source_db) . '\''
                                     . ' AND page_nr = \'' . PMA_sqlAddslashes($pdf_copy_row['pdf_page_number']) . '\'';
-                    $tb_rs    = PMA_query_as_cu($table_query);
+                    $tb_rs    = PMA_query_as_controluser($table_query);
                     unset($table_query);
                     unset($tb_rs);
                 }
@@ -852,7 +874,7 @@ class PMA_Table
                                 . '         db_name = \'' . PMA_sqlAddslashes($target_db) . '\''
                                 . ' WHERE db_name  = \'' . PMA_sqlAddslashes($source_db) . '\''
                                 . ' AND table_name = \'' . PMA_sqlAddslashes($source_table) . '\'';
-                PMA_query_as_cu($table_query);
+                PMA_query_as_controluser($table_query);
                 unset($table_query);
             }
 
@@ -870,7 +892,7 @@ class PMA_Table
                                             WHERE
                                                 db_name = \'' . PMA_sqlAddslashes($source_db) . '\' AND
                                                 table_name = \'' . PMA_sqlAddslashes($source_table) . '\'';
-                    $comments_copy_rs    = PMA_query_as_cu($comments_copy_query);
+                    $comments_copy_rs    = PMA_query_as_controluser($comments_copy_query);
 
                     // Write every comment as new copied entry. [MIME]
                     while ($comments_copy_row = PMA_DBI_fetch_assoc($comments_copy_rs)) {
@@ -885,7 +907,7 @@ class PMA_Table
                                             . '\'' . PMA_sqlAddslashes($comments_copy_row['transformation']) . '\','
                                             . '\'' . PMA_sqlAddslashes($comments_copy_row['transformation_options']) . '\'' : '')
                                     . ')';
-                        PMA_query_as_cu($new_comment_query);
+                        PMA_query_as_controluser($new_comment_query);
                     } // end while
                     PMA_DBI_free_result($comments_copy_rs);
                     unset($comments_copy_rs);
@@ -1030,7 +1052,7 @@ class PMA_Table
                        `table_name` = \'' . PMA_sqlAddslashes($new_name) . '\'
                  WHERE `db_name`    = \'' . PMA_sqlAddslashes($old_db) . '\'
                    AND `table_name` = \'' . PMA_sqlAddslashes($old_name) . '\'';
-            PMA_query_as_cu($remove_query);
+            PMA_query_as_controluser($remove_query);
             unset($remove_query);
         }
 
@@ -1042,7 +1064,7 @@ class PMA_Table
                        `table_name` = \'' . PMA_sqlAddslashes($new_name) . '\'
                  WHERE `db_name`    = \'' . PMA_sqlAddslashes($old_db) . '\'
                    AND `table_name` = \'' . PMA_sqlAddslashes($old_name) . '\'';
-            PMA_query_as_cu($table_query);
+            PMA_query_as_controluser($table_query);
             unset($table_query);
         }
 
@@ -1054,7 +1076,7 @@ class PMA_Table
                        `foreign_table` = \'' . PMA_sqlAddslashes($new_name) . '\'
                  WHERE `foreign_db`    = \'' . PMA_sqlAddslashes($old_db) . '\'
                    AND `foreign_table` = \'' . PMA_sqlAddslashes($old_name) . '\'';
-            PMA_query_as_cu($table_query);
+            PMA_query_as_controluser($table_query);
 
             $table_query = '
                 UPDATE ' . PMA_backquote($GLOBALS['cfgRelation']['db']) . '.'
@@ -1063,7 +1085,7 @@ class PMA_Table
                        `master_table` = \'' . PMA_sqlAddslashes($new_name) . '\'
                  WHERE `master_db`    = \'' . PMA_sqlAddslashes($old_db) . '\'
                    AND `master_table` = \'' . PMA_sqlAddslashes($old_name) . '\'';
-            PMA_query_as_cu($table_query);
+            PMA_query_as_controluser($table_query);
             unset($table_query);
         }
 
@@ -1075,7 +1097,7 @@ class PMA_Table
                        `table_name` = \'' . PMA_sqlAddslashes($new_name) . '\'
                  WHERE `db_name`    = \'' . PMA_sqlAddslashes($old_db) . '\'
                    AND `table_name` = \'' . PMA_sqlAddslashes($old_name) . '\'';
-            PMA_query_as_cu($table_query);
+            PMA_query_as_controluser($table_query);
             unset($table_query);
         }
 
@@ -1087,7 +1109,7 @@ class PMA_Table
                        `table_name` = \'' . PMA_sqlAddslashes($new_name) . '\'
                  WHERE `db_name`    = \'' . PMA_sqlAddslashes($old_db) . '\'
                    AND `table_name` = \'' . PMA_sqlAddslashes($old_name) . '\'';
-            PMA_query_as_cu($table_query);
+            PMA_query_as_controluser($table_query);
             unset($table_query);
         }
 
@@ -1112,7 +1134,7 @@ class PMA_Table
      * @param   boolean whether to quote name with backticks ``
      * @return array
      */
-    public function getUniqueColumns($quoted = true)
+    public function getUniqueColumns($backquoted = true)
     {
         $sql = 'SHOW INDEX FROM ' . $this->getFullName(true) . ' WHERE Non_unique = 0';
         $uniques = PMA_DBI_fetch_result($sql, array('Key_name', null), 'Column_name');
@@ -1122,7 +1144,7 @@ class PMA_Table
             if (count($index) > 1) {
                 continue;
             }
-            $return[] = $this->getFullName($quoted) . '.' . ($quoted ? PMA_backquote($index[0]) : $index[0]);
+            $return[] = $this->getFullName($backquoted) . '.' . ($backquoted ? PMA_backquote($index[0]) : $index[0]);
         }
 
         return $return;
@@ -1138,14 +1160,14 @@ class PMA_Table
      * @param   boolean whether to quote name with backticks ``
      * @return array
      */
-    public function getIndexedColumns($quoted = true)
+    public function getIndexedColumns($backquoted = true)
     {
         $sql = 'SHOW INDEX FROM ' . $this->getFullName(true) . ' WHERE Seq_in_index = 1';
         $indexed = PMA_DBI_fetch_result($sql, 'Column_name', 'Column_name');
 
         $return = array();
         foreach ($indexed as $column) {
-            $return[] = $this->getFullName($quoted) . '.' . ($quoted ? PMA_backquote($column) : $column);
+            $return[] = $this->getFullName($backquoted) . '.' . ($backquoted ? PMA_backquote($column) : $column);
         }
 
         return $return;

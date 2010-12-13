@@ -1,3 +1,5 @@
+phpMyAdmin 3.3.8.1 Documentation
+
   * Top
   * Requirements
   * Introduction
@@ -7,21 +9,19 @@
   * Transformations
   * FAQ
   * Developers
+  * Copyright
   * Credits
   * Translators
   * Glossary
-
-phpMyAdmin 3.1.4 Documentation
 
   * phpMyAdmin homepage
   * SourceForge phpMyAdmin project page
   * Official phpMyAdmin wiki
   * Local documents:
       + Version history: ChangeLog
-      + General notes: README
       + License: LICENSE
-  * Documentation version: $Id: Documentation.html 12379 2009-04-25 11:28:17Z
-    lem9 $
+  * Documentation version:
+    $Id$
 
 Requirements
 
@@ -37,6 +37,7 @@ Requirements
         strongly suggested for most users and is required for 64?bit machines.
         Not using mcrypt will cause phpMyAdmin to load pages significantly
         slower.
+      + To support upload progress bars, see FAQ 2.9.
   * MySQL 5.0 or newer (details);
   * Web browser with cookies enabled.
 
@@ -58,6 +59,8 @@ Currently phpMyAdmin can:
   * create^1 and read dumps of tables
   * export^1 data to various formats: CSV, XML, PDF, ISO/IEC 26300 -
     OpenDocument Text and Spreadsheet, Word, Excel and L^AT[E]X formats
+  * import data and MySQL structures from Microsoft Excel and OpenDocument
+    spreadsheets, as well as XML, CSV, and SQL files
   * administer multiple servers
   * manage MySQL users and privileges
   * check referential integrity in MyISAM tables
@@ -67,9 +70,12 @@ Currently phpMyAdmin can:
   * search globally in a database or a subset of it
   * transform stored data into any format using a set of predefined functions,
     like displaying BLOB-data as image or download-link
+  * track changes on databases, tables and views
   * support InnoDB tables and foreign keys (see FAQ 3.6)
   * support mysqli, the improved MySQL extension (see FAQ 1.17)
-  * communicate in 55 different languages
+  * communicate in 57 different languages
+  * synchronize two databases residing on the same as well as remote servers
+    (see FAQ 9.1)
 
 A word about users:
 
@@ -147,6 +153,7 @@ Quick Install
         $i++;
         $cfg['Servers'][$i]['user']          = 'root';
         $cfg['Servers'][$i]['password']      = 'cbb74bc'; // use here your password
+        $cfg['Servers'][$i]['auth_type']     = 'config';
         ?>
 
         For a full explanation of possible configuration values, see the
@@ -198,19 +205,25 @@ Quick Install
  6. Open the main phpMyAdmin directory in your browser. phpMyAdmin should now
     display a welcome screen and your databases, or a login dialog if using
     HTTP or cookie authentication mode.
- 7. You should deny access to the ./libraries subfolder in your webserver
-    configuration. For Apache you can use supplied .htaccess file in that
-    folder, for other webservers, you should configure this yourself. Such
-    configuration prevents from possible path exposure and cross side scripting
-    vulnerabilities that might happen to be found in that code.
+ 7. You should deny access to the ./libraries and ./setup/lib subfolders in
+    your webserver configuration. For Apache you can use supplied .htaccess
+    file in that folder, for other webservers, you should configure this
+    yourself. Such configuration prevents from possible path exposure and cross
+    side scripting vulnerabilities that might happen to be found in that code.
+ 8. It is generally good idea to protect public phpMyAdmin installation against
+    access by robots as they usually can not do anything good there. You can do
+    this using robots.txt file in root of your webserver or limit access by web
+    server configuration. You can find example .htaccess file which can help
+    you achieve this in contrib directory in phpMyAdmin.
 
 Linked-tables infrastructure
 
-For a whole set of new features (bookmarks, comments, SQL-history,
-PDF-generation, field contents transformation, etc.) you need to create a set
-of special tables. Those tables can be located in your own database, or in a
-central database for a multi-user installation (this database would then be
-accessed by the controluser, so no other user should have rights to it).
+For a whole set of new features (bookmarks, comments, SQL-history, tracking
+mechanism, PDF-generation, field contents transformation, etc.) you need to
+create a set of special tables. Those tables can be located in your own
+database, or in a central database for a multi-user installation (this database
+would then be accessed by the controluser, so no other user should have rights
+to it).
 
 Please look at your ./scripts/ directory, where you should find a file called
 create_tables.sql. (If you are using a Windows server, pay special attention to
@@ -233,17 +246,19 @@ below).
 Upgrading from an older version
 
 Simply copy ./config.inc.php from your previous installation into the newly
-unpacked one. Configuration files from very old versions (2.3.0 or before) may
-require some tweaking as some options have been changed or removed. For
-compatibility with PHP 6, remove a set_magic_quotes_runtime(0); statement that
-you might find near the end of your configuration file.
+unpacked one. Configuration files from old versions may require some tweaking
+as some options have been changed or removed; in particular, the definition of
+$cfg['AttributeTypes'] has changed so you better remove it from your file and
+just use the default one. For compatibility with PHP 6, remove a
+set_magic_quotes_runtime(0); statement that you might find near the end of your
+configuration file.
 
 You should not copy libraries/config.default.php over config.inc.php because
 the default configuration file is version-specific.
 
 If you have upgraded your MySQL server from a version previous to 4.1.2 to
-version 4.1.2 or newer and if you use the pmadb/linked table infrastructure,
-you should run the SQL script found in scripts/upgrade_tables_mysql_4_1_2+.sql.
+version 5.x or newer and if you use the pmadb/linked table infrastructure, you
+should run the SQL script found in scripts/upgrade_tables_mysql_4_1_2+.sql.
 
 Using authentication modes
 
@@ -251,8 +266,7 @@ Using authentication modes
     environment where you want to give users access to their own database and
     don't want them to play around with others.
     Nevertheless be aware that MS Internet Explorer seems to be really buggy
-    about cookies, at least till version 6, and PHP 4.1.1 is also a bit buggy
-    in this area!
+    about cookies, at least till version 6.
     Even in a single-user environment, you might prefer to use HTTP or cookie
     mode so that your user/password pair are not in clear in the configuration
     file.
@@ -263,8 +277,8 @@ Using authentication modes
     are using the HTTPS protocol.
     In cookie mode, the password is stored, encrypted with the blowfish
     algorithm, in a temporary cookie.
-  * Note: starting with phpMyAdmin 2.6.1, this section is only applicable if
-    your MySQL server is running with --skip-show-database.
+  * Note: this section is only applicable if your MySQL server is running with
+    --skip-show-database.
 
     For 'HTTP' and 'cookie' modes, phpMyAdmin needs a controluser that has only
     the SELECT privilege on the `mysql`.`user` (all columns except `Password`),
@@ -425,6 +439,10 @@ $cfg['PmaNoRelation_DisableWarning'] boolean
 $cfg['SuhosinDisableWarning'] boolean
     A warning is displayed on the main page if Suhosin is detected. You can set
     this parameter to TRUE to stop this message from appearing.
+$cfg['McryptDisableWarning'] boolean
+    Disable the default warning that is displayed if mcrypt is missing for
+    cookie authentication. You can set this parameter to TRUE to stop this
+    message from appearing.
 $cfg['AllowThirdPartyFraming'] boolean
     Setting this to true allows a page located on a different domain to call
     phpMyAdmin inside a frame, and is a potential security hole allowing
@@ -433,8 +451,8 @@ $cfg['blowfish_secret'] string
     The "cookie" auth_type uses blowfish algorithm to encrypt the password.
     If you are using the "cookie" auth_type, enter here a random passphrase of
     your choice. It will be used internally by the blowfish algorithm: you
-    won?t be prompted for this passphrase. The maximum number of characters for
-    this parameter seems to be 46.
+    won?t be prompted for this passphrase. There is no maximum length for this
+    secret.
 
     Since version 3.1.0 phpMyAdmin can generate this on the fly, but it makes a
     bit weaker security as this generated secret is stored in session and
@@ -489,8 +507,8 @@ $cfg['Servers'][$i]['controluser'] string
     $cfg['Servers'][$i]['controlpass'] string
     This special account is used for 2 distinct purposes: to make possible all
     relational features (see $cfg['Servers'][$i]['pmadb']) and, for a MySQL
-    server previous to 4.1.2 or running with --skip-show-database, to enable a
-    multi-user installation (HTTP or cookie authentication mode).
+    server running with --skip-show-database, to enable a multi-user
+    installation (HTTP or cookie authentication mode).
 
     When using HTTP or cookie authentication modes (or 'config' authentication
     mode since phpMyAdmin 2.2.1), you need to supply the details of a MySQL
@@ -573,7 +591,7 @@ $cfg['Servers'][$i]['hide_db'] string
 
     and to hide both "db1" and "db2" use
 
-    $cfg['Servers'][$i]['hide_db'] = '(db1|db2)';
+    $cfg['Servers'][$i]['hide_db'] = '^(db1|db2)$';
 
     More information on regular expressions can be found in the PCRE pattern
     syntax portion of the PHP reference manual.
@@ -638,7 +656,8 @@ $cfg['Servers'][$i]['table_info'] string
     This configuration variable will hold the name of this special table. To
     allow the usage of this functionality:
       + set up pmadb and the linked-tables infrastructure
-      + put the table name in $cfg['Servers'][$i]['table_info']
+      + put the table name in $cfg['Servers'][$i]['table_info'] (e.g.
+        'pma_table_info')
       + then for each table where you want to use this feature, click
         "Structure/Relation view/Choose field to display" to choose the field.
     Usage tip: Display field.
@@ -675,7 +694,8 @@ $cfg['Servers'][$i]['column_info'] string
 
     To allow the usage of this functionality:
       + set up pmadb and the linked-tables infrastructure
-      + put the table name in $cfg['Servers'][$i]['column_info']
+      + put the table name in $cfg['Servers'][$i]['column_info'] (e.g.
+        'pma_column_info')
       + to update your PRE-2.5.0 Column_comments Table use this:
 
         ALTER TABLE `pma_column_comments`
@@ -701,14 +721,69 @@ $cfg['Servers'][$i]['history'] string
 
     To allow the usage of this functionality:
       + set up pmadb and the linked-tables infrastructure
-      + put the table name in $cfg['Servers'][$i]['history']
+      + put the table name in $cfg['Servers'][$i]['history'] (e.g.
+        'pma_history')
+$cfg['Servers'][$i]['tracking'] string
+    Since release 3.3.x a tracking mechanism is available. It helps you to
+    track every SQL command which is executed by phpMyAdmin. The mechanism
+    supports logging of data manipulation and data definition statements. After
+    enabling it you can create versions of tables.
+
+    The creation of a version has two effects:
+      + phpMyAdmin saves a snapshot of the table, including structure and
+        indexes.
+      + phpMyAdmin logs all commands which change the structure and/or data of
+        the table and links these commands with the version number.
+    Of course you can view the tracked changes. On the "Tracking" page a
+    complete report is available for every version. For the report you can use
+    filters, for example you can get a list of statements within a date range.
+    When you want to filter usernames you can enter * for all names or you
+    enter a list of names separated by ','. In addition you can export the
+    (filtered) report to a file or to a temporary database.
+
+    To allow the usage of this functionality:
+      + set up pmadb and the linked-tables infrastructure
+      + put the table name in $cfg['Servers'][$i]['tracking'] (e.g.
+        'pma_tracking')
+$cfg['Servers'][$i]['tracking_version_auto_create'] boolean
+    Whether the tracking mechanism creates versions for tables and views
+    automatically. Default value is false.
+
+    If this is set to true and you create a table or view with
+      + CREATE TABLE ...
+      + CREATE VIEW ...
+    and no version exists for it, the mechanism will create a version for you
+    automatically.
+$cfg['Servers'][$i]['tracking_default_statements'] string
+    Defines the list of statements the auto-creation uses for new versions.
+    Default value is
+
+    CREATE TABLE,ALTER TABLE,DROP TABLE,RENAME TABLE,
+    CREATE INDEX,DROP INDEX,
+    INSERT,UPDATE,DELETE,TRUNCATE,REPLACE,
+    CREATE VIEW,ALTER VIEW,DROP VIEW,
+    CREATE DATABASE,ALTER DATABASE,DROP DATABASE
+
+$cfg['Servers'][$i]['tracking_version_drop_view'] boolean
+    Whether a DROP VIEW IF EXISTS statement will be added as first line to the
+    log when creating a view. Default value is true.
+
+$cfg['Servers'][$i]['tracking_version_drop_table'] boolean
+    Whether a DROP TABLE IF EXISTS statement will be added as first line to the
+    log when creating a table. Default value is true.
+
+$cfg['Servers'][$i]['tracking_version_drop_database'] boolean
+    Whether a DROP DATABASE IF EXISTS statement will be added as first line to
+    the log when creating a database. Default value is true.
+
 $cfg['Servers'][$i]['designer_coords'] string
     Since release 2.10.0 a Designer interface is available; it permits to
     visually manage the relations.
 
     To allow the usage of this functionality:
       + set up pmadb and the linked-tables infrastructure
-      + put the table name in $cfg['Servers'][$i]['designer_coords']
+      + put the table name in $cfg['Servers'][$i]['designer_coords'] (e.g.
+        'pma_designer_coords')
 $cfg['Servers'][$i]['verbose_check'] boolean
     Because release 2.5.0 introduced the new MIME-transformation support, the
     column_info table got enhanced with three new fields. If the above variable
@@ -723,10 +798,11 @@ $cfg['Servers'][$i]['verbose_check'] boolean
 $cfg['Servers'][$i]['AllowRoot'] boolean
     Whether to allow root access. This is just a shortcut for the AllowDeny
     rules below.
-$cfg['Servers'][$i]['AllowNoPasswordRoot'] boolean
-    Whether to allow access to root user without password. The default value of
-    false for this parameter prevents unintended access to a MySQL server with
-    was left with an empty password for root.
+$cfg['Servers'][$i]['AllowNoPassword'] boolean
+    Whether to allow logins without a password. The default value of false for
+    this parameter prevents unintended access to a MySQL server with was left
+    with an empty password for root or on which an anonymous (blank) user is
+    defined.
 $cfg['Servers'][$i]['AllowDeny']['order'] string
     If your rule order is empty, then IP authentication is disabled.
 
@@ -776,6 +852,19 @@ $cfg['Servers'][$i]['AllowDeny']['rules'] array of strings
     xxx.xxx.xxx.xxx/nn (CIDR, Classless Inter-Domain Routing type IP addresses)
     But the following does not work:
     xxx.xxx.xxx.xx[yyy-zzz] (partial IP address range)
+    Also IPv6 addresses are not supported.
+$cfg['Servers'][$i]['DisableIS'] boolean
+    Disable using INFORMATION_SCHEMA to retrieve information (use SHOW commands
+    instead), because of speed issues when many databases are present.
+    Currently used in some parts of the code, more to come.
+$cfg['Servers'][$i]['ShowDatabasesCommand'] string
+    On a server with a huge number of databases, the default SHOW DATABASES
+    command used to fetch the name of available databases will probably be too
+    slow, so it can be replaced by faster commands (see libraries/
+    config.default.php for examples).
+$cfg['Servers'][$i]['CountTables'] boolean
+    Whether to count the number of tables for each database when preparing the
+    list of databases for the navigation frame.
 $cfg['Servers'][$i]['SignonSession'] string
     Name of session which will be used for signon authentication method.
 $cfg['Servers'][$i]['SignonURL'] string
@@ -819,14 +908,16 @@ $cfg['ForceSSL'] boolean
 $cfg['ExecTimeLimit'] integer [number of seconds]
     Set the number of seconds a script is allowed to run. If seconds is set to
     zero, no time limit is imposed.
-    This setting is used while importing/exporting dump files but has no effect
-    when PHP is running in safe mode.
-$cfg['MemoryLimit'] integer [number of bytes]
-    Set the number of bytes a script is allowed to allocate. If number set to
-    zero, no limit is imposed.
-    This setting is used while importing/exporting dump files but has no effect
-    when PHP is running in safe mode.
-    You can also use any string as in php.ini, eg. '16M'.
+    This setting is used while importing/exporting dump files and in the
+    Synchronize feature but has no effect when PHP is running in safe mode.
+$cfg['MemoryLimit'] string [number of bytes]
+    Set the number of bytes a script is allowed to allocate. If set to zero, no
+    limit is imposed.
+    This setting is used while importing/exporting dump files and at some other
+    places in phpMyAdmin so you definitely don't want to put here a too low
+    value. It has no effect when PHP is running in safe mode.
+    You can also use any string as in php.ini, eg. '16M'. Ensure you don't omit
+    the suffix (16 means 16 bytes!)
 $cfg['SkipLockedTables'] boolean
     Mark used tables and make it possible to show databases with locked tables
     (since MySQL 3.23.30).
@@ -852,7 +943,11 @@ $cfg['LoginCookieRecall'] boolean
     This is automatically disabled if you do not have configured $cfg
     ['blowfish_secret'].
 $cfg['LoginCookieValidity'] integer [number of seconds]
-    Define how long is login cookie valid.
+    Define how long is login cookie valid. Please note that php configuration
+    option session.gc_maxlifetime might limit session validity and if session
+    is lost, login cookie is also invalidated. So it is a good idea to set
+    session.gc_maxlifetime not lower than the value of $cfg
+    ['LoginCookieValidity'].
 $cfg['LoginCookieStore'] integer [number of seconds]
     Define how long is login cookie should be stored in browser. Default 0
     means that it will be kept for existing session. This is recommended for
@@ -875,6 +970,10 @@ $cfg['AllowArbitraryServer'] boolean
 
     NOTE: Please use this carefully, as this may allow users access to MySQL
     servers behind the firewall where your HTTP server is placed.
+$cfg['Error_Handler']['display'] boolean
+    Whether to display errors from PHP or not.
+$cfg['Error_Handler']['gather'] boolean
+    Whether to gather errors from PHP or not.
 $cfg['LeftFrameLight'] boolean
     Defines whether to use a select-based menu and display only the current
     tables in the left frame (smaller page). Only in Non-Lightmode you can use
@@ -882,9 +981,10 @@ $cfg['LeftFrameLight'] boolean
 $cfg['LeftFrameDBTree'] boolean
     In light mode, defines whether to display the names of databases (in the
     selector) using a tree, see also $cfg['LeftFrameDBSeparator'].
-$cfg['LeftFrameDBSeparator'] string
+$cfg['LeftFrameDBSeparator'] string or array
     The string used to separate the parts of the database name when showing
-    them in a tree.
+    them in a tree. Alternatively you can specify more strings in an array and
+    all of them will be used as a separator.
 $cfg['LeftFrameTableSeparator'] string
     Defines a string to be used to nest table spaces. Defaults to '__'. This
     means if you have tables like 'first__second__third' this will be shown as
@@ -977,6 +1077,9 @@ $cfg['Order'] string [DESC|ASC|SMART]
     descending (DESC) order or in a "smart" (SMART) order - I.E. descending
     order for fields of type TIME, DATE, DATETIME and TIMESTAMP, ascending
     order else- by default.
+$cfg['DisplayBinaryAsHex'] boolean
+    Defines whether the "Show binary contents as HEX" browse option is ticked
+    by default.
 $cfg['ProtectBinary'] boolean or string
     Defines whether BLOB or BINARY fields are protected from editing when
     browsing a table's content. Valid values are:
@@ -1078,9 +1181,10 @@ $cfg['AllowAnywhereRecoding'] boolean
     used language file must have it enabled (by default only these which are in
     Unicode, just to avoid losing some characters).
 
-    Setting this to TRUE also activates a pull-down menu in the Export page, to
-    choose the character set when exporting a file. The default value in this
-    menu comes from $cfg['Export']['charset'].
+    Setting this to TRUE also activates a pull-down menu in the Export and
+    Import pages, to choose the character set when exporting a file. The
+    default value in this menu comes from $cfg['Export']['charset'] and $cfg
+    ['Import']['charset'].
 $cfg['RecodingEngine'] string
     You can select here which functions will be used for character set
     conversion. Possible values are:
@@ -1128,6 +1232,10 @@ $cfg['CheckConfigurationPermissions'] boolean
     filesystem mounted on a non-Windows server, in which case the permissions
     seems wrong but in fact cannot be detected. In this case a sysadmin would
     set this parameter to FALSE. Default is TRUE.
+$cfg['LinkLengthLimit'] integer
+    Limit for length of URL in links. When length would be above this limit, it
+    is replaced by form with button. This is required as some web servers (IIS)
+    have problems with long URLs. Default is 1000.
 $cfg['NaviWidth'] integer
     Navi frame width in pixels. See themes/themename/layout.inc.php.
 $cfg['NaviBackground'] string [valid css code for background]
@@ -1188,8 +1296,8 @@ $cfg['CtrlArrowsMoving'] boolean
     Enable Ctrl+Arrows (Option+Arrows in Safari) moving between fields when
     editing.
 $cfg['LimitChars'] integer
-    Maximum number of characters showen in any non-numeric field on browse
-    view. Can be turned off by a toggle button on the browse page.
+    Maximum number of characters shown in any non-numeric field on browse view.
+    Can be turned off by a toggle button on the browse page.
 $cfg['ModifyDeleteAtLeft'] boolean $cfg['ModifyDeleteAtRight'] boolean
     Defines the place where modify and delete links would be put when tables
     contents are displayed (you may have them displayed both at the left and at
@@ -1319,7 +1427,7 @@ $cfg['EditInWindow'] boolean
     display a query box.
 
     The size of this query window can be customized with $cfg
-    ['QueryWindowWidth'] and $cfg['QueryWindowWidth'] - both integers for the
+    ['QueryWindowWidth'] and $cfg['QueryWindowHeight'] - both integers for the
     size in pixels. Note that normally, those parameters will be modified in
     layout.inc.php for the theme you are using.
 
@@ -1395,7 +1503,8 @@ $cfg['NaturalOrder'] boolean
     Database view, for the table list.
 $cfg['InitialSlidersState'] string
     If set to 'closed', the visual sliders are initially in a closed state. A
-    value of 'open' does the reverse.
+    value of 'open' does the reverse. To completely disable all visual sliders,
+    use 'disabled'.
 $cfg['TitleTable'] string
 $cfg['TitleDatabase'] string
 $cfg['TitleServer'] string
@@ -1756,23 +1865,20 @@ FAQ - Frequently Asked Questions
  6. Using phpMyAdmin
  7. phpMyAdmin project
  8. Security
+ 9. Synchronization
 
 Please have a look at our Link section on the official phpMyAdmin homepage for
 in-depth coverage of phpMyAdmin's features and or interface.
 
 Server
 
-1.1 I'm running PHP 4+ and my server is crashing each time a specific action is
-required or phpMyAdmin sends a blank page or a page full of cryptic characters
-to my browser, what can I do?
+1.1 My server is crashing each time a specific action is required or phpMyAdmin
+sends a blank page or a page full of cryptic characters to my browser, what can
+I do?
 
-There are some known PHP bugs with output buffering and compression.
 Try to set the $cfg['OBGzip'] directive to FALSE in your config.inc.php file
 and the zlib.output_compression directive to Off in your php configuration
 file.
-Furthermore, we know about such problems connected to the release candidates of
-PHP 4.2.0 (tested with PHP 4.2.0 RC1 to RC4) together with MS Internet
-Explorer. Please upgrade to the release version PHP 4.2.0.
 
 1.2 My Apache server crashes when using phpMyAdmin.
 
@@ -1781,13 +1887,7 @@ See also the FAQ 1.1 entry about PHP bugs with output buffering.
 If your server keeps crashing, please ask for help in the various Apache
 support groups.
 
-1.3 I'm running phpMyAdmin with "cookie" authentication mode under PHP 4.2.0 or
-4.2.1 loaded as an Apache 2 module but can't enter the script: I'm always
-displayed the login screen.
-
-This is a known PHP bug (see this bug report) from the official PHP bug
-database. It means there is and won't be any phpMyAdmin fix against it because
-there is no way to code a fix.
+1.3 (withdrawn).
 
 1.4 Using phpMyAdmin on IIS, I'm displayed the error message: "The specified
 CGI application misbehaved by not returning a complete set of HTTP headers
@@ -1813,11 +1913,7 @@ index.php, navigation.php and libraries/common.lib.php.
 
 These features are based on the gzencode() and bzcompress() PHP functions to be
 more independent of the platform (Unix/Windows, Safe Mode or not, and so on).
-So, you must have PHP4 >= 4.0.4 and Zlib/Bzip2 support (--with-zlib and
---with-bz2).
-We faced PHP crashes when trying to download a dump with MS Internet Explorer
-when phpMyAdmin is run with a release candidate of PHP 4.2.0. In this case you
-should switch to the release version of PHP 4.2.0.
+So, you must have Zlib/Bzip2 support (--with-zlib and --with-bz2).
 
 1.8 I cannot insert a text file in a table, and I get an error about safe mode
 being in effect.
@@ -1914,11 +2010,11 @@ provider is unwilling to change the settings:
 
 1.17 Which MySQL versions does phpMyAdmin support?
 
-In phpMyAdmin 3.0.x, versions starting with MySQL 5.0.1 are fully supported.
-phpMyAdmin may connect to your MySQL server using PHP's classic MySQL extension
-as well as the improved MySQL extension (MySQLi) that is available in php 5.0.
-Either way, the developers of both extensions recommend to use the classic
-extension for MySQL 4.0 and below and MySQLi for MySQL 4.1 and newer.
+Since phpMyAdmin 3.0.x, only MySQL 5.0.1 and newer are supported. For older
+MySQL versions, you need to use 2.8.x branch. phpMyAdmin can connect to your
+MySQL server using PHP's classic MySQL extension as well as the improved MySQL
+extension (MySQLi) that is available in php 5.0. The latter one should be used
+unless you have good reason not to do so.
 When compiling php, we strongly recommend that you manually link the MySQL
 extension of your choice to a MySQL client library of at least the same minor
 version since the one that is bundled with some PHP distributions is rather old
@@ -1942,13 +2038,7 @@ library to match your MySQL installation. Your chosen extension is specified in
 $cfg['Servers'][$i]['extension']. More information (and several workarounds)
 are located in the MySQL Documentation.
 
-1.18 I'm running MySQL <= 4.0.1 having lower_case_table_names set to 1. If I
-create a new table with a capital letter in its name it is changed to lowercase
-as it should. But if I try to DROP this table MySQL is unable to find the
-corresponding file.
-
-This is a bug of MySQL <= 4.0.1. Please upgrade to at least MySQL 4.0.2 or turn
-off your lower_case_table_names directive.
+1.18 (withdrawn).
 
 1.19 I can't run the "display relations" feature because the script seems not
 to know the font face I'm using!
@@ -1962,7 +2052,7 @@ Configuration".
 
 To connect to a MySQL server, PHP needs a set of MySQL functions called "MySQL
 extension". This extension may be part of the PHP distribution (compiled-in),
-otherwise it needs to be loaded dynamically. Its name is probably mysql.so or
+otherwise it needs to be loaded dynamically. Its name is probably mysql.so or 
 php_mysql.dll. phpMyAdmin tried to load the extension but failed.
 
 Usually, the problem is solved by installing a software package called
@@ -1994,10 +2084,7 @@ value of this directive using the query
 
 SHOW VARIABLES LIKE 'lower_case_table_names';
 
-1.24 Some characters are being truncated in my queries, or I get characters
-randomly added. I am running PHP 4.2.3.
-
-This is a PHP 4.2.3 bug.
+1.24 (withdrawn).
 
 1.25 I am running Apache with mod_gzip-1.3.26.1a on Windows XP, and I get
 problems, such as undefined variables when I run a SQL query.
@@ -2134,9 +2221,29 @@ this case.
 
 Yes but the default configuration values of Suhosin are known to cause problems
 with some operations, for example editing a table with many columns and no
-primary key. Tuning information is available at http://www.hardened-php.net/
-hphp/troubleshooting.html, although the parameter names have changed (suhosin
-instead of hphp). See also the SuhosinDisableWarning directive.
+primary key or with textual primary key.
+
+Suhosin configuration might lead to malfunction in some cases and it can not be
+fully avoided as phpMyAdmin is kind of application which needs to transfer big
+amounts of fields in single HTTP request, what is something what Suhosin tries
+to prevent. Generally all suhosin.request.*, suhosin.post.* and suhosin.get.*
+directives can have negative effect on phpMyAdmin usability. You can always
+find in your error logs which limit did cause dropping of variable, so you can
+diagnose the problem and adjust matching configuration variable.
+
+The default values for most Suhosin configuration options will work in most
+scenarios, however you might want to adjust at least following parameters:
+
+  * suhosin.request.max_vars should be increased (eg. 2048)
+  * suhosin.post.max_vars should be increased (eg. 2048)
+  * suhosin.request.max_array_index_length should be increased (eg. 256)
+  * suhosin.post.max_array_index_length should be increased (eg. 256)
+  * suhosin.request.max_totalname_length should be increased (eg. 8192)
+  * suhosin.post.max_totalname_length should be increased (eg. 8192)
+  * suhosin.sql.bailout_on_error needs to be disabled (the default)
+  * suhosin.log.* should not include SQL, otherwise you get big slowdown
+
+You can also disable the warning using the SuhosinDisableWarning directive.
 
 1.39 When I try to connect via https, I can log in, but then my connection is
 redirected back to http. What can cause this behavior?
@@ -2146,7 +2253,7 @@ configuration. See http://httpd.apache.org/docs/2.0/mod/mod_ssl.html#ssloptions
 .
 
 1.40 When accessing phpMyAdmin via an Apache reverse proxy, cookie login does
-not work,
+not work.
 
 To be able to use cookie auth Apache must know that it has to rewrite the
 set-cookie headers.
@@ -2154,8 +2261,8 @@ Example from the Apache 2.2 documentation:
 
 ProxyPass /mirror/foo/ http://backend.example.com/
 ProxyPassReverse /mirror/foo/ http://backend.example.com/
-ProxyPassReverseCookieDomain backend.example.com public.example.com
-ProxyPassReverseCookiePath / /mirror/foo/
+ProxyPassReverseCookieDomain backend.example.com public.example.com 
+ProxyPassReverseCookiePath / /mirror/foo/ 
 
 Note: if the backend url looks like http://host/~user/phpmyadmin, the tilde (~)
 must be url encoded as %7E in the ProxyPassReverse* lines. This is not specific
@@ -2198,7 +2305,7 @@ I do?
 
 For RedHat users, Harald Legner suggests this on the mailing list:
 
-On my RedHat-Box the socket of MySQL is /var/lib/mysql/mysql.sock. In your
+On my RedHat-Box the socket of MySQL is /var/lib/mysql/mysql.sock. In your 
 php.ini you will find a line
 
 mysql.default_socket = /tmp/mysql.sock
@@ -2312,9 +2419,17 @@ Here are a few points to check:
   * The directory specified in the php.ini directive session.save_path does not
     exist or is read-only.
 
+2.9 Seeing an upload progress bar
+
+To be able to see a progress bar during your uploads, your server must have
+either the APC extension or the uploadprogress one. Moreover, the JSON
+extension has to be enabled in your PHP.
+
+If using APC, you must set apc.rfc1867 to on in your php.ini.
+
 Known limitations
 
-3.1 When using HTTP authentication, an user who logged out can not log in again
+3.1 When using HTTP authentication, a user who logged out can not log in again
 in with the same nick.
 
 This is related to the authentication mechanism (protocol) used by phpMyAdmin.
@@ -2325,14 +2440,14 @@ back to phpMyAdmin. You should be able to log in again.
 or a time limit error.
 
 Compressed dumps are built in memory and because of this are limited to php's
-memory limit. For GZip/BZip2 exports this can be overcome since 2.5.4 using
+memory limit. For GZip/BZip2 exports this can be overcome since 2.5.4 using 
 $cfg['CompressOnFly'] (enabled by default). Zip exports can not be handled this
 way, so if you need Zip files for larger dump, you have to use another way.
 
-3.3 With InnoDB tables, I lose foreign key relationships when I rename or alter
-a table.
+3.3 With InnoDB tables, I lose foreign key relationships when I rename a table
+or a column.
 
-This seems to be a InnoDB bug (fixed in MySQL 3.23.50?).
+This is an InnoDB bug, see http://bugs.mysql.com/bug.php?id=21704.
 
 3.4 I am unable to import dumps I created with the mysqldump tool bundled with
 the MySQL server distribution.
@@ -2433,6 +2548,48 @@ of the columns.
 
 This has been a known limitation of phpMyAdmin since the beginning and it's not
 likely to be solved in the future.
+
+3.15 When I import an Excel spreadsheet, some cells with calculations do not
+display correctly.
+
+phpMyAdmin uses the PHPExcel library to parse Excel XLS and XLSX spreadsheets.
+Therefore, any limitations that are listed on their page regarding Excel
+calculations will also apply here.
+
+PHPExcel will be kept up to date so as to make all improvements available to
+phpMyAdmin users.
+
+3.16 When I compress (gzip, bzip2, zip) an Excel workbook and attempt to import
+it, nothing happens.
+
+Since Excel XLSX workbooks are already compressed, there is often times only a
+small benefit from compressing them yet again. Support for compressed Excel
+XLSX and XLS workbooks may be added in the future.
+
+3.17 When I import an Excel spreadsheet, my custom cell types are not
+represented as they are in Excel.
+
+Excel's internal representation of custom cell types is rather muddled
+(especially in Excel 97-2003 binary XLS files). If possible, consider using a
+built-in type. These are almost always guarenteed to import correctly.
+
+3.18 When I import a CSV file that contains multiple tables, they are lumped
+together into a single table.
+
+There is no reliable way to differetiate tables in CSV format. For the time
+being, you will have to break apart CSV files containing multiple tables.
+
+3.19 When I import a file and have phpMyAdmin determine the appropriate data
+structure it only uses int, decimal, and varchar types.
+
+Currently, the import type-detection system can only assign these MySQL types
+to columns. In future, more will likely be added but for the time being you
+will have to edit the structure to your liking post-import.
+
+Also, you should note the fact that phpMyAdmin will use the size of the largest
+item in any given column as the column size for the appropriate type. If you
+know you will be adding larger items to that column then you should manually
+adjust the column sizes accordingly. This is done for the sake of efficiency.
 
 ISPs, multi-user installations
 
@@ -2553,9 +2710,7 @@ Testing needs to be done for Konqueror 2.2.2.
 stores the cookies.
 
 MS Internet Explorer seems to be really buggy about cookies, at least till
-version 6. And thanks to Andrew Zivolup we've traced also a PHP 4.1.1 bug in
-this area!
-Then, if you're running PHP 4.1.1, try to upgrade or downgrade... it may work!
+version 6.
 
 5.5 In Internet Explorer 5.0, I get JavaScript errors when browsing my rows.
 
@@ -2638,6 +2793,14 @@ Please check the following points:
 
 Many users have confirmed that the Tabbrowser Extensions plugin they installed
 in their Firefox is causing the problem.
+
+5.18 With Konqueror 4.2.x an invalid LIMIT clause is generated when I browse a
+table.
+
+This happens only when both of these conditions are met: using the http
+authentication mode and register_globals being set to On on the server. It
+seems to be a browser-specific problem; meanwhile use the cookie authentication
+mode.
 
 Using phpMyAdmin
 
@@ -2782,7 +2945,7 @@ pages?
   * Select a table from the list, enter its coordinates and click Save.
     Coordinates are relative; your diagram will be automatically scaled to fit
     the page. When initially placing tables on the page, just pick any
-    coordinates -- say, 50x50. After clicking Save, you can then use the
+    coordinates -- say, 50x50. After clicking Save, you can then use the 
     graphical editor to position the element correctly.
   * When you'd like to look at your PDF, first be sure to click the Save button
     beneath the list of tables and coordinates, to save any changes you made
@@ -2946,12 +3109,11 @@ file table.tex):
 \include{table}         % including exported table
 \end{document}          % end of document
 
-6.20 In MySQL 4, I see a lot of databases which are not mine, and cannot access
-them.
+6.20 I see a lot of databases which are not mine, and cannot access them.
 
-Upgrading to MySQL 4 usually gives users those global privileges: CREATE
-TEMPORARY TABLES, SHOW DATABASES, LOCK TABLES. Those privileges also enable
-users to see all the database names. See this bug report.
+You have one of these global privileges: CREATE TEMPORARY TABLES, SHOW
+DATABASES, LOCK TABLES. Those privileges also enable users to see all the
+database names. See this bug report.
 
 So if your users do not need those privileges, you can remove them and their
 databases list will shorten.
@@ -2979,27 +3141,10 @@ Yes. If a bookmark has the same label as a table name, it will be executed.
 6.23 Export: I heard phpMyAdmin can export Microsoft Excel files, how can I
 enable that?
 
-Current version does support direct export to Microsoft Excel and Word versions
-2000 and newer. If you need export older versions, you can use CSV suitable for
-Microsoft Excel, which works out of the box or you can try native experimental
-MS Excel exporter. This export has several problems, most important are
-limitation of cell content to 255 chars and no support for charsets, so think
-carefully whether you want to enable this.. For enabling this you need to set
-$cfg['TempDir'] to place where web server user can write (for example './tmp')
-and install PEAR module Spreadsheet_Excel_Writer into php include path. The
-installation can be done by following command:
-
-pear -d preferred_state=beta install -a Spreadsheet_Excel_Writer
-
-First part of switches set we want to install beta version of that module (no
-stable version available yet) and then we tell pear we want to satisfy
-dependencies.
-
-If you are running in PHP safe mode, you will have to set in php.ini the
-safe_mode_include_dir to the directory where your PEAR modules are located, for
-example:
-
-safe_mode_include_dir = /usr/local/lib/php
+You can use CSV for Microsoft Excel, which works out of the box, but phpMyAdmin
+supports direct export to Microsoft Excel version 97 and newer. For this to
+work, you need to set $cfg['TempDir'] to a place where the web server user can
+write (for example './tmp').
 
 To create the temporary directory on a UNIX-based system, you can do:
 
@@ -3015,10 +3160,10 @@ is done whenever you enter Structure page for this table.
 
 6.25 How does BLOB streaming work in phpMyAdmin?
 
-First, for general information about BLOB streaming on MySQL, visit
+First, for general information about BLOB streaming on MySQL, visit 
 blobstreaming.org. We currently support streaming if you are running MySQL 5.1
-with the PBXT and PBMS storage engines.
-
+with the PBXT and PBMS storage engines. Moreover, only PBMS 0.5.04 is
+supported.
 
  1. In config.inc.php your host should be defined with a FQDN (fully qualified
     domain name) instead of something like "localhost".
@@ -3038,6 +3183,12 @@ with the PBXT and PBMS storage engines.
     MIME-type will be sent to your browser; this MIME-type was stored at upload
     time but in case it's incorrect, it's possible to edit it by clicking on
     the displayed MIME-type.
+
+6.26 How can I select a range of rows?
+
+Click the first row of the range, hold the shift key and click the last row of
+the range. This works everywhere you see rows, for example in Browse mode or on
+the Structure page.
 
 phpMyAdmin project
 
@@ -3070,15 +3221,17 @@ proceed?
 
 The following method is preferred for new developers:
 
- 1. fetch the current SVN tree over anonymous SVN:
-    svn co https://phpmyadmin.svn.sourceforge.net/svnroot/phpmyadmin/trunk/
-    phpMyAdmin
+ 1. fetch the current git repository over anonymous git:
+    git clone git://phpmyadmin.git.sourceforge.net/gitroot/phpmyadmin/
+    phpmyadmin
  2. add your stuff
- 3. generate patch with your changes: svn diff
- 4. put the patch inside the patch tracker of the phpMyAdmin project.
+ 3. generate patch with your changes: git diff > xxx.diff
+ 4. submit your patch via the patch tracker of the phpMyAdmin project.
 
-Write access to the SVN tree is granted only to experienced developers who have
-already contributed something useful to phpMyAdmin.
+More details on git are available on our wiki.
+
+Write access to the repository is granted only to experienced developers who
+have already contributed something useful to phpMyAdmin.
 Also, have a look at the Developers section.
 
 Security
@@ -3087,6 +3240,39 @@ Security
 phpMyAdmin?
 
 Please refer to http://www.phpmyadmin.net/home_page/security.php
+
+8.2 How can I protect phpMyAdmin against brute force attacks?
+
+If you use Apache web server, phpMyAdmin exports information about
+authentication to Apache environment and it can be used in Apache logs.
+Currently there are two variables available:
+
+userID
+    User name of currently active user (he does not have to be logged in).
+userStatus
+    Status of currently active user, one of ok (user is logged in),
+    mysql-denied (MySQL denied user login), allow-denied (user denied by allow/
+    deny rules), root-denied (root is denied in configuration), empty-denied
+    (empty password is denied).
+
+LogFormat directive for Apache can look like following:
+
+LogFormat "%h %l %u %t \"%r\" %>s %b \
+\"%{Referer}i\" \"%{User-Agent}i\" %{userID}n %{userStatus}n"   pma_combined
+
+You can then use any log analyzing tools to detect possible break-in attempts.
+
+Synchronization
+
+9.1 How can I synchronize two databases/tables in phpMyAdmin?
+
+You can now synchronize databases/tables in phpMyAdmin using the Synchronize
+feature. It allows you to connect to local as well as remote servers.This
+requires you to enter server host name, username, password, port and the name
+of the database. Therefore you can now synchronize your databases placed on the
+same server or some remote server.
+
+For more details see How to synchronize
 
 Developers Information
 
@@ -3109,8 +3295,10 @@ If you're planning to contribute source, please read the following information:
     As far as possible, we want the scripts to be XHTML1.0 and CSS2 compliant
     on one hand, they fit the PEAR coding standards on the other hand. Please
     pay attention to this.
+  * Please enable showing PHP errors and warnings by the $cfg['Error_Handler']
+    ['display'] configuration directive.
   * Please try to keep up the file-naming conventions. Table-related stuff goes
-    to tbl_*.php, db-related code to db_*.php, server-related tools to
+    to tbl_*.php, db-related code to db_*.php, server-related tools to 
     server_*.php and so on.
   * Please don't put message strings in your code, instead add the string (at
     least) to english-utf-8.inc.php and print() it out.
@@ -3122,210 +3310,209 @@ If you're planning to contribute source, please read the following information:
     during its re-entry into Earth's atmosphere and in memory of the brave men
     and women who gave their lives for the people of Earth.
 
+Copyright
+
+Copyright (C) 1998-2000 Tobias Ratschiller <tobias_at_ratschiller.com>
+Copyright (C) 2001-2010 Marc Delisle <marc_at_infomarc.info>
+                        Olivier M?ller <om_at_omnis.ch>
+                        Robin Johnson <robbat2_at_users.sourceforge.net>
+                        Alexander M. Turek <me_at_derrabus.de>
+                        Michal ?iha? <michal_at_cihar.com>
+                        Garvin Hicking <me_at_supergarv.de>
+                        Michael Keck <mkkeck_at_users.sourceforge.net>
+                        Sebastian Mendel <cybot_tm_at_users.sourceforge.net>
+                        [check credits for more details]
+
+This program is free software; you can redistribute it and/or modify it under
+the terms of the GNU General Public License version 2, as published by the Free
+Software Foundation.
+
+This program is distributed in the hope that it will be useful, but WITHOUT ANY
+WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+PARTICULAR PURPOSE. See the GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License along with
+this program; if not, write to the Free Software Foundation, Inc., 51 Franklin
+St, Fifth Floor, Boston, MA 02110-1301 USA
+
 Credits
 
-phpMyAdmin - Credits
-====================
+Credits, in chronological order
 
-CREDITS, in chronological order
--------------------------------
-
-- Tobias Ratschiller <tobias_at_ratschiller.com>
-    * creator of the phpmyadmin project
-    * maintainer from 1998 to summer 2000
-
-- Marc Delisle <Marc.Delisle_at_cegepsherbrooke.qc.ca>
-    * multi-language version
-    * various fixes and improvements
-    * SQL analyser (most of it)
-    * current project maintainer
-
-- Olivier M?ller <om_at_omnis.ch>
-    * started SourceForge phpMyAdmin project in March 2001
-    * sync'ed different existing CVS trees with new features and bugfixes
-    * multi-language improvements, dynamic language selection
-    * current project maintainer
-    * many bugfixes and improvements
-
-- Lo?c Chapeaux <lolo_at_phpheaven.net>
-    * rewrote and optimized javascript, DHTML and DOM stuff
-    * rewrote the scripts so they fit the PEAR coding standards and
-      generate XHTML1.0 and CSS2 compliant codes
-    * improved the language detection system
-    * many bugfixes and improvements
-
-- Robin Johnson <robbat2_at_users.sourceforge.net>
-    * database maintenance controls
-    * table type code
-    * Host authentication IP Allow/Deny
-    * DB-based configuration (Not completed)
-    * SQL parser and pretty-printer
-    * SQL validator
-    * many bugfixes and improvements
-
-- Armel Fauveau <armel.fauveau_at_globalis-ms.com>
-    * bookmarks feature
-    * multiple dump feature
-    * gzip dump feature
-    * zip dump feature
-
-- Geert Lund <glund_at_silversoft.dk>
-    * various fixes
-    * moderator of the phpMyAdmin former users forum at phpwizard.net
-
-- Korakot Chaovavanich <korakot_at_iname.com>
-    * "insert as new row" feature
-
-- Pete Kelly <webmaster_at_trafficg.com>
-    * rewrote and fix dump code
-    * bugfixes
-
-- Steve Alberty <alberty_at_neptunlabs.de>
-    * rewrote dump code for PHP4
-    * mySQL table statistics
-    * bugfixes
-
-- Benjamin Gandon <gandon_at_isia.cma.fr>
-    * main author of the version 2.1.0.1
-    * bugfixes
-
-- Alexander M. Turek <me_at_derrabus.de>
-    * MySQL 4.0 / 4.1 / 5.0 compatibility
-    * abstract database interface (PMA_DBI) with MySQLi support
-    * privileges administration
-    * XML exports
-    * various features and fixes
-    * German language file updates
-
-- Mike Beck <mike.beck_at_web.de>
-    * automatic joins in QBE
-    * links column in printview
-    * Relation view
-
-- Michal ?iha? <michal_at_cihar.com>
-    * enhanced index creation/display feature
-    * feature to use a different charset for HTML than for MySQL
-    * improvements of export feature
-    * various features and fixes
-    * Czech language file updates
-
-- Christophe Gesch? from the "MySQL Form Generator for PHPMyAdmin"
-  (http://sf.net/projects/phpmysqlformgen/)
-    * suggested the patch for multiple table printviews
-
-- Garvin Hicking <me_at_supergarv.de>
-    * built the patch for vertical display of table rows
-    * built the Javascript based Query window + SQL history
-    * Improvement of column/db comments
-    * (MIME)-Transformations for columns
-    * Use custom alias names for Databases in left frame
-    * hierarchical/nested table display
-    * PDF-scratchboard for WYSIWYG-distribution of PDF relations
-    * new icon sets
-    * vertical display of column properties page
-    * some bugfixes, features, support, German language additions
-
-- Yukihiro Kawada <kawada_at_den.fujifilm.co.jp>
-    * japanese kanji encoding conversion feature
-
-- Piotr Roszatycki <d3xter_at_users.sourceforge.net> and Dan Wilson
-    * the Cookie authentication mode
-
-- Axel Sander <n8falke_at_users.sourceforge.net>
-    * table relation-links feature
-
-- Maxime Delorme <delorme.maxime_at_free.fr>
-    * PDF schema output, thanks also to Olivier Plathey for the
-      "FPDF" library (see http://www.fpdf.org/) and Steven Wittens
-      for the "UFPDF" library (see http://www.acko.net/node/56).
-
-- Olof Edlund <olof.edlund_at_upright.se>
-    * SQL validator server
-
-- Ivan R. Lanin <ivanlanin_at_users.sourceforge.net>
-    * phpMyAdmin logo (until June 2004)
-
-- Mike Cochrane <mike_at_graftonhall.co.nz>
-    * blowfish library from the Horde project
-
-- Marcel Tschopp <ne0x_at_users.sourceforge.net>
-    * mysqli support
-    * many bugfixes and improvements
-
-- Michael Keck <mkkeck_at_users.sourceforge.net>
-    * redesign for 2.6.0
-    * phpMyAdmin sailboat logo (June 2004)
-
-- Mathias Landh?u?er
-    * Representation at conferences
-
-- Sebastian Mendel <cybot_tm_at_users.sourceforge.net>
-    * interface improvements
-    * various bugfixes
-
-- Ivan A Kirillov
-    * new relations Designer
-
-- Raj Kissu Rajandran (Google Summer of Code 2008)
-    * BLOBstreaming support
-
-- Piotr Przybylski (Google Summer of Code 2008)
-    * improved setup script
+  * Tobias Ratschiller <tobias_at_ratschiller.com>
+      + creator of the phpmyadmin project
+      + maintainer from 1998 to summer 2000
+  * Marc Delisle <marc_at_infomarc.info>
+      + multi-language version
+      + various fixes and improvements
+      + SQL analyser (most of it)
+      + current project maintainer
+  * Olivier M?ller <om_at_omnis.ch>
+      + started SourceForge phpMyAdmin project in March 2001
+      + sync'ed different existing CVS trees with new features and bugfixes
+      + multi-language improvements, dynamic language selection
+      + current project maintainer
+      + many bugfixes and improvements
+  * Lo?c Chapeaux <lolo_at_phpheaven.net>
+      + rewrote and optimized javascript, DHTML and DOM stuff
+      + rewrote the scripts so they fit the PEAR coding standards and generate
+        XHTML1.0 and CSS2 compliant codes
+      + improved the language detection system
+      + many bugfixes and improvements
+  * Robin Johnson <robbat2_at_users.sourceforge.net>
+      + database maintenance controls
+      + table type code
+      + Host authentication IP Allow/Deny
+      + DB-based configuration (Not completed)
+      + SQL parser and pretty-printer
+      + SQL validator
+      + many bugfixes and improvements
+  * Armel Fauveau <armel.fauveau_at_globalis-ms.com>
+      + bookmarks feature
+      + multiple dump feature
+      + gzip dump feature
+      + zip dump feature
+  * Geert Lund <glund_at_silversoft.dk>
+      + various fixes
+      + moderator of the phpMyAdmin former users forum at phpwizard.net
+  * Korakot Chaovavanich <korakot_at_iname.com>
+      + "insert as new row" feature
+  * Pete Kelly <webmaster_at_trafficg.com>
+      + rewrote and fix dump code
+      + bugfixes
+  * Steve Alberty <alberty_at_neptunlabs.de>
+      + rewrote dump code for PHP4
+      + mySQL table statistics
+      + bugfixes
+  * Benjamin Gandon <gandon_at_isia.cma.fr>
+      + main author of the version 2.1.0.1
+      + bugfixes
+  * Alexander M. Turek <me_at_derrabus.de>
+      + MySQL 4.0 / 4.1 / 5.0 compatibility
+      + abstract database interface (PMA_DBI) with MySQLi support
+      + privileges administration
+      + XML exports
+      + various features and fixes
+      + German language file updates
+  * Mike Beck <mike.beck_at_web.de>
+      + automatic joins in QBE
+      + links column in printview
+      + Relation view
+  * Michal ?iha? <michal_at_cihar.com>
+      + enhanced index creation/display feature
+      + feature to use a different charset for HTML than for MySQL
+      + improvements of export feature
+      + various features and fixes
+      + Czech language file updates
+  * Christophe Gesch? from the "MySQL Form Generator for PHPMyAdmin" (http://
+    sf.net/projects/phpmysqlformgen/)
+      + suggested the patch for multiple table printviews
+  * Garvin Hicking <me_at_supergarv.de>
+      + built the patch for vertical display of table rows
+      + built the Javascript based Query window + SQL history
+      + Improvement of column/db comments
+      + (MIME)-Transformations for columns
+      + Use custom alias names for Databases in left frame
+      + hierarchical/nested table display
+      + PDF-scratchboard for WYSIWYG-distribution of PDF relations
+      + new icon sets
+      + vertical display of column properties page
+      + some bugfixes, features, support, German language additions
+  * Yukihiro Kawada <kawada_at_den.fujifilm.co.jp>
+      + japanese kanji encoding conversion feature
+  * Piotr Roszatycki <d3xter_at_users.sourceforge.net> and Dan Wilson
+      + the Cookie authentication mode
+  * Axel Sander <n8falke_at_users.sourceforge.net>
+      + table relation-links feature
+  * Maxime Delorme <delorme.maxime_at_free.fr>
+      + PDF schema output, thanks also to Olivier Plathey for the "FPDF"
+        library (see http://www.fpdf.org/) and Steven Wittens for the "UFPDF"
+        library (see http://www.acko.net/node/56).
+  * Olof Edlund <olof.edlund_at_upright.se>
+      + SQL validator server
+  * Ivan R. Lanin <ivanlanin_at_users.sourceforge.net>
+      + phpMyAdmin logo (until June 2004)
+  * Mike Cochrane <mike_at_graftonhall.co.nz>
+      + blowfish library from the Horde project
+  * Marcel Tschopp <ne0x_at_users.sourceforge.net>
+      + mysqli support
+      + many bugfixes and improvements
+  * Michael Keck <mkkeck_at_users.sourceforge.net>
+      + redesign for 2.6.0
+      + phpMyAdmin sailboat logo (June 2004)
+  * Mathias Landh?u?er
+      + Representation at conferences
+  * Sebastian Mendel <cybot_tm_at_users.sourceforge.net>
+      + interface improvements
+      + various bugfixes
+  * Ivan A Kirillov
+      + new relations Designer
+  * Raj Kissu Rajandran (Google Summer of Code 2008)
+      + BLOBstreaming support
+  * Piotr Przybylski (Google Summer of Code 2008)
+      + improved setup script
+  * Derek Schaefer (Google Summer of Code 2009)
+      + Improved the import system
+  * Alexander Rutkowski (Google Summer of Code 2009)
+      + Tracking mechanism
+  * Zahra Naeem (Google Summer of Code 2009)
+      + Synchronization feature
+  * Tom?? Srnka (Google Summer of Code 2009)
+      + Replication support
 
 And also to the following people who have contributed minor changes,
 enhancements, bugfixes or support for a new language since version 2.1.0:
 
-Bora Alioglu, Ricardo ?, Sven-Erik Andersen, Alessandro Astarita,
-P?ter Bakondy, Borges Botelho, Olivier Bussier, Neil Darlow,
-Mats Engstrom, Ian Davidson, Laurent Dhima, Kristof Hamann, Thomas Kl?ger,
-Lubos Klokner, Martin Marconcini, Girish Nair, David Nordenberg, Andreas Pauley,
-Bernard M. Piller, Laurent Haas, "Sakamoto", Yuval Sarna,
-www.securereality.com.au, Alexis Soulard, Alvar Soome, Siu Sun, Peter Svec,
-Michael Tacelosky, Rachim Tamsjadi, Kositer Uros,
-Lu?s V., Martijn W. van der Lee,
-Algis Vainauskas, Daniel Villanueva, Vinay, Ignacio Vazquez-Abrams, Chee Wai,
-Jakub Wilk, Thomas Michael Winningham, Vilius Zigmantas, "Manuzhai".
-
+Bora Alioglu, Ricardo ?, Sven-Erik Andersen, Alessandro Astarita, P?ter
+Bakondy, Borges Botelho, Olivier Bussier, Neil Darlow, Mats Engstrom, Ian
+Davidson, Laurent Dhima, Kristof Hamann, Thomas Kl?ger, Lubos Klokner, Martin
+Marconcini, Girish Nair, David Nordenberg, Andreas Pauley, Bernard M. Piller,
+Laurent Haas, "Sakamoto", Yuval Sarna, www.securereality.com.au, Alexis
+Soulard, Alvar Soome, Siu Sun, Peter Svec, Michael Tacelosky, Rachim Tamsjadi,
+Kositer Uros, Lu?s V., Martijn W. van der Lee, Algis Vainauskas, Daniel
+Villanueva, Vinay, Ignacio Vazquez-Abrams, Chee Wai, Jakub Wilk, Thomas Michael
+Winningham, Vilius Zigmantas, "Manuzhai".
 
 Original Credits of Version 2.1.0
----------------------------------
 
-    This work is based on Peter Kuppelwieser's MySQL-Webadmin. It was his idea
-    to create a web-based interface to MySQL using PHP3. Although I have not
-    used any of his source-code, there are some concepts I've borrowed from
-    him. phpMyAdmin was created because Peter told me he wasn't going to
-    further develop his (great) tool.
-    Thanks go to
-    - Amalesh Kempf <ak-lsml_at_living-source.com> who contributed the
-      code for the check when dropping a table or database. He also suggested
-      that you should be able to specify the primary key on tbl_create.php3. To
-      version 1.1.1 he contributed the ldi_*.php3-set (Import text-files) as
-      well as a bug-report. Plus many smaller improvements.
-    - Jan Legenhausen <jan_at_nrw.net>: He made many of the changes that
-      were introduced in 1.3.0 (including quite significant ones like the
-      authentication). For 1.4.1 he enhanced the table-dump feature. Plus
-      bug-fixes and help.
-    - Marc Delisle <DelislMa_at_CollegeSherbrooke.qc.ca> made phpMyAdmin
-      language-independent by outsourcing the strings to a separate file. He
-      also contributed the French translation.
-    - Alexandr Bravo <abravo_at_hq.admiral.ru> who contributed
-      tbl_select.php3, a feature to display only some fields from a table.
-    - Chris Jackson <chrisj_at_ctel.net> added support for MySQL
-      functions in tbl_change.php3. He also added the
-      "Query by Example" feature in 2.0.
-    - Dave Walton <walton_at_nordicdms.com> added support for multiple
-      servers and is a regular contributor for bug-fixes.
-    - Gabriel Ash <ga244_at_is8.nyu.edu> contributed the random access
-      features for 2.0.6.
-    The following people have contributed minor changes, enhancements, bugfixes
-    or support for a new language:
-    Jim Kraai, Jordi Bruguera, Miquel Obrador, Geert Lund, Thomas Kleemann,
-    Alexander Leidinger, Kiko Albiol, Daniel C. Chao, Pavel Piankov,
-    Sascha Kettler, Joe Pruett, Renato Lins, Mark Kronsbein, Jannis Hermanns,
-    G. Wieggers.
+This work is based on Peter Kuppelwieser's MySQL-Webadmin. It was his idea to
+create a web-based interface to MySQL using PHP3. Although I have not used any
+of his source-code, there are some concepts I've borrowed from him. phpMyAdmin
+was created because Peter told me he wasn't going to further develop his
+(great) tool.
 
-    And thanks to everyone else who sent me email with suggestions, bug-reports
-    and or just some feedback.
+Thanks go to
+
+  * Amalesh Kempf <ak-lsml_at_living-source.com> who contributed the code for
+    the check when dropping a table or database. He also suggested that you
+    should be able to specify the primary key on tbl_create.php3. To version
+    1.1.1 he contributed the ldi_*.php3-set (Import text-files) as well as a
+    bug-report. Plus many smaller improvements.
+  * Jan Legenhausen <jan_at_nrw.net>: He made many of the changes that were
+    introduced in 1.3.0 (including quite significant ones like the
+    authentication). For 1.4.1 he enhanced the table-dump feature. Plus
+    bug-fixes and help.
+  * Marc Delisle <DelislMa_at_CollegeSherbrooke.qc.ca> made phpMyAdmin
+    language-independent by outsourcing the strings to a separate file. He also
+    contributed the French translation.
+  * Alexandr Bravo <abravo_at_hq.admiral.ru> who contributed tbl_select.php3, a
+    feature to display only some fields from a table.
+  * Chris Jackson <chrisj_at_ctel.net> added support for MySQL functions in
+    tbl_change.php3. He also added the "Query by Example" feature in 2.0.
+  * Dave Walton <walton_at_nordicdms.com> added support for multiple servers
+    and is a regular contributor for bug-fixes.
+  * Gabriel Ash <ga244_at_is8.nyu.edu> contributed the random access features
+    for 2.0.6.
+
+The following people have contributed minor changes, enhancements, bugfixes or
+support for a new language:
+
+Jim Kraai, Jordi Bruguera, Miquel Obrador, Geert Lund, Thomas Kleemann,
+Alexander Leidinger, Kiko Albiol, Daniel C. Chao, Pavel Piankov, Sascha
+Kettler, Joe Pruett, Renato Lins, Mark Kronsbein, Jannis Hermanns, G. Wieggers.
+
+And thanks to everyone else who sent me email with suggestions, bug-reports and
+or just some feedback.
 
 Glossary
 
@@ -3454,5 +3641,8 @@ From Wikipedia, the free encyclopedia
   * zlib - an open-source, cross-platform data compression library by Jean-loup
     Gailly and Mark Adler.
 
-Valid XHTML 1.1 Valid CSS!
+  * Copyright ? 2003 - 2010 phpMyAdmin devel team
+  * License
+  * Donate
+  * Valid HTML and CSS
 

@@ -3,7 +3,8 @@
 /**
  * query by example the whole database
  *
- * @version $Id: db_qbe.php 11498 2008-08-21 16:32:39Z lem9 $
+ * @version $Id$
+ * @package phpMyAdmin
  */
 
 /**
@@ -166,8 +167,8 @@ function showColumnSelectCell($columns, $column_number, $selected = '')
 }
 
 ?>
-<fieldset>
 <form action="db_qbe.php" method="post">
+<fieldset>
 <table class="data" style="width: 100%;">
 <tr class="odd noclick">
     <th><?php echo $strField; ?>:</th>
@@ -801,7 +802,7 @@ if (isset($Field) && count($Field) > 0) {
                 $checked_tables = $col_cand;
                 foreach ($col_cand as $tab) {
                     if ($checked_tables[$tab] != 1) {
-                        $tsize[$tab] = PMA_Table::countRecords($db, $tab, true, false);
+                        $tsize[$tab] = PMA_Table::countRecords($db, $tab, false);
                         $checked_tables[$tab] = 1;
                     }
                     $csize[$tab] = $tsize[$tab];

@@ -2,7 +2,7 @@
 /**
  * common functions used for communicating between main, navigation and querywindow
  *
- * @version $Id: common.js 12022 2008-11-28 14:35:17Z nijel $
+ * @version $Id$
  */
 
 /**
@@ -101,10 +101,13 @@ function setDb(new_db) {
         var old_db = db;
         db = new_db;
 
+        // the db name as an id exists only when LeftFrameLight is false
         if (window.frame_navigation.document.getElementById(db) == null) {
+            // happens when LeftFrameLight is true
             // db is unknown, reload complete left frame
             refreshNavigation();
         } else {
+            // happens when LeftFrameLight is false
             unmarkDbTable(old_db);
             markDbTable(db);
         }
@@ -437,7 +440,7 @@ function openDb(new_db) {
 
 function updateTableTitle( table_link_id, new_title ) {
     //alert('updateTableTitle');
-    if ( window.parent.frame_navigation.document.getElementById(table_link_id) ) {
+    if ( window.parent.frame_navigation.document && window.parent.frame_navigation.document.getElementById(table_link_id) ) {
         var left = window.parent.frame_navigation.document;
 
         var link = left.getElementById(table_link_id);

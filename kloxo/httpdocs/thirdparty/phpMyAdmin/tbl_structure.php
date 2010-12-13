@@ -3,7 +3,8 @@
 /**
  * Displays table structure infos like fields/columns, indexes, size, rows
  * and allows manipulation of indexes and columns/fields
- * @version $Id: tbl_structure.php 12075 2008-12-03 21:49:03Z lem9 $
+ * @version $Id$
+ * @package phpMyAdmin
  */
 
 /**
@@ -213,8 +214,8 @@ while ($row = PMA_DBI_fetch_assoc($fields_rs)) {
     $type             = $row['Type'];
     $extracted_fieldspec = PMA_extractFieldSpec($row['Type']);
 
-    if ('set' == $extracted_fieldspec['type'] || 'enum' == $extracted_fieldspec['type']) { 
-        $type         = $extracted_fieldspec['type'] . '(' . $extracted_fieldspec['spec_in_brackets'] . ')'; 
+    if ('set' == $extracted_fieldspec['type'] || 'enum' == $extracted_fieldspec['type']) {
+        $type         = $extracted_fieldspec['type'] . '(' . $extracted_fieldspec['spec_in_brackets'] . ')';
 
         // for the case ENUM('&#8211;','&ldquo;')
         $type         = htmlspecialchars($type);
@@ -334,17 +335,18 @@ while ($row = PMA_DBI_fetch_assoc($fields_rs)) {
     <td nowrap="nowrap" style="font-size: 70%"><?php echo $attribute; ?></td>
     <td><?php echo (($row['Null'] == 'YES') ? $strYes : $strNo); ?></td>
     <td nowrap="nowrap"><?php
-    if (isset($row['Default'])) { 
+    if (isset($row['Default'])) {
         if ($extracted_fieldspec['type'] == 'bit') {
-            echo PMA_printable_bit_value($row['Default'], $extracted_fieldspec['spec_in_brackets']);
+            // here, $row['Default'] contains something like b'010'
+            echo PMA_convert_bit_default_value($row['Default']);
         } else {
-            echo $row['Default']; 
+            echo $row['Default'];
         }
     }
     else {
-        echo '<i>' . $strNone . '</i>';
+        echo '<i>' . $strNoneDefault . '</i>';
     } ?></td>
-    <td nowrap="nowrap"><?php echo $row['Extra']; ?></td>
+    <td nowrap="nowrap"><?php echo strtoupper($row['Extra']); ?></td>
     <td align="center">
         <a href="sql.php?<?php echo $url_query; ?>&amp;sql_query=<?php echo urlencode('SELECT COUNT(*) AS ' . PMA_backquote($strRows) . ', ' . PMA_backquote($row['Field']) . ' FROM ' . PMA_backquote($table) . ' GROUP BY ' . PMA_backquote($row['Field']) . ' ORDER BY ' . PMA_backquote($row['Field'])); ?>">
             <?php echo $titles['BrowseDistinctValues']; ?></a>
@@ -403,7 +405,7 @@ while ($row = PMA_DBI_fetch_assoc($fields_rs)) {
         ?>
     </td>
     <?php
-        if (! empty($tbl_type) && ($tbl_type == 'MYISAM' || $tbl_type == 'MARIA')
+        if (! empty($tbl_type) && ($tbl_type == 'MYISAM' || $tbl_type == 'ARIA' || $tbl_type == 'MARIA')
             // FULLTEXT is possible on TEXT, CHAR and VARCHAR
             && (strpos(' ' . $type, 'text') || strpos(' ' . $type, 'char'))) {
             echo "\n";
@@ -458,7 +460,7 @@ if (! $tbl_is_view && ! $db_is_information_schema) {
         PMA_buttonOrImage('submit_mult', 'mult_submit', 'submit_mult_unique', $strUnique, 'b_unique.png');
         PMA_buttonOrImage('submit_mult', 'mult_submit', 'submit_mult_index', $strIndex, 'b_index.png');
     }
-    if (! empty($tbl_type) && ($tbl_type == 'MYISAM' || $tbl_type == 'MARIA')) {
+    if (! empty($tbl_type) && ($tbl_type == 'MYISAM' || $tbl_type == 'ARIA' || $tbl_type == 'MARIA')) {
         PMA_buttonOrImage('submit_mult', 'mult_submit', 'submit_mult_fulltext', $strIdxFulltext, 'b_ftext.png');
     }
 }
@@ -481,7 +483,7 @@ echo $strPrintView;
 <?php
 if (! $tbl_is_view && ! $db_is_information_schema) {
 
-    // if internal relations are available, or foreign keys are supported 
+    // if internal relations are available, or foreign keys are supported
     // ($tbl_type comes from libraries/tbl_info.inc.php)
     if ($cfgRelation['relwork'] || PMA_foreignkey_supported($tbl_type)) {
         ?>
@@ -501,7 +503,21 @@ if (! $tbl_is_view && ! $db_is_information_schema) {
     echo $strStructPropose;
     ?></a><?php
     echo PMA_showMySQLDocu('Extending_MySQL', 'procedure_analyse') . "\n";
-    ?><br />
+    
+    
+    if(PMA_Tracker::isActive())
+    {
+        echo '<a href="tbl_tracking.php?' . $url_query . '">';
+        
+        if ($cfg['PropertiesIconic']) 
+        {
+            echo '<img class="icon" src="' . $pmaThemeImage . 'eye.png" width="16" height="16" alt="' . $strTrackingTrackTable . '" /> ';
+        }
+        echo $strTrackingTrackTable . '</a>';
+    }
+    ?>
+    
+    <br />
 <form method="post" action="tbl_addfield.php"
     onsubmit="return checkFormElementInRange(this, 'num_fields', '<?php echo str_replace('\'', '\\\'', $GLOBALS['strInvalidFieldAddCount']); ?>', 1)">
     <?php
@@ -523,9 +539,9 @@ if (! $tbl_is_view && ! $db_is_information_schema) {
     $choices = array(
         'last'  => $strAtEndOfTable,
         'first' => $strAtBeginningOfTable,
-        'after' => sprintf($strAfter, '') 
+        'after' => sprintf($strAfter, '')
     );
-    PMA_generate_html_radio('field_where', $choices, 'last', false);
+    PMA_display_html_radio('field_where', $choices, 'last', false);
     echo $fieldOptions;
     unset($fieldOptions, $choices);
     ?>
@@ -546,7 +562,6 @@ if ($fields_cnt > 20) {
 /**
  * Displays indexes
  */
-PMA_generate_slider_effect('tablestatistics_indexes', $strDetails);
 
 if (! $tbl_is_view && ! $db_is_information_schema && 'ARCHIVE' !=  $tbl_type) {
     /**
@@ -575,7 +590,8 @@ if (! $tbl_is_view && ! $db_is_information_schema && 'ARCHIVE' !=  $tbl_type) {
 <br />
     <?php
 }
-echo '<div id="tablestatistics">' . "\n";
+
+PMA_generate_slider_effect('tablestatistics', $strDetails);
 
 /**
  * Displays Space usage and row statistics
@@ -585,6 +601,10 @@ echo '<div id="tablestatistics">' . "\n";
 //                      Joshua Nye <josh at boxcarmedia.com> to get valid
 //                      statistics whatever is the table type
 if ($cfg['ShowStats']) {
+    if (empty($showtable)) {
+        $showtable = PMA_Table::sGetStatusInfo($GLOBALS['db'], $GLOBALS['table'], null, true);
+    }
+
     $nonisam     = false;
     $is_innodb = (isset($showtable['Type']) && $showtable['Type'] == 'InnoDB');
     if (isset($showtable['Type']) && !preg_match('@ISAM|HEAP@i', $showtable['Type'])) {
@@ -592,10 +612,9 @@ if ($cfg['ShowStats']) {
     }
 
     // Gets some sizes
-    $mergetable     = false;
-    if (isset($showtable['Type']) && $showtable['Type'] == 'MRG_MyISAM') {
-        $mergetable = true;
-    }
+
+    $mergetable = PMA_Table::isMerge($GLOBALS['db'], $GLOBALS['table']);
+
     // this is to display for example 261.2 MiB instead of 268k KiB
     $max_digits = 5;
     $decimals = 1;
@@ -603,7 +622,8 @@ if ($cfg['ShowStats']) {
     if ($mergetable == false) {
         list($index_size, $index_unit)   = PMA_formatByteDown($showtable['Index_length'], $max_digits, $decimals);
     }
-    if (isset($showtable['Data_free']) && $showtable['Data_free'] > 0) {
+    // InnoDB returns a huge value in Data_free, do not use it
+    if (! $is_innodb && isset($showtable['Data_free']) && $showtable['Data_free'] > 0) {
         list($free_size, $free_unit)     = PMA_formatByteDown($showtable['Data_free'], $max_digits, $decimals);
         list($effect_size, $effect_unit) = PMA_formatByteDown($showtable['Data_length'] + $showtable['Index_length'] - $showtable['Data_free'], $max_digits, $decimals);
     } else {
@@ -668,7 +688,7 @@ if ($cfg['ShowStats']) {
             <?php
         }
         // Optimize link if overhead
-        if (isset($free_size) && ($tbl_type == 'MYISAM' || $tbl_type == 'MARIA' || $tbl_type == 'BDB')) {
+        if (isset($free_size) && ($tbl_type == 'MYISAM' || $tbl_type == 'ARIA' || $tbl_type == 'MARIA' || $tbl_type == 'BDB')) {
             ?>
     <tr class="tblFooters">
         <td colspan="3" align="center">
@@ -705,7 +725,7 @@ if ($cfg['ShowStats']) {
         <th class="name"><?php echo $strFormat; ?></th>
         <td class="value"><?php
         if ($showtable['Row_format'] == 'Fixed') {
-            echo $strFixed;
+            echo $strStatic;
         } elseif ($showtable['Row_format'] == 'Dynamic') {
             echo $strDynamic;
         } else {
@@ -805,8 +825,6 @@ if ($cfg['ShowStats']) {
 require './libraries/tbl_triggers.lib.php';
 
 echo '<div class="clearfloat"></div>' . "\n";
-echo '</div>' . "\n";
-echo '</div>' . "\n";
 
 /**
  * Displays the footer

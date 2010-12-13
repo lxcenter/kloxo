@@ -1,7 +1,9 @@
 <?php
 /* vim: set expandtab sw=4 ts=4 sts=4: */
 /**
- * Sample export to Texy! text.
+ * Export to Texy! text.
+ *
+ * @package phpMyAdmin-Export-Texy
  */
 if (! defined('PHPMYADMIN')) {
     exit;
@@ -125,7 +127,7 @@ function PMA_exportData($db, $table, $crlf, $error_url, $sql_query)
 {
     global $what;
 
-    if (!PMA_exportOutputHandler('== ' . $GLOBALS['strDumpingData'] . ' ' . $table . "\n\n")) {
+    if (! PMA_exportOutputHandler('== ' . $GLOBALS['strDumpingData'] . ' ' . $table . "\n\n")) {
         return FALSE;
     }
 
@@ -140,7 +142,7 @@ function PMA_exportData($db, $table, $crlf, $error_url, $sql_query)
             $text_output .= '|' . htmlspecialchars(stripslashes(PMA_DBI_field_name($result, $i)));
         } // end for
         $text_output .= "\n|------\n";
-        if (!PMA_exportOutputHandler($text_output)) {
+        if (! PMA_exportOutputHandler($text_output)) {
             return FALSE;
         }
     } // end if
@@ -149,7 +151,7 @@ function PMA_exportData($db, $table, $crlf, $error_url, $sql_query)
     while ($row = PMA_DBI_fetch_row($result)) {
         $text_output = '';
         for ($j = 0; $j < $fields_cnt; $j++) {
-            if (!isset($row[$j]) || is_null($row[$j])) {
+            if (! isset($row[$j]) || is_null($row[$j])) {
                 $value = $GLOBALS[$what . '_null'];
             } elseif ($row[$j] == '0' || $row[$j] != '') {
                 $value = $row[$j];
@@ -159,7 +161,7 @@ function PMA_exportData($db, $table, $crlf, $error_url, $sql_query)
             $text_output .= '|' . htmlspecialchars($value);
         } // end for
         $text_output .= "\n";
-        if (!PMA_exportOutputHandler($text_output)) {
+        if (! PMA_exportOutputHandler($text_output)) {
             return FALSE;
         }
     } // end while
@@ -172,7 +174,7 @@ function PMA_exportStructure($db, $table, $crlf, $error_url, $do_relation = fals
 {
     global $cfgRelation;
 
-    if (!PMA_exportOutputHandler('== ' . $GLOBALS['strTableStructure'] . ' ' .$table . "\n\n")) {
+    if (! PMA_exportOutputHandler('== ' . $GLOBALS['strTableStructure'] . ' ' .$table . "\n\n")) {
         return FALSE;
     }
 
@@ -198,7 +200,7 @@ function PMA_exportStructure($db, $table, $crlf, $error_url, $do_relation = fals
     $fields_cnt  = PMA_DBI_num_rows($result);
 
     // Check if we can use Relations (Mike Beck)
-    if ($do_relation && !empty($cfgRelation['relation'])) {
+    if ($do_relation && ! empty($cfgRelation['relation'])) {
         // Find which tables are related with the current one and write it in
         // an array
         $res_rel = PMA_getForeigners($db, $table);
@@ -245,7 +247,7 @@ function PMA_exportStructure($db, $table, $crlf, $error_url, $do_relation = fals
     }
     $text_output .= "\n|------\n";
 
-    if (!PMA_exportOutputHandler($text_output)) {
+    if (! PMA_exportOutputHandler($text_output)) {
         return FALSE;
     }
 
@@ -286,7 +288,7 @@ function PMA_exportStructure($db, $table, $crlf, $error_url, $do_relation = fals
         if ($zerofill) {
             $strAttribute = 'UNSIGNED ZEROFILL';
         }
-        if (!isset($row['Default'])) {
+        if (! isset($row['Default'])) {
             if ($row['Null'] != 'NO') {
                 $row['Default'] = 'NULL';
             }
@@ -323,7 +325,7 @@ function PMA_exportStructure($db, $table, $crlf, $error_url, $do_relation = fals
 
         $text_output .= "\n";
 
-        if (!PMA_exportOutputHandler($text_output)) {
+        if (! PMA_exportOutputHandler($text_output)) {
             return FALSE;
         }
     } // end while

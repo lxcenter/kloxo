@@ -3,7 +3,9 @@
 /**
  * Holds class PMA_Message
  *
- * @version $Id: Error.class.php 10738 2007-10-08 16:02:58Z cybot_tm $
+ * @author Sebastian Mendel <info@sebastianmendel.de>
+ * @version $Id$
+ * @package phpMyAdmin
  */
 
 /**
@@ -26,27 +28,38 @@
  *
  * more advanced usage example:
  * <code>
+ * // create a localized success message
  * $message = PMA_Message::success('strSomeLocaleMessage');
  *
+ * // create another message, a hint, with a localized string which expects
+ * // two parameters: $strSomeFootnote = 'Read the %smanual%s'
  * $hint = PMA_Message::notice('strSomeFootnote');
+ * // replace %d with the following params
  * $hint->addParam('[a@./Documentation.html#cfg_Example@_blank]');
  * $hint->addParam('[/a]');
+ * // add this hint as a footnote
  * $hint = PMA_showHint($hint);
  *
+ * // add the retrieved footnote reference to the original message
  * $message->addMessage($hint);
  *
+ * // create another message ...
  * $more = PMA_Message::notice('strSomeMoreLocale');
  * $more->addString('strSomeEvenMoreLocale', '<br />');
  * $more->addParam('parameter for strSomeMoreLocale');
  * $more->addParam('more parameter for strSomeMoreLocale');
  *
+ * // and add it also to the original message
  * $message->addMessage($more);
+ * // finally add another raw message
  * $message->addMessage('some final words', ' - ');
  *
+ * // display() will now print all messages in the same order as they are added
  * $message->display();
  * // strSomeLocaleMessage <sup>1</sup> strSomeMoreLocale<br />
  * // strSomeEvenMoreLocale - some final words
  * </code>
+ * @package phpMyAdmin
  */
 class PMA_Message
 {
@@ -89,7 +102,7 @@ class PMA_Message
     protected $_string = '';
 
     /**
-     * The formated message
+     * The formatted message
      *
      * @access  protected
      * @var     string
@@ -170,7 +183,7 @@ class PMA_Message
      * @static
      * @uses    PMA_Message as returned object
      * @uses    PMA_Message::SUCCESS
-     * @param   string $string
+     * @param   string $string a localized string e.g. 'strSuccess'
      * @return  PMA_Message
      */
     static public function success($string = '')
@@ -190,7 +203,7 @@ class PMA_Message
      * @static
      * @uses    PMA_Message as returned object
      * @uses    PMA_Message::ERROR
-     * @param   string $string
+     * @param   string $string a localized string e.g. 'strError'
      * @return  PMA_Message
      */
     static public function error($string = '')
@@ -210,7 +223,7 @@ class PMA_Message
      * @static
      * @uses    PMA_Message as returned object
      * @uses    PMA_Message::WARNING
-     * @param   string $string
+     * @param   string $string a localized string e.g. 'strSetupWarning'
      * @return  PMA_Message
      */
     static public function warning($string)
@@ -226,7 +239,7 @@ class PMA_Message
      * @static
      * @uses    PMA_Message as returned object
      * @uses    PMA_Message::NOTICE
-     * @param   string  $string
+     * @param   string  $string a localized string e.g. 'strRelationNotWorking'
      * @return  PMA_Message
      */
     static public function notice($string)
@@ -333,12 +346,12 @@ class PMA_Message
             $this->setNumber(PMA_Message::SUCCESS);
         }
 
-        return $this->getNumber() & PMA_Message::SUCCESS;
+        return $this->getNumber() === PMA_Message::SUCCESS;
     }
 
     /**
      * returns whether this message is a notice message or not
-     * and optionaly makes this message a notice message
+     * and optionally makes this message a notice message
      *
      * @uses    PMA_Message::NOTICE
      * @uses    PMA_Message::setNumber()
@@ -352,12 +365,12 @@ class PMA_Message
             $this->setNumber(PMA_Message::NOTICE);
         }
 
-        return $this->getNumber() & PMA_Message::NOTICE;
+        return $this->getNumber() === PMA_Message::NOTICE;
     }
 
     /**
      * returns whether this message is a warning message or not
-     * and optionaly makes this message a warning message
+     * and optionally makes this message a warning message
      *
      * @uses    PMA_Message::WARNING
      * @uses    PMA_Message::setNumber()
@@ -371,12 +384,12 @@ class PMA_Message
             $this->setNumber(PMA_Message::WARNING);
         }
 
-        return $this->getNumber() & PMA_Message::WARNING;
+        return $this->getNumber() === PMA_Message::WARNING;
     }
 
     /**
      * returns whether this message is an error message or not
-     * and optionaly makes this message an error message
+     * and optionally makes this message an error message
      *
      * @uses    PMA_Message::ERROR
      * @uses    PMA_Message::setNumber()
@@ -390,7 +403,7 @@ class PMA_Message
             $this->setNumber(PMA_Message::ERROR);
         }
 
-        return $this->getNumber() & PMA_Message::ERROR;
+        return $this->getNumber() === PMA_Message::ERROR;
     }
 
     /**
@@ -442,7 +455,7 @@ class PMA_Message
      * usage
      * <code>
      * $message->addParam('strLocale', false);
-     * $message->addParam('[em]somes tring[/em]');
+     * $message->addParam('[em]some string[/em]');
      * $message->addParam('<img src="img" />', false);
      * </code>
      *
@@ -648,12 +661,12 @@ class PMA_Message
      * @uses    is_array()
      * @uses    array_unshift()
      * @uses    call_user_func_array()
-     * @return  string formated
+     * @return  string formatted
      */
     static public function format()
     {
         $params = func_get_args();
-        if (is_array($params[1])) {
+        if (isset($params[1]) && is_array($params[1])) {
             array_unshift($params[1], $params[0]);
             $params = $params[1];
         }
@@ -792,8 +805,8 @@ class PMA_Message
      */
     public function isDisplayed($is_displayed = false)
     {
-        if ($is_displayed){
-            $this->_is_displayed = $is_displayed;
+        if ($is_displayed) {
+            $this->_is_displayed = true;
         }
 
         return $this->_is_displayed;

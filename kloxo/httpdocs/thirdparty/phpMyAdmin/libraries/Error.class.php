@@ -3,7 +3,8 @@
 /**
  * Holds class PMA_Error
  *
- * @version $Id: Error.class.php 12202 2009-01-20 18:04:20Z lem9 $
+ * @version $Id$
+ * @package phpMyAdmin
  */
 
 /**
@@ -14,6 +15,7 @@ require_once './libraries/Message.class.php';
 /**
  * a single error
  *
+ * @package phpMyAdmin
  */
 class PMA_Error extends PMA_Message
 {
@@ -76,14 +78,6 @@ class PMA_Error extends PMA_Message
     protected $_line = 0;
 
     /**
-     * Holds any variables defined in the context where the error occured
-     * f. e. $this if the error occured in an object method
-     *
-     * @var array
-     */
-    protected $_context = array();
-
-    /**
      * Holds the backtrace for this error
      *
      * @var array
@@ -105,21 +99,18 @@ class PMA_Error extends PMA_Message
      * @uses    PMA_Error::setMessage()
      * @uses    PMA_Error::setFile()
      * @uses    PMA_Error::setLine()
-     * @uses    PMA_Error::setContext()
      * @uses    PMA_Error::setBacktrace()
      * @param   integer $errno
      * @param   string  $errstr
      * @param   string  $errfile
      * @param   integer $errline
-     * @param   array   $errcontext
      */
-    public function __construct($errno, $errstr, $errfile, $errline, $errcontext)
+    public function __construct($errno, $errstr, $errfile, $errline)
     {
         $this->setNumber($errno);
         $this->setMessage($errstr, false);
         $this->setFile($errfile);
         $this->setLine($errline);
-        $this->setContext($errcontext);
 
         $backtrace = debug_backtrace();
         // remove last two calls: debug_backtrace() and handleError()
@@ -138,17 +129,6 @@ class PMA_Error extends PMA_Message
     public function setBacktrace($backtrace)
     {
         $this->_backtrace = $backtrace;
-    }
-
-    /**
-     * sets PMA_Error::$_context
-     *
-     * @uses    PMA_Error::$_context to set it
-     * @param   array $context
-     */
-    public function setContext($context)
-    {
-        $this->_context = $context;
     }
 
     /**
@@ -339,7 +319,7 @@ class PMA_Error extends PMA_Message
         if (in_array($function, $include_functions)) {
             echo PMA_Error::relPath($arg);
         } elseif (is_scalar($arg)) {
-            echo gettype($arg) . ' ' . $arg;
+            echo gettype($arg) . ' ' . htmlspecialchars($arg);
         } else {
             echo gettype($arg);
         }

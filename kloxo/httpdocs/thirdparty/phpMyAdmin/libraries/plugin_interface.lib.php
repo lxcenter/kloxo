@@ -3,7 +3,8 @@
 /**
  * Generic plugin interface.
  *
- * @version $Id: plugin_interface.lib.php 12137 2008-12-14 13:58:06Z lem9 $
+ * @version $Id$
+ * @package phpMyAdmin
  */
 
 /**
@@ -171,7 +172,7 @@ function PMA_pluginGetChoice($section, $name, &$list, $cfgname = NULL)
             . PMA_pluginIsActive($section, $cfgname, $plugin_name) . '/>' . "\n";
         $ret .= '<label for="radio_plugin_' . $plugin_name . '">'
             . PMA_getString($val['text']) . '</label>' . "\n";
-        $ret .= '<br /><br />' . "\n";
+        $ret .= '<br />' . "\n";
     }
     return $ret;
 }

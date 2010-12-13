@@ -12,7 +12,8 @@
  *
  * The SQL Parser code relies heavily on these functions.
  *
- * @version $Id: string_native.lib.php 10831 2007-10-17 13:51:06Z cybot_tm $
+ * @version $Id$
+ * @package phpMyAdmin-String-Native
  */
 
 /**
