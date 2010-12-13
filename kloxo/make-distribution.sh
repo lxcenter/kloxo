@@ -32,7 +32,11 @@ zip -r9y kloxo-$version.zip ./bin ./cexe ./file ./httpdocs ./pscript ./sbin ./RE
 "*httpdocs/newpass" \
 "*httpdocs/.php.err" \
 "*/CVS/*" \
-"*/.svn/*"
+"*/.svn/*" \
+"*httpdocs/thirdparty/*" \
+"*httpdocs/htmllib/extjs/*" \
+"*httpdocs/htmllib/fckeditor/*" \
+"*httpdocs/htmllib/yui-dragdrop/*"
 #
 echo "### Finished"
 echo "################################"
