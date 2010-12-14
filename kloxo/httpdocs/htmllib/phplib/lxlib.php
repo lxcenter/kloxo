@@ -659,12 +659,8 @@ function log_log($file, $mess, $id = null)
 	}
 	$mess = trim($mess);
 	$rf = "__path_program_root/log/$file";
-	if (WindowsOs()) {
-		$endstr = "\r\n";
-	} else {
-		$endstr = "\n";
-	}
-	lfile_put_contents($rf, @ date("H:i M/d/Y") . ": $mess$endstr", FILE_APPEND);
+
+	lfile_put_contents($rf, @ date("H:i M/d/Y") . ": $mess" . PHP_EOL, FILE_APPEND);
 }
 
 function log_ajax($mess, $id = 1)
@@ -680,6 +676,25 @@ function log_redirect($mess, $id = 1)
 function log_message($mess, $id = 1)
 {
 	log_log('message', $mess, $id);
+}
+
+function log_security($mess, $id = 1)
+{
+    // get IP
+	if (isset($_SERVER['HTTP_X_FORWARDED_FOR'])) {
+	    $ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
+	}
+    else {
+        $ip = $_SERVER['REMOTE_ADDR'];
+    }
+
+	$user_agent = $_SERVER["HTTP_USER_AGENT"];
+	
+	if (empty($_SERVER["HTTP_USER_AGENT"])) {
+		$user_agent = "Not a browser";
+	}
+
+	log_log('security', $mess . " IP: $ip; User agent: $user_agent", $id);
 }
 
 function log_filesys_err($mess, $id = 1)
