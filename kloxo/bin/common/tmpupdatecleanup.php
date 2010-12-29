@@ -38,6 +38,8 @@ function updatecleanup_main()
 		print("Removed lxlabs.repo\n");
 		print("Installing lxcenter.repo\n");
 		system("wget -O /etc/yum.repos.d/lxcenter.repo http://download.lxcenter.org/lxcenter.repo");
+        print("Installing yum-protectbase plugin\n");
+        system("yum install -y -q yum-protectbase");
 		print("Done.\n");
 	}
 //
