@@ -1,0 +1,81 @@
+		body{
+			font-family:arial,sans-serif;
+			color:#333;
+			margin:0;
+			padding:0;
+		}
+		#boundary{
+		}
+		a{color:#369;}
+		h1{
+			font-family:"trebuchet ms",verdana,sans-serif;
+			font-size:130%;
+			border-bottom:1px solid #999;
+		}
+		h2{
+			font-family:"trebuchet ms",verdana,sans-serif;
+			font-size:110%;
+		}
+		h3{
+			font-family:"trebuchet ms",verdana,sans-serif;
+			font-size:100%;
+		}
+		p code{
+			font-size:110%;
+			color:#666;
+			font-weight:bold;
+		}
+		pre{
+			background:#eee;
+			padding:.5em 1em;
+			border:1px solid #999;
+		}
+		h1 code, h2 code, h3 code{
+			font-family:"trebuchet ms",verdana,sans-serif;
+				}
+		h2 img{border:none; padding-right:.5em;}
+		h1 code{
+			font-family:"Trebuchet MS",Arial,Sans-serif;
+		}
+		#header{
+			padding:0;
+			left:0;
+			top:0;
+			background:#69c;
+			margin:0;
+			border-top:1px solid #9cf;
+			border-bottom:1px solid #369;
+		}
+		#header a img{
+			border:0;
+			padding:5px 1em;
+		}
+		#content{
+			font-size:90%;
+			margin-right:17em;
+		}
+		#download{
+			position:absolute;
+			top:9em;
+			width:15em;
+			right:4em;
+		}
+		#download ul{
+			background:#ccf;
+			margin:0;
+			padding:.5em 0 .5em 1.5em;
+		}
+		#download h2{
+			background:#369;
+			color:#fff;
+			font-size:90%;
+			padding:0 .5em;
+			margin:.5em 0 0 0;
+			border-bottom:1px solid #036;
+			border-right:1px solid #036;
+			border-top:1px solid #69c;
+			border-left:1px solid #69c;
+		}
+		#download li{
+			list-style-type:square;
+		}

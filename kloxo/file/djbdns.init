@@ -1,0 +1,98 @@
+#!/bin/bash
+#
+# Startup script for the Qmail Mail Server
+#
+# chkconfig: - 85 15
+# description: Qmail is a World Wide Mail server.  It runs mail qmail-send and qmail-pop servers .
+# processname: tcpserver
+# pidfile: /var/run/Qmail.pid
+
+# Source function library.
+. /etc/rc.d/init.d/functions
+
+
+# Path to the Qmailctl script, server binary, and short-form for messages.
+Qmailtcp=/usr/local/bin/tcpserver
+Qmailproc=/var/qmail/boot/proc
+prog=Djbdns
+RETVAL=0
+
+PATH=$PATH:/usr/local/bin
+(cd /usr/local/lxlabs/kloxo/httpdocs/ ; lphp.exe ../bin/misc/djbdnsstart.php )
+
+# The semantics of these two functions differ from the way Qmailctl does
+# things -- attempting to start while running is a failure, and shutdown
+# when not running is also a failure.  So we just do it the way init scripts
+# are expected to behave here.
+start() {
+        echo -n $"Starting $prog: "
+		cd /var/tinydns/
+		./run > /dev/null 2>&1 &
+
+		if [ -f /var/dnscache/enable ] ; then 
+			cd /var/dnscache
+			./run > /dev/null 2>&1 &
+		else 
+			cd /var/axfrdns/
+			./run > /dev/null 2>&1 &
+		fi
+		RETVAL=$?
+        echo
+		[ $RETVAL = 0 ] && touch /var/lock/subsys/djbdns
+        exit $RETVAL
+}
+stop() {
+	echo -n $"Stopping $prog: "
+	pkill -x tinydns
+	sleep 1
+	pkill -x dnscache
+	sleep 1
+	pkill -f axfrdns
+	RETVAL=$?
+	echo
+	[ $RETVAL = 0 ] && rm -f /var/lock/subsys/djbdns /var/run/Qmail.pid
+}
+reload() {
+	echo -n $"Reloading $prog: "
+	killproc $Qmailtcp -HUP
+		RETVAL=$?
+		echo
+	[ $RETVAL = 0 ] && rm -f /var/lock/subsys/djbdns /var/run/Qmail.pid
+}
+
+# See how we were called.
+case "$1" in
+  start)
+	start
+	;;
+  stop)
+	stop
+	;;
+  status)
+        status tinydns
+		RETVAL=$?
+		RETVAL=$?
+	;;
+  restart)
+	stop
+	start
+	;;
+  condrestart)
+	if [ -f /var/run/Qmail.pid ] ; then
+		stop
+		start
+	fi
+	;;
+  reload)
+        reload
+	;;
+  graceful|help|configtest|fullstatus)
+        $Qmailtcp $@ 
+	RETVAL=$?
+	;;
+  *)
+	echo $"Usage: $prog {start|stop|restart|condrestart|reload|status|fullstatus|graceful|help|configtest}"
+	exit 1
+esac
+
+exit $RETVAL

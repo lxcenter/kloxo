@@ -1,0 +1,131 @@
+#!/bin/bash
+#
+# Startup script for the Apache Web Server
+#
+# chkconfig: - 85 15
+# description: Apache is a World Wide Web server.  It is used to serve \
+#	       HTML files and CGI.
+# processname: httpd
+# pidfile: /var/run/httpd.pid
+# config: /etc/httpd/conf/httpd.conf
+
+# Source function library.
+. /etc/rc.d/init.d/functions
+
+# This will prevent initlog from swallowing up a pass-phrase prompt if
+# mod_ssl needs a pass-phrase from the user.
+INITLOG_ARGS=""
+
+# Set HTTPD=/usr/sbin/httpd.worker in /etc/sysconfig/httpd to use a server
+# with the thread-based "worker" MPM; BE WARNED that some modules may not
+# work correctly with a thread-based MPM; notably PHP will refuse to start.
+
+# Path to the apachectl script, server binary, and short-form for messages.
+prog=kloxo
+__var_old_server_name=lxserver.php
+__var_old_wrapper_name=lxwrapper.php
+
+lxdir=/usr/local/lxlabs/$prog/httpdocs
+apachectl=/usr/local/lxlabs/ext/lxhttpd/bin/apachectl
+httpd=/usr/local/lxlabs/ext/lxhttpd/bin/lxhttpd
+RETVAL=0
+__var_server_name=$prog.php
+__var_wrapper_name=$prog-wrapper.sh
+__var_slave_db=/usr/local/lxlabs/$prog/etc/conf/slave-db.db
+
+# The semantics of these two functions differ from the way apachectl does
+# things -- attempting to start while running is a failure, and shutdown
+# when not running is also a failure.  So we just do it the way init scripts
+# are expected to behave here.
+start() {
+        echo -n $"Starting $prog: "
+		cd $lxdir
+		if ! pgrep -f $__var_wrapper_name ; then
+			sh ../sbin/$__var_wrapper_name &
+		fi
+
+		daemon $httpd $OPTIONS
+
+        RETVAL=$?
+        echo
+        [ $RETVAL = 0 ] && touch /var/lock/subsys/lxhttpd
+        return $RETVAL
+}
+
+stop() {
+	echo -n $"Stopping $prog: "
+	killproc $httpd
+	pkill -f $__var_server_name
+	pkill -f $__var_wrapper_name
+	pkill -f $__var_old_wrapper_name;
+	pkill -f $__var_old_server_name;
+	while : ; do
+		echo "Waiting for the process to die....."
+		if ! pgrep -f $__var_wrapper_name ; then
+			break;
+		fi
+		sleep 1
+	done
+	RETVAL=$?
+	echo
+	[ $RETVAL = 0 ] && rm -f /var/lock/subsys/lxhttpd /var/run/lxhttpd.pid
+}
+
+lxstop() {
+	echo -n $"Stopping $prog: "
+	killproc $httpd
+	pkill -f $__var_server_name;
+	pkill -f $__var_old_server_name;
+	RETVAL=$?
+	echo
+	[ $RETVAL = 0 ] && rm -f /var/lock/subsys/lxhttpd /var/run/lxhttpd.pid
+}
+
+reload() {
+	echo -n $"Reloading $prog: "
+	killproc $httpd -HUP
+	RETVAL=$?
+	echo
+}
+
+# See how we were called.
+case "$1" in
+  start)
+	start
+	;;
+  stop)
+	stop
+	;;
+  status)
+        status $httpd
+	RETVAL=$?
+	;;
+  restart)
+	stop
+	start
+	;;
+
+ lxrestart)
+	lxstop
+	start
+	;;
+
+  condrestart)
+	if [ -f /var/run/lxhttpd.pid ] ; then
+		stop
+		start
+	fi
+	;;
+  reload)
+        reload
+	;;
+  graceful|help|configtest|fullstatus)
+	$apachectl $@
+	RETVAL=$?
+	;;
+  *)
+	echo $"Usage: $prog {start|stop|restart|condrestart|reload|status|fullstatus|graceful|help|configtest}"
+	exit 1
+esac
+
+exit $RETVAL

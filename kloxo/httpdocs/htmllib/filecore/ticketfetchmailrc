@@ -1,0 +1,13 @@
+#set daemon 600
+#set daemon 120
+set postmaster "postmaster"
+set bouncemail
+set properties ""
+
+
+
+#poll localhost with proto POP3 user 'postmaster@softy.com' password 'admin' is root here  mda "procmail -d %T"
+poll <%mail_server%> with proto POP3 user '<%mail_account%>' password '<%mail_password%>' is root here mda "lphp.exe ../bin/common/mailtoticket.php"
+
+#poll 91.93.97.11 with proto POP3 user 'postmaster@emelsen.com' password 'emelse' is root here mda "procmail"
+

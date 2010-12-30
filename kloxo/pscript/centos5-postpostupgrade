@@ -1,0 +1,21 @@
+
+if [ -f /proc/user_beancounters ] ; then 
+mv /sbin/udevd /sbin/udevd.back ; 
+rm -rf /dev/*
+cd /dev/
+tar -xzf /usr/local/lxlabs/kloxo/file/centos-5/vps-dev.tgz
+fi
+
+cp /usr/local/lxlabs/kloxo/file/courier-imap.init /etc/init.d/courier-imap
+cp -a /usr/local/lxlabs/kloxo/file/pop3-centos5/ /var/qmail/supervise/pop3/
+chmod 755 /etc/init.d/courier-imap
+chmod 755 /var/qmail/supervise/pop3/run
+cp /usr/local/lxlabs/kloxo/file/centos-5/authdaemonrc /etc/courier/authlib/authdaemonrc
+echo -n 0 > /var/qmail/control/spfbehavior
+
+
+chkconfig --add courier-imap
+#ln -sf /var/qmail/bin/sendmail /usr/sbin
+#ln -sf /var/qmail/bin/sendmail /usr/lib
+ln -sf /usr/bin/tcprules /usr/local/bin
+ln -sf /usr/bin/rblsmtpd /usr/local/bin

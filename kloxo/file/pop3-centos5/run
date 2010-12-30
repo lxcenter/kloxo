@@ -1,0 +1,11 @@
+#!/bin/sh
+
+HOSTNAME=`hostname --fqdn`
+rm -rf ./env/*;
+
+cat /etc/courier/pop3d | /usr/bin/envconv
+exec /usr/bin/envdir ./env/ \
+/usr/bin/softlimit -m 9000000 \
+/usr/bin/tcpserver -v -R -H -l $HOSTNAME 0 110 \
+/usr/sbin/pop3login \
+/usr/bin/pop3d Maildir 2>&1

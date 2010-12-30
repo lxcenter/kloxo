@@ -1,0 +1,42 @@
+Changelog
+
+Kloxo 6.1.0 - 31-dec-2010
+##################################
+dterweij - Changed installer
+dterweij - Removed License server contact
+dterweij - Moved all C sources into one place
+dterweij - Fixed broken images
+dterweij - InstallApp new version 5.0.5000 (Mainly lxadmin to kloxo dir changes)
+various  - InstallApp software updates
+•Bug #8: 500 domain limit
+•Bug #21: Password protected directory feature does not work
+•Bug #31: AWBS Module Lxadmin with Kloxo has no connection
+•Bug #43: Error while saving a file edited using the inbuilt text editor
+•Bug #74: Apache not restarted after changing / adding protected directories
+•Bug #242: Typo in lxins.php
+•Bug #246: Switching back from suphp to mod_php does not work
+•Bug #273: MySQL disk usage = 0 MB
+•Bug #277: Bug in validate_domain_name
+•Bug #313: document root created with wrong ownership
+•Bug #317: lxguard hits PHP Fatal error: Out of Memory
+•Bug #364: error while adding a mail account to a .travel domain
+•Bug #366: kloxo scheduled backups by FTP are not deleted automatically
+•Feature #6: InstallApp outdated
+•Feature #270: Add delete option to mail catchall
+•Updates #54: Removing Licence server contact
+•Updates #283: phpMyAdmin 3.3.4
+•Updates #342: Speed improvements
+•Security #88: Kloxo Single Server 6.0.2083 Stable multiple vulnerabilities
+•Security #244: Remote CPU and memory usage DoS
+•Security #268: Local users can obtain the password hashes from the stats page protection files or from directory protection files
+•Security #341: Remotely block any or every IP addresses in hosts.deny
+•ToDo #303: Fix thirdparty hardcoded version numbers
+•ToDo #353: Command line in cron jobs should be longer
+And many more small things.
+
+#############################################
+6.0.2083 - A fix for ?
+6.0.2084 - Fix Horde/Roundcube security issue
+6.0.2085 - Fix for fix 2084
+6.0.2086 - Fix for fix 2085
+

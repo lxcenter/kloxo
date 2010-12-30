@@ -1,0 +1,30 @@
+service smtp 
+{
+	id = remote
+		socket_type     = stream
+		protocol        = tcp
+		wait            = no
+		disable         = no
+		interface = your-full-ipaddress
+		user            = root
+		env             = SENDER_NOCHECK=1 
+		instances       = UNLIMITED
+		server          = /usr/bin/lxredirecter.sh
+		server_args     = /var/qmail/bin/tcp-env -Rt0 /var/qmail/bin/qmail-smtpd /home/lxadmin/mail/bin/vchkpw    true
+}
+
+service smtp 
+{
+	id = local
+	socket_type     = stream
+		protocol        = tcp
+		wait            = no
+		interface = 127.0.0.1
+		disable         = no
+		user            = root
+		env             = SENDER_NOCHECK=1 RELAYCLIENT=
+		instances       = UNLIMITED
+		server          = /usr/bin/lxredirecter.sh
+		server_args     = /var/qmail/bin/tcp-env -Rt0 /var/qmail/bin/qmail-smtpd /home/lxadmin/mail/bin/vchkpw    true
+}
+

@@ -1,0 +1,9 @@
+#!/bin/sh
+program=$1
+if [ $program = 'kloxo' ] ; then
+	db="kloxo4_2"
+else 
+	db="hypervm1_0"
+fi
+mysqldump -u $program -p`cat /usr/local/lxlabs/$program/etc/conf/$program.pass` $db
+

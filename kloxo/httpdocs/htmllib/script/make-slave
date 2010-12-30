@@ -1,0 +1,4 @@
+#!/bin/sh
+. /script/directory
+lphp.exe ../bin/install/create.php --install-type=slave
+/script/restart

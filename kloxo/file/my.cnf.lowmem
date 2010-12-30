@@ -1,0 +1,61 @@
+# low memory stuff - MI 6/8/06 
+set-variable = max_allowed_packet=1M 
+set-variable = thread_stack=64K 
+set-variable = table_cache=4 
+set-variable = sort_buffer=64K 
+set-variable = net_buffer_length=2K 
+set-variable = key_buffer_size=2095104 
+skip-innodb 
+skip-networking 
+skip-bdb 
+skip-ndbcluster 
+
+ [mysqld]
+ port            = 3306
+ socket          = /var/lib/mysql/mysql.sock
+ skip-locking
+ key_buffer = 16K
+ max_allowed_packet = 1M
+ table_cache = 4
+ sort_buffer_size = 64K
+ read_buffer_size = 256K
+ read_rnd_buffer_size = 256K
+ net_buffer_length = 2K
+ thread_stack = 64K
+ # Berkeley DB
+ skip-bdb
+ # Innodb
+ skip-innodb
+
+ #innodb_data_home_dir = /var/lib/mysql/
+ #innodb_data_file_path = ibdata1:10M:autoextend
+ #innodb_log_group_home_dir = /var/lib/mysql/
+ #innodb_log_arch_dir = /var/lib/mysql/
+ # _buffer_pool_size 50 - 80 %  RAM but
+ #innodb_buffer_pool_size = 16M
+ #innodb_additional_mem_pool_size = 2M
+ # Set .._log_file_size to 25 % of buffer pool size
+ #innodb_log_file_size = 5M
+ #innodb_log_buffer_size = 8M
+ #innodb_flush_log_at_trx_commit = 1
+ #innodb_lock_wait_timeout = 50
+
+
+ [mysqldump]
+ quick
+ max_allowed_packet = 16M
+
+ [mysql]
+ no-auto-rehash
+ #safe-updates
+
+ [isamchk]
+ key_buffer = 8M
+ sort_buffer_size = 8M
+
+ [myisamchk]
+ key_buffer = 8M
+ sort_buffer_size = 8M
+
+ [mysqlhotcopy]
+ interactive-timeout
