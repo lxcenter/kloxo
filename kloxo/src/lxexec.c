@@ -12,12 +12,9 @@
 #include <fcntl.h>
 #include <time.h>
 
-
 int main(int argc, char **argv)
 {
-	//puts("hell");
 	argc--;
 	argv++;
 	execvp(argv[0], argv);
 }
-
