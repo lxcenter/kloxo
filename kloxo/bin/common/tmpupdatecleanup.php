@@ -55,6 +55,18 @@ if (!lxfile_exists("/usr/local/lxlabs/kloxo/file/webmailReset")) {
 }
 //
 
+
+// Fix #388 - phpMyAdmin config.inc.php permission
+
+    $correct_perm = "0644";
+    $check_perm = substr(decoct( fileperms("/usr/local/lxlabs/$program/httpdocs/thirdparty/phpMyAdmin/config.inc.php") ), 2);
+
+    if ($check_perm != $correct_perm) {
+        lxfile_unix_chmod("/usr/local/lxlabs/$program/httpdocs/thirdparty/phpMyAdmin/config.inc.php","0644");
+    }
+
+//
+
 	if (lxfile_exists(".svn")) {
 		print("SVN Found... Exiting\n\n");
 		exit;
