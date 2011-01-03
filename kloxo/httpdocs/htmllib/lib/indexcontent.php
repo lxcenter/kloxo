@@ -1,7 +1,8 @@
-<?php 
+<?php
+require_once('l18n/l18n.php');
+
 $accountlist = array('client' => "Kloxo Account",'domain' => 'Domain Owner', 'mailaccount' => "Mail Account");
 $progname = $sgbl->__var_program_name;
-
 
 if (lxfile_exists("__path_program_htmlbase/lib/indexheader_vendor.html")) {
 	lreadfile("__path_program_htmlbase/lib/indexheader_vendor.html");
@@ -12,9 +13,6 @@ if (lxfile_exists("__path_program_htmlbase/lib/indexheader_vendor.html")) {
 $ghtml->print_jscript_source("/htmllib/js/lxa.js");
 if ($sgbl->is_this_slave()) { print("Slave Server\n"); exit; }
 
-$logfo = db_get_value("general",  "admin", "login_pre");
-$logfo = str_replace("<%programname%>", $sgbl->__var_program_name, $logfo);
-
    if(!$cgi_forgotpwd ){
 	$ghtml->print_message();
 
@@ -24,54 +22,66 @@ $logfo = str_replace("<%programname%>", $sgbl->__var_program_name, $logfo);
 	} else {
 ?>
 
-<style type="text/css">
+	<style type="text/css">
 	@import url("/htmllib/lib/admin_login.css");
 	</style>
-		<div id="ctr" align="center">
-		<div class="login">
+<div id="ctr" align="center">
+	<div class="login">
 		<div class="login-form">
-		<div align="center">
-<font name=Verdana size=5 color=red >
-<b> Login </b></font></div>
-<br>
-<form name=loginform action="/htmllib/phplib/" onsubmit="encode_url(loginform) ; return fieldcheck(this);" method=post>
-		<div class="form-block">
-	<div class="inputlabel">Username</div>
-<input name=frm_clientname type=text class=inputbox size=30 />
-<div class="inputlabel">Password</div>
-<input name=frm_password type=password class=passbox size=30 /> <br>
-		
-	<?php 
-/*
-		if ($ghtml->iset("frm_nf")) {
-			print("<input type=hidden name=frm_nf value=" . $ghtml->frm_nf . ">");
-		}
-	*/
-		?> 
+			<div align="center">
+				<font name="Verdana" size="5" color="red">
+					<b><?php echo _('Login');?></b>
+				</font>
+			</div>
+			<br>
+			<form name=loginform action="/htmllib/phplib/" onsubmit="encode_url(loginform) ; return fieldcheck(this);" method=post>
+				<div class="form-block">
+					<div class="inputlabel">
+						<?php echo _('Username');?>
+					</div>
+					<input name="frm_clientname" type="text" class="inputbox" size="30" />
+					<div class="inputlabel">
+					<?php echo _('Password');?>
+					</div>
+					<input name="frm_password" type="password" class="passbox" size="30" />
+					<br />
+					
+					<?php 
+					/*
+					if ($ghtml->iset("frm_nf")) {
+						print("<input type=hidden name=frm_nf value=" . $ghtml->frm_nf . ">");
+					}
+					*/
+					?> 
 
-	
-		<input type=hidden name=id value="<?php echo mt_rand() ?>"> 
+					<input type="hidden" name="id" value="<?php echo mt_rand() ?>"> 
 
-<div align="left"><input type=submit class=button name=login value=Login /></div>
-</div>	</form>
+					<div align="left">
+						<input type="submit" class="button" name="login" value="<?php echo _('Login');?>" />
+					</div>
+				</div>
+			</form>
 		</div>
 	<div class="login-text">
-<div class="ctr"><img src="/img/login/icon.gif" width="64" height="64" alt="security" /></div>
-<?=$logfo?> 
-	<a class=forgotpwd  href="javascript:document.forgotpassword.submit()"><font color=black><u>Forgot Password?</u></a> <form name="forgotpassword" method="post"  action="/login/">
-		<input type="hidden" name=frm_forgotpwd value="1">
+		<div class="ctr">
+			<img src="/img/login/icon.gif" width="64" height="64" alt="security" />
+		</div>
+		<?php echo _('<p>Welcome to ').$progname._('</p><p>Use a valid username and password to gain access to the console.</p>'); ?> 
+		<a class="forgotpwd" href="javascript:document.forgotpassword.submit()">
+			<font color="black">
+				<u><?php _('Forgot Password?');?></u>
+		</a>
+		<form name="forgotpassword" method="post" action="/login/">
+			<input type="hidden" name="frm_forgotpwd" value="1" />
 		</form>
-         <script> document.loginform.frm_clientname.focus(); </script>
-</div><div class="clr"></div>
+		<script>document.loginform.frm_clientname.focus();</script>
+	</div>
+	<div class="clr"></div>
 </div>
 </div>
 <div id="break"></div>
-	
 		<?php
-
-	}
-		
-
+	}	
 }
 elseif ($cgi_forgotpwd == 1) {
 ?>
@@ -98,7 +108,7 @@ elseif ($cgi_forgotpwd == 1) {
 		</div>
 	<div class="login-text">
 <div class="ctr"><img src="/img/login/icon1.gif" width="64" height="64" alt="security" /></div>
-<p>Welcome to <?php echo  $sgbl->__var_program_name?></p><p>Use a valid username and email-id to get password.</p><br>
+<p>Welcome to <?php echo  $progname?></p><p>Use a valid username and email-id to get password.</p><br>
 
 	<a class=forgotpwd  href="javascript:history.go(-1);"><font color=black><u>Back to login</u></a> 
 		

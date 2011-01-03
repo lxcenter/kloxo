@@ -1,0 +1,47 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Kloxo 6.1.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2011-01-03 12:20+0100\n"
+"PO-Revision-Date: \n"
+"Last-Translator: Ángel Guzmán Maeso <shakaran@gmail.com>\n"
+"Language-Team: Lxcenter <angel.guzman@lxcenter.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-Language: English\n"
+"X-Poedit-Country: UNITED STATES\n"
+"X-Poedit-SourceCharset: utf-8\n"
+"X-Poedit-Basepath: /home/shakaran/Escritorio/l18n\n"
+"X-Poedit-SearchPath-0: .\n"
+
+#: index.php:16
+msgid "This page"
+msgstr ""
+
+#: indexcontent.php:37
+#: indexcontent.php:64
+msgid "Login"
+msgstr ""
+
+#: indexcontent.php:44
+msgid "Username"
+msgstr ""
+
+#: indexcontent.php:48
+msgid "Password"
+msgstr ""
+
+#: indexcontent.php:73
+msgid "<p>Welcome to "
+msgstr ""
+
+#: indexcontent.php:73
+msgid "</p><p>Use a valid username and password to gain access to the console.</p>"
+msgstr ""
+
+#: indexcontent.php:76
+msgid "Forgot Password?"
+msgstr ""
+
