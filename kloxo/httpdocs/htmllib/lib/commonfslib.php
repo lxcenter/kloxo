@@ -349,11 +349,19 @@ function lxfile_nonzero($file)
  */
 function lxfile_mkdir($dir)
 {
+	if(empty($dir)){ # Avoid "", NULL or false values
+		return false; 
+	}
+	
 	$dir = expand_real_root($dir);
-	if (lxfile_exists($dir)) {
+	if(lxfile_exists($dir)){
 		return true;
 	}
 
+	if(file_exists($dir)){ # Real check by PHP
+		return true; 
+	}
+	
 	log_filesys("Making directory $dir");
 	return mkdir($dir, 0755, true);
 }
