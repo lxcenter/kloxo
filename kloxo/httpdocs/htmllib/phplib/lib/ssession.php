@@ -53,7 +53,12 @@ function write()
 			if (is_object($v)) { continue; }
 			$array[$k] = $v;
 		}
-		lfile_put_json_serialize("__path_program_root/session/{$this->nname}", $array);
+		if(lxfile_exists("__path_program_root/session/{$this->nname}"))
+		{
+			lfile_put_json_serialize("__path_program_root/session/{$this->nname}", $array);
+		}
+		else{ # [FIXME] Maybe is need here a error message if the session is not exist for json encode?
+		}
 	}
 }
 
