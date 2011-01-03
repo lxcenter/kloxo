@@ -1,7 +1,6 @@
 <?php
 # [FIXME] $locale = get_language(); and use $_SESSION for store language
 $locale = '';
-echo "RECIBE".$_REQUEST['locale'];
 if(isset($_REQUEST['locale'])){
 	switch($_REQUEST['locale']){
 		case 'en':
