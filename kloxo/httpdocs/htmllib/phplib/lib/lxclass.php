@@ -771,8 +771,6 @@ function setDefaultValue($var, $val)
 
 function writeEntireObject()
 {
-
-
 	foreach((array) $this->__object_list as $variable) {
 		$objname = $variable . "_o";
 		$obj = $this->$objname;
@@ -785,7 +783,7 @@ function writeEntireObject()
 		dprint("<b> Driver  {$this->dbaction} <br> <br> </b>");
 	}
 	if ($this->isUnclean()) {
-		dprint("Really Writing  {$this->get__table()} {$this->nname}...dbaction... {$this->dbaction} <br> \n");
+		dprint('Really Writing the table \''.$this->get__table().'\'  for '.$this->nname.' with dbaction \''.$this->dbaction.'\' <br>');
 		$this->write();
 	}
 
@@ -4260,7 +4258,7 @@ function changeUsedFromParentAll($flag = 1)
 	//}
 	//dprint(" <b> Before Mailaccount Num: {$login->used->mailaccount_num} </b> <br> \n");
 	while(($qp = $qp->getParentO())) {
-		dprint(" Changin {$this->get__table()}: {$this->nname}... {$qp->get__table()} {$qp->nname} </b><br> ");
+		dprint('Changing the table \''.$this->get__table().'\' for '.$this->nname.' with table '.$qp->get__table().' '.$qp->nname.' </b><br />');
 		$this->changeUsedFromParent($qp, $flag);
 	}
 	//dprint(" <b> After  Mailaccount Num: {$login->used->mailaccount_num} </b> <br> \n");

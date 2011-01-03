@@ -2283,7 +2283,7 @@ function initSession($object, $ssl_param, $consuming_parent)
 	setcookie("$ckstart-classname", $class, $cookietime, '/');
 	setcookie("$ckstart-session-id", $session, $cookietime, '/');
 
-	dprint("Set cookies\n");
+	dprint("Set cookies<br/>");
 
 	$hostname = $_SERVER['REMOTE_ADDR'];
 

@@ -603,7 +603,7 @@ function addRow($array)
 	//dprint($insert, 2);
 
 	if ($ins = $this->database_query($gbl->$fdbvar, $insert)) {
-		dprint("Record inserted in $this->__sqtable for {$array['nname']}\n", 1);
+		dprint('Record inserted in the table \''.$this->__sqtable.'\' for '.$array['nname'].'<br />', 1);
 		//log_message("insert into {$this->__sqtable}:{$array['nname']} :::: $insert");
 	} else {
 		log_database("DbError: Insert Failed for {$this->__sqtable}:{$array['nname']}");
