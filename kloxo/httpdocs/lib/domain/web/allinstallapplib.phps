@@ -391,7 +391,7 @@ static function createListAlist($parent, $class)
 static function initThisList($parent, $class)
 {
 	global $gbl, $sgbl, $login, $ghtml; 
-	$driverapp = $gbl->getSyncClass($parent->__masterserver, $parent->__readserver, 'allinstallsoft');
+	$driverapp = $gbl->getSyncClass($parent->__masterserver, $parent->__readserver, 'allinstallapp');
 	$res = exec_class_method("allinstallapp__$driverapp", "getListofApps");
 
 	return $res;
