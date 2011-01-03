@@ -3249,7 +3249,7 @@ final protected function writeAChildList($class, $flag = NULL)
 		return;
 	}
 
-	dprintr("Warning... Writing {$class} in {$this->get__table()} {$this->nname}...<br> ");
+	dprintr('Warning: writing class \''.$class.'\' in table \''.$this->get__table().'\' with nname '.$this->nname.'<br/>');
 	if (!$this->$list) {
 		return;
 	}
