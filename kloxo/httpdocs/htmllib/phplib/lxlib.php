@@ -476,7 +476,16 @@ function lfile_put_contents($file, $data, $flag = null)
 
 	lxfile_mkdir(dirname($file));
 
-	return file_put_contents($file, $data, $flag);
+	if(is_readable($file)){
+		return file_put_contents($file, $data, $flag);
+	}
+	else
+	{
+		log_log('Could not read the file \''.$file.'\'
+			     with permissions:
+			     '.substr(sprintf('%o', fileperms($file)), -4));
+		return false;
+	}
 }
 
 /**
@@ -2131,7 +2140,7 @@ function initProgramlib($ctype = null)
 
 	// This means the session object got created fresh.
 	if (!$sessobj || $sessobj->dbaction === 'add') {
-		dprint("no session id");
+		dprint("Session id is empty. Clearing cookies and redirect to login.");
 		clear_all_cookie();
 		$ghtml->print_redirect_self("/login/");
 	}
