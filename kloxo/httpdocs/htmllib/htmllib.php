@@ -3598,7 +3598,7 @@ function printListAddFormBad($parent, $class)
             print("<select name=frm_{$class}_c_{$k} style='border:1px solid #b0c0f0; font-family:arial; color:#000000; font-size:10px; font-weight:normal; padding-left:2; background-color:#ffffff;' value=>\n");
 
             foreach($v[1] as $kk => $vv) {
-                print("<option value=$vv> $vv </option>");
+				echo '<option value="'.$vv.'">'.$vv.'</option>';
             }
             print("</select>");
         } else if(isset($v[0]) && $v[0] === 'M') {
@@ -3836,7 +3836,7 @@ function print_real_search($name_list, $parent, $class)
                     if($v === $value) {
                         $sel = "SELECTED";
                     }
-                    print("<option value='$v' $sel> $v </option>");
+					echo '<option value="'.$v.'" '.$sel.'>'.$v.'</option>';
                 }
                 print("</select>");
             }
@@ -4382,7 +4382,7 @@ function calljselectall<?=$unique_name; ?>(){
                 if($l == $f_page) {
                     $sel = "SELECTED";
                 }
-                print("<option value=$l $sel> $l </option>");
+				echo '<option value="'.$l.'" '.$sel.'>'.$l.'</option>';
             }
             print("</select>");
         } else
@@ -5112,7 +5112,7 @@ function printGraphSelect($list)
     foreach($list as $k=> $l) {
         $sssl = null;
         if($k == $oldname) { $sssl =  " SELECTED "; }
-        print("<option $sssl value='$k' >$l</option>");
+		echo '<option value="'.$k.'" '.$sssl.'>'.$l.'</option>';
     }
     ?>
 
@@ -5239,8 +5239,8 @@ function printShowSelectBox($list)
             $tdisp = $l->getClName();
         }
         ?>
-        <option <?php if($k == $oldname) { echo " SELECTED "; } ?> value='<?=$k ?>'  ><?=$tdisp ?></option>
-        <?php
+        <option <?php if($k == $oldname) { echo ' SELECTED '; } ?> value="<?=$k ?>"  ><?=$tdisp ?></option>
+		<?php
     }
     ?>
 
@@ -5894,9 +5894,17 @@ function form_footer()
 function getgroupvarselect($_multivarname)
 {
     global $gbl, $sgbl, $login, $ghtml;
-    if(isset($gbl->__group_mode) && $gbl->__group_mode) {
-        return "<td><select class=textbox name=$_multivarname> <option value=nochange> Dont Change </option> <option value=change> Change </option> </select>\n <br> </td> ";
-    } else {
+	if(isset($gbl->__group_mode) && $gbl->__group_mode){
+		return "
+		<td>
+			<select class=\"textbox\" name=\"$_multivarname\">
+				<option value=\"nochange\"> Dont Change </option>
+				<option value=\"change\"> Change </option>
+			</select>\n
+			<br />
+		</td> ";
+	} 
+	else{
         return null;
     }
 }
@@ -5946,8 +5954,11 @@ function print_fancy_select($class, $src, $dst)
             $desc = $ac_descr[2];
             $_t_image = dirname($_t_image) . "/small/" . basename($_t_image);
         }
-        print("<option value=$key style='valign:middle; padding: 0 0 0 25 ; width:300; height:20; background:url($_t_image) no-repeat;'>$desc </option>");
-
+        echo '<option
+			value="'.$key.'"
+			style="valign:middle;padding:0 0 0 25;
+			width:300;height:20;
+			background:url('.$_t_image.') no-repeat;">'.$desc.'</option>';
       }
     ?>
         </select>
@@ -5981,7 +5992,11 @@ function print_fancy_select($class, $src, $dst)
             $_t_image = dirname($_t_image) . "/small/" . basename($_t_image);
             $desc = $ac_descr[2];
         }
-        print("<option value=$d  style='valign:middle; padding: 0 0 0 25 ; width:300; height:20; background:url($_t_image) no-repeat;'> $desc </option>");
+        echo '<option
+			value="'.$d.'"
+			style="valign:middle;padding:0 0 0 25;
+			width:300;height:20;
+			background:url('.$_t_image.') no-repeat;">'.$desc.'</option>';
     }
     ?>
         </select>
@@ -6078,9 +6093,10 @@ function print_multiselect($form, $variable, $rowuniqueid, $rowclass, $rowcount)
 
 
      <select class=textbox id=<?=$ts_name ?>  multiple size=5 class=textbox name=<?=$variable1->name ?>   >
-    <?php foreach($variable1->option as $k => $option) { ?>
-    <option value="<?=$k?>" ><?=$option ?></option>
-    <?php  } ?>
+		<?php
+		foreach($variable1->option as $k => $option)
+			echo '<option value="'.$k.'" >'.$option.'</option>';
+		?>
     </select>
 
     </td>
@@ -6096,12 +6112,19 @@ function print_multiselect($form, $variable, $rowuniqueid, $rowclass, $rowcount)
     <td >
 
     <select id=<?=$ts_name2?> class=textbox size=5 multiple name=<?=trim($variable2->name)?> >
-    <?php $v2count = 0; foreach($v2 as $k => $option) { $v2count++?>
-    <option value="<?=$option?>" ><?=$option?></option>
-    <?php  } ?>
-    <?php if(!$v2count) foreach((array)$variable2->option as $k => $option) { ?>
-    <option value="<?=$option?>" ><?=$option?></option>
-    <?php  } ?>
+	<?php
+	$v2count = 0;
+	foreach($v2 as $k => $option)
+	{
+		$v2count++;
+		echo '<option value="'.$option.'" >'.$option.'</option>';
+	}
+	?>
+	<?php
+	if (!$v2count)
+		foreach((array)$variable2->option as $k => $option)
+			echo '<option value="'.$option.'" >'.$option.'</option>';
+	?>
     </select>
     <script>
     createFormVariable('<?=$form?>', '<?=$variable->name?>', '<?=$ts_name2?>');
@@ -6402,8 +6425,8 @@ function print_modify($form, $variable, $rowuniqueid, $rowclass, $rowcount)
     $postvar = $variable->postvar;
     if($postvar) {
         print("<select width=60%  name=$postvar->name value=\"\"  size=\"1\">");
-        foreach($postvar->option as $vv) {
-            print("<option value=$vv> $vv </option>");
+        foreach($postvar->option as $vv){
+            echo '<option value="'.$vv.'" >'.$vv.'</option>';
         }
         print("</select>");
     }
@@ -6581,7 +6604,7 @@ function print_variable($block, $variable, $count)
                     $sel = "SELECTED";
                 }
 
-                print("<option value=\"$k\" $sel>  $option </option>\n");
+                echo '<option value="'.$k.'" '.$sel.'>'.$option.'</option>';
             }
             print("</select> $filteropacitystringspanend");
 

@@ -434,23 +434,23 @@ function print_quick_action($class)
 	//$res .= "$desc[2] <br> ";
 	if (!$object->isLogin()) {
 		$res .= "<select $stylestr name=frm_redirectname>";
-		foreach($namelist as $l) {
+		foreach($namelist as $l){
 			$pl = substr($l, 0, 26);
-			$res .= "<option $stylestr value=$l> $pl </option>";
+			$res .= '<option '.$stylestr.' value="'.$l.'" >'.$pl.'</option>';
 		}
 		$res .= "</select> </td> </tr>  ";
 	}
 	$res .= " <tr style=\"background:#d6dff7\"> <td ><select $stylestr name=frm_redirectaction>";
 	foreach($alist as $k => $a) {
 		if (csb($k, "__title")) {
-			$res .= "<option value=>------$a----</option>";
+			$res .= '<option value="" >------'.$a.'----</option>';
 			continue;
 		}
 		$ac_descr = $ghtml->getActionDetails($a, null, $iconpath, $path, $post, $_t_file, $_t_name, $_t_image, $__t_identity);
 		$a = base64_encode($a);
 		//$res .= "<option value=$a style='background-image: url($_t_image); background-repeat:no-repeat; left-padding: 35px; text-align:right'>  $ac_descr[2] </option>";
 		$desc = substr($ac_descr[2], 0, 20);
-		$res .= "<option $stylestr value=$a>  $desc </option>";
+		$res .= '<option '.$stylestr.' value="'.$a.'" >'.$desc.'</option>';
 	}
 	$res .= "</select> </td> </tr> ";
 	$res .= "</form> <tr > <td align=right> <a href=javascript:quickaction.submit() > Go </a> </td> </tr> ";
