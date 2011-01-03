@@ -477,13 +477,20 @@ function lfile_put_contents($file, $data, $flag = null)
 	lxfile_mkdir(dirname($file));
 
 	if(is_readable($file)){
-		return file_put_contents($file, $data, $flag);
+		if(is_writable($file)){
+			return file_put_contents($file, $data, $flag);
+		}
+		else{
+			$error_msg = 'Could not write the file \''.$file.'\' with permissions: '.substr(sprintf('%o', fileperms($file)), -4);
+			dprint($error_msg);
+			log_log('filesys', $error_msg);
+			return false;
+		}
 	}
-	else
-	{
-		log_log('Could not read the file \''.$file.'\'
-			     with permissions:
-			     '.substr(sprintf('%o', fileperms($file)), -4));
+	else{
+		$error_msg = 'Could not read the file \''.$file.'\' with permissions: '.substr(sprintf('%o', fileperms($file)), -4);
+		dprint($error_msg);
+		log_log('filesys', $error_msg);
 		return false;
 	}
 }
