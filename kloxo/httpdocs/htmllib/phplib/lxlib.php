@@ -2012,15 +2012,17 @@ function delete_expired_ssessions()
 
 	$s_l = $login->getList("ssessionlist");
 
-	foreach ($s_l as $s) {
-		if (!is_object($s)) {
-			continue;
-		}
-		$timeout = $s->last_access + $login->getSpecialObject('sp_specialplay')->ssession_timeout;
-		dprint($s->nname);
-		if ($timeout < time()) {
-			$s->delete();
-			Utmp::updateUtmp($s->nname, $login, "Session Expired");
+	if(!empty($s_l)){
+		foreach ($s_l as $s) {
+			if (!is_object($s)) {
+				continue;
+			}
+			$timeout = $s->last_access + $login->getSpecialObject('sp_specialplay')->ssession_timeout;
+			dprint($s->nname);
+			if ($timeout < time()) {
+				$s->delete();
+				Utmp::updateUtmp($s->nname, $login, "Session Expired");
+			}
 		}
 	}
 }
