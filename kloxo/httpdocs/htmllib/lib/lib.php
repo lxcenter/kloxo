@@ -106,6 +106,7 @@ function download_thirdparty()
         $string = str_replace("\n", "", $string);
         $string = str_replace("\r", "", $string);
         core_installWithVersion("/usr/local/lxlabs/$prgm/", "$prgm-thirdparty", $string);
+        lxfile_unix_chmod("/usr/local/lxlabs/$prgm/httpdocs/thirdparty/phpMyAdmin/config.inc.php","0644");
     }
 }
 
