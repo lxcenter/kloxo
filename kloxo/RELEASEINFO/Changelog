@@ -1,8 +1,10 @@
 Changelog
 
-Kloxo 6.1.1 -
+Kloxo 6.1.1 - 05-jan-2011
 ##################################
--
+•Bug #388: phpMyAdmin Configfile wrong persmission (thirdparty 2013)
+•Bug #391: Forbidden: You don't have permission to access /index.html on this server.
+•Bug #396: InstallApp icon in kloxo 6.1.0 not working
 
 Kloxo 6.1.0 - 31-dec-2010
 ##################################
