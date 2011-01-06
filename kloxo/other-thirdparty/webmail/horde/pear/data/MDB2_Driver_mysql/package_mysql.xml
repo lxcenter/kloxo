@@ -1,0 +1,670 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<package packagerversion="1.7.2" version="2.0" xmlns="http://pear.php.net/dtd/package-2.0" xmlns:tasks="http://pear.php.net/dtd/tasks-1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://pear.php.net/dtd/tasks-1.0 http://pear.php.net/dtd/tasks-1.0.xsd http://pear.php.net/dtd/package-2.0 http://pear.php.net/dtd/package-2.0.xsd">
+ <name>MDB2_Driver_mysql</name>
+ <channel>pear.php.net</channel>
+ <summary>mysql MDB2 driver</summary>
+ <description>This is the MySQL MDB2 driver.</description>
+ <lead>
+  <name>Lukas Kahwe Smith</name>
+  <user>lsmith</user>
+  <email>smith@pooteeweet.org</email>
+  <active>no</active>
+ </lead>
+ <lead>
+  <name>Lorenzo Alberton</name>
+  <user>quipo</user>
+  <email>l.alberton@quipo.it</email>
+  <active>yes</active>
+ </lead>
+ <date>2009-01-14</date>
+ <time>15:41:13</time>
+ <version>
+  <release>1.5.0b2</release>
+  <api>1.5.0b2</api>
+ </version>
+ <stability>
+  <release>beta</release>
+  <api>beta</api>
+ </stability>
+ <license>BSD License</license>
+ <notes>- fixed bug #12117: disconnect() does not work as documented
+- fixed bug #13412: sometimes getTableConstraintDefinition() fails for FOREIGN KEYs
+- fixed bug #13581: wrong query in beginTransaction() for certain MySQL versions
+- request #13657: in setCharset(), use mysql_set_charset() if available [cwiedmann]
+- fixed bug #13928: Invalid triggers created for &apos;ON UPDATE&apos;
+- fixed bug #15051: Cannot create constraints with field length
+- add index on FK column(s) or a FK constraint cannot be created in some cases
+
+note:
+- the multi_query test failes because this is not supported by ext/mysql
+
+open todo items:
+- use a trigger to emulate setting default now()</notes>
+ <contents>
+  <dir baseinstalldir="/" name="/">
+   <dir name="MDB2">
+    <dir name="Driver">
+     <dir name="Datatype">
+      <file name="mysql.php" role="php">
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
+     </dir> <!-- /MDB2/Driver/Datatype -->
+     <dir name="Function">
+      <file name="mysql.php" role="php">
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
+     </dir> <!-- /MDB2/Driver/Function -->
+     <dir name="Manager">
+      <file name="mysql.php" role="php">
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
+     </dir> <!-- /MDB2/Driver/Manager -->
+     <dir name="Native">
+      <file name="mysql.php" role="php">
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
+     </dir> <!-- /MDB2/Driver/Native -->
+     <dir name="Reverse">
+      <file name="mysql.php" role="php">
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
+     </dir> <!-- /MDB2/Driver/Reverse -->
+     <file name="mysql.php" role="php">
+      <tasks:replace from="@package_version@" to="version" type="package-info" />
+     </file>
+    </dir> <!-- /MDB2/Driver -->
+   </dir> <!-- /MDB2 -->
+   <dir name="tests">
+    <file name="MDB2_nonstandard_mysql.php" role="test" />
+   </dir> <!-- /tests -->
+   <file name="package_mysql.xml" role="data" />
+  </dir> <!-- / -->
+ </contents>
+ <dependencies>
+  <required>
+   <php>
+    <min>4.3.0</min>
+   </php>
+   <pearinstaller>
+    <min>1.4.0b1</min>
+   </pearinstaller>
+   <package>
+    <name>MDB2</name>
+    <channel>pear.php.net</channel>
+    <min>2.5.0b2</min>
+   </package>
+   <extension>
+    <name>mysql</name>
+   </extension>
+  </required>
+ </dependencies>
+ <phprelease />
+ <changelog>
+  <release>
+   <version>
+    <release>1.5.0b2</release>
+    <api>1.5.0b2</api>
+   </version>
+   <stability>
+    <release>beta</release>
+    <api>beta</api>
+   </stability>
+   <date>2009-01-14</date>
+   <license>BSD License</license>
+   <notes>- fixed bug #12117: disconnect() does not work as documented
+- fixed bug #13412: sometimes getTableConstraintDefinition() fails for FOREIGN KEYs
+- fixed bug #13581: wrong query in beginTransaction() for certain MySQL versions
+- request #13657: in setCharset(), use mysql_set_charset() if available [cwiedmann]
+- fixed bug #13928: Invalid triggers created for &apos;ON UPDATE&apos;
+- fixed bug #15051: Cannot create constraints with field length
+- add index on FK column(s) or a FK constraint cannot be created in some cases
+
+note:
+- the multi_query test failes because this is not supported by ext/mysql
+
+open todo items:
+- use a trigger to emulate setting default now()</notes>
+  </release>
+  <release>
+   <version>
+    <release>1.5.0b1</release>
+    <api>1.5.0b1</api>
+   </version>
+   <stability>
+    <release>alpha</release>
+    <api>alpha</api>
+   </stability>
+   <date>2008-03-15</date>
+   <license>BSD License</license>
+   <notes>- fixed bug #11831: createTable() now supports tables with a multi-field PRIMARY KEY
+  where one field is defined as AUTO_INCREMENT
+- request #11204: support AUTO_INCREMENT for FLOAT data type and UNSIGNED option
+  for FLOAT and DECIMAL data type [afz]
+- fixed bug #11692: value of $db-&gt;supports(&apos;transactions&apos;) changes after query [afz]
+- request #12731: added truncateTable() in the Manager module
+- request #12732: added vacuum() in the Manager module for OPTIMIZE/VACUUM TABLE abstraction
+- request #12800: added alterDatabase() in the Manager module [afz]
+- fixed quoting in createDatabase() in the Manager module
+- fixed bug #12924: correctly handle internal expected errors even with custom error handling
+- added standaloneQuery() and databaseExists()
+- request #13106: added unixtimestamp() in the Function module
+- fixed regexp in listTableConstraints() in the Manager module to list FOREIGN KEY constraints
+- fixed bug #13180: MySQL driver tells SAVEPOINT is supported for MyISAM tables
+- fixed bug #13283: replace() doesn&apos;t respect quote_identifiers option
+- request #13313: setCharSet() supports &apos;COLLATE&apos; too
+- fixed bug #13370: some capabilities depend on user options, so check them after
+  a setOption() call
+- when triggers are supported, two triggers are created to emulate ON UPDATE / ON DELETE actions
+  for FOREIGN KEY constraints. Known limitation: since mysql doesn&apos;t support multiple triggers
+  with the same action time and event for one table, if there are multiple table referencing
+  the same table, only the first one will have the triggers created.
+
+note:
+- the multi_query test failes because this is not supported by ext/mysql
+
+open todo items:
+- use a trigger to emulate setting default now()</notes>
+  </release>
+  <release>
+   <version>
+    <release>1.5.0a2</release>
+    <api>1.5.0a2</api>
+   </version>
+   <stability>
+    <release>alpha</release>
+    <api>alpha</api>
+   </stability>
+   <date>2007-12-06</date>
+   <license>BSD License</license>
+   <notes>- fixed bug #12516: error in FK constraint creation query
+- request #12012: added charset/collation support in createDatabase()
+
+note:
+- the multi_query test failes because this is not supported by ext/mysql
+
+open todo items:
+- use a trigger to emulate setting default now()</notes>
+  </release>
+  <release>
+   <version>
+    <release>1.5.0a1</release>
+    <api>1.5.0a1</api>
+   </version>
+   <stability>
+    <release>alpha</release>
+    <api>alpha</api>
+   </stability>
+   <date>2007-10-28</date>
+   <license>BSD License</license>
+   <notes>- fixed bug #10024: Added new option &apos;lob_allow_url_include&apos; (default false) to
+  [dis]allow inserting a LOB from an url (file, http, ...).
+- fixed bug #10986: Using more random statement names (request #11625)
+- fixed bug #11055: Using placeholders with := variable assignment fails [bekarau]
+- initial support for FOREIGN KEY constraints in the Manager and Reverse modules
+- request #11389: added many new MySQL 5.1 error codes in errorInfo()
+- fixed bug #11428: propagate quote() errors with invalid data types
+- fixed bug #11590: _getServerCapabilities() has to be called once per connection
+- fixed bug #11790: avoid array_diff() because it has a memory leak in PHP 5.1.x
+- fixed some E_STRICT errors with PHP5
+- fixed bug #12010: MDB2_PORTABILITY_RTRIM option was ignored
+- fixed bug #12083: createTable() in the Manager module now returns MDB2_OK on success,
+  as documented
+- fixed bug #12217: mysql_num_rows() returns FALSE on failure, not NULL (thanks to zaa@zaa.pp.ru)
+- fixed bug #12242: missing charset info in the Reverse module (patch by Carsten Wiedmann)
+- fixed bug #12269: tableInfo() in the Reverse module detect &apos;clob&apos; data type
+  as first option
+- fixed bug #12336: supply default value for NOT NULL timestamp fields
+
+note:
+- the multi_query test failes because this is not supported by ext/mysql
+
+open todo items:
+- use a trigger to emulate setting default now()</notes>
+  </release>
+  <release>
+   <version>
+    <release>1.4.1</release>
+    <api>1.4.1</api>
+   </version>
+   <stability>
+    <release>stable</release>
+    <api>stable</api>
+   </stability>
+   <date>2007-05-03</date>
+   <license>BSD License</license>
+   <notes>- fixed bug #10378: incorrect query rewrite in setLimit() when using &quot;FOR UPDATE&quot;
+  or &quot;LOCK IN SHARE MODE&quot; (thanks to priyadi) or &quot;INTO OUTFILE&quot; or &quot;INTO DUMPFILE&quot;
+- return length as &quot;precision,scale&quot; for NUMERIC and DECIMAL fields in mapNativeDatatype()
+- in getTableIndexDefinition() and getTableConstraintDefinition() in the Reverse
+  module, also return the field position in the index/constraint
+- fixed bug #10636: transactions broken in release 2.4.0 because of some properties
+  being reset (thanks to Conor Kerr)
+- fixed bug #10807: connect() Method Incorrectly Caches Connections [fornax]
+- fixed bug #10895: setLimit() does not work properly when a subquery uses LIMIT
+
+note:
+- the multi_query test failes because this is not supported by ext/mysql
+
+open todo items:
+- use a trigger to emulate setting default now()</notes>
+  </release>
+  <release>
+   <version>
+    <release>1.4.0</release>
+    <api>1.4.0</api>
+   </version>
+   <stability>
+    <release>stable</release>
+    <api>stable</api>
+   </stability>
+   <date>2007-03-13</date>
+   <license>BSD License</license>
+   <notes>- fixed bug #9283: missing support for BINARY/VARBINARY data types (thanks to Tom Hendrikx)
+- propagate errors in getTableFieldDefinition() in the Reverse module
+- implemented getTriggerDefinition() in the Reverse module (mysql &gt; 5.0.2) [experimental]
+- implemented listTableTriggers() in the Manager module (mysql &gt; 5.0.2)
+- implemented listFunctions() in the Manager module
+- setCharset() now uses &quot;SET NAMES&quot; instead of &quot;SET character_set_client&quot;
+- select the mysql database in listUsers() in the Manager module
+- added error codes for MySQL 5 (patch by Adam Harvey)
+- implemented guid() in the Function module [globally unique identifier]
+- fixed bug #10033: beginTransaction() does not know server capabilities
+- fixed bug #10057: createConstraint() returns an error when the definition is incomplete
+- request #9451: you can set charset, collation, engine and comments in createSequence()
+- implemented a fallback mechanism within getTableIndexDefinition() and
+  getTableConstraintDefinition() in the Reverse module to ignore the &apos;idxname_format&apos;
+  option and use the index name as provided in case of failure before returning
+  an error
+- fixed bug #10181: propagate error when an invalid type is passed to prepare()
+- added a &apos;nativetype_map_callback&apos; option to map native data declarations back to
+  custom data types (thanks to Andrew Hill).
+- fixed bug #10239: execute() misinterprets MySQL&apos;s user defined variables
+- phpdoc fixes
+
+note:
+- the multi_query test failes because this is not supported by ext/mysql
+
+open todo items:
+- use a trigger to emulate setting default now()</notes>
+  </release>
+  <release>
+   <version>
+    <release>1.3.0</release>
+    <api>2.3.0</api>
+   </version>
+   <stability>
+    <release>stable</release>
+    <api>stable</api>
+   </stability>
+   <date>2006-11-03</date>
+   <license>BSD License</license>
+   <notes>- added charset and collation support to field declaration
+- fixed bug #9024: typo in error checking
+- fix typos in error handling in a few places (bug #9024)
+- do not skip id generation in nextId() when creating a sequence on demand
+  because this prevents lastInsertID() from working
+- migrated to package.xml version 2
+
+note:
+- the multi_query test failes because this is not supported by ext/mysql
+- use a trigger to emulate setting default now()</notes>
+  </release>
+  <release>
+   <version>
+    <release>1.2.2</release>
+    <api>1.2.2</api>
+   </version>
+   <stability>
+    <release>stable</release>
+    <api>stable</api>
+   </stability>
+   <date>2006-09-03</date>
+   <license uri="http://www.example.com">BSD License</license>
+   <notes>- flip positions property array in prepared statement objects to make it
+  possible to optionally use the same named placeholder in multiple places
+  inside a single prepared statement
+
+note:
+- the multi_query test failes because this is not supported by ext/mysql
+- use a trigger to emulate setting default now()</notes>
+  </release>
+  <release>
+   <version>
+    <release>1.2.1</release>
+    <api>1.2.1</api>
+   </version>
+   <stability>
+    <release>stable</release>
+    <api>stable</api>
+   </stability>
+   <date>2006-08-21</date>
+   <license uri="http://www.example.com">BSD License</license>
+   <notes>- fixed issue in tableInfo() that originates in getTableFieldDefinition() which
+  led to returning incorrect type values (Bug #8291)
+- quote identifiers in the reverse module when &apos;quote_identifiers&apos; is enabled (Bug #8309)
+- use version_compare() to fix complex version comparisons (Bug #8355)
+- do not use quote() in setCharset() since it is supposed to set the charset in
+  the connection that was passed to it
+- return an error if a named placeholder name is used twice inside a single statement
+- do not list empty contraints and indexes
+- added support for &apos;primary&apos; option in createTable()
+- fixed notnull reverse engineering on mysql 4.x (Bug #8415)
+- do not set a default if type is a LOB (Request #8074)
+- if a default value is set, then we need to use VARCHAR instead of TEXT
+- removed _verifyTableType() since it just adds overhead, is hard to do reliably
+  and you will get an error if the table type is not supported anyways
+- fixed handling return values when disable_query is set in _doQuery() and _execute()
+- only call RELEASE SAVEPOINT if the server version if 5.0.3 or higher
+- increased MDB2 dependency too 2.2.1
+
+note:
+- the multi_query test failes because this is not supported by ext/mysql
+- use a trigger to emulate setting default now()</notes>
+  </release>
+  <release>
+   <version>
+    <release>1.2.0</release>
+    <api>1.2.0</api>
+   </version>
+   <stability>
+    <release>stable</release>
+    <api>stable</api>
+   </stability>
+   <date>2006-07-23</date>
+   <license uri="http://www.example.com">BSD License</license>
+   <notes>- added ability to escape wildcard characters in escape() and quote()
+- added setTransactionIsolation()
+- added savepoint support to beginTransaction(), commit() and rollback()
+- added debug() call at the end of a query/prepare/execute calling (Request #7933)
+- added context array parameter to debug() and make use of it whereever sensible
+- added optional method name parameter to raiseError() and use whereever possible
+- added ability to escape wildcard characters in escape() and quote()
+- added debug() call at the end of a query/prepare/execute calling (Request #7933)
+- added &apos;nativetype&apos; output to tableInfo() and getTableFieldDefinition()
+- added &apos;mdb2type&apos; output to getTableFieldDefinition()
+- reworked tableInfo() to use a common implementation based on getTableFieldDefinition()
+  when a table name is passed (Bug #8124)
+- fixed incorrect regex in mapNativeDatatype() (Bug #8256) (thx ioz at ionosfera dot com)
+- use old dsn when rolling back open transactions in disconnect()
+- mysql_insert_id() breaks if the prepared statement that was executed to
+  generate the ID is deallocated before (Bug #8051)</notes>
+  </release>
+  <release>
+   <version>
+    <release>1.1.0</release>
+    <api>1.1.0</api>
+   </version>
+   <stability>
+    <release>stable</release>
+    <api>stable</api>
+   </stability>
+   <date>2006-06-15</date>
+   <license uri="http://www.example.com">BSD License</license>
+   <notes>- tweaked handling of free() for prepared statements
+- return error if a prepared statement is attempted to be freed twice
+- added setCharset()
+- use setCharset() in connect()/_doConnect()
+- set transaction enabled engine as default
+- generalized quoteIdentifier() with a property
+- use general implementation of quoteIdentifier() (Bug #7738)
+- fixed warning in replace() if type is not set (Bug #7740)
+- cosmetic performance tweak in getTableFieldDefinition()
+- switched most array_key_exists() calls to !empty() to improve readability and performance
+- fixed a few edge cases and potential warnings
+- added ability to rewrite queries for query(), exec() and prepare() using a debug handler callback
+- pass limit and offset to the result object constructor in _execute() for read statements
+- check if result/connection has not yet been freed/dicsonnected before
+  attempting to free a result set(Bug #7790)
+- revert change that would prefer &apos;clob&apos; over &apos;text&apos; for TEXT fields
+  (this was breaking runtime instrospection)</notes>
+  </release>
+  <release>
+   <version>
+    <release>1.0.3</release>
+    <api>1.0.3</api>
+   </version>
+   <stability>
+    <release>stable</release>
+    <api>stable</api>
+   </stability>
+   <date>2006-05-22</date>
+   <license uri="http://www.example.com">BSD License</license>
+   <notes>- fixed unsigned handling and minor tweaks to type mapping in mapNativeDatatype()
+- use emulated prepared statements on mysql 4.0 or lower
+- properly quote query to prepare
+- added &quot;emulate_prepared&quot; option to force prepared statement emulation</notes>
+  </release>
+  <release>
+   <version>
+    <release>1.0.2</release>
+    <api>1.0.2</api>
+   </version>
+   <stability>
+    <release>stable</release>
+    <api>stable</api>
+   </stability>
+   <date>2006-05-14</date>
+   <license uri="http://www.example.com">BSD License</license>
+   <notes>- optimized listTables() and listViews()
+- optimized show related queries
+- explicitly set is_manip parameter to false for transaction debug calls
+- silently change name of primary key contraints to PRIMARY
+- added ability to hint that a constraint is a primary key in dropConstraint()
+- typo fixes in phpdoc (thx Stoyan)
+- added support for fixed and variable types for &apos;text&apos; in declarations,
+  as well as in reverse engineering (Request #1523)
+- made _doQuery() return a reference
+- added userinfo&apos;s to all raiseError calls that previously had none
+- use native prepared queries of mysql 4.1 or higher
+- added &apos;prepared_statements&apos; supported meta data setting
+- added missing supported parameter to prepare() signature</notes>
+  </release>
+  <release>
+   <version>
+    <release>1.0.1</release>
+    <api>1.0.1</api>
+   </version>
+   <stability>
+    <release>stable</release>
+    <api>stable</api>
+   </stability>
+   <date>2006-04-16</date>
+   <license uri="http://www.example.com">BSD License</license>
+   <notes>- handle qualified table names in tableInfo()
+- aligned _modifyQuery() signature and phpdoc
+- added support for tabe options in createTable() (bug ##7079)
+- added optional database parameter to listTables() and listSequences()
+- added &apos;result_introspection&apos; supported metadata support
+- properly quote table names in tableInfo() (related to bug #6573)
+- use connected_server_info in getServerVersion() as a cache cache
+- use parent::disconnect() in disconnect()
+- added support for length in integer reverse engineering
+- some fixes regarding boolean reverse engineering
+- added listViews() and hide views in listTables()</notes>
+  </release>
+  <release>
+   <version>
+    <release>1.0.0</release>
+    <api>1.0.0</api>
+   </version>
+   <stability>
+    <release>stable</release>
+    <api>stable</api>
+   </stability>
+   <date>2006-02-09</date>
+   <license uri="http://www.example.com">BSD License</license>
+   <notes>- handle null as resource when disable_query option is enabled in result object</notes>
+  </release>
+  <release>
+   <version>
+    <release>0.2.4</release>
+    <api>0.2.4</api>
+   </version>
+   <stability>
+    <release>beta</release>
+    <api>beta</api>
+   </stability>
+   <date>2006-02-05</date>
+   <license uri="http://www.example.com">BSD License</license>
+   <notes>- added support for length in integer and decimal columns
+- removed ugly hack for quote parameter in quote() since it was insufficient
+  (escaping also needs to be prevented)
+- now using TINYINT(1) by default instead of CHAR(1) for the boolean datatype (BC BREAK!)
+- typo fix in error message in createTable()
+- improved parsing in getServerInfo() (bug #6550)
+- fixed subselect emulation
+- support an arbitrary number of arguments in concat()</notes>
+  </release>
+  <release>
+   <version>
+    <release>0.2.3</release>
+    <api>0.2.3</api>
+   </version>
+   <stability>
+    <release>beta</release>
+    <api>beta</api>
+   </stability>
+   <date>2006-01-13</date>
+   <license uri="http://www.example.com">BSD License</license>
+   <notes>- explicitly pass if the module is phptype specific in all loadModule calls (bug #6226)
+- properly handle PRIMARY keys in listTableConstraints()
+- apply _isIndexName() on non primary keys in getTableConstraintDefinition()
+- fixed signature of quoteIdentifier() to make second param optional
+- fixed signature of executeStoredProc()
+- typo fixes in error handling of nextResult() and numRows() calls
+- _fixIndexName() now just attempts to remove possible formatting
+- renamed _isSequenceName() to _fixSequenceName()
+- _fixSequenceName() now just attempts to remove possible formatting, and only
+  returns a boolean if no formatting was applied when the new &quot;check&quot; parameter is set to true</notes>
+  </release>
+  <release>
+   <version>
+    <release>0.2.2</release>
+    <api>0.2.2</api>
+   </version>
+   <stability>
+    <release>beta</release>
+    <api>beta</api>
+   </stability>
+   <date>2005-12-30</date>
+   <license uri="http://www.example.com">BSD License</license>
+   <notes>- fixed typo in sub select detection</notes>
+  </release>
+  <release>
+   <version>
+    <release>0.2.1</release>
+    <api>0.2.1</api>
+   </version>
+   <stability>
+    <release>beta</release>
+    <api>beta</api>
+   </stability>
+   <date>2005-12-28</date>
+   <license uri="http://www.example.com">BSD License</license>
+   <notes>- proper quote new table name in alterTable()</notes>
+  </release>
+  <release>
+   <version>
+    <release>0.2.0</release>
+    <api>0.2.0</api>
+   </version>
+   <stability>
+    <release>beta</release>
+    <api>beta</api>
+   </stability>
+   <date>2005-12-21</date>
+   <license uri="http://www.example.com">BSD License</license>
+   <notes>- do not fix case in listUsers()
+- unified case fixing in the list*() methods
+- fixed change and rename in alterTable()
+- primary key must be called primary
+- use getConnection() to access connection property
+- split index and constraint handling
+- quote identifiers where possible inside the manager methods depending on
+  the new &apos;quote_identifier&apos; option (defaults to off)
+- refactored get*Declaration() methods to use getTypeDeclaration()
+- setting in_transaction to false on disconnect
+- hide constraints from indexes and vice versa in the list methods
+- added new Function modules to handle difference in SQL functions
+- force rollback() with open transactions on disconnect
+- fixed table renaming
+- escape floats to make sure they do not contain evil characters (bug #5608)
+- support column length in create index (mysql only feature, but a nice touch,
+  emulating it with substring is not feasible though)
+- ensure that there is a connection in the escape() method
+- split off manipulation queries into exec() method from the query() method *BC BREAK*
+- only if result_types is set to false in prepare() method the query will be
+  handled as a DML statement *BC BREAK*
+- use a proper default value if a field is set to not null in _getDeclaration*() (bug #5930)
+- added ability to determine unsigned in mapNativeDatatype()
+  (only really implemented in the mysql(i) drivers) (bug #6054)
+- use MDB2_ERROR_NOT_FOUND in getTableConstraintDefinition() and getTableIndexDefinition() (bug #6055)
+- Sync lastInsertID with the mysqli implementation
+- use lastInsertID() method in nextID()
+- added getServerVersion() and use it to determine sub select support
+- unified array structure in mapNativeDatatype() *BC BREAK*
+- added &apos;mdbtype&apos; to tableInfo() output that is generated from mapNativeDatatype()
+- changed &apos;len&apos; to &apos;length&apos; in tableInfo() output *BC BREAK*</notes>
+  </release>
+  <release>
+   <version>
+    <release>0.1.1</release>
+    <api>0.1.1</api>
+   </version>
+   <stability>
+    <release>beta</release>
+    <api>beta</api>
+   </stability>
+   <date>2005-10-16</date>
+   <license uri="http://www.example.com">BSD License</license>
+   <notes>Warning: this release features numerous BC breaks!
+
+There have been considerable improvements to the datatype, manager and reverse
+modules. Furthermore preliminary support for auto increment and primary keys
+has been added. Please note that making a field auto increment implies a single
+column primary key on this field.
+
+- increased php dependency to 4.3.0 due to the usage of the streams API since beta5
+- ensure that instance is connected before using connection property in tableInfo()
+- added support for auto increment and primary key in schema.
+- alterTable now needs the full definition to work (use getTableFieldDefinition
+ from Reverse module if you do not have a definition at hand) this eliminates the need
+ of the declaration part in the alterTable array.
+- ensure that instance is connected before using connection property in tableInfo()
+- removed support for dummy_primary_key
+- fix PHP4.4 breakage
+- moved getInsertID() into core as lastInsertID()
+- use !empty() instead of isset() in fetchRow to determine if result cols were bound or result types were set
+- moved all private fetch mode fix methods into _fixResultArrayValues() for performance reasons
+- renamed MDB2_PORTABILITY_LOWERCASE to MDB2_PORTABILITY_FIX_CASE and use &apos;field_case&apos; option to determine if to upper- or lowercase (CASE_LOWER/CASE_UPPER)
+- count() -&gt; !empty() where possible
+- use array_map() instead of array_flip(array_change_key_case(array_flip())) to fix case of array values
+- use array_key_exists() instead of isset() where possible
+- changed structure of field add/remove/change in alterTable() to match MDB2_Schema
+- removed subSelect() implementation (now in already included in common)
+- return 0 for manipulation queries when disable_query is enabled
+- tweaked handling of notnull and default in field reverse engineering
+- tweaked getTableFieldDefinition() in reverse module</notes>
+  </release>
+  <release>
+   <version>
+    <release>0.1.0</release>
+    <api>0.1.0</api>
+   </version>
+   <stability>
+    <release>beta</release>
+    <api>beta</api>
+   </stability>
+   <date>2005-04-29</date>
+   <license uri="http://www.example.com">BSD License</license>
+   <notes>first unbundled release from MDB2 core
+
+- fixed new_link support (bug #4308)
+- dont just check for isset() for boolean values in order to support
+  setting them false as well (bug #4373)
+- ensure SQL injection protection in all _quote() methods (was missing in
+  some decimal, float, time, date and timestamp implementations)
+- dont inherite from the mysqli driver anymore to prevent indirect dependency on mysqli</notes>
+  </release>
+ </changelog>
+</package>

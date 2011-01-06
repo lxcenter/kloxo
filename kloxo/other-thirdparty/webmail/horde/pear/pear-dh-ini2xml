@@ -1,0 +1,61 @@
+#!@PHP-BIN@
+<?php
+/**
+ * Converts the old-style INI-language files into XML-files that
+ * are used from version 0.14.0+.
+ * 
+ * @version     $Id: pear-dh-ini2xml 286748 2009-08-03 17:38:38Z kguest $
+ * @author      Carsten Lucke <luckec@php.net>
+ */
+
+$frame = <<<EOT
+<?xml version="1.0" encoding="ISO-8859-1" standalone="yes" ?>
+<driver-data>
+    <holidays>
+    
+        __DATA__
+        
+    </holidays>
+</driver-data>
+EOT;
+
+$template = <<<EOT
+    
+        <holiday>
+            <internal-name>__INTERNALNAME__</internal-name>
+            <translation>__TRANSLATION__</translation>
+        </holiday>
+        
+EOT;
+
+array_shift($_SERVER['argv']);
+
+if ($_SERVER['argc'] < 1) {
+    die('Call this file from command line: ini2xml.php <file-to-convert> [<file-to-convert> [...]]' . "\n");
+}
+
+foreach ($_SERVER['argv'] as $filename) {
+    $newFilename = str_replace('.ini', '.xml', $filename);
+    $contents = parse_ini_file($filename);
+    $_xml = '';
+    
+    foreach ($contents as $internalName => $translation) {
+        $_tmp = str_replace('__INTERNALNAME__', $internalName, $template);
+        $_tmp = str_replace('__TRANSLATION__', $translation, $_tmp);
+        
+        $_xml .= $_tmp;
+    }
+    
+    $c = str_replace('__DATA__', $_xml, $frame);
+    $fp = fopen($newFilename, 'w');
+    fwrite($fp, $c, strlen($c));
+    
+    
+}
+
+
+
+
+
+
+?>

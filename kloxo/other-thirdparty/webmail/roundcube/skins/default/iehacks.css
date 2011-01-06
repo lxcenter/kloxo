@@ -1,0 +1,242 @@
+
+input, textarea
+{
+  border-style: expression(this.type=='checkbox' || this.type=='radio' || this.id=='quicksearchbox' ? 'none' : 'solid');
+  border-width: expression(this.type=='checkbox' || this.type=='radio' ? '0' : '1px');
+  border-color: expression(this.type=='checkbox' || this.type=='radio' ? '' : '#666666');
+  background-color: expression(this.type=='checkbox' || this.type=='radio' ? 'transparent' : '#ffffff');
+}
+
+#login-form form
+{
+  margin-top: 0;
+}
+
+.pagenav a.buttonPas
+{
+  filter: alpha(opacity=35);
+}
+
+#message
+{
+  filter: alpha(opacity=85);
+}
+
+.popupmenu
+{
+  background-color: #ffffff;
+}
+
+#tabsbar
+{
+  width: expression((parseInt(document.documentElement.clientWidth)-240)+'px');
+}
+
+#mainscreen
+{
+  width: expression((parseInt(document.documentElement.clientWidth)-40)+'px');
+  height: expression((parseInt(document.documentElement.clientHeight)-105)+'px');
+}
+
+#folder-manager
+{
+  height: expression((parseInt(this.parentNode.offsetHeight)-105)+'px');
+}
+
+#messagetoolbar
+{
+  width: expression((parseInt(document.documentElement.clientWidth)-215)+'px');
+  z-index: 240;
+}
+
+#messagetoolbar select.mboxlist
+{
+  margin: 0 8px;
+  top: 8px;
+}
+
+#abooktoolbar a.buttonPas
+{
+  filter: alpha(opacity=35);
+  background-image: url(images/abook_toolbar.gif);
+}
+
+#messagetoolbar a.buttonPas
+{
+  filter: alpha(opacity=35);
+  background-image: url(images/mail_toolbar.gif);
+}
+
+#listcontrols a.buttonPas
+{
+  filter: alpha(opacity=35);
+}
+
+#quicksearchbar
+{
+  z-index: 250;
+}
+
+#addresslist,
+#sectionslist,
+#identities-list,
+#mailleftcontainer,
+#mailrightcontainer,
+#compose-container,
+#compose-attachments,
+#mailcontframe,
+#mailboxlist-container,
+#mailrightcontent,
+#messageframe,
+#identity-details,
+#contacts-box,
+#prefs-box
+{
+  height: expression(parseInt(this.parentNode.offsetHeight)+'px');
+}
+
+#mailrightcontainer
+{
+  width: expression((parseInt(this.parentNode.offsetWidth)-170)+'px');
+}
+
+#messagepartcontainer
+{
+  width: expression((parseInt(document.documentElement.clientWidth)-40)+'px');
+  height: expression((parseInt(document.documentElement.clientHeight)-90)+'px');
+}
+
+#mailrightcontent
+{
+  width: 100%;
+}
+
+#compose-div
+{
+  height: expression((parseInt(this.parentNode.offsetHeight)-1-parseInt(document.getElementById('compose-headers').offsetHeight))+'px');
+}
+
+#partheader
+{
+  width: expression((parseInt(document.documentElement.clientWidth)-240)+'px');
+}
+
+#subscription-table
+{
+  width: auto;
+}
+
+#messagelist
+{
+  width: inherit;
+  *width: auto; /* IE6/7 conditional hack */
+  border-collapse: collapse;
+}
+
+#messagelist thead tr td,
+#messagelist tbody tr td
+{
+  height: 18px;
+}
+
+#messagelist tbody tr.unroot td.subject
+{
+  text-decoration: underline;
+}
+
+#messageframe
+{
+  width: expression((parseInt(this.parentNode.offsetWidth)-180)+'px');
+  overflow: hidden;
+}
+
+#countcontrols
+{
+  width: 24em;
+  padding-right: 10px;
+}
+
+body.iframe 
+{
+  width: expression((parseInt(document.documentElement.clientWidth))+'px');
+}
+
+div.message-part pre,
+div.message-htmlpart pre,
+div.message-part div.pre
+{
+  word-wrap: break-word;
+}
+
+#addressscreen
+{
+  width: expression((parseInt(document.documentElement.clientWidth)-245)+'px');
+  height: expression((parseInt(document.documentElement.clientHeight)-105)+'px');
+}
+
+#contacts-table
+{
+  width: expression(document.getElementById('addresslist').clientWidth);
+}
+
+#contacts-box,
+#prefs-box
+{
+  width: expression((parseInt(this.parentNode.offsetWidth)-555)+'px');
+}
+
+#rcmdraglayer
+{
+  filter: alpha(opacity=82);
+  padding-left: 20px;
+}
+
+div.draglayercopy
+{
+  border-color: #00cc00;
+  background: url(images/messageactions.png) 0 -125px no-repeat #fff;
+}
+
+html.ie8 .draglayercopy:before
+{
+  content: "";
+  display: none;
+}
+
+ul.toolbarmenu
+{
+  margin: 0 0 -4px 0;
+}
+
+.popupmenu ul li,
+ul.toolbarmenu li
+{
+  min-width: auto;
+}
+
+.popupmenu ul li a,
+ul.toolbarmenu li a
+{
+  min-height: auto;
+}
+
+#console
+{
+  filter: alpha(opacity=80);
+}
+
+table.records-table thead tr td
+{
+  height: 19px;
+}
+
+#listmenu fieldset
+{
+  margin: 0 4px;
+  padding: 0.8em;
+}
+
+#listcontrols input
+{
+  margin-top: 2px;
+}

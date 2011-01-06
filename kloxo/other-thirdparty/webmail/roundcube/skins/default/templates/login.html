@@ -1,0 +1,48 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title><roundcube:object name="pagetitle" /></title>
+<meta name="Robots" content="noindex,nofollow" />
+<roundcube:include file="/includes/links.html" />
+</head>
+<body>
+
+<img id="logo" src="/images/roundcube_logo.png" border="0" alt="<roundcube:object name='productname' />" style="margin:0 11px" />
+
+<roundcube:object name="message" id="message" />
+
+<div id="login-form">
+<div class="boxtitle"><roundcube:label name="welcome" /></div>
+<div class="boxcontent">
+
+<form name="form" action="./" method="post">
+<roundcube:object name="loginform" form="form" autocomplete="off" />
+
+<p style="text-align:center;"><input type="submit" class="button mainaction" value="<roundcube:label name='login' />" /></p>
+
+</form>
+</div>
+</div>
+
+<roundcube:object name="preloader" images="
+    /images/icons/folders.png
+    /images/mail_footer.png
+    /images/taskicons.gif
+    /images/display/loading.gif
+    /images/pagenav.gif
+    /images/mail_toolbar.png
+    /images/searchfield.gif
+    /images/icons/glass_roll.png
+    /images/icons/reset.gif
+    /images/icons/attachment.png
+    /images/icons/dot.png
+    /images/icons/unread.png  
+
+    /images/abook_toolbar.png
+    /images/icons/glass.png
+    /images/icons/groupactions.png
+    /images/watermark.gif
+" />
+
+</body>
+</html>

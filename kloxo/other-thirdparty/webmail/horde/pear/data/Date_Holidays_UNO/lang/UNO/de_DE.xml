@@ -1,0 +1,338 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<driver-data>
+    <holidays>
+    
+            
+        <holiday>
+            <internal-name>leprosyDay</internal-name>
+            <translation>Welt-Lepra-Tag</translation>
+        </holiday>
+            
+        <holiday>
+            <internal-name>nativeTongueDay</internal-name>
+            <translation>Internationaler Tag der Muttersprache</translation>
+        </holiday>
+            
+        <holiday>
+            <internal-name>womensDay</internal-name>
+            <translation>Internationaler Frauentag</translation>
+        </holiday>
+            
+        <holiday>
+            <internal-name>worldConsumersDay</internal-name>
+            <translation>Internationaler Weltverbrauchertag</translation>
+        </holiday>
+            
+        <holiday>
+            <internal-name>intForestDay</internal-name>
+            <translation>Internationaler Tag des Waldes</translation>
+        </holiday>
+            
+        <holiday>
+            <internal-name>intDayBeatingRacism</internal-name>
+            <translation>Internationaler Tag zur Überwindung von Rassismus</translation>
+        </holiday>
+            
+        <holiday>
+            <internal-name>dayOfPoesy</internal-name>
+            <translation>Tag der Poesie</translation>
+        </holiday>
+            
+        <holiday>
+            <internal-name>dayOfWater</internal-name>
+            <translation>Tag des Wassers</translation>
+        </holiday>
+            
+        <holiday>
+            <internal-name>meteorologyDay</internal-name>
+            <translation>Welttag der Meteorologie</translation>
+        </holiday>
+            
+        <holiday>
+            <internal-name>tuberculosisDay</internal-name>
+            <translation>Welt-Tuberkulose-Tag</translation>
+        </holiday>
+            
+        <holiday>
+            <internal-name>worldsHealthDay</internal-name>
+            <translation>Weltgesundheitstag</translation>
+        </holiday>
+            
+        <holiday>
+            <internal-name>bookAndCopyrightDay</internal-name>
+            <translation>Tag des Buches und des Urheberrechts</translation>
+        </holiday>
+            
+        <holiday>
+            <internal-name>treesDay</internal-name>
+            <translation>Tag des Baumes</translation>
+        </holiday>
+            
+        <holiday>
+            <internal-name>intellectualPropertyDay</internal-name>
+            <translation>Welttag des geistigen Eigentums</translation>
+        </holiday>
+            
+        <holiday>
+            <internal-name>intDayOfWork</internal-name>
+            <translation>Internationaler Tag der Arbeit</translation>
+        </holiday>
+            
+        <holiday>
+            <internal-name>freedomOfPressDay</internal-name>
+            <translation>Tag der Pressefreiheit</translation>
+        </holiday>
+            
+        <holiday>
+            <internal-name>dayOfTheSun</internal-name>
+            <translation>Tag der Sonne</translation>
+        </holiday>
+            
+        <holiday>
+            <internal-name>intFamilyDay</internal-name>
+            <translation>Internationaler Tag der Familie</translation>
+        </holiday>
+            
+        <holiday>
+            <internal-name>telecommunicationsDay</internal-name>
+            <translation>Welt-Telekommunikationstag</translation>
+        </holiday>
+            
+        <holiday>
+            <internal-name>culturalDevelopmentDay</internal-name>
+            <translation>Internationaler Tag der kulturellen Entwicklung</translation>
+        </holiday>
+            
+        <holiday>
+            <internal-name>biologicalDiversityDay</internal-name>
+            <translation>Internationaler Tag der biologischen Vielfalt</translation>
+        </holiday>
+            
+        <holiday>
+            <internal-name>africanLiberationDay</internal-name>
+            <translation>Tag der Freiheit Afrikas</translation>
+        </holiday>
+            
+        <holiday>
+            <internal-name>unPeaceSquadsDay</internal-name>
+            <translation>Internationaler Tag der UN-Friedenstruppen</translation>
+        </holiday>
+            
+        <holiday>
+            <internal-name>nonsmokersDay</internal-name>
+            <translation>Weltnichtrauchertag</translation>
+        </holiday>
+            
+        <holiday>
+            <internal-name>farmersDay</internal-name>
+            <translation>Weltbauerntag</translation>
+        </holiday>
+            
+        <holiday>
+            <internal-name>environmentDay</internal-name>
+            <translation>Tag der Umwelt</translation>
+        </holiday>
+            
+        <holiday>
+            <internal-name>africanChildrenDay</internal-name>
+            <translation>Tag des Afrikanischen Kindes</translation>
+        </holiday>
+            
+        <holiday>
+            <internal-name>desertDay</internal-name>
+            <translation>Weltwüstentag</translation>
+        </holiday>
+            
+        <holiday>
+            <internal-name>africanFugitiveDay</internal-name>
+            <translation>Tag des afrikanischen Flüchtlings</translation>
+        </holiday>
+            
+        <holiday>
+            <internal-name>antiDrugsDay</internal-name>
+            <translation>Internationaler Tag gegen Drogen</translation>
+        </holiday>
+            
+        <holiday>
+            <internal-name>intCoopDay</internal-name>
+            <translation>Internationaler Tag der Genossenschaften</translation>
+        </holiday>
+            
+        <holiday>
+            <internal-name>populationDay</internal-name>
+            <translation>Weltbevölkerungstag</translation>
+        </holiday>
+            
+        <holiday>
+            <internal-name>indigenousPeopleDay</internal-name>
+            <translation>Internationaler Tag der indigenen Völker</translation>
+        </holiday>
+            
+        <holiday>
+            <internal-name>intYouthDay</internal-name>
+            <translation>Internationaler Tag der Jugend</translation>
+        </holiday>
+            
+        <holiday>
+            <internal-name>slaveTradeDay</internal-name>
+            <translation>Internationaler Tag der Erinnerung an Sklavenhandel und dessen Abschaffung</translation>
+        </holiday>
+            
+        <holiday>
+            <internal-name>alphabetizationDay</internal-name>
+            <translation>Welt-Alphabetisierungs-Tag</translation>
+        </holiday>
+            
+        <holiday>
+            <internal-name>ozoneLayerProtectionDay</internal-name>
+            <translation>Tag für den Schutz der Ozonschicht</translation>
+        </holiday>
+            
+        <holiday>
+            <internal-name>intPeaceDay</internal-name>
+            <translation>Internationaler Tag des Friedens</translation>
+        </holiday>
+            
+        <holiday>
+            <internal-name>tourismDay</internal-name>
+            <translation>Welttourismustag</translation>
+        </holiday>
+            
+        <holiday>
+            <internal-name>intFugitiveDay</internal-name>
+            <translation>Internationaler Tag des Flüchtlings</translation>
+        </holiday>
+            
+        <holiday>
+            <internal-name>agedPeopleDay</internal-name>
+            <translation>Internationaler Tag der älteren Menschen</translation>
+        </holiday>
+            
+        <holiday>
+            <internal-name>animalsDay</internal-name>
+            <translation>Welttierschutztag</translation>
+        </holiday>
+            
+        <holiday>
+            <internal-name>outerSpaceWeek</internal-name>
+            <translation>Beginn der Internationalen Weltraumwoche</translation>
+        </holiday>
+            
+        <holiday>
+            <internal-name>habitatDay</internal-name>
+            <translation>Welttag des Wohn- und Siedlungswesens</translation>
+        </holiday>
+            
+        <holiday>
+            <internal-name>teachersDay</internal-name>
+            <translation>Internationaler Tag des Lehrers</translation>
+        </holiday>
+            
+        <holiday>
+            <internal-name>postAssociationDay</internal-name>
+            <translation>Tag des Weltpostvereins</translation>
+        </holiday>
+            
+        <holiday>
+            <internal-name>sanityDay</internal-name>
+            <translation>Welttag der geistigen Gesundheit</translation>
+        </holiday>
+            
+        <holiday>
+            <internal-name>nourishmentDay</internal-name>
+            <translation>Welternährungstag</translation>
+        </holiday>
+            
+        <holiday>
+            <internal-name>povertyRemovalDay</internal-name>
+            <translation>Internationaler Tag zur Beseitigung der Armut</translation>
+        </holiday>
+            
+        <holiday>
+            <internal-name>unitedNationsDay</internal-name>
+            <translation>Tag der Vereinten Nationen</translation>
+        </holiday>
+            
+        <holiday>
+            <internal-name>evolvementInfoDay</internal-name>
+            <translation>Beginn der Abrüstungswoche</translation>
+        </holiday>
+            
+        <holiday>
+            <internal-name>environmentalExploitationDay</internal-name>
+            <translation>Internationaler Tag für die Verhütung der Ausbeutung der Umwelt in Kriegen und bewaffneten Konflikten</translation>
+        </holiday>
+            
+        <holiday>
+            <internal-name>toleranceDay</internal-name>
+            <translation>Internationaler Tag der Toleranz</translation>
+        </holiday>
+            
+        <holiday>
+            <internal-name>africanIndustrializationDay</internal-name>
+            <translation>Tag der Industrialisierung Afrikas</translation>
+        </holiday>
+            
+        <holiday>
+            <internal-name>worldChildrenDay</internal-name>
+            <translation>Weltkindertag</translation>
+        </holiday>
+            
+        <holiday>
+            <internal-name>televisionDay</internal-name>
+            <translation>Welttag des Fernsehens</translation>
+        </holiday>
+            
+        <holiday>
+            <internal-name>noViolenceAgainstWomen</internal-name>
+            <translation>Internationaler Tag für die Beseitigung von Gewalt gegen Frauen</translation>
+        </holiday>
+            
+        <holiday>
+            <internal-name>palestinianSolidarity</internal-name>
+            <translation>Internationaler Tag der Solidarität mit dem palästinensischen Volk</translation>
+        </holiday>
+            
+        <holiday>
+            <internal-name>worldAidsDay</internal-name>
+            <translation>Welt-AIDS-Tag</translation>
+        </holiday>
+            
+        <holiday>
+            <internal-name>againstSlaveryDay</internal-name>
+            <translation>Internationaler Tag für die Abschaffung der Sklaverei</translation>
+        </holiday>
+            
+        <holiday>
+            <internal-name>disabledPeopleDay</internal-name>
+            <translation>Internationaler Tag der Behinderten</translation>
+        </holiday>
+            
+        <holiday>
+            <internal-name>evolvementHelperDay</internal-name>
+            <translation>Internationaler Tag des Entwicklungshelfers</translation>
+        </holiday>
+            
+        <holiday>
+            <internal-name>civilAeronauticsDay</internal-name>
+            <translation>Internationaler Tag der zivilen Luftfahrt</translation>
+        </holiday>
+            
+        <holiday>
+            <internal-name>humanRightsDay</internal-name>
+            <translation>Internationaler Tag der Menschenrechte</translation>
+        </holiday>
+            
+        <holiday>
+            <internal-name>unicefDay</internal-name>
+            <translation>UNICEF-Tag</translation>
+        </holiday>
+            
+        <holiday>
+            <internal-name>migrantsDay</internal-name>
+            <translation>Internationaler Tag der Migranten</translation>
+        </holiday>
+        
+        
+    </holidays>
+</driver-data>

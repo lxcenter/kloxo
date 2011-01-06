@@ -1,0 +1,43 @@
+CHANGELOG Roundcube Webmail
+===========================
+
+- Fix handling of backslash as IMAP delimiter
+- Fix charset replacement in HTML message bodies (#1487021)
+- Fix: contact group input is empty when using rename action more than once on the same group record
+- Fix "Server Error! (Not Found)" when using utils/save-pref action (#1487023)
+- Fix handling of Thunderbird's vCards (#1487024)
+
+RELEASE 0.4.1
+-------------
+
+- Fix space-stuffing in format=flowed messages (#1487018)
+- Fix msgexport.sh now using the new imap wrapper
+- Avoid displaying password on shell (#1486947)
+- Only lower-case user name if first login attempt failed (#1486393)
+- Make alias setting in squirrelmail_usercopy plugin configurable (patch by pommi, #1487007)
+- Prevent from saving a non-existing skin path in user prefs (#1486936)
+- Improve handling of single-part messages with bogus BODYSTRUCTURE (#1486898)
+- Fix path to SQL files when using pgsql/mysqli/sqlsrv drivers (#1486902)
+- Fix upgrade script for SQLite (#1486903)
+- Fixes in SQL init script + added update script for MSSQL database
+- Remove redundant date in syslog messages (#1486945)
+- Fix contacts list page controls when a group is selected (#1486946)
+- Fix SMTP test in Installer (#1486952)
+- Fix "Select all" causes message to be opened in folder with exactly one message (#1486913)
+- Fix Tab key doesn't work in HTML editor in Google Chrome (#1486925)
+- Fix TinyMCE uses zh_CN when zh_TW locale is set (#1486929)
+- Fix TinyMCE buttons are hidden in Opera (#1486922)
+- Fix JS error on IE when trying to send HTML message with enabled spellchecker (#1486940)
+- Display inline images with known extensions and non-image content-type (#1486934)
+- Fix "Threaded" checkbox after subfolder creation (#1486928)
+- Fix timezone string in sent mail (#1486961)
+- Show disabled checkboxes for protected folders instead of dots (#1485498)
+- Added fieldsets in Identity form, added 'identity_form' hook
+- Re-added 'Close' button in upload form (#1486930, #1486823)
+- Fix handling of charsets with LATIN-* label
+- Fix messages background image handling in some cases (#1486990)
+- Fix format=flowed handling (#1486989)
+- Fix when IMAP connection fails in 'get' action session shouldn't be destroyed (#1486995)
+- Fix list_cols is not updated after column dragging (#1486999)
+- Support %z variable in host configuration options (#1487003)
+

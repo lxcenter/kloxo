@@ -1,0 +1,182 @@
+[May 27 19:03:31] Starting installation of Zend Optimizer ...
+[May 27 19:03:31] Executing: uname -s 2>/dev/null
+[May 27 19:03:31] Command has returned exit status: 0
+[May 27 19:03:31] Executing: uname -m 2>/dev/null
+[May 27 19:03:31] Command has returned exit status: 0
+[May 27 19:03:31] Executing: uname -r 2>/dev/null
+[May 27 19:03:31] Command has returned exit status: 0
+[May 27 19:03:31] Executing: uname -n 2>/dev/null
+[May 27 19:03:31] Command has returned exit status: 0
+[May 27 19:03:31] System: Linux 2.6.18-128.1.1.el5.028stab062.3 x86_64
+[May 27 19:03:31] Hostname: cetnos_64
+[May 27 19:03:31] Setting TEMP=/tmp/zend_install.15974
+[May 27 19:03:31] Creating directory: /tmp/zend_install.15974
+[May 27 19:03:31] MSGBOX: "Welcome to the Zend Optimizer 3.3.3 Installation! For more information regarding this procedure, please see the Zend Optimizer Installation Guide. "
+[May 27 19:03:31] ./dialog --clear --backtitle 'Zend Optimizer Installation' --title 'Zend Optimizer 3.3.3' --msgbox ' Welcome to the Zend Optimizer 3.3.3 Installation! For more information regarding this procedure, please see the Zend Optimizer Installation Guide. ' 0 0
+[May 27 19:03:37] Showing license: ..//LICENSE
+[May 27 19:03:37] Wrapping text from file: ..//LICENSE
+[May 27 19:03:37] Open file: /tmp/zend_install.15974/LICENSE.wrapped for writing
+[May 27 19:03:37] ./dialog --clear --backtitle 'Zend Optimizer Installation' --title 'Zend Optimizer 3.3.3' --textbox '/tmp/zend_install.15974/LICENSE.wrapped' 0 0
+[May 27 19:03:44] YESNO: IMPORTANT: BY SELECTING THE 'YES' OPTION BELOW, DOWNLOADING, INSTALLING, OR OTHERWISE USING THIS SOFTWARE, YOU ACKNOWLEDGE THAT YOU HAVE READ THE LICENSE AGREEMENT, AND THAT YOU AGREE TO BE BOUND BY ITS TERMS AND CONDITIONS. IF YOU DO NOT AGREE TO ALL OF THE TERMS AND CONDITIONS OF SUCH AGREEMENT, YOU ARE NOT AN AUTHORIZED USER OF THE SOFTWARE AND IT IS YOUR RESPONSIBILITY TO EXIT THIS DOWNLOADING/INSTALLATION PROCESS WITHOUT DOWNLOADING OR INSTALLING THE SOFTWARE BY SELECTING THE 'NO' OPTION BELOW, AND TO DELETE THE SOFTWARE FROM YOUR COMPUTER. Do you accept the terms of this license?
+[May 27 19:03:44] ./dialog --clear --backtitle 'Zend Optimizer Installation' --title 'Zend Optimizer 3.3.3' --yesno ' IMPORTANT: BY SELECTING THE '\''YES'\'' OPTION BELOW, DOWNLOADING, INSTALLING, OR OTHERWISE USING THIS SOFTWARE, YOU ACKNOWLEDGE THAT YOU HAVE READ THE LICENSE AGREEMENT, AND THAT YOU AGREE TO BE BOUND BY ITS TERMS AND CONDITIONS. IF YOU DO NOT AGREE TO ALL OF THE TERMS AND CONDITIONS OF SUCH AGREEMENT, YOU ARE NOT AN AUTHORIZED USER OF THE SOFTWARE AND IT IS YOUR RESPONSIBILITY TO EXIT THIS DOWNLOADING/INSTALLATION PROCESS WITHOUT DOWNLOADING OR INSTALLING THE SOFTWARE BY SELECTING THE '\''NO'\'' OPTION BELOW, AND TO DELETE THE SOFTWARE FROM YOUR COMPUTER. Do you accept the terms of this license? ' 0 0
+[May 27 19:03:47] User choose: YES
+[May 27 19:03:47] Choosing install prefix ...
+[May 27 19:03:47] ASK: Please specify the location for installing Zend Optimizer: 
+[May 27 19:03:47] ./dialog --clear --backtitle 'Zend Optimizer Installation' --title 'Zend Optimizer 3.3.3' --inputbox ' Please specify the location for installing Zend Optimizer: ' 0 0 '/usr/local/Zend'
+[May 27 19:04:16] INPUTBOX: /usr/local/Zend
+[May 27 19:04:16] Trying to guess PHP.ini location ...
+[May 27 19:04:16] Found php.ini in: /etc
+[May 27 19:04:16] ASK: Confirm the location of your php.ini file
+[May 27 19:04:16] ./dialog --clear --backtitle 'Zend Optimizer Installation' --title 'Zend Optimizer 3.3.3' --inputbox ' Confirm the location of your php.ini file ' 0 0 '/etc'
+[May 27 19:04:19] INPUTBOX: /etc
+[May 27 19:04:19] Confirmed the location of php.ini at: /etc
+[May 27 19:04:19] Reading PHP.ini: /etc/php.ini
+[May 27 19:04:19] Creating directory: /tmp/zend_install.15974/saved
+[May 27 19:04:19] Open file: /tmp/zend_install.15974/saved/_etc_php.ini for writing
+[May 27 19:04:19] YESNO: Are you using Apache Web server?
+[May 27 19:04:19] ./dialog --clear --backtitle 'Zend Optimizer Installation' --title 'Zend Optimizer 3.3.3' --yesno ' Are you using Apache Web server? ' 0 0
+[May 27 19:04:23] User choose: YES
+[May 27 19:04:23] Trying to guess Apache executable file ...
+[May 27 19:04:23] ASK: Specify the full path to the Apache control utility (apachectl)
+[May 27 19:04:23] ./dialog --clear --backtitle 'Zend Optimizer Installation' --title 'Zend Optimizer 3.3.3' --inputbox ' Specify the full path to the Apache control utility (apachectl) ' 0 0 '/usr/sbin/apachectl'
+[May 27 19:04:25] INPUTBOX: /usr/sbin/apachectl
+[May 27 19:04:26] Executing: /usr/bin/file -bi /usr/sbin/apachectl 2>/dev/null
+[May 27 19:04:26] Command has returned exit status: 0
+[May 27 19:04:26] Found apachectl: /usr/sbin/apachectl
+[May 27 19:04:26] Found httpd: /usr/sbin/httpd
+[May 27 19:04:26] Executing: /usr/sbin/httpd -V 2>/dev/null
+[May 27 19:04:26] Command has returned exit status: 0
+[May 27 19:04:26] Guessed from Apache executable: HTTPD_ROOT=/etc/httpd
+[May 27 19:04:26] Guessed from Apache executable: APACHE_VERSION=2
+[May 27 19:04:26] Guessed from Apache executable: ERROR_LOG=/etc/httpd/logs/error_log
+[May 27 19:04:26] Guessed from Apache executable: APACHE_CONFIG=/etc/httpd/conf/httpd.conf
+[May 27 19:04:26] Guessed from Apache executable: DEFAULT_PIDLOG=/etc/httpd/logs/httpd.pid
+[May 27 19:04:26] Executing: /usr/sbin/httpd -l 2>/dev/null
+[May 27 19:04:26] Command has returned exit status: 0
+[May 27 19:04:26] Executing: /usr/sbin/httpd -V 2>/dev/null
+[May 27 19:04:26] Command has returned exit status: 0
+[May 27 19:04:26] Executing: /usr/sbin/httpd -l 2>/dev/null
+[May 27 19:04:26] Command has returned exit status: 0
+[May 27 19:04:26] Detecting PHP version ...
+[May 27 19:04:26] Opening Apache configuration file.
+[May 27 19:04:26] Found "Include" directive in /etc/httpd/conf/httpd.conf: /etc/httpd/conf.d/php.conf
+[May 27 19:04:26] Found "Include" directive in /etc/httpd/conf/httpd.conf: /etc/httpd/conf.d/proxy_ajp.conf
+[May 27 19:04:26] Found "Include" directive in /etc/httpd/conf/httpd.conf: /etc/httpd/conf.d/swtune.conf
+[May 27 19:04:26] Found "Include" directive in /etc/httpd/conf/httpd.conf: /etc/httpd/conf.d/welcome.conf
+[May 27 19:04:26] Guessed from Apache httpd.conf: USER=apache
+[May 27 19:04:26] Guessed from Apache httpd.conf: PORT=80
+[May 27 19:04:26] Guessed from Apache httpd.conf: GROUP=apache
+[May 27 19:04:26] Guessed from Apache httpd.conf: MaxClients=256
+[May 27 19:04:26] Guessed from Apache httpd.conf: PidFile=/etc/httpd/run/httpd.pid
+[May 27 19:04:26] Guessed from Apache httpd.conf: DOCUMENT_ROOT=/var/www/html
+[May 27 19:04:26] Guessed from Apache httpd.conf: GLOBAL_DOCUMENT_ROOT=/var/www/html
+[May 27 19:04:26] Guessed from Apache httpd.conf: APACHE_LIBEXEC=/etc/httpd/modules
+[May 27 19:04:26] Guessed from Apache httpd.conf: PHP_PATH=/etc/httpd/modules/libphp5.so
+[May 27 19:04:26] Guessed from Apache httpd.conf: PHP_TYPE=module
+[May 27 19:04:26] Executing: /usr/bin/strings /etc/httpd/modules/libphp5.so
+[May 27 19:04:26] Command has returned exit status: 0
+[May 27 19:04:29] Detected PHP version: 5.1.x
+[May 27 19:04:29] Gathering components info ...
+[May 27 19:04:29] Unlinking: /usr/local/Zend/doc
+[May 27 19:04:29] Executing: "mkdir -p '/usr/local/Zend/doc'" (status: 0)
+[May 27 19:04:29] Copying: ../data/doc/Zend_Optimizer_User_Guide.pdf to: /usr/local/Zend/doc/Zend_Optimizer_User_Guide.pdf
+[May 27 19:04:29] Setting permissions on /usr/local/Zend/doc/Zend_Optimizer_User_Guide.pdf: mode=100644
+[May 27 19:04:29] Unlinking: /usr/local/Zend/bin
+[May 27 19:04:29] Executing: "mkdir -p '/usr/local/Zend/bin'" (status: 0)
+[May 27 19:04:29] Copying: ../data/zendid to: /usr/local/Zend/bin/zendid
+[May 27 19:04:29] Setting permissions on /usr/local/Zend/bin/zendid: mode=100755
+[May 27 19:04:29] Unlinking: /usr/local/Zend/lib
+[May 27 19:04:29] Executing: "mkdir -p '/usr/local/Zend/lib'" (status: 0)
+[May 27 19:04:29] Copying: ../data/ZendExtensionManager.so to: /usr/local/Zend/lib/ZendExtensionManager.so
+[May 27 19:04:29] Setting permissions on /usr/local/Zend/lib/ZendExtensionManager.so: mode=100755
+[May 27 19:04:29] Unlinking: /usr/local/Zend/etc
+[May 27 19:04:29] Executing: "mkdir -p '/usr/local/Zend/etc'" (status: 0)
+[May 27 19:04:29] Copying: ../data/poweredbyoptimizer.gif to: /usr/local/Zend/etc/poweredbyoptimizer.gif
+[May 27 19:04:29] Setting permissions on /usr/local/Zend/etc/poweredbyoptimizer.gif: mode=100644
+[May 27 19:04:29] Copying: ../README-ZendOptimizer to: /usr/local/Zend/doc/README-ZendOptimizer
+[May 27 19:04:29] Setting permissions on /usr/local/Zend/doc/README-ZendOptimizer: mode=100644
+[May 27 19:04:29] Copying: ../EULA-ZendOptimizer to: /usr/local/Zend/doc/EULA-ZendOptimizer
+[May 27 19:04:29] Setting permissions on /usr/local/Zend/doc/EULA-ZendOptimizer: mode=100644
+[May 27 19:04:29] Unlinking: /usr/local/Zend/lib/Optimizer-3.3.3/php-4.2.0
+[May 27 19:04:29] Executing: "mkdir -p '/usr/local/Zend/lib/Optimizer-3.3.3/php-4.2.0'" (status: 0)
+[May 27 19:04:29] Copying: ../data/4_2_0_comp/ZendOptimizer.so to: /usr/local/Zend/lib/Optimizer-3.3.3/php-4.2.0/ZendOptimizer.so
+[May 27 19:04:29] Setting permissions on /usr/local/Zend/lib/Optimizer-3.3.3/php-4.2.0/ZendOptimizer.so: mode=100755
+[May 27 19:04:29] Unlinking: /usr/local/Zend/lib/Optimizer-3.3.3/php-4.2.x
+[May 27 19:04:29] Executing: "mkdir -p '/usr/local/Zend/lib/Optimizer-3.3.3/php-4.2.x'" (status: 0)
+[May 27 19:04:29] Copying: ../data/4_2_x_comp/ZendOptimizer.so to: /usr/local/Zend/lib/Optimizer-3.3.3/php-4.2.x/ZendOptimizer.so
+[May 27 19:04:29] Setting permissions on /usr/local/Zend/lib/Optimizer-3.3.3/php-4.2.x/ZendOptimizer.so: mode=100755
+[May 27 19:04:29] Unlinking: /usr/local/Zend/lib/Optimizer-3.3.3/php-4.3.x
+[May 27 19:04:29] Executing: "mkdir -p '/usr/local/Zend/lib/Optimizer-3.3.3/php-4.3.x'" (status: 0)
+[May 27 19:04:29] Copying: ../data/4_3_x_comp/ZendOptimizer.so to: /usr/local/Zend/lib/Optimizer-3.3.3/php-4.3.x/ZendOptimizer.so
+[May 27 19:04:29] Setting permissions on /usr/local/Zend/lib/Optimizer-3.3.3/php-4.3.x/ZendOptimizer.so: mode=100755
+[May 27 19:04:29] Unlinking: /usr/local/Zend/lib/Optimizer_TS-3.3.3/php-4.3.x
+[May 27 19:04:29] Executing: "mkdir -p '/usr/local/Zend/lib/Optimizer_TS-3.3.3/php-4.3.x'" (status: 0)
+[May 27 19:04:29] Copying: ../data/4_3_x_comp/TS/ZendOptimizer.so to: /usr/local/Zend/lib/Optimizer_TS-3.3.3/php-4.3.x/ZendOptimizer.so
+[May 27 19:04:29] Setting permissions on /usr/local/Zend/lib/Optimizer_TS-3.3.3/php-4.3.x/ZendOptimizer.so: mode=100755
+[May 27 19:04:29] Copying: ../data/ZendExtensionManager_TS.so to: /usr/local/Zend/lib/ZendExtensionManager_TS.so
+[May 27 19:04:29] Setting permissions on /usr/local/Zend/lib/ZendExtensionManager_TS.so: mode=100755
+[May 27 19:04:29] Unlinking: /usr/local/Zend/lib/Optimizer-3.3.3/php-4.4.x
+[May 27 19:04:29] Executing: "mkdir -p '/usr/local/Zend/lib/Optimizer-3.3.3/php-4.4.x'" (status: 0)
+[May 27 19:04:29] Copying: ../data/4_4_x_comp/ZendOptimizer.so to: /usr/local/Zend/lib/Optimizer-3.3.3/php-4.4.x/ZendOptimizer.so
+[May 27 19:04:29] Setting permissions on /usr/local/Zend/lib/Optimizer-3.3.3/php-4.4.x/ZendOptimizer.so: mode=100755
+[May 27 19:04:29] Unlinking: /usr/local/Zend/lib/Optimizer_TS-3.3.3/php-4.4.x
+[May 27 19:04:29] Executing: "mkdir -p '/usr/local/Zend/lib/Optimizer_TS-3.3.3/php-4.4.x'" (status: 0)
+[May 27 19:04:29] Copying: ../data/4_4_x_comp/TS/ZendOptimizer.so to: /usr/local/Zend/lib/Optimizer_TS-3.3.3/php-4.4.x/ZendOptimizer.so
+[May 27 19:04:29] Setting permissions on /usr/local/Zend/lib/Optimizer_TS-3.3.3/php-4.4.x/ZendOptimizer.so: mode=100755
+[May 27 19:04:29] Unlinking: /usr/local/Zend/lib/Optimizer-3.3.3/php-5.0.x
+[May 27 19:04:29] Executing: "mkdir -p '/usr/local/Zend/lib/Optimizer-3.3.3/php-5.0.x'" (status: 0)
+[May 27 19:04:29] Copying: ../data/5_0_x_comp/ZendOptimizer.so to: /usr/local/Zend/lib/Optimizer-3.3.3/php-5.0.x/ZendOptimizer.so
+[May 27 19:04:29] Setting permissions on /usr/local/Zend/lib/Optimizer-3.3.3/php-5.0.x/ZendOptimizer.so: mode=100755
+[May 27 19:04:29] Unlinking: /usr/local/Zend/lib/Optimizer_TS-3.3.3/php-5.0.x
+[May 27 19:04:29] Executing: "mkdir -p '/usr/local/Zend/lib/Optimizer_TS-3.3.3/php-5.0.x'" (status: 0)
+[May 27 19:04:29] Copying: ../data/5_0_x_comp/TS/ZendOptimizer.so to: /usr/local/Zend/lib/Optimizer_TS-3.3.3/php-5.0.x/ZendOptimizer.so
+[May 27 19:04:29] Setting permissions on /usr/local/Zend/lib/Optimizer_TS-3.3.3/php-5.0.x/ZendOptimizer.so: mode=100755
+[May 27 19:04:29] Unlinking: /usr/local/Zend/lib/Optimizer-3.3.3/php-5.1.x
+[May 27 19:04:29] Executing: "mkdir -p '/usr/local/Zend/lib/Optimizer-3.3.3/php-5.1.x'" (status: 0)
+[May 27 19:04:29] Copying: ../data/5_1_x_comp/ZendOptimizer.so to: /usr/local/Zend/lib/Optimizer-3.3.3/php-5.1.x/ZendOptimizer.so
+[May 27 19:04:29] Setting permissions on /usr/local/Zend/lib/Optimizer-3.3.3/php-5.1.x/ZendOptimizer.so: mode=100755
+[May 27 19:04:29] Unlinking: /usr/local/Zend/lib/Optimizer_TS-3.3.3/php-5.1.x
+[May 27 19:04:29] Executing: "mkdir -p '/usr/local/Zend/lib/Optimizer_TS-3.3.3/php-5.1.x'" (status: 0)
+[May 27 19:04:29] Copying: ../data/5_1_x_comp/TS/ZendOptimizer.so to: /usr/local/Zend/lib/Optimizer_TS-3.3.3/php-5.1.x/ZendOptimizer.so
+[May 27 19:04:29] Setting permissions on /usr/local/Zend/lib/Optimizer_TS-3.3.3/php-5.1.x/ZendOptimizer.so: mode=100755
+[May 27 19:04:29] Unlinking: /usr/local/Zend/lib/Optimizer-3.3.3/php-5.2.x
+[May 27 19:04:29] Executing: "mkdir -p '/usr/local/Zend/lib/Optimizer-3.3.3/php-5.2.x'" (status: 0)
+[May 27 19:04:29] Copying: ../data/5_2_x_comp/ZendOptimizer.so to: /usr/local/Zend/lib/Optimizer-3.3.3/php-5.2.x/ZendOptimizer.so
+[May 27 19:04:29] Setting permissions on /usr/local/Zend/lib/Optimizer-3.3.3/php-5.2.x/ZendOptimizer.so: mode=100755
+[May 27 19:04:29] Unlinking: /usr/local/Zend/lib/Optimizer_TS-3.3.3/php-5.2.x
+[May 27 19:04:29] Executing: "mkdir -p '/usr/local/Zend/lib/Optimizer_TS-3.3.3/php-5.2.x'" (status: 0)
+[May 27 19:04:29] Copying: ../data/5_2_x_comp/TS/ZendOptimizer.so to: /usr/local/Zend/lib/Optimizer_TS-3.3.3/php-5.2.x/ZendOptimizer.so
+[May 27 19:04:29] Setting permissions on /usr/local/Zend/lib/Optimizer_TS-3.3.3/php-5.2.x/ZendOptimizer.so: mode=100755
+[May 27 19:04:29] Added new extension to php.ini: zend_extension=/usr/local/Zend/lib/ZendExtensionManager.so 
+[May 27 19:04:29] Added new line to php.ini: zend_extension_manager.optimizer=/usr/local/Zend/lib/Optimizer-3.3.3 
+[May 27 19:04:29] Added new line to php.ini: zend_extension_manager.optimizer_ts=/usr/local/Zend/lib/Optimizer_TS-3.3.3 
+[May 27 19:04:29] Added new extension to php.ini: zend_extension_ts=/usr/local/Zend/lib/ZendExtensionManager_TS.so 
+[May 27 19:04:29] Added new line to php.ini: zend_optimizer.version=3.3.3 
+[May 27 19:04:29] PHP.ini re-ordered
+[May 27 19:04:29] Backing-up file: /etc/php.ini
+[May 27 19:04:29] Copying: /etc/php.ini to: /etc/php.ini-zend_optimizer.bak
+[May 27 19:04:29] Setting permissions on /etc/php.ini-zend_optimizer.bak: mode=100644
+[May 27 19:04:29] Saving PHP.ini file: /etc/php.ini
+[May 27 19:04:29] Open file: /etc/php.ini for writing
+[May 27 19:04:29] Relocating php.ini from: /etc/php.ini to: /usr/local/Zend/etc/php.ini
+[May 27 19:04:29] Moving: /etc/php.ini to: /usr/local/Zend/etc/php.ini
+[May 27 19:04:29] Unlinking: /etc/php.ini
+[May 27 19:04:29] Unlinking: /etc/php.ini
+[May 27 19:04:29] Symlinking /etc/php.ini -> /usr/local/Zend/etc/php.ini
+[May 27 19:04:29] MSGBOX: "The following configuration changes have been made: - The php.ini file has been relocated from /etc to /usr/local/Zend/etc - A symbolic link for the php.ini file has been created in /etc. - The original php.ini was backed up to /etc/php.ini-zend_optimizer.bak "
+[May 27 19:04:29] ./dialog --clear --backtitle 'Zend Optimizer Installation' --title 'Zend Optimizer 3.3.3' --msgbox ' The following configuration changes have been made: - The php.ini file has been relocated from /etc to /usr/local/Zend/etc - A symbolic link for the php.ini file has been created in /etc. - The original php.ini was backed up to /etc/php.ini-zend_optimizer.bak ' 0 0
+[May 27 19:04:34] MSGBOX: "The installation has completed successfully. Zend Optimizer is now ready for use. You must restart your Web server for the modifications to take effect."
+[May 27 19:04:34] ./dialog --clear --backtitle 'Zend Optimizer Installation' --title 'Zend Optimizer 3.3.3' --msgbox ' The installation has completed successfully. Zend Optimizer is now ready for use. You must restart your Web server for the modifications to take effect. ' 0 0
+[May 27 19:04:36] YESNO: Restart the Web server now?
+[May 27 19:04:36] ./dialog --clear --backtitle 'Zend Optimizer Installation' --title 'Zend Optimizer 3.3.3' --yesno ' Restart the Web server now? ' 0 0
+[May 27 19:04:38] User choose: YES
+[May 27 19:04:38] Trying to restart Apache ...
+[May 27 19:04:38] Executing: "/usr/sbin/apachectl stop 1>/dev/null" (status: 0)
+[May 27 19:04:42] Executing: "/usr/sbin/apachectl start 1>/dev/null" (status: 0)
+[May 27 19:04:46] Executing: "kill -0 16073 1>/dev/null" (status: 0)
+[May 27 19:04:48] Executing: "kill -0 16073 1>/dev/null" (status: 0)
+[May 27 19:04:48] MSGBOX: "Apache has restarted successfully."
+[May 27 19:04:48] ./dialog --clear --backtitle 'Zend Optimizer Installation' --title 'Zend Optimizer 3.3.3' --msgbox ' Apache has restarted successfully. ' 0 0
+[May 27 19:04:50] Cleaning up ...
+[May 27 19:04:50] Unlinking: /usr/local/Zend/logs
+[May 27 19:04:50] Executing: "mkdir -p '/usr/local/Zend/logs'" (status: 0)

@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<driver-data>
+    <holidays>
+    
+            
+        <holiday>
+            <internal-name>jesusCircumcision</internal-name>
+            <translation>Circumcision of Jesus</translation>
+        </holiday>
+            
+        <holiday>
+            <internal-name>epiphany</internal-name>
+            <translation>Epiphany</translation>
+        </holiday>
+            
+        <holiday>
+            <internal-name>mariaCleaning</internal-name>
+            <translation>Cleaning of Mary</translation>
+        </holiday>
+            
+        <holiday>
+            <internal-name>josefsDay</internal-name>
+            <translation>Joseph's Day</translation>
+        </holiday>
+            
+        <holiday>
+            <internal-name>mariaAnnouncement</internal-name>
+            <translation>Announcement of Mary</translation>
+        </holiday>
+            
+        <holiday>
+            <internal-name>easter</internal-name>
+            <translation>Easter Sunday</translation>
+        </holiday>
+            
+        <holiday>
+            <internal-name>palmSunday</internal-name>
+            <translation>Palm Sunday</translation>
+        </holiday>
+            
+        <holiday>
+            <internal-name>passionSunday</internal-name>
+            <translation>Passion Sunday</translation>
+        </holiday>
+            
+        <holiday>
+            <internal-name>painfulFriday</internal-name>
+            <translation>Painful Friday</translation>
+        </holiday>
+            
+        <holiday>
+            <internal-name>whiteSunday</internal-name>
+            <translation>White Sunday</translation>
+        </holiday>
+            
+        <holiday>
+            <internal-name>ashWednesday</internal-name>
+            <translation>Ash Wednesday</translation>
+        </holiday>
+            
+        <holiday>
+            <internal-name>goodFriday</internal-name>
+            <translation>Good Friday</translation>
+        </holiday>
+            
+        <holiday>
+            <internal-name>greenThursday</internal-name>
+            <translation>Green Thursday</translation>
+        </holiday>
+            
+        <holiday>
+            <internal-name>easterMonday</internal-name>
+            <translation>Easter Monday</translation>
+        </holiday>
+            
+        <holiday>
+            <internal-name>whitsun</internal-name>
+            <translation>Whitsun</translation>
+        </holiday>
+            
+        <holiday>
+            <internal-name>requestSunday</internal-name>
+            <translation>Request Sunday</translation>
+        </holiday>
+            
+        <holiday>
+            <internal-name>ascensionDay</internal-name>
+            <translation>Ascension Day</translation>
+        </holiday>
+            
+        <holiday>
+            <internal-name>whitMonday</internal-name>
+            <translation>Whit Monday</translation>
+        </holiday>
+            
+        <holiday>
+            <internal-name>mariaHaunting</internal-name>
+            <translation>Haunting of Mary</translation>
+        </holiday>
+            
+        <holiday>
+            <internal-name>trinitatis</internal-name>
+            <translation>Trinitatis</translation>
+        </holiday>
+            
+        <holiday>
+            <internal-name>corpusChristi</internal-name>
+            <translation>Feast of Corpus Christi</translation>
+        </holiday>
+            
+        <holiday>
+            <internal-name>heartJesus</internal-name>
+            <translation>Heart of Jesus celebration</translation>
+        </holiday>
+            
+        <holiday>
+            <internal-name>johannisCelebration</internal-name>
+            <translation>Johannis celebration</translation>
+        </holiday>
+            
+        <holiday>
+            <internal-name>petrusAndPaulus</internal-name>
+            <translation>Petrus and Paulus</translation>
+        </holiday>
+            
+        <holiday>
+            <internal-name>mariaAscension</internal-name>
+            <translation>Ascension of Mary</translation>
+        </holiday>
+            
+        <holiday>
+            <internal-name>crossRaising</internal-name>
+            <translation>Celebration of raising the Cross</translation>
+        </holiday>
+            
+        <holiday>
+            <internal-name>thanksGiving</internal-name>
+            <translation>Thanks Giving</translation>
+        </holiday>
+            
+        <holiday>
+            <internal-name>kermis</internal-name>
+            <translation>Kermis</translation>
+        </holiday>
+            
+        <holiday>
+            <internal-name>reformationDay</internal-name>
+            <translation>Reformation Day</translation>
+        </holiday>
+            
+        <holiday>
+            <internal-name>allSaintsDay</internal-name>
+            <translation>All Saints' Day</translation>
+        </holiday>
+            
+        <holiday>
+            <internal-name>allSoulsDay</internal-name>
+            <translation>All Souls' Day</translation>
+        </holiday>
+            
+        <holiday>
+            <internal-name>martinsDay</internal-name>
+            <translation>Martin's Day</translation>
+        </holiday>
+            
+        <holiday>
+            <internal-name>advent4</internal-name>
+            <translation>4th Advent</translation>
+        </holiday>
+            
+        <holiday>
+            <internal-name>advent1</internal-name>
+            <translation>1st Advent</translation>
+        </holiday>
+            
+        <holiday>
+            <internal-name>advent2</internal-name>
+            <translation>2nd Advent</translation>
+        </holiday>
+            
+        <holiday>
+            <internal-name>advent3</internal-name>
+            <translation>3rd Advent</translation>
+        </holiday>
+            
+        <holiday>
+            <internal-name>deathSunday</internal-name>
+            <translation>Death' Sunday</translation>
+        </holiday>
+            
+        <holiday>
+            <internal-name>dayOfRepentance</internal-name>
+            <translation>Day of Repentance</translation>
+        </holiday>
+            
+        <holiday>
+            <internal-name>stNicholasDay</internal-name>
+            <translation>St. Nicholas' Day</translation>
+        </holiday>
+            
+        <holiday>
+            <internal-name>mariaConception</internal-name>
+            <translation>Conception of Mary</translation>
+        </holiday>
+            
+        <holiday>
+            <internal-name>christmasEve</internal-name>
+            <translation>Christmas Eve</translation>
+        </holiday>
+            
+        <holiday>
+            <internal-name>christmasDay</internal-name>
+            <translation>Christmas Day</translation>
+        </holiday>
+            
+        <holiday>
+            <internal-name>boxingDay</internal-name>
+            <translation>Boxing Day</translation>
+        </holiday>
+            
+        <holiday>
+            <internal-name>newYearsEve</internal-name>
+            <translation>New Year's Eve</translation>
+        </holiday>
+        
+        
+    </holidays>
+</driver-data>
