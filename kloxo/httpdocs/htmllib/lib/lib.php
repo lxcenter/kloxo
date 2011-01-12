@@ -796,6 +796,13 @@ function execinstallappPhp($domain, $appname, $cmd)
 	dprint("\n*************************************************************************\n");
 }
 
+function execinstallSoftPhp($domain, $appname, $cmd)
+{
+	// Temporary fix for installapp #394
+	// TODO: This can be removed in the future
+	execinstallappPhp($domain, $appname, $cmd);
+}
+
 
 function update_self()
 {
