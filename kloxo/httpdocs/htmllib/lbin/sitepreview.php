@@ -30,7 +30,7 @@ $request = $_SERVER['REQUEST_URI'];
 
 if (!csa($request, "sitepreview/")) {
 	header("HTTP/1.0 404 Not Found");
-	print("404--- <br> ");
+	print("404<br>Action: sitepreview<br>Page/URL not found! <br>");
 	exit;
 }
 
