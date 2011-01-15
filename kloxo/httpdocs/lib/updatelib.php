@@ -585,16 +585,20 @@ function installChooser()
 
 function installRoundCube()
 {
-	global $gbl, $sgbl, $login, $ghtml; 
+	global $sgbl;
+
+	$path_webmail = "$sgbl->__path_kloxo_httpd_root/webmail";
+	$path_roundcube = "$sgbl->__path_kloxo_httpd_root/webmail/roundcube";
 
 	PrepareRoundCubeDb();
-	if (lxfile_exists("/home/kloxo/httpd/webmail/roundcube/")) {
-		system("chown -R lxlabs:lxlabs /home/kloxo/httpd/webmail/");
-		@ system("rm -f /tmp/horde.log");
-		return;
+
+	if (lxfile_exists($path_webmail)) {
+		lxfile_generic_chown_rec($path_webmail, 'lxlabs:lxlabs');
+		lxfile_generic_chown_rec("$path_roundcube/logs", 'apache:apache');
+		lxfile_generic_chown_rec("$path_roundcube/temp", 'apache:apache');
+		lxfile_rm('/tmp/horde.log');
 	}
 }
-
 
 function fix_suexec()
 {
