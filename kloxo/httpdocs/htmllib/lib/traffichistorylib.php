@@ -21,10 +21,33 @@ function isSelect()
 {
 	return false;
 }
+
 static function createListAlist($parent, $class)
 {
 	$alist[] = "a=list&c=$class";
 	return $alist;
+}
+
+static function defaultSort()
+{
+	return "nname";
+}
+
+static function defaultSortDir()
+{
+	return 'desc';
+}
+
+function display($var)
+{
+	if ($var == 'month') {
+		$month = date('n', $this->$var);
+		$month = intToMonth($month);
+		$year = date('Y', $this->$var);
+		return "$year $month";
+	}
+
+	return parent::display($var);
 }
 
 function getTrafficRealObject()
@@ -47,9 +70,7 @@ function getAllTrafficMonthly()
 	}
 	
 	return $trafficlist;
-}	
-
-static function defaultSortdir() { return 'desc'; }
+}
 
 static function getTrafficMonthly($object, $trafficname, $extra_var)  
 {
@@ -67,22 +88,19 @@ static function getTrafficMonthly($object, $trafficname, $extra_var)
 	$smonth = @ strftime("%m", $start);
 	$emonth = @ strftime("%m", $end);
 	$name = $object->nname;
-  
 
-	$thmonth = @ date("n");
+	$month = @ date("n");
 	$year = @ date("Y");
 	$count = 0;
-	for($i = $thmonth ; $i != ($thmonth + 1);) {
-		$count++;
-		if ($count > 14) { break; }
-
-		$totallist[] = self::getMonthTotal($tobjectlist, $i, $year, $extra_var); 
-		if ($i == 1) {
-			$i = 13;
-			$year = $year - 1;
+	while ($count < 13) {
+		$totallist[] = self::getMonthTotal($tobjectlist, $month, $year, $extra_var);
+		if ($month == 1) {
+			$month = 12;
+			$year--;
+		} else {
+			$month--;
 		}
-		$i--;
-
+		$count++;
 	}
 
 	return $totallist;
@@ -114,9 +132,10 @@ static function getMonthTotal($list, $month, $year, $extra_var)
 			$nname = $oldtime;
 		}
 	}
-	$montht = intToMonth($month);
-	$res['nname'] = "$year.$month";
-	$res['month'] = "$montht $year";
+
+	$timestamp = mktime(0, 0, 0, $month, 1, $year);
+	$res['nname'] = $timestamp;
+	$res['month'] = $timestamp;
 	$res['traffic_usage'] = $tot;
 
 	return $res;
