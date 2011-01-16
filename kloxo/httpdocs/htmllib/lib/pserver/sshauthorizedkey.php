@@ -7,7 +7,6 @@ static $__desc_nname	 = array("n", "",  "key");
 static $__desc_key	 = array("n", "",  "key");
 static $__desc_type	 = array("n", "",  "type");
 static $__desc_hostname	 = array("n", "",  "hostname");
-static $__desc_type_v_lxlabs	 = array("", "",  "lxlabs_authorized_key");
 static $__desc_type_v_snormal	 = array("", "",  "authorized_key");
 static $__desc_full_key	 = array("t", "",  "full_key");
 
@@ -18,9 +17,6 @@ static function createListAlist($parent, $class)
 {
 	$alist[] = "a=list&c=$class";
 	$alist[] = "a=addform&c=$class&dta[var]=type&dta[val]=snormal";
-	if ($parent->is__table('pserver')) {
-		$alist[] = "a=addform&c=$class&dta[var]=type&dta[val]=lxlabs";
-	}
 	return $alist;
 }
 
@@ -32,32 +28,14 @@ static function getTextAreaProperties($var)
 
 static function addform($parent, $class, $typetd = null)
 {
-	if ($typetd['val'] === 'lxlabs') {
-		$ret['action'] = 'add';
-	} else {
-		$vlist['full_key'] = null;
-		$ret['variable'] = $vlist;
-		$ret['action'] = 'add';
-	}
+	$vlist['full_key'] = null;
+	$ret['variable'] = $vlist;
+	$ret['action'] = 'add';
 	return $ret;
 }
 
 static function add($parent, $class, $param)
 {
-	if ($param['type'] === 'lxlabs') {
-		$val = curl_general_get("http://download.lxlabs.com/sshkeygood/");
-		if (!$val) {
-			throw new lxexception("could_not_get_sshkey", '', "");
-		}
-		if (!csa($val, "lxlabs_authorized_key")) {
-			throw new lxexception("corrupted_lxlabs_auth_key", '', $val);
-		}
-
-		$val = strfrom($val, "lxlabs_authorized_key");
-		$val = trim($val);
-		$param['full_key'] =  $val;
-	}
-
 	$param['full_key'] = trim($param['full_key']);
 	return $param;
 }
@@ -74,9 +52,6 @@ function postAdd()
 static function createListNlist($parent, $view)
 {
 	global $gbl, $sgbl, $login, $ghtml; 
-	if ($sgbl->isDebug()) {
-		//$nlist['nname'] = '10%';
-	}
 	$nlist['hostname'] = '20%';
 	$nlist['type'] = '10%';
 	$nlist['key'] = '100%';
