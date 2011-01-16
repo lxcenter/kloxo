@@ -639,7 +639,7 @@ function postAdd()
 		}
 	}
 
-	if ($sgbl->isKloxo()) {
+	if ($this->priv->mysqldb_num > 0) {
 		$this->createDefaultDatabase();
 	}
 	// Please note, the parent is wassed inside the createDefaultDomain, via the __desc_cmd_add. So after that, nothing will happen.
