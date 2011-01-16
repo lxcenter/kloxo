@@ -28,6 +28,11 @@ static function createListAlist($parent, $class)
 	return $alist;
 }
 
+static function createListBlist($parent, $class)
+{
+	return null;
+}
+
 static function defaultSort()
 {
 	return "nname";
