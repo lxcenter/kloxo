@@ -1,13 +1,13 @@
-Credits to the new LxCenter releases:
+Credits to LxCenter releases:
 
 K.T. Ligesh original developer of HyperVM/Kloxo/LxAdmin, rest in peace m8.. we miss you!
 
 
 Consortium:
-Brijesh 		- India 		- Head (Cousin of Ligesh)		- brijesh@lxcenter.org
-S. Bhargava 	- India 		- General Leader 				- bhargava@lxcenter.org
-Arthur Thornton	- USA 			- Kloxo Development Leader		- arthur@lxcenter.org
-Danny Terweij 	- Netherlands	- HyperVM Development Leader	- d.terweij@lxcenter.org
+Brijesh		- India 		- Head (Cousin of Ligesh)		- brijesh@lxcenter.org
+S. Bhargava 	- India 		- General Leader			- bhargava@lxcenter.org
+Arthur Thornton	- USA 			- Leader				- arthur@lxcenter.org
+Danny Terweij 	- Netherlands		- Leader				- d.terweij@lxcenter.org
 
 Secretary
 ---------
@@ -25,28 +25,30 @@ System Operations LxCenter
 Web Designers
 -------------
 * Peter Jones			- peter.jones@lxcenter.org
-* Walter Secco (GFX)
+* Walter Secco (GFX)		- walter.secco@lxcenter.org
 
 Developers
 ----------
-* Joko Frank Octo
+* Joko Frank Octo	- 
 * Deen Yusoff           - deen.yusoff@lxcenter.org
-* Martin Sefcik			- martin.sefcik@lxcenter.org
-* Keiran Smith			- keiran.smith@lxcenter.org
-* Michele Piperis		- michele@lxcenter.org
-* Walter Secco
+* Martin Sefcik		- martin.sefcik@lxcenter.org
+* Michele Piperis	- michele@lxcenter.org
+* Walter Secco		- walter.secco@lxcenter.org
 * Reid Forrest          - reid.forrest@lxcenter.org
-* Harry Spink			- harry.spink@lxcenter.org
-* Lars Nordseth
+* Harry Spink		- harry.spink@lxcenter.org
 * Angel Guzman Maeso    - angel.guzman@lxcenter.org
-* Dimitris Travlos
+* Dimitris Travlos	- dimitris.travlos@lxcenter.org
+* Mohamed Nabil		- mohamed.nabil@lxcenter.org
+* George Hafiz		- george.hafiz@lxcenter.org
+* Steve Amerige		- steve.amerige@lxcenter.org
 
 Translators
 -----------
-* Angel Guzman Maeso 			- Kloxo ES          - angel.guzman@lxcenter.org
-* Marek Zakrzewski				- Kloxo PL
-* com2 (Forum name)				- HyperVM ES
-* Danny Terweij/Mike Buderath	- Kloxo/HyperVM NL
+* Angel Guzman Maeso 			- Kloxo ES
+* Marek Zakrzewski			- Kloxo PL
+* com2 (Forum name)			- HyperVM ES
+* Danny Terweij/Mike Buderath		- Kloxo/HyperVM NL
+* George Hafiz				- en-gb corrector
 
 InstallApp software updater
 ---------------------------
@@ -55,14 +57,13 @@ InstallApp software updater
 
 Others
 ------
-* Marie		- Forum leader
-* impactgc	- PR
+* Steve Amerige	- Documentation
 
 Sponsors
 --------
-* DMEHosting	- LxCenter main servers
-* Razorservers	- Test/Development servers
-* Spry/VPSLink	- Test/Development server
+* DMEHosting		- LxCenter main servers
+* Razorservers		- Test/Development servers
+* Spry/VPSLink		- Test/Development server
 * UBHosting		- Test/Development servers
 * Nuisoft		- Test/Development server
 
@@ -70,6 +71,20 @@ Special thanks
 --------------
 * Andre Allen
 * Eduardo Silva
+* Keiran Smith
+
+Software
+--------
+* JetBrains PHPStorm ( http://www.jetbrains.com )
+- An PHP Development IDE.
+- Thank you JetBrains, for a tryout License for LxCenter developers!
+
+Donations
+---------
+We still need your Donation.
+Send it by paypal to donations@lxcenter.org
+Every cent helps!
+
 
 #################################################
 Developers, Translators,

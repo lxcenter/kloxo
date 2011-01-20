@@ -1,5 +1,15 @@
 Changelog
 
+Kloxo 6.1.2 - 19-jan-2011
+##################################
+•Bug #372: Traffic history: sorting of the month field does not work properly
+•Bug #379: Roundcube can't write logs
+•Bug #383: Adding client on plan with 0 database creates 1 database
+•Bug #390: suphp configuration and problems with the startup of httpd daemon
+•Bug #407: Traffic history: The delete button should be removed
+•ToDo #408: Remove: Add Lxlabs Authorized Key button
+
+
 Kloxo 6.1.1 - 05-jan-2011
 ##################################
 •Bug #388: phpMyAdmin Configfile wrong persmission (thirdparty 2013)
