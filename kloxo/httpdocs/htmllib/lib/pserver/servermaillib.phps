@@ -37,7 +37,15 @@ static $__desc_virus_scan_flag = array("f", "",  "enable_virus_scan");
 static $__acdesc_update_update = array("", "",  "server_mail_settings");
 static $__acdesc_update_spamdyke = array("", "",  "spamdyke");
 static $__desc_greet_delay = array("", "",  "greet_delay");
+static $__desc_max_rcpnts = array("", "",  "maximum_recipients");
 static $__desc_graylist_flag = array("f", "",  "enable_graylisting");
+static $__desc_graylist_min_secs = array("", "",  "graylist_min_secs");
+static $__desc_graylist_max_secs = array("", "",  "graylist_max_secs");
+static $__desc_reject_empty_rdns_flag = array("f", "",  "reject_empty_rdns");
+static $__desc_reject_ip_in_cc_rdns_flag = array("f", "",  "reject_ip_in_cc_rdns");
+static $__desc_reject_missing_sender_mx_flag = array("f", "",  "reject_missing_sender_mx");
+static $__desc_reject_unresolvable_rdns_flag = array("f", "",  "reject_unresolvable_rdns");
+static $__desc_dns_blacklists = array("", "",  "dns_blacklists");
 
 
 
@@ -45,6 +53,13 @@ function createExtraVariables()
 {
 	global $gbl, $sgbl, $login, $ghtml; 
 	$this->setDefaultValue("greet_delay", "1");
+	$this->setDefaultValue("max_rcpnts","30");
+	$this->setDefaultValue("graylist_min_secs","300");
+	$this->setDefaultValue("graylist_max_secs","1814400");
+	$this->setDefaultValue("reject_empty_rdns_flag","1");
+	$this->setDefaultValue("reject_ip_in_cc_rdns_flag","1");
+	$this->setDefaultValue("reject_missing_sender_mx_flag","1");
+	$this->setDefaultValue("reject_unresolvable_rdns_flag","1");
 
 }
 
@@ -78,9 +93,16 @@ function updateform($subaction, $param)
 			break;
 
 		case "spamdyke":
-			$this->setDefaultValue("greet_delay", "1");
-			//$vlist['greet_delay'] = null;
+			$vlist['greet_delay'] = null;
+			$vlist['max_rcpnts']= null;
 			$vlist['graylist_flag'] = null;
+			$vlist['graylist_min_secs'] = null;
+			$vlist['graylist_max_secs'] = null;
+			$vlist['reject_empty_rdns_flag'] = null;
+			$vlist['reject_ip_in_cc_rdns_flag'] = null;
+			$vlist['reject_missing_sender_mx_flag'] = null;
+			$vlist['reject_unresolvable_rdns_flag'] = null;
+			$vlist['dns_blacklists'] = null;
 			break;
 	}
 
