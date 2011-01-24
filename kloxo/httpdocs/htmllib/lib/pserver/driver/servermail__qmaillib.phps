@@ -160,7 +160,7 @@ function dbactionUpdate($subaction)
 function writeWhitelist()
 {
 	$list = get_namelist_from_objectlist($this->main->mail_graylist_wlist_a);
-	lfile_put_contents("/etc/spamdyke-exception.list", implode("\n", $list));
+	lfile_put_contents("/etc/spamdyke-ip-white.list", implode("\n", $list));
 }
 
 function writeDnsBlist()
@@ -175,7 +175,7 @@ function writeDnsBlist()
 function savespamdyke()
 {
 	lxfile_mkdir("/var/tmp/graylist.d/");
-	lxfile_touch("/etc/spamdyke-exception.list");
+	lxfile_touch("/etc/spamdyke-ip-white.list");
 	$bcont = lfile_get_contents("../file/template/spamdyke.conf");
 	$bcont = str_replace("%lx_greet_delay%", sprintf("greeting-delay-secs=%d",$this->main->greet_delay), $bcont);
 	$bcont = str_replace("%lx_graylist_level%", $this->main->isOn('graylist_flag') ? "graylist-level=always-create-dir" : "graylist-level=none", $bcont);
