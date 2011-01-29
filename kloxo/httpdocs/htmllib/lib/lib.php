@@ -632,25 +632,26 @@ function slave_get_driver($class)
 
 function PrepareRoundCubeDb()
 {
-//
-// TODO: This function should be changed. It Causes database connection errors since Kloxo 6.1.x
-// Related issue #421
-//
-//
-
-	global $gbl, $sgbl, $login, $ghtml; 
-
+//  Related to issue #421
+	global $gbl, $sgbl, $login, $ghtml;
 	$pass = slave_get_db_pass();
-
-	//system("yum -y install lxroundcube");
-	$pstring = null; if ($pass) { $pstring = "-p\"$pass\""; }
-	//$cmd = "echo \"drop database roundcubemail \" | mysql -u root $pstring 2>/dev/null";
-	//system($cmd);
-	$cmd = " echo \"create database roundcubemail ; grant all on roundcubemail.* to roundcube@localhost identified by 'pass' \" | mysql -u root $pstring 2>/dev/null";
-
-	system($cmd);
-
-	system("mysql -u roundcube -ppass roundcubemail < /home/kloxo/httpd/webmail/roundcube/SQL/mysql.initial.sql 2>/dev/null");
+	$pstring = null;
+	if ($pass) { $pstring = "-p\"$pass\""; }
+	$user = "root";
+	$host = "localhost";
+	$link = mysql_connect($host, $user, $pass);
+	mysql_query("CREATE DATABASE `roundcubemail`", $link);
+	system("mysql -u root $pstring roundcubemail < /home/kloxo/httpd/webmail/roundcube/SQL/mysql.initial.sql");
+	system("mysql -u root $pstring roundcubemail < /home/kloxo/httpd/webmail/roundcube/SQL/mysql.update.sql");
+	$pass = randomString(8);
+	$roundcubefileIN = "/usr/local/lxlabs/kloxo/file/webmail-chooser/db.inc.phps";
+	$roundcubefileOUT = "/home/kloxo/httpd/webmail/roundcube/config/db.inc.php";
+	$content = file_get_contents($roundcubefileIN);
+	$content = str_replace("mysql://roundcube:pass", "mysql://roundcube:" . $pass, $content);
+	system("chattr -i /home/kloxo/httpd/webmail/roundcube/config/db.inc.php");
+	lfile_put_contents($roundcubefileOUT, $content);
+	mysql_query("GRANT ALL ON roundcubemail.* TO roundcube@localhost IDENTIFIED BY '$pass'", $link);
+	mysql_query("flush privileges", $link);
 }
 
 
