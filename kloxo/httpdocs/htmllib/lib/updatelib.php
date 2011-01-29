@@ -138,25 +138,6 @@ function do_upgrade($upversion)
 	chdir($saveddir);
 }
 
-function fixZshEtc()
-{
-	global $global_dontlogshell;
-	$global_dontlogshell = true;
-
-	$dir = os_get_home_dir("root");
-
-	if (lxfile_exists("$dir/.etc")) {
-		lxfile_cp("htmllib/filecore/lxetc/commands.shell", "$dir/.etc/");
-		return;
-	}
-
-	$ret = lxshell_return("rpm", "-q", "zsh", "vim-ehhanced");
-	if ($ret) {
-		system("yum -y install zsh vim-enhanced");
-	}
-
-	lxfile_cp_rec("htmllib/filecore/lxetc/", "$dir/.etc");
-}
 
 function move_clients_to_client()
 {
