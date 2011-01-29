@@ -632,6 +632,12 @@ function slave_get_driver($class)
 
 function PrepareRoundCubeDb()
 {
+//
+// TODO: This function should be changed. It Causes database connection errors since Kloxo 6.1.x
+// Related issue #421
+//
+//
+
 	global $gbl, $sgbl, $login, $ghtml; 
 
 	$pass = slave_get_db_pass();
