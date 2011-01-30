@@ -42,19 +42,18 @@ if (!$link) {
 	exit;
 }
 print("Connected to MySQL\nTry to create the horde database...\n");
-
-$result = mysql_query("CREATE DATABASE `" . $database . "`");
+$result = mysql_query("CREATE DATABASE `" . $database . "`", $link);
 
 if (!$result) {
 	$skip = false;
 	print("Database already exists. Check for tables\n");
-	$result = mysql_select_db($database);
+	$result = mysql_select_db($database, $link);
 	if (!$result) {
 		print("Something went wrong, can not select horde database!\n");
 	}
 
 	$query = "SELECT `user_uid` FROM `horde_users` WHERE `user_uid`='admin'";
-	$result = mysql_query($query);
+	$result = mysql_query($query, $link);
 	if ($result) {
 		print("Your Database looks fine. No need to fix\n");
 		$skip = true;
@@ -63,14 +62,14 @@ if (!$result) {
 		print("Something went wrong, could not find admin user\n");
 
 		print("Dropping database\n");
-		$result = mysql_query("DROP DATABASE `" . $database . "`");
+		$result = mysql_query("DROP DATABASE `" . $database . "`", $link);
 		if (!$result) {
 			print("Could not drop horde database!\nScript Abort\n\n");
 			exit;
 		}
 
 		print("Create database\n");
-		$result = mysql_query("CREATE DATABASE `" . $database . "`");
+		$result = mysql_query("CREATE DATABASE `" . $database . "`", $link);
 		if (!$result) {
 			print("There is REALY something very very wrong... Go to http://forum.lxcenter.org/ and report.\n\n");
 			exit;
@@ -124,7 +123,7 @@ if (!$skip) {
 	print("Importing Horde database structure\n");
 	system("mysql -u root $pstring < /home/kloxo/httpd/webmail/horde/scripts/sql/groupware.mysql.sql");
 
-	$result = mysql_select_db($database);
+	$result = mysql_select_db($database, $link);
 	if (!$result) {
 		print("Something went wrong, can not select horde database!\n");
 	}
@@ -132,7 +131,7 @@ if (!$skip) {
 // TODO: Is this user realy needed!?!?
 //
 	$query = "INSERT INTO horde_users (user_uid, user_pass) VALUES ('admin','21232f297a57a5a743894a0e4a801fc3')";
-	$result = mysql_query($query);
+	$result = mysql_query($query, $link);
 	if (!$result) {
 		print("Something went wrong, could not add admin user into horde database\n");
 	}
@@ -140,11 +139,31 @@ if (!$skip) {
 
 print("###\nFixing RoundCube...\n");
 print("Just fixing RoundCube's database connection!!\n");
-
-$result = mysql_select_db('roundcubemail');
+	$pass = slave_get_db_pass();
+	$pstring = null;
+	if ($pass) {
+		$pstring = "-p\"$pass\"";
+	}
+$result = mysql_select_db('roundcubemail', $link);
 if (!$result) {
 	print("Something went wrong, can not select RoundCube database!\n");
-	exit;
+	print("Try to fix database...\n");
+	$result = mysql_query("DROP DATABASE `roundcubemail`", $link);
+	$result = mysql_query("CREATE DATABASE `roundcubemail`", $link);
+	if (!$result) {
+		print("There is REALY something very very wrong... Go to http://forum.lxcenter.org/ and report.\n\n");
+		exit;
+	}
+
+	system("mysql -u root $pstring roundcubemail < /home/kloxo/httpd/webmail/roundcube/SQL/mysql.initial.sql");
+	system("mysql -u root $pstring roundcubemail < /home/kloxo/httpd/webmail/roundcube/SQL/mysql.update.sql");
+
+	$result = mysql_select_db('roundcubemail', $link);
+	if (!$result) {
+		print("Something REALY went wrong, can not create RoundCube database!\n");
+		exit;
+	}
+	print("Database is fixed.\n");
 }
 
 print("Generating password..\n");
