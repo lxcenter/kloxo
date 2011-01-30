@@ -435,23 +435,23 @@ function print_quick_action($class)
 	//$res .= "$desc[2] <br> ";
 	if (!$object->isLogin()) {
 		$res .= "<select $stylestr name=frm_redirectname>";
-		foreach($namelist as $l) {
+		foreach($namelist as $l){
 			$pl = substr($l, 0, 26);
-			$res .= "<option $stylestr value=$l> $pl </option>";
+			$res .= '<option '.$stylestr.' value="'.$l.'" >'.$pl.'</option>';
 		}
 		$res .= "</select> </td> </tr>  ";
 	}
 	$res .= " <tr style=\"background:#d6dff7\"> <td ><select $stylestr name=frm_redirectaction>";
 	foreach($alist as $k => $a) {
 		if (csb($k, "__title")) {
-			$res .= "<option value=>------$a----</option>";
+			$res .= '<option value="" >------'.$a.'----</option>';
 			continue;
 		}
 		$ac_descr = $ghtml->getActionDetails($a, null, $iconpath, $path, $post, $_t_file, $_t_name, $_t_image, $__t_identity);
 		$a = base64_encode($a);
 		//$res .= "<option value=$a style='background-image: url($_t_image); background-repeat:no-repeat; left-padding: 35px; text-align:right'>  $ac_descr[2] </option>";
 		$desc = substr($ac_descr[2], 0, 20);
-		$res .= "<option $stylestr value=$a>  $desc </option>";
+		$res .= '<option '.$stylestr.' value="'.$a.'" >'.$desc.'</option>';
 	}
 	$res .= "</select> </td> </tr> ";
 	$res .= "</form> <tr > <td align=right> <a href=javascript:quickaction.submit() > Go </a> </td> </tr> ";
@@ -632,19 +632,26 @@ function slave_get_driver($class)
 
 function PrepareRoundCubeDb()
 {
-	global $gbl, $sgbl, $login, $ghtml; 
-
+//  Related to issue #421
+	global $gbl, $sgbl, $login, $ghtml;
 	$pass = slave_get_db_pass();
-
-	//system("yum -y install lxroundcube");
-	$pstring = null; if ($pass) { $pstring = "-p\"$pass\""; }
-	//$cmd = "echo \"drop database roundcubemail \" | mysql -u root $pstring 2>/dev/null";
-	//system($cmd);
-	$cmd = " echo \"create database roundcubemail ; grant all on roundcubemail.* to roundcube@localhost identified by 'pass' \" | mysql -u root $pstring 2>/dev/null";
-
-	system($cmd);
-
-	system("mysql -u roundcube -ppass roundcubemail < /home/kloxo/httpd/webmail/roundcube/SQL/mysql.initial.sql 2>/dev/null");
+	$pstring = null;
+	if ($pass) { $pstring = "-p\"$pass\""; }
+	$user = "root";
+	$host = "localhost";
+	$link = mysql_connect($host, $user, $pass);
+	mysql_query("CREATE DATABASE `roundcubemail`", $link);
+	system("mysql -u root $pstring roundcubemail < /home/kloxo/httpd/webmail/roundcube/SQL/mysql.initial.sql");
+	system("mysql -u root $pstring roundcubemail < /home/kloxo/httpd/webmail/roundcube/SQL/mysql.update.sql");
+	$pass = randomString(8);
+	$roundcubefileIN = "/usr/local/lxlabs/kloxo/file/webmail-chooser/db.inc.phps";
+	$roundcubefileOUT = "/home/kloxo/httpd/webmail/roundcube/config/db.inc.php";
+	$content = file_get_contents($roundcubefileIN);
+	$content = str_replace("mysql://roundcube:pass", "mysql://roundcube:" . $pass, $content);
+	system("chattr -i /home/kloxo/httpd/webmail/roundcube/config/db.inc.php");
+	lfile_put_contents($roundcubefileOUT, $content);
+	mysql_query("GRANT ALL ON roundcubemail.* TO roundcube@localhost IDENTIFIED BY '$pass'", $link);
+	mysql_query("flush privileges", $link);
 }
 
 
@@ -794,13 +801,6 @@ function execinstallappPhp($domain, $appname, $cmd)
 	}
 	system($cmd);
 	dprint("\n*************************************************************************\n");
-}
-
-function execinstallSoftPhp($domain, $appname, $cmd)
-{
-	// Temporary fix for installapp #394
-	// TODO: This can be removed in the future
-	execinstallappPhp($domain, $appname, $cmd);
 }
 
 
