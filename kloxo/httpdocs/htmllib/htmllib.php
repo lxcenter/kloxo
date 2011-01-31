@@ -22,15 +22,8 @@ class HtmlLib
             log_security("XSS attempt: $value");
             exit;
         }
-		else
-	    // taken from http://www.symantec.com/connect/articles/detection-sql-injection-and-cross-site-scripting-attacks
-	    // We first detect either the hex equivalent of the single-quote, the single-quote itself or the presence of the
-	    // double-dash. These are SQL characters for MS SQL Server and Oracle, which denote the beginning of a comment,
-	    // and everything that follows is ignored. Additionally, if you're using MySQL, you need to check for presence of
-	    // the '#' or its hex-equivalent. Note that we do not need to check for the hex-equivalent of the double-dash,
-	    // because it is not an HTML meta-character and will not be encoded by the browser
 
-    	if (preg_match('/(\%27)|(\')|(\-\-)|(\%23)|(\#)/ix', $value)) {
+		if (csa($value, "'")) {
 			log_security("SQL injection attempt: $value");
             exit;
     	}
