@@ -99,7 +99,6 @@ function save_xinetd_qmail()
 	}
 
 
-	$bcont = str_replace("%maps%", $maps, $bcont);
 	$bcont = str_replace("%domainkey%", $domkey, $bcont);
 	$bcont = str_replace("%virusscan%", $virus, $bcont);
 	$bcont = str_replace("%instance%", $instance, $bcont);
