@@ -770,7 +770,7 @@ function validate_domain_name($name)
 		throw new lxException('add_without_www', 'nname');
 	}
 
-	if(!eregi('^([a-z0-9]([a-z0-9-]{0,61}[a-z0-9])?\.)+([a-z]{2,6})$', $name)) { 
+	if(!preg_match('/^([a-z0-9]([a-z0-9-]{0,61}[a-z0-9])?\.)+(([a-z]{2,6})|(xn--[a-z0-9]{4,14}))$/i', $name)) {
 		throw new lxException('invalid_domain_name', 'nname');
 	}
 	
