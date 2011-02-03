@@ -49,8 +49,6 @@ function save_xinetd_qmail()
 	if (if_demo()) { throw new lxException ("demo", $v); }
 
 	$bcont = lfile_get_contents("../file/template/xinetd.smtp_lxa");
-	$maps = null;
-	if ($this->main->isOn("enable_maps")) { $maps = "/usr/bin/rblsmtpd -r bl.spamcop.net"; }
 
 	$domkey = null;
 	if ($this->main->isOn('domainkey_flag')) { $domkey = "DKSIGN=/var/qmail/control/domainkeys/%/private"; }
