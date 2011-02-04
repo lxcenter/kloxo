@@ -741,6 +741,7 @@ $__description["enable_domainkey"] = array("Enable Domainkey");
 $__description["max_smtp_instances"] = array("Max Smtp Instances");
 $__description["max_mail_attachment_size(bytes)"] = array("Max Mail Attachment Size(bytes)");
 $__description["additional_smtp_port"] = array("Additional Smtp Port");
+$__description["alt_smtp_sdyke"] = array("Spamdyke on Additional Smtp Port");
 $__description["enable_virus_scan"] = array("Enable Virus Scan");
 $__description["server_mail_settings"] = array("Server Mail Settings");
 $__description["spamdyke"] = array("Spamdyke");
