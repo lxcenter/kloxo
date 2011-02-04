@@ -670,12 +670,12 @@ static function createTmpDirIfitDoesntExist($file, $real)
 	} else {
 		if ($sgbl->isKloxoForRestore()) {
 			try {
-				lxshell_unzip_with_throw("__system__", $vd, $file, array("*$progname.file", "*$progname.metadata"));
+				lxshell_unzip_with_throw($vd, $file, array("*$progname.file", "*$progname.metadata"));
 			} catch (Exception $e) {
-				lxshell_unzip_with_throw("__system__", $vd, $file, array("*lxadmin.file", "*lxadmin.metadata"));
+				lxshell_unzip_with_throw($vd, $file, array("*lxadmin.file", "*lxadmin.metadata"));
 			}
 		} else {
-			lxshell_unzip_with_throw("__system__", $vd, $file, array("*$progname.file", "*$progname.metadata"));
+			lxshell_unzip_with_throw($vd, $file, array("*$progname.file", "*$progname.metadata"));
 		}
 	}
 

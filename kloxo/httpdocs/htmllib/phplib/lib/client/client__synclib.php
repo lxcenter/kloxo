@@ -220,10 +220,11 @@ function do_backup()
 
 function do_restore($docd)
 {
-	global $gbl, $sgbl, $login, $ghtml; 
+	global $gbl, $sgbl, $login, $ghtml;
 	$name = $this->main->getPathFromName('nname');
 	$fullpath = "$sgbl->__path_customer_root/$name/";
 	lxuser_mkdir($this->main->username, $fullpath);
+	lxfile_generic_chown($docd, $this->main->username);
 	lxuser_unzip_with_throw($this->main->username, $fullpath, $docd);
 	lxfile_generic_chown($fullpath, "{$this->main->username}:apache");
 	lxfile_generic_chmod($fullpath, "0750");
