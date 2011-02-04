@@ -46,7 +46,7 @@ static $__desc_reject_ip_in_cc_rdns_flag = array("f", "",  "reject_ip_in_cc_rdns
 static $__desc_reject_missing_sender_mx_flag = array("f", "",  "reject_missing_sender_mx");
 static $__desc_reject_unresolvable_rdns_flag = array("f", "",  "reject_unresolvable_rdns");
 static $__desc_dns_blacklists = array("", "",  "dns_blacklists");
-
+static $__desc_alt_smtp_sdyke_flag = array("f","","alt_smtp_sdyke");
 
 
 function createExtraVariables()
@@ -60,6 +60,7 @@ function createExtraVariables()
 	$this->setDefaultValue("reject_ip_in_cc_rdns_flag","1");
 	$this->setDefaultValue("reject_missing_sender_mx_flag","1");
 	$this->setDefaultValue("reject_unresolvable_rdns_flag","1");
+    $this->setDefaultValue("alt_smtp_sdyke_flag",1);
 
 }
 
@@ -90,6 +91,7 @@ function updateform($subaction, $param)
 			$vlist['queuelifetime'] = null;
 			$vlist['smtp_instance'] = null;
 			$vlist['additional_smtp_port'] = null;
+            $vlist['alt_smtp_sdyke_flag'] = null;
 			break;
 
 		case "spamdyke":

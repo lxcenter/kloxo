@@ -64,8 +64,6 @@ function save_xinetd_qmail()
 		}
 	}
 
-	$servicename = "smtp";
-
 	if ($this->main->smtp_instance > 0) {
 		$instance = $this->main->smtp_instance;
 	} else {
@@ -102,24 +100,22 @@ function save_xinetd_qmail()
 	$bcont = str_replace("%domainkey%", $domkey, $bcont);
 	$bcont = str_replace("%virusscan%", $virus, $bcont);
 	$bcont = str_replace("%instance%", $instance, $bcont);
-	$bcont = str_replace("%spamdyke%", $spamdyke, $bcont);
-
-	$cont = str_replace("%servicename%", $servicename, $bcont);
-	lfile_put_contents("/etc/xinetd.d/smtp_lxa", $cont);
-
 
 	if ($this->main->additional_smtp_port > 0) {
-		$servicename = "kloxo_smtp";
-
-		$cont = str_replace("%servicename%", $servicename, $bcont);
+        if ( !$this->main->isOn('alt_smtp_sdyke_flag') )
+            $spamdyke = "";
+        $cont = str_replace("%spamdyke%", $spamdyke, $bcont);
+ 		$cont = str_replace("%servicename%", "kloxo_smtp", $cont);
 		lfile_put_contents("/etc/xinetd.d/kloxo_smtp_lxa", $cont);
 		remove_line("/etc/services", "kloxo_smtp");
 		add_line("/etc/services", "kloxo_smtp {$this->main->additional_smtp_port}/tcp\n");
-	} else {
+ 	} else {
 		lxfile_rm("/etc/xinetd.d/kloxo_smtp_lxa");
 		remove_line("/etc/services", "kloxo_smtp");
 	}
-
+    $bcont = str_replace("%spamdyke%", $spamdyke, $bcont);
+    $cont = str_replace("%servicename%", "smtp", $bcont);
+    lfile_put_contents("/etc/xinetd.d/smtp_lxa", $cont);
 
 	exec_with_all_closed("/etc/init.d/xinetd restart");
 }
