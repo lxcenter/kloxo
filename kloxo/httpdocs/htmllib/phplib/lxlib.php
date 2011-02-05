@@ -476,7 +476,34 @@ function lfile_put_contents($file, $data, $flag = null)
 
 	lxfile_mkdir(dirname($file));
 
-    return file_put_contents($file, $data, $flag);
+	if(file_exists($file)){
+		if(is_readable($file)){
+			if(is_writable($file)){
+				return file_put_contents($file, $data, $flag);
+			}
+			else{
+				$error_msg = 'Could not write the file \''.$file.'\' with permissions: '.substr(sprintf('%o', fileperms($file)), -4);
+				dprint($error_msg);
+				log_log('filesys', $error_msg);
+				return false;
+			}
+		}
+		else{
+			$error_msg = 'Could not read the file \''.$file.'\' with permissions: '.substr(sprintf('%o', fileperms($file)), -4);
+			dprint($error_msg);
+			log_log('filesys', $error_msg);
+			return false;
+		}
+	}
+	else{
+        if(file_put_contents($file, $data, $flag) === false){
+            $error_msg = 'File \''.$file.'\' could not be created.';
+            dprint($error_msg);
+            log_log('filesys', $error_msg);
+            return false;
+        }
+        return true;
+ 	}
 }
 
 /**
