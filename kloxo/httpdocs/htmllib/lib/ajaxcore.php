@@ -68,7 +68,7 @@ function __ajax_desc_tree()
 	$icondir = get_image_path('/button/');
 	$rclist = $object->getResourceChildList();
 	$cid = htmlspecialchars($ghtml->node);
-
+	$cid = str_replace('&amp;', '&', $cid);
 	if ($object->hasFileResource()) {
 		$u = "a=show&k[class]=ffile&k[nname]=/";
 		$u = $ghtml->getFullUrl($u);
@@ -81,7 +81,7 @@ function __ajax_desc_tree()
 		$c = strfrom($ghtml->__resource_class, "__resource_");
 		if (cse($c, "_l")) {
 			$clname = $object->getChildNameFromDes($c);
-			$list = $object->getList($clname, $totalcount);
+			$list = $object->getList($clname);
 			foreach($list as $o) {
 				$u = "a=show&k[class]={$o->getClass()}&k[nname]={$o->nname}";
 				$u = $ghtml->getFullUrl($u);
