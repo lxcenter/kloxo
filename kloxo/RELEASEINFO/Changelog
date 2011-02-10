@@ -1,5 +1,22 @@
 Changelog
 
+Kloxo 6.1.3 - 14-feb-2011
+##################################
+•Bug #367: Add support for IDN Domain
+•Bug #400: Cannot restore account in GUI or via Commandline API (Restore Failed. Reason: could_not_unzip_file)
+•Bug #413: Kloxo GUI php.ini: post_max_size should be the same as upload_max_filesize
+•Bug #416: Cannot delete domain with specific name
+•Bug #418: Kloxo Tree menu depth now limited
+•Bug #426: Spamdyke whitelist only valid for graylist
+•Bug #431: Roundcube config/db.inc.php with wrong password and fixwebmail not fixing it. 
+•Feature #424: Extending Spamdyke features
+•Feature #436: Alternative smtp port with alternative or without SPAM control
+•Updates #437: New file creation fails after r297
+
+Moved to 6.1.4 (Not in time finished)
+•ToDo #421
+
+
 Kloxo 6.1.2 - 19-jan-2011
 ##################################
 •Bug #372: Traffic history: sorting of the month field does not work properly
@@ -8,7 +25,6 @@ Kloxo 6.1.2 - 19-jan-2011
 •Bug #390: suphp configuration and problems with the startup of httpd daemon
 •Bug #407: Traffic history: The delete button should be removed
 •ToDo #408: Remove: Add Lxlabs Authorized Key button
-
 
 Kloxo 6.1.1 - 05-jan-2011
 ##################################
