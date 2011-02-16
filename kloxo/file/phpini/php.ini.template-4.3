@@ -1,5 +1,7 @@
 [PHP]
-
+;
+; PHP.INI Template 4.3 file/phpini/
+;
 ;;;;;;;;;;;;;;;;;;;
 ; About this file ;
 ;;;;;;;;;;;;;;;;;;;
@@ -210,7 +212,7 @@ safe_mode_protected_env_vars = LD_LIBRARY_PATH
 ; This directive allows you to disable certain functions for security reasons.
 ; It receives a comma-delimited list of function names. This directive is
 ; *NOT* affected by whether Safe Mode is turned On or Off.
-disable_functions =
+disable_functions = shell_exec
 
 ; This directive allows you to disable certain classes for security reasons.
 ; It receives a comma-delimited list of class names. This directive is
