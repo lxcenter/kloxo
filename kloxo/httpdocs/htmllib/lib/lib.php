@@ -2072,7 +2072,7 @@ function lx_core_lock($file = null)
 	}
 	dprint("PID#:  ".$pid."\n");
 	if (!$pid) {
-		dprint("$prog:$file No pid file $pidfile detected..\n");
+		dprint("\n$prog:$file\nNo pid file $pidfile detected..\n");
 		lfile_put_contents($pidfile, os_getpid());
 		return false;
 	}
@@ -2086,9 +2086,9 @@ function lx_core_lock($file = null)
 
 	if (!$name || $name !== $prog) {
 		if (!$name) {
-			dprint("$prog:$file Stale Lock file $pidfile detected..., removing\n");
+			dprint("\n$prog:$file\nStale Lock file detected.\n$pidfile\nRemoving it...\n ");
 		} else {
-			dprint("$prog:$file Stale lock file... Another program $name is running on it..\n");
+			dprint("\n$prog:$file\nStale lock file found.\nAnother program $name is running on it..\n");
 		}
 
 		lxfile_rm($pidfile);
@@ -2116,7 +2116,7 @@ function lx_core_lock_check_only($prog, $file = null)
 	$pid = lfile_get_contents($pidfile);
 	dprint($pid . "\n");
 	if (!$pid) {
-		dprint("$prog:$file No pid in filedetected..\n");
+		dprint("\n$prog:$file\nNo pid in file detected..\n");
 		return false;
 	}
 
@@ -2128,11 +2128,11 @@ function lx_core_lock_check_only($prog, $file = null)
 	}
 
 	if (!$name || $name !== $prog) {
-		if (!$name) {
-			dprint("$prog:$file Stale Lock file detected..., removing\n");
-		} else {
-			dprint("$prog:$file Stale lock file... Another program $name is running on it..\n");
-		}
+                if (!$name) {
+                        dprint("\n$prog:$file\nStale Lock file detected.\n$pidfile\nRemoving it...\n ");
+                } else {
+                        dprint("\n$prog:$file\nStale lock file found.\nAnother program $name is running on it..\n");
+                }
 
 		lxfile_rm($pidfile);
 		return false;
@@ -2188,7 +2188,7 @@ function appvault_dbfilter($inputfile, $outputfile, $cont)
 	$val = str_replace("__lx_client_path", "/home/{$cont['customer_name']}", $val);
 	$val = str_replace("__lx_adminemail_login", $cont['admin_email_login'], $val);
 	$val = str_replace("__lx_admin_pass", $cont['adminpass'], $val);
-	$val= str_replace("__lx_md5_adminpass", md5($cont['adminpass']), $val);
+	$val = str_replace("__lx_md5_adminpass", md5($cont['adminpass']), $val);
 	$val = str_replace("__lx_db_host", $cont['realhost'], $val);
 	$val = str_replace("__lx_db_name", $cont['dbname'], $val);
 	$val = str_replace("__lx_db_pass", $cont['dbpass'], $val);
@@ -2205,15 +2205,8 @@ function appvault_dbfilter($inputfile, $outputfile, $cont)
 
 function installLxetc()
 {
-	if (!lxfile_exists("/root/.etc/pfixed")) {
-		if (lxfile_exists("/root/.etc/")) {
-			lxfile_rm_rec("/root/.etc/");
-		}
-	}
-
-	if (!lxfile_exists("/root/.etc/")) {
-		lxshell_background("lphp.exe", "../bin/common/misc/lxetc.php");
-	}
+// TODO: Remove this function
+	return;
 }
 
 function lightyApacheLimit($server, $var)

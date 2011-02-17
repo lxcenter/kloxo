@@ -85,7 +85,7 @@ function check_for_debug($file)
 	if ($sgbl->dbg > 0) {
 		ini_set("error_reporting", E_ALL & ~E_STRICT);
 		ini_set("display_errors", "On");
-		ini_set("log_errors", "Off");
+		ini_set("log_errors", "On");
 	} else {
 		ini_set("error_reporting", E_ERROR);
 		ini_set("display_errors", "Off");
@@ -1873,23 +1873,16 @@ function lx_error_handler($errno, $errstr, $file, $line)
 		return;
 	}
 
-	//debugBacktrace();
-
 	static $error = "";
-	//$pos = "$errstr in $file on line $line ";
-	if (windowsOs()) {
-		$file = str_replace('\\', "/", $file);
-		preg_match("/(.):(.*)/i", $file, $matches);
-		$file = "/dev/fs/" . strtoupper($matches[1]) . "/$matches[2]";
-	}
 	$pos = "$file:$line: $errstr";
-
 	$error .= $pos . "\n";
-
-	//debugBacktrace();
-
 	lfile_put_contents($sgbl->__var_error_file, $error);
-	dprint(" <font color=red> <b> Notice : $errstr in  $file at $line </b> </font> <br> \n", 1);
+
+	dprint("\n### PHP Error detected\n");
+	dprint("### Notice: $errstr\n");
+        dprint("### File:$file\n");
+        dprint("### Line number: $line\n");
+	dprint("### End PHP Error information\n\n");
 }
 
 /**
