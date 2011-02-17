@@ -48,12 +48,17 @@ function updatecleanup_main()
 // Fix vulnerability within webmail
 // If the flag isn't found, run the fix
 //
+// Disabled in Kloxo 6.1.4
+//if (!lxfile_exists("/usr/local/lxlabs/kloxo/file/webmailReset")) {
+//	system("/usr/local/lxlabs/ext/php/php /usr/local/lxlabs/kloxo/bin/misc/secure-webmail-mysql.phps");
+//	system("/bin/rm /usr/local/lxlabs/kloxo/bin/misc/secure-webmail-mysql.phps");
+//}
 
+// Remove Flagfile in Kloxo 6.1.4, thios can be removed in 6.1.4+
 if (!lxfile_exists("/usr/local/lxlabs/kloxo/file/webmailReset")) {
-	system("/usr/local/lxlabs/ext/php/php /usr/local/lxlabs/kloxo/bin/misc/secure-webmail-mysql.phps");
-	system("/bin/rm /usr/local/lxlabs/kloxo/bin/misc/secure-webmail-mysql.phps");
+      system("/bin/rm /usr/local/lxlabs/kloxo/file/webmailReset");
 }
-//
+
 
 
 // Fix #388 - phpMyAdmin config.inc.php permission
