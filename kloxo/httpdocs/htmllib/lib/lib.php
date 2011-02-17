@@ -640,6 +640,8 @@ function PrepareRoundCubeDb()
 	$user = "root";
 	$host = "localhost";
 	$link = mysql_connect($host, $user, $pass);
+	$result = mysql_select_db('roundcubemail', $link);
+	if ($result) { return; }
 	mysql_query("CREATE DATABASE `roundcubemail`", $link);
 	system("mysql -u root $pstring roundcubemail < /home/kloxo/httpd/webmail/roundcube/SQL/mysql.initial.sql");
 	system("mysql -u root $pstring roundcubemail < /home/kloxo/httpd/webmail/roundcube/SQL/mysql.update.sql");
