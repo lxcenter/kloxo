@@ -13,12 +13,8 @@ function __ac_desc_desktop($object)
     $history = $login->dskhistory;
     $history = array_reverse($history);
     $shortcut = $login->dskshortcut_a;
-
     $shediturl = $ghtml->getFullUrl('a=list&c=dskshortcut_a');
     $ghtml->print_message();
-    //$ghtml->print_curvy_table_start();
-    //print("To add links to  <font style='font-weight:bold'>Favorites </font> , go to a particular page, and then click on the <font style='font-weight:bold'> Add to Favorites </font> link that appears on the top right.  <font style='font-weight:bold'>History </font>  is the list of last 20 pages you have visited.");
-    //$ghtml->print_curvy_table_end();
     print("<table cellpadding=0  width=90% cellspacing=1 style='border:1px solid #$col;  background:#fffafa;'><tr></tr><tr height=50> <td align=center>");
     print("<form name=desktopsearch method=get action=/display.php>");
     $ghtml->print_input("hidden", "frm_action", "desktop");
@@ -26,34 +22,9 @@ function __ac_desc_desktop($object)
     $ghtml->print_input("text", "frm_desksearch", $ghtml->frm_desksearch);
     print("</form>\n");
     print("</td> <td ><a href=javascript:document.desktopsearch.submit()> <img src=img/general/icon/search_b.gif>  Search </a> </td> </tr> </table> ");
-
     print("</td> </tr> </table>");
-
     print("<table width=90% cellpadding=0 valign=top cellspacing=20 height=200> <tr> <td valign=top>\n");
-/*
-<div id="debug"></div><div id="boundary"><div id="content">
-<h2 class=expanded align=center onMouseover="this.style.background='url(<?php echo $skindir?>/onexpand.gif)'" onMouseout="this.style.background='url(<?php echo $skindir?>/background1.gif)'"><code>  </code></h2>
-
-    print("<table cellpadding=0 cellspacing=0 valign=top style=\"background:#f0f0f0;\" >\n");
-    $count = 0;*/
     $iconpath = get_image_path() . "/button/";
-    /*
-    if ($shortcut) foreach($shortcut as $k => $h) {
-        $k = base64_decode($k);
-        $count++;
-        $ac_descr = $ghtml->getActionDetails($k, null, $iconpath, $path, $post, $_t_file, $_t_name, $_t_image, $__t_identity);
-        if (isset($h->description) && $h->description) {
-            $des = $h->description;
-        } else {
-            $des = "{$ac_descr['desc']} for $__t_identity";
-        }
-
-        print("<tr valign=center style=\"background:#f0f0f0;height:25px\" onMouseover=\"this.style.background='url($skindir/a.gif)'\" onMouseout=\"this.style.background='url($skindir/b.gif)'\"><td style=\"padding:0 0 0 20;\" nowrap><a href=$k><img src=$_t_image width=20 height=20></td><td width=100% nowrap><a href=$k>&nbsp; $des</td></tr><tr style=\"background:#ffffff;\"><td nowrap></td> <td nowrap> </td> </tr>\n");
-
-    }
-
-    print("</table> </td> </div></div><td valign=top>");
-*/
     print("<div id=\"debug\"></div><div id=\"boundary\"><div id=\"content\"> <h2 class=expanded align=center onMouseover=\"this.style.background='url($skindir/onexpand.gif)'\" onMouseout=\"this.style.background='url($skindir/expand.gif)'\"><code>History</code></h2><table cellpadding=0 cellspacing=0 style=\"background:#f0f0f0;\">");
     $count = 0;
     foreach($history as $k => $h) {
@@ -121,34 +92,15 @@ function __ac_desc_show($object)
 {
     global $gbl, $sgbl, $login, $ghtml;
 
-
     print_time("show_select");
     if (!$object) { return; }
     $selflist = $object->getSelfList();
-
-    //print_time("show_select", "Show Select");
-
-    /*
-    $list = $object->createShowShowlist();
-    if ($list) {
-        foreach($list as $k => $l) {
-            $newobject = $object->getFromList($k, "/");
-            __ac_desc_show($newobject);
-        }
-    }
-*/
-
     $class = lget_class($object);
-
     $subaction = $ghtml->frm_subaction;
 
     if (!$login->isAdmin()) {
         check_for_license();
     }
-
-
-    //dprintr($gbl->c_session->ssession_vars);
-
 
     $object->getAnyErrorMessage();
 
@@ -165,12 +117,10 @@ function __ac_desc_show($object)
         print_customer_mode($object);
     }
 
-
     if ($selflist) {
         $ghtml->printShowSelectBox($selflist);
     }
     $printed_message = false;
-
 
     $clist = $object->createShowClist($subaction);
 
@@ -182,16 +132,10 @@ function __ac_desc_show($object)
 
 
     $ghtml->print_message();
-    if ($ilist) {
-        //$ghtml->print_info_block($object, $ilist);
-    }
 
     $cname = $object->getClass();
     $extra = $object->getExtraId();
     $ghtml->print_information('pre', 'show', $cname, $extra, "");
-
-
-
 
     $ilist = $object->createShowInfolist($subaction);
     $rlist = $object->createShowRlist($subaction);
@@ -203,17 +147,6 @@ function __ac_desc_show($object)
         $class = $object->get__table();
         $var = "{$class}_show_list";
         $interf = null;
-        /*
-        $ift = $login->getSpecialObject('sp_specialplay')->interface_template;
-        if ($ift && $ift !== "--$progname-default--") {
-            $iob = new interface_template(null, null, $ift);
-            $iob->get();
-            if ($iob->dbaction !== 'add' && isset($iob->$var)) {
-                $interf = $iob->$var;
-            }
-        }
-    */
-
         $object->createShowAlist($showalist);
         $object->createShowAlistConfig($advanced);
 
@@ -224,12 +157,10 @@ function __ac_desc_show($object)
             unset($showalist['__v_message']);
             $printed_message = true;
             if (isset($showalist['__v_refresh'])) {
-                //print("<META HTTP-EQUIV=REFRESH CONTENT=7>");
                 unset($showalist['__v_refresh']);
             }
 
         }
-
 
 
         $total = lx_merge_good($showalist, $advanced);
@@ -268,7 +199,6 @@ function __ac_desc_show($object)
                         $u = $a;
                     }
                     if (csb($k, "__title")) {
-                        //$nnalist[$u] = $u;
                         continue;
                     }
                     $res = search_url_in_array($u, $interf);
@@ -582,7 +512,6 @@ function do_list_class($object, $cname)
 
     global $gbl, $sgbl, $login, $ghtml;
 
-    //list($iclass, $mclass, $rclass) = get_composite($cname);
     $rclass = $cname;
     $blist = exec_class_method($rclass, "createListBlist", $object, $rclass);
 
@@ -604,7 +533,6 @@ function check_for_license()
 
     $list = get_admin_license_var();
 
-    //dprintr($list);
     foreach($list as $k => $l)
     {
         $res = strfrom($k, "used_q_");
@@ -629,7 +557,6 @@ function __ac_desc_list($object, $cname = null)
 
     if (!$cname) $cname = $ghtml->frm_o_cname;
 
-    //list($iclass, $mclass, $rclass) = get_composite($cname);
     $rclass = $cname;
 
     $selflist = $object->getSelfList();
@@ -1054,8 +981,6 @@ function __ac_desc_continue($object)
     }
     $ghtml->print_message();
 
-    //dprintr($param);
-
     $string[] = $ghtml->object_variable_startblock($object, $cname, "Continue Add $cname");
 
     $string[] = $ghtml->object_inherit_classpath();
@@ -1201,7 +1126,6 @@ function create_xml($object, $stuff, $ret)
             if ($v && $ghtml->is_special_variable($v[1])) {
             } else {
                 $descr = $ghtml->get_classvar_description_after_overload($class, $k);
-                //dprintr($descr);
                 if (count($descr) < 3) {
                     dprint("Variable $k in $class Not Defined... <br> \n");
                     $descr = array($class, $k, "Not Defined");
@@ -1539,7 +1463,6 @@ function print_navigation($navig)
         $url = "/display.php?$url";
         $desc = $ghtml->getActionDescr('', $h, $class, $var, $name);
         $image = $ghtml->get_image($buttonpath, $class, $var, ".gif");
-        //if ($class === 'mailaccount' || $class === 'domain') { continue; }
         $desc['help'] = $ghtml->get_action_or_display_help($desc['help'], 'action');
         $sep = null;
         $sep = "<td > |</td> ";
@@ -1552,10 +1475,6 @@ function print_navigation($navig)
 
         $menustring = null;
 
-        // DOnt print the last.. That is the header, printed later below this...
-        if ($k === count($navig) - 1) {
-            //break;
-        }
         print("<td > &nbsp;<a href='$url'><b><font $forecolorstring style='font-size:7pt'> {$desc['desc']}</b> $bracketedname </font> </a> &nbsp; </td> $sep ");
     }
     print("</td>  </tr></table></td> </tr>");
@@ -1634,14 +1553,7 @@ function print_navigation($navig)
     }
 
     print("</tr> ");
-    /*
-    ?>
-    <tr > <td colspan=2 id=histtd align=left  onClick="tdd = document.getElementById('histtd') ; pos = getAbsolutePos(tdd);histToggleHistory('histlist', <?php echo $xpos ?>, pos.y, event);" onMouseOver=" style.cursor='pointer';style.textDecoration='underline'; changeContent('help', 'Click To Show History'); " onMouseOut=" style.textDecoration='none';changeContent('help', 'helparea');"> &nbsp;</td></tr>
-    <?php
-    */
-
     print("</table> ");
-    //print("<script> navigsetDefaultImage('$imgpoint'); </script>");
 }
 
 function create_navmenu($n, $action, $stuff)
@@ -1668,7 +1580,6 @@ function create_navmenu($n, $action, $stuff)
 
     $ghtml->print_menulist("navig$n", $alist, $f, $type);
 
-//  print("navig$n.writeMenus();\n");
 
 }
 
@@ -1763,12 +1674,6 @@ function password_contact_check()
         return;
     }
 
-    /*
-    if ($sgbl->dbg > 0) {
-        return;
-    }
-*/
-
     if (csb($ghtml->frm_action, 'update')  && $ghtml->frm_subaction === 'password')
         return;
 
@@ -1859,15 +1764,6 @@ function main_system_lock()
 
     return;
     $lname = null;
-    /*
-    if (is_object($gbl->__c_object)) {
-        $lname = $gbl->__c_object->getClName();
-        if (isModifyAction() && lx_core_lock($lname)) {
-            $ghtml->print_redirect_back('system_is_locked', '');
-            exit;
-        }
-    }
-*/
     $nlname = $login->getClName();
     if ($nlname !== $lname && isModifyAction() && lx_core_lock($nlname)) {
         $ghtml->print_redirect_back('system_is_locked_by_u', '');
@@ -1894,10 +1790,6 @@ function display_init()
         do_display_init();
         main_system_lock();
         print_navigation($gbl->__navig);
-        if (if_demo()) {
-            //$url = $ghtml->get_get_from_current_post(null);
-            //log_clicks($url);
-        }
         print_warning();
         password_contact_check();
 
@@ -1915,7 +1807,6 @@ function display_init()
         $ghtml->print_redirect_back($e->getMessage(), $evlist, $e->value);
         exit;
     }
-    //license_check();
 
     if ($ghtml->frm_filter) {
         $filtername = $gbl->__c_object->getFilterVariableForThis($ghtml->frm_o_cname);
@@ -1925,7 +1816,6 @@ function display_init()
     }
 
     if ($ghtml->frm_hpfilter) {
-        //dprintr($ghtml->frm_hpfilter);
         $login->setupHpFilter($ghtml->frm_hpfilter);
         $login->setUpdateSubaction();
     }
@@ -1979,14 +1869,9 @@ function lx_frm_inc()
             $login->__auxiliary_object->write();
         }
 
-        if ($caction === 'add' || $caction === 'delete')
-        {
-            //collect_quota_later();
-        }
         $gbl->unsetSessionV('__tmp_redirect_var');
     } catch (Exception $e)
     {
-        //save_login();
         log_log("redirect_error", "exception");
         $gbl->setSessionV('__tmp_redirect_var', $ghtml->__http_vars);
         $gbl->c_session->write();
@@ -1995,12 +1880,10 @@ function lx_frm_inc()
         } else {
             $evlist = $e->variable;
         }
-        //dprint("$e");
         $ghtml->print_redirect_back($e->getMessage(), $evlist, $e->value);
         exit;
     }
 
-    //log_log("redirect_error", "here");
 
 // If redirecting, too, ssession wont be saved....
 
@@ -2057,7 +1940,6 @@ function display_exec()
     exit_if_under_maintenance();
 
     try {
-        //log_redirect("Before form");
         lx_frm_inc();
     } catch (Exception $e) {
         log_redirect("Caught except");
@@ -2065,5 +1947,4 @@ function display_exec()
         print("\n");
     }
 
-    //$ghtml->print_end();
 }
