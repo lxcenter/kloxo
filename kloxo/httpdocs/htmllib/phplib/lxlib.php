@@ -2642,6 +2642,11 @@ function exec_class_method($class, $func)
 
 	eval($sgbl->arg_getting_string);
 
+	// workaround for the following php bug:
+	//   http://bugs.php.net/bug.php?id=47948
+	//   http://bugs.php.net/bug.php?id=51329
+	class_exists($class);
+	// ---
 	return call_user_func_array(array($class, $func), $arglist);
 }
 

@@ -868,13 +868,14 @@ function do_local_action($rmt)
 		$object = $rmt->robject;
 		return $object->doSyncToSystem();
 	} else if ($rmt->action === "get") {
-		//Stupid php crashes without this.
-		// If it is a class functionn, you have to load it here. autoload and call_user_func doesn't seem to be the best of the friends.
-		//dprint("In do local action\n");
-		if (is_array($rmt->func)) {
+		// workaround for the following php bug:
+		//   http://bugs.php.net/bug.php?id=47948
+		//   http://bugs.php.net/bug.php?id=51329
+		if (is_array($rmt->func) && count($rmt->func) > 0) {
 			$class = $rmt->func[0];
-			$tmp = new $class(null, null, 'dummy');
+			class_exists($class);
 		}
+		// ---
 		return call_user_func_array($rmt->func, $rmt->arglist);
 
 	}
