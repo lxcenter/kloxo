@@ -80,15 +80,13 @@ function doUpdateExtraStuff()
 
 
 	lxfile_mkdir("__path_program_etc/flag");
-	@ unlink("/home/kloxo/httpd/webmail/horde/Ligesh,");
-
 	
 	fix_dns_zones();
 	lxshell_return("lphp.exe", "../bin/fixIpAddress.php");
 	fixservice();
 
-
 	add_domain_backup_dir();
+
 	if (!posix_getpwnam('admin')) {
 		os_create_system_user('admin', randomString(7), 'admin', '/sbin/nologin', "/home/admin");
 	}
@@ -130,6 +128,12 @@ function doUpdateExtraStuff()
 		system("chkconfig freshclam off > /dev/null 2>&1");
 		system("service freshclam stop >/dev/null 2>&1");
 	}
+
+	//
+	// Install/Update installapp if needed or remove installapp when installapp is disabled. 
+	// Line below added in Kloxo 6.1.4
+	installinstallapp();
+
 
 }
 
@@ -279,6 +283,7 @@ function fixdomainhomepermission()
 
 function installgroupwareagain()
 {
+	dprint("DEBUG: running Function installgroupwareagain in updatelib.php\n");
 	lxshell_return("__path_php_path", "../bin/misc/lxinstall_hordegroupware_db.php");
 }
 
@@ -398,15 +403,19 @@ function installinstallapp()
 	if ($sgbl->is_this_master()) {
 		$gen = $login->getObject('general')->generalmisc_b;
 		$diflag = $gen->isOn('disableinstallapp');
+		dprint("Disable InstallApp flag is ON\n");
 	} else {
 		$diflag = false;
+		dprint("Disable InstallApp flag is OFF\n");
 	}
 
 	if (!lxfile_exists("__path_kloxo_httpd_root/installappdata")) {
+		dprint("Running InstallApp data update..\n");
 		installapp_data_update();
 	}
 
 	if (lfile_exists("../etc/remote_installapp")) {
+		dprint("Hosting Remote InstallApp detected, remove InstallApp..\n");
 		lxfile_rm_rec("/home/kloxo/httpd/installapp/");
 		system("cd /var/cache/kloxo/ ; rm -f installapp*.tar.gz;");
 		return;
@@ -414,16 +423,20 @@ function installinstallapp()
 
 
 	if ($diflag) {
+		dprint("InstallApp is turned off, remove InstallApp..\n");
 		lxfile_rm_rec("/home/kloxo/httpd/installapp/");
 		system("cd /var/cache/kloxo/ ; rm -f installapp*.tar.gz;");
 		return;
 	}
 
-	return;
+	// Line below Removed in Kloxo 6.1.4
+	// return;
 
+	dprint("Creating installapp dir\n");
 	lxfile_mkdir("__path_kloxo_httpd_root/installapp");
 
 	if (!lxfile_exists("__path_kloxo_httpd_root/installapp/wordpress")) {
+		dprint("Installing/Updating InstallApp..\n");
 		lxshell_php("../bin/installapp-update.phps");
 	}
 	return;
