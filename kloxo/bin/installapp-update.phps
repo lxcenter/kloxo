@@ -21,6 +21,16 @@ function installapp_update_main()
 
 function application_update()
 {
+        global $gbl;
+
+        $checkflag = $gbl->getObject('general')->generalmisc_b;
+        $installappflag = $checkflag->isOn('disableinstallapp');
+        if ($installappflag)
+        {
+        print("InstallApp is disabled.\n");
+        exit;
+        }
+
 	print(fill_string("Fetch current InstallApp version", 50));
 	$string = file_get_contents("http://download.lxcenter.org/download/installapp/version.list");
 	$rmt = unserialize($string);
