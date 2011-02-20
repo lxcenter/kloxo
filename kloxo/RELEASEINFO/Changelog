@@ -1,5 +1,19 @@
 Changelog
 
+Kloxo 6.1.4 - xx-feb-2011
+##################################
+•Bug #258: Kloxo install on a Citrix Xenserver Centos VM causes console to lock up with error
+•Bug #443: Installap downloads & extracts cms packages when disabled.
+•Bug #447: Switch program fails
+•Bug #448: Error for /script/cleanup in version 6.1.3
+•Bug #450: CentOS on Xen with Udev
+•Bug #452: Add FTP User button results in a blank page
+•Bug #453: PHP info not working in Control Panel (PHPinfo)
+•Feature #378: Webmail SSL support
+•Feature #446: Stats page not password protected by default.
+•Security #435: Critical PHP security bug
+•ToDo #421: Add new script to reinstall/install/remove/change-version for lxwebmail
+
 Kloxo 6.1.3 - 14-feb-2011
 ##################################
 •Bug #367: Add support for IDN Domain
