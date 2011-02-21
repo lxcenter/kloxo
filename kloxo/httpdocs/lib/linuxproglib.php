@@ -2,7 +2,7 @@
 
 function os_doUpdateExtraStuff()
 {
-	//exec_with_all_closed("service qmail restart");
+// TODO: Remove empty Function
 }
 
 
@@ -12,7 +12,6 @@ function os_update_server()
 	os_fix_some_permissions();
 	lxfile_touch("../etc/flag/lowmem.flag");
 	os_createLowMem();
-
 }
 
 
@@ -20,7 +19,7 @@ function os_createLowMem()
 {
 	if (!lxfile_exists("/proc/user_beancounters") && !lxfile_exists("/proc/xen")) {
 		if (!lxshell_return("diff", "../file/lowmem/my.cnf.lowmem", "/etc/my.cnf")) {
-			lxfile_cp("/etc/lxlabs.saved.my.cnf", "/etc/my.cnf");
+			lxfile_cp("/etc/lowmem.saved.my.cnf", "/etc/my.cnf");
 			createRestartFile("mysqld");
 		}
 		return;
@@ -28,8 +27,8 @@ function os_createLowMem()
 
 	if (lxfile_exists("__path_program_etc/flag/lowmem.flag")) {
 
-		if (!lxfile_exists("/etc/lxlabs.saved.my.cnf")) {
-			lxfile_cp("/etc/my.cnf", "/etc/lxlabs.saved.my.cnf");
+		if (!lxfile_exists("/etc/lowmem.saved.my.cnf")) {
+			lxfile_cp("/etc/my.cnf", "/etc/lowmem.saved.my.cnf");
 			lxfile_cp("../file/lowmem/my.cnf.lowmem", "/etc/my.cnf");
 			createRestartFile('mysql');
 			createRestartFile('courier-imap');
@@ -44,8 +43,7 @@ function os_set_iis_ftp_root_path() { }
 
 function os_fix_some_permissions()
 {
-	//lxshell_return("chcon", "-R", "-t", "httpd_user_content_t", "/home/kloxo/");
-	//lxshell_return("chcon", "-R", "-t", "httpd_user_content_t", "/home/httpd/");
+// TODO: Remove empty Function
 }
 
 function remove_lighttpd_error_log()
@@ -67,6 +65,8 @@ function create_dev()
 	lxshell_return('/sbin/MAKEDEV', 'pty');
 	lxshell_return('/sbin/MAKEDEV', 'tty');
 	lxshell_return('/sbin/MAKEDEV', 'loop');
+	lxshell_return('/sbin/MAKEDEV', 'random');
+	lxshell_return('/sbin/MAKEDEV', 'urandom');
 }
 
 
@@ -90,6 +90,7 @@ function os_updateApplicableToSlaveToo()
 		lxshell_return("usermod", "-c", $desc, "admin");
 	}
 
+	// TODO: php six four symlink remove when lxphp 64bit is ready!
 	if (os_is_php_six_four()) {
 		$ver = get_package_version("kloxophpsixfour");
 		installWithVersion("/usr/lib/kloxophp", "kloxophpsixfour", $ver);
@@ -154,7 +155,6 @@ function os_updateApplicableToSlaveToo()
 	}
 
 	system("chkconfig gpm off");
-	//system("rpm -e php-mcrypt >/dev/null 2>&1");
 	lxfile_rm("phpinfo.php");
 
 	$ret = lxshell_return("rpm", "-q", "maildrop-toaster");
@@ -168,7 +168,7 @@ function os_updateApplicableToSlaveToo()
 	}
 
 	lxfile_touch("/var/named/chroot/etc/kloxo.named.conf");
-    lxfile_touch("/var/named/chroot/etc/global.options.named.conf");
+	lxfile_touch("/var/named/chroot/etc/global.options.named.conf");
 	lxshell_return("pkill", "-f", "gettraffic");
 
 
@@ -231,7 +231,7 @@ function os_updateApplicableToSlaveToo()
 	if (!lxfile_exists("/etc/xinetd.d/smtp_lxa")) {
 		lxfile_cp("../file/xinetd.smtp_lxa", "/etc/xinetd.d/smtp_lxa");
 	}
-	@ lxfile_rm("/etc/xinetd.d/pure-ftpd");
+	@lxfile_rm("/etc/xinetd.d/pure-ftpd");
 	lxfile_cp("../file/qmail.init", "/etc/init.d/qmail");
 	lxfile_unix_chmod("/etc/init.d/qmail", "0755");
 	lxfile_cp("../file/lxrestricted", "/etc/lxrestricted");
@@ -248,8 +248,6 @@ function os_updateApplicableToSlaveToo()
 	if (!lxfile_exists("/usr/bin/tcpserver")) {
 		lxshell_return("ln", "-s", "/usr/local/bin/tcpserver", "/usr/bin/");
 	}
-
-	//system("yum -y install lxlighttpd");
 
 
 	call_with_flag("enable_xinetd");
@@ -284,7 +282,7 @@ function os_updateApplicableToSlaveToo()
 		system("echo > /etc/lighttpd/conf/kloxo/webmail_redirect.conf");
 	}
 	if (!lxfile_real("/etc/lighttpd/conf/kloxo/virtualhost.conf")) {
-		//system("echo > /etc/lighttpd/conf/kloxo/virtualhost.conf");
+		system("echo > /etc/lighttpd/conf/kloxo/virtualhost.conf");
 	}
 	if (!lxfile_real("/etc/lighttpd/conf/kloxo/domainip.conf")) {
 		system("echo > /etc/lighttpd/conf/kloxo/domainip.conf");
@@ -310,8 +308,6 @@ function os_updateApplicableToSlaveToo()
 
 	if (!lxfile_exists("../etc/flag/xcache_enabled.flg")) {
 		lunlink("/etc/php.d/xcache.ini");
-	} else {
-		//lxfile_cp("../file/centos-5/xcache.ini", "/etc/php.d/");
 	}
 
 	$ret = lxshell_return("rpm", "-q", "xinetd");
@@ -335,7 +331,6 @@ function os_updateApplicableToSlaveToo()
 	    lxshell_return("yum", "-y", "install", "lxphp");
 	}
 
-	//install_if_package_not_exist("ImageMagick");
 
 	system("chmod 666 /dev/null");
 	@ exec("chkconfig pure-ftpd off 2>/dev/null");
@@ -363,20 +358,19 @@ function os_updateApplicableToSlaveToo()
 	lxfile_unix_chown_rec("/home/kloxo/httpd/script", "lxlabs:lxlabs");
 	lxfile_cp("../file/script/phpinfo.phps", "/home/kloxo/httpd/script/phpinfo.php");
 	lxfile_cp("../file/djbdns.init", "/etc/init.d/djbdns");
-	//system("lphp.exe ../bin/fix/fixfrontpage.php");
 	removeOtherDriver();
 	lxfile_rm_rec("__path_program_root/cache");
 	createRestartFile('syslog');
 	lxfile_mkdir("/home/kloxo/httpd/awstats/dirdata");
 	
-	//call_with_flag("remove_ssh_self_host_key");
 	remove_test_root();
+ 	remove_ssh_self_host_key();
 
 	if (lxfile_exists("/etc/httpd/conf/httpd.conf")) {
 		addLineIfNotExistInside("/etc/httpd/conf/httpd.conf", "Include /etc/httpd/conf/kloxo/kloxo.conf", "");
 	}
-
-	if (lxfile_exists("/proc/user_beancounters") || lxfile_exists("/proc/xen")) {
+	# Issue #450
+	if (lxfile_exists("/proc/user_beancounters")) {
 	    create_dev();
 	    lxfile_cp("../file/openvz/inittab", "/etc/inittab");
 	} else {
@@ -397,7 +391,13 @@ function remove_test_root()
 
 function remove_ssh_self_host_key()
 {
-	remove_line("/root/.ssh/authorized_keys2", "root@self.lxlabs.com");
+	# TODO: Can be removed somewhere in 6.2.x branche
+	if (lxfile_exists("/root/.ssh/authorized_keys") {
+ 		remove_line("/root/.ssh/authorized_keys", "root@self.lxlabs.com");
+	}
+        if (lxfile_exists("/root/.ssh/authorized_keys2") {
+		remove_line("/root/.ssh/authorized_keys2", "root@self.lxlabs.com");
+	}
 }
 
 function remove_host_deny()
