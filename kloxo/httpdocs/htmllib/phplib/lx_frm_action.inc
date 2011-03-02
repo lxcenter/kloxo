@@ -28,6 +28,14 @@ try {
 // If redirecting, too, ssession wont be saved....
 if (isset($gbl->__this_function)) {
 	dprint("Calling $gbl->__this_function <br> <br> ");
+	// workaround for the following php bug:
+	//   http://bugs.php.net/bug.php?id=47948
+	//   http://bugs.php.net/bug.php?id=51329
+	if (is_array($gbl->__this_function) && count($gbl->__this_function) > 0) {
+		$class = $gbl->__this_function[0];
+		class_exists($class);
+	}
+	// ---
 	call_user_func_array($gbl->__this_function, $gbl->__this_functionargs);
 }
 
