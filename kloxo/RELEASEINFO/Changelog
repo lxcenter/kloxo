@@ -1,36 +1,49 @@
 Changelog
 
+Kloxo 6.1.4 - 03-mar-2011
+##################################
+Bug #258: Kloxo install on a Citrix Xenserver Centos VM causes console to lock up with error
+Bug #443: InstallApp download/install packages when InstallApp is disabled in GUI.
+Bug #447: Switch Program fails (CGI died)
+Bug #448: Error in /script/cleanup in version 6.1.3
+Bug #450: Re-enable UDEV on Xen VPS (Was disabled in year 2008 by Lxlabs for a bug)
+Bug #452: Add FTP User button results in a blank page
+Security #435: Critical PHP security bug (disable_functions configuration in php.ini)
+
+Moved to 6.1.5 (Not in time finished)
+ToDo #421
+
 Kloxo 6.1.3 - 14-feb-2011
 ##################################
-•Bug #367: Add support for IDN Domain
-•Bug #400: Cannot restore account in GUI or via Commandline API (Restore Failed. Reason: could_not_unzip_file)
-•Bug #413: Kloxo GUI php.ini: post_max_size should be the same as upload_max_filesize
-•Bug #416: Cannot delete domain with specific name
-•Bug #418: Kloxo Tree menu depth now limited
-•Bug #426: Spamdyke whitelist only valid for graylist
-•Bug #431: Roundcube config/db.inc.php with wrong password and fixwebmail not fixing it. 
-•Feature #424: Extending Spamdyke features
-•Feature #436: Alternative smtp port with alternative or without SPAM control
-•Updates #437: New file creation fails after r297
+Bug #367: Add support for IDN Domain
+Bug #400: Cannot restore account in GUI or via Commandline API (Restore Failed. Reason: could_not_unzip_file)
+Bug #413: Kloxo GUI php.ini: post_max_size should be the same as upload_max_filesize
+Bug #416: Cannot delete domain with specific name
+Bug #418: Kloxo Tree menu depth now limited
+Bug #426: Spamdyke whitelist only valid for graylist
+Bug #431: Roundcube config/db.inc.php with wrong password and fixwebmail not fixing it.
+Feature #424: Extending Spamdyke features
+Feature #436: Alternative smtp port with alternative or without SPAM control
+Updates #437: New file creation fails after r297
 
 Moved to 6.1.4 (Not in time finished)
-•ToDo #421
+ToDo #421
 
 
 Kloxo 6.1.2 - 19-jan-2011
 ##################################
-•Bug #372: Traffic history: sorting of the month field does not work properly
-•Bug #379: Roundcube can't write logs
-•Bug #383: Adding client on plan with 0 database creates 1 database
-•Bug #390: suphp configuration and problems with the startup of httpd daemon
-•Bug #407: Traffic history: The delete button should be removed
-•ToDo #408: Remove: Add Lxlabs Authorized Key button
+Bug #372: Traffic history: sorting of the month field does not work properly
+Bug #379: Roundcube can't write logs
+Bug #383: Adding client on plan with 0 database creates 1 database
+Bug #390: suphp configuration and problems with the startup of httpd daemon
+Bug #407: Traffic history: The delete button should be removed
+ToDo #408: Remove: Add Lxlabs Authorized Key button
 
 Kloxo 6.1.1 - 05-jan-2011
 ##################################
-•Bug #388: phpMyAdmin Configfile wrong persmission (thirdparty 2013)
-•Bug #391: Forbidden: You don't have permission to access /index.html on this server.
-•Bug #396: InstallApp icon in kloxo 6.1.0 not working
+Bug #388: phpMyAdmin Configfile wrong persmission (thirdparty 2013)
+Bug #391: Forbidden: You don't have permission to access /index.html on this server.
+Bug #396: InstallApp icon in kloxo 6.1.0 not working
 
 Kloxo 6.1.0 - 31-dec-2010
 ##################################
@@ -40,30 +53,30 @@ dterweij - Moved all C sources into one place
 dterweij - Fixed broken images
 dterweij - InstallApp new version 5.0.5000 (Mainly lxadmin to kloxo dir changes)
 various  - InstallApp software updates
-•Bug #8: 500 domain limit
-•Bug #21: Password protected directory feature does not work
-•Bug #31: AWBS Module Lxadmin with Kloxo has no connection
-•Bug #43: Error while saving a file edited using the inbuilt text editor
-•Bug #74: Apache not restarted after changing / adding protected directories
-•Bug #242: Typo in lxins.php
-•Bug #246: Switching back from suphp to mod_php does not work
-•Bug #273: MySQL disk usage = 0 MB
-•Bug #277: Bug in validate_domain_name
-•Bug #313: document root created with wrong ownership
-•Bug #317: lxguard hits PHP Fatal error: Out of Memory
-•Bug #364: error while adding a mail account to a .travel domain
-•Bug #366: kloxo scheduled backups by FTP are not deleted automatically
-•Feature #6: InstallApp outdated
-•Feature #270: Add delete option to mail catchall
-•Updates #54: Removing Licence server contact
-•Updates #283: phpMyAdmin 3.3.4
-•Updates #342: Speed improvements
-•Security #88: Kloxo Single Server 6.0.2083 Stable multiple vulnerabilities
-•Security #244: Remote CPU and memory usage DoS
-•Security #268: Local users can obtain the password hashes from the stats page protection files or from directory protection files
-•Security #341: Remotely block any or every IP addresses in hosts.deny
-•ToDo #303: Fix thirdparty hardcoded version numbers
-•ToDo #353: Command line in cron jobs should be longer
+Bug #8: 500 domain limit
+Bug #21: Password protected directory feature does not work
+Bug #31: AWBS Module Lxadmin with Kloxo has no connection
+Bug #43: Error while saving a file edited using the inbuilt text editor
+Bug #74: Apache not restarted after changing / adding protected directories
+Bug #242: Typo in lxins.php
+Bug #246: Switching back from suphp to mod_php does not work
+Bug #273: MySQL disk usage = 0 MB
+Bug #277: Bug in validate_domain_name
+Bug #313: document root created with wrong ownership
+Bug #317: lxguard hits PHP Fatal error: Out of Memory
+Bug #364: error while adding a mail account to a .travel domain
+Bug #366: kloxo scheduled backups by FTP are not deleted automatically
+Feature #6: InstallApp outdated
+Feature #270: Add delete option to mail catchall
+Updates #54: Removing Licence server contact
+Updates #283: phpMyAdmin 3.3.4
+Updates #342: Speed improvements
+Security #88: Kloxo Single Server 6.0.2083 Stable multiple vulnerabilities
+Security #244: Remote CPU and memory usage DoS
+Security #268: Local users can obtain the password hashes from the stats page protection files or from directory protection files
+Security #341: Remotely block any or every IP addresses in hosts.deny
+ToDo #303: Fix thirdparty hardcoded version numbers
+ToDo #353: Command line in cron jobs should be longer
 And many more small things.
 
 #############################################
