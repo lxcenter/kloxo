@@ -392,10 +392,10 @@ function remove_test_root()
 function remove_ssh_self_host_key()
 {
 	# TODO: Can be removed somewhere in 6.2.x branche
-	if (lxfile_exists("/root/.ssh/authorized_keys") {
+	if (lxfile_exists("/root/.ssh/authorized_keys")) {
  		remove_line("/root/.ssh/authorized_keys", "root@self.lxlabs.com");
 	}
-        if (lxfile_exists("/root/.ssh/authorized_keys2") {
+        if (lxfile_exists("/root/.ssh/authorized_keys2")) {
 		remove_line("/root/.ssh/authorized_keys2", "root@self.lxlabs.com");
 	}
 }
