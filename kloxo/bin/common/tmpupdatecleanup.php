@@ -55,7 +55,7 @@ function updatecleanup_main()
 //}
 
 // Remove Flagfile in Kloxo 6.1.4, thios can be removed in 6.1.4+
-if (!lxfile_exists("/usr/local/lxlabs/kloxo/file/webmailReset")) {
+if (lxfile_exists("/usr/local/lxlabs/kloxo/file/webmailReset")) {
       system("/bin/rm /usr/local/lxlabs/kloxo/file/webmailReset");
 }
 
