@@ -821,8 +821,8 @@ function syncToPort($port, $cust_log, $err_log, $frontpage = false)
 	}
 
 	if ($this->main->__var_statsprog === 'awstats') {
-		$string .= "Redirect     /stats http://$domname/awstats/awstats.pl\n";
-		$string .= "Redirect     /stats/ http://$domname/awstats/awstats.pl\n";
+		$string .= "Redirect     /stats http://$domname/awstats/awstats.pl?config=$domname\n";
+		$string .= "Redirect     /stats/ http://$domname/awstats/awstats.pl?config=$domname\n";
 	} else {
 		$string .= "Alias     /stats  {$sgbl->__path_httpd_root}/{$domname}/webstats/\n";
 	}

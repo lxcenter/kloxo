@@ -603,8 +603,8 @@ function getDocumentRoot($subweb)
 		$string .= "url.redirect += (\"/kloxononssl\" => \"http://cp.$domname:{$this->main->__var_nonsslport}\")\n";
 	}
 	if ($this->main->__var_statsprog === 'awstats') {
-		$string .= "url.redirect   += (\"/stats/\" => \"http://$domname/awstats/awstats.pl\")\n";
-		$string .= "url.redirect   += (\"/stats\" => \"http://$domname/awstats/awstats.pl\")\n";
+		$string .= "url.redirect   += (\"/stats/\" => \"http://$domname/awstats/awstats.pl?config=$domname\")\n";
+		$string .= "url.redirect   += (\"/stats\" => \"http://$domname/awstats/awstats.pl?config=$domname\")\n";
 	} else {
 		$string .= "alias.url   += (\"/stats\" => \"$sgbl->__path_httpd_root/$domname/webstats\")\n";
 	}
