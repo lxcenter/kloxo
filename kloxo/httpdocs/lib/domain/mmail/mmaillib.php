@@ -388,7 +388,7 @@ function fixWebmailRedirect()
 	global $gbl, $sgbl, $login, $ghtml; 
 	$gen = $login->getObject('general')->generalmisc_b;
 	$sq = new Sqlite(null, 'mmail');
-	$res = $sq->getRowsWhere("syncserver = '$this->syncserver'", array('nname', 'systemuser', 'webmailprog', 'webmail_url', "remotelocalflag"));
+	$res = $sq->getRowsWhere('syncserver = :syncserver', array(':syncserver' => $this->syncserver), array('nname', 'systemuser', 'webmailprog', 'webmail_url', "remotelocalflag"));
 
 	$res = merge_array_object_not_deleted($res, $this);
 

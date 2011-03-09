@@ -423,8 +423,9 @@ function createExtraVariables()
 
 	$mydb = new Sqlite($this->__masterserver, 'ipaddress');
 	$syncserver = $this->syncserver? $this->syncserver: 'localhost';
-	$string = "syncserver = '$syncserver'";
-	$this->__var_ipssllist = $mydb->getRowsWhere($string, array('ipaddr', 'nname'));
+	$condition = 'syncserver = :syncserver';
+	$params = array(':syncserver' => $syncserver);
+	$this->__var_ipssllist = $mydb->getRowsWhere($condition, $params, array('ipaddr', 'nname'));
 
 
 	$this->__var_addonlist = $this->getTrueParentO()->getList('addondomain');
@@ -435,13 +436,11 @@ function createExtraVariables()
 	}
 
 	$dipdb = new Sqlite(null, "domainipaddress");
-	$string = "syncserver = '$syncserver' " ;
-	$domainip = $dipdb->getRowsWhere($string, array('domain', 'ipaddr'));
+	$domainip = $dipdb->getRowsWhere($condition, $params, array('domain', 'ipaddr'));
 	$this->__var_domainipaddress = get_namelist_from_arraylist($domainip, 'ipaddr', 'domain');
 
 	$ipdb = new Sqlite($this->__masterserver, 'ipaddress');
-	$string = "syncserver = '$syncserver' " ;
-	$iplist = $ipdb->getRowsWhere($string, array('ipaddr'));
+	$iplist = $ipdb->getRowsWhere($condition, $params, array('ipaddr'));
 	$this->__var_ipaddress = $iplist;
 	$mydb = new Sqlite($this->__masterserver, "web");
 	
@@ -469,8 +468,7 @@ function createExtraVariables()
 		$this->__var_clientname = $this->getTrueParentO()->getTrueParentO()->nname;
 	}
 
-	$string = "syncserver = '$syncserver'" ;
-	$this->__var_vdomain_list = $mydb->getRowsWhere($string, array('nname', 'ipaddress'));
+	$this->__var_vdomain_list = $mydb->getRowsWhere($condition, $params, array('nname', 'ipaddress'));
 	/*
 	$string = "ttype='forward' AND syncserver = '$syncserver'" ;
 	$this->__var_fdomain_list = $mydb->getRowsWhere($string, array('nname'));

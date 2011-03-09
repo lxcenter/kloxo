@@ -59,7 +59,7 @@ static function addform($parent, $class, $typetd = null)
 	global $gbl, $sgbl, $login, $ghtml; 
 	$vlist['client'] = array('M', $parent->nname);
 	$sq = new Sqlite(null, 'invoice');
-	$res = $sq->getRowsWhere("client = '$parent->nname'", array("month"));
+	$res = $sq->getRowsWhere('client = :nname', array(':nname' => $parent->nname), array("month"));
 	$list = get_namelist_from_arraylist($res, 'month');
 	$list = array_reverse($list);
 	$vlist['month'] = array('s', $list);
@@ -100,7 +100,7 @@ static function checkIftransactionExists($transactionid)
 	static $sq;
 	if (!$sq) { $sq = new Sqlite(null, 'paymentdetail'); }
 
-	if ($sq->getRowsWhere("transactionid = '$transactionid'")) {
+	if ($sq->getRowsWhere('transactionid = :transid', array(':transid' => $transactionid))) {
 		return true;
 	}
 	return false;
@@ -122,7 +122,7 @@ static function process_paypal($list)
 	$i = 0;
 	while (true) {
 		$r['nname'] = implode("___", array($r['client'], $r['month'], $i));
-		if (!$sq->getRowsWhere("nname = '{$r['nname']}'")) {
+		if (!$sq->getRowsWhere('nname = :nname', array(':nname' => $r['nname']))) {
 			break;
 		}
 		$i++;

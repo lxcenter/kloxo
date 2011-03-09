@@ -460,7 +460,7 @@ function createSessionProperties()
 function checkTicketUnread()
 {
 	$sql = new Sqlite($this->__masterserver, 'ticket');
-	$res = $sql->getRowsWhere("sent_to = '{$this->getClName()}' AND unread_flag = 'on'");
+	$res = $sql->getRowsWhere("sent_to = :clname AND unread_flag = 'on'", array(':clname' => $this->getClName()));
 	return count($res);
 }
 
@@ -468,7 +468,8 @@ function checkTicketUnread()
 function checkMessageUnread()
 {
 	$sql = new Sqlite($this->__masterserver, 'smessage');
-	$res = $sql->getRowsWhere("text_sent_to_cmlist LIKE '%,{$this->getClName()},%' AND text_readby_cmlist NOT LIKE '%,{$this->getClName()},%'");
+	$clname = $this->getClName();
+	$res = $sql->getRowsWhere("text_sent_to_cmlist LIKE CONCAT('%', :clname1, '%') AND text_readby_cmlist NOT LIKE CONCAT('%', :clname2, '%')", array(':clname1' => $clname, ':clname2' => $clname));
 	return count($res);
 }
 

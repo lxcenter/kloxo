@@ -50,8 +50,7 @@ class Dns extends DnsBase {
         $serverlist = explode(",", $this->syncserver);
         $list = null;
         foreach($serverlist as $server) {
-            $string = "syncserver LIKE '%$server%'";
-            $nlist = $db->getRowsWhere($string, array('nname'));
+            $nlist = $db->getRowsWhere("syncserver LIKE CONCAT('%', :server, '%')", array(':server' => $server), array('nname'));
             $dlistv = "__var_domainlist_$server";
             $this->$dlistv = $nlist;
         }
@@ -75,8 +74,7 @@ class Dns extends DnsBase {
 
 
         $mydb = new Sqlite(null, "ipaddress");
-        $string = "syncserver = '$this->syncserver'";
-        $this->__var_ipssllist = $mydb->getRowsWhere($string, array('ipaddr', 'nname'));
+        $this->__var_ipssllist = $mydb->getRowsWhere('syncserver = :syncserver', array(':syncserver' => $this->syncserver), array('ipaddr', 'nname'));
 
     }
 

@@ -237,7 +237,7 @@ function isSelect()
 {
 	return true;
 	$db = new Sqlite($this->__masterserver, "sslipaddress");
-	$res = $db->getRowsWhere("sslcert = '$this->certname'", array('nname'));
+	$res = $db->getRowsWhere('sslcert = :certname', array(':certname' => $this->certname), array('nname'));
 
 	return ($res? false: true);
 }

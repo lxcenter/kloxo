@@ -68,7 +68,7 @@ function display($var)
 function getTotalPaid()
 {
 	$sq = new Sqlite(null, "paymentdetail");
-	$res = $sq->getRowsWhere("month = '$this->month' AND client = '$this->client'");
+	$res = $sq->getRowsWhere('month = :month AND client = :client', array(':month' => $this->month, ':client' => $this->client));
 	$total = 0;
 	if ($res) {
 		foreach($res as $r) {

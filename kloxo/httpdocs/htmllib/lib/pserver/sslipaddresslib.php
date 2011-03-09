@@ -24,7 +24,7 @@ function defaultValue($var)
 {
 	if ($var === 'ipaddr') {
 		$db = new Sqlite($this->__masterserver, 'ipaddress');
-		$res = $db->getRowsWhere("nname = '$this->nname'");
+		$res = $db->getRowsWhere('nname = :nname', array(':nname' => $this->nname));
 		return $res[0]['ipaddr'];
 	}
 	return null;

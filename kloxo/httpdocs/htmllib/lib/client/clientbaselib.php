@@ -517,10 +517,10 @@ function updateWall($param)
 	global $gbl, $sgbl, $login, $ghtml; 
 	$clname = $this->getClName();
 	$db = new Sqlite($this->__masterserver, "client");
-	$clist = $db->getRowsWhere("parent_clname = '$clname'", array("nname", "contactemail"));
+	$clist = $db->getRowsWhere('parent_clname = :clname', array(':clname' => $clname), array('nname', 'contactemail'));
 
 	$db = new Sqlite($this->__masterserver, "domain");
-	$dlist = $db->getRowsWhere("parent_clname = '$clname'", array("nname", "contactemail"));
+	$dlist = $db->getRowsWhere('parent_clname = :clname', array(':clname' => $clname), array('nname', 'contactemail'));
 
 	$nlist = lx_merge_good($clist, $dlist);
 

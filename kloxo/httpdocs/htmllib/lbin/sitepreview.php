@@ -40,7 +40,7 @@ $domain = strtilfirst($request, "/");
 
 dprint($domain);
 $sq = new Sqlite(null, 'web');
-$res = $sq->getRowsWhere("nname = '$domain'");
+$res = $sq->getRowsWhere('nname = :domain', array(':domain' => $domain));
 
 if (!$res) {
 	print("Domain Doesn't exist\n");

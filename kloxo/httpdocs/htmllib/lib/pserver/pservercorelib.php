@@ -359,7 +359,7 @@ function getVpsRam()
 	}
 
 
-	$res = $sq->getRowsWhere("syncserver = '$this->nname'", $list);
+	$res = $sq->getRowsWhere('syncserver = :nname', array(':nname' => $this->nname), $list);
 	if (!$res) { return; }
 
 	foreach($res as $r) {
@@ -1127,7 +1127,7 @@ function updateform($subaction, $param)
 
 		case "information":
 			$sq = new Sqlite(null, 'client');
-			$res = $sq->getRowsWhere("cttype = 'wholesale'", array('nname'));
+			$res = $sq->getRowsWhere("cttype = 'wholesale'", null, array('nname'));
 			$clientlist = get_namelist_from_arraylist($res);
 
 

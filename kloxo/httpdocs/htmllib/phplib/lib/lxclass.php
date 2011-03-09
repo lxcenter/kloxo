@@ -391,15 +391,17 @@ function doCustomAction()
 	$sq = new Sqlite(null, 'customaction');
 
 	if ($this->dbaction === 'add') {
-		$query = "action = '$this->dbaction' AND class = '{$this->getClass()}'";
+		$query = 'action = :dbaction AND class = :class';
+		$params = array(':dbaction' => $this->dbaction, ':class' => $this->getClass());
 	} else {
-		$query = "action = '$this->dbaction' AND subaction = '$this->subaction' AND class = '{$this->getClass()}'";
+		$query = 'action = :dbaction AND subaction = :subaction AND class = :class';
+		$params = array(':dbaction' => $this->dbaction, ':subaction' => $this->subaction, ':class' => $this->getClass());
 	}
 
 	$this->__var_custom_exec = null;
 
 	dprint($query);
-	$list = $sq->getRowsWhere($query);
+	$list = $sq->getRowsWhere($query, $params);
 	if (!$list) { return; }
 	dprintr($list);
 	foreach($list as $k => $l) {
@@ -2541,7 +2543,7 @@ function changeNnameRewrite()
 		}
 		$this->nname =implode($sgbl->__var_nname_impstr, $nnamelist);
 		$sql = new Sqlite(null, $this->get__table());
-		$res = $sql->getRowsWhere("nname = '{$this->nname}'");
+		$res = $sql->getRowsWhere('nname = :nname', array(':nname' => $this->nname));
 		if ($res) {
 			throw new lxException("{$this->nname}_already_exists");
 		}
@@ -2704,7 +2706,7 @@ function consistencyNotExisting($trulist, $real)
 
 	global $gbl, $sgbl, $login, $ghtml; 
 	$sql = new Sqlite(null, get_table_from_class($this->getParentClass()));
-	$res = $sql->getRowsWhere("nname = '{$this->getParentName()}'");
+	$res = $sql->getRowsWhere('nname = :nname', array(':nname' => $this->getParentName()));
 
 	if ($trulist && $this->__parent_o->dbaction !== 'add' && !$res) {
 		$this->AddMEssageOnlyIfClientDomain("<font color=red> <b> (Parent {$this->getParentName()} Does Not Exist. Will be Not be Restored).</font> </b> ");
@@ -2799,7 +2801,7 @@ function checkForConsistency($tree, $trulist, $real = false)
 
 
 		$sql = new Sqlite(null, $this->get__table());
-		$res = $sql->getRowsWhere("nname = '{$this->nname}'");
+		$res = $sql->getRowsWhere('nname = :nname', array(':nname' => $this->nname));
 		$this->consistencySwitchServer();
 		if ($res) {
 			$return = $this->consistencyAlreadyExisting($res, $trulist, $real);
@@ -3762,7 +3764,7 @@ function getSingleOrListclass($class)
 {
 	$table = get_table_from_class($class);
 	$sq = new Sqlite(null, $table);
-	$count = $sq->getCountWhere("parent_clname = '{$this->getClName()}'");
+	$count = $sq->getCountWhere('parent_clname = :clname', array(':clname' => $this->getClName()));
 	if ($count == 1 && $this->isGte('customer')) {
 		$dlist = $this->getList($class);
 		$d = getFirstFromList($dlist);
@@ -3894,7 +3896,7 @@ function getCustomButton(&$alist)
 {
 	$t = $this->get__table();
 	$sq = new Sqlite(null, 'custombutton');
-	$res = $sq->getRowsWhere("class = '{$this->get__table()}'");
+	$res = $sq->getRowsWhere('class = :table', array(':table' => $this->get__table()));
 	if (!$res) { return; }
 
 	$alist['__title_custom'] = "Custom";
@@ -5118,7 +5120,7 @@ function fix_syncserver_nname_problem()
 		$newthis->nname =implode($sgbl->__var_nname_impstr, $nnamelist);
 
 		$sql = new Sqlite($this->__masterserver, $this->get__table());
-		$res = $sql->getRowsWhere("nname = '{$newthis->nname}'");
+		$res = $sql->getRowsWhere('nname = :nname', array(':nname' => $newthis->nname));
 		if ($res) {
 			throw new lxException("changed_name_already_exists", $newthis->nname, "syncserver");
 		}
@@ -5911,6 +5913,15 @@ function __get($var)
 	return '-';
 }
 
+function __isset($var)
+{
+	if ($var == '__parent_o') {
+		return isset($this->__parent_o);
+	}
+
+	return true;
+}
+
 }
 
 class Used extends priv {
@@ -5924,6 +5935,10 @@ function __get($var)
 	return "-";
 }
 
+function __isset($var)
+{
+	return true;
+}
 
 }
 

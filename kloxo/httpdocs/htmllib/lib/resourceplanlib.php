@@ -178,15 +178,9 @@ function getAccountList()
 {
 	global $gbl, $sgbl, $login, $ghtml; 
 	$sq = new Sqlite(null, 'client');
-	$res = $sq->getRowsWhere("resourceplan_used = '$this->nname'", array('nname'));
+	$res = $sq->getRowsWhere('resourceplan_used = :nname', array('nname' => $this->nname), array('nname'));
 	$total['client'] = get_namelist_from_arraylist($res);
 
-	if ($sgbl->isHyperVm()) {
-		$sq = new Sqlite(null, 'vps');
-		$res = $sq->getRowsWhere("resourceplan_used = '$this->nname'", array('nname'));
-		$vlist = get_namelist_from_arraylist($res);
-		$total['vps'] = $vlist;
-	}
 	return $total;
 }
 

@@ -195,7 +195,7 @@ function lxfile_cp_if_not_exists($src, $dst)
 function db_get_value($table, $nname, $var)
 {
 	$sql = new Sqlite(null, $table);
-	$row = $sql->getRowsWhere("nname = '$nname'", array($var));
+	$row = $sql->getRowsWhere("nname = :nname", array(':nname' => $nname), array($var));
 	return $row[0][$var];
 }
 
@@ -922,7 +922,7 @@ function call_with_flag($func)
 function check_disable_admin($cgi_clientname)
 {
 	$sq = new Sqlite(null, 'general');
-	$list = $sq->getRowsWhere("nname = 'admin'", array("disable_admin"));
+	$list = $sq->getRowsWhere("nname = 'admin'", null, array("disable_admin"));
 	$val = $list[0]['disable_admin'];
 
 	if ($cgi_clientname === 'admin' && $val === 'on') {
@@ -1299,7 +1299,7 @@ function getRealhostName($name)
 		return $name;
 	}
 	$sq = new Sqlite(null, 'pserver');
-	$res = $sq->getRowsWhere("nname = '$name'", array('realhostname'));
+	$res = $sq->getRowsWhere('nname = :name', array(':name' => $name), array('realhostname'));
 	if (!$res[0]['realhostname']) {
 		return 'localhost';
 	}
@@ -1411,7 +1411,7 @@ function get_admin_license_var()
 		$__l = "used_q_$__l";
 	}
 	$sq = new Sqlite(null, 'client');
-	$res = $sq->getRowsWhere("nname = 'admin'", $list);
+	$res = $sq->getRowsWhere("nname = 'admin'", null, $list);
 	return $res[0];
 }
 
@@ -2886,7 +2886,7 @@ function getIpaddressList($master, $servername)
 	if (!$servername) {
 		$servername = 'localhost';
 	}
-	$list = $sql->getRowsWhere("syncserver = '$servername'");
+	$list = $sql->getRowsWhere('syncserver = :servername', array(':servername' => $servername));
 	foreach($list as $l) {
 		$ret[] = $l['ipaddr'];
 	}
@@ -3754,9 +3754,9 @@ function migrateResourceplan($class)
 	}
 
 	foreach($total as $t) {
-		$string = $ss->createQueryStringAdd($t);
+		$string = $ss->createQueryStringAdd($t, $params);
 		$addstring = "insert into resourceplan $string;";
-		$ss->rawQuery($addstring);
+		$ss->rawQuery($addstring, $params);
 	}
 }
 
@@ -3790,7 +3790,7 @@ function getOsForServer($servername)
 
 	$sq = new Sqlite(null, 'pserver');
 
-	$res = $sq->getRowsWhere("nname = '$servername'", array('ostype'));
+	$res = $sq->getRowsWhere('nname = :servername', array(':servername' => $servername), array('ostype'));
 	return $res[0]['ostype'];
 }
 
@@ -4195,7 +4195,7 @@ function findServerTraffic()
 	$sq = new Sqlite(null, 'vps');
 	$list = $login->getList('pserver');
 	foreach($list as $l) {
-		$res = $sq->getRowsWhere("syncserver = '$l->nname'", array('used_q_traffic_usage', 'used_q_traffic_last_usage'));
+		$res = $sq->getRowsWhere('syncserver = :nname', array(':nname' => $l->nname), array('used_q_traffic_usage', 'used_q_traffic_last_usage'));
 		$tusage = 0;
 		$tlastusage = 0;
 		foreach($res as $r) {

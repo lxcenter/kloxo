@@ -1037,7 +1037,7 @@ static function createUusername($dname)
 		$dname = substr($dname, 0, 15);
 	}
 	$sq = new Sqlite(null, 'uuser');
-	if (!$sq->getRowsWhere("nname = '$dname'")) {
+	if (!$sq->getRowsWhere('nname = :dname', array(':dname' => $dname))) {
 		return $dname;
 	}
 
@@ -1045,7 +1045,7 @@ static function createUusername($dname)
 	$i = 0;
 	while (true) {
 		$i++;
-		if ($sq->getRowsWhere("nname = '$dname'")) {
+		if ($sq->getRowsWhere('nname = :dname', array(':dname' => $dname))) {
 			$dname = $dnamebase . "$i";
 		} else {
 			break;

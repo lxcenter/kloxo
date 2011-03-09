@@ -84,7 +84,7 @@ function createUsed()
 
 function getUsed()
 {
-	$vlist = array("mmail" => "mmail", "dns" => "dns",  "web" => "web", "mysqldb" => 'mysqldb', 'mssqldb' => 'mssqldb');
+	$vlist = array('mmail' => 'mmail', 'dns' => 'dns',  'web' => 'web', 'mysqldb' => 'mysqldb', 'mssqldb' => 'mssqldb');
 	$ret = null;
 	foreach($vlist as $k => $v) {
 		if (!is_array($v)) {
@@ -96,8 +96,7 @@ function getUsed()
 		}
 
 		$db = new Sqlite($this->__masterserver, $db);
-		$str = "$vname = '$this->nname'";
-		$res = $db->getRowsWhere($str, array('nname'));
+		$res = $db->getRowsWhere("$vname = :nname", array(':nname' => $this->nname), array('nname'));
 		if ($res) {
 			$tmp = null;
 			foreach($res as $r) {

@@ -736,7 +736,7 @@ function getIpaddress($list = null)
 	$sql = new Sqlite($this->__masterserver, "ipaddress");
 	if ($this->listpriv->ipaddress_list)  {
 		foreach($this->listpriv->ipaddress_list as $ip) {
-			$res = $sql->getRowsWhere("ipaddr = '$ip'", array('syncserver'));
+			$res = $sql->getRowsWhere('ipaddr = :ip', array(':ip' => $ip), array('syncserver'));
 
 			foreach($res as $a) {
 				$serv[] = $a['syncserver']? $a['syncserver']: 'localhost';

@@ -50,7 +50,7 @@ function createUsed()
 	}
 
 	$db = new Sqlite($this->__masterserver, 'domaintemplate');
-	$res = $db->getRowsWhere("dnstemplate = '$this->nname'");
+	$res = $db->getRowsWhere('dnstemplate = :nname', array(':nname' => $this->nname));
 	if ($res) {
 		$this->used_f = 'on';
 	} else {
