@@ -315,7 +315,7 @@ static function createServerInfo($list, $class = null)
 	return $ret;
 }
 
-static function  createListNlist($parent)
+static function createListNlist($parent, $view)
 {
 
 	//$nlist['cpstatus'] = '3%';

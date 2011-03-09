@@ -1523,7 +1523,7 @@ final protected function initVirtualListIfUndef($class)
 		$query = $this->getDefaultQuery($class, $rule);
 		//dprint(' <br> ' .$query . "<br> \n");
 		$filter = $this->getFilterForThis($class);
-		$string = exec_class_method($rclass, "getdbFilter", $filter, $class); 
+		$string = exec_class_method($rclass, "getdbFilter", $filter, $class);
 
 		if ($string) {
 			if ($query) { 
@@ -3810,7 +3810,7 @@ function getSpecialParentClass()
 	return 'client';
 }
 function createShowIlist() { return null; }
-static function AddListForm() { return null; }
+static function AddListForm($parent, $class) { return null; }
 
 function createShowPropertyList(&$alist) { $alist['property'][] = 'a=show';}
 function createShowActionList(&$alist) { }

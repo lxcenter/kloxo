@@ -1536,7 +1536,7 @@ function createShowUpdateform()
 }
 
 function hasFunctions() { return true; }
-function createShowAlistConfig(&$alist)
+function createShowAlistConfig(&$alist, $subaction = null)
 {
 	global $gbl, $sgbl, $login, $ghtml; 
 	$alist['__title_advanced'] = $login->getKeywordUc('advanced');

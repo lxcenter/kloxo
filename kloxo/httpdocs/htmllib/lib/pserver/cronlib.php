@@ -102,12 +102,10 @@ function createExtraVariables()
 	$mydb = new Sqlite($this->__masterserver, "uuser");
 	$userlist = $mydb->getRowsWhere("nname = '{$parent->username}'");
 	$this->__var_user_list = $userlist[0];
-
-
 }
 
 
-static function  createListNlist($parent)
+static function createListNlist($parent, $view)
 {
 	//$nlist["nname"] = "5%";
 	//$nlist["minute"] = "5%";

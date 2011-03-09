@@ -6,7 +6,7 @@ class mimehandler extends lxdb {
 
 static $__desc_extension	 = array("n", "",  "extension(s)");
 
-static function createListNlist($parent)
+static function createListNlist($parent, $view)
 {
 	$nlist['mimehandler'] = '100%';
 	$nlist['extension'] = '10%';
