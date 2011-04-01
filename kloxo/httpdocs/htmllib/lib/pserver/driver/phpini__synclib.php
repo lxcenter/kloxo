@@ -132,7 +132,7 @@ function createIniFile()
 		$adminbasedir = trim($this->main->__var_extrabasedir);
 
 		if (!$this->main->isOn('__var_disable_openbasedir')) {
-			$cont = "open_basedir = /home/{$this->main->__var_customer_name}:$adminbasedir:/tmp:/usr/share/pear:/home/httpd/$dname:/var/lib/php/session:/home/kloxo/httpd/script:/home/httpd/$dname/kloxoscript/\n$cont";
+			$cont = "open_basedir = /home/{$this->main->__var_customer_name}:$adminbasedir:/tmp:/usr/share/pear:/home/httpd/$dname:/var/lib/php/session:/home/kloxo/httpd/script:/home/httpd/$dname/kloxoscript/:/home/kloxo/httpd/webmail\n$cont";
 		}
 		$cont = "error_log = $elogfile\n$cont";
 		$cont = "$extrastring\n$cont";

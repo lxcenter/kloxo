@@ -179,7 +179,7 @@ function AddOpenBaseDir()
 
 	$path = "{$sgbl->__path_httpd_root}/{$this->main->nname}/httpdocs:{$sgbl->__path_httpd_root}/{$this->main->nname}/{$this->main->nname}:$corepath";
 
-	$openbasdstring = "php_admin_value open_basedir \"{$path}:{$adminbasedir}/tmp:/usr/share/pear:/var/lib/php/session/:/home/kloxo/httpd/script\"\n";
+	$openbasdstring = "php_admin_value open_basedir \"{$path}:{$adminbasedir}/tmp:/usr/share/pear:/var/lib/php/session/:/home/kloxo/httpd/script:/home/kloxo/httpd/webmail\"\n";
 
 	$string = "<Location />\n";
 	$string .= "<IfModule sapi_apache2.c>\n";
@@ -827,7 +827,7 @@ function syncToPort($port, $cust_log, $err_log, $frontpage = false)
 		$string .= "Alias     /stats  {$sgbl->__path_httpd_root}/{$domname}/webstats/\n";
 	}
 	$string .= "Alias     /__kloxo  /home/{$this->main->customer_name}/kloxoscript\n";
-	$string .= "Redirect     /webmail  http://webmail.{$this->main->nname}\n";
+	$string .= "Alias     /webmail  /home/kloxo/httpd/webmail\n";
 	$string .= "Redirect     /kloxononssl  http://cp.{$this->main->nname}:{$this->main->__var_nonsslport}\n";
 	$string .= "Redirect     /kloxo	https://cp.{$this->main->nname}:{$this->main->__var_sslport}\n";
 	//$string .= "Redirect     /webmail	http://webmail.{$this->main->nname}\n";
