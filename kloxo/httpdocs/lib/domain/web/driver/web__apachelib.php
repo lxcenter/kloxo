@@ -827,10 +827,9 @@ function syncToPort($port, $cust_log, $err_log, $frontpage = false)
 		$string .= "Alias     /stats  {$sgbl->__path_httpd_root}/{$domname}/webstats/\n";
 	}
 	$string .= "Alias     /__kloxo  /home/{$this->main->customer_name}/kloxoscript\n";
-	$string .= "Alias     /webmail  /home/kloxo/httpd/webmail\n";
 	$string .= "Redirect     /kloxononssl  http://cp.{$this->main->nname}:{$this->main->__var_nonsslport}\n";
 	$string .= "Redirect     /kloxo	https://cp.{$this->main->nname}:{$this->main->__var_sslport}\n";
-	//$string .= "Redirect     /webmail	http://webmail.{$this->main->nname}\n";
+	$string .= "Redirect     /webmail	https://webmail.{$this->main->nname}\n";
 	$string .= "<Directory /home/httpd/{$domname}/kloxoscript>\n";
 	$string .= "AllowOverride All\n";
 	$string .= "</Directory>\n";
@@ -1097,18 +1096,6 @@ static function createWebmailConfig()
 	$webdata = null;
 	$webdata .= "<VirtualHost  \\\n";
 	$webdata .= web__apache::staticcreateVirtualHostiplist("80");
-	$webdata .= "                   >\n";
-	$webdata .= "DocumentRoot {$sgbl->__path_kloxo_httpd_root}/webmail/\n";
-	$webdata .= "servername   webmail\n";
-	$webdata .= "ServerAlias   webmail.*\n";
-	$webdata .= "<Ifmodule mod_suphp.c>\n";
-	$webdata .= "SuPhp_UserGroup lxlabs lxlabs\n";
-	$webdata .= "</Ifmodule>\n";
-	$webdata .= "</VirtualHost>\n\n\n";  
-
-	/*
-	$webdata .= "<Ifmodule mod_ssl.c>\n";
-	$webdata .= "<VirtualHost  \\\n";
 	$webdata .= web__apache::staticcreateVirtualHostiplist("443");
 	$webdata .= "                   >\n";
 	$webdata .= "DocumentRoot {$sgbl->__path_kloxo_httpd_root}/webmail/\n";
@@ -1117,27 +1104,11 @@ static function createWebmailConfig()
 	$webdata .= "<Ifmodule mod_suphp.c>\n";
 	$webdata .= "SuPhp_UserGroup lxlabs lxlabs\n";
 	$webdata .= "</Ifmodule>\n";
-	$webdata .= "</VirtualHost>\n\n\n";  
-	$webdata .= "</Ifmodule>\n";
-	*/
-
+	$webdata .= "</VirtualHost>\n\n\n";
 	$webmailfile = "__path_real_etc_root/httpd/conf/kloxo/webmail.conf";
 
 	lfile_put_contents($webmailfile, $webdata);
 
-
-
-	$init_file = "$sgbl->__path_apache_path/kloxo/init.conf";
-	$fdata = null;
-	$iplist = os_get_allips();
-	foreach($iplist as $ipaddr){
-		$ip = trim($ipaddr);
-		if ($ip) {
-			$fdata .= "NameVirtualHost $ipaddr:80\n\n";
-			$fdata .= "NameVirtualHost $ipaddr:443\n\n";
-		}
-	}
-	lfile_put_contents($init_file, $fdata);
 
 	createRestartFile("apache");
 
