@@ -3,9 +3,9 @@
 // $Horde: horde/config/conf.xml,v 1.74.2.39 2006/06/22 05:09:01 chuck Exp $
 $conf['debug_level'] = E_ALL;
 $conf['max_exec_time'] = 0;
-$conf['use_ssl'] = 2;
+$conf['use_ssl'] = 1;
 $conf['server']['name'] = $_SERVER['SERVER_NAME'];
-$conf['server']['port'] = $_SERVER['SERVER_PORT'];
+$conf['server']['port'] = 443;
 $conf['compress_pages'] = true;
 $conf['umask'] = 077;
 $conf['session']['name'] = 'mm';
