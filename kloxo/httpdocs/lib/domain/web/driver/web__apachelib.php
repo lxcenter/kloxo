@@ -179,7 +179,7 @@ function AddOpenBaseDir()
 
 	$path = "{$sgbl->__path_httpd_root}/{$this->main->nname}/httpdocs:{$sgbl->__path_httpd_root}/{$this->main->nname}/{$this->main->nname}:$corepath";
 
-	$openbasdstring = "php_admin_value open_basedir \"{$path}:{$adminbasedir}/tmp:/usr/share/pear:/var/lib/php/session/:/home/kloxo/httpd/script:/home/kloxo/httpd/webmail\"\n";
+	$openbasdstring = "php_admin_value open_basedir \"{$path}:{$adminbasedir}/tmp:/usr/share/pear:/var/lib/php/session/:/home/kloxo/httpd/script\"\n";
 
 	$string = "<Location />\n";
 	$string .= "<IfModule sapi_apache2.c>\n";
