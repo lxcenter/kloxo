@@ -7261,11 +7261,7 @@ function toggle(pobjSrc)
                 $limit = $or->display('resourcepriv');
             }
 
-            if($sgbl->isHyperVm()) {
-                $array = array("traffic_usage",  "client_num", "disk_usage", "vps_num" );
-            } else {
-                $array = array("traffic_usage", "totaldisk_usage", "client_num", "maindomain_num", "vps_num" );
-            }
+            $array = array("traffic_usage", "totaldisk_usage", "client_num", "maindomain_num", "vps_num" );
 
             if(!array_search_bool($or->vv, $array)) {
                 continue;
@@ -7324,22 +7320,6 @@ function toggle(pobjSrc)
     */
 
 ?>
-
-
-<?php
-    if($login->isAdmin() && $sgbl->IsHyperVM()) {
-
-        $rdesc = null;
-        $rdesc .= " <tr style='background:url($skinget/a.gif)'> <td > <a href=/live/ target=_blank><img width=15 height=15 src=/img/image/collage/button//live.gif> Live </a> </td> </tr> ";
-        $rdesc .= " <tr style='background:url($skinget/a.gif)'> <td > <a href=/live/transcript.php target=_blank><img width=15 height=15 src=/img/image/collage/button//live_transcript.gif> Live Transcript </a> </td> </tr> ";
-        ?>
-        xpHelp = createMenu('<font color=#003360>Live', '', true);
-        createSubMenu(xpHelp, "<?=$rdesc ?>", "", "", "");
-        <?php
-    }
-    ?>
-//   createSubMenu(xpHelp, "Community","<?=$forumurl ?>","0","helparea","/img/image/collage/button/community.gif", "_blank");
-
 
 <?php
     /*
