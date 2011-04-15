@@ -198,10 +198,6 @@ function createShowPropertyList(&$alist)
 	if ($ghtml->frm_subaction === 'reversedns') {
 		$alist['property'][] = 'goback=1&a=list&c=reversedns';
 		$alist['property'][] = 'a=updateform&sa=reversedns';
-		if ($sgbl->isHyperVM()) {
-			$alist['property'][] = 'goback=1&a=list&c=all_dns';
-			$alist['property'][] = 'goback=1&a=list&c=all_reversedns';
-		}
 	}
 
 	return $alist;
@@ -291,17 +287,6 @@ function updateform($subaction, $param)
 		case "generalsetting":
 
 			$vlist['generalmisc_b-autoupdate'] = null;
-			if ($sgbl->isHyperVM()) {
-				if (!isset($this->generalmisc_b->installkloxo)) {
-					$this->generalmisc_b->installkloxo = 'on';
-				}
-				$vlist['generalmisc_b-installkloxo'] = null;
-				$vlist['generalmisc_b-openvzincrement'] = null;
-				$vlist['generalmisc_b-xenimportdriver'] = null;
-				$vlist['generalmisc_b-rebuild_time_limit'] = null;
-				$vlist['generalmisc_b-no_console_user'] = null;
-				$vlist['generalmisc_b-disable_hostname_change'] = null;
-			}
 
 			if ($sgbl->isKloxo()) {
 				$vlist['generalmisc_b-extrabasedir'] = null;
@@ -328,11 +313,6 @@ function updateform($subaction, $param)
 				$this->reversedns_b = new reversedns_b(null, null, 'general');
 			}
 
-
-			if ($sgbl->isHyperVM()) {
-				$vlist['reversedns_b-enableflag'] = null;
-				$vlist['reversedns_b-forwardenableflag'] = null;
-			}
 			$this->dns_slave_list = $this->reversedns_b->dns_slave_list;
 			$vlist['reversedns_b-primarydns'] = null;
 			$vlist['reversedns_b-secondarydns'] = null;

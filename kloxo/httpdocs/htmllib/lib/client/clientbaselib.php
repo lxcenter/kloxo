@@ -363,26 +363,7 @@ function createShowAlistConfig(&$alist, $subaction = null)
 		//$alist['__v_dialog_ipcheck'] = "o=general&a=updateform&sa=session_config";
 		$alist['__v_dialog_download'] = "o=general&a=updateform&sa=download_config";
 		$alist['__v_dialog_forc'] = "a=updateform&sa=forcedeletepserver";
-
-		if ($sgbl->isHyperVm()) {
-			$alist['__v_dialog_hack'] = "o=general&a=updateform&sa=hackbuttonconfig";
-			$alist['__v_dialog_rev'] = "o=general&a=updateform&sa=reversedns";
-			$alist['__v_dialog_cust'] = "o=general&a=updateform&sa=customaction";
-			$alist['__v_dialog_orph'] = "a=updateform&sa=deleteorphanedvps";
-			$alist['__v_dialog_lxc'] = "o=general&a=updateform&sa=kloxo_config";
-			//$alist[] = "a=show&o=ostemplatelist";
-			$alist[] = "a=list&c=customaction";
-		} else {
-			$alist[] = "o=genlist&c=dirindexlist_a&a=list";
-		}
-
-
-	}
-
-	if ($sgbl->isHyperVm()) {
-		if (!$this->isAdmin()) {
-			$alist[] = "a=updateform&sa=ostemplatelist";
-		}
+		$alist[] = "o=genlist&c=dirindexlist_a&a=list";
 	}
 
 	$alist['__title_asep'] = $login->getKeywordUc('separate');
@@ -1200,11 +1181,9 @@ static function createListAlist($parent, $class)
 
 	$alist[] = "a=list&c=client";
 
-	if (!$sgbl->isHyperVm()) {
-		if ($parent->isLte('wholesale')) {
-			$alist[] = "a=addform&dta[var]=cttype&dta[val]=wholesale&c=client";
-			$alist[] = "a=addform&dta[var]=cttype&dta[val]=reseller&c=client";
-		}
+	if ($parent->isLte('wholesale')) {
+		$alist[] = "a=addform&dta[var]=cttype&dta[val]=wholesale&c=client";
+		$alist[] = "a=addform&dta[var]=cttype&dta[val]=reseller&c=client";
 	}
 
 	if ($parent->isLte('reseller')) {

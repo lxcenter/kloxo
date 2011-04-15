@@ -346,13 +346,7 @@ function get_favorite($class)
 		$url = base64_decode($h->url);
 		// If the link is from kloxo, it shouldn't throw up a lot of errors. Needs to fix this properly..
 		$ac_descr = @ $ghtml->getActionDetails($url, null, $iconpath, $path, $post, $_t_file, $_t_name, $_t_image, $__t_identity);
-		if ($sgbl->isHyperVM() && $h->vpsparent_clname) {
-			$url = kloxo::generateKloxoUrl($h->vpsparent_clname, null, $url);
-			$tag = "(l)";
-		} else {
-			//$url = $url;
-			$tag = null;
-		}
+		$tag = null;
 
 		if (isset($h->description)) {
 			$str = $h->description;

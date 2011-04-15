@@ -1758,10 +1758,6 @@ function main_system_lock()
 {
     global $gbl, $sgbl, $login, $ghtml;
 
-    // Not needed for hyperVM. HyperVM has more intelligent per vps locking.
-    if ($sgbl->isHyperVm())
-        return;
-
     return;
     $lname = null;
     $nlname = $login->getClName();

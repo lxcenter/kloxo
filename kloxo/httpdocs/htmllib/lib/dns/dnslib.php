@@ -37,12 +37,6 @@ class Dns extends DnsBase {
 
         global $gbl, $sgbl, $login, $ghtml;
 
-        if ($sgbl->isHyperVm()) {
-            $this->createExtraVariablesHyperVM();
-            return;
-        }
-
-
         $db = new Sqlite($this->__masterserver, "dns");
 
         $gen = $login->getObject('general')->generalmisc_b;

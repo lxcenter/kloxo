@@ -3693,9 +3693,7 @@ function getLoginTo()
 	if ($sgbl->isKloxo() && $this->isLte('customer')) {
 		$llist[] = "list-domain";
 	}
-	if ($sgbl->ishyperVM() && $this->isLte('customer')) {
-		$llist[] = "list-vps";
-	}
+
 	$llist[] = "desktop-";
 	$llist[] = "show-home";
 	return $llist;
@@ -3724,9 +3722,7 @@ function getUrlFromLoginTo()
 
 	if (!csa($string, "-")) {
 		if ($this->isClass('client')) {
-			if ($sgbl->isHyperVm()) {
-				$url = $this->getSingleOrListclass("vps");
-			} else if ($sgbl->isKloxo()) {
+			if ($sgbl->isKloxo()) {
 				if ($this->isEq('reseller')) {
 					$url = $this->getSingleOrListclass('client');
 				} else {
@@ -5162,11 +5158,6 @@ function AddToThere($newserver)
 		$this->__old_driver = $this->__driverappclass;
 	}
 	$this->createSyncClass();
-
-	if ($sgbl->isHyperVM()) {
-		$driverapp = $gbl->getSyncClass($this->__masterserver, $this->syncserver, 'vps');
-		$this->ttype = $driverapp;
-	}
 
 	$this->doServerSpecific();
 	$this->doDriverSpecific();
