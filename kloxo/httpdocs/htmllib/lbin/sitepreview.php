@@ -66,7 +66,7 @@ if (isset($res[$ext]) && $res[$ext] !== 'text/html' && $res[$ext] !== 'text/css'
 
 rl_exec_get(null, 'localhost', 'removeFromEtcHost', array($domain));
 
-include "/usr/local/lxlabs/kloxo/httpdocs/lib/hn_urlrewrite_example/hn_urlrewrite.class.php";
+include "/usr/local/lxlabs/kloxo/httpdocs/lib/hn_urlrewrite/hn_urlrewrite.class.php";
 
 $rewrite = new hn_urlrewrite();
 
