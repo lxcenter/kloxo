@@ -27,41 +27,9 @@ function updatecleanup_main()
 
 	print("Executing UpdateCleanup. This can take some time. Please be patient.\n");
 	log_log("update", "Executing Updatecleanup");
-//
-// Check for lxlabs yum repo file and if exists
-// Change to lxcenter repo file
-//
-	if (lxfile_exists("/etc/yum.repos.d/lxlabs.repo")) {
-		print("Delete old repo's\n");
-		lxfile_mv("/etc/yum.repos.d/lxlabs.repo","/etc/yum.repos.d/lxlabs.repo.lxsave");
-		system("rm -f /etc/yum.repos.d/lxlabs.repo");
-		print("Removed lxlabs.repo\n");
-		print("Installing lxcenter.repo\n");
-		system("wget -O /etc/yum.repos.d/lxcenter.repo http://download.lxcenter.org/lxcenter.repo");
-        print("Installing yum-protectbase plugin\n");
-        system("yum install -y -q yum-protectbase");
-		print("Done.\n");
-	}
-//
-
-//
-// Fix vulnerability within webmail
-// If the flag isn't found, run the fix
-//
-// Disabled in Kloxo 6.1.4
-//if (!lxfile_exists("/usr/local/lxlabs/kloxo/file/webmailReset")) {
-//	system("/usr/local/lxlabs/ext/php/php /usr/local/lxlabs/kloxo/bin/misc/secure-webmail-mysql.phps");
-//	system("/bin/rm /usr/local/lxlabs/kloxo/bin/misc/secure-webmail-mysql.phps");
-//}
-
-// Remove Flagfile in Kloxo 6.1.4, thios can be removed in 6.1.4+
-if (lxfile_exists("/usr/local/lxlabs/kloxo/file/webmailReset")) {
-      system("/bin/rm /usr/local/lxlabs/kloxo/file/webmailReset");
-}
-
-
 
 // Fix #388 - phpMyAdmin config.inc.php permission
+// TODO: Fix it permanently after third-party updates.
 
     $correct_perm = "0644";
     $check_perm = substr(decoct( fileperms("/usr/local/lxlabs/$program/httpdocs/thirdparty/phpMyAdmin/config.inc.php") ), 2);
@@ -69,6 +37,11 @@ if (lxfile_exists("/usr/local/lxlabs/kloxo/file/webmailReset")) {
     if ($check_perm != $correct_perm) {
         lxfile_unix_chmod("/usr/local/lxlabs/$program/httpdocs/thirdparty/phpMyAdmin/config.inc.php","0644");
     }
+
+// Fix #446 - Stats page not password protected by default. Complements r427.
+// TODO: Remove this fix in Kloxo 6.1.6 and up.
+	mysql_query("UPDATE `kloxo`.`web` SET `stats_password` = SUBSTRING(MD5(RAND()) FROM 1 FOR 8) WHERE `web`.`stats_password` = ''");
+	lxshell_return("__path_php_path", "../bin/fix/fixweb.php");
 
 //
 
