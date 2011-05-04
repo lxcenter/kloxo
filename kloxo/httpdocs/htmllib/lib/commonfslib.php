@@ -382,8 +382,12 @@ function lxfile_cp($src, $dst)
 		$dst = $dst . "/" . basename($src);
 	}
 
-	log_filesys("Copying $src $dst");
-	system("cp $src $dst", $ret);
+	if(lxfile_exists($src)) {
+		log_filesys("Copying $src $dst");
+		system("cp $src $dst", $ret);
+	} else {
+		log_filesys("ERROR! Copy $src to $dst failed!");
+	}
 	return $ret == 0;
 }
 

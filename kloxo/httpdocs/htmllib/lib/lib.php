@@ -2441,8 +2441,7 @@ function curl_get_file_contents($file)
 
 function install_if_package_not_exist($name)
 {
-	$ret = lxshell_return("rpm", "-q", $name);
-	if ($ret) {
+	if (lxshell_return("rpm", "-q", $name)) {
 		lxshell_return("yum", "-y", "install", $name);
 	}
 }
@@ -2550,7 +2549,6 @@ function getDownloadServer()
 
 function download_source($file)
 {
-	
 	$server = getDownloadServer();
 	download_file("$server/$file");
 }
@@ -2595,7 +2593,7 @@ function download_file($url, $localfile = null)
 		$localfile = basename($url);
 	}
 	$fp = null;
-	if ($localfile !== 'devnull') {
+	if ($localfile !== null) {
 		$fp = lfopen($localfile, "w");
 		curl_setopt($ch, CURLOPT_FILE, $fp);
 	}
@@ -2845,7 +2843,7 @@ function copy_script()
 
 function copy_image()
 {
-	// Not needed anymore - LxCenter
+	// TODO: Function not in use
 	return; 
 	global $gbl, $sgbl, $login, $ghtml; 
 	$prgm = $sgbl->__var_program_name;

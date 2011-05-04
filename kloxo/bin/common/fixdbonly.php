@@ -4,5 +4,5 @@ include_once "lib/updatelib.php";
 
 if (!lxfile_exists("__path_slave_db")) {
 	updateDatabaseProperly();
-	fixExtraDB();
+	fixDataBaseIssues();
 }

@@ -1,8 +1,9 @@
 <?php 
 
 
-function fixExtraDB()
+function fixDataBaseIssues()
 {
+	log_cleanup("Fix admin account database settings");
 	$sq = new Sqlite(null, 'domain');
 	$sq->rawQuery("update domain set priv_q_php_flag = 'on'");
 	$sq->rawQuery("update web set priv_q_php_flag = 'on'");
@@ -21,11 +22,10 @@ function fixExtraDB()
 	$sq->rawQuery("update client set priv_q_document_root_flag = 'on' where nname = 'admin'");
 	$sq->rawQuery("update client set priv_q_runstats_flag = 'on' where nname = 'admin'");
 	$sq->rawQuery("update client set priv_q_webhosting_flag = 'on' where nname = 'admin'");
-	//$sq->rawQuery("update service set grepstring = 'courier' where servicename = 'courier-imap'");
-
-	//$sq->rawQuery("update ticket set parent_clname = 'client_s_vv_p_admin' where subject = 'Welcome to Kloxo'");
 	$sq->rawQuery("update ticket set parent_clname = 'client-admin' where subject = 'Welcome to Kloxo'");
 	$sq->rawQuery("update domain set dtype = 'maindomain' where dtype = 'domain'");
+
+	log_cleanup("Set default database settings");
 	db_set_default('mmail', 'remotelocalflag', 'local');
 	db_set_default('mmail', 'syncserver', 'localhost');
 	db_set_default('dns', 'syncserver', 'localhost');
@@ -48,14 +48,21 @@ function fixExtraDB()
 	db_set_default('web', 'priv_q_php_manage_flag', 'on');
 	db_set_default('client', 'priv_q_php_manage_flag', 'on');
 	db_set_default('client', 'priv_q_webhosting_flag', 'on');
-	migrateResourceplan('domain');
-	$sq->rawQuery("update resourceplan set realname = nname where realname = ''");
-	$sq->rawQuery("update resourceplan set realname = nname where realname is null");
 	db_set_default_variable_diskusage('client', 'priv_q_totaldisk_usage', 'priv_q_disk_usage');
 	db_set_default_variable_diskusage('domain', 'priv_q_totaldisk_usage', 'priv_q_disk_usage');
 	db_set_default_variable('web', 'docroot', 'nname');
 	db_set_default_variable('client', 'used_q_maindomain_num', 'used_q_domain_num');
 	db_set_default_variable('client', 'priv_q_maindomain_num', 'priv_q_domain_num');
+	db_set_default("servermail", "domainkey_flag", "on");
+
+	log_cleanup("Fix resourceplan settings in database");
+	migrateResourceplan('domain');
+	$sq->rawQuery("update resourceplan set realname = nname where realname = ''");
+	$sq->rawQuery("update resourceplan set realname = nname where realname is null");
+	lxshell_php("../bin/common/fixresourceplan.php");
+
+	log_cleanup("Alter some database tables");
+	// TODO: Check if this is still longer needed!
 	$sq->rawQuery("alter table sslcert change text_ca_content text_ca_content longtext");
 	$sq->rawQuery("alter table sslcert change text_key_content text_key_content longtext");
 	$sq->rawQuery("alter table sslcert change text_csr_content text_csr_content longtext");
@@ -64,39 +71,51 @@ function fixExtraDB()
 	$sq->rawQuery("alter table dns change ser_dns_record_a ser_dns_record_a longtext");
 	$sq->rawQuery("alter table installsoft change ser_installappmisc_b ser_installappmisc_b longtext");
 	$sq->rawQuery("alter table web change ser_redirect_a ser_redirect_a longtext");
-	initDbLoginPre();
-	lxshell_php("../bin/common/fixresourceplan.php");
-	db_set_default("servermail", "domainkey_flag", "on");
 
+	log_cleanup("Set default welcome text at Kloxo login page");
+	initDbLoginPre();
+
+	log_cleanup("Remove default db password if exists");
 	critical_change_db_pass();
 }
 
 
 
 
-function doUpdateExtraStuff()
+function doUpdates()
 {
-	global $gbl, $sgbl, $login, $ghtml; 
+	global $gbl, $sgbl, $login, $ghtml;
 
-
+	log_cleanup("Create flag dir");
 	lxfile_mkdir("__path_program_etc/flag");
-	
-	fix_dns_zones();
+
+	log_cleanup("Fix IP Address");
 	lxshell_return("lphp.exe", "../bin/fixIpAddress.php");
+
+	log_cleanup("Fix Services");
 	fixservice();
 
+	log_cleanup("Create domain backup dirs");
 	add_domain_backup_dir();
 
+	log_cleanup("Create OS system user admin...");
 	if (!posix_getpwnam('admin')) {
 		os_create_system_user('admin', randomString(7), 'admin', '/sbin/nologin', "/home/admin");
+		log_cleanup("...account admin created");
+	} else {
+		log_cleanup("..admin account exists");
 	}
 
-	copy_image();
-
+	log_cleanup("Fix php.ini");
 	call_with_flag("fix_phpini");
+
+	log_cleanup("Fix awstats");
 	call_with_flag("fix_awstats");
+
+	log_cleanup("Fix Domainkeys");
 	call_with_flag("fix_domainkey");
 
+	log_cleanup("Set Watchdog defaults");
 	watchdog::addDefaultWatchdog('localhost');
 	$a = null;
 	$driverapp = $gbl->getSyncClass(null, 'localhost', 'web');
@@ -107,6 +126,7 @@ function doUpdateExtraStuff()
 	$a['dns'] = $driverapp;
 	slave_save_db("driver", $a);
 
+	log_cleanup("Fix MySQL root password");
 	$a = null;
 	fix_mysql_root_password('localhost');
 	$dbadmin = new Dbadmin(null, 'localhost', "mysql___localhost");
@@ -114,30 +134,32 @@ function doUpdateExtraStuff()
 	$pass = $dbadmin->dbpassword;
 	$a['mysql']['dbpassword'] = $pass;
 	slave_save_db("dbadmin", $a);
+
+	log_cleanup("Set admin contact email");
 	save_admin_email();
+
+	log_cleanup("Get Kloxo License info");
 	lxshell_php("htmllib/lbin/getlicense.php");
 
-
+	log_cleanup("Create database interface_template (Forced)");
 	system("mysql -u kloxo -p`cat ../etc/conf/kloxo.pass` kloxo < ../file/interface/interface_template.dump");
 
+	log_cleanup("Fix Self SSL");
 	fix_self_ssl();
-	$value = db_get_value("servermail", "localhost", "virus_scan_flag");
 
-	if (!isOn($value)) {
-		dprint("Shutting off freshclam\n");
+	log_cleanup("Checking freshclam (virus scanner)");
+	if (!isOn(db_get_value("servermail", "localhost", "virus_scan_flag"))) {
 		system("chkconfig freshclam off > /dev/null 2>&1");
 		system("service freshclam stop >/dev/null 2>&1");
+		log_cleanup("Disabled freshclam service\n");
 	}
 
-	//
-	// Install/Update installapp if needed or remove installapp when installapp is disabled. 
-	// Line below added in Kloxo 6.1.4
+	// Install/Update installapp if needed or remove installapp when installapp is disabled.
+	// Added in Kloxo 6.1.4
+	log_cleanup("Install/Update InstallApp");
 	installinstallapp();
 
-
 }
-
-
 
 function fix_domainkey()
 {
@@ -153,7 +175,6 @@ function fix_move_to_client()
 	lxshell_php("../bin/fix/fixmovetoclient.php");
 }
 
-
 function addcustomername()
 {
 	lxshell_return("__path_php_path", "../bin/misc/addcustomername.php");
@@ -166,7 +187,7 @@ function fix_phpini()
 
 function switchtoaliasnext()
 {
-	global $gbl, $sgbl, $login, $ghtml; 
+	global $gbl, $sgbl, $login, $ghtml;
 	$driverapp = $gbl->getSyncClass(null, 'localhost', 'web');
 
 	if ($driverapp !== 'lighttpd') {
@@ -175,7 +196,7 @@ function switchtoaliasnext()
 
 	lxfile_cp("../file/lighttpd/lighttpd.conf", "/etc/lighttpd/lighttpd.conf");
 	lxshell_return("__path_php_path", "../bin/fix/fixweb.php");
-	
+
 }
 
 function fix_awstats()
@@ -185,7 +206,6 @@ function fix_awstats()
 
 function install_xcache()
 {
-	return;
 	if (lxfile_exists("/etc/php.d/xcache.ini")) {
 		return;
 	}
@@ -196,63 +216,6 @@ function install_xcache()
 	lxshell_return("yum", "-y", "install", "php-xcache");
 	lunlink("/etc/php.d/xcache.ini");
 	lxfile_cp("../file/xcache.ini", "/etc/php.d/xcache.noini");
-}
-
-
-
-function fixdomainipissue()
-{
-	lxshell_return("__path_php_path", "../bin/fix/fixweb.php");
-}
-
-function fixrootquota()
-{
-	system("setquota -u root 0 0 0 0 -a");
-}
-
-function fixtotaldiskusageplan()
-{
-	global $gbl, $sgbl, $login, $ghtml; 
-	initProgram('admin');
-	$login->loadAllObjects('resourceplan');
-
-	$list = $login->getList('resourceplan');
-	foreach($list as $l) {
-		if (!$l->priv->totaldisk_usage || $l->priv->totaldisk_usage === '-') {
-			$l->priv->totaldisk_usage = $l->priv->disk_usage;
-			$l->setUpdateSubaction();
-			$l->write();
-		}
-	}
-}
-
-function fixcmlistagain()
-{
-	lxshell_return("__path_php_path", "../bin/common/generatecmlist.php");
-}
-function fixcmlist()
-{
-	lxshell_return("__path_php_path", "../bin/common/generatecmlist.php");
-}
-
-function fixcgibin()
-{
-	lxshell_return("__path_php_path", "../bin/fix/fixcgibin.php");
-}
-
-function fixsimpledocroot()
-{
-	lxshell_return("__path_php_path", "../bin/fix/fixsimpldocroot.php");
-}
-
-function installSuphp()
-{
-	lxshell_return("__path_php_path", "../bin/misc/installsuphp.php");
-}
-
-function fixadminuser()
-{
-	lxshell_return("__path_php_path", "../bin/fix/fixadminuser.php");
 }
 
 function install_gd()
@@ -266,135 +229,10 @@ function install_gd()
 	$global_dontlogshell = false;
 }
 
-function fixphpinfo()
-{
-	lxshell_return("__path_php_path", "../bin/fix/fixweb.php");
-}
-
-function fixdirprotectagain()
-{
-	lxshell_return("__path_php_path", "../bin/fix/fixweb.php");
-}
-
-function fixdomainhomepermission()
-{
-	lxshell_return("__path_php_path", "../bin/fix/fixweb.php");
-}
-
-function installgroupwareagain()
-{
-	dprint("DEBUG: running Function installgroupwareagain in updatelib.php\n");
-	lxshell_return("__path_php_path", "../bin/misc/lxinstall_hordegroupware_db.php");
-}
-
 function fixservice()
 {
 	lxshell_return("__path_php_path", "../bin/fix/fixservice.php");
 }
-function fixsslca()
-{
-	lxshell_return("__path_php_path", "../bin/fix/fixweb.php");
-}
-
-function dirprotectfix()
-{
-	lxshell_return("__path_php_path", "../bin/fix/fixdirprotect.php");
-}
-
-function cronfix()
-{
-	lxshell_return("__path_php_path", "../bin/cronfix.php");
-}
-
-
-function changetoclient()
-{
-	global $gbl, $sgbl, $login, $ghtml; 
-	system("service xinetd stop");
-	lxshell_return("__path_php_path", "../bin/changetoclientlogin.phps");
-	lxshell_return("__path_php_path", "../bin/misc/fixftpuserclient.phps");
-	restart_service("xinetd");
-	$driverapp = $gbl->getSyncClass(null, 'localhost', 'web');
-	createRestartFile($driverapp);
-}
-
-
-
-
-function fix_dns_zones()
-{
-	global $gbl, $sgbl, $login, $ghtml; 
-	return;
-
-	initProgram('admin');
-	$flag = "__path_program_root/etc/flag/dns_zone_fix.flag";
-	if (lxfile_exists($flag)) {
-		return;
-	}
-	lxfile_touch($flag);
-
-	$login->loadAllObjects('dns');
-	$list = $login->getList('dns');
-
-
-	foreach($list as $l) {
-		fixupDnsRec($l);
-	}
-	$login->loadAllObjects('dnstemplate');
-	$list = $login->getList('dnstemplate');
-	foreach($list as $l) {
-		fixupDnsRec($l);
-	}
-
-}
-
-function fixupDnsRec($l)
-{
-	$l->dns_record_a = null;
-	foreach($l->cn_rec_a as $k => $v) {
-		$tot = new dns_record_a(null, null, "cn_$v->nname");
-		$tot->ttype = "cname";
-		$tot->hostname = $v->nname;
-		$tot->param = $v->param;
-		$l->dns_record_a["cn_$v->nname"] = $tot;
-	}
-
-	foreach($l->mx_rec_a as $k => $v) {
-		$tot = new dns_record_a(null, null, "mx_$v->nname");
-		$tot->ttype = "mx";
-		$tot->hostname = $l->nname;
-		$tot->param = $v->param;
-		$tot->priority = $v->nname;
-		$l->dns_record_a["mx_$v->nname"] = $tot;
-	}
-	foreach($l->ns_rec_a as $k => $v) {
-		$tot = new dns_record_a(null, null, "ns_$v->nname");
-		$tot->ttype = "ns";
-		$tot->hostname = $v->nname;
-		$tot->param = $v->nname;
-		$l->dns_record_a["ns_$v->nname"] = $tot;
-	}
-
-	foreach($l->txt_rec_a as $k => $v) {
-		$tot = new dns_record_a(null, null, "txt_$v->nname");
-		$tot->ttype = "txt";
-		$tot->hostname = $v->nname;
-		$tot->param = $v->param;
-		$l->dns_record_a["txt_$v->nname"] = $tot;
-	}
-
-	foreach($l->a_rec_a as $k => $v) {
-		$tot = new dns_record_a(null, null, "a_$v->nname");
-		$tot->ttype = "a";
-		$tot->hostname = $v->nname;
-		$tot->param = $v->param;
-		$l->dns_record_a["a_$v->nname"] = $tot;
-	}
-
-	$l->setUpdateSubaction();
-	$l->write();
-}
-
 
 function installinstallapp()
 {
@@ -441,7 +279,6 @@ function installinstallapp()
 	}
 	return;
 }
-
 
 function installWithVersion($path, $file, $ver)
 {
@@ -554,21 +391,6 @@ function removeOtherDriver()
 	}
 }
 
-
-function updateApplicableToSlaveToo()
-{
-    // Fixes #303 and #304
-	download_thirdparty();
-
-	os_updateApplicableToSlaveToo();
-	lxfile_mkdir("__path_kloxo_httpd_root/default/");
-	lxfile_cp("../file/skeleton.zip", "__path_kloxo_httpd_root/skeleton.zip");
-	lxshell_unzip("__system__", "__path_kloxo_httpd_root/default/", "../file/skeleton.zip");
-	lxfile_cp("../file/default_index.html", "__path_kloxo_httpd_root/default/index.html");
-	lxfile_mkdir("__path_kloxo_httpd_root/disable/");
-	lxfile_cp("../file/disable.html", "__path_kloxo_httpd_root/disable/index.html");
-}
-
 function fix_secure_log()
 {
 	lxfile_mv("/var/log/secure", "/var/log/secure.lxback");
@@ -633,7 +455,7 @@ function enable_xinetd()
 
 function fix_mailaccount_only()
 {
-	global $gbl, $sgbl, $login, $ghtml; 
+	global $gbl, $sgbl, $login, $ghtml;
 	lxfile_unix_chown_rec("/var/bogofilter", "lxpopuser:lxpopgroup");
 	$login->loadAllObjects('mailaccount');
 	$list = $login->getList('mailaccount');
@@ -645,7 +467,7 @@ function fix_mailaccount_only()
 
 function change_spam_to_bogofilter_next_next()
 {
-	global $gbl, $sgbl, $login, $ghtml; 
+	global $gbl, $sgbl, $login, $ghtml;
 	system("rpm -e --nodeps spamassassin");
 	system("yum -y install bogofilter");
 
@@ -722,7 +544,7 @@ function changeColumn($tbl_name, $changelist)
 	$conlist = array_flip($changelist);
 	$query= "select * from" . " " . $tbl_name;
 	$res =$db->rawQuery($query);
-	
+
 	foreach($columnold as $l) {
 		$check = array_search($l , $conlist);
 		if($check) {
@@ -759,15 +581,15 @@ function changeValues($res, $tbl_name, $db, $newfields)
 }
 
 
-function droptable($tbl_name) 
-{ 
+function droptable($tbl_name)
+{
 	dprint("Dropping table...............\n");
 	$db = new Sqlite($tbl_name);
 	$db->rawQuery("drop table " . $tbl_name );
 }
 
 
-function dropcolumn($tbl_name, $column) 
+function dropcolumn($tbl_name, $column)
 {
 	dprint("Dropping Column...............\n");
 
@@ -778,7 +600,7 @@ function dropcolumn($tbl_name, $column)
 	foreach($oldcolumns as $key=>$l) {
 		$t= array_search(trim($l), $column);
 		if(!empty($t)) {
-			dprint("value $oldcolumns[$key] has deleted\n"); 
+			dprint("value $oldcolumns[$key] has deleted\n");
 			unset($oldcolumns[$key]);
 		}else {
 			$newcollist[] = $l;
@@ -802,7 +624,7 @@ function getTabledetails($tbl_name){
 
 function construct_uuser_nname($list)
 {
-	global $gbl, $sgbl, $login, $ghtml; 
+	global $gbl, $sgbl, $login, $ghtml;
 	return $list['nname'] . $sgbl->__var_nname_impstr . $list['servername'];
 }
 
