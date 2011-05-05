@@ -7,6 +7,7 @@ function update_main()
 
 	debug_for_backend();
 	$login = new Client(null, null, 'upgrade');
+	$DoUpdate = false;
 
 	$opt = parse_opt($argv);
 	print("Getting Version Info from the LxCenter download Server...\n");
@@ -29,8 +30,34 @@ function update_main()
 	} else {
 		$localversion = $sgbl->__ver_major_minor_release;
 		print("Kloxo is the latest version ($localversion)\n");
-		print("Run /script/cleanup if you want to fix/restore/(re)install non working components.\n");
-		exit;
+
+		log_cleanup("Checking for new ThirdParty package version");
+		$ver = file_get_contents("http://download.lxcenter.org/download/thirdparty/kloxo-version.list");
+		if ($ver != "") {
+        	$ver = trim($ver);
+        	$ver = str_replace("\n", "", $ver);
+        	$ver = str_replace("\r", "", $ver);
+			if (!lxfile_real("/var/cache/kloxo/kloxo-thirdparty.$ver.zip")) {
+				$DoUpdate = true;
+				log_cleanup("Found a new ThirdParty version ($ver)");
+			} else {
+				log_cleanup("No new ThirdParty version found (Current version $ver)");
+			}
+		}
+
+		log_cleanup("Checking for new WebMail package version");
+		$ver = get_package_version("lxwebmail");
+		if (!lxfile_real("/var/cache/kloxo/lxwebmail$ver.tar.gz")) {
+			$DoUpdate = true;
+			log_cleanup("Found a new WebMail version ($ver)");
+		}  else {
+			log_cleanup("No new Webmail version found (Current version $ver)");
+		}
+
+		if ( $DoUpdate == false ) {
+			print("Run /script/cleanup if you want to fix/restore/(re)install non working components.\n");
+			exit;
+		}
 	}
 
 
