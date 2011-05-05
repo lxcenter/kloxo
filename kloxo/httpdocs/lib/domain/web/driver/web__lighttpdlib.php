@@ -596,7 +596,7 @@ function getDocumentRoot($subweb)
 
 	$string = null;
 	$string .= "alias.url    = (\"/__kloxo\" => \"/home/{$this->main->customer_name}/kloxoscript\")\n";
-    $string .= "alias.url   += (\"/webmail\" => \"/home/kloxo/httpd/webmail\")\n";
+    $string .= "url.redirect = (\"/webmail\" => \"https://webmail.$domname\")\n";
 
 	if ($this->main->nname !== 'lxlabs.com') {
 		$string .= "url.redirect += (\"^kloxo$\" => \"https://cp.$domname:{$this->main->__var_sslport}\")\n";
