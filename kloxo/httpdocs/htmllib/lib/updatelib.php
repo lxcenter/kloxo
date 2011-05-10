@@ -287,10 +287,6 @@ function updatecleanup()
 	lxfile_touch("/etc/httpd/conf/kloxo/default.conf");
 	log_cleanup("- Initialize cp_config.conf...");
 	lxfile_touch("/etc/httpd/conf/kloxo/cp_config.conf");
-	log_cleanup("- Remove access_log file...");
-	lunlink("../log/access_log");
-	log_cleanup("- Remove lighttpd_error.log...");
-	lunlink("../log/lighttpd_error.log");
 	log_cleanup("- Remove /etc/init.d/pure-ftpd service file...");
 	@lxfile_rm("/etc/init.d/pure-ftpd");
 	if (!lxfile_exists("/etc/xinetd.d/pureftp")) {
