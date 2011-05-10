@@ -1,0 +1,41 @@
+<?php 
+$__keyword['under'] = 'pod';
+$__keyword['filtered'] = 'filtorwane';
+$__keyword['no'] = 'Brak';
+$__keyword['matching_the_filter'] = 'Spe³niaj±cy filtr';
+$__keyword['no_matches_found'] = 'Nie znaleziono wyników spe³niaj±cych kryteria wyszukiwania';
+$__keyword['db_will_be_used'] = 'Nowa baza danych zostanie utworzona';
+$__keyword['master_cannot_be_assigned'] = 'Serwer g³ówny nie mo¿e zostaæ dopisany do klienta';
+$__keyword['resource'] = 'zasoby';
+$__keyword['help'] = 'Pomoc';
+$__keyword['desktop'] = 'Pulpit';
+$__keyword['home'] = 'Pulpit';
+$__keyword['manage'] = 'Zarz±dzanie';
+$__keyword['list'] = 'lista';
+$__keyword['extra'] = 'extra';
+$__keyword['system'] = 'system';
+$__keyword['administration'] = 'administracja';
+$__keyword['logout'] = 'Wyloguj';
+$__keyword['about'] = 'o';
+$__keyword['status'] = 'Stan';
+$__keyword['enable'] = 'W³±cz';
+$__keyword['disable'] = 'Wy³±cz';
+$__keyword['console'] = 'Konsola';
+$__keyword['webmailanddb'] = 'Strony WWW & Poczta & Bazy danych';
+$__keyword['trafficandlog'] = 'Transfer & Logi';
+$__keyword['script'] = 'skrypty';
+$__keyword['action'] = 'Akcja';
+$__keyword['power'] = 'moc';
+$__keyword['cpenabled'] = 'Panel aktywny';
+$__keyword['cpdisabled'] = 'Panel zablokowany';
+$__keyword['virtual'] = 'wirtualny';
+$__keyword['continue_without_plan'] = 'Kontynuuj bez tworzenia pakietu';
+$__keyword['add'] = 'dodaj';
+$__keyword['continue'] = 'kontynuuj';
+$__keyword['all'] = 'wszystko';
+$__keyword['search_on'] = 'wyszukiwanie w³±czone';
+$__keyword['search_note'] = 'Wyszukiwanie jest w³±czone, dlatego ta lista jest pusta. Aby zobaczyæ wszystkie wyniki, kliknij Poka¿ Wszystko';
+$__keyword['deprecated'] = 'niedozwolony w Sprzedawcy i Administratorze.';
+
+$__keyword['console_message'] = "Jeste¶ aktualnie zalogowany do u¿ytkownika (%username%) na serwerze podstawowym, który automatycznie prze³±czy Ciê na serwer VPS. Has³em do serwera VPS jest has³o do tego panelu. Mo¿esz siê tak¿e zalogowaæ jako u¿ytkownik %username% u¿ywaj±c swojego ulubionego klienta SSH, nastêpnie po prawid³owym zalogowaniu zostaniesz prze³±czony na serwer VPS. Pamiêtaj, ¿e nie potrzebujesz mieæ skonfigurowanego adresu IP na serwerze VPS, aby skorzystaæ z tej funkcji. £±czysz siê z hostem jako u¿ytkownik, który automatycznie przeniesie Ciê na serwer VPS.";
+
