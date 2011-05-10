@@ -33,7 +33,7 @@ msgstr "Wachtwoord"
 
 #: indexcontent.php:73
 msgid "<p>Welcome to "
-msgstr "<p>Welkom bij"
+msgstr "<p>Welkom bij "
 
 #: indexcontent.php:73
 msgid "</p><p>Use a valid username and password to gain access to the console.</p>"
