@@ -558,16 +558,20 @@ $__description["version"] = array("Version");
 $__description["schedule_updation_later"] = array(" Schedule Updation Later");
 $__description["current_version"] = array("Current Version");
 $__description["latest_version"] = array("Latest Version");
+
+//ReleaseNotes tab
 $__description["bugs_in_this_version"] = array("Bugs In This Version");
 $__description["bugs"] = array("Bugs");
 $__description["release_note"] = array("Release Note");
 $__description["note"] = array("Note");
 $__description["Past"] = array("Past");
+$__description["releasenotes_issue"] = array("Issue");
 $__description["Old_version"] = array("Old Version");
 $__description["Newer_Version"] = array("Newer Version");
 $__description["critical"] = array("Critical");
 $__description["enhancement"] = array("Enhancement");
-$__description["Anonyous Ftp"] = array("Anonyous Ftp");
+
+$__description["Anonymous Ftp"] = array("Anonymous Ftp");
 $__description["firewall_rule"] = array("Firewall Rule");
 $__description["[%v]_name"] = array("[%v] Name");
 $__description["from_address"] = array("From Address");
