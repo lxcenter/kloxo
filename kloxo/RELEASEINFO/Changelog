@@ -1,5 +1,12 @@
 Changelog
 
+Kloxo 6.1.5 - 10-may-2011
+##################################
+Bug #37: Call domain.tld/stats
+Bug #245: NameVirtualHost has no VirtualHosts
+Feature #378: Webmail SSL support
+Feature #446: Stats page not password protected by default.
+
 Kloxo 6.1.4 - 03-mar-2011
 ##################################
 Bug #258: Kloxo install on a Citrix Xenserver Centos VM causes console to lock up with error
