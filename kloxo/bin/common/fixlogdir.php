@@ -29,6 +29,12 @@ function fixlogdir_main()
 	//
 	lxfile_generic_chmod_rec("../log", "0640");
 	lxfile_generic_chmod_rec("../processed_log", "0640");
+	lxfile_generic_chmod("../log", "0700");
+	lxfile_generic_chmod("../processed_log", "0700");
+	lxfile_generic_chmod("../log/lighttpd_error.log", "0644");
+	lxfile_generic_chmod("../log/access_log", "0644");
+	lxfile_generic_chown("../log/lighttpd_error.log", "lxlabs:root");
+	lxfile_generic_chown("../log/access_log", "lxlabs:root");
 	//
 	os_restart_program();
 

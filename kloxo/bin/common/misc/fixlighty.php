@@ -80,9 +80,14 @@ if (!lxfile_exists($pemfile)) {
 	lxfile_generic_chown($pemfile, "lxlabs");
 }
 
-lxfile_rm("__path_program_root/log/access_log");
-lxfile_rm("__path_program_root/log/lighttpd_error.log");
+lxfile_touch("__path_program_root/log/lighttpd_error.log");
+lxfile_touch("__path_program_root/log/access_log");
+lxfile_generic_chmod("__path_program_root/log", "0700");
 lxfile_generic_chown("__path_program_root/log", "lxlabs:lxlabs");
+lxfile_generic_chmod("__path_program_root/log/lighttpd_error.log", "0644");
+lxfile_generic_chmod("__path_program_root/log/access_log", "0644");
+lxfile_generic_chown("__path_program_root/log/lighttpd_error.log", "lxlabs:root");
+lxfile_generic_chown("__path_program_root/log/access_log", "lxlabs:root");
 
 if (!lxfile_exists($cafile)) {
 	lxfile_cp("__path_program_htmlbase/htmllib/filecore/program.ca", $cafile);
