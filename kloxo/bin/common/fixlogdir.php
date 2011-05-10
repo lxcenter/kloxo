@@ -8,8 +8,6 @@ function fixlogdir_main()
 {
 	global $gbl, $sgbl, $login, $ghtml; 
 
-	$progname = $sgbl->__var_program_name;
-
 	$logl = lscandir_without_dot("../log");
 	lxfile_mkdir("../processed_log");
 	@ lunlink("../log/access_log");
@@ -26,7 +24,12 @@ function fixlogdir_main()
 		lxfile_touch("../log/$l");
 	}
 	lxfile_generic_chown_rec("../log", "lxlabs:lxlabs");
-	lxfile_generic_chmod("../log", "0700");
+	//
+	// Related to Issue #15
+	//
+	lxfile_generic_chmod_rec("../log", "0640");
+	lxfile_generic_chmod_rec("../processed_log", "0640");
+	//
 	os_restart_program();
 
 
