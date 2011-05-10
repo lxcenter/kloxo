@@ -1,0 +1,56 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Kloxo 6.1.5\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2011-05-10 17:34+0100\n"
+"PO-Revision-Date: \n"
+"Last-Translator: Danny Terweij <d.terweij@lxcenter.org>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: \n"
+"X-Poedit-SourceCharset: utf-8\n"
+"X-Poedit-Language: Dutch\n"
+"X-Poedit-Country: NETHERLANDS\n"
+"X-Poedit-KeywordsList: _\n"
+"X-Poedit-Basepath: .\n"
+"X-Poedit-SearchPath-0: d:\\PhpstormProjects\\Kloxo\\trunk\\kloxo\\httpdocs\\login\n"
+"X-Poedit-SearchPath-1: d:\\PhpstormProjects\\Kloxo\\trunk\\kloxo\\httpdocs\\htmllib\n"
+"X-Poedit-SearchPath-2: d:\\PhpstormProjects\\Kloxo\\trunk\\kloxo\\httpdocs\\htmllib\\lib\n"
+
+#: d:\PhpstormProjects\Kloxo\trunk\kloxo\httpdocs\htmllib/lib/indexcontent.php:33
+#: d:\PhpstormProjects\Kloxo\trunk\kloxo\httpdocs\htmllib/lib/indexcontent.php:60
+msgid "Login"
+msgstr "Inloggen"
+
+#: d:\PhpstormProjects\Kloxo\trunk\kloxo\httpdocs\htmllib/lib/indexcontent.php:40
+msgid "Username"
+msgstr "Gebruikersnaam"
+
+#: d:\PhpstormProjects\Kloxo\trunk\kloxo\httpdocs\htmllib/lib/indexcontent.php:44
+msgid "Password"
+msgstr "Wachtwoord"
+
+#: d:\PhpstormProjects\Kloxo\trunk\kloxo\httpdocs\htmllib/lib/indexcontent.php:69
+msgid "<p>Welcome to "
+msgstr "<p>Welkom bij"
+
+#: d:\PhpstormProjects\Kloxo\trunk\kloxo\httpdocs\htmllib/lib/indexcontent.php:69
+msgid "</p><p>Use a valid username and password to gain access to the console.</p>"
+msgstr "</p><p>Gebruik een geldig gebruikersnaam en wachtwoord om het controle paneel te benaderen.</p>"
+
+#: d:\PhpstormProjects\Kloxo\trunk\kloxo\httpdocs\htmllib/lib/indexcontent.php:72
+msgid "Forgot Password?"
+msgstr "Wachtwoord vergeten?"
+
+#: d:\PhpstormProjects\Kloxo\trunk\kloxo\httpdocs\htmllib/phplib/index.php:143
+msgid "Successful Login to "
+msgstr "Geslaagde inlog naar "
+
+#: d:\PhpstormProjects\Kloxo\trunk\kloxo\httpdocs\htmllib/phplib/index.php:143
+msgid " from "
+msgstr "van "
+
+#~ msgid "This page"
+#~ msgstr "Deze pagina"

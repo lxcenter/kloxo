@@ -1,6 +1,12 @@
 <?php
 # [FIXME] $locale = get_language(); and use $_SESSION for store language
-$locale = '';
+//$locale = '1';
+if ( isset( $_SERVER["HTTP_ACCEPT_LANGUAGE"] ) )
+	{
+		$locale = $_SERVER["HTTP_ACCEPT_LANGUAGE"];
+	}
+log_log('error',"localecheck. found agent $locale");
+/*
 if(isset($_REQUEST['locale'])){
 	switch($_REQUEST['locale']){
 		case 'en':
@@ -15,10 +21,17 @@ if(isset($_REQUEST['locale'])){
 		case 'es_ES':
 			$locale = 'es_ES';
 		break;
+		case 'nl':
+			$locale = 'nl';
+		break;
+		case 'nl_NL':
+			$locale = 'nl';
+		break;
 		default:
-			$locale = '';
+			$locale = 'en';
 		break;
 	}
+
 	if(!empty($locale)){
 		$_SESSION['locale'] = $locale;
 	}
@@ -26,29 +39,46 @@ if(isset($_REQUEST['locale'])){
 		$_SESSION['locale'] = 'en_US';
 	}
 }
-elseif(empty($_SESSION['locale'])){
+
+ elseif(empty($_SESSION['locale'])){
 	$_SESSION['locale'] = 'en_US';
 }
-$locale = $_SESSION['locale']; # Default en_US
+ */
+$_SESSION['locale'] = $locale;
+$locale = $_SESSION['locale'];
+log_log('error',"Locale found. Defaults now to $locale");
+
 if(empty($locale)){
 	$locale = 'en_US';
+	log_log('error',"no locale found. Defaults now to $locale");
+
 }
-putenv("LC_ALL=$locale");
+
+/*
+ putenv("LC_ALL=$locale");
 
 $current_locale = setlocale(LC_ALL, $locale);
 if(empty($current_locale))
 {
 	dprint('Setting default locale to en_US');
 	$current_locale = 'en_US';
+	log_log('error',"XX no locale found. Defaults now to $current_locale");
 }
 dprint('Current locale: '.$current_locale.'<br />');
-$gettext_domain = bindtextdomain('kloxo', '/usr/local/lxlabs/kloxo/httpdocs/l18n');
+ */
+
+$locale_dir = '/usr/local/lxlabs/kloxo/httpdocs/l18n';
+setlocale(LC_MESSAGES, $locale);
+putenv("LANGUAGE=$locale");
+putenv("LANG=$locale");
+$gettext_domain = bindtextdomain('kloxo', $locale_dir);
+textdomain('kloxo');
+
 if(empty($gettext_domain)){
 	$error_msg = 'Could not load the text domain for translate strings.';
-	dprint($error_msg);
 	log_log('error', $error_msg);
 }
 else{
-	dprint('Gettext domain: '.$gettext_domain.'<br />');
+	log_log('error','Gettext domain: '.$gettext_domain);
 }
-dprint('Text domain: '.textdomain('kloxo'));
+log_log('error','Text domain: '.textdomain('kloxo'));
