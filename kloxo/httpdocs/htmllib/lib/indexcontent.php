@@ -85,7 +85,7 @@ elseif ($cgi_forgotpwd == 1) {
 		<div class="login-form">
 		<div align="center">
 <font name=Verdana size=5 color=red >
-<b> <?php _('Forgot Password');?> </b></font></div>
+<b> <?php echo _('Forgot Password');?> </b></font></div>
 <br>
   	
 		<form name=sendmail action="<?php echo $_SERVER['PHP_SELF']; ?>"  method="post">

@@ -1,45 +1,109 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Kloxo 6.1.5\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-01-03 12:20+0100\n"
+"Report-Msgid-Bugs-To: LxCenter <contact@lxcenter.org>\n"
+"POT-Creation-Date: 2011-05-11 02:39+0200\n"
 "PO-Revision-Date: \n"
 "Last-Translator: Danny Terweij <d.terweij@lxcenter.org>\n"
 "Language-Team: \n"
-"Language: \n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=utf-8\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: \n"
 "X-Poedit-SourceCharset: utf-8\n"
 "X-Poedit-Language: Dutch\n"
 "X-Poedit-Country: NETHERLANDS\n"
 
-#: index.php:16
-msgid "This page"
-msgstr "Deze pagina"
+#: httpdocs/htmllib/lib/indexcontent.php:14
+msgid "Slave Server"
+msgstr "Dit is een Slave server, log in op de Master om de Slave te beheren."
 
-#: indexcontent.php:37
-#: indexcontent.php:64
+#: httpdocs/htmllib/lib/indexcontent.php:33
+#: httpdocs/htmllib/lib/indexcontent.php:52
 msgid "Login"
 msgstr "Inloggen"
 
-#: indexcontent.php:44
+#: httpdocs/htmllib/lib/indexcontent.php:40
+#: httpdocs/htmllib/lib/indexcontent.php:94
 msgid "Username"
 msgstr "Gebruikersnaam"
 
-#: indexcontent.php:48
+#: httpdocs/htmllib/lib/indexcontent.php:44
 msgid "Password"
 msgstr "Wachtwoord"
 
-#: indexcontent.php:73
+#: httpdocs/htmllib/lib/indexcontent.php:61
+#: httpdocs/htmllib/lib/indexcontent.php:103
 msgid "<p>Welcome to "
 msgstr "<p>Welkom bij "
 
-#: indexcontent.php:73
+#: httpdocs/htmllib/lib/indexcontent.php:61
 msgid "</p><p>Use a valid username and password to gain access to the console.</p>"
 msgstr "</p><p>Gebruik een geldig gebruikersnaam en wachtwoord om het controle paneel te benaderen.</p>"
 
-#: indexcontent.php:76
+#: httpdocs/htmllib/lib/indexcontent.php:64
 msgid "Forgot Password?"
 msgstr "Wachtwoord vergeten?"
 
+#: httpdocs/htmllib/lib/indexcontent.php:88
+msgid "Forgot Password"
+msgstr "Wachtwoord vergeten"
+
+#: httpdocs/htmllib/lib/indexcontent.php:96
+msgid "Email ID"
+msgstr "Email adres"
+
+#: httpdocs/htmllib/lib/indexcontent.php:98
+msgid "Send"
+msgstr "Verstuur"
+
+#: httpdocs/htmllib/lib/indexcontent.php:103
+msgid "</p><p>Use a valid username and email-id to get password.</p><br>"
+msgstr "</p><p>Gebruik een geldig gebruikersnaam en Email adres voor de herstel procedure.</p>"
+
+#: httpdocs/htmllib/lib/indexcontent.php:105
+msgid "Back to login"
+msgstr "Terug naar inlog pagina"
+
+#: httpdocs/htmllib/lib/indexcontent.php:152
+msgid "Password Reset Request"
+msgstr "Wachtwoord herstel verzoek"
+
+#: httpdocs/htmllib/lib/indexcontent.php:153
+msgid ""
+"\\n"
+"\\n"
+"\\n"
+"Your password has been reset to the one below for your"
+msgstr ""
+"\\n"
+"\\n"
+"\\n"
+"Je wachtwoord is hersteld voor"
+
+#: httpdocs/htmllib/lib/indexcontent.php:153
+msgid "login"
+msgstr "Inloggen"
+
+#: httpdocs/htmllib/lib/indexcontent.php:154
+msgid "The Client IP address which requested the Reset:"
+msgstr "Een persoon met het volgende IP adres heeft het wachtwoor dherstel verzocht: "
+
+#: httpdocs/htmllib/lib/indexcontent.php:155
+msgid "Username:"
+msgstr "Gebruikersnaam:"
+
+#: httpdocs/htmllib/lib/indexcontent.php:156
+msgid "New Password:"
+msgstr "Nieuw Wachtwoord:"
+
+#: httpdocs/htmllib/phplib/index.php:143
+msgid "Successful Login to "
+msgstr "Geslaagde inlog naar "
+
+#: httpdocs/htmllib/phplib/index.php:143
+msgid " from "
+msgstr " van "
+
+#~ msgid "This page"
+#~ msgstr "Deze pagina"
