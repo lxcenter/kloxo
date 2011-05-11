@@ -1,18 +1,31 @@
 body {
- 	margin: 0px;
-	padding: 0px;
+ 	margin: 0;
+	padding: 0;
 	color : #333;
 	background-color : #FFF;
 	font-size : 11px;
-	font-family : Arial, Helvetica, sans-serif;
+	font-family: Verdana, Geneva, sans-serif;
 		 }
 
+body h1 {
+	font-family: Verdana, Geneva, sans-serif;
+	font-size: 15px;
+	color: #F00;
+}
+
+body h2 {
+	font-family: Verdana, Geneva, sans-serif;
+	font-size: 9px;
+	text-decoration: underline;
+	color: #666;
+}
+
 #wrapper {
-    border: 0px;
-    margin: 0px;
+    border: 0;
+    margin: 0;
     margin-left: auto;
     margin-right: auto;
-    padding: 0px;
+    padding: 0;
 }
 
 #break {
@@ -20,16 +33,17 @@ body {
 }
 
 form {
-	margin: 0px;
+	margin: 0;
 }
 
 .button {
-	border : solid 1px #cccccc;
-	background: #E9ECEF;
-	color : #666666;
-	font-weight : bold;
-	font-size : 11px;
-	padding: 4px;
+	border: solid 1px #cccccc;
+	background: URL("/img/general/button/btm_02.gif") repeat-x;
+	color: #666666;
+	font-weight: bold;
+	padding: 5px 25px 5px 25px;
+	vertical-align: middle;
+
 }
 
 .login {
@@ -49,10 +63,7 @@ form {
 .form-block {
 	border: 1px solid #cccccc;
 	background: #E9ECEF;
-	padding-top: 15px;
-	padding-left: 10px;
-	padding-bottom: 10px;
-	padding-right: 10px;
+	padding: 15px 10px 10px 10px;
 }
 
 .login-form {
@@ -73,34 +84,26 @@ form {
 }
 
 .inputbox {
-	COLOR: #000000;
-	FONT-FAMILY: Verdana, Tahoma;
-	FONT-SIZE: 11px;
-	BORDER: 1px SOLID #666666;
-	WIDTH: 190px;
-	PADDING: 2px 2px 3px 2px;
-	MARGIN: 0px;
-	BACKGROUND: URL(/img/login/user.gif) no-repeat;
-	BACKGROUND-POSITION: 1px 1px;
-	BACKGROUND-COLOR: #FFFFFF;
-	PADDING-LEFT: 18px;
-	VERTICAL-ALIGN: middle;
+	color: #000;
+	width: 190px;
+	padding: 2px 2px 3px 2px;
+	background: URL("/img/login/user.gif") no-repeat;
+	background-position: 1px 1px;
+	background-color: #FFF;
+	padding-left: 18px;
+	vertical-align: middle;
 	margin: 0 0 1em 0;
-	border: 1px solid #cccccc;
+	border: 1px solid #ccc;
 }
 .passbox {
-	COLOR: #000000;
-	FONT-FAMILY: Verdana, Tahoma;
-	FONT-SIZE: 11px;
-	BORDER: 1px SOLID #666666;
-	WIDTH: 190px;
-	PADDING: 2px 2px 3px 2px;
-	MARGIN: 0px;
-	BACKGROUND-POSITION: 1px 1px;
-	BACKGROUND-COLOR: #FFFFFF;
-	VERTICAL-ALIGN: middle;
+	color: #000;
+	width: 205px;
+	padding: 2px 2px 3px 2px;
+	background-position: 1px 1px;
+	background-color: #FFF;
+	vertical-align: middle;
 	margin: 0 0 1em 0;
-	border: 1px solid #cccccc;
+	border: 1px solid #ccc;
 }
 
 .clr {
