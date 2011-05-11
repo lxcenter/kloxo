@@ -147,9 +147,7 @@ static function staticcreateVirtualHostiplist($port)
 function addSendmail()
 {
 
-	return null;
-
-	$sendmailstring = "php_admin_value sendmail_path  \"/usr/sbin/sendmail -t -i -f emailcop@{$this->main->nname}\"\n";
+	$sendmailstring = "php_admin_value sendmail_path  \"/usr/sbin/sendmail -t -i -f postmaster@{$this->main->nname}\"\n";
 	$string  = "\n\n<IfModule sapi_apache2.c>\n";
 
 	$string .= $sendmailstring;
