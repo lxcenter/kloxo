@@ -1,5 +1,8 @@
 <?php 
-include_once "htmllib/lib/include.php"; 
+include_once "htmllib/lib/include.php";
+
+//fixes issue #515
+lxfile_generic_chmod("/home/admin", "0770");
 
 if (lxfile_exists("/etc/httpd/conf.d/php.conf")) {
 	lunlink("/etc/httpd/conf.d/suphp.conf");
@@ -24,7 +27,6 @@ if (lxfile_exists("/etc/httpd/conf.d/php.conf")) {
 }
 
 print("Fixing Configuration...\n");
-//lxfile_mv("/etc/httpd/conf.d/php.conf", "/etc/httpd/conf.d/php.nonconf");
+
 lxfile_cp("../file/suphp.conf", "/etc/httpd/conf.d/suphp.nonconf");
 lxfile_cp("../file/etc_suphp.conf", "/etc/suphp.conf");
-//lxshell_return("__path_php_path", "../bin/fix/fixweb.php");

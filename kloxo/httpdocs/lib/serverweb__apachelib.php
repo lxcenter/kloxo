@@ -14,6 +14,8 @@ function dbactionUpdate($subaction)
 		lxfile_cp("../file/suphp.conf", "/etc/httpd/conf.d/suphp.conf");
 		lxfile_cp("../file/etc_suphp.conf", "/etc/suphp.conf");
 	}
+	# Fixed issue #515
+	lxfile_generic_chmod("/home/admin", "0770");
 
 	createRestartFile("httpd");
 }
