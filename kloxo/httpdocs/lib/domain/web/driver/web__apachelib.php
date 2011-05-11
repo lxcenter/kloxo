@@ -59,6 +59,7 @@ function updateMainConfFile()
 
 
 	lfile_put_contents($init_file, $fdata);
+    $fdata = null;
 
 	$vdomlist = merge_array_object_not_deleted($vdomlist, $this->main);
 
