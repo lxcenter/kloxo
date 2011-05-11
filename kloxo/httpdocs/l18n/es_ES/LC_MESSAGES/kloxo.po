@@ -1,47 +1,113 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Kloxo\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-01-03 12:05+0100\n"
+"Report-Msgid-Bugs-To: LxCenter <contact@lxcenter.org>\n"
+"POT-Creation-Date: 2011-05-11 02:39+0200\n"
 "PO-Revision-Date: \n"
 "Last-Translator: Ángel Guzmán Maeso <shakaran@gmail.com>\n"
 "Language-Team: LxCenter <angel.guzman@lxcenter.org>\n"
-"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: \n"
 "X-Poedit-Language: Spanish\n"
 "X-Poedit-Country: SPAIN\n"
 "X-Poedit-SourceCharset: utf-8\n"
 "X-Poedit-Basepath: /home/shakaran/Escritorio/l18n\n"
 "X-Poedit-SearchPath-0: .\n"
 
-#: index.php:16
-msgid "This page"
-msgstr "Esta página"
+#: httpdocs/htmllib/lib/indexcontent.php:14
+msgid "Slave Server"
+msgstr ""
 
-#: indexcontent.php:37
-#: indexcontent.php:64
+#: httpdocs/htmllib/lib/indexcontent.php:33
+#: httpdocs/htmllib/lib/indexcontent.php:52
 msgid "Login"
 msgstr "Acceso"
 
-#: indexcontent.php:44
+#: httpdocs/htmllib/lib/indexcontent.php:40
+#: httpdocs/htmllib/lib/indexcontent.php:94
 msgid "Username"
 msgstr "Nombre de usuario"
 
-#: indexcontent.php:48
+#: httpdocs/htmllib/lib/indexcontent.php:44
 msgid "Password"
 msgstr "Contraseña"
 
-#: indexcontent.php:73
+#: httpdocs/htmllib/lib/indexcontent.php:61
+#: httpdocs/htmllib/lib/indexcontent.php:103
 msgid "<p>Welcome to "
 msgstr "<p>Bienvenido a "
 
-#: indexcontent.php:73
-msgid "</p><p>Use a valid username and password to gain access to the console.</p>"
-msgstr "</p><p>Usa un nombre válido de nombre de usuario y contraseña para conseguir acceso a la consola.</p>"
+#: httpdocs/htmllib/lib/indexcontent.php:61
+msgid ""
+"</p><p>Use a valid username and password to gain access to the console.</p>"
+msgstr ""
+"</p><p>Usa un nombre válido de nombre de usuario y contraseña para conseguir "
+"acceso a la consola.</p>"
 
-#: indexcontent.php:76
+#: httpdocs/htmllib/lib/indexcontent.php:64
 msgid "Forgot Password?"
 msgstr "¿Contraseña olvidada?"
 
+#: httpdocs/htmllib/lib/indexcontent.php:88
+#, fuzzy
+msgid "Forgot Password"
+msgstr "¿Contraseña olvidada?"
+
+#: httpdocs/htmllib/lib/indexcontent.php:96
+msgid "Email ID"
+msgstr ""
+
+#: httpdocs/htmllib/lib/indexcontent.php:98
+msgid "Send"
+msgstr ""
+
+#: httpdocs/htmllib/lib/indexcontent.php:103
+#, fuzzy
+msgid "</p><p>Use a valid username and email-id to get password.</p><br>"
+msgstr ""
+"</p><p>Usa un nombre válido de nombre de usuario y contraseña para conseguir "
+"acceso a la consola.</p>"
+
+#: httpdocs/htmllib/lib/indexcontent.php:105
+msgid "Back to login"
+msgstr ""
+
+#: httpdocs/htmllib/lib/indexcontent.php:152
+msgid "Password Reset Request"
+msgstr ""
+
+#: httpdocs/htmllib/lib/indexcontent.php:153
+msgid "\\n\\n\\nYour password has been reset to the one below for your"
+msgstr ""
+
+#: httpdocs/htmllib/lib/indexcontent.php:153
+#, fuzzy
+msgid "login"
+msgstr "Acceso"
+
+#: httpdocs/htmllib/lib/indexcontent.php:154
+msgid "The Client IP address which requested the Reset:"
+msgstr ""
+
+#: httpdocs/htmllib/lib/indexcontent.php:155
+#, fuzzy
+msgid "Username:"
+msgstr "Nombre de usuario"
+
+#: httpdocs/htmllib/lib/indexcontent.php:156
+#, fuzzy
+msgid "New Password:"
+msgstr "Contraseña"
+
+#: httpdocs/htmllib/phplib/index.php:143
+msgid "Successful Login to "
+msgstr ""
+
+#: httpdocs/htmllib/phplib/index.php:143
+msgid " from "
+msgstr ""
+
+#~ msgid "This page"
+#~ msgstr "Esta página"
