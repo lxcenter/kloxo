@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Kloxo 6.1.5\n"
 "Report-Msgid-Bugs-To: LxCenter <contact@lxcenter.org>\n"
-"POT-Creation-Date: 2011-05-11 02:39+0200\n"
+"POT-Creation-Date: 2011-05-11 05:09+0200\n"
 "PO-Revision-Date: \n"
 "Last-Translator: Danny Terweij <d.terweij@lxcenter.org>\n"
 "Language-Team: \n"
@@ -38,8 +38,11 @@ msgid "<p>Welcome to "
 msgstr "<p>Welkom bij "
 
 #: httpdocs/htmllib/lib/indexcontent.php:61
-msgid "</p><p>Use a valid username and password to gain access to the console.</p>"
-msgstr "</p><p>Gebruik een geldig gebruikersnaam en wachtwoord om het controle paneel te benaderen.</p>"
+msgid ""
+"</p><p>Use a valid username and password to gain access to the console.</p>"
+msgstr ""
+"</p><p>Gebruik een geldig gebruikersnaam en wachtwoord om het controle "
+"paneel te benaderen.</p>"
 
 #: httpdocs/htmllib/lib/indexcontent.php:64
 msgid "Forgot Password?"
@@ -59,7 +62,9 @@ msgstr "Verstuur"
 
 #: httpdocs/htmllib/lib/indexcontent.php:103
 msgid "</p><p>Use a valid username and email-id to get password.</p><br>"
-msgstr "</p><p>Gebruik een geldig gebruikersnaam en Email adres voor de herstel procedure.</p>"
+msgstr ""
+"</p><p>Gebruik een geldig gebruikersnaam en Email adres voor de herstel "
+"procedure.</p>"
 
 #: httpdocs/htmllib/lib/indexcontent.php:105
 msgid "Back to login"
@@ -70,16 +75,8 @@ msgid "Password Reset Request"
 msgstr "Wachtwoord herstel verzoek"
 
 #: httpdocs/htmllib/lib/indexcontent.php:153
-msgid ""
-"\\n"
-"\\n"
-"\\n"
-"Your password has been reset to the one below for your"
-msgstr ""
-"\\n"
-"\\n"
-"\\n"
-"Je wachtwoord is hersteld voor"
+msgid "\\n\\n\\nYour password has been reset to the one below for your"
+msgstr "\\n\\n\\nJe wachtwoord is hersteld voor"
 
 #: httpdocs/htmllib/lib/indexcontent.php:153
 msgid "login"
@@ -87,7 +84,8 @@ msgstr "Inloggen"
 
 #: httpdocs/htmllib/lib/indexcontent.php:154
 msgid "The Client IP address which requested the Reset:"
-msgstr "Een persoon met het volgende IP adres heeft het wachtwoor dherstel verzocht: "
+msgstr ""
+"Een persoon met het volgende IP adres heeft het wachtwoor dherstel verzocht: "
 
 #: httpdocs/htmllib/lib/indexcontent.php:155
 msgid "Username:"
