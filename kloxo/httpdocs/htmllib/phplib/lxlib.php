@@ -1790,7 +1790,7 @@ function get_language()
 function get_charset()
 {
 	$lang = get_language();
-	$charset = @ lfile_get_contents("lang/$lan/charset");
+	$charset = @ lfile_get_contents("lang/$lang/charset");
 	$charset = trim($charset);
 	return $charset;
 }
@@ -1804,6 +1804,8 @@ function print_meta_lan()
 	print("<head>");
 	if ($charset) {
 		print("<meta http-equiv=\"Content-Type\" content=\"text/html; charset=$charset\"  />");
+	} else {
+		print("<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\"  />");
 	}
 }
 
@@ -1812,34 +1814,33 @@ function init_language()
 	global $gbl, $sgbl, $login, $ghtml;
 	global $g_language_mes, $g_language_desc;
 
-	$lan = get_language();
+	$language = get_language();
 
-	if ($lan === 'en') {
-		include_once "htmllib/lib/messagelib.php";
-		include_once "htmllib/lib/helplib.php";
-		include_once "htmllib/lib/helpvarlib.php";
-		include_once "lib/messagelib.php";
-		include_once "htmllib/lib/langfunctionlib.php";
-		include_once "htmllib/lib/langkeywordlib.php";
-	} else {
-		if (lxfile_exists("lang/$lan/messagelib.php"))
-			include_once "lang/$lan/messagelib.php"; else
-			include_once "htmllib/lib/messagelib.php";
-
-		if (lxfile_exists("lang/$lan/langfunctionlib.php")) {
-			include_once "lang/$lan/langfunctionlib.php";
+		if (lxfile_exists("lang/$language/messagelib.php")) {
+			include_once("lang/$language/messagelib.php");
 		} else {
-			include_once "htmllib/lib/langfunctionlib.php";
+			include_once("lang/en/messagelib.php");
 		}
 
-		if (lxfile_exists("lang/$lan/langkeywordlib.php")) {
-			include_once "lang/$lan/langkeywordlib.php";
+		if (lxfile_exists("lang/$language/langfunctionlib.php")) {
+			include_once("lang/$language/langfunctionlib.php");
 		} else {
-			include_once "htmllib/lib/langkeywordlib.php";
+			include_once("lang/en/langfunctionlib.php");
 		}
-	}
 
-	include_once "htmllib/lib/commonmessagelib.php";
+		if (lxfile_exists("lang/$language/langkeywordlib.php")) {
+			include_once("lang/$language/langkeywordlib.php");
+		} else {
+			include_once("lang/en/langkeywordlib.php");
+		}
+
+		if (lxfile_exists("lang/$language/desclib.php")) {
+			include_once("lang/$language/desclib.php");
+		} else {
+			include_once("lang/en/desclib.php");
+		}
+
+	include_once("htmllib/lib/commonmessagelib.php");
 
 	$g_language_mes = new Language_Mes();
 	$g_language_mes->__information = $__information;
@@ -1849,13 +1850,9 @@ function init_language()
 	$g_language_mes->__helpvar = $__helpvar;
 	$g_language_mes->__commonhelp = $g_commonhelp;
 
-	if ($lan === 'en') {
-		//return;
-	}
-	include_once "lang/$lan/desclib.php";
 	$g_language_desc = new Remote();
 	$g_language_desc->__description = $__description;
-	//$g_language_desc->__acdescription = $__acdescription;
+
 }
 
 function lx_error_handler($errno, $errstr, $file, $line)
@@ -1944,9 +1941,6 @@ function lx_exception_handler($e)
 			$trace .= $a["class"] . ":";
 		}
 		$trace .= $a["function"] . "(";
-		if (isset($a["args"])) {
-			//$trace .= implode(",", $a['args']);
-		}
 		$trace .= ")\n";
 	}
 	lfile_put_contents($sgbl->__var_error_file, $trace);

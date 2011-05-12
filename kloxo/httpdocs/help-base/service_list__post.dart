@@ -1,2 +1,0 @@
-
- Getting the service status turned out to be tricky on linux systems, since for most of the services, an [b] /etc/init.d/service status [/b] does not return the correct value. So we have a concept of [b] grep string [/b] which is string to search in process list. <%program%> will search for this string in the process list and will show the service as running if it can find it. You can leave the grep string as blank for services that cannot be grepped, such as [b] iptables [/b], and also for services that will actually work properly.
