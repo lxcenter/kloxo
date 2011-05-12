@@ -213,8 +213,8 @@ function os_updateApplicableToSlaveToo()
 	lxfile_touch("/etc/httpd/conf/kloxo/ssl.conf");
 	lxfile_touch("/etc/httpd/conf/kloxo/default.conf");
 	lxfile_touch("/etc/httpd/conf/kloxo/cp_config.conf");
-	lunlink("../log/access_log");
-	lunlink("../log/lighttpd_error.log");
+//	lunlink("../log/access_log");
+//	lunlink("../log/lighttpd_error.log");
 
 
 	@lxfile_rm("/etc/init.d/pure-ftpd");
