@@ -102,9 +102,7 @@ function save_xinetd_qmail()
 	$bcont = str_replace("%instance%", $instance, $bcont);
 
 	if ($this->main->additional_smtp_port > 0) {
-        if ( !$this->main->isOn('alt_smtp_sdyke_flag') )
-            $spamdyke = "";
-        $cont = str_replace("%spamdyke%", $spamdyke, $bcont);
+        $cont = str_replace("%spamdyke%", ( $this->main->isOn('alt_smtp_sdyke_flag') ? $spamdyke : "" ), $bcont);
  		$cont = str_replace("%servicename%", "kloxo_smtp", $cont);
 		lfile_put_contents("/etc/xinetd.d/kloxo_smtp_lxa", $cont);
 		remove_line("/etc/services", "kloxo_smtp");
