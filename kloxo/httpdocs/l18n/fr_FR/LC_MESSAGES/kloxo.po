@@ -1,0 +1,101 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Kloxo 6.1.0\n"
+"Report-Msgid-Bugs-To: LxCenter <contact@lxcenter.org>\n"
+"POT-Creation-Date: 2011-05-11 05:09+0200\n"
+"PO-Revision-Date: \n"
+"Last-Translator: Ángel Guzmán Maeso <shakaran@gmail.com>\n"
+"Language-Team: Lxcenter <angel.guzman@lxcenter.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: \n"
+"X-Poedit-Language: English\n"
+"X-Poedit-Country: UNITED STATES\n"
+"X-Poedit-SourceCharset: utf-8\n"
+"X-Poedit-Basepath: /home/shakaran/Escritorio/l18n\n"
+"X-Poedit-SearchPath-0: .\n"
+
+#: httpdocs/htmllib/lib/indexcontent.php:14
+msgid "Slave Server"
+msgstr ""
+
+#: httpdocs/htmllib/lib/indexcontent.php:33
+#: httpdocs/htmllib/lib/indexcontent.php:52
+msgid "Login"
+msgstr ""
+
+#: httpdocs/htmllib/lib/indexcontent.php:40
+#: httpdocs/htmllib/lib/indexcontent.php:94
+msgid "Username"
+msgstr ""
+
+#: httpdocs/htmllib/lib/indexcontent.php:44
+msgid "Password"
+msgstr ""
+
+#: httpdocs/htmllib/lib/indexcontent.php:61
+#: httpdocs/htmllib/lib/indexcontent.php:103
+msgid "<p>Welcome to "
+msgstr ""
+
+#: httpdocs/htmllib/lib/indexcontent.php:61
+msgid ""
+"</p><p>Use a valid username and password to gain access to the console.</p>"
+msgstr ""
+
+#: httpdocs/htmllib/lib/indexcontent.php:64
+msgid "Forgot Password?"
+msgstr ""
+
+#: httpdocs/htmllib/lib/indexcontent.php:88
+msgid "Forgot Password"
+msgstr ""
+
+#: httpdocs/htmllib/lib/indexcontent.php:96
+msgid "Email ID"
+msgstr ""
+
+#: httpdocs/htmllib/lib/indexcontent.php:98
+msgid "Send"
+msgstr ""
+
+#: httpdocs/htmllib/lib/indexcontent.php:103
+msgid "</p><p>Use a valid username and email-id to get password.</p><br>"
+msgstr ""
+
+#: httpdocs/htmllib/lib/indexcontent.php:105
+msgid "Back to login"
+msgstr ""
+
+#: httpdocs/htmllib/lib/indexcontent.php:152
+msgid "Password Reset Request"
+msgstr ""
+
+#: httpdocs/htmllib/lib/indexcontent.php:153
+msgid "\\n\\n\\nYour password has been reset to the one below for your"
+msgstr ""
+
+#: httpdocs/htmllib/lib/indexcontent.php:153
+msgid "login"
+msgstr ""
+
+#: httpdocs/htmllib/lib/indexcontent.php:154
+msgid "The Client IP address which requested the Reset:"
+msgstr ""
+
+#: httpdocs/htmllib/lib/indexcontent.php:155
+msgid "Username:"
+msgstr ""
+
+#: httpdocs/htmllib/lib/indexcontent.php:156
+msgid "New Password:"
+msgstr ""
+
+#: httpdocs/htmllib/phplib/index.php:143
+msgid "Successful Login to "
+msgstr ""
+
+#: httpdocs/htmllib/phplib/index.php:143
+msgid " from "
+msgstr ""
