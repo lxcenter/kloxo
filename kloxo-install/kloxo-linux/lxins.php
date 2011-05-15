@@ -80,7 +80,7 @@ function lxins_main()
 		exec("rpm -e --nodeps $package > /dev/null 2>&1");
 	}
 
-	$packages = array("php-mbstring", "php-mysql", "which", "gcc-c++", "php-imap", "php-pear", "php-devel", "lxlighttpd", "httpd", "mod_ssl", "zip", "unzip", "lxphp", "lxzend", "mysql", "mysql-server",  "mysqlclient10", "curl","autoconf","automake","libtool", "bogofilter", "gcc", "cpp", "openssl", "pure-ftpd", "yum-protectbase");
+	$packages = array("php-mbstring", "php-mysql", "which", "gcc-c++", "php-imap", "php-pear", "php-devel", "lxlighttpd", "httpd", "mod_ssl", "zip", "unzip", "lxphp", "lxzend", "mysql", "mysql-server",  "mysqlclient*", "curl","autoconf","automake","libtool", "bogofilter", "gcc", "cpp", "openssl", "pure-ftpd", "yum-protectbase");
 	$list = implode(" ", $packages);
 	while (true) {
 		print("Installing packages $list...\n");
