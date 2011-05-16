@@ -12,8 +12,13 @@ $conf['session']['name'] = 'mm';
 $conf['session']['use_only_cookies'] = true;
 $conf['session']['cache_limiter'] = 'nocache';
 $conf['session']['timeout'] = 0;
-$conf['cookie']['domain'] = $_SERVER['SERVER_NAME'];
 $conf['cookie']['path'] = '/horde';
+
+/* fix bug 529 */
+$conf['cookie']['domain'] = ''];
+$conf['urls']['token_lifetime'] = 30;
+$conf['urls']['hmac_lifetime'] = 30;
+
 $conf['sql']['persistent'] = false;
 $conf['sql']['hostspec'] = 'localhost';
 $conf['sql']['username'] = 'horde_groupware';
