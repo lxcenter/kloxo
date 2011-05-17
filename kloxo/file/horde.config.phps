@@ -15,7 +15,7 @@ $conf['session']['timeout'] = 0;
 $conf['cookie']['path'] = '/horde';
 
 /* fix bug 529 */
-$conf['cookie']['domain'] = ''];
+$conf['cookie']['domain'] = '';
 $conf['urls']['token_lifetime'] = 30;
 $conf['urls']['hmac_lifetime'] = 30;
 
