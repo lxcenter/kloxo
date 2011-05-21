@@ -5,7 +5,6 @@
  *
  * @todo js error when view name is empty (strFormEmpty)
  * @todo (also validate if js is disabled, after form submission?)
- * @version $Id$
  * @package phpMyAdmin
  */
 
@@ -139,13 +138,13 @@ $url_params['reload'] = 1;
             </select>
         </td>
     </tr>
-    <tr><td><?php echo $strViewName; ?></td>
+    <tr><td><?php echo __('VIEW name'); ?></td>
         <td><input type="text" size="20" name="view[name]" onfocus="this.select()"
                 value="<?php echo htmlspecialchars($view['name']); ?>" />
         </td>
     </tr>
 
-    <tr><td><?php echo $strColumnNames; ?></td>
+    <tr><td><?php echo __('Column names'); ?></td>
         <td><input type="text" maxlength="100" size="50" name="view[column_names]"
                 onfocus="this.select()"
                 value="<?php echo htmlspecialchars($view['column_names']); ?>" />
@@ -179,7 +178,7 @@ $url_params['reload'] = 1;
     </table>
 </fieldset>
 <fieldset class="tblFooters">
-    <input type="submit" name="createview" value="<?php echo $strGo; ?>" />
+    <input type="submit" name="createview" value="<?php echo __('Go'); ?>" />
 </fieldset>
 </form>
 </div>
@@ -187,6 +186,6 @@ $url_params['reload'] = 1;
 /**
  * Displays the footer
  */
-require_once './libraries/footer.inc.php';
+require './libraries/footer.inc.php';
 
 ?>

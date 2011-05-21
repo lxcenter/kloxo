@@ -2,7 +2,6 @@
 /* vim: set expandtab sw=4 ts=4 sts=4: */
 /**
  *
- * @version $Id$
  * @package phpMyAdmin
  */
 if (! defined('PHPMYADMIN')) {
@@ -17,15 +16,7 @@ if (! defined('PHPMYADMIN')) {
  * @uses    PMA_showHint()
  * @uses    $GLOBALS['cfg']['PropertiesNumColumns']
  * @uses    $GLOBALS['is_show_stats']
- * @uses    $GLOBALS['strTable']
- * @uses    $GLOBALS['strAction']
- * @uses    $GLOBALS['strRecords']
- * @uses    $GLOBALS['strApproximateCount']
- * @uses    $GLOBALS['strType']
- * @uses    $GLOBALS['strCollation']
- * @uses    $GLOBALS['strSize']
- * @uses    $GLOBALS['strOverhead']
- * @uses    $GLOBALS['structure_tbl_col_cnt']
+ * @uses    $GLOBALS['colspan_for_structure']
  * @uses    PMA_SortableTableHeader()
  * @param   boolean $db_is_information_schema
  * @param   boolean $replication
@@ -40,39 +31,39 @@ function PMA_TableHeader($db_is_information_schema = false, $replication = false
         $action_colspan = 6;
     }
 
-    echo '<table class="data" style="float: left;">' . "\n"
+    echo '<table class="data">' . "\n"
         .'<thead>' . "\n"
         .'<tr><th></th>' . "\n"
-        .'    <th>' . PMA_SortableTableHeader($GLOBALS['strTable'], 'table') . '</th>' . "\n";
+        .'    <th>' . PMA_SortableTableHeader(__('Table'), 'table') . '</th>' . "\n";
     if ($replication) {
      echo '    <th>' . "\n"
-         .'        ' . $GLOBALS['strReplication'] . "\n"
+         .'        ' . __('Replication') . "\n"
          .'    </th>';
     }
     echo '    <th colspan="' . $action_colspan . '">' . "\n"
-        .'        ' . $GLOBALS['strAction'] . "\n"
+        .'        ' . __('Action') . "\n"
         .'    </th>'
         // larger values are more interesting so default sort order is DESC
-        .'    <th>' . PMA_SortableTableHeader($GLOBALS['strRecords'], 'records', 'DESC')
-        .PMA_showHint(PMA_sanitize($GLOBALS['strApproximateCount'])) . "\n"
+        .'    <th>' . PMA_SortableTableHeader(__('Rows'), 'records', 'DESC')
+        .PMA_showHint(PMA_sanitize(__('May be approximate. See [a@./Documentation.html#faq3_11@Documentation]FAQ 3.11[/a]'))) . "\n"
         .'    </th>' . "\n";
     if (!($GLOBALS['cfg']['PropertiesNumColumns'] > 1)) {
-        echo '    <th>' . PMA_SortableTableHeader($GLOBALS['strType'], 'type') . '</th>' . "\n";
+        echo '    <th>' . PMA_SortableTableHeader(__('Type'), 'type') . '</th>' . "\n";
         $cnt++;
-        echo '    <th>' . PMA_SortableTableHeader($GLOBALS['strCollation'], 'collation') . '</th>' . "\n";
+        echo '    <th>' . PMA_SortableTableHeader(__('Collation'), 'collation') . '</th>' . "\n";
         $cnt++;
     }
     if ($GLOBALS['is_show_stats']) {
         // larger values are more interesting so default sort order is DESC
-        echo '    <th>' . PMA_SortableTableHeader($GLOBALS['strSize'], 'size', 'DESC') . '</th>' . "\n"
+        echo '    <th>' . PMA_SortableTableHeader(__('Size'), 'size', 'DESC') . '</th>' . "\n"
         // larger values are more interesting so default sort order is DESC
-           . '    <th>' . PMA_SortableTableHeader($GLOBALS['strOverhead'], 'overhead', 'DESC') . '</th>' . "\n";
+           . '    <th>' . PMA_SortableTableHeader(__('Overhead'), 'overhead', 'DESC') . '</th>' . "\n";
         $cnt += 2;
     }
     echo '</tr>' . "\n";
     echo '</thead>' . "\n";
     echo '<tbody>' . "\n";
-    $GLOBALS['structure_tbl_col_cnt'] = $cnt + $action_colspan + 3;
+    $GLOBALS['colspan_for_structure'] = $cnt + $action_colspan + 3;
 } // end function PMA_TableHeader()
 
 
@@ -101,14 +92,14 @@ function PMA_SortableTableHeader($title, $sort, $initial_sort_order = 'ASC')
 
     $order_img = '';
     $order_link_params = array();
-    $order_link_params['title'] = $GLOBALS['strSort'];
+    $order_link_params['title'] = __('Sort');
 
     // If this column was requested to be sorted.
     if ($requested_sort == $sort) {
         if ($requested_sort_order == 'ASC') {
             $future_sort_order = 'DESC';
             // current sort order is ASC
-            $order_img  = ' <img class="icon" src="' . $GLOBALS['pmaThemeImage'] . 's_asc.png" width="11" height="9" alt="'. $GLOBALS['strAscending'] . '" title="'. $GLOBALS['strAscending'] . '" id="sort_arrow" />';
+            $order_img  = ' <img class="icon" src="' . $GLOBALS['pmaThemeImage'] . 's_asc.png" width="11" height="9" alt="'. __('Ascending') . '" title="'. __('Ascending') . '" id="sort_arrow" />';
             // but on mouse over, show the reverse order (DESC)
             $order_link_params['onmouseover'] = 'if(document.getElementById(\'sort_arrow\')){ document.getElementById(\'sort_arrow\').src=\'' . $GLOBALS['pmaThemeImage'] . 's_desc.png\'; }';
             // on mouse out, show current sort order (ASC)
@@ -116,7 +107,7 @@ function PMA_SortableTableHeader($title, $sort, $initial_sort_order = 'ASC')
         } else {
             $future_sort_order = 'ASC';
             // current sort order is DESC
-            $order_img  = ' <img class="icon" src="' . $GLOBALS['pmaThemeImage'] . 's_desc.png" width="11" height="9" alt="'. $GLOBALS['strDescending'] . '" title="'. $GLOBALS['strDescending'] . '" id="sort_arrow" />';
+            $order_img  = ' <img class="icon" src="' . $GLOBALS['pmaThemeImage'] . 's_desc.png" width="11" height="9" alt="'. __('Descending') . '" title="'. __('Descending') . '" id="sort_arrow" />';
             // but on mouse over, show the reverse order (ASC)
             $order_link_params['onmouseover'] = 'if(document.getElementById(\'sort_arrow\')){ document.getElementById(\'sort_arrow\').src=\'' . $GLOBALS['pmaThemeImage'] . 's_asc.png\'; }';
             // on mouse out, show current sort order (DESC)

@@ -5,7 +5,6 @@
  * This script is distinct from libraries/common.inc.php because this
  * script is called from /test.
  *
- * @version $Id$
  * @package phpMyAdmin
  */
 
@@ -184,7 +183,6 @@ function PMA_isValid(&$var, $type = 'length', $compare = null)
  * @return   string  The secured path
  *
  * @access  public
- * @author  Marc Delisle (lem9@users.sourceforge.net)
  */
 function PMA_securePath($path)
 {
@@ -203,10 +201,9 @@ function PMA_securePath($path)
  * @todo    use detected argument separator (PMA_Config)
  * @uses    $GLOBALS['session_name']
  * @uses    $GLOBALS['text_dir']
- * @uses    $GLOBALS['strError']
  * @uses    $GLOBALS['available_languages']
  * @uses    $GLOBALS['lang']
- * @uses    PMA_removeCookie()
+ * @uses    $GLOBALS['PMA_Config']->removeCookie()
  * @uses    select_lang.lib.php
  * @uses    $_COOKIE
  * @uses    substr()
@@ -223,36 +220,7 @@ function PMA_securePath($path)
  */
 function PMA_fatalError($error_message, $message_args = null)
 {
-    // it could happen PMA_fatalError() is called before language file is loaded
-    if (! isset($GLOBALS['available_languages'])) {
-        $GLOBALS['cfg'] = array(
-            'DefaultLang'           => 'en-utf-8',
-            'AllowAnywhereRecoding' => false);
-
-        // Loads the language file
-        require_once './libraries/select_lang.lib.php';
-
-        if (isset($strError)) {
-            $GLOBALS['strError'] = $strError;
-        } else {
-            $GLOBALS['strError'] = 'Error';
-        }
-
-        // $text_dir is set in lang/language-utf-8.inc.php
-        if (isset($text_dir)) {
-            $GLOBALS['text_dir'] = $text_dir;
-        }
-    }
-
-    // $error_message could be a language string identifier: strString
-    if (substr($error_message, 0, 3) === 'str') {
-        if (isset($$error_message)) {
-            $error_message = $$error_message;
-        } elseif (isset($GLOBALS[$error_message])) {
-            $error_message = $GLOBALS[$error_message];
-        }
-    }
-
+    /* Use format string if applicable */
     if (is_string($message_args)) {
         $error_message = sprintf($error_message, $message_args);
     } elseif (is_array($message_args)) {
@@ -260,23 +228,63 @@ function PMA_fatalError($error_message, $message_args = null)
     }
     $error_message = strtr($error_message, array('<br />' => '[br]'));
 
+    if (function_exists('__')) {
+        $error_header = __('Error');
+    } else {
+        $error_header = 'Error';
+    }
+
     // Displays the error message
-    // (do not use &amp; for parameters sent by header)
-    $query_params = array(
-        'lang'  => $GLOBALS['available_languages'][$GLOBALS['lang']][2],
-        'dir'   => $GLOBALS['text_dir'],
-        'type'  => $GLOBALS['strError'],
-        'error' => $error_message,
-    );
-    header('Location: ' . (defined('PMA_SETUP') ? '../' : '') . 'error.php?'
-            . http_build_query($query_params, null, '&'));
+    $lang = $GLOBALS['available_languages'][$GLOBALS['lang']][1];
+    $dir = $GLOBALS['text_dir'];
+    $type = $error_header;
+    $error = $error_message;
 
     // on fatal errors it cannot hurt to always delete the current session
     if (isset($GLOBALS['session_name']) && isset($_COOKIE[$GLOBALS['session_name']])) {
-        PMA_removeCookie($GLOBALS['session_name']);
+        $GLOBALS['PMA_Config']->removeCookie($GLOBALS['session_name']);
     }
 
+    require('./libraries/error.inc.php');
+
     exit;
+}
+
+/**
+ * Returns a link to the PHP documentation
+ *
+ * @param string  anchor in documentation
+ *
+ * @return  string  the URL
+ *
+ * @access  public
+ */
+function PMA_getPHPDocLink($target) {
+    /* l10n: Language to use for PHP documentation, please use only languages which do exist in official documentation. */
+    $lang = _pgettext('PHP documentation language', 'en');
+
+    return 'http://php.net/manual/' . $lang . '/' . $target;
+}
+
+/**
+ * Warn or fail on missing extension.
+ *
+ * @param string $extension Extension name
+ * @param bool $fatal Whether the error is fatal.
+ / @param string $extra Extra string to append to messsage.
+ */
+function PMA_warnMissingExtension($extension, $fatal = false, $extra = '')
+{
+    $message = sprintf(__('The %s extension is missing. Please check your PHP configuration.'),
+        '[a@' . PMA_getPHPDocLink('book.' . $extension . '.php') . '@Documentation][em]' . $extension . '[/em][/a]');
+    if ($extra != '') {
+        $message .= ' ' . $extra;
+    }
+    if ($fatal) {
+        PMA_fatalError($message);
+    } else {
+        trigger_error($message, E_USER_WARNING);
+    }
 }
 
 /**
@@ -298,31 +306,12 @@ function PMA_getTableCount($db)
     if ($tables) {
         $num_tables = PMA_DBI_num_rows($tables);
 
-        // for blobstreaming - get blobstreaming tables
-        // for use in determining if a table here is a blobstreaming table - rajk
-
-        // load PMA configuration
-        $PMA_Config = $_SESSION['PMA_Config'];
-
-        // if PMA configuration exists
-        if (!empty($PMA_Config))
-        {
-            // load BS tables
-            $session_bs_tables = $_SESSION['PMA_Config']->get('BLOBSTREAMING_TABLES');
-
-            // if BS tables exist
-            if (isset ($session_bs_tables))
-                while ($data = PMA_DBI_fetch_assoc($tables))
-                    foreach ($session_bs_tables as $table_key=>$table_val)
-                        // if the table is a blobstreaming table, reduce the table count
-                        if ($data['Tables_in_' . $db] == $table_key)
-                        {
-                            if ($num_tables > 0)
-                                $num_tables--;
-
-                            break;
-                        }
-        } // end if PMA configuration exists
+        // do not count hidden blobstreaming tables
+        while ((($num_tables > 0)) && $data = PMA_DBI_fetch_assoc($tables)) {
+            if (PMA_BS_IsHiddenTable($data['Tables_in_' . $db])) {
+                $num_tables--;
+            }
+        }
 
         PMA_DBI_free_result($tables);
     } else {
@@ -528,71 +517,6 @@ function PMA_getenv($var_name) {
 }
 
 /**
- * removes cookie
- *
- * @uses    PMA_Config::isHttps()
- * @uses    PMA_Config::getCookiePath()
- * @uses    setcookie()
- * @uses    time()
- * @param   string  $cookie     name of cookie to remove
- * @return  boolean result of setcookie()
- */
-function PMA_removeCookie($cookie)
-{
-    return setcookie($cookie, '', time() - 3600,
-        PMA_Config::getCookiePath(), '', PMA_Config::isHttps());
-}
-
-/**
- * sets cookie if value is different from current cokkie value,
- * or removes if value is equal to default
- *
- * @uses    PMA_Config::isHttps()
- * @uses    PMA_Config::getCookiePath()
- * @uses    $_COOKIE
- * @uses    PMA_removeCookie()
- * @uses    setcookie()
- * @uses    time()
- * @param   string  $cookie     name of cookie to remove
- * @param   mixed   $value      new cookie value
- * @param   string  $default    default value
- * @param   int     $validity   validity of cookie in seconds (default is one month)
- * @param   bool    $httponlt   whether cookie is only for HTTP (and not for scripts)
- * @return  boolean result of setcookie()
- */
-function PMA_setCookie($cookie, $value, $default = null, $validity = null, $httponly = true)
-{
-    if ($validity == null) {
-        $validity = 2592000;
-    }
-    if (strlen($value) && null !== $default && $value === $default
-     && isset($_COOKIE[$cookie])) {
-        // remove cookie, default value is used
-        return PMA_removeCookie($cookie);
-    }
-
-    if (! strlen($value) && isset($_COOKIE[$cookie])) {
-        // remove cookie, value is empty
-        return PMA_removeCookie($cookie);
-    }
-
-    if (! isset($_COOKIE[$cookie]) || $_COOKIE[$cookie] !== $value) {
-        // set cookie with new value
-        /* Calculate cookie validity */
-        if ($validity == 0) {
-            $v = 0;
-        } else {
-            $v = time() + $validity;
-        }
-        return setcookie($cookie, $value, $v,
-            PMA_Config::getCookiePath(), '', PMA_Config::isHttps(), $httponly);
-    }
-
-    // cookie has already $value as value
-    return true;
-}
-
-/**
  * Send HTTP header, taking IIS limits into account (600 seems ok)
  *
  * @uses    PMA_IS_IIS
@@ -630,7 +554,7 @@ function PMA_sendHeaderLocation($uri)
         echo '<body>' . "\n";
         echo '<script type="text/javascript">' . "\n";
         echo '//<![CDATA[' . "\n";
-        echo 'document.write(\'<p><a href="' . htmlspecialchars($uri) . '">' . $GLOBALS['strGo'] . '</a></p>\');' . "\n";
+        echo 'document.write(\'<p><a href="' . htmlspecialchars($uri) . '">' . __('Go') . '</a></p>\');' . "\n";
         echo '//]]>' . "\n";
         echo '</script></body></html>' . "\n";
 
@@ -661,6 +585,123 @@ function PMA_sendHeaderLocation($uri)
                 header('Location: ' . $uri);
             }
         }
+    }
+}
+
+/**
+ * Returns value of an element in $array given by $path.
+ * $path is a string describing position of an element in an associative array,
+ * eg. Servers/1/host refers to $array[Servers][1][host]
+ *
+ * @param  string   $path
+ * @param  array    $array
+ * @param  mixed    $default
+ * @return mixed    array element or $default
+ */
+function PMA_array_read($path, $array, $default = null)
+{
+    $keys = explode('/', $path);
+    $value =& $array;
+    foreach ($keys as $key) {
+        if (!isset($value[$key])) {
+            return $default;
+        }
+        $value =& $value[$key];
+    }
+    return $value;
+}
+
+/**
+ * Stores value in an array
+ *
+ * @param  string   $path
+ * @param  array    &$array
+ * @param  mixed    $value
+ */
+function PMA_array_write($path, &$array, $value)
+{
+    $keys = explode('/', $path);
+    $last_key = array_pop($keys);
+    $a =& $array;
+    foreach ($keys as $key) {
+        if (!isset($a[$key])) {
+            $a[$key] = array();
+        }
+        $a =& $a[$key];
+    }
+    $a[$last_key] = $value;
+}
+
+/**
+ * Removes value from an array
+ *
+ * @param  string   $path
+ * @param  array    &$array
+ * @param  mixed    $value
+ */
+function PMA_array_remove($path, &$array)
+{
+    $keys = explode('/', $path);
+    $keys_last = array_pop($keys);
+    $path = array();
+    $depth = 0;
+
+    $path[0] =& $array;
+    $found = true;
+    // go as deep as required or possible
+    foreach ($keys as $key) {
+        if (!isset($path[$depth][$key])) {
+            $found = false;
+            break;
+        }
+        $depth++;
+        $path[$depth] =& $path[$depth-1][$key];
+    }
+    // if element found, remove it
+    if ($found) {
+        unset($path[$depth][$keys_last]);
+        $depth--;
+    }
+
+    // remove empty nested arrays
+    for (; $depth >= 0; $depth--) {
+        if (!isset($path[$depth+1]) || count($path[$depth+1]) == 0) {
+            unset($path[$depth][$keys[$depth]]);
+        } else {
+            break;
+        }
+    }
+}
+
+/**
+ * Returns link to (possibly) external site using defined redirector.
+ *
+ * @param string $url  URL where to go.
+ *
+ * @return string URL for a link.
+ */
+function PMA_linkURL($url) {
+    if (!preg_match('#^https?://#', $url) || defined('PMA_SETUP')) {
+        return $url;
+    } else {
+        $params = array();
+        $params['url'] = $url;
+        return './url.php' . PMA_generate_common_url($params);
+    }
+}
+
+/**
+ * Returns HTML code to include javascript file.
+ *
+ * @param string $url Location of javascript, relative to js/ folder.
+ *
+ * @return string HTML code for javascript inclusion.
+ */
+function PMA_includeJS($url) {
+    if (strpos($url, '?') === FALSE) {
+        return '<script src="./js/' . $url . '?ts=' . filemtime('./js/' . $url) . '" type="text/javascript"></script>' . "\n";
+    } else {
+        return '<script src="./js/' . $url . '" type="text/javascript"></script>' . "\n";
     }
 }
 ?>

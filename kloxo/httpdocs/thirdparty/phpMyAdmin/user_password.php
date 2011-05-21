@@ -4,14 +4,7 @@
  * displays and handles the form where the user can change his password
  * linked from main.php
  *
- * @uses    $GLOBALS['strUpdateProfileMessage']
- * @uses    $GLOBALS['strBack']
  * @uses    $GLOBALS['js_include']
- * @uses    $GLOBALS['strChangePassword']
- * @uses    $GLOBALS['strPasswordEmpty']
- * @uses    $GLOBALS['strPasswordNotSame']
- * @uses    $GLOBALS['strError']
- * @uses    $GLOBALS['strNoRights']
  * @uses    $cfg['ShowChgPassword']
  * @uses    $cfg['Server']['auth_type']
  * @uses    PMA_DBI_select_db()
@@ -21,11 +14,10 @@
  * @uses    PMA_generate_common_url()
  * @uses    PMA_isValid()
  * @uses    PMA_mysqlDie()
- * @uses    PMA_setCookie()
+ * @uses    $GLOBALS['PMA_Config']->setCookie()
  * @uses    PMA_blowfish_encrypt()
  * @uses    PMA_showMessage()
  * @uses    define()
- * @version $Id$
  * @package phpMyAdmin
  */
 
@@ -42,6 +34,8 @@ if (! defined('PMA_NO_VARIABLES_IMPORT')) {
  */
 require_once './libraries/common.inc.php';
 
+$GLOBALS['js_include'][] = 'server_privileges.js';
+
 /**
  * Displays an error message and exits if the user isn't allowed to use this
  * script
@@ -51,8 +45,8 @@ if (!$cfg['ShowChgPassword']) {
 }
 if ($cfg['Server']['auth_type'] == 'config' || !$cfg['ShowChgPassword']) {
     require_once './libraries/header.inc.php';
-    PMA_Message::error('strNoRights')->display();
-    require_once './libraries/footer.inc.php';
+    PMA_Message::error(__('You don\'t have sufficient privileges to be here right now!'))->display();
+    require './libraries/footer.inc.php';
 } // end if
 
 
@@ -67,13 +61,20 @@ if (isset($_REQUEST['nopass'])) {
     if ($_REQUEST['nopass'] == '1') {
         $password = '';
     } elseif (empty($_REQUEST['pma_pw']) || empty($_REQUEST['pma_pw2'])) {
-        $message = PMA_Message::error('strPasswordEmpty');
+        $message = PMA_Message::error(__('The password is empty!'));
         $_error = true;
     } elseif ($_REQUEST['pma_pw'] != $_REQUEST['pma_pw2']) {
-        $message = PMA_Message::error('strPasswordNotSame');
+        $message = PMA_Message::error(__('The passwords aren\'t the same!'));
         $_error = true;
     } else {
         $password = $_REQUEST['pma_pw'];
+    }
+
+    if($GLOBALS['is_ajax_request'] == true && $_error == true) {
+        /**
+         * If in an Ajax request, we don't need to show the rest of the page
+         */
+        PMA_ajaxResponse($message, false);
     }
 
     if (! $_error) {
@@ -96,7 +97,7 @@ if (isset($_REQUEST['nopass'])) {
         // Changes password cookie if required
         // Duration = till the browser is closed for password (we don't want this to be saved)
         if ($cfg['Server']['auth_type'] == 'cookie') {
-            PMA_setCookie('pmaPass-' . $server,
+            $GLOBALS['PMA_Config']->setCookie('pmaPass-' . $server,
                 PMA_blowfish_encrypt($password, $GLOBALS['cfg']['blowfish_secret']));
         } // end if
 
@@ -106,15 +107,22 @@ if (isset($_REQUEST['nopass'])) {
             $_url_params['old_usr'] = 'relog';
         }
 
+        $message = PMA_Message::success(__('The profile has been updated.'));
+
+        if($GLOBALS['is_ajax_request'] == true) {
+            $extra_data['sql_query'] = PMA_showMessage($message, $sql_query, 'success');
+            PMA_ajaxResponse($message, true, $extra_data);
+        }
+
         // Displays the page
         require_once './libraries/header.inc.php';
-        echo '<h1>' . $strChangePassword . '</h1>' . "\n\n";
-        PMA_showMessage($strUpdateProfileMessage, $sql_query, 'success');
+        echo '<h1>' . __('Change password') . '</h1>' . "\n\n";
+        PMA_showMessage($message, $sql_query, 'success');
         ?>
         <a href="index.php<?php echo PMA_generate_common_url($_url_params); ?>" target="_parent">
-            <strong><?php echo $strBack; ?></strong></a>
+            <strong><?php echo __('Back'); ?></strong></a>
         <?php
-        require_once './libraries/footer.inc.php';
+        require './libraries/footer.inc.php';
     } // end if
 } // end if
 
@@ -124,9 +132,9 @@ if (isset($_REQUEST['nopass'])) {
  * aren't valid -> displays the form
  */
 // Loads the headers
-$GLOBALS['js_include'][] = 'server_privileges.js';
 require_once './libraries/header.inc.php';
-echo '<h1>' . $strChangePassword . '</h1>' . "\n\n";
+
+echo '<h1>' . __('Change password') . '</h1>' . "\n\n";
 
 // Displays an error message if required
 if (isset($message)) {
@@ -138,5 +146,5 @@ require_once './libraries/display_change_password.lib.php';
 /**
  * Displays the footer
  */
-require_once './libraries/footer.inc.php';
+require './libraries/footer.inc.php';
 ?>

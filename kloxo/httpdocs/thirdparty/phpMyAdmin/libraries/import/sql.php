@@ -3,7 +3,6 @@
 /**
  * SQL import plugin for phpMyAdmin
  *
- * @version $Id$
  * @package phpMyAdmin-Import
  */
 if (! defined('PHPMYADMIN')) {
@@ -15,9 +14,9 @@ if (! defined('PHPMYADMIN')) {
  */
 if (isset($plugin_list)) {
     $plugin_list['sql'] = array(
-        'text'          => 'strSQL',
+        'text'          => __('SQL'),
         'extension'     => 'sql',
-        'options_text'  => 'strOptions',
+        'options_text'  => __('Options'),
     );
     $compats = PMA_DBI_getCompatibilities();
     if (count($compats) > 0) {
@@ -26,10 +25,11 @@ if (isset($plugin_list)) {
             $values[$val] = $val;
         }
         $plugin_list['sql']['options'] = array(
+            array('type' => 'begin_group', 'name' => 'general_opts'),
             array(
                 'type'      => 'select',
                 'name'      => 'compatibility',
-                'text'      => 'strSQLCompatibility',
+                'text'      => __('SQL compatibility mode:'),
                 'values'    => $values,
                 'doc'       => array(
                     'manual_MySQL_Database_Administration',
@@ -39,7 +39,7 @@ if (isset($plugin_list)) {
             array(
                 'type' => 'bool', 
                 'name' => 'no_auto_value_on_zero', 
-                'text' => 'strDoNotAutoIncrementZeroValues',
+                'text' => __('Do not use <code>AUTO_INCREMENT</code> for zero values'),
                 'doc'       => array(
                     'manual_MySQL_Database_Administration',
                     'Server_SQL_mode',
@@ -47,6 +47,7 @@ if (isset($plugin_list)) {
                 ),
 
             ),
+            array('type' => 'end_group'),
         );
     }
 
@@ -167,8 +168,20 @@ while (!($GLOBALS['finished'] && $i >= $len) && !$error && !$timeout_passed) {
             while (!$endq) {
                 // Find next quote
                 $pos = strpos($buffer, $quote, $i + 1);
+                /*
+                 * Behave same as MySQL and accept end of query as end of backtick.
+                 * I know this is sick, but MySQL behaves like this:
+                 *
+                 * SELECT * FROM `table
+                 *
+                 * is treated like
+                 *
+                 * SELECT * FROM `table`
+                 */
+                if ($pos === FALSE && $quote == '`' && $found_delimiter) {
+                    $pos = $first_sql_delimiter - 1;
                 // No quote? Too short string
-                if ($pos === FALSE) {
+                } elseif ($pos === FALSE) {
                     // We hit end of string => unclosed quote, but we handle it as end of query
                     if ($GLOBALS['finished']) {
                         $endq = TRUE;

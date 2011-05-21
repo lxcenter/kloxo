@@ -29,9 +29,6 @@
  * @uses    $GLOBALS['userlink'] to close it
  * @uses    $cfg['Server']['user']
  * @uses    $cfg['NavigationBarIconic']
- * @uses    $cfg['DBG']['enable']
- * @uses    $cfg['DBG']['profile']['enable']
- * @uses    $GLOBALS['strOpenNewWindow']
  * @uses    $cfg['MaxCharactersInDisplayedSQL']
  * @uses    PMA_isValid()
  * @uses    PMA_setHistory()
@@ -41,7 +38,6 @@
  * @uses    PMA_generate_common_url()
  * @uses    basename()
  * @uses    file_exists()
- * @version $Id$
  * @package phpMyAdmin
  */
 if (! defined('PHPMYADMIN')) {
@@ -51,8 +47,6 @@ if (! defined('PHPMYADMIN')) {
 /**
  * for PMA_setHistory()
  */
-require_once './libraries/relation.lib.php';
-
 if (! PMA_isValid($_REQUEST['no_history']) && empty($GLOBALS['error_message'])
  && ! empty($GLOBALS['sql_query'])) {
     PMA_setHistory(PMA_ifSetOr($GLOBALS['db'], ''),
@@ -68,7 +62,7 @@ if ($GLOBALS['error_handler']->hasDisplayErrors()) {
 }
 
 if (count($GLOBALS['footnotes'])) {
-    echo '<div class="notice">';
+    echo '<div class="footnotes">';
     foreach ($GLOBALS['footnotes'] as $footnote) {
         echo '<span id="footnote_' . $footnote['nr'] . '"><sup>'
             . $footnote['nr'] . '</sup> ' . $footnote['note'] . '</span><br />';
@@ -85,7 +79,7 @@ if (! empty($_SESSION['debug'])) {
     }
 
     echo '<div>';
-    echo count($_SESSION['debug']['queries']) . ' queries executed'
+    echo count($_SESSION['debug']['queries']) . ' queries executed '
         . $sum_exec . ' times in ' . $sum_time . ' seconds';
     echo '<pre>';
     print_r($_SESSION['debug']);
@@ -94,12 +88,14 @@ if (! empty($_SESSION['debug'])) {
     $_SESSION['debug'] = array();
 }
 
+if (!$GLOBALS['is_ajax_request']) {
 ?>
 <script type="text/javascript">
 //<![CDATA[
 <?php
 if (empty($GLOBALS['error_message'])) {
     ?>
+$(document).ready(function(){
 // updates current settings
 if (window.parent.setAll) {
     window.parent.setAll('<?php
@@ -118,7 +114,15 @@ if (window.parent.refreshNavigation) {
     window.parent.refreshNavigation();
 }
         <?php
+    } else if (isset($_GET['reload_left_frame']) && $_GET['reload_left_frame'] == '1') {
+        // reload left frame (used by user preferences)
+        ?>
+        if (window.parent && window.parent.frame_navigation) {
+            window.parent.frame_navigation.location.reload();
+        }
+        <?php
     }
+
     ?>
 // set current db, table and sql query in the querywindow
 if (window.parent.reload_querywindow) {
@@ -154,67 +158,60 @@ if (window.parent.frame_content) {
     //window.parent.frame_content.setAttribute('name', 'frame_content');
     //window.parent.frame_content.setAttribute('id', 'frame_content');
 }
+});
+
 //]]>
 </script>
 <?php
+}
 
 // Link to itself to replicate windows including frameset
 if (!isset($GLOBALS['checked_special'])) {
     $GLOBALS['checked_special'] = false;
 }
 
-if (PMA_getenv('SCRIPT_NAME') && empty($_POST) && !$GLOBALS['checked_special']) {
+if (PMA_getenv('SCRIPT_NAME') && empty($_POST) && !$GLOBALS['checked_special'] && ! $GLOBALS['is_ajax_request']) {
     echo '<div id="selflink" class="print_ignore">' . "\n";
     $url_params['target'] = basename(PMA_getenv('SCRIPT_NAME'));
+    ?>
+<script type="text/javascript">
+//<![CDATA[
+
+/* Store current location in hash part of URL to allow direct bookmarking */
+setURLHash("<?php echo PMA_generate_common_url($url_params, 'text', ''); ?>");
+
+//]]>
+</script>
+<?php
+
     echo '<a href="index.php' . PMA_generate_common_url($url_params) . '"'
-        . ' title="' . $GLOBALS['strOpenNewWindow'] . '" target="_blank">';
-    /*
-    echo '<a href="index.php?target=' . basename(PMA_getenv('SCRIPT_NAME'));
-    $url = PMA_generate_common_url($GLOBALS['db'], $GLOBALS['table']);
-    if (!empty($url)) {
-        echo '&amp;' . $url;
-    }
-    echo '" target="_blank">';
-    */
+        . ' title="' . __('Open new phpMyAdmin window') . '" target="_blank">';
     if ($GLOBALS['cfg']['NavigationBarIconic']) {
         echo '<img class="icon" src="'. $GLOBALS['pmaThemeImage'] . 'window-new.png"'
-            . ' alt="' . $GLOBALS['strOpenNewWindow'] . '" />';
+            . ' alt="' . __('Open new phpMyAdmin window') . '" />';
     }
     if ($GLOBALS['cfg']['NavigationBarIconic'] !== true) {
-        echo $GLOBALS['strOpenNewWindow'];
+        echo __('Open new phpMyAdmin window');
     }
     echo '</a>' . "\n";
     echo '</div>' . "\n";
 }
 
 // Include possible custom footers
-if (file_exists('./config.footer.inc.php')) {
-    require './config.footer.inc.php';
+if (! $GLOBALS['is_ajax_request'] && file_exists(CUSTOM_FOOTER_FILE)) {
+    require CUSTOM_FOOTER_FILE;
 }
-
 
 /**
- * Generates profiling data if requested
+ * If we are in an AJAX request, we do not need to generate the closing tags for
+ * body and html.
  */
-
-// profiling deactivated due to licensing issues
-if (! empty($GLOBALS['cfg']['DBG']['php'])
- && ! empty($GLOBALS['cfg']['DBG']['profile']['enable'])) {
-    //run the basic setup code first
-    require_once './libraries/dbg/setup.php';
-    //if the setup ran fine, then do the profiling
-    /*
-    if (! empty($GLOBALS['DBG'])) {
-        require_once './libraries/dbg/profiling.php';
-        dbg_dump_profiling_results();
-    }
-    */
-}
-
+if (! $GLOBALS['is_ajax_request']) {
 ?>
 </body>
 </html>
 <?php
+}
 /**
  * Stops the script execution
  */

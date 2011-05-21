@@ -2,7 +2,6 @@
 /* vim: set expandtab sw=4 ts=4 sts=4: */
 /**
  *
- * @version $Id$
  * @package phpMyAdmin
  */
 
@@ -22,7 +21,7 @@ require_once './libraries/transformations.lib.php';
 $types = PMA_getAvailableMIMEtypes();
 ?>
 
-<h2><?php echo $strMIME_available_mime; ?></h2>
+<h2><?php echo __('Available MIME types'); ?></h2>
 <?php
 foreach ($types['mimetype'] as $key => $mimetype) {
 
@@ -35,17 +34,17 @@ foreach ($types['mimetype'] as $key => $mimetype) {
 }
 ?>
 <br />
-<i>(<?php echo $strMIME_without; ?>)</i>
+<i>(<?php echo __('MIME types printed in italics do not have a separate transformation function'); ?>)</i>
 
 <br />
 <br />
 <br />
-<h2><?php echo $strMIME_available_transform; ?></h2>
+<h2><?php echo __('Available transformations'); ?></h2>
 <table border="0" width="90%">
 <thead>
 <tr>
-    <th><?php echo $strMIME_transformation; ?></th>
-    <th><?php echo $strMIME_description; ?></th>
+    <th><?php echo __('Browser transformation'); ?></th>
+    <th><?php echo _pgettext('for MIME transformation', 'Description'); ?></th>
 </tr>
 </thead>
 <tbody>
@@ -53,11 +52,19 @@ foreach ($types['mimetype'] as $key => $mimetype) {
 $odd_row = true;
 foreach ($types['transformation'] as $key => $transform) {
     $func = strtolower(str_ireplace('.inc.php', '', $types['transformation_file'][$key]));
-    $desc = 'strTransformation_' . $func;
+    require './libraries/transformations/' . $types['transformation_file'][$key];
+    $funcname = 'PMA_transformation_' . $func . '_info';
+    $desc = '<i>' . sprintf(__('No description is available for this transformation.<br />Please ask the author what %s does.'), 'PMA_transformation_' . $func . '()') . '</i>';
+    if (function_exists($funcname)) {
+        $desc_arr = $funcname();
+        if (isset($desc_arr['info'])) {
+            $desc = $desc_arr['info'];
+        }
+    }
     ?>
     <tr class="<?php echo $odd_row ? 'odd' : 'even'; ?>">
         <td><?php echo $transform; ?></td>
-        <td><?php echo (isset($$desc) ? $$desc : '<i>' . sprintf($strMIME_nodescription, 'PMA_transformation_' . $func . '()') . '</i>'); ?></td>
+        <td><?php echo $desc; ?></td>
     </tr>
     <?php
     $odd_row = !$odd_row;
@@ -70,5 +77,5 @@ foreach ($types['transformation'] as $key => $transform) {
 /**
  * Displays the footer
  */
-require_once './libraries/footer.inc.php';
+require './libraries/footer.inc.php';
 ?>

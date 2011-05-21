@@ -3,7 +3,6 @@
 /**
  * handle row specifc actions like edit, delete, export
  *
- * @version $Id$
  * @package phpMyAdmin
  */
 
@@ -26,10 +25,10 @@ require_once './libraries/mysql_charsets.lib.php';
  */
 if (! PMA_isValid($_REQUEST['rows_to_delete'], 'array')
  && ! isset($_REQUEST['mult_btn'])) {
-    $disp_message = $strNoRowsSelected;
+    $disp_message = __('No rows selected');
     $disp_query = '';
     require './sql.php';
-    require_once './libraries/footer.inc.php';
+    require './libraries/footer.inc.php';
 }
 
 if (isset($_REQUEST['submit_mult'])) {
@@ -56,32 +55,26 @@ switch($submit_mult) {
         // leave as is
         break;
 
-    case $GLOBALS['strExport']:
+    case 'export':
         $submit_mult = 'row_export';
         break;
 
-    case $GLOBALS['strDelete']:
-    case $GLOBALS['strKill']:
+    case 'delete':
         $submit_mult = 'row_delete';
         break;
 
     default:
-    case $GLOBALS['strEdit']:
+    case 'edit':
         $submit_mult = 'row_edit';
         break;
 }
 
-$GLOBALS['js_include'][] = 'tbl_change.js';
-$GLOBALS['js_include'][] = 'functions.js';
-
-require_once './libraries/header.inc.php';
-
 if (!empty($submit_mult)) {
     switch($submit_mult) {
         case 'row_edit':
-            // garvin: As we got the fields to be edited from the 
+            // As we got the rows to be edited from the
             // 'rows_to_delete' checkbox, we use the index of it as the
-            // indicating WHERE clause. Then we build the array which is used 
+            // indicating WHERE clause. Then we build the array which is used
             // for the tbl_change.php script.
             $where_clause = array();
             foreach ($_REQUEST['rows_to_delete'] as $i_where_clause => $del_query) {
@@ -96,9 +89,9 @@ if (!empty($submit_mult)) {
             // Needed to allow SQL export
             $single_table = TRUE;
 
-            // garvin: As we got the fields to be edited from the 
+            // As we got the rows to be exported from the
             // 'rows_to_delete' checkbox, we use the index of it as the
-            // indicating WHERE clause. Then we build the array which is used 
+            // indicating WHERE clause. Then we build the array which is used
             // for the tbl_change.php script.
             $where_clause = array();
             foreach ($_REQUEST['rows_to_delete'] as $i_where_clause => $del_query) {
@@ -115,7 +108,9 @@ if (!empty($submit_mult)) {
             $err_url = 'tbl_row_action.php' . PMA_generate_common_url($GLOBALS['url_params']);
             if (! isset($_REQUEST['mult_btn'])) {
                 $original_sql_query = $sql_query;
-                $original_url_query = $url_query;
+                if (! empty($url_query)) {
+                    $original_url_query = $url_query;
+                }
             }
             require './libraries/mult_submits.inc.php';
             $_url_params = $GLOBALS['url_params'];
@@ -128,7 +123,7 @@ if (!empty($submit_mult)) {
              */
             // sql_query is not set when user does not confirm multi-delete
             if ((!empty($submit_mult) || isset($_REQUEST['mult_btn'])) && ! empty($sql_query)) {
-                $disp_message = $strSuccess;
+                $disp_message = __('Your SQL query has been executed successfully');
                 $disp_query = $sql_query;
             }
 
@@ -150,7 +145,7 @@ if (!empty($submit_mult)) {
             /**
              * Displays the footer
              */
-            require_once './libraries/footer.inc.php';
+            require './libraries/footer.inc.php';
             break;
     }
 }

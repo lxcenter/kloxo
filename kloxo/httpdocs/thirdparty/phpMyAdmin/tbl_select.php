@@ -7,7 +7,6 @@
  * and include sql.php to execute it
  *
  * @todo display search form again if no results from previous search
- * @version $Id$
  * @package phpMyAdmin
  */
 
@@ -15,23 +14,23 @@
  * Gets some core libraries
  */
 require_once './libraries/common.inc.php';
-require_once './libraries/relation.lib.php'; // foreign keys
 require_once './libraries/mysql_charsets.lib.php';
 
-$GLOBALS['js_include'][] = 'tbl_change.js';
-$GLOBALS['js_include'][] = 'mootools.js';
-
+$GLOBALS['js_include'][] = 'sql.js';
+$GLOBALS['js_include'][] = 'tbl_select.js';
+$GLOBALS['js_include'][] = 'jquery/jquery-ui-1.8.custom.js';
+$GLOBALS['js_include'][] = 'jquery/timepicker.js';
 if ($GLOBALS['cfg']['PropertiesIconic'] == true) {
     $titles['Browse'] =
         '<img class="icon" width="16" height="16" src="' . $pmaThemeImage
-        .'b_browse.png" alt="' . $strBrowseForeignValues . '" title="'
-        .$strBrowseForeignValues . '" />';
+        .'b_browse.png" alt="' . __('Browse foreign values') . '" title="'
+        . __('Browse foreign values') . '" />';
 
     if ($GLOBALS['cfg']['PropertiesIconic'] === 'both') {
-        $titles['Browse'] .= $strBrowseForeignValues;
+        $titles['Browse'] .= __('Browse foreign values');
     }
 } else {
-    $titles['Browse'] = $strBrowseForeignValues;
+    $titles['Browse'] = __('Browse foreign values');
 }
 
 /**
@@ -62,12 +61,11 @@ if (!isset($param) || $param[0] == '') {
     // Gets the list and number of fields
     $result     = PMA_DBI_query('SHOW FULL FIELDS FROM ' . PMA_backquote($table) . ' FROM ' . PMA_backquote($db) . ';', null, PMA_DBI_QUERY_STORE);
     $fields_cnt = PMA_DBI_num_rows($result);
-    // rabue: we'd better ensure, that all arrays are empty.
     $fields_list = $fields_null = $fields_type = $fields_collation = array();
     while ($row = PMA_DBI_fetch_assoc($result)) {
         $fields_list[] = $row['Field'];
         $type          = $row['Type'];
-        // reformat mysql query output - staybyte - 9. June 2001
+        // reformat mysql query output
         if (strncasecmp($type, 'set', 3) == 0
             || strncasecmp($type, 'enum', 4) == 0) {
             $type = str_replace(',', ', ', $type);
@@ -95,33 +93,12 @@ if (!isset($param) || $param[0] == '') {
     PMA_DBI_free_result($result);
     unset($result, $type);
 
-    // <markus@noga.de>
     // retrieve keys into foreign fields, if any
     // check also foreigners even if relwork is FALSE (to get
     // foreign keys from innodb)
     $foreigners = PMA_getForeigners($db, $table);
     ?>
-<script type="text/javascript">
-// <![CDATA[
-function PMA_tbl_select_operator(f, index, multiple) {
-    switch (f.elements["func[" + index + "]"].options[f.elements["func[" + index + "]"].selectedIndex].value) {
-<?php
-reset($GLOBALS['cfg']['UnaryOperators']);
-while (list($operator) = each($GLOBALS['cfg']['UnaryOperators'])) {
-    echo '        case "' . $operator . "\":\r\n";
-}
-?>
-            bDisabled = true;
-            break;
-
-        default:
-            bDisabled = false;
-    }
-    f.elements["fields[" + index + "]" + ((multiple) ? "[]": "")].disabled = bDisabled;
-}
-// ]]>
-</script>
-<form method="post" action="tbl_select.php" name="insertForm">
+        <form method="post" action="tbl_select.php" name="insertForm" id="tbl_search_form" <?php echo ($GLOBALS['cfg']['AjaxEnable'] ? ' class="ajax"' : ''); ?>>
 <?php echo PMA_generate_common_hidden_inputs($db, $table); ?>
 <input type="hidden" name="goto" value="<?php echo $goto; ?>" />
 <input type="hidden" name="back" value="tbl_select.php" />
@@ -129,14 +106,14 @@ while (list($operator) = each($GLOBALS['cfg']['UnaryOperators'])) {
 <fieldset id="fieldset_table_search">
 
 <fieldset id="fieldset_table_qbe">
-    <legend><?php echo $strDoAQuery; ?></legend>
+    <legend><?php echo __('Do a "query by example" (wildcard: "%")') ?></legend>
     <table class="data">
     <thead>
-    <tr><th><?php echo $strField; ?></th>
-        <th><?php echo $strType; ?></th>
-        <th><?php echo $strCollation; ?></th>
-        <th><?php echo $strOperator; ?></th>
-        <th><?php echo $strValue; ?></th>
+    <tr><th><?php echo __('Column'); ?></th>
+        <th><?php echo __('Type'); ?></th>
+        <th><?php echo __('Collation'); ?></th>
+        <th><?php echo __('Operator'); ?></th>
+        <th><?php echo __('Value'); ?></th>
     </tr>
     </thead>
     <tbody>
@@ -145,7 +122,7 @@ while (list($operator) = each($GLOBALS['cfg']['UnaryOperators'])) {
 
     for ($i = 0; $i < $fields_cnt; $i++) {
         ?>
-        <tr class="<?php echo $odd_row ? 'odd' : 'even'; $odd_row = ! $odd_row; ?>">
+        <tr class="noclick <?php echo $odd_row ? 'odd' : 'even'; $odd_row = ! $odd_row; ?>">
             <th><?php echo htmlspecialchars($fields_list[$i]); ?></th>
             <td><?php echo $fields_type[$i]; ?></td>
             <td><?php echo $fields_collation[$i]; ?></td>
@@ -183,7 +160,6 @@ while (list($operator) = each($GLOBALS['cfg']['UnaryOperators'])) {
             </td>
             <td>
         <?php
-        // <markus@noga.de>
         $field = $fields_list[$i];
 
         $foreignData = PMA_getForeignData($foreigners, $field, false, '', '');
@@ -225,19 +201,16 @@ while (list($operator) = each($GLOBALS['cfg']['UnaryOperators'])) {
             echo '            </select>' . "\n";
         } else {
             // o t h e r   c a s e s
+            $the_class = 'textfield';
+            $type = $fields_type[$i];
+            if ($type == 'date') {
+                $the_class .= ' datefield';
+            } elseif ($type == 'datetime' || substr($type, 0, 9) == 'timestamp') {
+                $the_class .= ' datetimefield';
+            }
             echo '            <input type="text" name="fields[' . $i . ']"'
-                .' size="40" class="textfield" id="field_' . $i . '" />' .  "\n";
+                .' size="40" class="' . $the_class . '" id="field_' . $i . '" />' .  "\n";
         };
-        $type = $fields_type[$i];
-        if ($type == 'date' || $type == 'datetime' || substr($type, 0, 9) == 'timestamp') {
-        ?>
-                    <script type="text/javascript">
-                    //<![CDATA[
-                    document.write('<a title="<?php echo $strCalendar;?>" href="javascript:openCalendar(\'<?php echo PMA_generate_common_url();?>\', \'insertForm\', \'field_<?php echo ($i); ?>\', \'<?php echo (substr($type, 0, 9) == 'timestamp') ? 'datetime' : substr($type, 0, 9); ?>\', \'\')"><img class="calendar" src="<?php echo $pmaThemeImage; ?>b_calendar.png" alt="<?php echo $strCalendar; ?>"/></a>');
-                    //]]>
-                    </script>
-        <?php
-        }
         ?>
             <input type="hidden" name="names[<?php echo $i; ?>]"
                 value="<?php echo htmlspecialchars($fields_list[$i]); ?>" />
@@ -254,10 +227,10 @@ while (list($operator) = each($GLOBALS['cfg']['UnaryOperators'])) {
     </table>
 </fieldset>
 <?php
-    PMA_generate_slider_effect('searchoptions', $strOptions);
+    PMA_generate_slider_effect('searchoptions', __('Options'));
 ?>
 <fieldset id="fieldset_select_fields">
-    <legend><?php echo $strSelectFields; ?></legend>
+    <legend><?php echo __('Select columns (at least one):'); ?></legend>
     <select name="param[]" size="<?php echo min($fields_cnt, 10); ?>"
         multiple="multiple">
     <?php
@@ -275,21 +248,21 @@ while (list($operator) = each($GLOBALS['cfg']['UnaryOperators'])) {
 </fieldset>
 
 <fieldset id="fieldset_search_conditions">
-    <legend><?php echo '<em>' . $strOr . '</em> ' .$strAddSearchConditions; ?></legend>
+    <legend><?php echo '<em>' . __('Or') . '</em> ' . __('Add search conditions (body of the "where" clause):'); ?></legend>
 <?php echo PMA_showMySQLDocu('SQL-Syntax', 'Functions'); ?>
 
 <input type="text" name="where" class="textfield" size="64" />
 </fieldset>
 
 <fieldset id="fieldset_limit_rows">
-    <legend><?php echo $strLimitNumRows; ?></legend>
+    <legend><?php echo __('Number of rows per page'); ?></legend>
     <input type="text" size="4" name="session_max_rows"
         value="<?php echo $GLOBALS['cfg']['MaxRows']; ?>" class="textfield" />
 </fieldset>
 
 <fieldset id="fieldset_display_order">
-    <legend><?php echo $strDisplayOrder; ?></legend>
-    <select name="orderField" style="vertical-align: middle">
+    <legend><?php echo __('Display order:'); ?></legend>
+    <select name="orderField">
         <option value="--nil--"></option>
     <?php
     foreach ($fields_list as $each_field) {
@@ -301,8 +274,8 @@ while (list($operator) = each($GLOBALS['cfg']['UnaryOperators'])) {
     </select>
 <?php
     $choices = array(
-        'ASC'  => $strAscending,
-        'DESC' => $strDescending
+        'ASC'  => __('Ascending'),
+        'DESC' => __('Descending')
     );
     PMA_display_html_radio('order', $choices, 'ASC', false, true, "formelement");
     unset($choices);
@@ -314,11 +287,12 @@ while (list($operator) = each($GLOBALS['cfg']['UnaryOperators'])) {
 <fieldset class="tblFooters">
     <input type="hidden" name="max_number_of_fields"
         value="<?php echo $fields_cnt; ?>" />
-    <input type="submit" name="submit" value="<?php echo $strGo; ?>" />
+    <input type="submit" name="submit" value="<?php echo __('Go'); ?>" />
 </fieldset>
 </form>
+<div id="sqlqueryresults"></div>
     <?php
-    require_once './libraries/footer.inc.php';
+    require './libraries/footer.inc.php';
 }
 
 
@@ -340,8 +314,8 @@ else {
         $param = PMA_backquote($param);
         $sql_query .= implode(', ', $param);
     } // end if
-     
-    // avoid a loop, for example when $cfg['DefaultTabTable'] is set 
+
+    // avoid a loop, for example when $cfg['DefaultTabTable'] is set
     // to 'tbl_select.php'
     unset($param);
 
@@ -403,7 +377,27 @@ else {
                     $func_type = 'LIKE';
                     $fields[$i] = '%' . $fields[$i] . '%';
                 }
-                $w[] = PMA_backquote($names[$i]) . ' ' . $func_type . ' ' . $quot . PMA_sqlAddslashes($fields[$i]) . $quot;
+                if ($func_type == 'REGEXP ^...$') {
+                    $func_type = 'REGEXP';
+                    $fields[$i] = '^' . $fields[$i] . '$';
+                }
+
+                if ($func_type == 'IN (...)' || $func_type == 'NOT IN (...)' || $func_type == 'BETWEEN' || $func_type == 'NOT BETWEEN') {
+                    $func_type = str_replace(' (...)', '', $func_type);
+
+                    // quote values one by one
+                    $values = explode(',', $fields[$i]);
+                    foreach ($values as &$value)
+                        $value = $quot . PMA_sqlAddslashes(trim($value)) . $quot;
+
+                    if ($func_type == 'BETWEEN' || $func_type == 'NOT BETWEEN')
+                        $w[] = PMA_backquote($names[$i]) . ' ' . $func_type . ' ' . (isset($values[0]) ? $values[0] : '')  . ' AND ' . (isset($values[1]) ? $values[1] : '');
+                    else
+                        $w[] = PMA_backquote($names[$i]) . ' ' . $func_type . ' (' . implode(',', $values) . ')';
+                }
+                else {
+                    $w[] = PMA_backquote($names[$i]) . ' ' . $func_type . ' ' . $quot . PMA_sqlAddslashes($fields[$i]) . $quot;;
+                }
 
             } // end if
         } // end for

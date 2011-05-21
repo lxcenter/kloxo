@@ -4,7 +4,6 @@
  * Microsoft Office Excel 97-2003 XLS import plugin for phpMyAdmin
  *
  * @todo    Pretty much everything
- * @version $Id$
  * @package phpMyAdmin-Import
  */
 
@@ -18,12 +17,14 @@ if (! defined('PHPMYADMIN')) {
 
 if (isset($plugin_list)) {
     $plugin_list['xls'] = array(
-        'text' => 'strImportXLS',
+        'text' => __('Excel 97-2003 XLS Workbook'),
         'extension' => 'xls',
         'options' => array(
-                array('type' => 'bool', 'name' => 'col_names', 'text' => 'strImportColNames'),
+                array('type' => 'begin_group', 'name' => 'general_opts'),
+                array('type' => 'bool', 'name' => 'col_names', 'text' => __('The first line of the file contains the table column names <i>(if this is unchecked, the first line will become part of the data)</i>')),
+                array('type' => 'end_group')
             ),
-        'options_text' => 'strOptions',
+        'options_text' => __('Options'),
         );
     /* We do not define function when plugin is just queried for information above */
     return;

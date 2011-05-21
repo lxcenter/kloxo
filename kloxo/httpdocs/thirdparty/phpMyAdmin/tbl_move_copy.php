@@ -2,7 +2,6 @@
 /* vim: set expandtab sw=4 ts=4 sts=4: */
 /**
  *
- * @version $Id$
  * @package phpMyAdmin
  */
 
@@ -10,7 +9,6 @@
  * Gets some core libraries
  */
 require_once './libraries/common.inc.php';
-require_once './libraries/Table.class.php';
 
 // Check parameters
 
@@ -43,19 +41,19 @@ if (empty($_REQUEST['target_db'])) {
 if (PMA_isValid($_REQUEST['new_name'])) {
     if ($db == $_REQUEST['target_db'] && $table == $_REQUEST['new_name']) {
         if (isset($_REQUEST['submit_move'])) {
-            $message = PMA_Message::error('strMoveTableSameNames');
+            $message = PMA_Message::error(__('Can\'t move table to same one!'));
         } else {
-            $message = PMA_Message::error('strCopyTableSameNames');
+            $message = PMA_Message::error(__('Can\'t copy table to same one!'));
         }
-        $goto = './tbl_operations.php';
+        $result = false;
     } else {
-        PMA_Table::moveCopy($db, $table, $_REQUEST['target_db'], $_REQUEST['new_name'],
+        $result = PMA_Table::moveCopy($db, $table, $_REQUEST['target_db'], $_REQUEST['new_name'],
             $_REQUEST['what'], isset($_REQUEST['submit_move']), 'one_table');
 
         if (isset($_REQUEST['submit_move'])) {
-            $message = PMA_Message::success('strMoveTableOK');
+            $message = PMA_Message::success(__('Table %s has been moved to %s.'));
         } else {
-            $message = PMA_Message::success('strCopyTableOK');
+            $message = PMA_Message::success(__('Table %s has been copied to %s.'));
         }
         $old = PMA_backquote($db) . '.' . PMA_backquote($table);
         $message->addParam($old);
@@ -68,23 +66,18 @@ if (PMA_isValid($_REQUEST['new_name'])) {
             $table     = $_REQUEST['new_name'];
         }
         $reload = 1;
-
-        $disp_query = $sql_query;
-        $disp_message = $message;
-        unset($sql_query, $message);
-
-        $goto = $cfg['DefaultTabTable'];
     }
 } else {
     /**
      * No new name for the table!
      */
-    $message = PMA_Message::error('strTableEmpty');
-    $goto = './tbl_operations.php';
+    $message = PMA_Message::error(__('The table name is empty!'));
+    $result = false;
 }
 
 /**
  * Back to the calling script
  */
-require $goto;
+$_message = $message;
+unset($message);
 ?>

@@ -1,5 +1,3 @@
-$Id: README 10967 2007-12-08 12:46:36Z lem9 $
-
 phpMyAdmin - hints for distributing phpMyAdmin
 ==============================================
 
@@ -15,5 +13,27 @@ For example if you want setup script to generate config file in var,
 change SETUP_CONFIG_FILE to /var/lib/phpmyadmin/config.inc.php and you
 will also probably want to skip directory writable check, so set
 SETUP_DIR_WRITABLE to false.
+
+External libraries
+------------------
+
+phpMyAdmin includes several external libraries, you might want to
+replace them with system ones if they are available, but please note
+that you should test whether version you provide is compatible with the
+one we ship.
+
+Currently known list of external libraries:
+
+js/jquery 
+    jQuery js framework
+js/colorpicker 
+    jQuery based color picker
+
+libarries/PHPExcel 
+    PHPExcel library for handling Excel files
+libraries/php-gettext 
+    php-gettext library
+libraries/tcpdf 
+    tcpdf library, modified for our needs!
 
 # vim: et ts=4 sw=4 sts=4 tw=72 spell spelllang=en_us

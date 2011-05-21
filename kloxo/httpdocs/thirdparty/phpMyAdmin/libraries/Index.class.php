@@ -1,9 +1,8 @@
 <?php
 /* vim: set expandtab sw=4 ts=4 sts=4: */
 /**
- * holds the datasbe index class
+ * holds the database index class
  *
- * @version $Id$
  * @package phpMyAdmin
  */
 
@@ -308,6 +307,11 @@ class PMA_Index
         return $this->_type;
     }
 
+    public function getChoice()
+    {
+        return $this->_choice;
+    }
+
     /**
      * Return a list of all index choices
      *
@@ -351,8 +355,8 @@ class PMA_Index
     {
         if ($as_text) {
             $r = array(
-                '0' => $GLOBALS['strNo'],
-                '1' => $GLOBALS['strYes'],
+                '0' => __('No'),
+                '1' => __('Yes'),
             );
         } else {
             $r = array(
@@ -377,8 +381,8 @@ class PMA_Index
     {
         if ($as_text) {
             $r = array(
-                '0' => $GLOBALS['strYes'],
-                '1' => $GLOBALS['strNo'],
+                '0' => __('Yes'),
+                '1' => __('No'),
             );
         } else {
             $r = array(
@@ -414,36 +418,35 @@ class PMA_Index
      * @param   boolean     $print_mode
      * @access  public
      * @return  array       Index collection array
-     * @author  Garvin Hicking (pma@supergarv.de)
      */
     static public function getView($table, $schema, $print_mode = false)
     {
         $indexes = PMA_Index::getFromTable($table, $schema);
 
         if (count($indexes) < 1) {
-            return PMA_Message::warning('strNoIndex')->getDisplay();
+            return PMA_Message::error(__('No index defined!'))->getDisplay();
         }
 
         $r = '';
 
-        $r .= '<h2>' . $GLOBALS['strIndexes'] . ': ';
+        $r .= '<h2>' . __('Indexes') . ': ';
         $r .= PMA_showMySQLDocu('optimization', 'optimizing-database-structure');
         $r .= '</h2>';
         $r .= '<table>';
         $r .= '<thead>';
         $r .= '<tr>';
         if (! $print_mode) {
-            $r .= '<th colspan="2">' . $GLOBALS['strAction'] . '</th>';
+            $r .= '<th colspan="2">' . __('Action') . '</th>';
         }
-        $r .= '<th>' . $GLOBALS['strKeyname'] . '</th>';
-        $r .= '<th>' . $GLOBALS['strType'] . '</th>';
-        $r .= '<th>' . $GLOBALS['strUnique'] . '</th>';
-        $r .= '<th>' . $GLOBALS['strPacked'] . '</th>';
-        $r .= '<th>' . $GLOBALS['strField'] . '</th>';
-        $r .= '<th>' . $GLOBALS['strCardinality'] . '</th>';
-        $r .= '<th>' . $GLOBALS['strCollation'] . '</th>';
-        $r .= '<th>' . $GLOBALS['strNull'] . '</th>';
-        $r .= '<th>' . $GLOBALS['strComment'] . '</th>';
+        $r .= '<th>' . __('Keyname') . '</th>';
+        $r .= '<th>' . __('Type') . '</th>';
+        $r .= '<th>' . __('Unique') . '</th>';
+        $r .= '<th>' . __('Packed') . '</th>';
+        $r .= '<th>' . __('Column') . '</th>';
+        $r .= '<th>' . __('Cardinality') . '</th>';
+        $r .= '<th>' . __('Collation') . '</th>';
+        $r .= '<th>' . __('Null') . '</th>';
+        $r .= '<th>' . __('Comment') . '</th>';
         $r .= '</tr>';
         $r .= '</thead>';
         $r .= '<tbody>';
@@ -459,24 +462,29 @@ class PMA_Index
                 $this_params['index'] = $index->getName();
                 $r .= '<td ' . $row_span . '>'
                    . '    <a href="tbl_indexes.php' . PMA_generate_common_url($this_params)
-                   . '">' . PMA_getIcon('b_edit.png', $GLOBALS['strEdit']) . '</a>'
+                   . '">' . PMA_getIcon('b_edit.png', __('Edit')) . '</a>'
                    . '</td>' . "\n";
 
                 $this_params = $GLOBALS['url_params'];
                 if ($index->getName() == 'PRIMARY') {
                     $this_params['sql_query'] = 'ALTER TABLE ' . PMA_backquote($table) . ' DROP PRIMARY KEY';
-                    $this_params['zero_rows'] = $GLOBALS['strPrimaryKeyHasBeenDropped'];
+                    $this_params['message_to_show'] = __('The primary key has been dropped');
                     $js_msg      = PMA_jsFormat('ALTER TABLE ' . $table . ' DROP PRIMARY KEY');
                 } else {
                     $this_params['sql_query'] = 'ALTER TABLE ' . PMA_backquote($table) . ' DROP INDEX ' . PMA_backquote($index->getName());
-                    $this_params['zero_rows'] = sprintf($GLOBALS['strIndexHasBeenDropped'], $index->getName());
+                    $this_params['message_to_show'] = sprintf(__('Index %s has been dropped'), $index->getName());
                     $js_msg      = PMA_jsFormat('ALTER TABLE ' . $table . ' DROP INDEX ' . $index->getName());
                 }
 
-                $r .= '<td ' . $row_span . '>'
-                   . '    <a href="sql.php' . PMA_generate_common_url($this_params)
-                   . '" onclick="return confirmLink(this, \'' . $js_msg . '\')">'
-                   . PMA_getIcon('b_drop.png', $GLOBALS['strDrop'])  . '</a>'
+                $r .= '<td ' . $row_span . '>';
+                $r .= '<input type="hidden" class="drop_primary_key_index_msg" value="' . $js_msg . '" />';
+                $r .= '    <a ';
+                if ($GLOBALS['cfg']['AjaxEnable']) {
+                    $r .= 'class="drop_primary_key_index_anchor" ';
+                }
+                $r .= ' href="sql.php' . PMA_generate_common_url($this_params)
+                   . '" >'
+                   . PMA_getIcon('b_drop.png', __('Drop'))  . '</a>'
                    . '</td>' . "\n";
             }
 
@@ -535,7 +543,6 @@ class PMA_Index
     /**
      * Function to check over array of indexes and look for common problems
      *
-     * @uses    $GLOBALS['strIndexesSeemEqual']
      * @uses    is_string()
      * @uses    is_array()
      * @uses    count()
@@ -569,7 +576,7 @@ class PMA_Index
                 // did not find any difference
                 // so it makes no sense to have this two equal indexes
 
-                $message = PMA_Message::warning('strIndexesSeemEqual');
+                $message = PMA_Message::error(__('The indexes %1$s and %2$s seem to be equal and one of them could possibly be removed.'));
                 $message->addParam($each_index->getName());
                 $message->addParam($while_index->getName());
                 $output .= $message->getDisplay();

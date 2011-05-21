@@ -2,14 +2,8 @@
 /* vim: set expandtab sw=4 ts=4 sts=4: */
 /**
  *
- * @version $Id$
  * @package phpMyAdmin
  */
-
-/**
- *
- */
-require_once './libraries/Theme.class.php';
 
 /**
  *
@@ -112,7 +106,7 @@ class PMA_Theme_Manager
 
         if (! $this->checkTheme($GLOBALS['cfg']['ThemeDefault'])) {
             trigger_error(
-                sprintf($GLOBALS['strThemeDefaultNotFound'],
+                sprintf(__('Default theme %s not found!'),
                     htmlspecialchars($GLOBALS['cfg']['ThemeDefault'])),
                 E_USER_ERROR);
             $GLOBALS['cfg']['ThemeDefault'] = false;
@@ -150,7 +144,7 @@ class PMA_Theme_Manager
     {
         if (! $this->checkTheme($theme)) {
             trigger_error(
-                sprintf($GLOBALS['strThemeNotFound'], htmlspecialchars($theme)),
+                sprintf(__('Theme %s not found!'), htmlspecialchars($theme)),
                 E_USER_ERROR);
             return false;
         }
@@ -193,7 +187,7 @@ class PMA_Theme_Manager
     /**
      * save theme in cookie
      *
-     * @uses    PMA_setCookie();
+     * @uses    $GLOBALS['PMA_Config']->setCookie();
      * @uses    PMA_Theme_Manager::getThemeCookieName()
      * @uses    PMA_Theme_Manager::$theme
      * @uses    PMA_Theme_Manager::$theme_default
@@ -201,11 +195,11 @@ class PMA_Theme_Manager
      */
     function setThemeCookie()
     {
-        PMA_setCookie($this->getThemeCookieName(), $this->theme->id,
+        $GLOBALS['PMA_Config']->setCookie($this->getThemeCookieName(), $this->theme->id,
             $this->theme_default);
         // force a change of a dummy session variable to avoid problems
         // with the caching of phpmyadmin.css.php
-        $_SESSION['PMA_Config']->set('theme-update', $this->theme->id);
+        $GLOBALS['PMA_Config']->set('theme-update', $this->theme->id);
         return true;
     }
 
@@ -218,7 +212,7 @@ class PMA_Theme_Manager
     {
         if (! is_dir($folder)) {
             trigger_error(
-                sprintf($GLOBALS['strThemePathNotFound'],
+                sprintf(__('Theme path not found for theme %s!'),
                     htmlspecialchars($folder)),
                 E_USER_ERROR);
             return false;
@@ -294,7 +288,7 @@ class PMA_Theme_Manager
         $theme_preview_href = '<a href="' . $theme_preview_path . '" target="themes" onclick="'
                             . "window.open('" . $theme_preview_path . "','themes','left=10,top=20,width=510,height=350,scrollbars=yes,status=yes,resizable=yes');"
                             . '">';
-        $select_box .=  $theme_preview_href . $GLOBALS['strTheme'] . '</a>:' . "\n";
+        $select_box .=  $theme_preview_href . __('Theme / Style') . '</a>:' . "\n";
 
         $select_box .=  '<select name="set_theme" xml:lang="en" dir="ltr"'
             .' onchange="this.form.submit();" >';
@@ -308,7 +302,7 @@ class PMA_Theme_Manager
         $select_box .=  '</select>';
 
         if ($form) {
-            $select_box .=  '<noscript><input type="submit" value="' . $GLOBALS['strGo'] . '" /></noscript>';
+            $select_box .=  '<noscript><input type="submit" value="' . __('Go') . '" /></noscript>';
             $select_box .=  '</form>';
         }
 

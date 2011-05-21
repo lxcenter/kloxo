@@ -2,7 +2,6 @@
 /* vim: set expandtab sw=4 ts=4 sts=4: */
 /**
  *
- * @version $Id$
  * @package phpMyAdmin
  */
 
@@ -19,10 +18,10 @@ if (!isset($selected_tbl)) {
 /**
  * Gets the relations settings
  */
-require_once './libraries/relation.lib.php';
+$cfgRelation  = PMA_getRelationsParam();
+
 require_once './libraries/transformations.lib.php';
 
-$cfgRelation  = PMA_getRelationsParam();
 
 /**
  * Check parameters
@@ -46,7 +45,7 @@ if ($cfgRelation['commwork']) {
      */
     if ($comment) {
         ?>
-    <p> <?php echo $strDBComment; ?>
+    <p> <?php echo __('Database comment: '); ?>
         <i><?php echo htmlspecialchars($comment); ?></i></p>
         <?php
     } // end if
@@ -64,19 +63,13 @@ while ($row = PMA_DBI_fetch_assoc($rowset)) {
     $table        = $row[$myfieldname];
     $comments = PMA_getComments($db, $table);
 
-    if ($count != 0) {
-        echo '<div style="page-break-before: always;">' . "\n";
-    } else {
-        echo '<div>' . "\n";
-    }
+    echo '<div>' . "\n";
 
     echo '<h2>' . $table . '</h2>' . "\n";
 
     /**
      * Gets table informations
      */
-    // The 'show table' statement works correct since 3.23.03
-    $num_rows     = PMA_Table::sGetStatusInfo($db, $table, 'TABLE_ROWS');
     $show_comment = PMA_Table::sGetStatusInfo($db, $table, 'TABLE_COMMENT');
 
     /**
@@ -125,9 +118,9 @@ while ($row = PMA_DBI_fetch_assoc($rowset)) {
 
 
     /**
-     * Gets fields properties
+     * Gets columns properties
      */
-    $result      = PMA_DBI_query('SHOW FIELDS FROM ' . PMA_backquote($table) . ';', null, PMA_DBI_QUERY_STORE);
+    $result      = PMA_DBI_query('SHOW COLUMNS FROM ' . PMA_backquote($table) . ';', null, PMA_DBI_QUERY_STORE);
     $fields_cnt  = PMA_DBI_num_rows($result);
 
     if (PMA_MYSQL_INT_VERSION < 50025) {
@@ -162,7 +155,7 @@ while ($row = PMA_DBI_fetch_assoc($rowset)) {
      * Displays the comments of the table if MySQL >= 3.23
      */
     if (!empty($show_comment)) {
-        echo $strTableComments . ': ' . htmlspecialchars($show_comment) . '<br /><br />';
+        echo __('Table comments') . ': ' . htmlspecialchars($show_comment) . '<br /><br />';
     }
 
     /**
@@ -171,17 +164,17 @@ while ($row = PMA_DBI_fetch_assoc($rowset)) {
     ?>
 
 <table width="100%" class="print">
-<tr><th width="50"><?php echo $strField; ?></th>
-    <th width="80"><?php echo $strType; ?></th>
-<?php /*    <th width="50"><?php echo $strAttr; ?></th>*/ ?>
-    <th width="40"><?php echo $strNull; ?></th>
-    <th width="70"><?php echo $strDefault; ?></th>
-<?php /*    <th width="50"><?php echo $strExtra; ?></th>*/ ?>
+<tr><th width="50"><?php echo __('Column'); ?></th>
+    <th width="80"><?php echo __('Type'); ?></th>
+<?php /*    <th width="50"><?php echo __('Attributes'); ?></th>*/ ?>
+    <th width="40"><?php echo __('Null'); ?></th>
+    <th width="70"><?php echo __('Default'); ?></th>
+<?php /*    <th width="50"><?php echo __('Extra'); ?></th>*/ ?>
     <?php
     if ($have_rel) {
-        echo '    <th>' . $strLinksTo . '</th>' . "\n";
+        echo '    <th>' . __('Links to') . '</th>' . "\n";
     }
-    echo '    <th>' . $strComments . '</th>' . "\n";
+    echo '    <th>' . __('Comments') . '</th>' . "\n";
     if ($cfgRelation['mimework']) {
         echo '    <th>MIME</th>' . "\n";
     }
@@ -195,8 +188,8 @@ while ($row = PMA_DBI_fetch_assoc($rowset)) {
             $row['Null'] = 'NO';
         }
         $type             = $row['Type'];
-        // reformat mysql query output - staybyte - 9. June 2001
-        // loic1: set or enum types: slashes single quotes inside options
+        // reformat mysql query output
+        // set or enum types: slashes single quotes inside options
         if (preg_match('@^(set|enum)\((.+)\)$@i', $type, $tmp)) {
             $tmp[2]       = substr(preg_replace('@([^,])\'\'@', '\\1\\\'', ',' . $tmp[2]), 1);
             $type         = $tmp[1] . '(' . str_replace(',', ', ', $tmp[2]) . ')';
@@ -217,15 +210,15 @@ while ($row = PMA_DBI_fetch_assoc($rowset)) {
                 $type     = ' ';
             }
         }
-        $strAttribute     = ' ';
+        $attribute     = ' ';
         if ($binary) {
-            $strAttribute = 'BINARY';
+            $attribute = 'BINARY';
         }
         if ($unsigned) {
-            $strAttribute = 'UNSIGNED';
+            $attribute = 'UNSIGNED';
         }
         if ($zerofill) {
-            $strAttribute = 'UNSIGNED ZEROFILL';
+            $attribute = 'UNSIGNED ZEROFILL';
         }
         if (!isset($row['Default'])) {
             if ($row['Null'] != 'NO') {
@@ -263,8 +256,8 @@ while ($row = PMA_DBI_fetch_assoc($rowset)) {
         ?>
     </td>
     <td<?php echo $type_nowrap; ?> xml:lang="en" dir="ltr"><?php echo $type; ?></td>
-<?php /*    <td<?php echo $type_nowrap; ?>><?php echo $strAttribute; ?></td>*/ ?>
-    <td><?php echo (($row['Null'] == 'NO') ? $strNo : $strYes); ?></td>
+<?php /*    <td<?php echo $type_nowrap; ?>><?php echo $attribute; ?></td>*/ ?>
+    <td><?php echo (($row['Null'] == 'NO') ? __('No') : __('Yes')); ?></td>
     <td nowrap="nowrap"><?php if (isset($row['Default'])) { echo $row['Default']; } ?></td>
 <?php /*    <td<?php echo $type_nowrap; ?>><?php echo $row['Extra']; ?></td>*/ ?>
         <?php
@@ -319,7 +312,7 @@ function printPage()
 //]]>
 </script>
 <?php
-echo '<br /><br /><input type="button" id="print" value="' . $strPrint . '" onclick="printPage()" />';
+echo '<br /><br /><input type="button" id="print" value="' . __('Print') . '" onclick="printPage()" />';
 
-require_once './libraries/footer.inc.php';
+require './libraries/footer.inc.php';
 ?>

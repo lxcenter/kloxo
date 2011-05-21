@@ -2,7 +2,6 @@
 /* vim: set expandtab sw=4 ts=4 sts=4: */
 /**
  *
- * @version $Id$
  * @package phpMyAdmin-Designer
  */
 
@@ -12,7 +11,6 @@
 include_once 'pmd_common.php';
 $die_save_pos = 0;
 include_once 'pmd_save_pos.php';
-require_once './libraries/relation.lib.php';
 extract($_POST, EXTR_SKIP);
 
 $tables = PMA_DBI_get_tables_full($db, $T1);
@@ -28,7 +26,7 @@ if (PMA_foreignkey_supported($type_T1) && PMA_foreignkey_supported($type_T2) && 
     $existrel_foreign = PMA_getForeigners($db, $T2, '', 'foreign');
     if (isset($existrel_foreign[$F2])
      && isset($existrel_foreign[$F2]['constraint'])) {
-         PMD_return_new(0,'strErrorRelationExists');
+         PMD_return_new(0,__('Error: relation already exists.'));
     }
 // note: in InnoDB, the index does not requires to be on a PRIMARY
 // or UNIQUE key
@@ -60,14 +58,14 @@ if (PMA_foreignkey_supported($type_T1) && PMA_foreignkey_supported($type_T2) && 
         if ($on_update != 'nix') {
             $upd_query   .= ' ON UPDATE ' . $on_update;
         }
-        PMA_DBI_try_query($upd_query) or PMD_return_new(0,'strErrorRelationAdded');
-    PMD_return_new(1,'strForeignKeyRelationAdded');
+        PMA_DBI_try_query($upd_query) or PMD_return_new(0,__('Error: Relation not added.'));
+    PMD_return_new(1,__('FOREIGN KEY relation added'));
     }
 
 // internal (pmadb) relation
 } else {
     if ($GLOBALS['cfgRelation']['relwork'] == false) {
-        PMD_return_new(0, 'strGeneralRelationFeat:strDisabled');
+        PMD_return_new(0, _('General relation features') . ':' . _('Disabled'));
     } else {
         // no need to recheck if the keys are primary or unique at this point,
         // this was checked on the interface part
@@ -83,9 +81,9 @@ if (PMA_foreignkey_supported($type_T1) && PMA_foreignkey_supported($type_T2) && 
                             . '\'' . PMA_sqlAddslashes($F1) . '\')';
 
         if (PMA_query_as_controluser($q , false, PMA_DBI_QUERY_STORE)) {
-            PMD_return_new(1, 'strInternalRelationAdded');
+            PMD_return_new(1, __('Internal relation added'));
         } else {
-            PMD_return_new(0, 'strErrorRelationAdded');
+            PMD_return_new(0, __('Error: Relation not added.'));
         }
    }
 }

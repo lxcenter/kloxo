@@ -5,7 +5,6 @@
  *
  * register_globals_save (mark this file save for disabling register globals)
  *
- * @version $Id$
  * @package phpMyAdmin
  */
 
@@ -41,11 +40,12 @@ if (isset($_REQUEST['sql_query'])) {
 if (isset($_REQUEST['ShowFunctionFields'])) {
     $cfg['ShowFunctionFields'] = $_REQUEST['ShowFunctionFields'];
 }
-
-/**
- * load relation data, foreign keys
- */
-require_once './libraries/relation.lib.php';
+if (isset($_REQUEST['ShowFieldTypesInDataEditView'])) {
+    $cfg['ShowFieldTypesInDataEditView'] = $_REQUEST['ShowFieldTypesInDataEditView'];
+}
+if (isset($_REQUEST['default_action'])) {
+    $default_action = $_REQUEST['default_action'];
+}
 
 /**
  * file listing
@@ -110,8 +110,10 @@ if ($GLOBALS['cfg']['ShowPropertyComments']) {
 /**
  * used in ./libraries/header.inc.php to load JavaScript library file
  */
+$GLOBALS['js_include'][] = 'functions.js';
 $GLOBALS['js_include'][] = 'tbl_change.js';
-
+$GLOBALS['js_include'][] = 'jquery/jquery-ui-1.8.custom.js';
+$GLOBALS['js_include'][] = 'jquery/timepicker.js';
 /**
  * HTTP and HTML headers
  */
@@ -174,9 +176,9 @@ if (isset($where_clause)) {
         // No row returned
         if (! $rows[$key_id]) {
             unset($rows[$key_id], $where_clause_array[$key_id]);
-            PMA_showMessage($strEmptyResultSet, $local_query);
+            PMA_showMessage(__('MySQL returned an empty result set (i.e. zero rows).'), $local_query);
             echo "\n";
-            require_once './libraries/footer.inc.php';
+            require './libraries/footer.inc.php';
         } else { // end if (no row returned)
             $meta = PMA_DBI_get_fields_meta($result[$key_id]);
             list($unique_condition, $tmp_clause_is_unique) = PMA_getUniqueCondition($result[$key_id], count($meta), $meta, $rows[$key_id], true);
@@ -185,6 +187,7 @@ if (isset($where_clause)) {
             }
             unset($unique_condition, $tmp_clause_is_unique);
         }
+
     }
 } else {
     // no primary key given, just load first row - but what happens if table is empty?
@@ -193,7 +196,11 @@ if (isset($where_clause)) {
     $rows = array_fill(0, $cfg['InsertRows'], false);
 }
 
-// <markus@noga.de>
+// Copying a row - fetched data will be inserted as a new row, therefore the where clause is needless.
+if (isset($default_action) && $default_action === 'insert') {
+    unset($where_clause, $where_clauses);
+}
+
 // retrieve keys into foreign fields, if any
 $foreigners  = PMA_getForeigners($db, $table);
 
@@ -201,7 +208,7 @@ $foreigners  = PMA_getForeigners($db, $table);
 /**
  * Displays the form
  */
-// loic1: autocomplete feature of IE kills the "onchange" event handler and it
+// autocomplete feature of IE kills the "onchange" event handler and it
 //        must be replaced by the "onpropertychange" one in this case
 $chg_evt_handler = (PMA_USR_BROWSER_AGENT == 'IE' && PMA_USR_BROWSER_VER >= 5 && PMA_USR_BROWSER_VER < 7)
                  ? 'onpropertychange'
@@ -209,7 +216,6 @@ $chg_evt_handler = (PMA_USR_BROWSER_AGENT == 'IE' && PMA_USR_BROWSER_VER >= 5 &&
 // Had to put the URI because when hosted on an https server,
 // some browsers send wrongly this form to the http server.
 
-if ($cfg['CtrlArrowsMoving']) {
     ?>
 <!-- Set on key handler for moving using by Ctrl+arrows -->
 <script src="./js/keyhandler.js" type="text/javascript"></script>
@@ -220,7 +226,6 @@ document.onkeydown = onKeyDownArrowsHandler;
 //]]>
 </script>
     <?php
-}
 
 $_form_params = array(
     'db'        => $db,
@@ -239,12 +244,13 @@ if (isset($clause_is_unique)) {
 }
 
 ?>
+
 <!-- Insert/Edit form -->
-<form method="post" action="tbl_replace.php" name="insertForm" <?php if ($is_upload) { echo ' enctype="multipart/form-data"'; } ?>>
+<form id="insertForm" method="post" action="tbl_replace.php" name="insertForm" <?php if ($is_upload) { echo ' enctype="multipart/form-data"'; } ?>>
 <?php
 echo PMA_generate_common_hidden_inputs($_form_params);
 
-$titles['Browse'] = PMA_getIcon('b_browse.png', $strBrowseForeignValues);
+$titles['Browse'] = PMA_getIcon('b_browse.png', __('Browse foreign values'));
 
 // Set if we passed the first timestamp field
 $timestamp_seen = 0;
@@ -268,10 +274,18 @@ if (! empty($sql_query)) {
     $url_params['sql_query'] = $sql_query;
 }
 
+if (! $cfg['ShowFunctionFields'] || ! $cfg['ShowFieldTypesInDataEditView']) {
+    echo __('Show');
+}
 if (! $cfg['ShowFunctionFields']) {
     $this_url_params = array_merge($url_params,
-        array('ShowFunctionFields' => 1, 'goto' => 'sql.php'));
-    echo $strShow . ' : <a href="tbl_change.php' . PMA_generate_common_url($this_url_params) . '">' . $strFunction . '</a>' . "\n";
+        array('ShowFunctionFields' => 1, 'ShowFieldTypesInDataEditView' => $cfg['ShowFieldTypesInDataEditView'], 'goto' => 'sql.php'));
+    echo ' : <a href="tbl_change.php' . PMA_generate_common_url($this_url_params) . '">' . __('Function') . '</a>' . "\n";
+}
+if (! $cfg['ShowFieldTypesInDataEditView']) {
+    $this_other_url_params = array_merge($url_params,
+        array('ShowFieldTypesInDataEditView' => 1, 'ShowFunctionFields' => $cfg['ShowFunctionFields'], 'goto' => 'sql.php'));
+    echo ' : <a href="tbl_change.php' . PMA_generate_common_url($this_other_url_params) . '">' . __('Type') . '</a>' . "\n";
 }
 
 foreach ($rows as $row_id => $vrow) {
@@ -280,35 +294,41 @@ foreach ($rows as $row_id => $vrow) {
     }
 
     $jsvkey = $row_id;
-    $browse_foreigners_uri = '&amp;pk=' . $row_id;
+    $rownumber_param = '&amp;rownumber=' . $row_id;
     $vkey = '[multi_edit][' . $jsvkey . ']';
 
     $vresult = (isset($result) && is_array($result) && isset($result[$row_id]) ? $result[$row_id] : $result);
     if ($insert_mode && $row_id > 0) {
-        echo '<input type="checkbox" checked="checked" name="insert_ignore_' . $row_id . '" id="insert_ignore_check_' . $row_id . '" />';
-        echo '<label for="insert_ignore_check_' . $row_id . '">' . $strIgnore . '</label><br />' . "\n";
+        echo '<input type="checkbox" checked="checked" name="insert_ignore_' . $row_id . '" id="insert_ignore_' . $row_id . '" />';
+        echo '<label for="insert_ignore_' . $row_id . '">' . __('Ignore') . '</label><br />' . "\n";
     }
 ?>
-    <table>
+    <table class="insertRowTable">
     <thead>
         <tr>
-            <th><?php echo $strField; ?></th>
-            <th><?php echo $strType; ?></th>
-<?php
+            <th><?php echo __('Column'); ?></th>
+
+ <?php
+     if ($cfg['ShowFieldTypesInDataEditView']) {
+        $this_url_params = array_merge($url_params,
+            array('ShowFieldTypesInDataEditView' => 0, 'ShowFunctionFields' => $cfg['ShowFunctionFields'], 'goto' => 'sql.php'));
+        echo '          <th><a href="tbl_change.php' . PMA_generate_common_url($this_url_params) . '" title="' . __('Hide') . '">' . __('Type') . '</a></th>' . "\n";
+    }
+
     if ($cfg['ShowFunctionFields']) {
         $this_url_params = array_merge($url_params,
-            array('ShowFunctionFields' => 0, 'goto' => 'sql.php'));
-        echo '          <th><a href="tbl_change.php' . PMA_generate_common_url($this_url_params) . '" title="' . $strHide . '">' . $strFunction . '</a></th>' . "\n";
+            array('ShowFunctionFields' => 0, 'ShowFieldTypesInDataEditView' => $cfg['ShowFieldTypesInDataEditView'], 'goto' => 'sql.php'));
+        echo '          <th><a href="tbl_change.php' . PMA_generate_common_url($this_url_params) . '" title="' . __('Hide') . '">' . __('Function') . '</a></th>' . "\n";
     }
 ?>
-            <th><?php echo $strNull; ?></th>
-            <th><?php echo $strValue; ?></th>
+            <th><?php echo __('Null'); ?></th>
+            <th><?php echo __('Value'); ?></th>
         </tr>
     </thead>
     <tfoot>
         <tr>
             <th colspan="5" align="right" class="tblFooters">
-                <input type="submit" value="<?php echo $strGo; ?>" />
+                <input type="submit" value="<?php echo __('Go'); ?>" />
             </th>
         </tr>
     </tfoot>
@@ -327,11 +347,10 @@ foreach ($rows as $row_id => $vrow) {
 
             // d a t e t i m e
             //
-            // loic1: current date should not be set as default if the field is NULL
-            //        for the current row
-            // lem9:  but do not put here the current datetime if there is a default
-            //        value (the real default value will be set in the
-            //        Default value logic below)
+            // Current date should not be set as default if the field is NULL
+            // for the current row, but do not put here the current datetime
+            // if there is a default value (the real default value will be set
+            // in the Default value logic below)
 
             // Note: (tested in MySQL 4.0.16): when lang is some UTF-8,
             // $field['Default'] is not set if it contains NULL:
@@ -360,10 +379,37 @@ foreach ($rows as $row_id => $vrow) {
                 $table_fields[$i]['Field_title'] = $table_fields[$i]['Field_html'];
             }
 
-            // The type column
-            $table_fields[$i]['is_binary'] = stristr($table_fields[$i]['Type'], 'binary');
-            $table_fields[$i]['is_blob']   = stristr($table_fields[$i]['Type'], 'blob');
-            $table_fields[$i]['is_char']   = stristr($table_fields[$i]['Type'], 'char');
+            // The type column.
+            // Fix for bug #3152931 'ENUM and SET cannot have "Binary" option'
+            // If check to ensure types such as "enum('one','two','binary',..)" or
+            // "enum('one','two','varbinary',..)" are not categorized as binary.
+            if (stripos($table_fields[$i]['Type'], 'binary') === 0
+            || stripos($table_fields[$i]['Type'], 'varbinary') === 0) {
+                $table_fields[$i]['is_binary'] = stristr($table_fields[$i]['Type'], 'binary');
+            } else {
+                $table_fields[$i]['is_binary'] = false;
+            }
+
+            // If check to ensure types such as "enum('one','two','blob',..)" or
+            // "enum('one','two','tinyblob',..)" etc. are not categorized as blob.
+            if (stripos($table_fields[$i]['Type'], 'blob') === 0
+            || stripos($table_fields[$i]['Type'], 'tinyblob') === 0
+            || stripos($table_fields[$i]['Type'], 'mediumblob') === 0
+            || stripos($table_fields[$i]['Type'], 'longblob') === 0) {
+                $table_fields[$i]['is_blob']   = stristr($table_fields[$i]['Type'], 'blob');
+            } else {
+                $table_fields[$i]['is_blob'] = false;
+            }
+
+            // If check to ensure types such as "enum('one','two','char',..)" or
+            // "enum('one','two','varchar',..)" are not categorized as char.
+            if (stripos($table_fields[$i]['Type'], 'char') === 0
+            || stripos($table_fields[$i]['Type'], 'varchar') === 0) {
+                $table_fields[$i]['is_char']   = stristr($table_fields[$i]['Type'], 'char');
+            } else {
+                $table_fields[$i]['is_char'] = false;
+            }
+
             $table_fields[$i]['first_timestamp'] = false;
             switch ($table_fields[$i]['True_Type']) {
                 case 'set':
@@ -395,15 +441,12 @@ foreach ($rows as $row_id => $vrow) {
         if (-1 === $field['len']) {
             $field['len'] = PMA_DBI_field_len($vresult, $i);
         }
-
-        $unnullify_trigger = $chg_evt_handler . "=\"return unNullify('"
-            . PMA_escapeJsString($field['Field_md5']) . "', '"
-            . PMA_escapeJsString($jsvkey) . "')\"";
+        //Call validation when the form submited...
+        $unnullify_trigger = $chg_evt_handler . "=\"return verificationsAfterFieldChange('". PMA_escapeJsString($field['Field_md5']) . "', '"
+            . PMA_escapeJsString($jsvkey) . "','".$field['pma_type']."')\"";
 
         // Use an MD5 as an array index to avoid having special characters in the name atttibute (see bug #1746964 )
         $field_name_appendix =  $vkey . '[' . $field['Field_md5'] . ']';
-        $field_name_appendix_md5 = $field['Field_md5'] . $vkey . '[]';
-
 
         if ($field['Type'] == 'datetime'
          && ! isset($field['Default'])
@@ -414,21 +457,22 @@ foreach ($rows as $row_id => $vrow) {
             $vrow[$field['Field']] = date('Y-m-d H:i:s', time());
         }
         ?>
-        <tr class="<?php echo $odd_row ? 'odd' : 'even'; ?>">
+        <tr class="noclick <?php echo $odd_row ? 'odd' : 'even'; ?>">
             <td <?php echo ($cfg['LongtextDoubleTextarea'] && strstr($field['True_Type'], 'longtext') ? 'rowspan="2"' : ''); ?> align="center">
                 <?php echo $field['Field_title']; ?>
                 <input type="hidden" name="fields_name<?php echo $field_name_appendix; ?>" value="<?php echo $field['Field_html']; ?>"/>
             </td>
-            <td align="center"<?php echo $field['wrap']; ?>>
-                <?php echo $field['pma_type']; ?>
-            </td>
+<?php if ($cfg['ShowFieldTypesInDataEditView']) { ?>
+             <td align="center"<?php echo $field['wrap']; ?>><span class="column_type"><?php echo $field['pma_type']; ?></span>
+             </td>
 
-        <?php
+         <?php } //End if
 
         // Prepares the field value
         $real_null_value = FALSE;
         $special_chars_encoded = '';
         if (isset($vrow)) {
+            // (we are editing)
             if (is_null($vrow[$field['Field']])) {
                 $real_null_value = TRUE;
                 $vrow[$field['Field']]    = '';
@@ -437,32 +481,39 @@ foreach ($rows as $row_id => $vrow) {
             } elseif ($field['True_Type'] == 'bit') {
                 $special_chars = PMA_printable_bit_value($vrow[$field['Field']], $extracted_fieldspec['spec_in_brackets']);
             } else {
-                // loic1: special binary "characters"
+                // special binary "characters"
                 if ($field['is_binary'] || ($field['is_blob'] && ! $cfg['ProtectBinary'])) {
-                	if ($_SESSION['tmp_user_values']['display_binary_as_hex'] && $cfg['ShowFunctionFields']) {
-                		$vrow[$field['Field']] = bin2hex($vrow[$field['Field']]);
-                		$field['display_binary_as_hex'] = true;
-					} else {
-                    	$vrow[$field['Field']] = PMA_replace_binary_contents($vrow[$field['Field']]);
-					}
+                    if ($_SESSION['tmp_user_values']['display_binary_as_hex'] && $cfg['ShowFunctionFields']) {
+                        $vrow[$field['Field']] = bin2hex($vrow[$field['Field']]);
+                        $field['display_binary_as_hex'] = true;
+                    } else {
+                        $vrow[$field['Field']] = PMA_replace_binary_contents($vrow[$field['Field']]);
+                    }
                 } // end if
                 $special_chars   = htmlspecialchars($vrow[$field['Field']]);
 
-		//We need to duplicate the first \n or otherwise we will lose the first newline entered in a VARCHAR or TEXT column
-	        $special_chars_encoded = PMA_duplicateFirstNewline($special_chars);
+            //We need to duplicate the first \n or otherwise we will lose the first newline entered in a VARCHAR or TEXT column
+                $special_chars_encoded = PMA_duplicateFirstNewline($special_chars);
 
                 $data            = $vrow[$field['Field']];
             } // end if... else...
-            // loic1: if a timestamp field value is not included in an update
-            //        statement MySQL auto-update it to the current timestamp
-            // lem9:  however, things have changed since MySQL 4.1, so
-            //        it's better to set a fields_prev in this situation
+
+            //when copying row, it is useful to empty auto-increment column to prevent duplicate key error
+            if (isset($default_action) && $default_action === 'insert') {
+                if ($field['Key'] === 'PRI' && strpos($field['Extra'], 'auto_increment') !== FALSE) {
+                    $data = $special_chars_encoded = $special_chars = NULL;
+                }
+            }
+            // If a timestamp field value is not included in an update
+            // statement MySQL auto-update it to the current timestamp;
+            // however, things have changed since MySQL 4.1, so
+            // it's better to set a fields_prev in this situation
             $backup_field  = '<input type="hidden" name="fields_prev'
                 . $field_name_appendix . '" value="'
                 . htmlspecialchars($vrow[$field['Field']]) . '" />';
         } else {
             // (we are inserting)
-            // loic1: display default values
+            // display default values
             if (!isset($field['Default'])) {
                 $field['Default'] = '';
                 $real_null_value          = TRUE;
@@ -484,11 +535,13 @@ foreach ($rows as $row_id => $vrow) {
         }
 
         $idindex  = ($o_rows * $fields_cnt) + $i + 1;
-        $tabindex = (($idindex - 1) * 3) + 1;
+        $tabindex = $idindex;
+
+        // These GIS data types are not yet supported.
+        $no_support_types = array('geometry', 'point', 'linestring', 'polygon', 'multipoint', 'multilinestring', 'multipolygon', 'geometrycollection');
 
         // The function column
         // -------------------
-        // Change by Bernard M. Piller <bernard@bmpsystems.com>
         // We don't want binary data to be destroyed
         // Note: from the MySQL manual: "BINARY doesn't affect how the column is
         //       stored or retrieved" so it does not mean that the contents is
@@ -496,8 +549,8 @@ foreach ($rows as $row_id => $vrow) {
         if ($cfg['ShowFunctionFields']) {
             if (($cfg['ProtectBinary'] && $field['is_blob'] && !$is_upload)
              || ($cfg['ProtectBinary'] == 'all' && $field['is_binary'])) {
-                echo '        <td align="center">' . $strBinary . '</td>' . "\n";
-            } elseif (strstr($field['True_Type'], 'enum') || strstr($field['True_Type'], 'set') || 'geometry' == $field['pma_type']) {
+                echo '        <td align="center">' . __('Binary') . '</td>' . "\n";
+            } elseif (strstr($field['True_Type'], 'enum') || strstr($field['True_Type'], 'set') || in_array($field['pma_type'], $no_support_types)) {
                 echo '        <td align="center">--</td>' . "\n";
             } else {
                 ?>
@@ -507,7 +560,7 @@ foreach ($rows as $row_id => $vrow) {
                 <?php
                 $selected     = '';
 
-                // garvin: Find the current type in the RestrictColumnTypes. Will result in 'FUNC_CHAR'
+                // Find the current type in the RestrictColumnTypes. Will result in 'FUNC_CHAR'
                 // or something similar. Then directly look up the entry in the RestrictFunctions array,
                 // which will then reveal the available dropdown options
                 if (isset($cfg['RestrictColumnTypes'][strtoupper($field['True_Type'])])
@@ -532,6 +585,7 @@ foreach ($rows as $row_id => $vrow) {
 
                 if ($field['True_Type'] == 'timestamp'
                   && empty($field['Default'])
+                  && empty($data)
                   && ! isset($analyzed_sql[0]['create_table_fields'][$field['Field']]['on_update_current_timestamp'])) {
                     $default_function = $cfg['DefaultFunctions']['first_timestamp'];
                 }
@@ -546,11 +600,11 @@ foreach ($rows as $row_id => $vrow) {
                 }
 
                 // this is set only when appropriate and is always true
-				if (isset($field['display_binary_as_hex'])) {
-                	$default_function = 'UNHEX';
-				}
+                if (isset($field['display_binary_as_hex'])) {
+                    $default_function = 'UNHEX';
+                }
 
-                // garvin: loop on the dropdown array and print all available options for that field.
+                // loop on the dropdown array and print all available options for that field.
                 foreach ($dropdown as $each_dropdown){
                     echo '<option';
                     if ($default_function === $each_dropdown) {
@@ -561,7 +615,7 @@ foreach ($rows as $row_id => $vrow) {
                     $op_spacing_needed = TRUE;
                 }
 
-                // garvin: For compatibility's sake, do not let out all other functions. Instead
+                // For compatibility's sake, do not let out all other functions. Instead
                 // print a separator (blank) and then show ALL functions which weren't shown
                 // yet.
                 $cnt_functions = count($cfg['Functions']);
@@ -602,41 +656,35 @@ foreach ($rows as $row_id => $vrow) {
             }
             echo ' />' . "\n";
 
-            if (!(($cfg['ProtectBinary'] && $field['is_blob']) || ($cfg['ProtectBinary'] == 'all' && $field['is_binary']))) {
-
-                echo '            <input type="checkbox" tabindex="' . ($tabindex + $tabindex_for_null) . '"'
-                     . ' name="fields_null' . $field_name_appendix . '"';
-                if ($real_null_value && !$field['first_timestamp']) {
-                    echo ' checked="checked"';
-                }
-                echo ' id="field_' . ($idindex) . '_2"';
-                $onclick         = ' onclick="if (this.checked) {nullify(';
-                if (strstr($field['True_Type'], 'enum')) {
-                    if (strlen($field['Type']) > 20) {
-                        $onclick .= '1, ';
-                    } else {
-                        $onclick .= '2, ';
-                    }
-                } elseif (strstr($field['True_Type'], 'set')) {
-                    $onclick     .= '3, ';
-                } elseif ($foreigners && isset($foreigners[$field['Field']]) && $foreignData['foreign_link'] == false) {
-                    // foreign key in a drop-down
-                    $onclick     .= '4, ';
-                } elseif ($foreigners && isset($foreigners[$field['Field']]) && $foreignData['foreign_link'] == true) {
-                    // foreign key with a browsing icon
-                    $onclick     .= '6, ';
-                } else {
-                    $onclick     .= '5, ';
-                }
-                $onclick         .= '\'' . PMA_escapeJsString($field['Field_html']) . '\', \'' . $field['Field_md5'] . '\', \'' . PMA_escapeJsString($vkey) . '\'); this.checked = true}; return true" />' . "\n";
-                echo $onclick;
-            } else {
-                echo '            <input type="hidden" name="fields_null' . $field_name_appendix . '"';
-                if ($real_null_value && !$field['first_timestamp']) {
-                    echo ' value="on"';
-                }
-                echo ' />' . "\n";
+            echo '            <input type="checkbox" class="checkbox_null" tabindex="' . ($tabindex + $tabindex_for_null) . '"'
+                 . ' name="fields_null' . $field_name_appendix . '"';
+            if ($real_null_value && !$field['first_timestamp']) {
+                echo ' checked="checked"';
             }
+            echo ' id="field_' . ($idindex) . '_2" />';
+
+            // nullify_code is needed by the js nullify() function
+            if (strstr($field['True_Type'], 'enum')) {
+                if (strlen($field['Type']) > 20) {
+                    $nullify_code = '1';
+                } else {
+                    $nullify_code = '2';
+                }
+            } elseif (strstr($field['True_Type'], 'set')) {
+                $nullify_code = '3';
+            } elseif ($foreigners && isset($foreigners[$field['Field']]) && $foreignData['foreign_link'] == false) {
+                // foreign key in a drop-down
+                $nullify_code = '4';
+            } elseif ($foreigners && isset($foreigners[$field['Field']]) && $foreignData['foreign_link'] == true) {
+                // foreign key with a browsing icon
+                $nullify_code = '6';
+            } else {
+                $nullify_code = '5';
+            }
+            // to be able to generate calls to nullify() in jQuery
+            echo '<input type="hidden" class="nullify_code" name="nullify_code' . $field_name_appendix . '" value="' . $nullify_code . '" />';
+            echo '<input type="hidden" class="hashed_field" name="hashed_field' . $field_name_appendix . '" value="' .  $field['Field_md5'] . '" />';
+            echo '<input type="hidden" class="multi_edit" name="multi_edit' . $field_name_appendix . '" value="' . PMA_escapeJsString($vkey) . '" />';
         }
         echo '        </td>' . "\n";
 
@@ -646,37 +694,29 @@ foreach ($rows as $row_id => $vrow) {
         // HTML attribute
 
         echo '        <td>' . "\n";
+        // Will be used by js/tbl_change.js to set the default value
+        // for the "Continue insertion" feature
+        echo '<span class="default_value hide">' . $special_chars . '</span>';
         if ($foreignData['foreign_link'] == true) {
             echo $backup_field . "\n";
             ?>
             <input type="hidden" name="fields_type<?php echo $field_name_appendix; ?>"
                 value="foreign" />
-            <input type="hidden" name="fields<?php echo $field_name_appendix; ?>"
-                value="" id="field_<?php echo ($idindex); ?>_3A" />
-            <input type="text" name="field_<?php echo $field_name_appendix_md5; ?>"
+            <input type="text" name="fields<?php echo $field_name_appendix; ?>"
                 class="textfield" <?php echo $unnullify_trigger; ?>
                 tabindex="<?php echo ($tabindex + $tabindex_for_value); ?>"
                 id="field_<?php echo ($idindex); ?>_3"
                 value="<?php echo htmlspecialchars($data); ?>" />
-            <script type="text/javascript">
-            //<![CDATA[
-                document.writeln('<a target="_blank" onclick="window.open(this.href, \'foreigners\', \'width=640,height=240,scrollbars=yes,resizable=yes\'); return false"');
-                document.write(' href="browse_foreigners.php?');
-                document.write('<?php echo PMA_generate_common_url($db, $table); ?>');
-                document.writeln('&amp;field=<?php echo PMA_escapeJsString(urlencode($field['Field']) . $browse_foreigners_uri); ?>">');
-                document.writeln('<?php echo str_replace("'", "\'", $titles['Browse']); ?></a>');
-            //]]>
-            </script>
+                <a class="hide foreign_values_anchor" target="_blank" onclick="window.open(this.href, 'foreigners', 'width=640,height=240,scrollbars=yes,resizable=yes'); return false;" href="browse_foreigners.php?<?php echo PMA_generate_common_url($db, $table); ?>&amp;field=<?php echo PMA_escapeJsString(urlencode($field['Field']) . $rownumber_param); ?>"><?php echo str_replace("'", "\'", $titles['Browse']); ?></a>
             <?php
         } elseif (is_array($foreignData['disp_row'])) {
             echo $backup_field . "\n";
             ?>
             <input type="hidden" name="fields_type<?php echo $field_name_appendix; ?>"
                 value="foreign" />
-            <input type="hidden" name="fields<?php echo $field_name_appendix; ?>"
-                value="" id="field_<?php echo $idindex; ?>_3A" />
-            <select name="field_<?php echo $field_name_appendix_md5; ?>"
+            <select name="fields<?php echo $field_name_appendix; ?>"
                 <?php echo $unnullify_trigger; ?>
+                class="textfield"
                 tabindex="<?php echo ($tabindex + $tabindex_for_value); ?>"
                 id="field_<?php echo ($idindex); ?>_3">
                 <?php echo PMA_foreignDropdown($foreignData['disp_row'], $foreignData['foreign_field'], $foreignData['foreign_display'], $data, $cfg['ForeignKeyMaxLimit']); ?>
@@ -715,7 +755,7 @@ foreach ($rows as $row_id => $vrow) {
             echo "\n";
             if (strlen($special_chars) > 32000) {
                 echo "        </td>\n";
-                echo '        <td>' . $strTextAreaLength;
+                echo '        <td>' . __(' Because of its length,<br /> this column might not be editable ');
             }
         } elseif ($field['pma_type'] == 'enum') {
             if (! isset($table_fields[$i]['values'])) {
@@ -739,8 +779,9 @@ foreach ($rows as $row_id => $vrow) {
             // show dropdown or radio depend on length
             if (strlen($field['Type']) > 20) {
                 ?>
-                <select name="field_<?php echo $field_name_appendix_md5; ?>"
+                <select name="fields<?php echo $field_name_appendix; ?>"
                     <?php echo $unnullify_trigger; ?>
+                    class="textfield"
                     tabindex="<?php echo ($tabindex + $tabindex_for_value); ?>"
                     id="field_<?php echo ($idindex); ?>_3">
                     <option value="">&nbsp;</option>
@@ -767,7 +808,8 @@ foreach ($rows as $row_id => $vrow) {
                 $j = 0;
                 foreach ($field_enum_values as $enum_value) {
                     echo '            ';
-                    echo '<input type="radio" name="field_' . $field_name_appendix_md5 . '"';
+                    echo '<input type="radio" name="fields' . $field_name_appendix . '"';
+                    echo ' class="textfield"';
                     echo ' value="' . $enum_value['html'] . '"';
                     echo ' id="field_' . ($idindex) . '_3_'  . $j . '"';
                     echo $unnullify_trigger;
@@ -802,8 +844,8 @@ foreach ($rows as $row_id => $vrow) {
             echo $backup_field . "\n";
             ?>
                 <input type="hidden" name="fields_type<?php echo $field_name_appendix; ?>" value="set" />
-                <input type="hidden" name="fields<?php echo $field_name_appendix; ?>" value="" />
-                <select name="field_<?php echo $field_name_appendix_md5; ?>"
+                <select name="fields<?php echo $field_name_appendix . '[]'; ?>"
+                    class="textfield"
                     size="<?php echo $select_size; ?>"
                     multiple="multiple" <?php echo $unnullify_trigger; ?>
                     tabindex="<?php echo ($tabindex + $tabindex_for_value); ?>"
@@ -821,74 +863,29 @@ foreach ($rows as $row_id => $vrow) {
                 </select>
             <?php
         }
-        // Change by Bernard M. Piller <bernard@bmpsystems.com>
         // We don't want binary data destroyed
         elseif ($field['is_binary'] || $field['is_blob']) {
             if (($cfg['ProtectBinary'] && $field['is_blob'])
                 || ($cfg['ProtectBinary'] == 'all' && $field['is_binary'])) {
                 echo "\n";
-                    // rajk - for blobstreaming
-                    $bs_reference_exists = FALSE;
-
-                    if (isset ($tbl_type) && strlen ($tbl_type) > 0)
-                    {
-                        // load PMA_Config
-                        $PMA_Config = $_SESSION['PMA_Config'];
-
-                        if (!empty($PMA_Config))
-                        {
-                            $requiredTblType = $PMA_Config->get('PBXT_NAME');
-
-                            if ($requiredTblType == strtolower ($tbl_type))
-                            {
-                                $pluginsExist = $PMA_Config->get('BLOBSTREAMING_PLUGINS_EXIST');
-
-                                // check if blobstreaming plugins exist
-                                if ($pluginsExist)
-                                {
-                                    $bs_tables = $PMA_Config->get('BLOBSTREAMABLE_DATABASES');
-
-                                    if (!empty($bs_tables) && strlen($db) > 0)
-                                    {
-                                        $bs_tables = $bs_tables[$db];
-
-                                        if (isset($bs_tables))
-                                        {
-                                            $allBSTablesExist = TRUE;
-
-                                            foreach ($bs_tables as $table_key=>$bs_tbl)
-                                                if (!$bs_tables[$table_key]['Exists'])
-                                                {
-                                                    $allBSTablesExist = FALSE;
-                                                    break;
-                                                }
-
-                                            if ($allBSTablesExist)
-                                                $bs_reference_exists = PMA_BS_ReferenceExists($data, $db);
-                                        }   // end if (isset($bs_tables))
-                                    }   // end if (!empty($bs_tables) && strlen($db) > 0)
-                                }   // end if ($pluginsExist)
-                            }   // end if ($requiredTblType == strtolower ($tbl_type))
-                        }   // end if (!empty($PMA_Config))
-                    }   // end if (isset ($tbl_type) && strlen ($tbl_type) > 0)
-
-                    if ($bs_reference_exists)
+                    // for blobstreaming
+                if (PMA_BS_IsTablePBMSEnabled($db, $table, $tbl_type) && PMA_BS_IsPBMSReference($data, $db))
                     {
                         echo '<input type="hidden" name="remove_blob_ref_' . $field['Field_md5'] . $vkey . '" value="' . $data . '" />';
-                        echo '<input type="checkbox" name="remove_blob_repo_' . $field['Field_md5'] . $vkey . '" /> ' . $strBLOBRepositoryRemove . "<br />";
+                        echo '<input type="checkbox" name="remove_blob_repo_' . $field['Field_md5'] . $vkey . '" /> ' . __('Remove BLOB Repository Reference') . "<br />";
                         echo PMA_BS_CreateReferenceLink($data, $db);
                         echo "<br />";
                     }
                     else
                     {
-                        echo $strBinaryDoNotEdit;
+                        echo __('Binary - do not edit');
                         if (isset($data)) {
                             $data_size = PMA_formatByteDown(strlen(stripslashes($data)), 3, 1);
                             echo ' ('. $data_size [0] . ' ' . $data_size[1] . ')';
                                     unset($data_size);
                         }
                         echo "\n";
-                    }   // end if ($bs_reference_exists)
+                    }   // end if (PMA_BS_IsTablePBMSEnabled($db, $table, $tbl_type) && PMA_BS_IsPBMSReference($data, $db))
                 ?>
                 <input type="hidden" name="fields_type<?php echo $field_name_appendix; ?>" value="protected" />
                 <input type="hidden" name="fields<?php echo $field_name_appendix; ?>" value="" />
@@ -908,8 +905,8 @@ foreach ($rows as $row_id => $vrow) {
                 <?php
 
             } else {
-                // field size should be at least 4 and max 40
-                $fieldsize = min(max($field['len'], 4), 40);
+                // field size should be at least 4 and max $cfg['LimitChars']
+                $fieldsize = min(max($field['len'], 4), $cfg['LimitChars']);
                 echo "\n";
                 echo $backup_field . "\n";
                 ?>
@@ -926,68 +923,14 @@ foreach ($rows as $row_id => $vrow) {
             // (displayed whatever value the ProtectBinary has)
 
             if ($is_upload && $field['is_blob']) {
-                // added by rajk
-                // check if field type is of longblob
-                if ($field['pma_type'] == "longblob")
-                {
-                    if (isset ($tbl_type) && strlen ($tbl_type) > 0)
-                    {
-                        // load PMA Config
-                        $PMA_Config = $_SESSION['PMA_Config'];
-
-                        // is PMA_Config's data loaded? continue only if it is
-                        if (!empty($PMA_Config))
-                        {
-                            $requiredTblType = $PMA_Config->get('PBXT_NAME');
-
-                            if ($requiredTblType == strtolower ($tbl_type))
-                            {
-                                $pluginsExist = $PMA_Config->get('BLOBSTREAMING_PLUGINS_EXIST');
-
-                                // check if blobstreaming plugins exist
-                                if ($pluginsExist)
-                                {
-                                    $curlExists = $PMA_Config->get('CURL_EXISTS');
-
-                                    // check if CURL exists
-                                    if ($curlExists)
-                                    {
-                                        $bs_tables = $PMA_Config->get('BLOBSTREAMABLE_DATABASES');
-
-                                        // check for BLOBStreamable databases and if current database name is provided
-                                        if (!empty($bs_tables) && strlen($db) > 0)
-                                        {
-                                            $bs_tables = $bs_tables[$db];
-
-                                            // check if reference to BLOBStreaming tables exists
-                                            if (isset($bs_tables))
-                                            {
-                                                $allBSTablesExist = TRUE;
-
-                                                foreach ($bs_tables as $table_key=>$bs_tbl)
-                                                    if (!$bs_tables[$table_key]['Exists'])
-                                                    {
-                                                        $allBSTablesExist = FALSE;
-                                                        break;
-                                                    }
-
-                                                // check if necessary BLOBStreaming tables exist
-                                                if ($allBSTablesExist)
-                                                {
-                                                    echo '<br />';
-                                                    echo '<input type="checkbox" name="upload_blob_repo_' . $field['Field_md5'] . $vkey . '" /> ' . $strBLOBRepositoryUpload;
-                                                }   // end if ($allBSTablesExist)
-                                            }   // end if (isset($bs_tables)
-                                        }   // end if (!empty($bs_tables) && strlen ($db) > 0)
-                                    }   // end if ($curlExists)
-                                }   // end if ($pluginsExist)
-                            }   // end if ($requiredTblType == strtolower ($tbl_type))
-                        }   // end if (!empty($PMA_Config))
-                    }   // end if (isset ($tbl_type) && strlen ($tbl_type) > 0)
+                // check if field type is of longblob and  if the table is PBMS enabled.
+                if (($field['pma_type'] == "longblob") && PMA_BS_IsTablePBMSEnabled($db, $table, $tbl_type)) {
+                    echo '<br />';
+                    echo '<input type="checkbox" name="upload_blob_repo' . $vkey . '[' . $field['Field_md5'] . ']" /> ' .  __('Upload to BLOB repository');
                 }
 
                 echo '<br />';
-                echo '<input type="file" name="fields_upload_' . $field['Field_md5'] . $vkey . '" class="textfield" id="field_' . $idindex . '_3" size="10" />&nbsp;';
+                echo '<input type="file" name="fields_upload' . $vkey . '[' . $field['Field_md5'] . ']" class="textfield" id="field_' . $idindex . '_3" size="10" ' . $unnullify_trigger . '/>&nbsp;';
 
                 // find maximum upload size, based on field type
                 /**
@@ -1015,12 +958,12 @@ foreach ($rows as $row_id => $vrow) {
             if (!empty($cfg['UploadDir'])) {
                 $files = PMA_getFileSelectOptions(PMA_userDir($cfg['UploadDir']));
                 if ($files === FALSE) {
-                    echo '        <font color="red">' . $strError . '</font><br />' . "\n";
-                    echo '        ' . $strWebServerUploadDirectoryError . "\n";
+                    echo '        <font color="red">' . __('Error') . '</font><br />' . "\n";
+                    echo '        ' . __('The directory you set for upload work cannot be reached') . "\n";
                 } elseif (!empty($files)) {
                     echo "<br />\n";
-                    echo '    <i>' . $strOr . '</i>' . ' ' . $strWebServerUploadDirectory . ':<br />' . "\n";
-                    echo '        <select size="1" name="fields_uploadlocal_' . $field['Field_md5'] . $vkey . '">' . "\n";
+                    echo '    <i>' . __('Or') . '</i>' . ' ' . __('web server upload directory') . ':<br />' . "\n";
+                    echo '        <select size="1" name="fields_uploadlocal' . $vkey . '[' . $field['Field_md5'] . ']">' . "\n";
                     echo '            <option value="" selected="selected"></option>' . "\n";
                     echo $files;
                     echo '        </select>' . "\n";
@@ -1028,7 +971,7 @@ foreach ($rows as $row_id => $vrow) {
             } // end if (web-server upload directory)
         } // end elseif (binary or blob)
 
-        elseif ('geometry' == $field['pma_type']) {
+        elseif (in_array($field['pma_type'], $no_support_types)) {
             // ignore this column to avoid changing it
         }
         else {
@@ -1048,10 +991,16 @@ foreach ($rows as $row_id => $vrow) {
                     ><?php echo $special_chars_encoded; ?></textarea>
                 <?php
             } else {
+                $the_class = 'textfield';
+                if ($field['pma_type'] == 'date') {
+                    $the_class .= ' datefield';
+                } elseif ($field['pma_type'] == 'datetime' || substr($field['pma_type'], 0, 9) == 'timestamp') {
+                    $the_class .= ' datetimefield';
+                }
                 ?>
                 <input type="text" name="fields<?php echo $field_name_appendix; ?>"
                     value="<?php echo $special_chars; ?>" size="<?php echo $fieldsize; ?>"
-                    class="textfield" <?php echo $unnullify_trigger; ?>
+                    class="<?php echo $the_class; ?>" <?php echo $unnullify_trigger; ?>
                     tabindex="<?php echo ($tabindex + $tabindex_for_value); ?>"
                     id="field_<?php echo ($idindex); ?>_3" />
                 <?php
@@ -1065,6 +1014,11 @@ foreach ($rows as $row_id => $vrow) {
                     <input type="hidden" name="fields_type<?php echo $field_name_appendix; ?>" value="timestamp" />
                     <?php
                 }
+                if (substr($field['pma_type'], 0, 8) == 'datetime') {
+                    ?>
+                    <input type="hidden" name="fields_type<?php echo $field_name_appendix; ?>" value="datetime" />
+                    <?php
+                }
                 if ($field['True_Type'] == 'bit') {
                     ?>
                     <input type="hidden" name="fields_type<?php echo $field_name_appendix; ?>" value="bit" />
@@ -1073,17 +1027,7 @@ foreach ($rows as $row_id => $vrow) {
                 if ($field['pma_type'] == 'date' || $field['pma_type'] == 'datetime' || substr($field['pma_type'], 0, 9) == 'timestamp') {
                     // the _3 suffix points to the date field
                     // the _2 suffix points to the corresponding NULL checkbox
-                    ?>
-                    <script type="text/javascript">
-                    //<![CDATA[
-                    document.write('<a title="<?php echo $strCalendar;?>"');
-                    document.write(' href="javascript:openCalendar(\'<?php echo PMA_generate_common_url();?>\', \'insertForm\', \'field_<?php echo ($idindex); ?>_3\', \'<?php echo (substr($field['pma_type'], 0, 9) == 'timestamp') ? 'datetime' : substr($field['pma_type'], 0, 9); ?>\', \'field_<?php echo ($idindex); ?>_2\')">');
-                    document.write('<img class="calendar"');
-                    document.write(' src="<?php echo $pmaThemeImage; ?>b_calendar.png"');
-                    document.write(' alt="<?php echo $strCalendar; ?>"/></a>');
-                    //]]>
-                    </script>
-                    <?php
+                    // in dateFormat, 'yy' means the year with 4 digits
                 }
             }
         }
@@ -1099,19 +1043,21 @@ foreach ($rows as $row_id => $vrow) {
 ?>
     <br />
 
-    <fieldset>
+    <fieldset id="actions_panel">
     <table border="0" cellpadding="5" cellspacing="0">
     <tr>
         <td valign="middle" nowrap="nowrap">
-            <select name="submit_type" tabindex="<?php echo ($tabindex + $tabindex_for_value + 1); ?>">
+            <select name="submit_type" class="control_at_footer" tabindex="<?php echo ($tabindex + $tabindex_for_value + 1); ?>">
 <?php
 if (isset($where_clause)) {
     ?>
-                <option value="<?php echo $strSave; ?>"><?php echo $strSave; ?></option>
+                <option value="save"><?php echo __('Save'); ?></option>
     <?php
 }
     ?>
-                <option value="<?php echo $strInsertAsNewRow; ?>"><?php echo $strInsertAsNewRow; ?></option>
+                <option value="insert"><?php echo __('Insert as new row'); ?></option>
+                <option value="insertignore"><?php echo __('Insert as new row and ignore errors'); ?></option>
+                <option value="showinsert"><?php echo __('Show insert query'); ?></option>
             </select>
     <?php
 echo "\n";
@@ -1122,16 +1068,16 @@ if (!isset($after_insert)) {
 ?>
         </td>
         <td valign="middle">
-            &nbsp;&nbsp;&nbsp;<strong><?php echo $strAndThen; ?></strong>&nbsp;&nbsp;&nbsp;
+            &nbsp;&nbsp;&nbsp;<strong><?php echo __('and then'); ?></strong>&nbsp;&nbsp;&nbsp;
         </td>
         <td valign="middle" nowrap="nowrap">
             <select name="after_insert">
-                <option value="back" <?php echo ($after_insert == 'back' ? 'selected="selected"' : ''); ?>><?php echo $strAfterInsertBack; ?></option>
-                <option value="new_insert" <?php echo ($after_insert == 'new_insert' ? 'selected="selected"' : ''); ?>><?php echo $strAfterInsertNewInsert; ?></option>
+                <option value="back" <?php echo ($after_insert == 'back' ? 'selected="selected"' : ''); ?>><?php echo __('Go back to previous page'); ?></option>
+                <option value="new_insert" <?php echo ($after_insert == 'new_insert' ? 'selected="selected"' : ''); ?>><?php echo __('Insert another new row'); ?></option>
 <?php
 if (isset($where_clause)) {
     ?>
-                <option value="same_insert" <?php echo ($after_insert == 'same_insert' ? 'selected="selected"' : ''); ?>><?php echo $strAfterInsertSame; ?></option>
+                <option value="same_insert" <?php echo ($after_insert == 'same_insert' ? 'selected="selected"' : ''); ?>><?php echo __('Go back to this page'); ?></option>
     <?php
     // If we have just numeric primary key, we can also edit next
     // in 2.8.2, we were looking for `field_name` = numeric_value
@@ -1139,7 +1085,7 @@ if (isset($where_clause)) {
     // in 2.9.0, we are looking for `table_name`.`field_name` = numeric_value
     if ($found_unique_key && preg_match('@^[\s]*`[^`]*`[\.]`[^`]*` = [0-9]+@', $where_clause)) {
         ?>
-    <option value="edit_next" <?php echo ($after_insert == 'edit_next' ? 'selected="selected"' : ''); ?>><?php echo $strAfterInsertNext; ?></option>
+    <option value="edit_next" <?php echo ($after_insert == 'edit_next' ? 'selected="selected"' : ''); ?>><?php echo __('Edit next row'); ?></option>
         <?php
     }
 }
@@ -1150,11 +1096,11 @@ if (isset($where_clause)) {
 
     <tr>
         <td>
-<?php echo PMA_showHint($strUseTabKey); ?>
+<?php echo PMA_showHint(__('Use TAB key to move from value to value, or CTRL+arrows to move anywhere')); ?>
         </td>
         <td colspan="3" align="right" valign="middle">
-            <input type="submit" value="<?php echo $strGo; ?>" tabindex="<?php echo ($tabindex + $tabindex_for_value + 6); ?>" id="buttonYes" />
-            <input type="reset" value="<?php echo $strReset; ?>" tabindex="<?php echo ($tabindex + $tabindex_for_value + 7); ?>" />
+            <input type="submit" class="control_at_footer" value="<?php echo __('Go'); ?>" tabindex="<?php echo ($tabindex + $tabindex_for_value + 6); ?>" id="buttonYes" />
+            <input type="reset" class="control_at_footer" value="<?php echo __('Reset'); ?>" tabindex="<?php echo ($tabindex + $tabindex_for_value + 7); ?>" />
         </td>
     </tr>
     </table>
@@ -1166,8 +1112,8 @@ if (isset($where_clause)) {
 <?php
 if ($insert_mode) {
 ?>
-<!-- Restart insertion form -->
-<form method="post" action="tbl_replace.php" name="restartForm" >
+<!-- Continue insertion form -->
+<form id="continueForm" method="post" action="tbl_replace.php" name="continueForm" >
     <?php echo PMA_generate_common_hidden_inputs($db, $table); ?>
     <input type="hidden" name="goto" value="<?php echo htmlspecialchars($GLOBALS['goto']); ?>" />
     <input type="hidden" name="err_url" value="<?php echo htmlspecialchars($err_url); ?>" />
@@ -1178,7 +1124,7 @@ if ($insert_mode) {
             echo '<input type="hidden" name="where_clause[' . $key_id . ']" value="' . htmlspecialchars(trim($where_clause)) . '" />'. "\n";
         }
     }
-    $tmp = '<select name="insert_rows" id="insert_rows" onchange="this.form.submit();" >' . "\n";
+    $tmp = '<select name="insert_rows" id="insert_rows">' . "\n";
     $option_values = array(1,2,5,10,15,20,30,40);
     foreach ($option_values as $value) {
         $tmp .= '<option value="' . $value . '"';
@@ -1188,14 +1134,14 @@ if ($insert_mode) {
         $tmp .= '>' . $value . '</option>' . "\n";
     }
     $tmp .= '</select>' . "\n";
-    echo "\n" . sprintf($strRestartInsertion, $tmp);
+    echo "\n" . sprintf(__('Continue insertion with %s rows'), $tmp);
     unset($tmp);
-    echo '<noscript><input type="submit" value="' . $strGo . '" /></noscript>' . "\n";
+    echo '<noscript><input type="submit" value="' . __('Go') . '" /></noscript>' . "\n";
     echo '</form>' . "\n";
 }
 
 /**
  * Displays the footer
  */
-require_once './libraries/footer.inc.php';
+require './libraries/footer.inc.php';
 ?>

@@ -4,7 +4,6 @@
  * Set of functions used to build OpenDocument Text dumps of tables
  *
  * @package phpMyAdmin-Export-ODT
- * @version $Id$
  */
 if (! defined('PHPMYADMIN')) {
     exit;
@@ -19,39 +18,47 @@ if (isset($plugin_list)) {
         $hide_structure = true;
     }
     $plugin_list['odt'] = array(
-        'text' => 'strOpenDocumentText',
+        'text' => __('Open Document Text'),
         'extension' => 'odt',
         'mime_type' => 'application/vnd.oasis.opendocument.text',
         'force_file' => true,
         'options' => array(), /* Filled later */
-        'options_text' => 'strOptions',
+        'options_text' => __('Options'),
         );
+
+    /* what to dump (structure/data/both) */
+    $plugin_list['odt']['options'][] =
+        array('type' => 'begin_group', 'text' => __('Dump table') , 'name' => 'general_opts');
+    $plugin_list['odt']['options'][] =
+        array('type' => 'radio', 'name' => 'structure_or_data', 'values' => array('structure' => __('structure'), 'data' => __('data'), 'structure_and_data' => __('structure and data')));
+    $plugin_list['odt']['options'][] = array('type' => 'end_group');
+
     /* Structure options */
     if (!$hide_structure) {
         $plugin_list['odt']['options'][] =
-            array('type' => 'bgroup', 'name' => 'structure', 'text' => 'strStructure', 'force' => 'data');
+            array('type' => 'begin_group', 'name' => 'structure', 'text' => __('Object creation options'), 'force' => 'data');
         if (!empty($GLOBALS['cfgRelation']['relation'])) {
             $plugin_list['odt']['options'][] =
-                array('type' => 'bool', 'name' => 'relation', 'text' => 'strRelations');
+                array('type' => 'bool', 'name' => 'relation', 'text' => __('Display foreign key relationships'));
         }
         $plugin_list['odt']['options'][] =
-            array('type' => 'bool', 'name' => 'comments', 'text' => 'strComments');
+            array('type' => 'bool', 'name' => 'comments', 'text' => __('Display comments'));
         if (!empty($GLOBALS['cfgRelation']['mimework'])) {
             $plugin_list['odt']['options'][] =
-                array('type' => 'bool', 'name' => 'mime', 'text' => 'strMIME_MIMEtype');
+                array('type' => 'bool', 'name' => 'mime', 'text' => __('Display MIME types'));
         }
         $plugin_list['odt']['options'][] =
-            array('type' => 'egroup');
+            array('type' => 'end_group');
     }
     /* Data */
     $plugin_list['odt']['options'][] =
-        array('type' => 'bgroup', 'name' => 'data', 'text' => 'strData', 'force' => 'structure');
+        array('type' => 'begin_group', 'name' => 'data', 'text' => __('Data dump options'), 'force' => 'structure');
     $plugin_list['odt']['options'][] =
-        array('type' => 'bool', 'name' => 'columns', 'text' => 'strPutColNames');
+        array('type' => 'bool', 'name' => 'columns', 'text' => __('Put columns names in the first row'));
     $plugin_list['odt']['options'][] =
-        array('type' => 'text', 'name' => 'null', 'text' => 'strReplaceNULLBy');
+        array('type' => 'text', 'name' => 'null', 'text' => __('Replace NULL with:'));
     $plugin_list['odt']['options'][] =
-        array('type' => 'egroup');
+        array('type' => 'end_group');
 } else {
 
 $GLOBALS['odt_buffer'] = '';
@@ -110,7 +117,7 @@ function PMA_exportHeader() {
  * @access  public
  */
 function PMA_exportDBHeader($db) {
-    $GLOBALS['odt_buffer'] .= '<text:h text:outline-level="1" text:style-name="Heading_1" text:is-list-header="true">' . htmlspecialchars($GLOBALS['strDatabase'] . ' ' . $db) . '</text:h>';
+    $GLOBALS['odt_buffer'] .= '<text:h text:outline-level="1" text:style-name="Heading_1" text:is-list-header="true">' . htmlspecialchars(__('Database') . ' ' . $db) . '</text:h>';
     return TRUE;
 }
 
@@ -165,7 +172,7 @@ function PMA_exportData($db, $table, $crlf, $error_url, $sql_query) {
         $field_flags[$j] = PMA_DBI_field_flags($result, $j);
     }
 
-    $GLOBALS['odt_buffer'] .= '<text:h text:outline-level="2" text:style-name="Heading_2" text:is-list-header="true">' . htmlspecialchars($GLOBALS['strDumpingData'] . ' ' . $table) . '</text:h>';
+    $GLOBALS['odt_buffer'] .= '<text:h text:outline-level="2" text:style-name="Heading_2" text:is-list-header="true">' . htmlspecialchars(__('Dumping data for table') . ' ' . $table) . '</text:h>';
     $GLOBALS['odt_buffer'] .= '<table:table table:name="' . htmlspecialchars($table) . '_structure">';
     $GLOBALS['odt_buffer'] .= '<table:table-column table:number-columns-repeated="' . $fields_cnt . '"/>';
 
@@ -229,13 +236,13 @@ function PMA_exportData($db, $table, $crlf, $error_url, $sql_query) {
  *
  * @access  public
  */
- // @@@ $strTableStructure
+ // @@@ Table structure 
 function PMA_exportStructure($db, $table, $crlf, $error_url, $do_relation = false, $do_comments = false, $do_mime = false, $dates = false, $dummy)
 {
     global $cfgRelation;
 
     /* Heading */
-    $GLOBALS['odt_buffer'] .= '<text:h text:outline-level="2" text:style-name="Heading_2" text:is-list-header="true">' . htmlspecialchars($GLOBALS['strTableStructure'] . ' ' . $table) . '</text:h>';
+    $GLOBALS['odt_buffer'] .= '<text:h text:outline-level="2" text:style-name="Heading_2" text:is-list-header="true">' . htmlspecialchars(__('Table structure for table') . ' ' . $table) . '</text:h>';
 
     /**
      * Get the unique keys in the table
@@ -291,31 +298,31 @@ function PMA_exportStructure($db, $table, $crlf, $error_url, $do_relation = fals
     /* Header */
     $GLOBALS['odt_buffer'] .= '<table:table-row>';
     $GLOBALS['odt_buffer'] .= '<table:table-cell office:value-type="string">'
-        . '<text:p>' . htmlspecialchars($GLOBALS['strField']) . '</text:p>'
+        . '<text:p>' . htmlspecialchars(__('Column')) . '</text:p>'
         . '</table:table-cell>';
     $GLOBALS['odt_buffer'] .= '<table:table-cell office:value-type="string">'
-        . '<text:p>' . htmlspecialchars($GLOBALS['strType']) . '</text:p>'
+        . '<text:p>' . htmlspecialchars(__('Type')) . '</text:p>'
         . '</table:table-cell>';
     $GLOBALS['odt_buffer'] .= '<table:table-cell office:value-type="string">'
-        . '<text:p>' . htmlspecialchars($GLOBALS['strNull']) . '</text:p>'
+        . '<text:p>' . htmlspecialchars(__('Null')) . '</text:p>'
         . '</table:table-cell>';
     $GLOBALS['odt_buffer'] .= '<table:table-cell office:value-type="string">'
-        . '<text:p>' . htmlspecialchars($GLOBALS['strDefault']) . '</text:p>'
+        . '<text:p>' . htmlspecialchars(__('Default')) . '</text:p>'
         . '</table:table-cell>';
     if ($do_relation && $have_rel) {
         $GLOBALS['odt_buffer'] .= '<table:table-cell office:value-type="string">'
-            . '<text:p>' . htmlspecialchars($GLOBALS['strLinksTo']) . '</text:p>'
+            . '<text:p>' . htmlspecialchars(__('Links to')) . '</text:p>'
             . '</table:table-cell>';
     }
     if ($do_comments) {
         $GLOBALS['odt_buffer'] .= '<table:table-cell office:value-type="string">'
-            . '<text:p>' . htmlspecialchars($GLOBALS['strComments']) . '</text:p>'
+            . '<text:p>' . htmlspecialchars(__('Comments')) . '</text:p>'
             . '</table:table-cell>';
         $comments = PMA_getComments($db, $table);
     }
     if ($do_mime && $cfgRelation['mimework']) {
         $GLOBALS['odt_buffer'] .= '<table:table-cell office:value-type="string">'
-            . '<text:p>' . htmlspecialchars($GLOBALS['strMIME_MIMEtype']) . '</text:p>'
+            . '<text:p>' . htmlspecialchars(__('MIME type')) . '</text:p>'
             . '</table:table-cell>';
         $mime_map = PMA_getMIME($db, $table, true);
     }
@@ -327,8 +334,8 @@ function PMA_exportStructure($db, $table, $crlf, $error_url, $do_relation = fals
         $GLOBALS['odt_buffer'] .= '<table:table-cell office:value-type="string">'
             . '<text:p>' . htmlspecialchars($row['Field']) . '</text:p>'
             . '</table:table-cell>';
-        // reformat mysql query output - staybyte - 9. June 2001
-        // loic1: set or enum types: slashes single quotes inside options
+        // reformat mysql query output
+        // set or enum types: slashes single quotes inside options
         $field_name = $row['Field'];
         $type = $row['Type'];
         if (preg_match('/^(set|enum)\((.+)\)$/i', $type, $tmp)) {
@@ -365,7 +372,7 @@ function PMA_exportStructure($db, $table, $crlf, $error_url, $do_relation = fals
             $row['Default'] = $row['Default'];
         }
         $GLOBALS['odt_buffer'] .= '<table:table-cell office:value-type="string">'
-            . '<text:p>' . htmlspecialchars(($row['Null'] == '' || $row['Null'] == 'NO') ? $GLOBALS['strNo'] : $GLOBALS['strYes']) . '</text:p>'
+            . '<text:p>' . htmlspecialchars(($row['Null'] == '' || $row['Null'] == 'NO') ? __('No') : __('Yes')) . '</text:p>'
             . '</table:table-cell>';
         $GLOBALS['odt_buffer'] .= '<table:table-cell office:value-type="string">'
             . '<text:p>' . htmlspecialchars($row['Default']) . '</text:p>'

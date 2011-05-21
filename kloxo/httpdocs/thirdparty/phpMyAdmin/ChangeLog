@@ -1,9 +1,203 @@
-﻿----------------------
-phpMyAdmin - ChangeLog
-----------------------
+﻿phpMyAdmin - ChangeLog
+======================
 
-$Id$
-$HeadURL: https://phpmyadmin.svn.sourceforge.net/svnroot/phpmyadmin/trunk/phpMyAdmin/ChangeLog $
+3.4.1.0 (2011-05-20)
+- bug #3301108 [interface] Synchronize and already configured host
+- bug #3302457 Inline edit and $cfg['PropertiesIconic']
+- Patch #3302313 Show a translated label
+- bug #3300981 [navi] Table filter is case sensitive
+- bug #3285929 [privileges] Revert temporary fix
+- bug #3302872 [synchronize] Synchronize and user name
+- bug #3302733 [core] Some browsers report an insecure https connection
+- [security] Make redirector require valid token
+
+3.4.0.0 (2011-05-11)
++ rfe #2890226 [view] Enable VIEW rename 
++ rfe #838637 [privileges] Export a user's privileges 
+- [core] Updated mootools to fix some glitches with Safari.
++ rfe #2816943 [interface] Add REGEXP ^...$ to select dialog.
++ rfe #2924956 [interface] Add insert ignore option to editing row.
++ rfe #2838080 [interface] Show warning when javascript is disabled.
++ rfe #2823707 [edit] Call UUID function separately to show it in insert.
++ rfe #2420684 [export] Allow export of timestamps in UTC.
++ [core] Remove config data from session as it brings chicken-egg problem.
++ [core] Cookie path now honors PmaAbsoluteUri.
++ rfe #2393597 [core] phpMyAdmin honors https in PmaAbsoluteUri.
++ rfe #1778337 [core] Try moving tables by RENAME and fail to CREATE/INSERT if that fails.
++ rfe #1721189 [core] Force reload js on code change.
++ rfe #1954161 [interface] Do not display long numbers in server status.
++ rfe #2033616 [edit] Add option to just display insert query.
++ rfe #1435032 [interface] Move SSL status to the end, it is usually empty.
++ rfe #1340812 [interface] Show numbers of columns in table structure.
++ rfe #1186511 [inrerface] Add link to reload navigation frame.
++ rfe #2936156 [auth] Signon authentication forwards error message through session data.
++ rfe #2835109 [interface] Move ^1 to the end of message.
++ rfe #854911  [interface] Grey out non applicable actions in structure 
++ [interface] Allow to create new table from navigation frame (in light mode).
++ rfe #1025696 [browse] Add direct download of binary fields.
+- [browse] Properly display NULL value for BLOB.
+- rfe #1516803 [edit] Allow to set BLOB to/from NULL with ProtectBinary.
+- [edit] Do not default to UNHEX when using file upload.
+- rfe #1379201 [core] Add option to configure session_save_path.
++ [interface] Provide links to documentation in highlighted SQL.
++ [interface] It is now possible to bookmark most pages in JS capable browser.
+- bug #2936482 [core] Fix SSL detection.
++ rfe #2937850 [doc] Add some hints to chk_rel.php for quick setup.
++ rfe #2938579 [interface] Add class to some elements for easier theming.
++ rfe #2937840 [doc] Add some interesting configs to config.sample.inc.php.
++ rfe #2792992 [doc] Added advice to re-login after changing pmadb settings
++ patch #2952353 [interface] Prefill "Copy table to" in tbl_operations.php, thanks to iinl
++ [lang] Add English (United Kingdom) translation, thanks to Robert Readman.
++ patch #2948421 [auth] HTTP Basic auth realm name,
+  thanks to Harald Jenny - haraldj
+- bug #2954916 [interface] Do not insert doc links to not formatted SQL.
++ [lang] Chinese Simplified update, thanks to Shanyan Baishui - rimyxp 
++ [lang] Turkish update, thanks to Burak Yavuz
++ rfe #2963310 [interface] Focus TEXTAREA "sql_query" on click on "SQL" link
++ [lang] Uzbek update, thanks to Orzu Samarqandiy
++ rfe #2958013 [import] After import, also list uploaded filename, thanks
+  to Pavel Konnikov and Herman van Rink
++ patch #2974341 [structure] Clicking on table name in db Structure should 
+  Browse the table if possible, thanks to bhdouglass - dougboybhd
++ patch #2975533 [search] New search operators, thanks to
+  Martynas Mickevičius
++ patch #2967320 [designer] Colored relations based on the primary key,
+  thanks to GreenRover - greenrover
+- [core] Provide way for vendors to easily change paths to config files.
++ patch #2979922, rfe #2804874 [interface] Add inline query editing, thanks to Muhammd Adnan.
+- bug #2966752 [setup] Allow to configure changes tracking in setup script.
++ patch #2981165 [edit] Optionally disable the Type column, 
+  thanks to Brian Douglass - bhdouglass
++ patch #2984058 [edit] Buttons for quicky creating common SQL queries, thanks
+  to sutharshan.
++ patch #2984337 [interface] Convert loading of export/import to jQuery ready
+  event, thanks to sutharshan.
+- [edit] CURRENT_TIMESTAMP is also valid for datetime fields.
+- patch #2985068 [engines] Fix parsing of PBXT status, thanks to Madhura Jayaratne.
+- patch #2986073 [interface] Convert upload progress bar to jQuery, thanks to
+  Philip Frank.
+- patch #2983960 [interface] Add javascript validation of datetime input,
+  thanks to Sutharshan Balachandren.
+- rfe #2981999 [interface] Default sort order is now SMART.
+- rfe #2972969 [interface] Fix flipping of headers in non-IE browsers.
++ rfe #2964518 [interface] Allow to choose servers from configuration for
+  synchronisation.
++ rfe #2988633 [relation] Improve ON DELETE/ON UPDATE drop-downs
++ rfe #2988629 [relation] Improve labels in relation view 
++ rfe #2983207, patch #2988715 [interface] Use jQuery calendar dialog, thanks
+  to Muhammad Adnan.
++ [doc] Incorporate synchronisation docs into main document.
++ [core] Include Content Security Policy HTTP headers.
+- bug #3004216 [CSS] Field attributes use inline CSS
+- patch #2999595, rfe #2998130 [interface] Cleanup navigation frame.
+- patch #3025161 [core] Prevent sending of unnecessary cookies, 
+  thanks to Piotr Przybylski  - crackpl
+- bug [password] Generate password only available if JS is enabled
+  (fixed for Privileges and Change password)
+- [core] RecodingEngine now accepts none as valid option.
++ [core] Dropped AllowAnywhereRecoding configuration variable.
+- rfe #3016457 [interface] Define tab order in SQL form to allow easier tab
+  navigation.
++ [core] Centralized format string expansion, @VARIABLES@ are recommended way
+  now, used by file name templates, default queries, export and title
+  generating.
++ [validator] SQL validator works also with SOAP PHP extension.
+- [interface] Better formatting for SQL validator results.
+- [doc] The linked-tables infrastructure is now called phpMyAdmin
+  configuration storage.
+- [interface] Move drop/empty links from being tabs to Operations tab.
+- [interface] Fixed rendering of error/notice/info titles background.
+- patch #3038293 [doc] Language and grammar fixes,
+  thanks to Isaac Bennetch - ibennetch
+- patch #3038312 [export] JSON export, 
+  thanks to Hauke Henningsen - blubberkeks152
+- rfe #1494550 [interface] Editor for SET/ENUM fields.
+- rfe #2649375 [interface] Simplified interface to backup/restore.
+- rfe #2973909 Users preferences
+- [relations] Dropped WYSIWYG-PDF configuration variable.
+- rfe #806035, #686260 [relations] Export relations to Dia, SVG and others
++ [interface] Added charts to status tab, profiling page and query results
++ [interface] AJAXification on various pages 
+- [core] Remove last remaining parts of profiling code which was removed in 2006.
+- bug #3042665 [parser] Add workaround for MySQL way of handling backtick.
+- bug #3056610 [interface] Removed modification options for information_schema 
++ patch #3055886 [config] Add Left frame table filter visibility config option, thanks to eesau
+- [core] Force generating of new session on login
++ rfe #1105678 [interface] Drop page-break-before as it is useless for smaller
+  tables.
++ rfe #2956556 [interface] Allow to wrap enum values.
+- bug #1669459 [interface] Do not automatically mark PDF schema rows to delete
+- bug #3087682 [interface] Do not apply LeftFrameDBSeparator on first character.
++ rfe #3111455 [interface] Column highlighting and marking in table view
++ Visual query builder
+- bug #3115519 [interface] Prevent long queries from being shown in confirmation popup
+- patch #3112792 [navi] Left panel table grouping incorrect,
+  thanks to garas - garas
+- bug #3123433 [interface] Avoid double escaping of MySQL errors.
+- [interface] Use less noisy message and remove disable link on server charts and database statistics.
++ rfe #3141330 [relation] When displaying results, show a link to the foreign 
+  table even when phpMyAdmin configuration storage is not active
+- bug #3141327 [relation] Foreign key input options
+- [export] Better handling of export to PHP array.
+- rfe #3158867 [privileges] No DROP DATABASE warning if you delete a user
+- [interface] Add link to documentation for status variables.
+- [security] Redirect external links to avoid Referer leakage.
+- [interface] Default to not count tables in database.
+- patch #3172172 [interface] Shortcut for copying table row.
+- bug #3175227 [auth] Reset user cache on login.
+- rfe #3148361 [interface] Replace hard coded limit with $cfg['LimitChars'].
+- bug #3177136 [interface] Indicate that bookmark is being used on browse.
+- [interface] Indicate shared bookmarks in interface.
+- patch #3176420 [Search] Ajaxify browse and delete criteria in DB Search,
+  thanks to Thilanka Kaushalya
+- [interface] New default theme pmahomme, dropped darkblue_orange theme.
+- rfe #2936155 [auth] Allow to pass additional parameters using signon method.
+- rfe #1640812 [auth] Add example for OpenID authentication using signon method.
+- rfe #1312657 [dbi] Default to mysqli extension.
+- rfe #1168350 [interface] Add clear button to SQL edit box.
+- [core] Update library PHPExcel to version 1.7.6
+- bug #3206876 [core] Work without mbstring installed.
+- rfe #3196075, patch #3212068 [interface] Add links to variables documentation.
+- bug #3208723 [import] Fix import of utf-8 XML files.
+- bug #3039384 [auth] Force signon auth on signon URL change.
+- bug #3168733 [core] Synchronization does not honor AllowArbitraryServer
+- bug #3134495 [synchronization] Data containing single quotes prevents sync,
+  thanks to jviewer
+- Remove the custom color picker feature
+- bug #3285929 [privileges] Don't fail silently on missing priviledge to execute REVOKE ALL PRIVILEGES
+
+3.3.11.0 (not yet released)
+
+3.3.10.1 (2011-05-20)
+- [security] XSS on Tracking page
+
+3.3.10.0 (2011-03-19)
+- patch #3147400 [structure] Aria table size printed as unknown,
+  thanks to erickoh75 - erickoh75
+- patch #3150164 [structure] Ordering by size gives incorrect results,
+  thanks to Madhura Jayaratne - madhuracj 
+- bug #3153409 [core] 0 row(s) affected 
+- bug #3155842 [core] Edit relational page and page number
+- [security] Minor security fixes, see PMASA-2010-9 and PMASA-2010-10
+- [lang] German update, thanks to to jannicars@users.sourceforge.net.
+
+3.3.9.2 (2011-02-11)
+- [security] SQL injection, see PMASA-2011-2
+
+3.3.9.1 (2011-02-08)
+- [security] Path disclosure, see PMASA-2011-1
+
+3.3.9.0 (2011-01-03)
+- bug [doc] Fix references to MySQL doc
+- patch #3101490 Default function for TIMESTAMP, thanks to jirand - jirand
+- bug #3103853 [js] Double quotes were not escaped in generated js
+- bug #3077463 [core] Events were not copied when copying/renaming database
+- bug #1762306 [core] Copy database with view of a view
+- patch #3117535 [replication] Add quotes to database in initial statement,
+  thanks to Craig Duncan - duncan3dc
+- bug #3112614 [pdf schema] Scratchboard for PDF pages not working
+- bug #3125606 [parser] Query for table "level" causes strange display
+- bug #3127904 [parser] Close all opened round brackets indents
 
 3.3.8.1 (2010-11-29)
 - bug #3115519 (private) [security] XSS on db search, see PMASA-2010-8
@@ -215,6 +409,6 @@ $HeadURL: https://phpmyadmin.svn.sourceforge.net/svnroot/phpmyadmin/trunk/phpMyA
                      http://www.phpmyadmin.net/old-stuff/ChangeLogs/
 
 # vim: et ts=4 sw=4 sts=4
-# vim: ft=changelog fenc=utf-8 encoding=utf-8
-# vim: fde=getline(v\:lnum-1)=~'^\\s*$'&&getline(v\:lnum)=~'\\S'?'>1'\:1&&v\:lnum>8&&getline(v\:lnum)!~'^#'
+# vim: ft=changelog fenc=utf-8
+# vim: fde=getline(v\:lnum-1)=~'^\\s*$'&&getline(v\:lnum)=~'\\S'?'>1'\:1&&v\:lnum>4&&getline(v\:lnum)!~'^#'
 # vim: fdn=1 fdm=expr

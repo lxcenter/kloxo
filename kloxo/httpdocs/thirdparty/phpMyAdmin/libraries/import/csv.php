@@ -4,7 +4,6 @@
  * CSV import plugin for phpMyAdmin
  *
  * @todo    add an option for handling NULL values
- * @version $Id$
  * @package phpMyAdmin-Import
  */
 if (! defined('PHPMYADMIN')) {
@@ -19,27 +18,30 @@ if ($plugin_param !== 'table') {
 
 if (isset($plugin_list)) {
     $plugin_list['csv'] = array(
-        'text' => 'strCSV',
+        'text' => __('CSV'),
         'extension' => 'csv',
         'options' => array(
-            array('type' => 'bool', 'name' => 'replace', 'text' => 'strReplaceTable'),
-            array('type' => 'bool', 'name' => 'ignore', 'text' => 'strIgnoreDuplicates'),
-            array('type' => 'text', 'name' => 'terminated', 'text' => 'strFieldsTerminatedBy', 'size' => 2, 'len' => 2),
-            array('type' => 'text', 'name' => 'enclosed', 'text' => 'strFieldsEnclosedBy', 'size' => 2, 'len' => 2),
-            array('type' => 'text', 'name' => 'escaped', 'text' => 'strFieldsEscapedBy', 'size' => 2, 'len' => 2),
-            array('type' => 'text', 'name' => 'new_line', 'text' => 'strLinesTerminatedBy', 'size' => 2),
+            array('type' => 'begin_group', 'name' => 'general_opts'),
+            array('type' => 'bool', 'name' => 'replace', 'text' => __('Replace table data with file')),
+            array('type' => 'bool', 'name' => 'ignore', 'text' => __('Do not abort on INSERT error')),
+            array('type' => 'text', 'name' => 'terminated', 'text' => __('Columns separated with:'), 'size' => 2, 'len' => 2),
+            array('type' => 'text', 'name' => 'enclosed', 'text' => __('Columns enclosed with:'), 'size' => 2, 'len' => 2),
+            array('type' => 'text', 'name' => 'escaped', 'text' => __('Columns escaped with:'), 'size' => 2, 'len' => 2),
+            array('type' => 'text', 'name' => 'new_line', 'text' => __('Lines terminated with:'), 'size' => 2),
             ),
-        'options_text' => 'strOptions',
+        'options_text' => __('Options'),
         );
-    
+
     if ($plugin_param !== 'table') {
         $plugin_list['csv']['options'][] =
-            array('type' => 'bool', 'name' => 'col_names', 'text' => 'strImportColNames');
+            array('type' => 'bool', 'name' => 'col_names', 'text' => __('The first line of the file contains the table column names <i>(if this is unchecked, the first line will become part of the data)</i>'));
     } else {
+        $hint = new PMA_Message(__('If the data in each row of the file is not in the same order as in the database, list the corresponding column names here. Column names must be separated by commas and not enclosed in quotations.'));
         $plugin_list['csv']['options'][] =
-            array('type' => 'text', 'name' => 'columns', 'text' => 'strColumnNames');
+            array('type' => 'text', 'name' => 'columns', 'text' => __('Column names: ') . PMA_showHint($hint));
     }
-    
+    $plugin_list['csv']['options'][] = array('type' => 'end_group');
+
     /* We do not define function when plugin is just queried for information above */
     return;
 }
@@ -54,10 +56,12 @@ $csv_enclosed = strtr($csv_enclosed,  $replacements);
 $csv_escaped = strtr($csv_escaped, $replacements);
 $csv_new_line = strtr($csv_new_line, $replacements);
 
+$param_error = FALSE;
 if (strlen($csv_terminated) != 1) {
-    $message = PMA_Message::error('strInvalidCSVParameter');
-    $message->addParam('strFieldsTerminatedBy', false);
+    $message = PMA_Message::error(__('Invalid parameter for CSV import: %s'));
+    $message->addParam(__('Columns terminated by'), false);
     $error = TRUE;
+    $param_error = TRUE;
     // The default dialog of MS Excel when generating a CSV produces a
     // semi-colon-separated file with no chance of specifying the
     // enclosing character. Thus, users who want to import this file
@@ -67,17 +71,25 @@ if (strlen($csv_terminated) != 1) {
     // But the parser won't work correctly with strings so we allow just
     // one character.
 } elseif (strlen($csv_enclosed) > 1) {
-    $message = PMA_Message::error('strInvalidCSVParameter');
-    $message->addParam('strFieldsEnclosedBy', false);
+    $message = PMA_Message::error(__('Invalid parameter for CSV import: %s'));
+    $message->addParam(__('Columns enclosed by'), false);
     $error = TRUE;
+    $param_error = TRUE;
 } elseif (strlen($csv_escaped) != 1) {
-    $message = PMA_Message::error('strInvalidCSVParameter');
-    $message->addParam('strFieldsEscapedBy', false);
+    $message = PMA_Message::error(__('Invalid parameter for CSV import: %s'));
+    $message->addParam(__('Columns escaped by'), false);
     $error = TRUE;
+    $param_error = TRUE;
 } elseif (strlen($csv_new_line) != 1 && $csv_new_line != 'auto') {
-    $message = PMA_Message::error('strInvalidCSVParameter');
-    $message->addParam('strLinesTerminatedBy', false);
+    $message = PMA_Message::error(__('Invalid parameter for CSV import: %s'));
+    $message->addParam(__('Lines terminated by'), false);
     $error = TRUE;
+    $param_error = TRUE;
+}
+
+// If there is an error in the parameters entered, indicate that immediately.
+if ($param_error) {
+    PMA_mysqlDie($message->getMessage(), '', '', $err_url);
 }
 
 $buffer = '';
@@ -116,7 +128,7 @@ if (!$analyze) {
                 }
             }
             if (!$found) {
-                $message = PMA_Message::error('strInvalidColumn');
+                $message = PMA_Message::error(__('Invalid column (%s) specified! Ensure that columns names are spelled correctly, separated by commas, and not enclosed in quotes.' ));
                 $message->addParam($val);
                 $error = TRUE;
                 break;
@@ -126,7 +138,7 @@ if (!$analyze) {
         }
         $sql_template .= ') ';
     }
-    
+
     $required_fields = count($fields);
 
     $sql_template .= ' VALUES (';
@@ -174,7 +186,7 @@ while (!($finished && $i >= $len) && !$error && !$timeout_passed) {
     while ($i < $len) {
         // Deadlock protection
         if ($lasti == $i && $lastlen == $len) {
-            $message = PMA_Message::error('strInvalidCSVFormat');
+            $message = PMA_Message::error(__('Invalid format of CSV input on line %d.'));
             $message->addParam($line);
             $error = TRUE;
             break;
@@ -287,18 +299,18 @@ while (!($finished && $i >= $len) && !$error && !$timeout_passed) {
             if (!$csv_finish) {
                 $values[] = '';
             }
-            
+
             if ($analyze) {
                 foreach ($values as $ley => $val) {
                     $tempRow[] = $val;
                     ++$col_count;
                 }
-                
+
                 if ($col_count > $max_cols) {
                     $max_cols = $col_count;
                 }
                 $col_count = 0;
-                
+
                 $rows[] = $tempRow;
                 $tempRow = array();
             } else {
@@ -309,13 +321,13 @@ while (!($finished && $i >= $len) && !$error && !$timeout_passed) {
                     if ($values[count($values) - 1] == ';') {
                         unset($values[count($values) - 1]);
                     } else {
-                        $message = PMA_Message::error('strInvalidCSVFieldCount');
+                        $message = PMA_Message::error(__('Invalid column count in CSV input on line %d.'));
                         $message->addParam($line);
                         $error = TRUE;
                         break;
                     }
                 }
-                
+
                 $first = TRUE;
                 $sql = $sql_template;
                 foreach ($values as $key => $val) {
@@ -331,13 +343,13 @@ while (!($finished && $i >= $len) && !$error && !$timeout_passed) {
                     $first = FALSE;
                 }
                 $sql .= ')';
-                
+
                 /**
                  * @todo maybe we could add original line to verbose SQL in comment
                  */
                 PMA_importRunQuery($sql, $sql);
             }
-            
+
             $line++;
             $csv_finish = FALSE;
             $values = array();
@@ -358,26 +370,26 @@ if ($analyze) {
             $rows[$i][] = 'NULL';
         }
     }
-    
-    if ($_REQUEST['csv_col_names']) {
+
+    if (isset($_REQUEST['csv_col_names'])) {
         $col_names = array_splice($rows, 0, 1);
         $col_names = $col_names[0];
     }
-    
+
     if ((isset($col_names) && count($col_names) != $max_cols) || !isset($col_names)) {
         // Fill out column names
         for ($i = 0; $i < $max_cols; ++$i) {
             $col_names[] = 'COL '.($i+1);
         }
     }
-    
+
     if (strlen($db)) {
         $result = PMA_DBI_fetch_result('SHOW TABLES');
         $tbl_name = 'TABLE '.(count($result) + 1);
     } else {
         $tbl_name = 'TBL_NAME';
     }
-    
+
     $tables[] = array($tbl_name, $col_names, $rows);
 
     /* Obtain the best-fit MySQL types for each column */
@@ -421,7 +433,7 @@ if ($analyze) {
 PMA_importRunQuery();
 
 if (count($values) != 0 && !$error) {
-    $message = PMA_Message::error('strInvalidCSVFormat');
+    $message = PMA_Message::error(__('Invalid format of CSV input on line %d.'));
     $message->addParam($line);
     $error = TRUE;
 }

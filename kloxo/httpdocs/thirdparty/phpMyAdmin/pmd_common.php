@@ -1,8 +1,6 @@
 <?php
 /* vim: set expandtab sw=4 ts=4 sts=4: */
 /**
- * @author  Ivan A Kirillov (Ivan.A.Kirillov@gmail.com)
- * @version $Id$
  * @package phpMyAdmin-Designer
  */
 
@@ -15,7 +13,6 @@ require_once './libraries/header_http.inc.php';
 
 $GLOBALS['PMD']['STYLE']          = 'default';
 
-require_once './libraries/relation.lib.php';
 $cfgRelation = PMA_getRelationsParam();
 
 $GLOBALS['script_display_field'] =
@@ -240,11 +237,13 @@ function get_script_tabs()
     $script_tabs =
         '<script type="text/javascript">' . "\n" .
         '// <![CDATA[' . "\n" .
-        'var j_tabs = new Array();' . "\n";
+        'var j_tabs = new Array();' . "\n" .
+		'var h_tabs = new Array();' . "\n" ;
     for ($i = 0, $cnt = count($GLOBALS['PMD']['TABLE_NAME']); $i < $cnt; $i++) {
         $script_tabs .= "j_tabs['" . $GLOBALS['PMD_URL']['TABLE_NAME'][$i] . "'] = '"
             . (PMA_foreignkey_supported($GLOBALS['PMD']['TABLE_TYPE'][$i]) ? '1' : '0') . "';\n";
-    }
+    	$script_tabs .="h_tabs['" . $GLOBALS['PMD_URL']['TABLE_NAME'][$i] . "'] = 1;"."\n" ;
+	}
     $script_tabs .=
         '// ]]>' . "\n" .
         '</script>' . "\n";

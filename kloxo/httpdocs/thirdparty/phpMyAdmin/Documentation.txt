@@ -1,4 +1,4 @@
-phpMyAdmin 3.3.8.1 Documentation
+phpMyAdmin 3.4.1 Documentation
 
   * Top
   * Requirements
@@ -11,7 +11,6 @@ phpMyAdmin 3.3.8.1 Documentation
   * Developers
   * Copyright
   * Credits
-  * Translators
   * Glossary
 
   * phpMyAdmin homepage
@@ -20,17 +19,15 @@ phpMyAdmin 3.3.8.1 Documentation
   * Local documents:
       + Version history: ChangeLog
       + License: LICENSE
-  * Documentation version:
-    $Id$
 
 Requirements
 
   * PHP
-      + You need PHP 5.2.0 or newer, with session support (see FAQ 1.31) and
-        the Standard PHP Library (SPL) extension.
+      + You need PHP 5.2.0 or newer, with session support (see FAQ 1.31) , the
+        Standard PHP Library (SPL) extension and JSON support.
       + To support uploading of ZIP files, you need the PHP zip extension.
       + For proper support of multibyte strings (eg. UTF-8, which is currently
-        default), you should install mbstring and ctype extensions.
+        the default), you should install the mbstring and ctype extensions.
       + You need GD2 support in PHP to display inline thumbnails of JPEGs
         ("image/jpeg: inline") with their original aspect ratio
       + When using the "cookie" authentication method, the mcrypt extension is
@@ -38,6 +35,7 @@ Requirements
         Not using mcrypt will cause phpMyAdmin to load pages significantly
         slower.
       + To support upload progress bars, see FAQ 2.9.
+      + To support BLOB streaming, see PHP and MySQL requirements in FAQ 6.25.
   * MySQL 5.0 or newer (details);
   * Web browser with cookies enabled.
 
@@ -50,8 +48,8 @@ the appropriate part in the MySQL manual.
 
 Currently phpMyAdmin can:
 
-  * browse and drop databases, tables, views, fields and indexes
-  * create, copy, drop, rename and alter databases, tables, fields and indexes
+  * browse and drop databases, tables, views, columns and indexes
+  * create, copy, drop, rename and alter databases, tables, columns and indexes
   * maintenance server, databases and tables, with proposals on server
     configuration
   * execute, edit and bookmark any SQL-statement, even batch-queries
@@ -73,7 +71,7 @@ Currently phpMyAdmin can:
   * track changes on databases, tables and views
   * support InnoDB tables and foreign keys (see FAQ 3.6)
   * support mysqli, the improved MySQL extension (see FAQ 1.17)
-  * communicate in 57 different languages
+  * communicate in 62 different languages
   * synchronize two databases residing on the same as well as remote servers
     (see FAQ 9.1)
 
@@ -93,7 +91,7 @@ Installation
 
  1. Quick Install
  2. Setup script usage
- 3. Linked-tables infrastructure
+ 3. phpMyAdmin configuration storage
  4. Upgrading from an older version
  5. Using authentication modes
 
@@ -216,10 +214,10 @@ Quick Install
     server configuration. You can find example .htaccess file which can help
     you achieve this in contrib directory in phpMyAdmin.
 
-Linked-tables infrastructure
+phpMyAdmin configuration storage
 
 For a whole set of new features (bookmarks, comments, SQL-history, tracking
-mechanism, PDF-generation, field contents transformation, etc.) you need to
+mechanism, PDF-generation, column contents transformation, etc.) you need to
 create a set of special tables. Those tables can be located in your own
 database, or in a central database for a multi-user installation (this database
 would then be accessed by the controluser, so no other user should have rights
@@ -230,7 +228,8 @@ create_tables.sql. (If you are using a Windows server, pay special attention to
 FAQ 1.23).
 
 If you already had this infrastructure and upgraded to MySQL 4.1.2 or newer,
-please use ./scripts/upgrade_tables_mysql_4_1_2+.sql.
+please use ./scripts/upgrade_tables_mysql_4_1_2+.sql and then create new tables
+by importing ./scripts/create_tables.sql.
 
 You can use your phpMyAdmin to create the tables for you. Please be aware that
 you may need special (administrator) privileges to create the database and
@@ -257,7 +256,7 @@ You should not copy libraries/config.default.php over config.inc.php because
 the default configuration file is version-specific.
 
 If you have upgraded your MySQL server from a version previous to 4.1.2 to
-version 5.x or newer and if you use the pmadb/linked table infrastructure, you
+version 5.x or newer and if you use the phpMyAdmin configuration storage, you
 should run the SQL script found in scripts/upgrade_tables_mysql_4_1_2+.sql.
 
 Using authentication modes
@@ -311,7 +310,8 @@ Using authentication modes
 
     GRANT SELECT, INSERT, UPDATE, DELETE ON <pma_db>.* TO 'pma'@'localhost';
 
-    (this of course requires that your linked-tables infrastructure be set up).
+    (this of course requires that your phpMyAdmin configuration storage be set
+    up).
   * Then each of the true users should be granted a set of privileges on a set
     of particular databases. Normally you shouldn't give global privileges to
     an ordinary user, unless you understand the impact of those privileges (for
@@ -443,6 +443,8 @@ $cfg['McryptDisableWarning'] boolean
     Disable the default warning that is displayed if mcrypt is missing for
     cookie authentication. You can set this parameter to TRUE to stop this
     message from appearing.
+$cfg['TranslationWarningThreshold'] integer
+    Show warning about incomplete translations on certain threshold.
 $cfg['AllowThirdPartyFraming'] boolean
     Setting this to true allows a page located on a different domain to call
     phpMyAdmin inside a frame, and is a potential security hole allowing
@@ -537,11 +539,18 @@ $cfg['Servers'][$i]['auth_type'] string ['HTTP'|'http'|'cookie'|'config'|
       + 'signon' authentication mode ($auth_type = 'signon') as introduced in
         2.10.0 allows you to log in from prepared PHP session data. This is
         useful for implementing single signon from another application. Sample
-        way how to seed session is in signon example: scripts/signon.php. You
-        need to configure session name and signon URL to use this
-        authentication method.
+        way how to seed session is in signon example: scripts/signon.php. There
+        is also alternative example using OpenID - scripts/openid.php. You need
+        to configure session name and signon URL to use this authentication
+        method.
     Please see the install section on "Using authentication modes" for more
     information.
+$cfg['Servers'][$i]['auth_http_realm'] string
+    When using auth_type = 'HTTP', this field allows to define a custom HTTP
+    Basic Auth Realm which will be displayed to the user. If not explicitly
+    specified in your configuration, a string combined of "phpMyAdmin " and
+    either $cfg['Servers'][$i]['verbose'] or $cfg['Servers'][$i]['host'] will
+    be used.
 $cfg['Servers'][$i]['auth_swekey_config'] string
     The name of the file containing Swekey ids and login names for hardware
     authentication. Leave empty to deactivate this feature.
@@ -581,9 +590,10 @@ $cfg['Servers'][$i]['only_db'] string or array
     phpMyAdmin that it should display db3 and db4 on top, and the rest in
     alphabetic order.
 $cfg['Servers'][$i]['hide_db'] string
-    Regular expression for hiding some databases. This only hides them from
-    listing, but a user is still able to access them (using, for example, the
-    SQL query area). To limit access, use the MySQL privilege system.
+    Regular expression for hiding some databases from unprivileged users. This
+    only hides them from listing, but a user is still able to access them
+    (using, for example, the SQL query area). To limit access, use the MySQL
+    privilege system.
 
     For example, to hide all databases starting with the letter "a", use
 
@@ -602,36 +612,36 @@ $cfg['Servers'][$i]['verbose'] string
     databases on your system, for example. For HTTP auth, all non-US-ASCII
     characters will be stripped.
 $cfg['Servers'][$i]['pmadb'] string
-    The name of the database containing the linked-tables infrastructure.
+    The name of the database containing the phpMyAdmin configuration storage.
 
-    See the Linked-tables infrastructure section in this document to see the
-    benefits of this infrastructure, and for a quick way of creating this
-    database and the needed tables.
+    See the phpMyAdmin configuration storage section in this document to see
+    the benefits of this feature, and for a quick way of creating this database
+    and the needed tables.
 
     If you are the only user of this phpMyAdmin installation, you can use your
     current database to store those special tables; in this case, just put your
     current database name in $cfg['Servers'][$i]['pmadb']. For a multi-user
     installation, set this parameter to the name of your central database
-    containing the linked-tables infrastructure.
+    containing the phpMyAdmin configuration storage.
 $cfg['Servers'][$i]['bookmarktable'] string
     Since release 2.2.0 phpMyAdmin allows users to bookmark queries. This can
     be useful for queries you often run.
 
     To allow the usage of this functionality:
-      + set up pmadb and the linked-tables infrastructure
+      + set up pmadb and the phpMyAdmin configuration storage
       + enter the table name in $cfg['Servers'][$i]['bookmarktable']
 $cfg['Servers'][$i]['relation'] string
     Since release 2.2.4 you can describe, in a special 'relation' table, which
-    field is a key in another table (a foreign key). phpMyAdmin currently uses
+    column is a key in another table (a foreign key). phpMyAdmin currently uses
     this to
       + make clickable, when you browse the master table, the data values that
         point to the foreign table;
-      + display in an optional tool-tip the "display field" when browsing the
+      + display in an optional tool-tip the "display column" when browsing the
         master table, if you move the mouse to a column containing a foreign
         key (use also the 'table_info' table);
         (see FAQ 6.7)
       + in edit/insert mode, display a drop-down list of possible foreign keys
-        (key value and "display field" are shown)
+        (key value and "display column" are shown)
         (see FAQ 6.21)
       + display links on the table properties page, to check referential
         integrity (display missing foreign keys) for each described key;
@@ -641,26 +651,27 @@ $cfg['Servers'][$i]['relation'] string
     The keys can be numeric or character.
 
     To allow the usage of this functionality:
-      + set up pmadb and the linked-tables infrastructure
+      + set up pmadb and the phpMyAdmin configuration storage
       + put the relation table name in $cfg['Servers'][$i]['relation']
       + now as normal user open phpMyAdmin and for each one of your tables
         where you want to use this feature, click "Structure/Relation view/"
-        and choose foreign fields.
+        and choose foreign columns.
     Please note that in the current version, master_db must be the same as
-    foreign_db. Those fields have been put in future development of the
+    foreign_db. Those columns have been put in future development of the
     cross-db relations.
 $cfg['Servers'][$i]['table_info'] string
     Since release 2.3.0 you can describe, in a special 'table_info' table,
-    which field is to be displayed as a tool-tip when moving the cursor over
+    which column is to be displayed as a tool-tip when moving the cursor over
     the corresponding key.
     This configuration variable will hold the name of this special table. To
     allow the usage of this functionality:
-      + set up pmadb and the linked-tables infrastructure
+      + set up pmadb and the phpMyAdmin configuration storage
       + put the table name in $cfg['Servers'][$i]['table_info'] (e.g.
         'pma_table_info')
       + then for each table where you want to use this feature, click
-        "Structure/Relation view/Choose field to display" to choose the field.
-    Usage tip: Display field.
+        "Structure/Relation view/Choose column to display" to choose the
+        column.
+    Usage tip: Display column.
 $cfg['Servers'][$i]['table_coords'] string
     $cfg['Servers'][$i]['pdf_pages'] string
     Since release 2.3.0 you can have phpMyAdmin create PDF pages showing the
@@ -672,7 +683,7 @@ $cfg['Servers'][$i]['table_coords'] string
     You must be using the "relation" feature.
 
     To allow the usage of this functionality:
-      + set up pmadb and the linked-tables infrastructure
+      + set up pmadb and the phpMyAdmin configuration storage
       + put the correct table names in $cfg['Servers'][$i]['table_coords'] and
         $cfg['Servers'][$i]['pdf_pages']
     Usage tips: PDF output.
@@ -689,11 +700,11 @@ $cfg['Servers'][$i]['column_info'] string
     Also new in release 2.5.0 is a MIME-transformation system which is also
     based on the following table structure. See Transformations for further
     information. To use the MIME-transformation system, your column_info table
-    has to have the three new fields 'mimetype', 'transformation',
+    has to have the three new columns 'mimetype', 'transformation',
     'transformation_options'.
 
     To allow the usage of this functionality:
-      + set up pmadb and the linked-tables infrastructure
+      + set up pmadb and the phpMyAdmin configuration storage
       + put the table name in $cfg['Servers'][$i]['column_info'] (e.g.
         'pma_column_info')
       + to update your PRE-2.5.0 Column_comments Table use this:
@@ -720,7 +731,7 @@ $cfg['Servers'][$i]['history'] string
     browser.
 
     To allow the usage of this functionality:
-      + set up pmadb and the linked-tables infrastructure
+      + set up pmadb and the phpMyAdmin configuration storage
       + put the table name in $cfg['Servers'][$i]['history'] (e.g.
         'pma_history')
 $cfg['Servers'][$i]['tracking'] string
@@ -742,7 +753,7 @@ $cfg['Servers'][$i]['tracking'] string
     (filtered) report to a file or to a temporary database.
 
     To allow the usage of this functionality:
-      + set up pmadb and the linked-tables infrastructure
+      + set up pmadb and the phpMyAdmin configuration storage
       + put the table name in $cfg['Servers'][$i]['tracking'] (e.g.
         'pma_tracking')
 $cfg['Servers'][$i]['tracking_version_auto_create'] boolean
@@ -764,31 +775,43 @@ $cfg['Servers'][$i]['tracking_default_statements'] string
     CREATE VIEW,ALTER VIEW,DROP VIEW,
     CREATE DATABASE,ALTER DATABASE,DROP DATABASE
 
-$cfg['Servers'][$i]['tracking_version_drop_view'] boolean
+$cfg['Servers'][$i]['tracking_add_drop_view'] boolean
     Whether a DROP VIEW IF EXISTS statement will be added as first line to the
     log when creating a view. Default value is true.
 
-$cfg['Servers'][$i]['tracking_version_drop_table'] boolean
+$cfg['Servers'][$i]['tracking_add_drop_table'] boolean
     Whether a DROP TABLE IF EXISTS statement will be added as first line to the
     log when creating a table. Default value is true.
 
-$cfg['Servers'][$i]['tracking_version_drop_database'] boolean
+$cfg['Servers'][$i]['tracking_add_drop_database'] boolean
     Whether a DROP DATABASE IF EXISTS statement will be added as first line to
     the log when creating a database. Default value is true.
 
+$cfg['Servers'][$i]['userconfig'] string
+    Since release 3.4.x phpMyAdmin allows users to set most preferences by
+    themselves and store them in the database.
+
+    If you don't allow for storing preferences in pmadb, users can still
+    personalize phpMyAdmin, but settings will be saved in browser's local
+    storage, or, it is is unavailable, until the end of session.
+
+    To allow the usage of this functionality:
+      + set up pmadb and the phpMyAdmin configuration storage
+      + put the table name in $cfg['Servers'][$i]['userconfig']
 $cfg['Servers'][$i]['designer_coords'] string
     Since release 2.10.0 a Designer interface is available; it permits to
     visually manage the relations.
 
     To allow the usage of this functionality:
-      + set up pmadb and the linked-tables infrastructure
+      + set up pmadb and the phpMyAdmin configuration storage
       + put the table name in $cfg['Servers'][$i]['designer_coords'] (e.g.
         'pma_designer_coords')
 $cfg['Servers'][$i]['verbose_check'] boolean
     Because release 2.5.0 introduced the new MIME-transformation support, the
-    column_info table got enhanced with three new fields. If the above variable
-    is set to TRUE (default) phpMyAdmin will check if you have the latest table
-    structure available. If not, it will emit a warning to the superuser.
+    column_info table got enhanced with three new columns. If the above
+    variable is set to TRUE (default) phpMyAdmin will check if you have the
+    latest table structure available. If not, it will emit a warning to the
+    superuser.
 
     You can disable this checking behavior by setting the variable to false,
     which should offer a performance increase.
@@ -804,7 +827,7 @@ $cfg['Servers'][$i]['AllowNoPassword'] boolean
     with an empty password for root or on which an anonymous (blank) user is
     defined.
 $cfg['Servers'][$i]['AllowDeny']['order'] string
-    If your rule order is empty, then IP authentication is disabled.
+    If your rule order is empty, then IP authorization is disabled.
 
     If your rule order is set to 'deny,allow' then the system applies all deny
     rules followed by allow rules. Access is allowed by default. Any client
@@ -816,11 +839,11 @@ $cfg['Servers'][$i]['AllowDeny']['order'] string
     does not match an Allow directive or does match a Deny directive will be
     denied access to the server.
 
-    If your rule order is set to 'explicit', the authentication is performed in
-    a similar fashion to rule order 'deny,allow', with the added restriction
-    that your host/username combination must be listed in the allow rules, and
-    not listed in the deny rules. This is the most secure means of using Allow/
-    Deny rules, and was available in Apache by specifying allow and deny rules
+    If your rule order is set to 'explicit', authorization is performed in a
+    similar fashion to rule order 'deny,allow', with the added restriction that
+    your host/username combination must be listed in the allow rules, and not
+    listed in the deny rules. This is the most secure means of using Allow/Deny
+    rules, and was available in Apache by specifying allow and deny rules
     without setting any order.
 
     Please also see $cfg['TrustedProxies'] for detecting IP address behind
@@ -880,6 +903,13 @@ $cfg['ServerDefault'] integer
     logging in.
     If you have only one server configured, $cfg['ServerDefault'] MUST be set
     to that server.
+$cfg['AjaxEnable'] boolean
+    Defines whether to refresh only parts of certain pages using Ajax
+    techniques. Applies only where a non-Ajax behavior is possible; for
+    example, the Designer feature is Ajax-only so this directive does not apply
+    to it.
+$cfg['VersionCheck'] boolean
+    Enables check for latest versions using javascript on main phpMyAdmin page.
 $cfg['MaxDbList'] integer
     The maximum number of database names to be displayed in the navigation
     frame and the database list.
@@ -910,6 +940,8 @@ $cfg['ExecTimeLimit'] integer [number of seconds]
     zero, no time limit is imposed.
     This setting is used while importing/exporting dump files and in the
     Synchronize feature but has no effect when PHP is running in safe mode.
+$cfg['SessionSavePath'] string
+    Path for storing session data (session_save_path PHP parameter).
 $cfg['MemoryLimit'] string [number of bytes]
     Set the number of bytes a script is allowed to allocate. If set to zero, no
     limit is imposed.
@@ -949,9 +981,9 @@ $cfg['LoginCookieValidity'] integer [number of seconds]
     session.gc_maxlifetime not lower than the value of $cfg
     ['LoginCookieValidity'].
 $cfg['LoginCookieStore'] integer [number of seconds]
-    Define how long is login cookie should be stored in browser. Default 0
-    means that it will be kept for existing session. This is recommended for
-    not trusted environments.
+    Define how long login cookie should be stored in browser. Default 0 means
+    that it will be kept for existing session. This is recommended for not
+    trusted environments.
 $cfg['LoginCookieDeleteAll'] boolean
     If enabled (default), logout deletes cookies for all servers, otherwise
     only for current one. Setting this to false makes it easy to forget to log
@@ -966,7 +998,8 @@ $cfg['VerboseMultiSubmit'] boolean
     multi-query statement embedded into the SQL output as inline comments.
     Defaults to TRUE.
 $cfg['AllowArbitraryServer'] boolean
-    If enabled allows you to log in to arbitrary servers using cookie auth.
+    If enabled, allows you to log in to arbitrary servers using cookie auth and
+    permits to specify servers of your choice in the Synchronize dialog.
 
     NOTE: Please use this carefully, as this may allow users access to MySQL
     servers behind the firewall where your HTTP server is placed.
@@ -1019,6 +1052,10 @@ $cfg['LeftLogoLink'] string
 $cfg['LeftLogoLinkWindow'] string
     Whether to open the linked page in the main window (main) or in a new one
     (new). Note: use new if you are linking to phpmyadmin.net.
+$cfg['LeftDisplayTableFilterMinimum'] integer
+    Defines the minimum number of tables to display a JavaScript filter box
+    above the list of tables in the left frame. Defaults to 30. To disable the
+    filter completely some high number can he used (e.g. 9999)
 $cfg['LeftDisplayServers'] boolean
     Defines whether or not to display a server choice at the top of the left
     frame. Defaults to FALSE.
@@ -1073,29 +1110,32 @@ $cfg['MaxRows'] integer
     Number of rows displayed when browsing a result set. If the result set
     contains more rows, "Previous" and "Next" links will be shown.
 $cfg['Order'] string [DESC|ASC|SMART]
-    Defines whether fields are displayed in ascending (ASC) order, in
+    Defines whether columns are displayed in ascending (ASC) order, in
     descending (DESC) order or in a "smart" (SMART) order - I.E. descending
-    order for fields of type TIME, DATE, DATETIME and TIMESTAMP, ascending
+    order for columns of type TIME, DATE, DATETIME and TIMESTAMP, ascending
     order else- by default.
 $cfg['DisplayBinaryAsHex'] boolean
     Defines whether the "Show binary contents as HEX" browse option is ticked
     by default.
 $cfg['ProtectBinary'] boolean or string
-    Defines whether BLOB or BINARY fields are protected from editing when
+    Defines whether BLOB or BINARY columns are protected from editing when
     browsing a table's content. Valid values are:
-      + FALSE to allow editing of all fields;
-      + 'blob' to allow editing of all fields except BLOBS;
-      + 'all' to disallow editing of all BINARY or BLOB fields.
+      + FALSE to allow editing of all columns;
+      + 'blob' to allow editing of all columns except BLOBS;
+      + 'all' to disallow editing of all BINARY or BLOB columns.
 $cfg['ShowFunctionFields'] boolean
     Defines whether or not MySQL functions fields should be initially displayed
     in edit/insert mode. Since version 2.10, the user can toggle this setting
     from the interface.
+$cfg['ShowFieldTypesInDataEditView'] boolean
+    Defines whether or not type fields should be initially displayed in edit/
+    insert mode. The user can toggle this setting from the interface.
 $cfg['CharEditing'] string
     Defines which type of editing controls should be used for CHAR and VARCHAR
-    fields. Possible values are:
-      + input - this allows to limit size of text to size of field in MySQL,
-        but has problems with newlines in fields
-      + textarea - no problems with newlines in fields, but also no length
+    columns. Possible values are:
+      + input - this allows to limit size of text to size of columns in MySQL,
+        but has problems with newlines in columns
+      + textarea - no problems with newlines in columns, but also no length
         limitations
     Default is old behavior so input.
 $cfg['InsertRows'] integer
@@ -1158,33 +1198,19 @@ $cfg['MySQLManualType'] string
 $cfg['DefaultLang'] string
     Defines the default language to use, if not browser-defined or
     user-defined.
-    See the select_lang.lib.php script to know the valid values for this
-    setting.
+    The corresponding language file needs to be in locale/code/LC_MESSAGES/
+    phpmyadmin.mo.
 $cfg['DefaultConnectionCollation'] string
     Defines the default connection collation to use, if not user-defined.
     See the MySQL documentation for list of possible values.
 $cfg['Lang'] string
-    Force: always use this language (must be defined in the select_lang.lib.php
-    script).
+    Force language to use.
+    The corresponding language file needs to be in locale/code/LC_MESSAGES/
+    phpmyadmin.mo.
 $cfg['FilterLanguages'] string
     Limit list of available languages to those matching the given regular
     expression. For example if you want only Czech and English, you should set
     filter to '^(cs|en)'.
-$cfg['DefaultCharset'] string
-    Default character set to use for recoding of MySQL queries. This must be
-    enabled and it's described by $cfg['AllowAnywhereRecoding'] option.
-    You can give here any character set which is in $cfg['AvailableCharsets']
-    array and this is just default choice, user can select any of them.
-$cfg['AllowAnywhereRecoding'] boolean
-    Allow character set recoding of MySQL queries. You need recode or iconv
-    support (compiled in or module) in PHP to allow MySQL queries recoding and
-    used language file must have it enabled (by default only these which are in
-    Unicode, just to avoid losing some characters).
-
-    Setting this to TRUE also activates a pull-down menu in the Export and
-    Import pages, to choose the character set when exporting a file. The
-    default value in this menu comes from $cfg['Export']['charset'] and $cfg
-    ['Import']['charset'].
 $cfg['RecodingEngine'] string
     You can select here which functions will be used for character set
     conversion. Possible values are:
@@ -1192,7 +1218,12 @@ $cfg['RecodingEngine'] string
         recode)
       + iconv - use iconv or libiconv functions
       + recode - use recode_string function
+      + none - disable encoding conversion
     Default is auto.
+    Enabled charset conversion activates a pull-down menu in the Export and
+    Import pages, to choose the character set when exporting a file. The
+    default value in this menu comes from $cfg['Export']['charset'] and $cfg
+    ['Import']['charset'].
 $cfg['IconvExtraParams'] string
     Specify some parameters for iconv used in charset conversion. See iconv
     documentation for details. By default //TRANSLIT is used, so that invalid
@@ -1238,35 +1269,34 @@ $cfg['LinkLengthLimit'] integer
     have problems with long URLs. Default is 1000.
 $cfg['NaviWidth'] integer
     Navi frame width in pixels. See themes/themename/layout.inc.php.
-$cfg['NaviBackground'] string [valid css code for background]
-    $cfg['MainBackground'] string [valid css code for background]
+$cfg['NaviBackground'] string [CSS color for background]
+    $cfg['MainBackground'] string [CSS color for background]
     The background styles used for both the frames. See themes/themename/
     layout.inc.php.
-$cfg['NaviPointerBackground'] string [valid css code for background]
-    $cfg['NaviPointerColor'] string [valid css color]
+$cfg['NaviPointerBackground'] string [CSS color for background]
+    $cfg['NaviPointerColor'] string [CSS color]
     The style used for the pointer in the navi frame. See themes/themename/
     layout.inc.php.
-$cfg['NaviDatabaseNameColor'] string [valid css code]
-    The color used for the database name in the navi frame. See themes/
-    themename/layout.inc.php.
 $cfg['LeftPointerEnable'] boolean
     A value of TRUE activates the navi pointer (when LeftFrameLight is FALSE).
 $cfg['Border'] integer
     The size of a table's border. See themes/themename/layout.inc.php.
-$cfg['ThBackground'] string [valid css code for background]
-    $cfg['ThColor'] string [valid css color]
+$cfg['ThBackground'] string [CSS color for background]
+    $cfg['ThColor'] string [CSS color]
     The style used for table headers. See themes/themename/layout.inc.php.
-$cfg['BgOne'] string [HTML color]
+$cfg['BgOne'] string [CSS color]
     The color (HTML) #1 for table rows. See themes/themename/layout.inc.php.
-$cfg['BgTwo'] string [HTML color]
+$cfg['BgTwo'] string [CSS color]
     The color (HTML) #2 for table rows. See themes/themename/layout.inc.php.
-$cfg['BrowsePointerBackground'] string [HTML color]
-    $cfg['BrowsePointerColor'] string [HTML color]
-    $cfg['BrowseMarkerBackground'] string [HTML color]
-    $cfg['BrowseMarkerColor'] string [HTML color]
+$cfg['BrowsePointerBackground'] string [CSS color]
+    $cfg['BrowsePointerColor'] string [CSS color]
+    $cfg['BrowseMarkerBackground'] string [CSS color]
+    $cfg['BrowseMarkerColor'] string [CSS color]
     The colors (HTML) uses for the pointer and the marker in browse mode.
     The former feature highlights the row over which your mouse is passing and
     the latter lets you visually mark/unmark rows by clicking on them.
+    Highlighting / marking a column is done by hovering over / clicking the
+    column's header (outside of the text).
     See themes/themename/layout.inc.php.
 $cfg['FontFamily'] string
     You put here a valid CSS font family value, for example arial, sans-serif.
@@ -1289,48 +1319,47 @@ $cfg['TextareaCols'] integer
     The Char* values are used for CHAR and VARCHAR editing (if configured via
     $cfg['CharEditing']).
 $cfg['LongtextDoubleTextarea'] boolean
-    Defines whether textarea for LONGTEXT fields should have double size.
+    Defines whether textarea for LONGTEXT columns should have double size.
 $cfg['TextareaAutoSelect'] boolean
     Defines if the whole textarea of the query box will be selected on click.
-$cfg['CtrlArrowsMoving'] boolean
-    Enable Ctrl+Arrows (Option+Arrows in Safari) moving between fields when
-    editing.
 $cfg['LimitChars'] integer
     Maximum number of characters shown in any non-numeric field on browse view.
     Can be turned off by a toggle button on the browse page.
 $cfg['ModifyDeleteAtLeft'] boolean $cfg['ModifyDeleteAtRight'] boolean
-    Defines the place where modify and delete links would be put when tables
-    contents are displayed (you may have them displayed both at the left and at
-    the right). "Left" and "right" are parsed as "top" and "bottom" with
-    vertical display mode.
-$cfg['DefaultDisplay'] string $cfg['HeaderFlipType'] string
+    Defines the place where table row links (Edit, Inline edit, Copy, Delete)
+    would be put when tables contents are displayed (you may have them
+    displayed both at the left and at the right). "Left" and "right" are parsed
+    as "top" and "bottom" with vertical display mode.
+$cfg['DefaultDisplay'] string
     There are 3 display modes: horizontal, horizontalflipped and vertical.
     Define which one is displayed by default. The first mode displays each row
     on a horizontal line, the second rotates the headers by 90 degrees, so you
-    can use descriptive headers even though fields only contain small values
+    can use descriptive headers even though columns only contain small values
     and still print them out. The vertical mode sorts each row on a vertical
     lineup.
-
-    The HeaderFlipType can be set to 'css' or 'fake'. When using 'css' the
-    rotation of the header for horizontalflipped is done via CSS. If set to
-    'fake' PHP does the transformation for you, but of course this does not
-    look as good as CSS.
+$cfg['HeaderFlipType'] string
+    The HeaderFlipType can be set to 'auto', 'css' or 'fake'. When using 'css'
+    the rotation of the header for horizontalflipped is done via CSS. The CSS
+    transformation currently works only in Internet Explorer.If set to 'fake'
+    PHP does the transformation for you, but of course this does not look as
+    good as CSS. The 'auto' option enables CSS transformation when browser
+    supports it and use PHP based one otherwise.
 $cfg['DefaultPropDisplay'] string or integer
     When editing/creating new columns in a table all fields normally get lined
     up one field a line. (default: 'horizontal'). If you set this to 'vertical'
     you can have each field lined up vertically beneath each other. You can
     save up a lot of place on the horizontal direction and no longer have to
     scroll. If you set this to integer, editing of fewer columns will appear in
-    'vertical' mode, while editing of more fields still in 'horizontal' mode.
-    This way you can still effectively edit large number of fields, while
+    'vertical' mode, while editing of more columns still in 'horizontal' mode.
+    This way you can still effectively edit large number of columns, while
     having full view on few of them.
 $cfg['ShowBrowseComments'] boolean
     $cfg['ShowPropertyComments'] boolean
     By setting the corresponding variable to TRUE you can enable the display of
     column comments in Browse or Property display. In browse mode, the comments
     are shown inside the header. In property mode, comments are displayed using
-    a CSS-formatted dashed-line below the name of the field. The comment is
-    shown as a tool-tip for that field.
+    a CSS-formatted dashed-line below the name of the column. The comment is
+    shown as a tool-tip for that column.
 $cfg['SQLQuery']['Edit'] boolean
     Whether to display an edit link to change a query in any SQL Query box.
 $cfg['SQLQuery']['Explain'] boolean
@@ -1408,6 +1437,12 @@ $cfg['Export'] array
     In this array are defined default parameters for export, names of items are
     similar to texts seen on export page, so you can easily identify what they
     mean.
+$cfg['Export']['method'] string
+    Defines how the export form is displayed when it loads. Valid values are:
+      + quick to display the minimum number of options to configure
+      + custom to display every available option to configure
+      + custom-no-form same as custom but does not display the option of using
+        quick export
 $cfg['Import'] array
     In this array are defined default parameters for import, names of items are
     similar to texts seen on import page, so you can easily identify what they
@@ -1476,27 +1511,6 @@ $cfg['MaxExactCountViews'] integer
     For VIEWs, since obtaining the exact count could have an impact on
     performance, this value is the maximum to be displayed, using a SELECT
     COUNT ... LIMIT. The default value of 0 bypasses any row counting.
-$cfg['WYSIWYG-PDF'] boolean
-    Utilizes a WYSIWYG editing control to easily place elements of a PDF page.
-    By clicking on the button 'toggle scratchboard' on the page where you edit
-    x/y coordinates of those elements you can activate a scratchboard where all
-    your elements are placed. By clicking on an element, you can move them
-    around in the pre-defined area and the x/y coordinates will get updated
-    dynamically. Likewise, when entering a new position directly into the input
-    field, the new position in the scratchboard changes after your cursor
-    leaves the input field.
-    You have to click on the 'OK'-button below the tables to save the new
-    positions. If you want to place a new element, first add it to the table of
-    elements and then you can drag the new element around.
-    By changing the paper size and the orientation you can change the size of
-    the scratchboard as well. You can do so by just changing the dropdown field
-    below, and the scratchboard will resize automatically, without interfering
-    with the current placement of the elements.
-    If ever an element gets out of range you can either enlarge the paper size
-    or click on the 'reset' button to place all elements below each other.
-    NOTE: You have to use a recent browser like IE6 or Mozilla to get this
-    control to work. The basic Drag&Drop script functionality was kindly
-    borrowed from www.youngpup.net and is underlying so specific license.
 $cfg['NaturalOrder'] boolean
     Sorts database and table names according to natural order (for example, t1,
     t2, t10). Currently implemented in the left panel (Light mode) and in
@@ -1505,28 +1519,16 @@ $cfg['InitialSlidersState'] string
     If set to 'closed', the visual sliders are initially in a closed state. A
     value of 'open' does the reverse. To completely disable all visual sliders,
     use 'disabled'.
+$cfg['UserprefsDisallow'] array
+    Contains names of configuration options (keys in $cfg array) that users
+    can't set through user preferences. For possible values, refer to libraries
+    /config/user_preferences.forms.php.
 $cfg['TitleTable'] string
 $cfg['TitleDatabase'] string
 $cfg['TitleServer'] string
 $cfg['TitleDefault'] string
-    Allows you to specify window's title bar. Following magic string can be
-    used to get special values:
-
-    @HTTP_HOST@
-        HTTP host that runs phpMyAdmin
-    @SERVER@
-        MySQL server name
-    @VERBOSE@
-        Verbose MySQL server name as defined in server configuration
-    @VSERVER@
-        Verbose MySQL server name if set, otherwise normal
-    @DATABASE@
-        Currently opened database
-    @TABLE@
-        Currently opened table
-    @PHPMYADMIN@
-        phpMyAdmin with version
-
+    Allows you to specify window's title bar. You can use format string
+    expansion.
 $cfg['ErrorIconic'] boolean
     Uses icons for warnings, errors and informations.
 $cfg['MainPageIconic'] boolean
@@ -1545,9 +1547,7 @@ $cfg['ThemePerServer'] boolean
 $cfg['DefaultQueryTable'] string
     $cfg['DefaultQueryDatabase'] string
     Default queries that will be displayed in query boxes when user didn't
-    specify any. Use %d for database name, %t for table name and %f for a comma
-    separated list of field names. Note that %t and %f are only applicable to
-    $cfg['DefaultQueryTable'].
+    specify any. You can use standard format string expansion.
 $cfg['SQP']['fmtType'] string [html|none]
     The main use of the new SQL Parser is to pretty-print SQL queries. By
     default we use HTML to format the query, but you can disable this by
@@ -1613,31 +1613,11 @@ $cfg['DBG']['sql'] boolean
     DEVELOPERS ONLY!
     Enable logging queries and execution times to be displayed in the bottom of
     main page (right frame).
-$cfg['DBG']['php'] boolean
-    DEVELOPERS ONLY!
-    Enable the DBG extension for debugging phpMyAdmin. Required for profiling
-    the code.
-    For help in setting up your system to this, see the Developers section.
-$cfg['DBG']['profile']['enable'] boolean
-    DEVELOPERS ONLY!
-    Enable profiling support for phpMyAdmin. This will append a chunk of data
-    to the end of every page displayed in the main window with profiling
-    statistics for that page.
-    You may need to increase the maximum execution time for this to complete
-    successfully.Profiling was removed from the code for version 2.9.0 due to
-    licensing issues.
-$cfg['DBG']['profile']['threshold'] float (units in milliseconds)
-    DEVELOPERS ONLY!
-    When profiling data is displayed, this variable controls the threshold of
-    display for any profiling data, based on the average time each time has
-    taken. If it is over the threshold it is displayed, otherwise it is not
-    displayed. This takes a value in milliseconds. In most cases you don't need
-    to edit this.
 $cfg['ColumnTypes'] array
     All possible types of a MySQL column. In most cases you don't need to edit
     this.
 $cfg['AttributeTypes'] array
-    Possible attributes for fields. In most cases you don't need to edit this.
+    Possible attributes for columns. In most cases you don't need to edit this.
 $cfg['Functions'] array
     A list of functions MySQL supports. In most cases you don't need to edit
     this.
@@ -1652,15 +1632,15 @@ $cfg['DefaultFunctions'] array
     defined for meta types from $cfg['RestrictColumnTypes'] and for
     first_timestamp, which is used for first timestamp column in table.
 $cfg['NumOperators'] array
-    Operators available for search operations on numeric and date fields.
+    Operators available for search operations on numeric and date columns.
 $cfg['TextOperators'] array
-    Operators available for search operations on character fields. Note that we
-    put LIKE by default instead of LIKE %...%, to avoid unintended performance
-    problems in case of huge tables.
+    Operators available for search operations on character columns. Note that
+    we put LIKE by default instead of LIKE %...%, to avoid unintended
+    performance problems in case of huge tables.
 $cfg['EnumOperators'] array
-    Operators available for search operations on enum fields.
+    Operators available for search operations on ENUM columns.
 $cfg['NullOperators'] array
-    Additional operators available for search operations when the field can be
+    Additional operators available for search operations when the column can be
     null.
 
 Transformations
@@ -1674,14 +1654,14 @@ Transformations
 To enable transformations, you have to setup the column_info table and the
 proper directives. Please see the Configuration section on how to do so.
 
-You can apply different transformations to the contents of each field. The
-transformation will take the content of each field and transform it with
+You can apply different transformations to the contents of each column. The
+transformation will take the content of each column and transform it with
 certain rules defined in the selected transformation.
 
-Say you have a field 'filename' which contains a filename. Normally you would
+Say you have a column 'filename' which contains a filename. Normally you would
 see in phpMyAdmin only this filename. Using transformations you can transform
 that filename into a HTML link, so you can click inside of the phpMyAdmin
-structure on the field's link and will see the file displayed in a new browser
+structure on the column's link and will see the file displayed in a new browser
 window. Using transformation options you can also specify strings to append/
 prepend to a string or the format you want the output stored in.
 
@@ -1741,12 +1721,12 @@ transformations.
 
 Because the user cannot enter own mimetypes, it is kept sure that
 transformations always work. It makes no sense to apply a transformation to a
-mimetype, the transform-function doesn't know to handle.
+mimetype the transform-function doesn't know to handle.
 
 One can, however, use empty mime-types and global transformations which should
 work for many mimetypes. You can also use transforms on a different mimetype
-they where built for, but pay attention to option usage as well as what the
-transformation does to your field.
+than what they where built for, but pay attention to option usage as well as
+what the transformation does to your column.
 
 There is a basic file called 'global.inc.php'. This function can be included by
 any other transform function and provides some basic functions.
@@ -1830,12 +1810,7 @@ functions in the dropdown.
 
 Please see the libraries/transformations/TEMPLATE file for adding your own
 transform function. See the libraries/transformations/TEMPLATE_MIMETYPE for
-adding a mimetype without a transform function. Also note the introduction of a
-function description in the language files. For each function a
-$strTransformation_[filename without .inc.php] has to exist.
-
-You can use the template generator to generate new functions and entries in the
-language file.
+adding a mimetype without a transform function.
 
 To create a new transform function please see libraries/transformations/
 template_generator.sh. To create a new, empty mimetype please see libraries/
@@ -1847,13 +1822,22 @@ A transform function always gets passed three variables:
     want to transform.
  2. $options - Contains any user-passed options to a transform function as an
     array.
- 3. $meta - Contains an object with field information to your column. The data
-    is drawn from the output of the mysql_fetch_field() function. This means,
-    all object properties described on the manual page are available in this
-    variable and can be used to transform a field accordingly to unsigned/
+ 3. $meta - Contains an object with information about your column. The data is
+    drawn from the output of the mysql_fetch_field() function. This means, all
+    object properties described on the manual page are available in this
+    variable and can be used to transform a column accordingly to unsigned/
     zerofill/not_null/... properties.
-    The $meta->mimetype variable contains the original MIME-type of the field
+    The $meta->mimetype variable contains the original MIME-type of the column
     (i.e. 'text/plain', 'image/jpeg' etc.)
+
+Additionally you should also provide additional function to provide information
+about the transformation to the user. This function should have same name as
+transformation function just with appended _info suffix. This function accepts
+no parameters and returns array with information about the transformation.
+Currently following keys can be used:
+
+info
+    Long description of the transformation.
 
 FAQ - Frequently Asked Questions
 
@@ -1897,7 +1881,7 @@ You just forgot to read the install.txt file from the php distribution. Have a
 look at the last message in this bug report from the official PHP bug database.
 
 1.5 Using phpMyAdmin on IIS, I'm facing crashes and/or many error messages with
-the HTTP or advanced authentication mode.
+the HTTP.
 
 This is a known problem with the PHP ISAPI filter: it's not so stable. Please
 use instead the cookie authentication mode.
@@ -1930,19 +1914,7 @@ enable uploads of files while being reasonably secure:
   * put upload_tmp_dir = /tmp/php in php.ini
   * restart Apache
 
-1.9 I'm having troubles when uploading files. In general file uploads don't
-work on my system and uploaded files have a Content-Type: header in the first
-line.
-
-It's not really phpMyAdmin related but RedHat 7.0. You have a RedHat 7.0 and
-you updated your PHP RPM to php-4.0.4pl1-3.i386.rpm, didn't you?
-So the problem is that this package has a serious bug that was corrected ages
-ago in PHP (2001-01-28: see PHP's bug tracking system for more details). The
-problem is that the bugged package is still available though it was corrected
-(see RedHat's BugZilla for more details).
-So please download the fixed package (4.0.4pl1-9) and the problem should go
-away.
-And that fixes the \r\n problem with file uploads!
+1.9 (withdrawn).
 
 1.10 I'm having troubles when uploading files with phpMyAdmin running on a
 secure server. My browser is Internet Explorer and I'm using the Apache server.
@@ -1966,21 +1938,14 @@ of your SQL commands, removed.
 
 The MySQL manual explains how to reset the permissions.
 
-1.13 I get an error 'No SQL query' when trying to execute a bookmark.
+1.13 (withdrawn).
 
-If PHP does not have read/write access to its upload_tmp_dir, it cannot access
-the uploaded query.
+1.14 (withdrawn).
 
-1.14 I get an error 'No SQL query' when trying to submit a query from the
-convenient text area.
+1.15 I have problems with mysql.user column names.
 
-Check the post_max_size directive from your PHP configuration file and try to
-increase it.
-
-1.15 I have problems with mysql.user field names.
-
-In previous MySQL versions, the User and Password fields were named user and
-password. Please modify your field names to align with current standards.
+In previous MySQL versions, the User and Passwordcolumns were named user and
+password. Please modify your column names to align with current standards.
 
 1.16 I cannot upload big dump files (memory, HTTP or timeout problems).
 
@@ -2011,16 +1976,16 @@ provider is unwilling to change the settings:
 1.17 Which MySQL versions does phpMyAdmin support?
 
 Since phpMyAdmin 3.0.x, only MySQL 5.0.1 and newer are supported. For older
-MySQL versions, you need to use 2.8.x branch. phpMyAdmin can connect to your
-MySQL server using PHP's classic MySQL extension as well as the improved MySQL
-extension (MySQLi) that is available in php 5.0. The latter one should be used
-unless you have good reason not to do so.
-When compiling php, we strongly recommend that you manually link the MySQL
+MySQL versions, you need to use the latest 2.x branch. phpMyAdmin can connect
+to your MySQL server using PHP's classic MySQL extension as well as the
+improved MySQL extension (MySQLi) that is available in php 5.0. The latter one
+should be used unless you have a good reason not to do so.
+When compiling PHP, we strongly recommend that you manually link the MySQL
 extension of your choice to a MySQL client library of at least the same minor
 version since the one that is bundled with some PHP distributions is rather old
-and might cause problems (see FAQ 1.17a). If your webserver is running on a
-windows system, you might want to try MySQL's Connector/PHP instead of the
-MySQL / MySQLi extensions that are bundled with the official php Win32 builds.
+and might cause problems (see FAQ 1.17a).
+
+MariaDB is also supported (versions 5.1 and 5.2 were tested).
 
 1.17a I cannot connect to the MySQL server. It always returns the error
 message, "Client does not support authentication protocol requested by server;
@@ -2052,7 +2017,7 @@ Configuration".
 
 To connect to a MySQL server, PHP needs a set of MySQL functions called "MySQL
 extension". This extension may be part of the PHP distribution (compiled-in),
-otherwise it needs to be loaded dynamically. Its name is probably mysql.so or 
+otherwise it needs to be loaded dynamically. Its name is probably mysql.so or
 php_mysql.dll. phpMyAdmin tried to load the extension but failed.
 
 Usually, the problem is solved by installing a software package called
@@ -2069,7 +2034,7 @@ This is most likely because in php.ini, your file_uploads parameter is not set
 to "on".
 
 1.23 I'm running MySQL on a Win32 machine. Each time I create a new table the
-table and field names are changed to lowercase!
+table and column names are changed to lowercase!
 
 This happens because the MySQL directive lower_case_table_names defaults to 1
 (ON) in the Win32 version of MySQL. You can change this behavior by simply
@@ -2121,8 +2086,8 @@ turn off this directive, convert all database and table names to lower case and
 turn it on again. Alternatively, there's a bug-fix available starting with
 MySQL 3.23.56 / 4.0.11-gamma.
 
-1.29 When I create a table or modify a field, I get an error and the fields are
-duplicated.
+1.29 When I create a table or modify a column, I get an error and the columns
+are duplicated.
 
 It is possible to configure Apache in such a way that PHP has problems
 interpreting .php files.
@@ -2153,8 +2118,9 @@ upgrading MMCache to version 2.3.21 solves the problem.
 1.31 Does phpMyAdmin support php5?
 
 Yes.
-However, phpMyAdmin needs to be backwards compatible to php4. This is why
-phpMyAdmin disables the E_STRICT error_level in error_reporting settings.
+
+Since release 3.0 only PHP 5.2 and newer. For older PHP versions 2.9 branch is
+still maintained.
 
 1.32 Can I use HTTP authentication with IIS?
 
@@ -2225,7 +2191,7 @@ primary key or with textual primary key.
 
 Suhosin configuration might lead to malfunction in some cases and it can not be
 fully avoided as phpMyAdmin is kind of application which needs to transfer big
-amounts of fields in single HTTP request, what is something what Suhosin tries
+amounts of columns in single HTTP request, what is something what Suhosin tries
 to prevent. Generally all suhosin.request.*, suhosin.post.* and suhosin.get.*
 directives can have negative effect on phpMyAdmin usability. You can always
 find in your error logs which limit did cause dropping of variable, so you can
@@ -2261,8 +2227,8 @@ Example from the Apache 2.2 documentation:
 
 ProxyPass /mirror/foo/ http://backend.example.com/
 ProxyPassReverse /mirror/foo/ http://backend.example.com/
-ProxyPassReverseCookieDomain backend.example.com public.example.com 
-ProxyPassReverseCookiePath / /mirror/foo/ 
+ProxyPassReverseCookieDomain backend.example.com public.example.com
+ProxyPassReverseCookiePath / /mirror/foo/
 
 Note: if the backend url looks like http://host/~user/phpmyadmin, the tilde (~)
 must be url encoded as %7E in the ProxyPassReverse* lines. This is not specific
@@ -2305,7 +2271,7 @@ I do?
 
 For RedHat users, Harald Legner suggests this on the mailing list:
 
-On my RedHat-Box the socket of MySQL is /var/lib/mysql/mysql.sock. In your 
+On my RedHat-Box the socket of MySQL is /var/lib/mysql/mysql.sock. In your
 php.ini you will find a line
 
 mysql.default_socket = /tmp/mysql.sock
@@ -2357,7 +2323,7 @@ When you are using a port on your localhost, which you redirect via
 port-forwarding to another host, MySQL is not resolving the localhost as
 expected.
 Erik Wasser explains: The solution is: if your host is "localhost" MySQL (the
-commandline tool 'mysql' as well) always tries to use the socket connection for
+command line tool mysql as well) always tries to use the socket connection for
 speeding up things. And that doesn't work in this configuration with port
 forwarding.
 If you enter "127.0.0.1" as hostname, everything is right and MySQL uses the
@@ -2440,7 +2406,7 @@ back to phpMyAdmin. You should be able to log in again.
 or a time limit error.
 
 Compressed dumps are built in memory and because of this are limited to php's
-memory limit. For GZip/BZip2 exports this can be overcome since 2.5.4 using 
+memory limit. For GZip/BZip2 exports this can be overcome since 2.5.4 using
 $cfg['CompressOnFly'] (enabled by default). Zip exports can not be handled this
 way, so if you need Zip files for larger dump, you have to use another way.
 
@@ -2480,20 +2446,20 @@ that feature
 3.6 What is currently not supported in phpMyAdmin about InnoDB?
 
 In Relation view, being able to choose a table in another database, or having
-more than one index field in the foreign key.
+more than one index column in the foreign key.
 
 In Query-by-example (Query), automatic generation of the query LEFT JOIN from
 the foreign table.
 
 
-3.7 I have table with many (100+) fields and when I try to browse table I get
+3.7 I have table with many (100+) columns and when I try to browse table I get
 series of errors like "Warning: unable to parse url". How can this be fixed?
 
 Your table neither have a primary key nor an unique one, so we must use a long
 expression to identify this row. This causes problems to parse_url function.
 The workaround is to create a primary or unique key.
 
-3.8 I cannot use (clickable) HTML-forms in fields where I put a
+3.8 I cannot use (clickable) HTML-forms in columns where I put a
 MIME-Transformation onto!
 
 Due to a surrounding form-container (for multi-row delete checkboxes), no
@@ -2509,7 +2475,7 @@ transformations, see our Link section on the official phpMyAdmin-homepage.
 
 When MySQL is running in ANSI-compatibility mode, there are some major
 differences in how SQL is structured (see http://dev.mysql.com/doc/mysql/en/
-ANSI_mode.html). Most important of all, the quote-character (") is interpreted
+ansi-mode.html). Most important of all, the quote-character (") is interpreted
 as an identifier quote character and not as a string quote character, which
 makes many internal phpMyAdmin operations into invalid SQL statements. There is
 no workaround to this behaviour. News to this item will be posted in Bug report
@@ -2530,18 +2496,13 @@ returns an approximate count in the case of InnoDB tables. See $cfg
 ['MaxExactCount'] for a way to modify those results, but this could have a
 serious impact on performance.
 
-3.12 What are the phpMyAdmin limitations for MySQL 3?
-
-The number of records in queries containing COUNT and GROUP BY is not correctly
-calculated. Also, sorting results of a query like "SELECT * from table GROUP
-BY" ... is problematic.
+3.12 (withdrawn).
 
 3.13 I get an error when entering USE followed by a db name containing an
 hyphen.
 
-The tests I have made with current MySQL 4.1.11 API shows that the API does not
-accept this syntax for the USE command. Enclosing the db name with backquotes
-works. For further confusion, no backquotes are needed with command-line mysql.
+The tests I have made with MySQL 5.1.49 shows that the API does not accept this
+syntax for the USE command.
 
 3.14 I am not able to browse a table when I don't have the right to SELECT one
 of the columns.
@@ -2683,12 +2644,12 @@ with the usage of 'cookie' auth_type.
 Browsers or client OS
 
 5.1 I get an out of memory error, and my controls are non-functional, when
-trying to create a table with more than 14 fields.
+trying to create a table with more than 14 columns.
 
 We could reproduce this problem only under Win98/98SE. Testing under WinNT4 or
-Win2K, we could easily create more than 60 fields.
-A workaround is to create a smaller number of fields, then come back to your
-table properties and add the other fields.
+Win2K, we could easily create more than 60 columns.
+A workaround is to create a smaller number of columns, then come back to your
+table properties and add the other columns.
 
 5.2 With Xitami 2.5b4, phpMyAdmin won't process form fields.
 
@@ -2717,8 +2678,8 @@ version 6.
 Upgrade to at least Internet Explorer 5.5 SP2.
 
 5.6 In Internet Explorer 5.0, 5.5 or 6.0, I get an error (like "Page not
-found") when trying to modify a row in a table with many fields, or with a text
-field
+found") when trying to modify a row in a table with many columns, or with a
+text column
 
 Your table neither have a primary key nor an unique one, so we must use a long
 URL to identify this row. There is a limit on the length of the URL in those
@@ -2808,7 +2769,7 @@ Using phpMyAdmin
 brings up a SQL-error.
 
 Examine the SQL error with care. Often the problem is caused by specifying a
-wrong field-type.
+wrong column-type.
 Common errors include:
 
   * Using VARCHAR without a size argument
@@ -2817,19 +2778,19 @@ Common errors include:
 Also, look at the syntax chapter in the MySQL manual to confirm that your
 syntax is correct.
 
-6.2 When I create a table, I set an index for two fields and phpMyAdmin
-generates only one index with those two fields.
+6.2 When I create a table, I set an index for two columns and phpMyAdmin
+generates only one index with those two columns.
 
-This is the way to create a multi-fields index. If you want two indexes, create
-the first one when creating the table, save, then display the table properties
-and click the Index link to create the other index.
+This is the way to create a multi-columns index. If you want two indexes,
+create the first one when creating the table, save, then display the table
+properties and click the Index link to create the other index.
 
 6.3 How can I insert a null value into my table?
 
-Since version 2.2.3, you have a checkbox for each field that can be null.
-Before 2.2.3, you had to enter "null", without the quotes, as the field's
+Since version 2.2.3, you have a checkbox for each column that can be null.
+Before 2.2.3, you had to enter "null", without the quotes, as the column's
 value. Since version 2.5.5, you have to use the checkbox to get a real NULL
-value, so if you enter "NULL" this means you want a literal NULL in the field,
+value, so if you enter "NULL" this means you want a literal NULL in the column,
 and not a NULL value (this works in PHP4).
 
 6.4 How can I backup my database or table?
@@ -2901,7 +2862,7 @@ To setup appropriate links and display information:
   * in Links, for "town_code" choose "REL_towns->code"
   * in Links, for "country_code" choose "REL_countries->country_code"
   * on table "REL_towns" click Structure, then Relation view
-  * in "Choose field to display", choose "description"
+  * in "Choose column to display", choose "description"
   * repeat the two previous steps for table "REL_countries"
 
 Then test like this:
@@ -2910,20 +2871,20 @@ Then test like this:
   * Choose "Query"
   * Use tables: persons, towns, countries
   * Click "Update query"
-  * In the fields row, choose persons.person_name and click the "Show" tickbox
+  * In the columns row, choose persons.person_name and click the "Show" tickbox
   * Do the same for towns.description and countries.descriptions in the other 2
     columns
   * Click "Update query" and you will see in the query box that the correct
     joins have been generated
   * Click "Submit query"
 
-6.7 How can I use the "display field" feature?
+6.7 How can I use the "display column" feature?
 
 Starting from the previous example, create the pma_table_info as explained in
 the configuration section, then browse your persons table, and move the mouse
 over a town code or country code.
 
-See also FAQ 6.21 for an additional feature that "display field" enables:
+See also FAQ 6.21 for an additional feature that "display column" enables:
 drop-down list of possible values.
 
 6.8 How can I produce a PDF schema of my database?
@@ -2945,7 +2906,7 @@ pages?
   * Select a table from the list, enter its coordinates and click Save.
     Coordinates are relative; your diagram will be automatically scaled to fit
     the page. When initially placing tables on the page, just pick any
-    coordinates -- say, 50x50. After clicking Save, you can then use the 
+    coordinates -- say, 50x50. After clicking Save, you can then use the
     graphical editor to position the element correctly.
   * When you'd like to look at your PDF, first be sure to click the Save button
     beneath the list of tables and coordinates, to save any changes you made
@@ -2986,7 +2947,7 @@ Structure:
     structure.
   * "Add AUTO_INCREMENT value" ensures that AUTO_INCREMENT value (if any) will
     be included in backup.
-  * "Enclose table and field names with backquotes" ensures that field and
+  * "Enclose table and column names with backquotes" ensures that column and
     table names formed with special characters are protected.
   * "Add into comments" includes column comments, relations, and MIME types set
     in the pmadb in the dump as SQL comments (/* xxx */).
@@ -3011,39 +2972,37 @@ create a database with a dot, but then you cannot work with it, nor delete it.
 
 6.14 How do I set up the SQL Validator?
 
-To use it, you need a very recent version of PHP, 4.3.0 recommended, with XML,
-PCRE and PEAR support. On your system command line, run "pear install
-Net_Socket Net_URL HTTP_Request Mail_Mime Net_DIME SOAP" to get the necessary
-PEAR modules for usage.
-On a more recent pear version, I had problems with the state of Net_DIME being
-beta, so this single command "pear -d preferred_state=beta install -a SOAP"
-installed all the needed modules.
+To use SQL Validator, you need PHP with XML, PCRE and PEAR support. In addition
+you need a SOAP support, either as a PHP extension or as a PEAR SOAP module.
+
+To install PEAR SOAP module, run "pear install Net_Socket Net_URL HTTP_Request
+Mail_Mime Net_DIME SOAP" to get the necessary PEAR modules for usage.
+
 If you use the Validator, you should be aware that any SQL statement you submit
 will be stored anonymously (database/table/column names, strings, numbers
 replaced with generic values). The Mimer SQL Validator itself, is ? 2001
 Upright Database Technology. We utilize it as free SOAP service.
 
-6.15 I want to add a BLOB field and put an index on it, but MySQL says "BLOB
+6.15 I want to add a BLOB column and put an index on it, but MySQL says "BLOB
 column '...' used in key specification without a key length".
 
-The right way to do this, is to create the field without any indexes, then
+The right way to do this, is to create the column without any indexes, then
 display the table structure and use the "Create an index" dialog. On this page,
-you will be able to choose your BLOB field, and set a size to the index, which
-is the condition to create an index on a BLOB field.
+you will be able to choose your BLOB column, and set a size to the index, which
+is the condition to create an index on a BLOB column.
 
 6.16 How can I simply move in page with plenty editing fields?
 
 You can use Ctrl+arrows (Option+Arrows in Safari) for moving on most pages with
-many editing fields (table structure changes, row editing, etc.) (must be
-enabled in configuration - see. $cfg['CtrlArrowsMoving']). You can also have a
-look at the directive $cfg['DefaultPropDisplay'] ('vertical') and see if this
-eases up editing for you.
+many editing fields (table structure changes, row editing, etc.). You can also
+have a look at the directive $cfg['DefaultPropDisplay'] ('vertical') and see if
+this eases up editing for you.
 
 6.17 Transformations: I can't enter my own mimetype! WTF is this feature then
 useful for?
 
 Slow down :). Defining mimetypes is of no use, if you can't put transformations
-on them. Otherwise you could just put a comment on the field. Because entering
+on them. Otherwise you could just put a comment on the column. Because entering
 your own mimetype will cause serious syntax checking issues and validation,
 this introduces a high-risk false-user-input situation. Instead you have to
 initialize mimetypes using functions or empty mimetype definitions.
@@ -3088,7 +3047,8 @@ query will be:
 
 SELECT Name, Address FROM addresses WHERE 1 AND Name LIKE '%phpMyAdmin%'
 
-You can use multiple occurrences of /*[VARIABLE]*/ in a single query.
+You can use multiple occurrences of /*[VARIABLE]*/ in a single query (that is,
+multiple occurrences of the same variable).
 NOTE THE ABSENCE OF SPACES inside the "/**/" construct. Any spaces inserted
 there will be later also inserted as spaces in your query and may lead to
 unexpected results especially when using the variable expansion inside of a
@@ -3118,16 +3078,16 @@ database names. See this bug report.
 So if your users do not need those privileges, you can remove them and their
 databases list will shorten.
 
-6.21 In edit/insert mode, how can I see a list of possible values for a field,
+6.21 In edit/insert mode, how can I see a list of possible values for a column,
 based on some foreign table?
 
 You have to setup appropriate links between the tables, and also setup the
-"display field" in the foreign table. See FAQ 6.6 for an example. Then, if
+"display column" in the foreign table. See FAQ 6.6 for an example. Then, if
 there are 100 values or less in the foreign table, a drop-down list of values
 will be available. You will see two lists of values, the first list containing
-the key and the display field, the second list containing the display field and
-the key. The reason for this is to be able to type the first letter of either
-the key or the display field.
+the key and the display column, the second list containing the display column
+and the key. The reason for this is to be able to type the first letter of
+either the key or the display column.
 
 For 100 values or more, a distinct window will appear, to browse foreign key
 values and choose one. To change the default limit of 100, see $cfg
@@ -3160,35 +3120,86 @@ is done whenever you enter Structure page for this table.
 
 6.25 How does BLOB streaming work in phpMyAdmin?
 
-First, for general information about BLOB streaming on MySQL, visit 
-blobstreaming.org. We currently support streaming if you are running MySQL 5.1
-with the PBXT and PBMS storage engines. Moreover, only PBMS 0.5.04 is
-supported.
+For general information about BLOB streaming on MySQL, visit blobstreaming.org.
+You need the following components:
+
+  * PBMS BLOB Streaming Daemon for MySQL (0.5.15 or later)
+  * Streaming enabled PBXT Storage engine for MySQL (1.0.11-6 or later)
+  * PBMS Client Library for MySQL (0.5.15 or later)
+  * PBMS PHP Extension for MySQL (0.1.1 or later)
+
+Here are details about configuration and operation:
 
  1. In config.inc.php your host should be defined with a FQDN (fully qualified
-    domain name) instead of something like "localhost".
- 2. A current limitation is that your first login via phpMyAdmin to a
-    freshly-started server must be done with an account that has the SUPER
-    privilege.
- 3. On your target database, go to Operations and in the "BLOB Repository"
-    section, click "Enable". This creates the PBMS system tables inside your
-    database.
- 4. Ensure that your target table is under the PBXT storage engine and has a
-    LONGBLOB column.
- 5. When you insert or update a row in this table, put a checkmark on the
+    domain name) instead of "localhost".
+ 2. Ensure that your target table is under the PBXT storage engine and has a
+    LONGBLOB column (which must be nullable if you want to remove the BLOB
+    reference from it).
+ 3. When you insert or update a row in this table, put a checkmark on the
     "Upload to BLOB repository" optional choice; otherwise, the upload will be
-    done directly in your column instead of the repository.
- 6. Finally when you browse your table, you'll see in your column a link to
+    done directly in your LONGBLOB column instead of the repository.
+ 4. Finally when you browse your table, you'll see in your column a link to
     stream your data, for example "View image". A header containing the correct
     MIME-type will be sent to your browser; this MIME-type was stored at upload
-    time but in case it's incorrect, it's possible to edit it by clicking on
-    the displayed MIME-type.
+    time.
 
 6.26 How can I select a range of rows?
 
 Click the first row of the range, hold the shift key and click the last row of
 the range. This works everywhere you see rows, for example in Browse mode or on
 the Structure page.
+
+6.27 What format strings can I use?
+
+In all places where phpMyAdmin accepts format strings, you can use @VARIABLE@
+expansion and strftime format strings. The expanded variables depend on a
+context (for example, if you haven't chosen a table, you can not get the table
+name), but the following variables can be used:
+
+@HTTP_HOST@
+    HTTP host that runs phpMyAdmin
+@SERVER@
+    MySQL server name
+@VERBOSE@
+    Verbose MySQL server name as defined in server configuration
+@VSERVER@
+    Verbose MySQL server name if set, otherwise normal
+@DATABASE@
+    Currently opened database
+@TABLE@
+    Currently opened table
+@FIELDS@
+    Fields of currently opened table
+@PHPMYADMIN@
+    phpMyAdmin with version
+
+6.28 How can I easily edit relational schema for export?
+
+By clicking on the button 'toggle scratchboard' on the page where you edit x/y
+coordinates of those elements you can activate a scratchboard where all your
+elements are placed. By clicking on an element, you can move them around in the
+pre-defined area and the x/y coordinates will get updated dynamically.
+Likewise, when entering a new position directly into the input field, the new
+position in the scratchboard changes after your cursor leaves the input field.
+
+You have to click on the 'OK'-button below the tables to save the new
+positions. If you want to place a new element, first add it to the table of
+elements and then you can drag the new element around.
+
+By changing the paper size and the orientation you can change the size of the
+scratchboard as well. You can do so by just changing the dropdown field below,
+and the scratchboard will resize automatically, without interfering with the
+current placement of the elements.
+
+If ever an element gets out of range you can either enlarge the paper size or
+click on the 'reset' button to place all elements below each other.
+
+6.29 Why can't I get a chart from my query result table?
+
+Not every table can be put to the chart. Only tables with one, two or three
+columns can be visualised as a chart. Moreover the table must be in a special
+format for chart script to understand it. Currently supported formats can be
+found in the wiki.
 
 phpMyAdmin project
 
@@ -3198,23 +3209,36 @@ Our Bug Tracker is located at http://sf.net/projects/phpmyadmin/ under the Bugs
 section.
 
 But please first discuss your bug with other users:
-http://sf.net/projects/phpmyadmin/ (and choose Forums)
+https://sourceforge.net/projects/phpmyadmin/forums.
 
 7.2 I want to translate the messages to a new language or upgrade an existing
 language, where do I start?
 
-Always use the current SVN version of your language file. For a new language,
-start from english-utf-8.inc.php. If you don't know how to get the SVN version,
-please ask one of the developers.
+Always use latest Git version of the po file to translate. You can optionally
+translate online at our translation server where you can also get the latest po
+files and merge them with your translations. For creating a new translation
+simply use po/phpmyadmin.pot and generate po/LANG_CODE.po for your language
+(you can use msginit -i po/phpmyadmin.pot -l LANG_CODE --no-translator -o po/
+LANG_CODE.po to do this) or ask on the mailing list to add the translation to
+the web interface. More details are available on our wiki.
+
 Please note that we try not to use HTML entities like &eacute; in the
 translations, since we define the right character set in the file. With HTML
 entities, the text on JavaScript messages would not display correctly. However
-there are some entities that need to be there, for quotes ,non-breakable
-spaces, ampersands, less than, greater than.
+there are some entities that need to be there: quotes, non-breakable spaces,
+ampersands, less than, greater than.
+
 You can then put your translations, as a zip file to avoid losing special
 characters, on the sourceforge.net translation tracker.
+
 It would be a good idea to subscribe to the phpmyadmin-translators mailing
 list, because this is where we ask for translations of new messages.
+
+Documentation is being translated using po4a and gettext (see documentation for
+existing translations). To start, checkout localized_docs/po from Git, or just
+go to the translation server and translate it online. If your language is
+missing, just contact Michal ?iha?; he will add it. If you prefer to directly
+translate the po files, please put updated ones into our translation tracker.
 
 7.3 I would like to help out with the development of phpMyAdmin. How should I
 proceed?
@@ -3244,7 +3268,7 @@ Please refer to http://www.phpmyadmin.net/home_page/security.php
 8.2 How can I protect phpMyAdmin against brute force attacks?
 
 If you use Apache web server, phpMyAdmin exports information about
-authentication to Apache environment and it can be used in Apache logs.
+authentication to the Apache environment and it can be used in Apache logs.
 Currently there are two variables available:
 
 userID
@@ -3267,12 +3291,44 @@ Synchronization
 9.1 How can I synchronize two databases/tables in phpMyAdmin?
 
 You can now synchronize databases/tables in phpMyAdmin using the Synchronize
-feature. It allows you to connect to local as well as remote servers.This
+feature. It allows you to connect to local as well as remote servers. This
 requires you to enter server host name, username, password, port and the name
 of the database. Therefore you can now synchronize your databases placed on the
 same server or some remote server.
 
-For more details see How to synchronize
+This feature is helpful for developers who need to replicate their database?s
+structure as well as data. Moreover, this feature not only helps replication
+but also facilitates the user to keep his/her database in sync with another
+database. Other than the full database, certain tables of the databases can
+also be synchronized.
+
+You need to fill in the host name of the server, the username and password of
+an user account already there in MySQL. Port is by default populated with 3306
+(MySQL default port). Then the name of the database should be mentioned at the
+end. All the information other than the port needs to be filled explicitly for
+the source as well as target servers.
+
+After successfully passing through the authentication phase, the source and
+target database table names will be displayed. It will be a tabular
+representation.
+
+On the left, are listed the source database table names. Some of the names have
+a + plus sign preceding them. This shows that these tables are only present in
+source database and they need to be added to the target database in order to
+synchronize the target database. The tables whose names are not preceded by a +
+sign are already present in the target database.
+
+On the right, are listed the target database table names. There are few table
+names that have (not present) appended after their names. This means that these
+tables are to be created in target database in order to synchronize target
+database with source database. Some table names have a - minus sign preceding
+them. This shows that these tables are only present in target database and they
+will remain unchanged in the target database. The column in the middle shows
+the difference between the source and target corresponding tables.
+
+The difference is depicted by the red and green buttons with S and D letters,
+indicating that either Structure or Data are not up to date. By clicking on
+them, they will turn grey, what means that they will be synchronized.
 
 Developers Information
 
@@ -3298,10 +3354,12 @@ If you're planning to contribute source, please read the following information:
   * Please enable showing PHP errors and warnings by the $cfg['Error_Handler']
     ['display'] configuration directive.
   * Please try to keep up the file-naming conventions. Table-related stuff goes
-    to tbl_*.php, db-related code to db_*.php, server-related tools to 
+    to tbl_*.php, db-related code to db_*.php, server-related tools to
     server_*.php and so on.
-  * Please don't put message strings in your code, instead add the string (at
-    least) to english-utf-8.inc.php and print() it out.
+  * Please use gettext wrappers around all messages (__('Some text') or
+    _ngettext() function). To translate them, you need to call scripts/
+    update-po script. To use translated messages, call scripts/generate-mo,
+    which generates binary files read by Gettext.
   * If you want to be really helpful, write an entry for the ChangeLog.
   * The DBG extension (PHP Debugger DBG) is now supported by phpMyAdmin for
     developers to better debug and profile their code.
@@ -3437,6 +3495,8 @@ Credits, in chronological order
   * Marcel Tschopp <ne0x_at_users.sourceforge.net>
       + mysqli support
       + many bugfixes and improvements
+  * Nicola Asuni (Tecnick.com)
+      + TCPDF library (http://www.tcpdf.org)
   * Michael Keck <mkkeck_at_users.sourceforge.net>
       + redesign for 2.6.0
       + phpMyAdmin sailboat logo (June 2004)
@@ -3449,8 +3509,9 @@ Credits, in chronological order
       + new relations Designer
   * Raj Kissu Rajandran (Google Summer of Code 2008)
       + BLOBstreaming support
-  * Piotr Przybylski (Google Summer of Code 2008)
+  * Piotr Przybylski (Google Summer of Code 2008 and 2010)
       + improved setup script
+      + user preferences
   * Derek Schaefer (Google Summer of Code 2009)
       + Improved the import system
   * Alexander Rutkowski (Google Summer of Code 2009)
@@ -3459,6 +3520,20 @@ Credits, in chronological order
       + Synchronization feature
   * Tom?? Srnka (Google Summer of Code 2009)
       + Replication support
+  * Muhammad Adnan (Google Summer of Code 2010)
+      + Relation schema export to multiple formats
+  * Lori Lee (Google Summer of Code 2010)
+      + User interface improvements
+      + ENUM/SET editor
+      + Simplified interface for export/import
+  * Ninad Pundalik (Google Summer of Code 2010)
+      + AJAXifying the interface
+  * Martynas Mickevi?ius (Google Summer of Code 2010)
+      + Charts
+  * Barrie Leslie
+      + BLOBstreaming support with PBMS PHP extension
+  * Ankit Gupta (Google Summer of Code 2010)
+      + Visual query builder
 
 And also to the following people who have contributed minor changes,
 enhancements, bugfixes or support for a new language since version 2.1.0:
@@ -3496,7 +3571,7 @@ Thanks go to
     language-independent by outsourcing the strings to a separate file. He also
     contributed the French translation.
   * Alexandr Bravo <abravo_at_hq.admiral.ru> who contributed tbl_select.php3, a
-    feature to display only some fields from a table.
+    feature to display only some columns from a table.
   * Chris Jackson <chrisj_at_ctel.net> added support for MySQL functions in
     tbl_change.php3. He also added the "Query by Example" feature in 2.0.
   * Dave Walton <walton_at_nordicdms.com> added support for multiple servers

@@ -5,7 +5,6 @@
  * NOTE: Requires PHP loaded as a Apache module.
  *
  * @package phpMyAdmin-Auth-HTTP
- * @version $Id$
  */
 
 
@@ -28,14 +27,19 @@ function PMA_auth()
         exit;
     }
 
-    if (empty($GLOBALS['cfg']['Server']['verbose'])) {
-        $server_message = $GLOBALS['cfg']['Server']['host'];
+    if (empty($GLOBALS['cfg']['Server']['auth_http_realm'])) {
+        if (empty($GLOBALS['cfg']['Server']['verbose'])) {
+            $server_message = $GLOBALS['cfg']['Server']['host'];
+        } else {
+            $server_message = $GLOBALS['cfg']['Server']['verbose'];
+        }
+        $realm_message = 'phpMyAdmin ' . $server_message;
     } else {
-        $server_message = $GLOBALS['cfg']['Server']['verbose'];
+        $realm_message = $GLOBALS['cfg']['Server']['auth_http_realm'];
     }
     // remove non US-ASCII to respect RFC2616
-    $server_message = preg_replace('/[^\x20-\x7e]/i', '', $server_message);
-    header('WWW-Authenticate: Basic realm="phpMyAdmin ' . $server_message .  '"');
+    $realm_message = preg_replace('/[^\x20-\x7e]/i', '', $realm_message);
+    header('WWW-Authenticate: Basic realm="' . $realm_message .  '"');
     header('HTTP/1.0 401 Unauthorized');
     if (php_sapi_name() !== 'cgi-fcgi') {
 	header('status: 401 Unauthorized');
@@ -44,28 +48,28 @@ function PMA_auth()
     // Defines the charset to be used
     header('Content-Type: text/html; charset=' . $GLOBALS['charset']);
     /* HTML header */
-    $page_title = $GLOBALS['strAccessDenied'];
+    $page_title = __('Access denied');
     require './libraries/header_meta_style.inc.php';
     ?>
 </head>
 <body>
     <?php
-    if (file_exists('./config.header.inc.php')) {
-        require './config.header.inc.php';
+    if (file_exists(CUSTOM_HEADER_FILE)) {
+        require CUSTOM_HEADER_FILE;
     }
     ?>
 
 <br /><br />
 <center>
-    <h1><?php echo sprintf($GLOBALS['strWelcome'], ' phpMyAdmin'); ?></h1>
+    <h1><?php echo sprintf(__('Welcome to %s'), ' phpMyAdmin'); ?></h1>
 </center>
 <br />
 
     <?php
-    PMA_Message::error('strWrongUser')->display();
+    PMA_Message::error(__('Wrong username/password. Access denied.'))->display();
 
-    if (file_exists('./config.footer.inc.php')) {
-        require './config.footer.inc.php';
+    if (file_exists(CUSTOM_FOOTER_FILE)) {
+        require CUSTOM_FOOTER_FILE;
     }
     ?>
 

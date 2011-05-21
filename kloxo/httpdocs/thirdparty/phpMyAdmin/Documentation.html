@@ -5,12 +5,11 @@ vim: expandtab ts=4 sw=4 sts=4 tw=78
 -->
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-US"
     version="-//W3C//DTD XHTML 1.1//EN" dir="ltr">
-<!-- $Id$ -->
 <head>
     <link rel="icon" href="./favicon.ico" type="image/x-icon" />
     <link rel="shortcut icon" href="./favicon.ico" type="image/x-icon" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>phpMyAdmin 3.3.8.1 - Documentation</title>
+    <title>phpMyAdmin 3.4.1 - Documentation</title>
     <link rel="stylesheet" type="text/css" href="docs.css" />
 </head>
 
@@ -18,7 +17,7 @@ vim: expandtab ts=4 sw=4 sts=4 tw=78
 <div id="header">
     <h1>
         <a href="http://www.phpmyadmin.net/">php<span class="myadmin">MyAdmin</span></a>
-        3.3.8.1
+        3.4.1
         Documentation
     </h1>
 </div>
@@ -36,7 +35,6 @@ vim: expandtab ts=4 sw=4 sts=4 tw=78
     <li><a href="Documentation.html#developers">Developers</a></li>
     <li><a href="Documentation.html#copyright">Copyright</a></li>
     <li><a href="Documentation.html#credits">Credits</a></li>
-    <li><a href="translators.html">Translators</a></li>
     <li><a href="Documentation.html#glossary">Glossary</a></li>
 </ul>
 
@@ -53,9 +51,6 @@ vim: expandtab ts=4 sw=4 sts=4 tw=78
             <li>License: <a href="license.php">LICENSE</a></li>
         </ul>
     </li>
-    <li><div class="l10n">Documentation version:</div>
-        <i>$Id$</i>
-    </li>
 </ul>
 
 <!-- REQUIREMENTS -->
@@ -65,11 +60,11 @@ vim: expandtab ts=4 sw=4 sts=4 tw=78
         <ul><li>You need PHP 5.2.0 or newer, with <tt>session</tt> support
                 (<a href="#faq1_31">see
 			<abbr title="Frequently Asked Questions">FAQ</abbr> 1.31</a>)
-		and the Standard PHP Library (SPL) extension.
+		, the Standard PHP Library (SPL) extension and JSON support.
                 </li>
 		<li>To support uploading of ZIP files, you need the PHP <tt>zip</tt> extension.</li>
         <li>For proper support of multibyte strings (eg. UTF-8, which is
-            currently default), you should install mbstring and ctype
+            currently the default), you should install the mbstring and ctype
             extensions.
         </li>
             <li>You need GD2 support in PHP to display inline
@@ -84,6 +79,9 @@ vim: expandtab ts=4 sw=4 sts=4 tw=78
                 </li>
                 <li>To support upload progress bars, see <a href="#faq2_9">
                     <abbr title="Frequently Asked Questions">FAQ</abbr> 2.9</a>.</li>
+                <li>To support BLOB streaming, see PHP and MySQL requirements
+                in <a href="#faq6_25">
+                    <abbr title="Frequently Asked Questions">FAQ</abbr> 6.25</a>.</li>
         </ul>
     </li>
     <li><b>MySQL</b> 5.0 or newer (<a href="#faq1_17">details</a>);</li>
@@ -101,8 +99,8 @@ vim: expandtab ts=4 sw=4 sts=4 tw=78
 
 <h3>Currently phpMyAdmin can:</h3>
 
-<ul><li>browse and drop databases, tables, views, fields and indexes</li>
-    <li>create, copy, drop, rename and alter databases, tables, fields and
+<ul><li>browse and drop databases, tables, views, columns and indexes</li>
+    <li>create, copy, drop, rename and alter databases, tables, columns and
         indexes</li>
     <li>maintenance server, databases and tables, with proposals on server
         configuration</li>
@@ -139,7 +137,7 @@ vim: expandtab ts=4 sw=4 sts=4 tw=78
         <abbr title="Frequently Asked Questions">FAQ</abbr> 3.6)</a></li>
     <li>support mysqli, the improved MySQL extension <a href="#faq1_17">
         (see <abbr title="Frequently Asked Questions">FAQ</abbr> 1.17)</a></li>
-    <li>communicate in <a href="./translators.html">57 different languages</a>
+    <li>communicate in <a href="http://www.phpmyadmin.net/home_page/translations.php">62 different languages</a>
         </li>
     <li>synchronize two databases residing on the same as well as remote servers
         <a href="#faq9_1">(see <abbr title="Frequently Asked Questions">FAQ</abbr> 9.1)</a>
@@ -167,7 +165,7 @@ vim: expandtab ts=4 sw=4 sts=4 tw=78
 
 <ol><li><a href="#quick_install">Quick Install</a></li>
     <li><a href="#setup_script">Setup script usage</a></li>
-    <li><a href="#linked-tables">Linked-tables infrastructure</a></li>
+    <li><a href="#linked-tables">phpMyAdmin configuration storage</a></li>
     <li><a href="#upgrading">Upgrading from an older version</a></li>
     <li><a href="#authentication_modes">Using authentication modes</a></li>
 </ol>
@@ -323,12 +321,12 @@ rm -rf config                      # remove not needed directory
     </li>
 </ol>
 
-<h3 id="linked-tables">Linked-tables infrastructure</h3>
+<h3 id="linked-tables">phpMyAdmin configuration storage</h3>
 
 <p> For a whole set of new features (bookmarks, comments,
     <abbr title="structured query language">SQL</abbr>-history,
     tracking mechanism,
-    <abbr title="Portable Document Format">PDF</abbr>-generation, field contents
+    <abbr title="Portable Document Format">PDF</abbr>-generation, column contents
     transformation, etc.) you need to create a set of special tables. Those
     tables can be located in your own database, or in a central database for a
     multi-user installation (this database would then be accessed by the
@@ -340,7 +338,8 @@ rm -rf config                      # remove not needed directory
     <abbr title="Frequently Asked Questions">FAQ</abbr> 1.23</a>).</p>
 
 <p> If you already had this infrastructure and upgraded to MySQL 4.1.2
-    or newer, please use <i>./scripts/upgrade_tables_mysql_4_1_2+.sql</i>.</p>
+    or newer, please use <i>./scripts/upgrade_tables_mysql_4_1_2+.sql</i>
+    and then create new tables by importing <i>./scripts/create_tables.sql</i>.</p>
 
 <p> You can use your phpMyAdmin to create the tables for you. Please be aware
     that you may need special (administrator) privileges to create the database
@@ -369,7 +368,7 @@ rm -rf config                      # remove not needed directory
     is version-specific.</p>
 
 <p> If you have upgraded your MySQL server from a version previous to 4.1.2 to
-    version 5.x or newer and if you use the pmadb/linked table infrastructure,
+    version 5.x or newer and if you use the phpMyAdmin configuration storage,
     you should run the SQL script found in
     <tt>scripts/upgrade_tables_mysql_4_1_2+.sql</tt>.</p>
 
@@ -395,7 +394,7 @@ rm -rf config                      # remove not needed directory
         In cookie mode, the password is stored, encrypted with the blowfish
         algorithm, in a temporary cookie.</li>
 
-    <li>Note: this section is only applicable if
+    <li id="pmausr">Note: this section is only applicable if
         your MySQL server is running with <tt>--skip-show-database</tt>.<br /><br />
 
         For '<abbr title="HyperText Transfer Protocol">HTTP</abbr>' and 'cookie'
@@ -438,8 +437,9 @@ GRANT SELECT (Host, Db, User, Table_name, Table_priv, Column_priv)
 GRANT SELECT, INSERT, UPDATE, DELETE ON &lt;pma_db&gt;.* TO 'pma'@'localhost';
 </pre>
 
-        (this of course requires that your <a href="#linked-tables">linked-tables
-        infrastructure</a> be set up).<br /></li>
+        (this of course requires that your <a href="#linked-tables">phpMyAdmin
+        configuration storage</a> be set up).  
+    <br /></li>
 
     <li>Then each of the <i>true</i> users should be granted a set of privileges
         on a set of particular databases. Normally you shouldn't give global
@@ -624,6 +624,9 @@ since this link provides funding for phpMyAdmin.
     You can set this parameter to <tt>TRUE</tt> to stop this message 
     from appearing.</dd>
 
+    <dt id="cfg_TranslationWarningThreshold">$cfg['TranslationWarningThreshold'] integer</dt>
+    <dd>Show warning about incomplete translations on certain threshold.</dd>
+
     <dt id="cfg_AllowThirdPartyFraming">$cfg['AllowThirdPartyFraming'] boolean</dt>
     <dd>Setting this to <tt>true</tt> allows a page located on a different
     domain to call phpMyAdmin inside a frame, and is a potential security
@@ -758,7 +761,9 @@ since this link provides funding for phpMyAdmin.
                 as introduced in 2.10.0 allows you to log in from prepared PHP
                 session data. This is useful for implementing single signon
                 from another application. Sample way how to seed session is in
-                signon example: <code>scripts/signon.php</code>. You need to
+                signon example: <code>scripts/signon.php</code>. There is also
+                alternative example using OpenID -
+                <code>scripts/openid.php</code>.  You need to
                 configure <a href="#cfg_Servers_SignonSession"
                 class="configrule">session name</a> and <a
                 href="#cfg_Servers_SignonURL" class="configrule">signon
@@ -768,6 +773,16 @@ since this link provides funding for phpMyAdmin.
         Please see the <a href="#setup">install section</a> on &quot;Using authentication modes&quot;
         for more information.
 	</dd>
+    <dt id="servers_auth_http_realm">
+    <span id="cfg_Servers_auth_http_realm">$cfg['Servers'][$i]['auth_http_realm']</span> string<br />
+    </dt>
+    <dd>
+    When using auth_type = '<abbr title="HyperText Transfer Protocol">HTTP</abbr>', this field allows to define a custom
+   <abbr title="HyperText Transfer Protocol">HTTP</abbr> Basic Auth Realm which will be displayed to the user. If not explicitly
+    specified in your configuration, a string combined of "phpMyAdmin " and either
+    <a href="#cfg_Servers_verbose" class="configrule">$cfg['Servers'][$i]['verbose']</a>
+    or <a href="#cfg_Servers_host" class="configrule">$cfg['Servers'][$i]['host']</a> will be used.
+    </dd>
     <dt id="servers_auth_swekey_config">
     <span id="cfg_Servers_auth_swekey_config">$cfg['Servers'][$i]['auth_swekey_config']</span> string<br />
     </dt>
@@ -827,7 +842,8 @@ since this link provides funding for phpMyAdmin.
 
     <dt><span id="cfg_Servers_hide_db">$cfg['Servers'][$i]['hide_db']</span> string
     </dt>
-    <dd>Regular expression for hiding some databases. This only hides them
+    <dd>Regular expression for hiding some databases from unprivileged users. 
+        This only hides them
         from listing, but a user is still able to access them (using, for example,
         the SQL query area). To limit access, use the MySQL privilege system.
         <br /><br />
@@ -850,11 +866,11 @@ since this link provides funding for phpMyAdmin.
     <dt id="pmadb">
         <span id="cfg_Servers_pmadb">$cfg['Servers'][$i]['pmadb']</span> string
     </dt>
-    <dd>The name of the database containing the linked-tables infrastructure.
+    <dd>The name of the database containing the phpMyAdmin configuration storage.
         <br /><br />
 
-        See the <a href="#linked-tables">Linked-tables infrastructure</a>
-        section in this document to see the benefits of this infrastructure,
+        See the <a href="#linked-tables">phpMyAdmin configuration storage</a>
+        section in this document to see the benefits of this feature,
         and for a quick way of creating this database and the needed tables.
         <br /><br />
 
@@ -863,7 +879,7 @@ since this link provides funding for phpMyAdmin.
         case, just put your current database name in
         <tt>$cfg['Servers'][$i]['pmadb']</tt>. For a multi-user installation,
         set this parameter to the name of your central database containing
-        the linked-tables infrastructure.</dd>
+        the phpMyAdmin configuration storage.</dd>
 
     <dt id="bookmark">
         <span id="cfg_Servers_bookmarktable">$cfg['Servers'][$i]['bookmarktable']</span> string
@@ -872,7 +888,7 @@ since this link provides funding for phpMyAdmin.
         useful for queries you often run.<br /><br />
 
         To allow the usage of this functionality:
-        <ul><li>set up <a href="#pmadb">pmadb</a> and the linked-tables infrastructure</li>
+        <ul><li>set up <a href="#pmadb">pmadb</a> and the phpMyAdmin configuration storage</li>
             <li>enter the table name in
                 <tt>$cfg['Servers'][$i]['bookmarktable']</tt></li>
         </ul>
@@ -882,17 +898,17 @@ since this link provides funding for phpMyAdmin.
         <span id="cfg_Servers_relation">$cfg['Servers'][$i]['relation']</span> string
     </dt>
     <dd>Since release 2.2.4 you can describe, in a special 'relation' table,
-        which field is a key in another table (a foreign key). phpMyAdmin
+        which column is a key in another table (a foreign key). phpMyAdmin
         currently uses this to
         <ul><li>make clickable, when you browse the master table, the data values
                 that point to the foreign table;</li>
-            <li>display in an optional tool-tip the &quot;display field&quot;
+            <li>display in an optional tool-tip the &quot;display column&quot;
                 when browsing the master table, if you move the mouse to a column
                 containing a foreign key (use also the 'table_info' table);<br />
                 (see <a href="#faqdisplay"><abbr title="Frequently Asked Questions">
                 FAQ</abbr> 6.7</a>)</li>
             <li>in edit/insert mode, display a drop-down list of possible foreign
-                keys (key value and &quot;display field&quot; are shown)<br />
+                keys (key value and &quot;display column&quot; are shown)<br />
                 (see <a href="#faq6_21"><abbr title="Frequently Asked Questions">
                 FAQ</abbr> 6.21</a>)</li>
             <li>display links on the table properties page, to check referential
@@ -908,18 +924,19 @@ since this link provides funding for phpMyAdmin.
 
         To allow the usage of this functionality:
 
-        <ul><li>set up <a href="#pmadb">pmadb</a> and the linked-tables
-                infrastructure</li>
+        <ul><li>set up <a href="#pmadb">pmadb</a> and the phpMyAdmin 
+                configuration storage</li>
             <li>put the relation table name in
                 <tt>$cfg['Servers'][$i]['relation']</tt></li>
             <li>now as normal user open phpMyAdmin and for each one of your
                 tables where you want to use this feature, click
-                &quot;Structure/Relation view/&quot; and choose foreign fields.
+                &quot;Structure/Relation view/&quot; and choose foreign
+                columns.
                 </li>
         </ul>
 
         Please note that in the current version, <tt>master_db</tt>
-        must be the same as <tt>foreign_db</tt>. Those fields have been put in
+        must be the same as <tt>foreign_db</tt>. Those columns have been put in
         future development of the cross-db relations.
     </dd>
 
@@ -928,19 +945,19 @@ since this link provides funding for phpMyAdmin.
     </dt>
     <dd>
         Since release 2.3.0 you can describe, in a special 'table_info'
-        table, which field is to be displayed as a tool-tip when moving the
+        table, which column is to be displayed as a tool-tip when moving the
         cursor over the corresponding key.<br />
         This configuration variable will hold the name of this special
         table. To allow the usage of this functionality:
-        <ul><li>set up <a href="#pmadb">pmadb</a> and the linked-tables infrastructure</li>
+        <ul><li>set up <a href="#pmadb">pmadb</a> and the phpMyAdmin configuration storage</li>
             <li>put the table name in
                 <tt>$cfg['Servers'][$i]['table_info']</tt> (e.g.
                 'pma_table_info')</li>
             <li>then for each table where you want to use this feature,
-                click &quot;Structure/Relation view/Choose field to display&quot;
-                to choose the field.</li>
+                click &quot;Structure/Relation view/Choose column to display&quot;
+                to choose the column.</li>
         </ul>
-        Usage tip: <a href="#faqdisplay">Display field</a>.
+        Usage tip: <a href="#faqdisplay">Display column</a>.
     </dd>
     <dt id="table_coords">
         <span id="cfg_Servers_table_coords">$cfg['Servers'][$i]['table_coords']</span> string<br />
@@ -959,8 +976,7 @@ since this link provides funding for phpMyAdmin.
 
         To allow the usage of this functionality:
 
-        <ul><li>set up <a href="#pmadb">pmadb</a> and the linked-tables
-                infrastructure</li>
+        <ul><li>set up <a href="#pmadb">pmadb</a> and the phpMyAdmin configuration storage</li>
             <li>put the correct table names in
                 <tt>$cfg['Servers'][$i]['table_coords']</tt> and
                 <tt>$cfg['Servers'][$i]['pdf_pages']</tt></li>
@@ -987,12 +1003,11 @@ since this link provides funding for phpMyAdmin.
         based on the following table structure. See <a href="#transformations">
         Transformations</a> for further information. To use the
         MIME-transformation system, your column_info table has to have the three
-        new fields 'mimetype', 'transformation', 'transformation_options'.
+        new columns 'mimetype', 'transformation', 'transformation_options'.
         <br /><br />
 
         To allow the usage of this functionality:
-        <ul><li>set up <a href="#pmadb">pmadb</a> and the linked-tables
-                infrastructure</li>
+        <ul><li>set up <a href="#pmadb">pmadb</a> and the phpMyAdmin configuration storage</li>
             <li>put the table name in
                 <tt>$cfg['Servers'][$i]['column_info']</tt> (e.g.
                 'pma_column_info')</li>
@@ -1032,8 +1047,7 @@ ALTER TABLE `pma_column_comments`
 
         To allow the usage of this functionality:
 
-        <ul><li>set up <a href="#pmadb">pmadb</a> and the linked-tables
-                infrastructure</li>
+        <ul><li>set up <a href="#pmadb">pmadb</a> and the phpMyAdmin configuration storage</li>
             <li>put the table name in <tt>$cfg['Servers'][$i]['history']</tt>
             (e.g. 'pma_history')
                 </li>
@@ -1065,13 +1079,13 @@ ALTER TABLE `pma_column_comments`
         To allow the usage of this functionality:
 
         <ul>
-            <li>set up <a href="#pmadb">pmadb</a> and the linked-tables infrastructure</li>
+            <li>set up <a href="#pmadb">pmadb</a> and the phpMyAdmin configuration storage</li>
             <li>put the table name in <tt>$cfg['Servers'][$i]['tracking']</tt> (e.g. 'pma_tracking')</li>
         </ul>
     </dd>
 
     <dt id="tracking2">
-        <span id="cfg_Servers_tracking_auto_create">$cfg['Servers'][$i]['tracking_version_auto_create']</span> boolean
+        <span id="cfg_Servers_tracking_version_auto_create">$cfg['Servers'][$i]['tracking_version_auto_create']</span> boolean
     </dt>
     <dd>
         Whether the tracking mechanism creates versions for tables and views automatically. Default value is false.
@@ -1102,7 +1116,7 @@ CREATE DATABASE,ALTER DATABASE,DROP DATABASE</pre>
     </dd>
 
     <dt id="tracking4">
-        <span id="cfg_Servers_tracking_drop_view">$cfg['Servers'][$i]['tracking_version_drop_view']</span> boolean
+        <span id="cfg_Servers_tracking_add_drop_view">$cfg['Servers'][$i]['tracking_add_drop_view']</span> boolean
     </dt>
     <dd>
         Whether a DROP VIEW IF EXISTS statement will be added as first line to the log when creating a view. Default value is true.
@@ -1111,7 +1125,7 @@ CREATE DATABASE,ALTER DATABASE,DROP DATABASE</pre>
 
 
     <dt id="tracking5">
-        <span id="cfg_Servers_tracking_drop_table">$cfg['Servers'][$i]['tracking_version_drop_table']</span> boolean
+        <span id="cfg_Servers_tracking_add_drop_table">$cfg['Servers'][$i]['tracking_add_drop_table']</span> boolean
     </dt>
     <dd>
         Whether a DROP TABLE IF EXISTS statement will be added as first line to the log when creating a table. Default value is true.
@@ -1119,13 +1133,34 @@ CREATE DATABASE,ALTER DATABASE,DROP DATABASE</pre>
     </dd>
 
     <dt id="tracking6">
-        <span id="cfg_Servers_tracking_drop_database">$cfg['Servers'][$i]['tracking_version_drop_database']</span> boolean
+        <span id="cfg_Servers_tracking_add_drop_database">$cfg['Servers'][$i]['tracking_add_drop_database']</span> boolean
     </dt>
     <dd>
         Whether a DROP DATABASE IF EXISTS statement will be added as first line to the log when creating a database. Default value is true.
         <br/><br/>
     </dd>
 
+    <dt id="userconfig">
+        <span id="cfg_Servers_userconfig">$cfg['Servers'][$i]['userconfig']</span> string
+    </dt>
+    <dd>
+        Since release 3.4.x phpMyAdmin allows users to set most preferences by themselves
+        and store them in the database.
+        <br /><br />
+
+        If you don't allow for storing preferences in <a href="#pmadb">pmadb</a>, users can
+        still personalize phpMyAdmin, but settings will be saved in browser's local storage,
+        or, it is is unavailable, until the end of session.
+        <br /><br />
+
+        To allow the usage of this functionality:
+
+        <ul>
+            <li>set up <a href="#pmadb">pmadb</a> and the phpMyAdmin
+            configuration storage</li>
+            <li>put the table name in <tt>$cfg['Servers'][$i]['userconfig']</tt></li>
+        </ul>
+    </dd>
 
     <dt id="designer_coords">
         <span id="cfg_Servers_designer_coords">$cfg['Servers'][$i]['designer_coords']</span> string
@@ -1136,8 +1171,7 @@ CREATE DATABASE,ALTER DATABASE,DROP DATABASE</pre>
 
         To allow the usage of this functionality:
 
-        <ul><li>set up <a href="#pmadb">pmadb</a> and the linked-tables
-                infrastructure</li>
+        <ul><li>set up <a href="#pmadb">pmadb</a> and the phpMyAdmin configuration storage</li>
             <li>put the table name in <tt>$cfg['Servers'][$i]['designer_coords']</tt> (e.g. 'pma_designer_coords')
                 </li>
         </ul>
@@ -1146,7 +1180,7 @@ CREATE DATABASE,ALTER DATABASE,DROP DATABASE</pre>
     <dt><span id="cfg_Servers_verbose_check">$cfg['Servers'][$i]['verbose_check']</span> boolean
     </dt>
     <dd>Because release 2.5.0 introduced the new MIME-transformation support, the
-        column_info table got enhanced with three new fields. If the above variable
+        column_info table got enhanced with three new columns. If the above variable
         is set to <tt>TRUE</tt> (default) phpMyAdmin will check if you have the
         latest table structure available. If not, it will emit a warning to the
         superuser.<br /><br />
@@ -1171,7 +1205,7 @@ CREATE DATABASE,ALTER DATABASE,DROP DATABASE</pre>
         <span id="cfg_Servers_AllowDeny_order">$cfg['Servers'][$i]['AllowDeny']['order']</span> string
     </dt>
     <dd>If your rule order is empty, then <abbr title="Internet Protocol">IP</abbr>
-        authentication is disabled.<br /><br />
+        authorization is disabled.<br /><br />
 
         If your rule order is set to <tt>'deny,allow'</tt> then the system applies
         all deny rules followed by allow rules. Access is allowed by default. Any
@@ -1183,7 +1217,7 @@ CREATE DATABASE,ALTER DATABASE,DROP DATABASE</pre>
         default.  Any client which does not match an Allow directive or does
         match a Deny directive will be denied access to the server.<br /><br />
 
-        If your rule order is set to 'explicit', the authentication is
+        If your rule order is set to 'explicit', authorization is
         performed in a similar fashion to rule order 'deny,allow', with the
         added restriction that your host/username combination <b>must</b> be
         listed in the <i>allow</i> rules, and not listed in the <i>deny</i>
@@ -1262,6 +1296,16 @@ CREATE DATABASE,ALTER DATABASE,DROP DATABASE</pre>
         If you have only one server configured, <tt>$cfg['ServerDefault']</tt>
         MUST be set to that server.</dd>
 
+    <dt id="cfg_AjaxEnable">$cfg['AjaxEnable'] boolean</dt>
+    <dd>Defines whether to refresh only parts of certain pages using Ajax
+    techniques. Applies only where a non-Ajax behavior is possible;
+    for example, the Designer feature is Ajax-only so this directive
+    does not apply to it.</dd>
+
+    <dt id="cfg_VersionCheck">$cfg['VersionCheck'] boolean</dt>
+    <dd>Enables check for latest versions using javascript on main phpMyAdmin
+    page.</dd>
+
     <dt id="cfg_MaxDbList">$cfg['MaxDbList'] integer</dt>
     <dd>The maximum number of database names to be displayed in the
         navigation frame and the database list.</dd>
@@ -1298,6 +1342,10 @@ CREATE DATABASE,ALTER DATABASE,DROP DATABASE</pre>
         to zero, no time limit is imposed.<br />
         This setting is used while importing/exporting dump files and in the
         Synchronize feature but has no effect when PHP is running in safe mode.</dd>
+
+    <dt id="cfg_SessionSavePath">$cfg['SessionSavePath'] string</dt>
+    <dd>Path for storing session data (<a
+    href="http://php.net/session_save_path">session_save_path PHP parameter</a>).</dd>
 
     <dt id="cfg_MemoryLimit">$cfg['MemoryLimit'] string [number of bytes]</dt>
     <dd>Set the number of bytes a script is allowed to allocate. If set
@@ -1349,7 +1397,7 @@ CREATE DATABASE,ALTER DATABASE,DROP DATABASE</pre>
         not lower than the value of $cfg['LoginCookieValidity'].</dd>
 
     <dt id="cfg_LoginCookieStore">$cfg['LoginCookieStore'] integer [number of seconds]</dt>
-    <dd>Define how long is login cookie should be stored in browser. Default 0
+    <dd>Define how long login cookie should be stored in browser. Default 0
         means that it will be kept for existing session. This is recommended
         for not trusted environments.</dd>
 
@@ -1373,7 +1421,7 @@ CREATE DATABASE,ALTER DATABASE,DROP DATABASE</pre>
         comments. Defaults to <tt>TRUE</tt>.</dd>
     <dt id="AllowArbitraryServer">
         <span id="cfg_AllowArbitraryServer">$cfg['AllowArbitraryServer']</span> boolean</dt>
-    <dd>If enabled allows you to log in to arbitrary servers using cookie auth.
+    <dd>If enabled, allows you to log in to arbitrary servers using cookie auth and permits to specify servers of your choice in the Synchronize dialog.
         <br /><br />
 
         <b>NOTE:</b> Please use this carefully, as this may allow users access to
@@ -1452,6 +1500,13 @@ CREATE DATABASE,ALTER DATABASE,DROP DATABASE</pre>
     or in a new one (<tt>new</tt>). Note: use <tt>new</tt> if you are
     linking to <tt>phpmyadmin.net</tt>.</dd>
 
+    <dt id="cfg_LeftDisplayTableFilterMinimum">$cfg['LeftDisplayTableFilterMinimum']
+    integer</dt>
+    <dd>Defines the minimum number of tables to display a JavaScript filter box above the
+    list of tables in the left frame.
+    Defaults to <tt>30</tt>. To disable the filter completely some high number
+    can he used (e.g. 9999)</dd>
+
     <dt id="cfg_LeftDisplayServers">$cfg['LeftDisplayServers'] boolean</dt>
     <dd>Defines whether or not to display a server choice at the top of the left frame.
         Defaults to FALSE.</dd>
@@ -1519,9 +1574,9 @@ CREATE DATABASE,ALTER DATABASE,DROP DATABASE</pre>
         contains more rows, &quot;Previous&quot; and &quot;Next&quot; links will be shown.</dd>
 
     <dt id="cfg_Order">$cfg['Order'] string [<tt>DESC</tt>|<tt>ASC</tt>|<tt>SMART</tt>]</dt>
-    <dd>Defines whether fields are displayed in ascending (<tt>ASC</tt>) order,
+    <dd>Defines whether columns are displayed in ascending (<tt>ASC</tt>) order,
         in descending (<tt>DESC</tt>) order or in a &quot;smart&quot;
-        (<tt>SMART</tt>) order - I.E. descending order for fields of type TIME,
+        (<tt>SMART</tt>) order - I.E. descending order for columns of type TIME,
         DATE, DATETIME and TIMESTAMP, ascending order else- by default.</dd>
 
     <dt id="cfg_DisplayBinaryAsHex">$cfg['DisplayBinaryAsHex'] boolean </dt>
@@ -1529,12 +1584,12 @@ CREATE DATABASE,ALTER DATABASE,DROP DATABASE</pre>
     option is ticked by default.</dd>
 
     <dt id="cfg_ProtectBinary">$cfg['ProtectBinary'] boolean or string</dt>
-    <dd>Defines whether <tt>BLOB</tt> or <tt>BINARY</tt> fields are protected
+    <dd>Defines whether <tt>BLOB</tt> or <tt>BINARY</tt> columns are protected
         from editing when browsing a table's content. Valid values are:
-        <ul><li><tt>FALSE</tt> to allow editing of all fields;</li>
-            <li><tt>'blob'</tt> to allow editing of all fields except <tt>BLOBS</tt>;</li>
+        <ul><li><tt>FALSE</tt> to allow editing of all columns;</li>
+            <li><tt>'blob'</tt> to allow editing of all columns except <tt>BLOBS</tt>;</li>
             <li><tt>'all'</tt> to disallow editing of all <tt>BINARY</tt> or
-                <tt>BLOB</tt> fields.</li>
+                <tt>BLOB</tt> columns.</li>
         </ul>
     </dd>
 
@@ -1543,13 +1598,19 @@ CREATE DATABASE,ALTER DATABASE,DROP DATABASE</pre>
         displayed in edit/insert mode. Since version 2.10, the user can
         toggle this setting from the interface.
     </dd>
+    
+    <dt id="cfg_ShowFieldTypesInDataEditView">$cfg['ShowFieldTypesInDataEditView'] boolean</dt>
+    <dd>Defines whether or not type fields should be initially
+        displayed in edit/insert mode. The user can
+        toggle this setting from the interface.
+    </dd>
 
     <dt id="cfg_CharEditing">$cfg['CharEditing'] string</dt>
     <dd>Defines which type of editing controls should be used for CHAR and
-        VARCHAR fields. Possible values are:
-        <ul><li>input - this allows to limit size of text to size of field in
-                MySQL, but has problems with newlines in fields</li>
-            <li>textarea - no problems with newlines in fields, but also no
+        VARCHAR columns. Possible values are:
+        <ul><li>input - this allows to limit size of text to size of columns in
+                MySQL, but has problems with newlines in columns</li>
+            <li>textarea - no problems with newlines in columns, but also no
                 length limitations</li>
         </ul>
         Default is old behavior so input.</dd>
@@ -1640,8 +1701,9 @@ CREATE DATABASE,ALTER DATABASE,DROP DATABASE</pre>
     <dt id="cfg_DefaultLang">$cfg['DefaultLang'] string</dt>
     <dd>Defines the default language to use, if not browser-defined or
         user-defined.<br />
-        See the <i>select_lang.lib.php</i> script to know the valid values for
-        this setting.</dd>
+        The corresponding language file needs to be in
+        locale/<i>code</i>/LC_MESSAGES/phpmyadmin.mo.
+        </dd>
 
     <dt id="cfg_DefaultConnectionCollation">$cfg['DefaultConnectionCollation'] string</dt>
     <dd>Defines the default connection collation to use, if not
@@ -1650,34 +1712,15 @@ CREATE DATABASE,ALTER DATABASE,DROP DATABASE</pre>
         documentation</a> for list of possible values.</dd>
 
     <dt id="cfg_Lang">$cfg['Lang'] string</dt>
-    <dd>Force: always use this language (must be defined in the
-        <i>select_lang.lib.php</i> script).</dd>
+    <dd>Force language to use.<br />
+        The corresponding language file needs to be in
+        locale/<i>code</i>/LC_MESSAGES/phpmyadmin.mo.
+        </dd>
 
     <dt id="cfg_FilterLanguages">$cfg['FilterLanguages'] string</dt>
     <dd>Limit list of available languages to those matching the given regular
         expression. For example if you want only Czech and English, you should
         set filter to <code>'^(cs|en)'</code>.</dd>
-
-    <dt id="cfg_DefaultCharset">$cfg['DefaultCharset'] string</dt>
-    <dd>Default character set to use for recoding of MySQL queries. This must be
-        enabled and it's described by
-        <a href="#cfg_AllowAnywhereRecoding" class="configrule">$cfg['AllowAnywhereRecoding']</a>
-        option.<br />
-        You can give here any character set which is in
-        <a href="#cfg_AvailableCharsets" class="configrule">$cfg['AvailableCharsets']</a>
-        array and this is just default choice, user can select any of them.</dd>
-
-    <dt id="cfg_AllowAnywhereRecoding">$cfg['AllowAnywhereRecoding'] boolean</dt>
-    <dd>Allow character set recoding of MySQL queries. You need recode or iconv
-        support (compiled in or module) in PHP to allow MySQL queries recoding
-        and used language file must have it enabled (by default only these
-        which are in Unicode, just to avoid losing some characters).<br /><br />
-
-        Setting this to <tt>TRUE</tt> also activates a pull-down menu
-        in the Export and Import pages, to choose the character set when 
-        exporting a file. The default value in this menu comes from 
-        <tt>$cfg['Export']['charset']</tt> and <tt>$cfg['Import']['charset']</tt>.
-    </dd>
 
     <dt id="cfg_RecodingEngine">$cfg['RecodingEngine'] string</dt>
     <dd>You can select here which functions will be used for character set
@@ -1686,8 +1729,15 @@ CREATE DATABASE,ALTER DATABASE,DROP DATABASE</pre>
                 iconv, then recode)</li>
             <li>iconv  - use iconv or libiconv functions</li>
             <li>recode - use recode_string function</li>
+            <li>none - disable encoding conversion</li>
         </ul>
         Default is auto.</dd>
+    <dd>
+        Enabled charset conversion activates a pull-down menu
+        in the Export and Import pages, to choose the character set when 
+        exporting a file. The default value in this menu comes from 
+        <tt>$cfg['Export']['charset']</tt> and <tt>$cfg['Import']['charset']</tt>.
+        </dd>
 
     <dt id="cfg_IconvExtraParams">$cfg['IconvExtraParams'] string</dt>
     <dd>Specify some parameters for iconv used in charset conversion. See
@@ -1751,21 +1801,16 @@ $cfg['TrustedProxies'] =
     <dd>Navi frame width in pixels. See <tt>themes/themename/layout.inc.php</tt>.
     </dd>
 
-    <dt><span id="cfg_NaviBackground">$cfg['NaviBackground']</span> string [valid css code for background]<br />
-        <span id="cfg_MainBackground">$cfg['MainBackground']</span> string [valid css code for background]
+    <dt><span id="cfg_NaviBackground">$cfg['NaviBackground']</span> string [CSS color for background]<br />
+        <span id="cfg_MainBackground">$cfg['MainBackground']</span> string [CSS color for background]
     </dt>
     <dd>The background styles used for both the frames.
         See <tt>themes/themename/layout.inc.php</tt>.</dd>
 
-    <dt id="cfg_NaviPointerBackground">$cfg['NaviPointerBackground'] string [valid css code for background]<br />
-        <span id="cfg_NaviPointerColor">$cfg['NaviPointerColor']</span> string [valid css color]</dt>
+    <dt id="cfg_NaviPointerBackground">$cfg['NaviPointerBackground'] string [CSS color for background]<br />
+        <span id="cfg_NaviPointerColor">$cfg['NaviPointerColor']</span> string [CSS color]</dt>
     <dd>The style used for the pointer in the navi frame.
         See <tt>themes/themename/layout.inc.php</tt>.</dd>
-
-    <dt id="cfg_NaviDatabaseNameColor">$cfg['NaviDatabaseNameColor'] string [valid css code]<br />
-    </dt>
-    <dd>The color used for the database name in the navi frame.
-    See <tt>themes/themename/layout.inc.php</tt>.</dd>
 
     <dt id="cfg_LeftPointerEnable">$cfg['LeftPointerEnable'] boolean</dt>
     <dd>A value of <tt>TRUE</tt> activates the navi pointer (when LeftFrameLight
@@ -1775,28 +1820,29 @@ $cfg['TrustedProxies'] =
     <dd>The size of a table's border. See <tt>themes/themename/layout.inc.php</tt>.
     </dd>
 
-    <dt id="cfg_ThBackground">$cfg['ThBackground'] string [valid css code for background]<br />
-        <span id="cfg_ThColor">$cfg['ThColor']</span> string [valid css color]</dt>
+    <dt id="cfg_ThBackground">$cfg['ThBackground'] string [CSS color for background]<br />
+        <span id="cfg_ThColor">$cfg['ThColor']</span> string [CSS color]</dt>
     <dd>The style used for table headers. See
         <tt>themes/themename/layout.inc.php</tt>.</dd>
 
-    <dt id="cfg_BgcolorOne">$cfg['BgOne'] string [HTML color]</dt>
+    <dt id="cfg_BgcolorOne">$cfg['BgOne'] string [CSS color]</dt>
     <dd>The color (HTML) #1 for table rows. See <tt>themes/themename/layout.inc.php</tt>.
     </dd>
 
-    <dt id="cfg_BgcolorTwo">$cfg['BgTwo'] string [HTML color]</dt>
+    <dt id="cfg_BgcolorTwo">$cfg['BgTwo'] string [CSS color]</dt>
     <dd>The color (HTML) #2 for table rows. See <tt>themes/themename/layout.inc.php</tt>.
     </dd>
 
-    <dt><span id="cfg_BrowsePointerBackground">$cfg['BrowsePointerBackground'] </span>string [HTML color]<br />
-        <span id="cfg_BrowsePointerColor">$cfg['BrowsePointerColor'] </span>string [HTML color]<br />
-        <span id="cfg_BrowseMarkerBackground">$cfg['BrowseMarkerBackground'] </span>string [HTML color]<br />
-        <span id="cfg_BrowseMarkerColor">$cfg['BrowseMarkerColor'] </span>string [HTML color]
+    <dt><span id="cfg_BrowsePointerBackground">$cfg['BrowsePointerBackground'] </span>string [CSS color]<br />
+        <span id="cfg_BrowsePointerColor">$cfg['BrowsePointerColor'] </span>string [CSS color]<br />
+        <span id="cfg_BrowseMarkerBackground">$cfg['BrowseMarkerBackground'] </span>string [CSS color]<br />
+        <span id="cfg_BrowseMarkerColor">$cfg['BrowseMarkerColor'] </span>string [CSS color]
     </dt>
     <dd>The colors (HTML) uses for the pointer and the marker in browse mode.<br />
         The former feature highlights the row over which your mouse is passing
         and the latter lets you visually mark/unmark rows by clicking on
-        them.<br />
+        them. Highlighting / marking a column is done by hovering over /
+        clicking the column's header (outside of the text).<br />
         See <tt>themes/themename/layout.inc.php</tt>.</dd>
 
 
@@ -1829,17 +1875,12 @@ $cfg['TrustedProxies'] =
 
     <dt><span id="cfg_LongtextDoubleTextarea">$cfg['LongtextDoubleTextarea'] </span>boolean
     </dt>
-    <dd>Defines whether textarea for LONGTEXT fields should have double size.</dd>
+    <dd>Defines whether textarea for LONGTEXT columns should have double size.</dd>
 
     <dt><span id="cfg_TextareaAutoSelect">$cfg['TextareaAutoSelect'] </span>boolean
     </dt>
     <dd>Defines if the whole textarea of the query box will be selected on
         click.</dd>
-    <dt id="CtrlArrowsMoving">
-        <span id="cfg_CtrlArrowsMoving">$cfg['CtrlArrowsMoving'] </span>boolean
-    </dt>
-    <dd>Enable Ctrl+Arrows (Option+Arrows in Safari) moving between fields when
-        editing.</dd>
 
     <dt id="cfg_LimitChars">$cfg['LimitChars'] integer</dt>
     <dd>Maximum number of characters shown in any non-numeric field on browse view.
@@ -1848,26 +1889,32 @@ $cfg['TrustedProxies'] =
     <dt><span id="cfg_ModifyDeleteAtLeft">$cfg['ModifyDeleteAtLeft'] </span>boolean
         <span id="cfg_ModifyDeleteAtRight">$cfg['ModifyDeleteAtRight'] </span>boolean
     </dt>
-    <dd>Defines the place where modify and delete links would be put when
+    <dd>Defines the place where table row links (Edit, Inline edit, Copy,
+        Delete) would be put when
         tables contents are displayed (you may have them displayed both at the
         left and at the right).
         &quot;Left&quot; and &quot;right&quot; are parsed as &quot;top&quot;
         and &quot;bottom&quot; with vertical display mode.</dd>
 
-    <dt id="cfg_DefaultDisplay">$cfg['DefaultDisplay'] string
-        <span id="cfg_HeaderFlipType">$cfg['HeaderFlipType'] </span>string
-    </dt>
+    <dt id="cfg_DefaultDisplay">$cfg['DefaultDisplay'] string</dt>
     <dd>There are 3 display modes: horizontal, horizontalflipped and vertical.
         Define which one is displayed by default. The first mode displays each
         row on a horizontal line, the second rotates the headers by 90
-        degrees, so you can use descriptive headers even though fields only
+        degrees, so you can use descriptive headers even though columns only
         contain small values and still print them out. The vertical mode sorts
-        each row on a vertical lineup.<br /><br />
+        each row on a vertical lineup.
+    </dd>
 
-        The HeaderFlipType can be set to 'css' or 'fake'. When using 'css'
-        the rotation of the header for horizontalflipped is done via CSS. If
-        set to 'fake' PHP does the transformation for you, but of course this
-        does not look as good as CSS.</dd>
+    <dt id="cfg_HeaderFlipType">$cfg['HeaderFlipType'] string</dt>
+    <dd>
+        The HeaderFlipType can be set to 'auto', 'css' or 'fake'. When using
+        'css' the rotation of the header for horizontalflipped is done via
+        CSS. The CSS transformation currently works only in Internet
+        Explorer.If set to 'fake' PHP does the transformation for you, but of
+        course this does not look as good as CSS. The 'auto' option enables
+        CSS transformation when browser supports it and use PHP based one
+        otherwise.
+    </dd>
 
     <dt id="DefaultPropDisplay">
         <span id="cfg_DefaultPropDisplay">$cfg['DefaultPropDisplay']</span>
@@ -1877,9 +1924,9 @@ $cfg['TrustedProxies'] =
         'vertical' you can have each field lined up vertically beneath each
         other. You can save up a lot of place on the horizontal direction and
         no longer have to scroll. If you set this to integer, editing of fewer
-        columns will appear in 'vertical' mode, while editing of more fields
+        columns will appear in 'vertical' mode, while editing of more columns 
         still in 'horizontal' mode. This way you can still effectively edit
-        large number of fields, while having full view on few of them.</dd>
+        large number of columns, while having full view on few of them.</dd>
 
     <dt id="cfg_ShowBrowseComments">$cfg['ShowBrowseComments'] boolean<br />
         <span id="cfg_ShowPropertyComments">$cfg['ShowPropertyComments'] </span>boolean
@@ -1888,7 +1935,7 @@ $cfg['TrustedProxies'] =
         display of column comments in Browse or Property display. In browse
         mode, the comments are shown inside the header. In property mode,
         comments are displayed using a CSS-formatted dashed-line below the
-        name of the field. The comment is shown as a tool-tip for that field.
+        name of the column. The comment is shown as a tool-tip for that column.
     </dd>
 
     <dt id ="cfg_SQLQuery_Edit">$cfg['SQLQuery']['Edit'] boolean</dt>
@@ -2005,6 +2052,16 @@ setfacl -d -m "g:www-data:rwx" tmp
         identify what they mean.
     </dd>
 
+    <dt id="cfg_Export_method">$cfg['Export']['method'] string</dt>
+    <dd>
+        Defines how the export form is displayed when it loads. Valid values are:
+        <ul>
+        <li><tt>quick</tt> to display the minimum number of options to configure</li>
+        <li><tt>custom</tt> to display every available option to configure</li>
+        <li><tt>custom-no-form</tt> same as <tt>custom</tt> but does not display the option of using quick export</li>
+        </ul>
+    </dd>
+
     <dt id="cfg_Import">$cfg['Import'] array</dt>
     <dd>
         In this array are defined default parameters for import, names of
@@ -2093,32 +2150,6 @@ setfacl -d -m "g:www-data:rwx" tmp
     any row counting.
     </dd>
 
-    <dt id="wysiwyg">
-        <span id="cfg_WYSIWYG-PDF">$cfg['WYSIWYG-PDF'] </span>boolean</dt>
-    <dd>Utilizes a WYSIWYG editing control to easily place elements of a
-        <abbr title="Portable Document Format">PDF</abbr>
-        page.  By clicking on the button 'toggle scratchboard' on the page
-        where you edit x/y coordinates of those elements you can activate a
-        scratchboard where all your elements are placed. By clicking on an
-        element, you can move them around in the pre-defined area and the x/y
-        coordinates will get updated dynamically. Likewise, when entering a
-        new position directly into the input field, the new position in the
-        scratchboard changes after your cursor leaves the input field.<br />
-        You have to click on the 'OK'-button below the tables to save the new
-        positions.  If you want to place a new element, first add it to the
-        table of elements and then you can drag the new element around.<br />
-        By changing the paper size and the orientation you can change the size
-        of the scratchboard as well. You can do so by just changing the
-        dropdown field below, and the scratchboard will resize automatically,
-        without interfering with the current placement of the elements.<br />
-        If ever an element gets out of range you can either enlarge the paper
-        size or click on the 'reset' button to place all elements below each
-        other.<br />
-        <b>NOTE:</b> You have to use a recent browser like IE6 or Mozilla to
-        get this control to work. The basic Drag&amp;Drop script functionality
-        was kindly borrowed from www.youngpup.net and is underlying so
-        specific license.</dd>
-
     <dt id="cfg_NaturalOrder">$cfg['NaturalOrder'] boolean</dt>
     <dd>Sorts database and table names according to natural order (for example,
         t1, t2, t10). Currently implemented in the left panel (Light mode)
@@ -2129,28 +2160,17 @@ setfacl -d -m "g:www-data:rwx" tmp
     closed state. A value of <tt>'open'</tt> does the reverse. To completely 
     disable all visual sliders, use <tt>'disabled'</tt>.</dd>
 
+    <dt id="cfg_UserprefsDisallow">$cfg['UserprefsDisallow'] array</dt>
+    <dd>Contains names of configuration options (keys in <tt>$cfg</tt> array)
+        that users can't set through user preferences. For possible values, refer
+        to <tt>libraries/config/user_preferences.forms.php</tt>.</dd>
+
     <dt id="cfg_TitleTable">$cfg['TitleTable'] string</dt>
     <dt id="cfg_TitleDatabase">$cfg['TitleDatabase'] string</dt>
     <dt id="cfg_TitleServer">$cfg['TitleServer'] string</dt>
     <dt id="cfg_TitleDefault">$cfg['TitleDefault'] string</dt>
-    <dd>Allows you to specify window's title bar. Following magic string can
-        be used to get special values:
-        <dl>
-            <dt><code>@HTTP_HOST@</code></dt>
-                <dd>HTTP host that runs phpMyAdmin</dd>
-            <dt><code>@SERVER@</code></dt>
-                <dd>MySQL server name</dd>
-            <dt><code>@VERBOSE@</code></dt>
-                <dd>Verbose MySQL server name as defined in <a href="#cfg_Servers_verbose">server configuration</a></dd>
-            <dt><code>@VSERVER@</code></dt>
-                <dd>Verbose MySQL server name if set, otherwise normal</dd>
-            <dt><code>@DATABASE@</code></dt>
-                <dd>Currently opened database</dd>
-            <dt><code>@TABLE@</code></dt>
-                <dd>Currently opened table</dd>
-            <dt><code>@PHPMYADMIN@</code></dt>
-                <dd>phpMyAdmin with version</dd>
-        </dl>
+    <dd>Allows you to specify window's title bar. You can use 
+        <a href="#faq6_27">format string expansion</a>.
     </dd>
 
     <dt id="cfg_ErrorIconic">$cfg['ErrorIconic'] boolean</dt>
@@ -2181,9 +2201,9 @@ setfacl -d -m "g:www-data:rwx" tmp
         <span id="cfg_DefaultQueryDatabase">$cfg['DefaultQueryDatabase']</span> string
     </dt>
     <dd>Default queries that will be displayed in query boxes when user didn't
-        specify any. Use %d for database name, %t for table name and %f for a
-        comma separated list of field names. Note that %t and %f are only
-        applicable to <tt>$cfg['DefaultQueryTable']</tt>.</dd>
+        specify any. You can use standard 
+        <a href="#faq6_27">format string expansion</a>.
+        </dd>
 
     <dt id="cfg_SQP_fmtType">$cfg['SQP']['fmtType'] string [<tt>html</tt>|<tt>none</tt>]</dt>
     <dd>
@@ -2264,36 +2284,12 @@ setfacl -d -m "g:www-data:rwx" tmp
         Enable logging queries and execution times to be displayed in the bottom
         of main page (right frame).</dd>
 
-    <dt id="cfg_DBG_enable_php">$cfg['DBG']['php'] boolean</dt>
-    <dd><b>DEVELOPERS ONLY!</b><br />
-        Enable the DBG extension for debugging phpMyAdmin. Required for profiling
-        the code.<br />
-        For help in setting up your system to this, see the
-        <a href="#developersdbg">Developers</a> section.</dd>
-
-    <dt id="cfg_DBG_profile_enable">$cfg['DBG']['profile']['enable'] boolean</dt>
-    <dd><b>DEVELOPERS ONLY!</b><br />
-        Enable profiling support for phpMyAdmin. This will append a chunk of data
-        to the end of every page displayed in the main window with profiling
-        statistics for that page.<br />
-        You may need to increase the maximum execution time for this to
-        complete successfully.<i>Profiling was removed from the code for
-        version 2.9.0 due to licensing issues.</i></dd>
-
-    <dt id="cfg_DBG_profile_threshold">$cfg['DBG']['profile']['threshold'] float (units in milliseconds)</dt>
-    <dd><b>DEVELOPERS ONLY!</b><br />
-        When profiling data is displayed, this variable controls the threshold of
-        display for any profiling data, based on the average time each time has
-        taken. If it is over the threshold it is displayed, otherwise it is not
-        displayed. This takes a value in milliseconds. In most cases you don't need
-        to edit this.</dd>
-
     <dt id="cfg_ColumnTypes">$cfg['ColumnTypes'] array</dt>
     <dd>All possible types of a MySQL column. In most cases you don't need to
         edit this.</dd>
 
     <dt id="cfg_AttributeTypes">$cfg['AttributeTypes'] array</dt>
-    <dd>Possible attributes for fields. In most cases you don't need to edit
+    <dd>Possible attributes for columns. In most cases you don't need to edit
         this.</dd>
 
     <dt id="cfg_Functions">$cfg['Functions'] array</dt>
@@ -2317,21 +2313,21 @@ setfacl -d -m "g:www-data:rwx" tmp
         in table.</dd>
 
     <dt id="cfg_NumOperators">$cfg['NumOperators'] array</dt>
-    <dd>Operators available for search operations on numeric and date fields.
+    <dd>Operators available for search operations on numeric and date columns.
     </dd>
 
     <dt id="cfg_TextOperators">$cfg['TextOperators'] array</dt>
-    <dd>Operators available for search operations on character fields.
+    <dd>Operators available for search operations on character columns.
         Note that we put <code>LIKE</code> by default instead of
         <code>LIKE %...%</code>, to avoid unintended performance problems
         in case of huge tables.</dd>
 
     <dt id="cfg_EnumOperators">$cfg['EnumOperators'] array</dt>
-    <dd>Operators available for search operations on enum fields.</dd>
+    <dd>Operators available for search operations on ENUM columns.</dd>
 
     <dt id="cfg_NullOperators">$cfg['NullOperators'] array</dt>
     <dd>Additional operators available for search operations when the
-        field can be null.</dd>
+        column can be null.</dd>
 
 </dl>
 
@@ -2349,14 +2345,14 @@ setfacl -d -m "g:www-data:rwx" tmp
     and the proper directives. Please see the <a href="#config">Configuration
     section</a> on how to do so.</p>
 
-<p> You can apply different transformations to the contents of each field. The
-    transformation will take the content of each field and transform it with
+<p> You can apply different transformations to the contents of each column. The
+    transformation will take the content of each column and transform it with
     certain rules defined in the selected transformation.</p>
 
-<p> Say you have a field 'filename' which contains a filename. Normally you would
+<p> Say you have a column 'filename' which contains a filename. Normally you would
     see in phpMyAdmin only this filename. Using transformations you can transform
     that filename into a HTML link, so you can click inside of the phpMyAdmin
-    structure on the field's link and will see the file displayed in a new browser
+    structure on the column's link and will see the file displayed in a new browser
     window. Using transformation options you can also specify strings to
     append/prepend to a string or the format you want the output stored in.</p>
 
@@ -2373,7 +2369,8 @@ setfacl -d -m "g:www-data:rwx" tmp
 
 <p> Go to your <i>tbl_structure.php</i> page (i.e. reached through
     clicking on the 'Structure' link for a table). There click on
-    &quot;Change&quot; (or change icon) and there you will see three new fields at
+    &quot;Change&quot; (or change icon) and there you will see three new
+    fields at
     the end of the line. They are called 'MIME-type', 'Browser transformation' and
     'Transformation options'.</p>
 
@@ -2423,13 +2420,13 @@ setfacl -d -m "g:www-data:rwx" tmp
     transformations.</p>
 
 <p> Because the user cannot enter own mimetypes, it is kept sure that transformations
-    always work. It makes no sense to apply a transformation to a mimetype, the
+    always work. It makes no sense to apply a transformation to a mimetype the
     transform-function doesn't know to handle.</p>
 
 <p> One can, however, use empty mime-types and global transformations which should work
-    for many mimetypes. You can also use transforms on a different mimetype they where built
+    for many mimetypes. You can also use transforms on a different mimetype than what they where built
     for, but pay attention to option usage as well as what the transformation does to your
-    field.</p>
+    column.</p>
 
 <p> There is a basic file called '<i>global.inc.php</i>'. This function can be included by
     any other transform function and provides some basic functions.</p>
@@ -2521,12 +2518,7 @@ setfacl -d -m "g:www-data:rwx" tmp
 
 <p> Please see the libraries/transformations/TEMPLATE file for adding your own transform
     function. See the libraries/transformations/TEMPLATE_MIMETYPE for adding a mimetype
-    without a transform function. Also note the introduction of a function description in
-    the language files. For each function a $strTransformation_[filename without .inc.php]
-    has to exist.</p>
-
-<p> You can use the template generator to generate new functions and entries in the
-    language file.</p>
+    without a transform function.</p>
 
 <p> To create a new transform function please see
     <tt>libraries/transformations/template_generator.sh</tt>.
@@ -2539,16 +2531,28 @@ setfacl -d -m "g:www-data:rwx" tmp
         you want to transform.</li>
     <li><b>$options</b> - Contains any user-passed options to a transform function
         as an array.</li>
-    <li><b>$meta</b> - Contains an object with field information to your column.
+    <li><b>$meta</b> - Contains an object with information about your column.
         The data is drawn from the output of the
         <a href="http://www.php.net/mysql_fetch_field">mysql_fetch_field()</a>
         function. This means, all object properties described on the
         <a href="http://www.php.net/mysql_fetch_field">manual page</a> are
-        available in this variable and can be used to transform a field accordingly
+        available in this variable and can be used to transform a column accordingly
         to unsigned/zerofill/not_null/... properties.<br />
         The $meta-&gt;mimetype variable contains the original MIME-type of the
-        field (i.e. 'text/plain', 'image/jpeg' etc.)</li>
+        column (i.e. 'text/plain', 'image/jpeg' etc.)</li>
 </ol>
+
+<p> Additionally you should also provide additional function to provide 
+    information about the transformation to the user. This function should
+    have same name as transformation function just with appended
+    <code>_info</code> suffix. This function accepts no parameters and returns
+    array with information about the transformation. Currently following keys
+    can be used:
+</p>
+<dl>
+    <dt><code>info</code></dt>
+    <dd>Long description of the transformation.</dd>
+</dl>
 
 <!-- FAQ -->
 <h2 id="faq">FAQ - Frequently Asked Questions</h2>
@@ -2611,8 +2615,7 @@ setfacl -d -m "g:www-data:rwx" tmp
     <a href="#faq1_5">1.5 Using phpMyAdmin on
     <abbr title="Internet Information Services">IIS</abbr>, I'm facing crashes
     and/or many error messages with the
-    <abbr title="HyperText Transfer Protocol">HTTP</abbr> or advanced authentication
-    mode.</a></h4>
+    <abbr title="HyperText Transfer Protocol">HTTP</abbr>.</a></h4>
 
 <p> This is a known problem with the PHP
     <abbr title="Internet Server Application Programming Interface">ISAPI</abbr>
@@ -2657,23 +2660,7 @@ setfacl -d -m "g:www-data:rwx" tmp
 </ul>
 
 <h4 id="faq1_9">
-    <a href="#faq1_9">1.9 I'm having troubles when uploading files. In
-    general file uploads don't work on my system and uploaded files have a
-    <tt>Content-Type:</tt> header in the first line.</a></h4>
-
-<p> It's not really phpMyAdmin related but RedHat 7.0. You have a RedHat 7.0
-    and you updated your PHP RPM to php-4.0.4pl1-3.i386.rpm, didn't you?<br />
-    So the problem is that this package has a serious bug that was corrected
-    ages ago in PHP (2001-01-28: see
-    <a href="http://www.php.net/bugs.php?id=8966">PHP's bug tracking system</a>
-    for more details). The problem is that the bugged package is still
-    available though it was corrected (see
-    <a href="http://bugzilla.redhat.com/bugzilla/show_bug.cgi?id=24933">RedHat's BugZilla</a>
-    for more details).<br />
-    So please download
-    <a href="http://www.redhat.com/swr/i386/php-4.0.4pl1-9.i386.html">the fixed package (4.0.4pl1-9)</a>
-    and the problem should go away.<br />
-    And that fixes the \r\n problem with file uploads!</p>
+    <a href="#faq1_9">1.9 (withdrawn).</a></h4>
 
 <h4 id="faq1_10">
     <a href="#faq1_10">1.10 I'm having troubles when uploading files with
@@ -2701,31 +2688,21 @@ setfacl -d -m "g:www-data:rwx" tmp
     <a href="#faq1_12">1.12 I have lost my MySQL root password, what can I do?</a></h4>
 
 <p> The MySQL manual explains how to
-    <a href="http://www.mysql.com/doc/R/e/Resetting_permissions.html">
+    <a href="http://dev.mysql.com/doc/mysql/en/resetting-permissions.html">
     reset the permissions</a>.</p>
 
 <h4 id="faq1_13">
-    <a href="#faq1_13">1.13 I get an error 'No
-    <abbr title="structured query language">SQL</abbr> query' when trying to
-    execute a bookmark.</a></h4>
-
-<p> If PHP does not have read/write access to its <tt>upload_tmp_dir</tt>, it
-    cannot access the uploaded query.</p>
+    <a href="#faq1_13">1.13 (withdrawn).</a></h4>
 
 <h4 id="faq1_14">
-    <a href="#faq1_14">1.14 I get an error 'No
-    <abbr title="structured query language">SQL</abbr> query' when trying to
-    submit a query from the convenient text area.</a></h4>
-
-<p> Check the <tt>post_max_size</tt> directive from your PHP configuration file
-    and try to increase it.</p>
+    <a href="#faq1_14">1.14 (withdrawn).</a></h4>
 
 <h4 id="faq1_15">
-    <a href="#faq1_15">1.15 I have problems with <i>mysql.user</i> field names.</a>
+    <a href="#faq1_15">1.15 I have problems with <i>mysql.user</i> column names.</a>
 </h4>
 
-<p> In previous MySQL versions, the <tt>User</tt> and <tt>Password</tt> fields
-    were named <tt>user</tt> and <tt>password</tt>. Please modify your field
+<p> In previous MySQL versions, the <tt>User</tt> and <tt>Password</tt>columns 
+    were named <tt>user</tt> and <tt>password</tt>. Please modify your column 
     names to align with current standards.</p>
 
 <h4 id="faq1_16">
@@ -2767,22 +2744,19 @@ setfacl -d -m "g:www-data:rwx" tmp
     support?</a></h4>
 
 <p> Since phpMyAdmin 3.0.x, only MySQL 5.0.1 and newer are supported. For 
-    older MySQL versions, you need to use 2.8.x branch. phpMyAdmin can 
+    older MySQL versions, you need to use the latest 2.x branch. phpMyAdmin can 
     connect to your MySQL server using PHP's classic
     <a href="http://php.net/mysql">MySQL extension</a> as well as the
     <a href="http://php.net/mysqli">improved MySQL extension (MySQLi)</a> that
-    is available in php 5.0. The latter one should be used unless you have 
+    is available in php 5.0. The latter one should be used unless you have a
     good reason not to do so.<br />
-    When compiling php, we strongly recommend that you manually link the MySQL
+    When compiling PHP, we strongly recommend that you manually link the MySQL
     extension of your choice to a MySQL client library of at least the same
     minor version since the one that is bundled with some PHP distributions is
     rather old and might cause problems <a href="#faq1_17a">
-       (see <abbr title="Frequently Asked Questions">FAQ</abbr> 1.17a)</a>.
-    If your webserver is running on a windows system, you might want to try
-    MySQL's
-    <a href="http://dev.mysql.com/downloads/connector/php/">Connector/PHP</a>
-    instead of the MySQL / MySQLi extensions that are bundled with the official
-    php Win32 builds.</p>
+        (see <abbr title="Frequently Asked Questions">FAQ</abbr> 1.17a)</a>.<br /><br />
+    MariaDB is also supported (versions 5.1 and 5.2 were tested).
+    </p>
 
 <h5 id="faq1_17a">
     <a href="#faq1_17a">1.17a I cannot connect to the MySQL server. It always returns the error
@@ -2805,7 +2779,7 @@ setfacl -d -m "g:www-data:rwx" tmp
 </p>
 
 <h4 id="faq1_18">
-    <a href="#faq1_18">1.18 (withdrawn).
+    <a href="#faq1_18">1.18 (withdrawn).</a></h4>
 
 <h4 id="faq1_19">
     <a href="#faq1_19">1.19 I can't run the &quot;display relations&quot; feature because the
@@ -2845,7 +2819,7 @@ setfacl -d -m "g:www-data:rwx" tmp
 
 <h4 id="faq1_23">
     <a href="#faq1_23">1.23 I'm running MySQL on a Win32 machine. Each time I create
-    a new table the table and field names are changed to lowercase!</a></h4>
+    a new table the table and column names are changed to lowercase!</a></h4>
 
 <p> This happens because the MySQL directive <tt>lower_case_table_names</tt>
     defaults to 1 (<tt>ON</tt>) in the Win32 version of MySQL. You can change
@@ -2911,8 +2885,8 @@ setfacl -d -m "g:www-data:rwx" tmp
     available starting with MySQL&nbsp;3.23.56 / 4.0.11-gamma.</p>
 
 <h4 id="faq1_29">
-    <a href="#faq1_29">1.29 When I create a table or modify a field, I get an error
-    and the fields are duplicated.</a></h4>
+    <a href="#faq1_29">1.29 When I create a table or modify a column, I get an error
+    and the columns are duplicated.</a></h4>
 
 <p> It is possible to configure Apache in such a way that PHP has problems
     interpreting .php files.</p>
@@ -2949,10 +2923,10 @@ SetInputFilter PHP
 <h4 id="faq1_31">
     <a href="#faq1_31">1.31 Does phpMyAdmin support php5?</a></h4>
 
-<p> Yes.<br />
-    However, phpMyAdmin needs to be backwards compatible to php4. This is why
-    phpMyAdmin disables the <tt>E_STRICT</tt> error_level in
-    <tt>error_reporting</tt> settings.
+<p>Yes.</p>
+<p>
+    Since release 3.0 only PHP 5.2 and newer. For older PHP versions 2.9 branch
+    is still maintained.
 </p>
 
 <h4 id="faq1_32">
@@ -3042,7 +3016,7 @@ RewriteRule .* - [E=REMOTE_USER:%{HTTP:Authorization},L]
 <p>
     Suhosin configuration might lead to malfunction in some cases and it can
     not be fully avoided as phpMyAdmin is kind of application which needs to
-    transfer big amounts of fields in single HTTP request, what is something
+    transfer big amounts of columns in single HTTP request, what is something
     what Suhosin tries to prevent. Generally all
     <code>suhosin.request.*</code>, <code>suhosin.post.*</code> and
     <code>suhosin.get.*</code> directives can have negative effect on
@@ -3175,7 +3149,7 @@ the <tt>mysql_upgrade</tt> command on the server.</p>
 </ul>
 
 <p> Have also a look at the
-    <a href="http://www.mysql.com/doc/C/a/Can_not_connect_to_server.html">
+    <a href="http://dev.mysql.com/doc/en/can-not-connect-to-server.html">
          corresponding section of the MySQL documentation</a>.</p>
 
 <h4 id="faq2_4">
@@ -3207,7 +3181,7 @@ the <tt>mysql_upgrade</tt> command on the server.</p>
     port-forwarding to another host, MySQL is not resolving the localhost
     as expected.<br />
     Erik Wasser explains: The solution is: if your host is &quot;localhost&quot;
-    MySQL (the commandline tool 'mysql' as well) always tries to use the socket
+    MySQL (the command line tool <code>mysql</code> as well) always tries to use the socket
     connection for speeding up things. And that doesn't work in this configuration
     with port forwarding.<br />
     If you enter "127.0.0.1" as hostname, everything is right and MySQL uses the
@@ -3333,7 +3307,7 @@ have either the <a href="http://pecl.php.net/package/APC">APC</a> extension
     <a href="#faq3_4">3.4 I am unable to import dumps I created with the mysqldump tool
     bundled with the MySQL server distribution.</a></h4>
 
-<p> The problem is that older versions of mysqldump created invalid comments like this:</p>
+<p> The problem is that older versions of <code>mysqldump</code> created invalid comments like this:</p>
 
 <pre>
 -- MySQL dump 8.22
@@ -3371,13 +3345,13 @@ have either the <a href="http://pecl.php.net/package/APC">APC</a> extension
     <a href="#faq3_6">3.6 What is currently not supported in phpMyAdmin about InnoDB?</a></h4>
 
 <p> In Relation view, being able to choose a table in another database,
-    or having more than one index field in the foreign key.<br /><br/>
+    or having more than one index column in the foreign key.<br /><br/>
     In Query-by-example (Query), automatic generation of the query
     LEFT JOIN from the foreign table.<br /><br/>
 </p>
 
 <h4 id="faq3_7">
-    <a href="#faq3_7">3.7 I have table with many (100+) fields and when I try to browse table
+    <a href="#faq3_7">3.7 I have table with many (100+) columns and when I try to browse table
     I get series of errors like &quot;Warning: unable to parse url&quot;. How
     can this be fixed?</a></h4>
 <p>
@@ -3388,7 +3362,7 @@ have either the <a href="http://pecl.php.net/package/APC">APC</a> extension
 </p>
 
 <h4 id="faq3_8">
-    <a href="#faq3_8">3.8 I cannot use (clickable) HTML-forms in fields where I put
+    <a href="#faq3_8">3.8 I cannot use (clickable) HTML-forms in columns where I put
     a MIME-Transformation onto!</a></h4>
 
 <p> Due to a surrounding form-container (for multi-row delete checkboxes), no
@@ -3409,8 +3383,8 @@ have either the <a href="http://pecl.php.net/package/APC">APC</a> extension
 
 <p> When MySQL is running in ANSI-compatibility mode, there are some major
     differences in how <abbr title="structured query language">SQL</abbr> is
-    structured (see <a href="http://dev.mysql.com/doc/mysql/en/ANSI_mode.html">
-    http://dev.mysql.com/doc/mysql/en/ANSI_mode.html</a>). Most important of all,
+    structured (see <a href="http://dev.mysql.com/doc/mysql/en/ansi-mode.html">
+    http://dev.mysql.com/doc/mysql/en/ansi-mode.html</a>). Most important of all,
     the quote-character (") is interpreted as an identifier quote character and
     not as a string quote character, which makes many internal phpMyAdmin
     operations into invalid <abbr title="structured query language">SQL</abbr>
@@ -3438,21 +3412,15 @@ have either the <a href="http://pecl.php.net/package/APC">APC</a> extension
     this could have a serious impact on performance.</p>
 
 <h4 id="faq3_12">
-    <a href="#faq3_12">3.12 What are the phpMyAdmin limitations for MySQL 3?</a></h4>
-
-<p> The number of records in queries containing COUNT and GROUP BY is
-    not correctly calculated. Also, sorting results of a query like
-    &quot;SELECT * from table GROUP BY&quot; ... is problematic.</p>
+    <a href="#faq3_12">3.12 (withdrawn).</a></h4>
 
 <h4 id="faq3_13">
     <a href="#faq3_13">3.13 I get an error when entering <tt>USE</tt> followed by a db name
     containing an hyphen.
 </a></h4>
 <p>
-    The tests I have made with current MySQL 4.1.11 API shows that the
-    API does not accept this syntax for the USE command. Enclosing the
-    db name with backquotes works. For further confusion, no backquotes
-    are needed with command-line mysql.
+    The tests I have made with MySQL 5.1.49 shows that the
+    API does not accept this syntax for the USE command.
 </p>
 
 <h4 id="faq3_14">
@@ -3467,7 +3435,7 @@ have either the <a href="http://pecl.php.net/package/APC">APC</a> extension
 <h4 id="faq3_15">
     <a href="#faq3_15">3.15 When I import an Excel spreadsheet, some cells with calculations do not display correctly.</a></h4>
 <p>
-    phpMyAdmin uses the <a href="http://www.codeplex.com/PHPExcel/" target="_blank">PHPExcel</a> library to parse Excel XLS and XLSX spreadsheets. 
+    phpMyAdmin uses the <a href="http://www.codeplex.com/PHPExcel/">PHPExcel</a> library to parse Excel XLS and XLSX spreadsheets. 
     Therefore, any limitations that are listed on their page regarding Excel calculations will also apply here.
     <br /><br />
     PHPExcel will be kept up to date so as to make all improvements available to phpMyAdmin users.
@@ -3637,14 +3605,14 @@ $cfg['Servers'][$i]['AllowDeny']['rules'] = array(
 
 <h4 id="faq5_1">
     <a href="#faq5_1">5.1 I get an out of memory error, and my controls are non-functional,
-    when trying to create a table with more than 14 fields.
+    when trying to create a table with more than 14 columns.
 </a></h4>
 <p>
     We could reproduce this problem only under Win98/98SE. Testing under
-    WinNT4 or Win2K, we could easily create more than 60 fields.
+    WinNT4 or Win2K, we could easily create more than 60 columns.
     <br />
-    A workaround is to create a smaller number of fields, then come back to
-    your table properties and add the other fields.
+    A workaround is to create a smaller number of columns, then come back to
+    your table properties and add the other columns.
 </p>
 
 <h4 id="faq5_2">
@@ -3688,7 +3656,8 @@ $cfg['Servers'][$i]['AllowDeny']['rules'] = array(
 
 <h4 id="faq5_6">
     <a href="#faq5_6">5.6 In Internet Explorer 5.0, 5.5 or 6.0, I get an error (like "Page not found")
-    when trying to modify a row in a table with many fields, or with a text field
+    when trying to modify a row in a table with many columns, or with a text
+    column 
 </a></h4>
 <p>
     Your table neither have a primary key nor an unique one, so we must use a
@@ -3808,7 +3777,7 @@ $cfg['Servers'][$i]['AllowDeny']['rules'] = array(
 </a></h4>
 <p>
     Examine the <abbr title="structured query language">SQL</abbr> error with care. Often the problem is caused by
-    specifying a wrong field-type.<br />
+    specifying a wrong column-type.<br />
     Common errors include:
 </p>
 <ul>
@@ -3821,11 +3790,12 @@ $cfg['Servers'][$i]['AllowDeny']['rules'] = array(
 </p>
 
 <h4 id="faq6_2">
-    <a href="#faq6_2">6.2 When I create a table, I set an index for two fields and
-    phpMyAdmin generates only one index with those two fields.
+    <a href="#faq6_2">6.2 When I create a table, I set an index for two
+        columns and
+    phpMyAdmin generates only one index with those two columns.
 </a></h4>
 <p>
-    This is the way to create a multi-fields
+    This is the way to create a multi-columns
     index. If you want two indexes, create the first one when creating the
     table, save, then display the table properties and click the Index link to
     create the other index.
@@ -3834,11 +3804,11 @@ $cfg['Servers'][$i]['AllowDeny']['rules'] = array(
 <h4 id="faq6_3">
     <a href="#faq6_3">6.3 How can I insert a null value into my table?</a></h4>
 <p>
-    Since version 2.2.3, you have a checkbox for each field that can be null.
+    Since version 2.2.3, you have a checkbox for each column that can be null.
     Before 2.2.3, you had to enter &quot;null&quot;, without the quotes, as the
-    field's value. Since version 2.5.5, you have to use the checkbox to get
+    column's value. Since version 2.5.5, you have to use the checkbox to get
     a real NULL value, so if you enter &quot;NULL&quot; this means you want
-    a literal NULL in the field, and not a NULL value (this works in PHP4).
+    a literal NULL in the column, and not a NULL value (this works in PHP4).
 </p>
 
 <h4 id="faq6_4">
@@ -3920,7 +3890,7 @@ INSERT INTO REL_towns VALUES ('M', 'Montr&eacute;al');
     <li>in Links, for &quot;town_code&quot; choose &quot;REL_towns-&gt;code&quot;</li>
     <li>in Links, for &quot;country_code&quot; choose &quot;REL_countries-&gt;country_code&quot;</li>
     <li>on table &quot;REL_towns&quot; click Structure, then Relation view</li>
-    <li>in &quot;Choose field to display&quot;, choose &quot;description&quot;</li>
+    <li>in &quot;Choose column to display&quot;, choose &quot;description&quot;</li>
     <li>repeat the two previous steps for table &quot;REL_countries&quot;</li>
 </ul>
 
@@ -3930,7 +3900,7 @@ INSERT INTO REL_towns VALUES ('M', 'Montr&eacute;al');
     <li>Choose &quot;Query&quot;</li>
     <li>Use tables: persons, towns, countries</li>
     <li>Click &quot;Update query&quot;</li>
-    <li>In the fields row, choose persons.person_name and click the
+    <li>In the columns row, choose persons.person_name and click the
         &quot;Show&quot; tickbox </li>
     <li>Do the same for towns.description and countries.descriptions in the
         other 2 columns</li>
@@ -3940,13 +3910,13 @@ INSERT INTO REL_towns VALUES ('M', 'Montr&eacute;al');
 </ul>
 
 <h4 id="faqdisplay">
-    <a href="#faqdisplay">6.7 How can I use the &quot;display field&quot; feature?</a></h4>
+    <a href="#faqdisplay">6.7 How can I use the &quot;display column&quot; feature?</a></h4>
 <p>
     Starting from the previous example, create the pma_table_info as explained
     in the configuration section, then browse your persons table,
     and move the mouse over a town code or country code.
     <br /><br />
-    See also <a href="#faq6_21"><abbr title="Frequently Asked Questions">FAQ</abbr> 6.21</a> for an additional feature that &quot;display field&quot;
+    See also <a href="#faq6_21"><abbr title="Frequently Asked Questions">FAQ</abbr> 6.21</a> for an additional feature that &quot;display column&quot;
     enables: drop-down list of possible values.
 </p>
 
@@ -3995,7 +3965,7 @@ INSERT INTO REL_towns VALUES ('M', 'Montr&eacute;al');
     columns!</a></h4>
 
 <p> No, it's MySQL that is doing
-    <a href="http://www.mysql.com/doc/S/i/Silent_column_changes.html">silent
+    <a href="http://dev.mysql.com/doc/en/silent-column-changes.html">silent
     column type changing</a>.</p>
 
 <h4 id="underscore">
@@ -4030,8 +4000,8 @@ INSERT INTO REL_towns VALUES ('M', 'Montr&eacute;al');
         different structure.</li>
     <li>&quot;Add AUTO_INCREMENT value&quot; ensures that AUTO_INCREMENT value
         (if any) will be included in backup.</li>
-    <li>&quot;Enclose table and field names with backquotes&quot; ensures that
-        field and table names formed with special characters are protected.</li>
+    <li>&quot;Enclose table and column names with backquotes&quot; ensures that
+        column and table names formed with special characters are protected.</li>
     <li>&quot;Add into comments&quot; includes column comments, relations, and MIME
         types set in the pmadb in the dump as
         <abbr title="structured query language">SQL</abbr> comments (<i>/* xxx */</i>).
@@ -4067,45 +4037,52 @@ INSERT INTO REL_towns VALUES ('M', 'Montr&eacute;al');
     <a href="#faqsqlvalidator">6.14 How do I set up the
     <abbr title="structured query language">SQL</abbr> Validator?</a></h4>
 
-<p> To use it, you need a very recent version of PHP, 4.3.0 recommended, with
+<p> 
+    To use SQL Validator, you need PHP with 
     <abbr title="Extensible Markup Language">XML</abbr>,
     <abbr title="Perl Compatible Regular Expressions">PCRE</abbr> and
     <abbr title="PHP Extension and Application Repository">PEAR</abbr> support.
-    On your system command line, run <tt>"pear install Net_Socket Net_URL
-    HTTP_Request Mail_Mime Net_DIME SOAP"</tt> to get the necessary
-    <abbr title="PHP Extension and Application Repository">PEAR</abbr> modules
-    for usage.<br />
-    On a more recent pear version, I had problems with the state of Net_DIME
-    being beta, so this single command
-    <tt>"pear -d preferred_state=beta install -a SOAP"</tt> installed all the
-    needed modules.<br />
+    In addition you need a <abbr title="Simple Object Access
+    Protocol">SOAP</abbr> support, either as a PHP extension or as a PEAR SOAP
+    module.
+</p>
+
+<p>
+    To install <abbr title="PHP Extension and Application
+    Repository">PEAR</abbr> <abbr title="Simple Object Access
+    Protocol">SOAP</abbr> module, run <tt>"pear install Net_Socket Net_URL
+    HTTP_Request Mail_Mime Net_DIME SOAP"</tt> to get the necessary <abbr
+    title="PHP Extension and Application Repository">PEAR</abbr> modules for
+    usage.
+</p>
+
+<p>
     If you use the Validator, you should be aware that any
     <abbr title="structured query language">SQL</abbr> statement you
     submit will be stored anonymously (database/table/column names,
     strings, numbers replaced with generic values). The Mimer
     <abbr title="structured query language">SQL</abbr>
     Validator itself, is &copy; 2001 Upright Database Technology.
-    We utilize it as free SOAP service.</p>
+    We utilize it as free SOAP service.
+</p>
 
 <h4 id="faq6_15">
-    <a href="#faq6_15">6.15 I want to add a BLOB field and put an index on
+    <a href="#faq6_15">6.15 I want to add a BLOB column and put an index on
     it, but MySQL says &quot;BLOB column '...' used in key specification without
     a key length&quot;.</a></h4>
 
-<p> The right way to do this, is to create the field without any indexes,
+<p> The right way to do this, is to create the column without any indexes,
     then display the table structure and use the &quot;Create an index&quot;
-    dialog. On this page, you will be able to choose your BLOB field, and
+    dialog. On this page, you will be able to choose your BLOB column, and
     set a size to the index, which is the condition to create an index on
-    a BLOB field.</p>
+    a BLOB column.</p>
 
 <h4 id="faq6_16">
     <a href="#faq6_16">6.16 How can I simply move in page with plenty
     editing fields?</a></h4>
 
 <p> You can use Ctrl+arrows (Option+Arrows in Safari) for moving on most pages
-    with many editing fields (table structure changes, row editing, etc.)
-    (must be enabled in configuration - see.
-    <a href="#CtrlArrowsMoving" class="configrule">$cfg['CtrlArrowsMoving']</a>).
+    with many editing fields (table structure changes, row editing, etc.).
     You can also have a look at the directive
     <a href="#DefaultPropDisplay" class="configrule">$cfg['DefaultPropDisplay']</a>
     ('vertical') and see if this eases up editing for you.</p>
@@ -4115,7 +4092,7 @@ INSERT INTO REL_towns VALUES ('M', 'Montr&eacute;al');
     WTF is this feature then useful for?</a></h4>
 
 <p> Slow down :). Defining mimetypes is of no use, if you can't put transformations
-    on them. Otherwise you could just put a comment on the field. Because entering
+    on them. Otherwise you could just put a comment on the column. Because entering
     your own mimetype will cause serious syntax checking issues and validation,
     this introduces a high-risk false-user-input situation. Instead you have to
     initialize mimetypes using functions or empty mimetype definitions.<br />
@@ -4163,7 +4140,7 @@ INSERT INTO REL_towns VALUES ('M', 'Montr&eacute;al');
     <code>SELECT Name, Address FROM addresses WHERE 1 AND Name LIKE '%phpMyAdmin%'</code>
     <br /><br />
 
-    You can use multiple occurrences of <b>/*[VARIABLE]*/</b> in a single query.<br />
+    You can use multiple occurrences of <b>/*[VARIABLE]*/</b> in a single query (that is, multiple occurrences of the <i>same</i> variable).<br />
     <b>NOTE THE ABSENCE OF SPACES</b> inside the &quot;/**/&quot; construct. Any
     spaces inserted there
     will be later also inserted as spaces in your query and may lead to unexpected
@@ -4205,17 +4182,17 @@ INSERT INTO REL_towns VALUES ('M', 'Montr&eacute;al');
 
 <h4 id="faq6_21">
     <a href="#faq6_21">6.21 In edit/insert mode, how can I see a list of
-    possible values for a field, based on some foreign table?</a></h4>
+    possible values for a column, based on some foreign table?</a></h4>
 
 <p> You have to setup appropriate links between the tables, and also
-    setup the &quot;display field&quot; in the foreign table. See
+    setup the &quot;display column&quot; in the foreign table. See
     <a href="#faq6_6"><abbr title="Frequently Asked Questions">FAQ</abbr>
     6.6</a> for an example. Then, if there are 100 values or less in the
     foreign table, a drop-down list of values will be available.
     You will see two lists of values, the first list containing the key
-    and the display field, the second list containing the display field
+    and the display column, the second list containing the display column 
     and the key. The reason for this is to be able to type the first
-    letter of either the key or the display field.<br /><br />
+    letter of either the key or the display column.<br /><br />
 
     For 100 values or more, a distinct window will appear, to browse foreign
     key values and choose one. To change the default limit of 100, see
@@ -4256,15 +4233,22 @@ chmod o+rwx tmp
 <h4 id="faq6_25">
 	<a href="#faq6_25">6.25 How does BLOB streaming work in phpMyAdmin?</a></h4>
 
-<p> First, for general information about BLOB streaming on MySQL, visit <a href="http://blobstreaming.org">blobstreaming.org</a>. We currently support streaming if you are running MySQL 5.1 with the PBXT and PBMS storage engines. Moreover, only PBMS 0.5.04 is supported.</p>
+<p> For general information about BLOB streaming on MySQL, visit <a href="http://blobstreaming.org">blobstreaming.org</a>. You need the following components:</p>
+<ul>
+    <li>PBMS BLOB Streaming Daemon for MySQL (0.5.15 or later)</li>
+    <li>Streaming enabled PBXT Storage engine for MySQL (1.0.11-6 or
+    later)</li>
+    <li>PBMS Client Library for MySQL (0.5.15 or later)</li>
+    <li>PBMS PHP Extension for MySQL (0.1.1 or later)</li>
+</ul>
+
+<p>Here are details about configuration and operation:</p>
 
 <ol>
-	<li>In <tt>config.inc.php</tt> your host should be defined with a FQDN (fully qualified domain name) instead of something like &quot;localhost&quot;.</li>
-	<li>A current limitation is that your first login via phpMyAdmin to a freshly-started server must be done with an account that has the SUPER privilege.</li>
-	<li>On your target database, go to Operations and in the &quot;BLOB Repository&quot; section, click &quot;Enable&quot;. This creates the PBMS system tables inside your database.</li>
-	<li>Ensure that your target table is under the PBXT storage engine and has a LONGBLOB column.</li>
-	<li>When you insert or update a row in this table, put a checkmark on the &quot;Upload to BLOB repository&quot; optional choice; otherwise, the upload will be done directly in your column instead of the repository.</li>
-	<li>Finally when you browse your table, you'll see in your column a link to stream your data, for example &quot;View image&quot;. A header containing the correct MIME-type will be sent to your browser; this MIME-type was stored at upload time but in case it's incorrect, it's possible to edit it by clicking on the displayed MIME-type.</li> 
+	<li>In <tt>config.inc.php</tt> your host should be defined with a FQDN (fully qualified domain name) instead of &quot;localhost&quot;.</li>
+    <li>Ensure that your target table is under the <tt>PBXT</tt> storage engine and has a <tt>LONGBLOB</tt> column (which must be nullable if you want to remove the BLOB reference from it).</li>
+	<li>When you insert or update a row in this table, put a checkmark on the &quot;Upload to BLOB repository&quot; optional choice; otherwise, the upload will be done directly in your LONGBLOB column instead of the repository.</li>
+	<li>Finally when you browse your table, you'll see in your column a link to stream your data, for example &quot;View image&quot;. A header containing the correct MIME-type will be sent to your browser; this MIME-type was stored at upload time.</li> 
 </ol>	
 
 <h4 id="faq6_26">
@@ -4272,6 +4256,69 @@ chmod o+rwx tmp
 
 <p> Click the first row of the range, hold the shift key and click the last row of the range. This works everywhere you see rows, for example in Browse mode or on the Structure page.</p>
 
+
+<h4 id="faq6_27">
+    <a href="#faq6_27">6.27 What format strings can I use?</a></h4>
+
+<p>
+    In all places where phpMyAdmin accepts format strings, you can use
+    <code>@VARIABLE@</code> expansion and 
+    <a href="http://php.net/strftime">strftime</a> format strings. The
+    expanded variables depend on a context (for example, if you haven't chosen a 
+    table, you can not get the table name), but the following variables can be used:
+</p>
+<dl>
+    <dt><code>@HTTP_HOST@</code></dt>
+        <dd>HTTP host that runs phpMyAdmin</dd>
+    <dt><code>@SERVER@</code></dt>
+        <dd>MySQL server name</dd>
+    <dt><code>@VERBOSE@</code></dt>
+        <dd>Verbose MySQL server name as defined in <a href="#cfg_Servers_verbose">server configuration</a></dd>
+    <dt><code>@VSERVER@</code></dt>
+        <dd>Verbose MySQL server name if set, otherwise normal</dd>
+    <dt><code>@DATABASE@</code></dt>
+        <dd>Currently opened database</dd>
+    <dt><code>@TABLE@</code></dt>
+        <dd>Currently opened table</dd>
+    <dt><code>@FIELDS@</code></dt>
+        <dd>Fields of currently opened table</dd>
+    <dt><code>@PHPMYADMIN@</code></dt>
+        <dd>phpMyAdmin with version</dd>
+</dl>
+
+<h4 id="wysiwyg">
+    <a href="#wysiwyg">6.28 How can I easily edit relational schema for export?</a></h4>
+
+    <p> 
+        By clicking on the button 'toggle scratchboard' on the page
+        where you edit x/y coordinates of those elements you can activate a
+        scratchboard where all your elements are placed. By clicking on an
+        element, you can move them around in the pre-defined area and the x/y
+        coordinates will get updated dynamically. Likewise, when entering a
+        new position directly into the input field, the new position in the
+        scratchboard changes after your cursor leaves the input field.
+    </p>
+    <p>
+        You have to click on the 'OK'-button below the tables to save the new
+        positions.  If you want to place a new element, first add it to the
+        table of elements and then you can drag the new element around.
+    </p>
+    <p>
+        By changing the paper size and the orientation you can change the size
+        of the scratchboard as well. You can do so by just changing the
+        dropdown field below, and the scratchboard will resize automatically,
+        without interfering with the current placement of the elements.
+    </p>
+    <p>
+        If ever an element gets out of range you can either enlarge the paper
+        size or click on the 'reset' button to place all elements below each
+        other.
+    </p>
+
+<h4 id="faq6_29">
+    <a href="#faq6_29">6.29 Why can't I get a chart from my query result table?</a></h4>
+
+<p> Not every table can be put to the chart. Only tables with one, two or three columns can be visualised as a chart. Moreover the table must be in a special format for chart script to understand it. Currently supported formats can be found in the <a href="http://wiki.phpmyadmin.net/pma/Charts#Data_formats_for_query_results_chart">wiki</a>.</p>
 
 <h3 id="faqproject">phpMyAdmin project</h3>
 
@@ -4283,27 +4330,52 @@ chmod o+rwx tmp
     under the Bugs section.<br /><br />
 
     But please first discuss your bug with other users:<br />
-    <a href="http://sf.net/projects/phpmyadmin/">
-        http://sf.net/projects/phpmyadmin/</a> (and choose Forums)</p>
+    <a href="https://sourceforge.net/projects/phpmyadmin/forums">
+    https://sourceforge.net/projects/phpmyadmin/forums</a>.
+</p>
 
 <h4 id="faq7_2">
     <a href="#faq7_2">7.2 I want to translate the messages to a new language or upgrade an
     existing language, where do I start?</a></h4>
 
-<p> Always use the current SVN version of your language file.
-    For a new language, start from <i>english-utf-8.inc.php</i>. If you
-    don't  know how to get the SVN version, please ask one of the developers.
-    <br />
+<p> Always use latest Git version of the po file to translate. You can optionally
+    translate online at our <a href="http://l10n.cihar.com/">translation
+    server</a> where you can also get the latest po files and merge them
+    with your translations. For creating a new translation simply use
+    <code>po/phpmyadmin.pot</code> and generate
+    <code>po/LANG_CODE.po</code> for your language (you can use
+    <code>msginit -i po/phpmyadmin.pot -l LANG_CODE --no-translator -o po/LANG_CODE.po</code>
+    to do this) or ask on the mailing list to add the translation to the web
+    interface. More details are available on <a href="http://wiki.phpmyadmin.net/pma/Gettext_for_translators">our wiki</a>.
+</p>
+<p>
     Please note that we try not to use HTML entities like &amp;eacute; in
     the translations, since we define the right character set in the file.
     With HTML entities, the text on JavaScript messages would not
     display correctly.
-    However there are some entities that need to be there, for quotes
-    ,non-breakable spaces, ampersands, less than, greater than.<br />
+    However there are some entities that need to be there: quotes,
+    non-breakable spaces, ampersands, less than, greater than.
+</p>
+<p>
     You can then put your translations, as a zip file to avoid losing special
-    characters, on the sourceforge.net translation tracker.<br />
-    It would be a good idea to subscribe to the phpmyadmin-translators mailing
-    list, because this is where we ask for translations of new messages.</p>
+    characters, on the sourceforge.net <a href="https://sourceforge.net/tracker/?group_id=23067&amp;atid=387645">translation tracker.</a>
+</p>
+<p>
+    It would be a good idea to subscribe to the <a href="https://lists.sourceforge.net/lists/listinfo/phpmyadmin-translators">phpmyadmin-translators</a> mailing
+    list, because this is where we ask for translations of new messages.
+</p>
+
+<p>
+    Documentation is being translated using po4a and gettext (see 
+    <a href="http://www.phpmyadmin.net/home_page/docs.php">documentation</a>
+    for existing translations). To start, checkout
+    <a href="http://phpmyadmin.git.sourceforge.net/git/gitweb.cgi?p=phpmyadmin/localized_docs;a=tree;f=po"><code>localized_docs/po</code></a>
+    from Git, or just go to the <a href="https://l10n.cihar.com/projects/pmadoc/">translation server</a>
+    and translate it online. If your language is missing, just contact
+    <a href="mailto:michal@cihar.com">Michal &#268;iha&#345;</a>; he will add it. If
+    you prefer to directly translate the po files, please put updated ones into our
+    <a href="https://sourceforge.net/tracker/?group_id=23067&amp;atid=387645">translation tracker</a>. 
+</p>
 
 <h4 id="faq7_3">
     <a href="#faq7_3">7.3 I would like to help out with the development of
@@ -4325,7 +4397,7 @@ chmod o+rwx tmp
     </li>
 </ol>
 
-<p>More details on git are available on <a href="http://wiki.phpmyadmin.net/pma/Devel:Git">our wiki</a>.</p>
+<p>More details on git are available on <a href="http://wiki.phpmyadmin.net/pma/Git">our wiki</a>.</p>
 
 <p> Write access to the repository is granted only to experienced developers who
     have already contributed something useful to phpMyAdmin.<br />
@@ -4344,7 +4416,7 @@ chmod o+rwx tmp
     <a href="#faq8_2">8.2 How can I protect phpMyAdmin against brute force attacks?</a></h4>
 
 <p> If you use Apache web server, phpMyAdmin exports information about 
-    authentication to Apache environment and it can be used in Apache logs.
+    authentication to the Apache environment and it can be used in Apache logs.
     Currently there are two variables available:
 </p>
 <dl>
@@ -4375,12 +4447,57 @@ LogFormat "%h %l %u %t \"%r\" %>s %b \
     <a href="#faq9_1">9.1 How can I synchronize two databases/tables in phpMyAdmin?</a></h4>
 
 <p> You can now synchronize databases/tables in phpMyAdmin using the Synchronize feature.
-It allows you to connect to local as well as remote servers.This requires you to enter 
+It allows you to connect to local as well as remote servers. This requires you to enter 
 server host name, username, password, port and the name of the database. Therefore you can 
 now synchronize your databases placed on the same server or some remote server.
 </p>
 
-<p>For more details see <a href="./documentation-gsoc/Synchronization_User_Manual.htm">How to synchronize</a>
+<p>
+This feature is helpful for developers who need to replicate their
+database&#8217;s structure as well as data. Moreover, this feature not only
+helps replication but also facilitates the user to keep his/her database
+in sync with another database. Other than the full database, certain
+tables of the databases can also be synchronized.
+</p>
+
+<p>
+You need to fill in the host name of the server, the username and
+password of an user account already there in MySQL. Port is by default
+populated with 3306 (MySQL default port). Then the name of the database
+should be mentioned at the end. All the information other than the port
+needs to be filled explicitly for the source as well as target servers.
+</p>
+
+<p>
+After successfully passing through the authentication phase, the source and
+target database table names will be displayed. It will be a tabular
+representation. 
+</p>
+
+<p>
+On the left, are listed the source database table names. Some of the
+names have a <code>+</code> plus sign preceding them. This shows that these tables
+are only present in source database and they need to be added to the
+target database in order to synchronize the target database. The tables
+whose names are not preceded by a <code>+</code> sign are already present in the
+target database. 
+</p>
+
+<p>
+On the right, are listed the target database table names. There are few
+table names that have <code>(not present)</code> appended after their names. This
+means that these tables are to be created in target database in order to
+synchronize target database with source database. Some table names
+have a <code>-</code> minus sign preceding them. This shows that these tables are
+only present in target database and they will remain unchanged in the
+target database. The column in the middle shows the difference between
+the source and target corresponding tables.
+</p>
+
+<p>
+The difference is depicted by the red and green buttons with <tt>S</tt> and <tt>D</tt>
+letters, indicating that either Structure or Data are not up to date. By
+clicking on them, they will turn grey, what means that they will be synchronized.
 </p>
 
 <!-- DEVELOPERS -->
@@ -4416,8 +4533,12 @@ now synchronize your databases placed on the same server or some remote server.
     <li>Please try to keep up the file-naming conventions. Table-related stuff
         goes to <i>tbl_*.php</i>, db-related code to <i>db_*.php</i>,
         server-related tools to <i>server_*.php</i> and so on.</li>
-    <li>Please don't put message strings in your code, instead add the string
-        (at least) to <i>english-utf-8.inc.php</i> and print() it out.</li>
+    <li>Please use gettext wrappers around all messages 
+        (<code>__('Some text')</code> or <code>_ngettext()</code> function).
+        To translate them, you need to call <code>scripts/update-po</code>
+        script. To use translated messages, call
+        <code>scripts/generate-mo</code>, which generates binary files read by
+        Gettext.</li>
     <li>If you want to be really helpful, write an entry for the ChangeLog.</li>
     <li id="developersdbg">
         The DBG extension (<a href="http://dd.cron.ru/dbg/">PHP
@@ -4439,7 +4560,7 @@ Copyright (C) 2001-2010 Marc Delisle &lt;marc_at_infomarc.info&gt;
                         Olivier Müller &lt;om_at_omnis.ch&gt;
                         Robin Johnson &lt;robbat2_at_users.sourceforge.net&gt;
                         Alexander M. Turek &lt;me_at_derrabus.de&gt;
-                        Michal Čihař &lt;michal_at_cihar.com&gt;
+                        Michal &#268;iha&#345; &lt;michal_at_cihar.com&gt;
                         Garvin Hicking &lt;me_at_supergarv.de&gt;
                         Michael Keck &lt;mkkeck_at_users.sourceforge.net&gt;
                         Sebastian Mendel &lt;cybot_tm_at_users.sourceforge.net&gt;
@@ -4642,6 +4763,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
   <li>many bugfixes and improvements</li>
 </ul></li>
 
+<li>Nicola Asuni (Tecnick.com)
+<ul>
+    <li>TCPDF library (<a
+        href="http://www.tcpdf.org">http://www.tcpdf.org</a>)</li>
+</ul></li>
+
 <li>Michael Keck &lt;mkkeck_at_users.sourceforge.net&gt;
 <ul>
   <li>redesign for 2.6.0</li>
@@ -4669,9 +4796,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
   <li>BLOBstreaming support</li>
 </ul></li>
 
-<li>Piotr Przybylski (Google Summer of Code 2008)
+<li>Piotr Przybylski (Google Summer of Code 2008 and 2010)
 <ul>
   <li>improved setup script</li>
+  <li>user preferences</li>
 </ul></li>
 
 <li>Derek Schaefer (Google Summer of Code 2009)
@@ -4693,6 +4821,39 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 <ul>
   <li>Replication support</li>
 </ul></li>
+
+<li>Muhammad Adnan (Google Summer of Code 2010)
+<ul>
+  <li>Relation schema export to multiple formats</li>
+</ul></li>
+
+<li>Lori Lee (Google Summer of Code 2010)
+<ul>
+  <li>User interface improvements</li>
+  <li>ENUM/SET editor</li>
+  <li>Simplified interface for export/import</li>
+</ul></li>
+
+<li>Ninad Pundalik (Google Summer of Code 2010)
+<ul>
+  <li>AJAXifying the interface</li>
+</ul></li>
+
+<li>Martynas Mickevičius (Google Summer of Code 2010)
+<ul>
+  <li>Charts</li>
+</ul></li>
+
+<li>Barrie Leslie
+<ul>
+  <li>BLOBstreaming support with PBMS PHP extension</li>
+</ul></li>
+
+<li>Ankit Gupta (Google Summer of Code 2010)
+<ul>
+  <li>Visual query builder</li>
+</ul></li>
+
 
 </ul>
 
@@ -4744,7 +4905,7 @@ Jakub Wilk, Thomas Michael Winningham, Vilius Zigmantas, &quot;Manuzhai&quot;.
       also contributed the French translation.
   </li>
   <li>Alexandr Bravo &lt;abravo_at_hq.admiral.ru&gt; who contributed
-      tbl_select.php3, a feature to display only some fields from a table.
+      tbl_select.php3, a feature to display only some columns from a table.
   </li>
   <li>Chris Jackson &lt;chrisj_at_ctel.net&gt; added support for MySQL
       functions in tbl_change.php3. He also added the
@@ -4912,7 +5073,7 @@ Jakub Wilk, Thomas Michael Winningham, Vilius Zigmantas, &quot;Manuzhai&quot;.
     <li><a href="http://www.wikipedia.org/wiki/Server_%28computing%29">Server</a>
          - a computer system that provides services to other computing
          systems over a network.</li>
-    <li><a id="glossar_storage_engine" href="http://dev.mysql.com/doc/refman/5.0/en/storage-engines.html">Storage Engines</a>
+    <li><a id="glossar_storage_engine" href="http://dev.mysql.com/doc/en/storage-engines.html">Storage Engines</a>
         - handlers for different table types</li>
     <li><a href="http://www.wikipedia.org/wiki/Socket#Computer_sockets">socket</a>
          - a form of inter-process communication.</li>

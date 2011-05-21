@@ -2,7 +2,6 @@
 /* vim: set expandtab sw=4 ts=4 sts=4: */
 /**
  * @package phpMyAdmin-Export-CSV
- * @version $Id$
  */
 if (! defined('PHPMYADMIN')) {
     exit;
@@ -14,20 +13,22 @@ if (! defined('PHPMYADMIN')) {
 
 if (isset($plugin_list)) {
     $plugin_list['csv'] = array(
-        'text' => 'strStrucCSV',
+        'text' => __('CSV'),
         'extension' => 'csv',
         'mime_type' => 'text/comma-separated-values',
         'options' => array(
-            array('type' => 'text', 'name' => 'separator', 'text' => 'strFieldsTerminatedBy'),
-            array('type' => 'text', 'name' => 'enclosed', 'text' => 'strFieldsEnclosedBy'),
-            array('type' => 'text', 'name' => 'escaped', 'text' => 'strFieldsEscapedBy'),
-            array('type' => 'text', 'name' => 'terminated', 'text' => 'strLinesTerminatedBy'),
-            array('type' => 'text', 'name' => 'null', 'text' => 'strReplaceNULLBy'),
-            array('type' => 'bool', 'name' => 'removeCRLF', 'text' => 'strRemoveCRLF'),
-            array('type' => 'bool', 'name' => 'columns', 'text' => 'strPutColNames'),
-            array('type' => 'hidden', 'name' => 'data'),
+            array('type' => 'begin_group', 'name' => 'general_opts'),
+            array('type' => 'text', 'name' => 'separator', 'text' => __('Columns separated with:')),
+            array('type' => 'text', 'name' => 'enclosed', 'text' => __('Columns enclosed with:')),
+            array('type' => 'text', 'name' => 'escaped', 'text' => __('Columns escaped with:')),
+            array('type' => 'text', 'name' => 'terminated', 'text' => __('Lines terminated with:')),
+            array('type' => 'text', 'name' => 'null', 'text' => __('Replace NULL with:')),
+            array('type' => 'bool', 'name' => 'removeCRLF', 'text' => __('Remove carriage return/line feed characters within columns')),
+            array('type' => 'bool', 'name' => 'columns', 'text' => __('Put columns names in the first row')),
+            array('type' => 'hidden', 'name' => 'structure_or_data'),
+            array('type' => 'end_group'),
             ),
-        'options_text' => 'strOptions',
+        'options_text' => __('Options'),
         );
 } else {
 
@@ -189,7 +190,7 @@ function PMA_exportData($db, $table, $crlf, $error_url, $sql_query) {
             if (!isset($row[$j]) || is_null($row[$j])) {
                 $schema_insert .= $GLOBALS[$what . '_null'];
             } elseif ($row[$j] == '0' || $row[$j] != '') {
-                // loic1 : always enclose fields
+                // always enclose fields
                 if ($what == 'excel') {
                     $row[$j]       = preg_replace("/\015(\012)?/", "\012", $row[$j]);
                 }

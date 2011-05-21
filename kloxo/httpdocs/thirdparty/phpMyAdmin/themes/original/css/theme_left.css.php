@@ -3,7 +3,6 @@
 /**
  * navigation css file from theme Original
  *
- * @version $Id$
  * @package phpMyAdmin-theme
  * @subpackage Original
  */
@@ -16,7 +15,7 @@ if (!defined('PMA_MINIMUM_COMMON')) {
 /******************************************************************************/
 /* general tags */
 html {
-    font-size: <?php echo (null !== $_SESSION['PMA_Config']->get('fontsize') ? $_SESSION['PMA_Config']->get('fontsize') : $_COOKIE['pma_fontsize']); ?>;
+    font-size: <?php echo (null !== $GLOBALS['PMA_Config']->get('fontsize') ? $GLOBALS['PMA_Config']->get('fontsize') : $_COOKIE['pma_fontsize']); ?>;
 }
 
 input, select, textarea {
@@ -27,7 +26,7 @@ body {
 <?php if (! empty($GLOBALS['cfg']['FontFamily'])) { ?>
     font-family:        <?php echo $GLOBALS['cfg']['FontFamily']; ?>;
 <?php } ?>
-    background:         <?php echo (isset($_SESSION['tmp_user_values']['custom_color']) ? $_SESSION['tmp_user_values']['custom_color'] : $GLOBALS['cfg']['NaviBackground']); ?>;
+    background:         <?php echo $GLOBALS['cfg']['NaviBackground']; ?>;
     color:              <?php echo $GLOBALS['cfg']['NaviColor']; ?>;
     margin:             0;
     padding:            0.2em 0.2em 0.2em 0.2em;
@@ -76,17 +75,12 @@ button {
     margin-left:        0.3em;
 }
 
-.navi_dbName {
-    font-weight:    bold;
-    color:          <?php echo $GLOBALS['cfg']['NaviDatabaseNameColor']; ?>;
-}
-
 /******************************************************************************/
 /* specific elements */
 
 div#pmalogo {
     <?php //better echo $GLOBALS['cfg']['logoBGC']; ?>
-    background-color: <?php echo (isset($_SESSION['tmp_user_values']['custom_color']) ? $_SESSION['tmp_user_values']['custom_color'] : $GLOBALS['cfg']['NaviBackground']); ?>;
+    background-color: <?php echo $GLOBALS['cfg']['NaviBackground']; ?>;
     padding:.3em;
 }
 div#pmalogo,
@@ -101,16 +95,23 @@ ul#databaseList {
     margin-bottom:      0.5em;
     padding-bottom:     0.5em;
     padding-<?php echo $left; ?>:     1.5em;
+    font-style: italic;
 }
 
 ul#databaseList a {
     display: block;
+    font-style: normal;
 }
 
 div#navidbpageselector a,
 ul#databaseList a {
     background:         <?php echo $GLOBALS['cfg']['NaviBackground']; ?>;
     color:              <?php echo $GLOBALS['cfg']['NaviColor']; ?>;
+}
+
+ul#databaseList ul {
+    padding-left: 1em;
+    padding-right: 0;
 }
 
 ul#databaseList a:hover {
@@ -131,10 +132,10 @@ div#leftframelinks .icon {
 div#leftframelinks a img.icon {
     margin:             0;
     padding:            0.2em;
-    border:             0.05em solid <?php echo $GLOBALS['cfg']['NaviColor']; ?>;
+    border:             0.1em solid <?php echo $GLOBALS['cfg']['NaviColor']; ?>;
 }
 
-div#leftframelinks a:hover {
+div#leftframelinks a:hover img {
     background:         <?php echo $GLOBALS['cfg']['NaviPointerBackground']; ?>;
     color:              <?php echo $GLOBALS['cfg']['NaviPointerColor']; ?>;
 }
@@ -160,7 +161,7 @@ div#left_tableList ul {
     margin:             0;
     padding:            0;
     font-size:          80%;
-    background:         <?php echo (isset($_SESSION['tmp_user_values']['custom_color']) ? $_SESSION['tmp_user_values']['custom_color'] : $GLOBALS['cfg']['NaviBackground']); ?>;
+    background:         <?php echo $GLOBALS['cfg']['NaviBackground']; ?>;
 }
 
 div#left_tableList ul ul {
@@ -223,4 +224,25 @@ div#left_tableList ul ul {
 #serverinfo a:hover {
     background:         <?php echo $GLOBALS['cfg']['NaviPointerBackground']; ?>;
     color:              <?php echo $GLOBALS['cfg']['NaviPointerColor']; ?>;
+}
+
+#NavFilter {
+    display: none;
+}
+
+#clear_fast_filter {
+    background: white;
+    color: black;
+    cursor: pointer;
+    padding: 0;
+    margin: 3px 5px 0 -23px;
+    position: relative;
+    float: right;
+}
+
+#fast_filter {
+    width: 100%;
+    padding:2px 0px;
+    margin:0;
+    border:0;
 }

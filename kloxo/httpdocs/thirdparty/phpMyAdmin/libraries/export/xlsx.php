@@ -4,7 +4,6 @@
  *
  *
  * @package phpMyAdmin-Export-XLSX
- * @version $Id$
  */
 if (! defined('PHPMYADMIN')) {
     exit;
@@ -15,16 +14,18 @@ if (! defined('PHPMYADMIN')) {
  */
 if (isset($plugin_list)) {
     $plugin_list['xlsx'] = array(
-        'text' => 'strImportXLSX',
+        'text' => __('Excel 2007 XLSX Workbook'),
         'extension' => 'xlsx',
         'mime_type' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
         'force_file' => true,
         'options' => array(
-            array('type' => 'text', 'name' => 'null', 'text' => 'strReplaceNULLBy'),
-            array('type' => 'bool', 'name' => 'columns', 'text' => 'strPutColNames'),
-            array('type' => 'hidden', 'name' => 'data'),
+            array('type' => 'begin_group', 'name' => 'general_opts'),
+            array('type' => 'text', 'name' => 'null', 'text' => __('Replace NULL with:')),
+            array('type' => 'bool', 'name' => 'columns', 'text' => __('Put columns names in the first row')),
+            array('type' => 'hidden', 'name' => 'structure_or_data'),
+            array('type' => 'end_group')
             ),
-        'options_text' => 'strOptions',
+        'options_text' => __('Options'),
         );
 } else {
 

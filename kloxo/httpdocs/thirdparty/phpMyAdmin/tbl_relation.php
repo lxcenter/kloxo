@@ -10,7 +10,6 @@
  * @todo check foreign fields to be from same type and size, all other makes no sense
  * @todo add an link to create an index required for constraints, or an option to do automatically
  * @todo if above todos are fullfilled we can add all fields meet requirements in the select dropdown
- * @version $Id$
  * @package phpMyAdmin
  */
 
@@ -18,6 +17,8 @@
  * Gets some core libraries
  */
 require_once './libraries/common.inc.php';
+$GLOBALS['js_include'][] = 'tbl_relation.js';
+
 require_once './libraries/tbl_common.php';
 $url_query .= '&amp;goto=tbl_sql.php';
 
@@ -36,8 +37,6 @@ $avoid_show_comment = TRUE;
  * Displays top menu links
  */
 require_once './libraries/tbl_links.inc.php';
-
-require_once './libraries/relation.lib.php';
 
 $options_array = array(
     'CASCADE'   => 'CASCADE',
@@ -61,7 +60,6 @@ function PMA_generate_dropdown($dropdown_question, $select_name, $choices, $sele
     echo htmlspecialchars($dropdown_question) . '&nbsp;&nbsp;';
 
     echo '<select name="' . htmlspecialchars($select_name) . '">' . "\n";
-    echo '<option value=""></option>' . "\n";
 
     foreach ($choices as $one_value => $one_label) {
         echo '<option value="' . htmlspecialchars($one_value) . '"';
@@ -275,7 +273,7 @@ if (isset($_REQUEST['destination_foreign'])) {
                 echo PMA_showMySQLDocu('manual_Table_types', 'InnoDB_foreign_key_constraints') . "\n";
             }
             if (substr($tmp_error, 1, 4) == '1005') {
-                $message = PMA_Message::warning('strForeignKeyError');
+                $message = PMA_Message::error( __('Error creating foreign key on %1$s (check data types)'));
                 $message->addParam($master_field);
                 $message->display();
                 echo PMA_showMySQLDocu('manual_Table_types', 'InnoDB_foreign_key_constraints') . "\n";
@@ -286,9 +284,9 @@ if (isset($_REQUEST['destination_foreign'])) {
     } // end foreach
     if (!empty($display_query)) {
         if ($seen_error) {
-            PMA_showMessage($strError, null, 'error');
+            PMA_showMessage(__('Error'), null, 'error');
         } else {
-            PMA_showMessage($strSuccess, null, 'success');
+            PMA_showMessage(__('Your SQL query has been executed successfully'), null, 'success');
         }
     }
 } // end if isset($destination_foreign)
@@ -395,21 +393,21 @@ if ($col_rs && PMA_DBI_num_rows($col_rs) > 0) {
     $saved_row_cnt  = count($save_row);
     ?>
     <fieldset>
-    <legend><?php echo $strLinksTo; ?></legend>
+    <legend><?php echo __('Relations'); ?></legend>
 
     <table>
-    <tr><th></th>
+    <tr><th><?php echo __('Column'); ?></th>
     <?php
     if ($cfgRelation['relwork']) {
-        echo '<th>' . $strInternalRelations;
+        echo '<th>' . __('Internal relation');
         if (PMA_foreignkey_supported($tbl_type)) {
-            echo PMA_showHint($strInternalAndForeign);
+            echo PMA_showHint(__('An internal relation is not necessary when a corresponding FOREIGN KEY relation exists.'));
         }
         echo '</th>';
     }
     if (PMA_foreignkey_supported($tbl_type)) {
         // this does not have to be translated, it's part of the MySQL syntax
-        echo '<th colspan="2">FOREIGN KEY (' . $tbl_type . ')';
+        echo '<th colspan="2">' . __('Foreign key constraint') . ' (' . $tbl_type . ')';
         echo '</th>';
     }
     ?>
@@ -471,7 +469,7 @@ if ($col_rs && PMA_DBI_num_rows($col_rs) > 0) {
             if (!empty($save_row[$i]['Key'])) {
                 ?>
             <span class="formelement">
-            <select name="destination_foreign[<?php echo $myfield_md5; ?>]">
+            <select name="destination_foreign[<?php echo $myfield_md5; ?>]" class="referenced_column_dropdown">
                 <?php
                 if (isset($existrel_foreign[$myfield])) {
                     // need to backquote to support a dot character inside
@@ -508,10 +506,13 @@ if ($col_rs && PMA_DBI_num_rows($col_rs) > 0) {
             </span>
             <span class="formelement">
                 <?php
+                // For ON DELETE and ON UPDATE, the default action 
+                // is RESTRICT as per MySQL doc; however, a SHOW CREATE TABLE
+                // won't display the clause if it's set as RESTRICT. 
                 PMA_generate_dropdown('ON DELETE',
                     'on_delete[' . $myfield_md5 . ']',
                     $options_array,
-                    isset($existrel_foreign[$myfield]['on_delete']) ? $existrel_foreign[$myfield]['on_delete']: '');
+                    isset($existrel_foreign[$myfield]['on_delete']) ? $existrel_foreign[$myfield]['on_delete']: 'RESTRICT');
 
                 echo '</span>' . "\n"
                     .'<span class="formelement">' . "\n";
@@ -519,10 +520,10 @@ if ($col_rs && PMA_DBI_num_rows($col_rs) > 0) {
                 PMA_generate_dropdown('ON UPDATE',
                     'on_update[' . $myfield_md5 . ']',
                     $options_array,
-                    isset($existrel_foreign[$myfield]['on_update']) ? $existrel_foreign[$myfield]['on_update']: '');
+                    isset($existrel_foreign[$myfield]['on_update']) ? $existrel_foreign[$myfield]['on_update']: 'RESTRICT');
                 echo '</span>' . "\n";
             } else {
-                echo $strNoIndex;
+                echo __('No index defined!');
             } // end if (a key exists)
             echo '        </td>';
         } // end if (InnoDB)
@@ -541,8 +542,8 @@ if ($col_rs && PMA_DBI_num_rows($col_rs) > 0) {
         $disp = PMA_getDisplayField($db, $table);
         ?>
     <fieldset>
-        <label><?php echo $strChangeDisplay . ': '; ?></label>
-        <select name="display_field" style="vertical-align: middle">
+        <label><?php echo __('Choose column to display') . ': '; ?></label>
+        <select name="display_field">
             <option value="">---</option>
         <?php
         foreach ($save_row AS $row) {
@@ -559,7 +560,7 @@ if ($col_rs && PMA_DBI_num_rows($col_rs) > 0) {
     } // end if (displayworks)
     ?>
     <fieldset class="tblFooters">
-        <input type="submit" value="<?php echo $strSave; ?>" />
+        <input type="submit" value="<?php echo __('Save'); ?>" />
     </fieldset>
 </form>
     <?php
@@ -568,5 +569,5 @@ if ($col_rs && PMA_DBI_num_rows($col_rs) > 0) {
 /**
  * Displays the footer
  */
-require_once './libraries/footer.inc.php';
+require './libraries/footer.inc.php';
 ?>

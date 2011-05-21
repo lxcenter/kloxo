@@ -7,7 +7,7 @@
  * fills tooltip arrays and provides $tables, $num_tables, $is_show_stats
  * and $db_is_information_schema
  *
- * staybyte: speedup view on locked tables - 11 June 2001
+ * speedup view on locked tables
  *
  * @uses    $cfg['ShowStats']
  * @uses    $cfg['ShowTooltip']
@@ -31,7 +31,6 @@
  * @uses    strnatcasecmp()
  * @uses    count()
  * @uses    addslashes()
- * @version $Id$
  * @package phpMyAdmin
  */
 if (! defined('PHPMYADMIN')) {
@@ -59,7 +58,6 @@ $pos = $_SESSION['tmp_user_values']['table_limit_offset'];
  * fills given tooltip arrays
  *
  * @uses    $cfg['ShowTooltipAliasTB']
- * @uses    $GLOBALS['strStatCreateTime']
  * @uses    PMA_localisedDate()
  * @uses    strtotime()
  * @param   array   $tooltip_truename   tooltip data
@@ -85,17 +83,17 @@ function PMA_fillTooltip(&$tooltip_truename, &$tooltip_aliasname, $table)
     }
 
     if (isset($table['Create_time']) && !empty($table['Create_time'])) {
-        $tooltip_aliasname[$table['Name']] .= ', ' . $GLOBALS['strStatCreateTime']
+        $tooltip_aliasname[$table['Name']] .= ', ' . __('Creation')
              . ': ' . PMA_localisedDate(strtotime($table['Create_time']));
     }
 
     if (! empty($table['Update_time'])) {
-        $tooltip_aliasname[$table['Name']] .= ', ' . $GLOBALS['strStatUpdateTime']
+        $tooltip_aliasname[$table['Name']] .= ', ' . __('Last update')
              . ': ' . PMA_localisedDate(strtotime($table['Update_time']));
     }
 
     if (! empty($table['Check_time'])) {
-        $tooltip_aliasname[$table['Name']] .= ', ' . $GLOBALS['strStatCheckTime']
+        $tooltip_aliasname[$table['Name']] .= ', ' . __('Last check')
              . ': ' . PMA_localisedDate(strtotime($table['Check_time']));
     }
 }
@@ -272,6 +270,9 @@ unset($each_table, $tbl_group_sql, $db_info_result);
 
 /**
  * Displays top menu links
+ * If in an Ajax request, we do not need to show this
  */
-require './libraries/db_links.inc.php';
+if($GLOBALS['is_ajax_request'] != true) {
+    require './libraries/db_links.inc.php';
+}
 ?>

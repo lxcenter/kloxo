@@ -1,8 +1,6 @@
 <?php
 /* vim: set expandtab sw=4 ts=4 sts=4: */
 /**
- * @author  Ivan A Kirillov (Ivan.A.Kirillov@gmail.com)
- * @version $Id$
  * @package phpMyAdmin-Designer
  */
 
@@ -22,41 +20,44 @@ $hidden           = "hidden";
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns:v="urn:schemas-microsoft-com:vml" xmlns="http://www.w3.org/1999/xhtml" xml:lang="<?php echo $GLOBALS['available_languages'][$GLOBALS['lang']][2]; ?>" lang="<?php echo $GLOBALS['available_languages'][$GLOBALS['lang']][2]; ?>" dir="<?php echo $GLOBALS['text_dir']; ?>">
+<html xmlns:v="urn:schemas-microsoft-com:vml" xmlns="http://www.w3.org/1999/xhtml" xml:lang="<?php echo $GLOBALS['available_languages'][$GLOBALS['lang']][1]; ?>" lang="<?php echo $GLOBALS['available_languages'][$GLOBALS['lang']][1]; ?>" dir="<?php echo $GLOBALS['text_dir']; ?>">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=<?php echo $charset ?>" />
     <link rel="icon" href="pmd/images/favicon.ico" type="image/x-icon" />
     <link rel="shortcut icon" href="pmd/images/favicon.ico" type="image/x-icon" />
     <link rel="stylesheet" type="text/css" href="pmd/styles/<?php echo $GLOBALS['PMD']['STYLE'] ?>/style1.css" />
     <title>Designer</title>
+<?php
+$params = array('lang' => $GLOBALS['lang']);
+if (isset($GLOBALS['db'])) {
+    $params['db'] = $GLOBALS['db'];
+}
+require_once './libraries/header_scripts.inc.php';
+?>
     <script type="text/javascript">
     // <![CDATA[
 <?php
 echo '
     var server = "' . PMA_escapeJsString($server) . '";
     var db = "' . PMA_escapeJsString($db) . '";
-    var token = "' . PMA_escapeJsString($token) . '";
-    var LangSelectReferencedKey = "' . PMA_escapeJsString($strSelectReferencedKey) . '";
-    var LangSelectForeignKey = "' . PMA_escapeJsString($strSelectForeignKey) . '";
-    var LangPleaseSelectPrimaryOrUniqueKey = "' . PMA_escapeJsString($strPleaseSelectPrimaryOrUniqueKey) . '";
-    var LangIEnotSupport = "' . PMA_escapeJsString($strIEUnsupported) . '";
-    var LangChangeDisplay = "' . PMA_escapeJsString($strChangeDisplay) . '";
-
-    var strLang = Array();
-    strLang["strModifications"] = "' . PMA_escapeJsString($strModifications) . '";
-    strLang["strRelationDeleted"] = "' . PMA_escapeJsString($strRelationDeleted) . '";
-    strLang["strForeignKeyRelationAdded"] = "' . PMA_escapeJsString($strForeignKeyRelationAdded). '";
-    strLang["strGeneralRelationFeat:strDisabled"] = "' . PMA_escapeJsString($strGeneralRelationFeat . ' : ' . $strDisabled) . '";
-    strLang["strInternalRelationAdded"] = "' . PMA_escapeJsString($strInternalRelationAdded) . '";
-    strLang["strErrorRelationAdded"] = "' . PMA_escapeJsString($strErrorRelationAdded) . '";
-    strLang["strErrorRelationExists"] = "' . PMA_escapeJsString($strErrorRelationExists) . '";
-    strLang["strErrorSaveTable"] = "' . PMA_escapeJsString($strErrorSaveTable) . '";';
+    var token = "' . PMA_escapeJsString($token) . '";';
+	echo "\n";
+	if($_REQUEST['query']) {
+	echo '
+	 $(document).ready(function(){
+		$(".trigger").click(function(){
+		$(".panel").toggle("fast");
+		$(this).toggleClass("active");
+		return false;
+		});
+	});';
+	}
 ?>
-
     // ]]>
     </script>
     <script src="pmd/scripts/ajax.js" type="text/javascript"></script>
-    <script src="pmd/scripts/move.js" type="text/javascript"></script>
+    <script src="pmd/scripts/history.js" type="text/javascript"></script>
+	<script src="pmd/scripts/move.js" type="text/javascript"></script>
     <!--[if IE]>
     <script src="pmd/scripts/iecanvas.js" type="text/javascript"></script>
     <![endif]-->
@@ -70,51 +71,58 @@ echo $script_tabs . $script_contr . $script_display_field;
 <div class="header" id="top_menu">
         <a href="javascript:Show_left_menu(document.getElementById('key_Show_left_menu'));"
             onmousedown="return false;" class="M_butt first" target="_self">
-            <img id='key_Show_left_menu' title="<?php echo $strShowHideLeftMenu; ?>"
+            <img id='key_Show_left_menu' title="<?php echo __('Show/Hide left menu'); ?>"
                 alt="v" src="pmd/images/downarrow2_m.png" /></a>
         <a href="javascript:Save2();" onmousedown="return false;"
             class="M_butt" target="_self"
-        ><img title="<?php echo $strSavePosition ?>" src="pmd/images/save.png" alt=""
+        ><img title="<?php echo __('Save position') ?>" src="pmd/images/save.png" alt=""
         /></a><a href="javascript:Start_table_new();" onmousedown="return false;"
             class="M_butt" target="_self"
-        ><img title="<?php echo $strCreateTable ?>" src="pmd/images/table.png" alt=""
+        ><img title="<?php echo __('Create table')?>" src="pmd/images/table.png" alt=""
         /></a><a href="javascript:Start_relation();" onmousedown="return false;"
             class="M_butt" id="rel_button" target="_self"
-        ><img title="<?php echo $strCreateRelation ?>" src="pmd/images/relation.png" alt=""
+        ><img title="<?php echo __('Create relation') ?>" src="pmd/images/relation.png" alt=""
         /></a><a href="javascript:Start_display_field();" onmousedown="return false;"
             class="M_butt" id="display_field_button" target="_self"
-        ><img title="<?php echo $strChangeDisplay ?>" src="pmd/images/display_field.png" alt=""
+        ><img title="<?php echo __('Choose column to display') ?>" src="pmd/images/display_field.png" alt=""
         /></a><a href="javascript:location.reload();" onmousedown="return false;"
             class="M_butt" target="_self"
-        ><img title="<?php echo $strReload; ?>" src="pmd/images/reload.png" alt=""
+        ><img title="<?php echo __('Reload'); ?>" src="pmd/images/reload.png" alt=""
         /></a><a href="javascript:Help();" onmousedown="return false;"
             class="M_butt" target="_self"
-        ><img title="<?php echo $strHelp; ?>" src="pmd/images/help.png" alt=""
+        ><img title="<?php echo __('Help'); ?>" src="pmd/images/help.png" alt=""
         /></a><img class="M_bord" src="pmd/images/bord.png" alt=""
         /><a href="javascript:Angular_direct();" onmousedown="return false;"
             class="M_butt" id="angular_direct_button" target="_self"
-        ><img title="<?php echo $strAngularLinks . ' / ' . $strDirectLinks; ?>"
+        ><img title="<?php echo __('Angular links') . ' / ' . __('Direct links'); ?>"
                 src="pmd/images/ang_direct.png" alt=""
         /></a><a href="javascript:Grid();" onmousedown="return false;"
             class="M_butt" id="grid_button" target="_self"
-        ><img title="<?php echo $strSnapToGrid ?>" src="pmd/images/grid.png" alt=""
+        ><img title="<?php echo __('Snap to grid') ?>" src="pmd/images/grid.png" alt=""
         /></a><img class="M_bord" src="pmd/images/bord.png" alt=""
         /><a href="javascript:Small_tab_all(document.getElementById('key_SB_all'));"
             onmousedown="return false;" class="M_butt" target="_self"
-        ><img id='key_SB_all' title="<?php echo $strSmallBigAll; ?>" alt="v"
+        ><img id='key_SB_all' title="<?php echo __('Small/Big All'); ?>" alt="v"
                 src="pmd/images/downarrow1.png"
         /></a><a href="javascript:Small_tab_invert();" onmousedown="return false;"
             class="M_butt" target="_self"
-        ><img title="<?php echo $strToggleSmallBig; ?>" alt="key" src="pmd/images/bottom.png"
+        ><img title="<?php echo __('Toggle small/big'); ?>" alt="key" src="pmd/images/bottom.png"
         /></a><img class="M_bord" src="pmd/images/bord.png" alt=""
         /><a href="javascript:PDF_save();" onmousedown="return false;"
             class="M_butt" target="_self"
         ><img src="pmd/images/pdf.png" alt="key" width="20" height="20"
-                title="<?php echo $strImportExportCoords; ?>" /></a>
-        <a href="javascript:Top_menu_right(document.getElementById('key_Left_Right'));"
+                title="<?php echo __('Import/Export coordinates for PDF schema'); ?>" /></a
+         >
+        <?php if($_REQUEST['query']){
+            echo '<a href="#" onClick="build_query(\'SQL Query on Database\', 0)" onmousedown="return false;"
+            class="M_butt" target="_self">';
+            echo '<img src="pmd/images/query_builder.png" alt="key" width="20" height="20" title="';
+            echo __('Build Query');
+            echo '"/></a>'; }?>
+         <a href="javascript:Top_menu_right(document.getElementById('key_Left_Right'));"
             onmousedown="return false;" class="M_butt last" target="_self">
             <img src="pmd/images/2rightarrow_m.png" id="key_Left_Right" alt=">"
-                title="<?php echo $strMoveMenu; ?>" /></a>
+                title="<?php echo __('Move Menu'); ?>" /></a>
 </div>
 
 <div id="osn_tab">
@@ -126,11 +134,11 @@ echo $script_tabs . $script_contr . $script_display_field;
 <div align="center" style="padding-top:5px;">
     <a href="javascript:Hide_tab_all(document.getElementById('key_HS_all'));"
         onmousedown="return false;" class="M_butt" target="_self">
-    <img title="<?php echo $strHideShowAll; ?>" alt="v"
+    <img title="<?php echo __('Hide/Show all'); ?>" alt="v"
         src="pmd/images/downarrow1.png" id='key_HS_all' /></a>
     <a href="javascript:No_have_constr(document.getElementById('key_HS'));"
         onmousedown="return false;" class="M_butt" target="_self">
-    <img title="<?php echo $strHideShowNoRelation; ?>" alt="v"
+    <img title="<?php echo __('Hide/Show Tables with no relation'); ?>" alt="v"
         src="pmd/images/downarrow2.png" id='key_HS' /></a>
 </div>
 
@@ -140,14 +148,14 @@ echo $script_tabs . $script_contr . $script_display_field;
 $name_cnt = count($GLOBALS['PMD']['TABLE_NAME']);
 for ($i = 0; $i < $name_cnt; $i++) {
     ?>
-    <tr><td title="<?php echo $strStructure; ?>" width="1px"
+    <tr><td title="<?php echo __('Structure'); ?>" width="1px"
             onmouseover="this.className='L_butt2_2'"
             onmouseout="this.className='L_butt2_1'">
             <img onclick="Start_tab_upd('<?php echo $GLOBALS['PMD_URL']["TABLE_NAME_SMALL"][$i]; ?>');"
                 src="pmd/images/exec.png" alt="" /></td>
         <td width="1px">
             <input onclick="VisibleTab(this,'<?php echo $GLOBALS['PMD_URL']["TABLE_NAME"][$i]; ?>')"
-                title="<?php echo $strHide ?>"
+                title="<?php echo __('Hide'); ?>"
                 id="check_vis_<?php echo $GLOBALS['PMD_URL']["TABLE_NAME"][$i]; ?>"
                 style="margin:0px;" type="checkbox"
                 value="<?php echo $GLOBALS['PMD_URL']["TABLE_NAME"][$i]; ?>"
@@ -170,7 +178,7 @@ for ($i = 0; $i < $name_cnt; $i++) {
 </div>
 
 <div align="center">
-    <?php echo $strNumberOfTables . ': ' . $name_cnt; ?>
+    <?php echo __('Number of tables') . ': ' . $name_cnt; ?>
 </div>
 <div align="right">
     <div id="layer_menu_sizer" onmousedown="layer_menu_cur_click=1">
@@ -196,6 +204,13 @@ for ($i = 0; $i < count($GLOBALS['PMD']["TABLE_NAME"]); $i++) {
          ">
 <thead>
 <tr>
+    <?php
+	if(isset($_REQUEST['query'])) {
+		echo '<td class="select_all">';
+    	echo '<input type="checkbox" value="select_all_'.htmlspecialchars($t_n_url).'" style="margin: 0px;" ';
+        echo 'id="select_all_'.htmlspecialchars($t_n_url).'" title="select all" ';
+        echo 'onclick="Select_all(\''. htmlspecialchars($t_n_url) .'\',\''.htmlspecialchars($GLOBALS['PMD_OUT']["OWNER"][$i]).'\')"></td>';
+	}?>
     <td class="small_tab" onmouseover="this.className='small_tab2';"
         onmouseout="this.className='small_tab';"
         id="id_hide_tbody_<?php echo $t_n_url ?>"
@@ -213,15 +228,21 @@ for ($i = 0; $i < count($GLOBALS['PMD']["TABLE_NAME"]); $i++) {
         onclick="Start_tab_upd('<?php echo $GLOBALS['PMD_URL']["TABLE_NAME_SMALL"][$i]; ?>');">
         <img src="pmd/images/exec_small.png" alt="" /></td>
     <td nowrap="nowrap" id="id_zag_<?php echo $t_n_url ?>" class="tab_zag"
-        onmousedown="cur_click=document.getElementById('<?php echo $t_n_url ?>');"
-        onmouseover="this.className = 'tab_zag_2'"
-        onmouseout="this.className = 'tab_zag'">
+        onmousedown="cur_click=document.getElementById('<?php echo $t_n_url ?>');"/
+        onmouseover="Table_onover('<?php echo $t_n_url ?>',0,<?php echo (isset($_REQUEST['query'])? 1 : 0 )?> )"
+        onmouseout="Table_onover('<?php echo $t_n_url ?>',1,<?php echo (isset($_REQUEST['query']) ? 1 : 0 )?>)">
         <span class='owner'>
         <?php
         echo $GLOBALS['PMD_OUT']["OWNER"][$i];
         echo '.</span>';
         echo $GLOBALS['PMD_OUT']["TABLE_NAME_SMALL"][$i];
         ?></td>
+    <?php
+	if(isset($_REQUEST['query'])) {
+		echo '<td class="tab_zag"  onmouseover="Table_onover(\''.htmlspecialchars($t_n_url).'\',0,1)"  id="id_zag_'.htmlspecialchars($t_n_url).'_2"';
+        echo 'onmousedown="cur_click=document.getElementById(\''.htmlspecialchars($t_n_url).'\');"';
+        echo 'onmouseout="Table_onover(\''.htmlspecialchars($t_n_url).'\',1,1)">';
+	}?>
 </tr>
 </thead>
 <tbody id="id_tbody_<?php echo $t_n_url ?>"
@@ -252,6 +273,14 @@ for ($i = 0; $i < count($GLOBALS['PMD']["TABLE_NAME"]); $i++) {
             echo (isset($tables_all_keys[$t_n.".".$tab_column[$t_n]["COLUMN_NAME"][$j]]) ? 1 : 0);
         }
         ?>)">
+    <?php
+	if(isset($_REQUEST['query'])) {
+    	echo '<td class="select_all">';
+	    echo '<input value="'.htmlspecialchars($t_n_url).urlencode($tab_column[$t_n]["COLUMN_NAME"][$j]).'"';
+        echo 'type="checkbox" id="select_'.htmlspecialchars($t_n_url).'._'.urlencode($tab_column[$t_n]["COLUMN_NAME"][$j]).'" ';
+ 		echo 'style="margin: 0px;" title="select_'.urlencode($tab_column[$t_n]["COLUMN_NAME"][$j]).'" ';
+		echo 'onclick="store_column(\''.urlencode($GLOBALS['PMD_OUT']["TABLE_NAME_SMALL"][$i]).'\',\''.htmlspecialchars($GLOBALS['PMD_OUT']["OWNER"][$i]).'\',\''.urlencode($tab_column[$t_n]["COLUMN_NAME"][$j]).'\')"></td>';
+	}?>
     <td width="10px" colspan="3"
         id="<?php echo $t_n_url.".".urlencode($tab_column[$t_n]["COLUMN_NAME"][$j]) ?>">
         <div style="white-space:nowrap">
@@ -285,6 +314,14 @@ for ($i = 0; $i < count($GLOBALS['PMD']["TABLE_NAME"]); $i++) {
         ?>
         </div>
    </td>
+   <?php
+   if(isset($_REQUEST['query'])) {
+	   //$temp = $GLOBALS['PMD_OUT']["OWNER"][$i].'.'.$GLOBALS['PMD_OUT']["TABLE_NAME_SMALL"][$i];
+	   echo '<td class="small_tab_pref" onmouseover="this.className=\'small_tab_pref2\';"';
+	   echo 'onmouseout="this.className=\'small_tab_pref\';"';
+	   echo 'onclick="Click_option(\'pmd_optionse\',\''.urlencode($tab_column[$t_n]["COLUMN_NAME"][$j]).'\',\''.$GLOBALS['PMD_OUT']["TABLE_NAME_SMALL"][$i].'\')" >';
+	   echo  '<img src="pmd/images/exec_small.png" title="options" alt="" /></td> ';
+	} ?>
 </tr>
         <?php
     }
@@ -312,7 +349,7 @@ for ($i = 0; $i < count($GLOBALS['PMD']["TABLE_NAME"]); $i++) {
         <table width="168" border="0" align="center" cellpadding="2" cellspacing="0">
         <thead>
         <tr>
-            <td colspan="2" align="center" nowrap="nowrap"><strong><?php echo $strCreateRelation; ?></strong></td>
+            <td colspan="2" align="center" nowrap="nowrap"><strong><?php echo __('Create relation'); ?></strong></td>
         </tr>
         </thead>
         <tbody id="foreign_relation">
@@ -346,9 +383,9 @@ for ($i = 0; $i < count($GLOBALS['PMD']["TABLE_NAME"]); $i++) {
         <tr>
             <td colspan="2" align="center" nowrap="nowrap">
                 <input type="button" class="butt" name="Button"
-                    value="<?php echo $strOK; ?>" onclick="New_relation()" />
+                    value="<?php echo __('OK'); ?>" onclick="New_relation()" />
                 <input type="button" class="butt" name="Button"
-                    value="<?php echo $strCancel; ?>"
+                    value="<?php echo __('Cancel'); ?>"
                     onclick="document.getElementById('layer_new_relation').style.visibility = 'hidden';" />
             </td>
         </tr>
@@ -378,14 +415,14 @@ for ($i = 0; $i < count($GLOBALS['PMD']["TABLE_NAME"]); $i++) {
     <td class="input_tab">
         <table width="100%" border="0" align="center" cellpadding="2" cellspacing="0">
         <tr>
-            <td colspan="3" align="center" nowrap="nowrap"><strong><?php echo $strDeleteRelation; ?></strong></td>
+            <td colspan="3" align="center" nowrap="nowrap"><strong><?php echo __('Delete relation'); ?></strong></td>
         </tr>
         <tr>
             <td colspan="3" align="center" nowrap="nowrap">
                 <input name="Button" type="button" class="butt"
-                    onclick="Upd_relation()" value="<?php echo $strDelete; ?>" />
+                    onclick="Upd_relation()" value="<?php echo __('Delete'); ?>" />
                 <input type="button" class="butt" name="Button"
-                    value="<?php echo $strCancel; ?>"
+                    value="<?php echo __('Cancel'); ?>"
                     onclick="document.getElementById('layer_upd_relation').style.visibility = 'hidden'; Re_load();" />
             </td>
         </tr>
@@ -399,6 +436,392 @@ for ($i = 0; $i < count($GLOBALS['PMD']["TABLE_NAME"]); $i++) {
 </tr>
 </tbody>
 </table>
+
+<table id="pmd_optionse" style="visibility:<?php echo $hidden ?>;"
+    width="5%" border="0" cellpadding="0" cellspacing="0">
+<tbody>
+<tr>
+    <td class="frams1" width="10px"></td>
+    <td class="frams5" width="99%" ></td>
+    <td class="frams2" width="10px"><div class="bor"></div></td>
+</tr>
+<tr>
+    <td class="frams8"></td>
+    <td class="input_tab">
+        <table width="168" border="0" align="center" cellpadding="2" cellspacing="0">
+       <thead>
+        <tr>
+        	<td colspan="2" rowspan="2" id="option_col_name" nowrap="nowrap" align="center"></td>
+        </tr>
+        </thead>
+        <tbody id="where">
+        <tr><td align="center" nowrap="nowrap"><b>WHERE</b></td></tr>
+        <tr>
+        <td width="58" nowrap="nowrap"><?php echo __('Relation operator'); ?></td>
+            <td width="102"><select name="rel_opt" id="rel_opt">
+                    <option value="--" selected="selected"> -- </option>
+                    <option value="=" > = </option>
+                    <option value=">"> > </option>
+                    <option value="<"> < </option>
+                    <option value=">="> >= </option>
+                    <option value="<="> <= </option>
+                    <option value="NOT"> NOT </option>
+                    <option value="IN"> IN </option>
+                    <option value="EXCEPT"> <?php echo __('Except'); ?> </option>
+                    <option value="NOT IN"> NOT IN </option>
+                </select>
+            </td>
+        </tr>
+        <tr>
+        <td nowrap="nowrap"><?php echo __('Value'); ?>/<br /><?php echo __('subquery'); ?></td>
+            <td><textarea id="Query" value="" cols="18"></textarea>
+            </td>
+        </tr>
+        <tr><td align="center" nowrap="nowrap"><b><?php echo __('Rename to'); ?></b></td></tr>
+        <tr>
+        <td width="58" nowrap="nowrap"><?php echo __('New name'); ?></td>
+        	<td width="102"><input type="text" value="" id="new_name"/></td>
+        </tr>
+        <tr><td align="center" nowrap="nowrap"><b><?php echo __('Aggregate'); ?></b></td></tr>
+         <tr>
+         <td width="58" nowrap="nowrap"><?php echo __('Operator'); ?></td>
+            <td width="102"><select name="operator" id="operator">
+                    <option value="---" selected="selected">---</option>
+                    <option value="sum" > SUM </option>
+                    <option value="min"> MIN </option>
+                    <option value="max"> MAX </option>
+                    <option value="avg"> AVG </option>
+                    <option value="count"> COUNT </option>
+                    </select>
+           </td></tr>
+           <tr>
+				<td nowrap="nowrap" width="58" align="center"><b>GROUP BY</b></td>
+                <td><input type="checkbox" value="groupby" id="groupby"/></td>
+           </tr>
+           <tr>
+				<td nowrap="nowrap" width="58" align="center"><b>ORDER BY</b></td>
+                <td><input type="checkbox" value="orderby" id="orderby"/></td>
+           </tr>
+          <tr><td align="center" nowrap="nowrap"><b>HAVING</b></td></tr>
+          <tr>
+          <td width="58" nowrap="nowrap"><?php echo __('Operator'); ?></td>
+            <td width="102"><select name="h_operator" id="h_operator">
+                    <option value="---" selected="selected">---</option>
+                    <option value="None" > <?php echo __('None'); ?> </option>
+                    <option value="sum" > SUM </option>
+                    <option value="min"> MIN </option>
+                    <option value="max"> MAX </option>
+                    <option value="avg"> AVG </option>
+                    <option value="count"> COUNT </option>
+                    </select>
+           	</td></tr>
+            <tr>
+            <td width="58" nowrap="nowrap"><?php echo __('Relation operator'); ?></td>
+            <td width="102"><select name="h_rel_opt" id="h_rel_opt">
+                    <option value="--" selected="selected"> -- </option>
+                    <option value="=" > = </option>
+                    <option value=">"> > </option>
+                    <option value="<"> < </option>
+                    <option value=">="> >= </option>
+                    <option value="<="> <= </option>
+                    <option value="NOT"> NOT </option>
+                    <option value="IN"> IN </option>
+                    <option value="EXCEPT"> <?php echo __('Except'); ?> </option>
+                    <option value="NOT IN"> NOT IN </option>
+                </select>
+            </td>
+        	</tr>
+            <tr>
+            <td width="58" nowrap="nowrap"><?php echo __('Value'); ?>/<br/><?php echo __('subquery'); ?></td>
+        		<td width="102"><textarea id="having" value="" cols="18"></textarea></td>
+        	</tr>
+        </tbody>
+        <tbody>
+        <tr>
+            <td colspan="2" align="center" nowrap="nowrap">
+                <input type="button" class="butt" name="Button"
+                    value="<?php echo __('OK'); ?>" onclick="add_object()" />
+                <input type="button" class="butt" name="Button"
+                    value="<?php echo __('Cancel'); ?>"
+                    onclick="Close_option()" />
+            </td>
+        </tr>
+        </tbody>
+        </table>
+    </td>
+    <td class="frams6"></td>
+</tr>
+<tr>
+    <td class="frams4"><div class="bor"></div></td>
+    <td class="frams7"></td>
+    <td class="frams3"></td>
+</tr>
+</tbody>
+</table>
+
+<table id="query_rename_to" style="visibility:<?php echo $hidden ?>;"
+    width="5%" border="0" cellpadding="0" cellspacing="0">
+<tbody>
+<tr>
+    <td class="frams1" width="10px"></td>
+    <td class="frams5" width="99%" ></td>
+    <td class="frams2" width="10px"><div class="bor"></div></td>
+</tr>
+<tr>
+    <td class="frams8"></td>
+    <td class="input_tab">
+        <table width="168" border="0" align="center" cellpadding="2" cellspacing="0">
+        <thead>
+        <tr>
+        <td colspan="2" align="center" nowrap="nowrap"><strong><?php echo __('Rename to'); ?></strong></td>
+        </tr>
+        </thead>
+        <tbody id="rename_to">
+        <tr>
+        <td width="58" nowrap="nowrap"><?php echo __('New name'); ?></td>
+            <td width="102">
+            	<input type="text" value="" id="e_rename"/>
+            </td>
+        </tr>
+        </tbody>
+        <tbody>
+        <tr>
+            <td colspan="2" align="center" nowrap="nowrap">
+                <input type="button" class="butt" name="Button"
+                    value="<?php echo __('OK'); ?>" onclick="edit('Rename')" />
+                <input type="button" class="butt" name="Button"
+                    value="<?php echo __('Cancel'); ?>"
+                    onclick="document.getElementById('query_rename_to').style.visibility = 'hidden';" />
+            </td>
+        </tr>
+        </tbody>
+        </table>
+    </td>
+    <td class="frams6"></td>
+</tr>
+<tr>
+    <td class="frams4"><div class="bor"></div></td>
+    <td class="frams7"></td>
+    <td class="frams3"></td>
+</tr>
+</tbody>
+</table>
+
+<table id="query_having" style="visibility:<?php echo $hidden ?>;"
+    width="5%" border="0" cellpadding="0" cellspacing="0">
+<tbody>
+	<tr>
+    	<td class="frams1" width="10px"></td>
+    	<td class="frams5" width="99%" ></td>
+    	<td class="frams2" width="10px"><div class="bor"></div></td>
+	</tr>
+<tr>
+    <td class="frams8"></td>
+    <td class="input_tab">
+    <table width="168" border="0" align="center" cellpadding="2" cellspacing="0">
+       <thead>
+        <tr>
+          <td colspan="2" align="center" nowrap="nowrap"><strong>HAVING</strong></td>
+        </tr>
+        </thead>
+        <tbody id="rename_to">
+        <tr>
+        <td width="58" nowrap="nowrap"><?php echo __('Operator'); ?></td>
+            <td width="102"><select name="hoperator" id="hoperator">
+                    <option value="---" selected="selected">---</option>
+                    <option value="None" > None </option>
+                    <option value="sum" > SUM </option>
+                    <option value="min"> MIN </option>
+                    <option value="max"> MAX </option>
+                    <option value="avg"> AVG </option>
+                    <option value="count"> COUNT </option>
+                    </select>
+           </td></tr>
+        <tr>
+        <tr>
+        <td width="58" nowrap="nowrap"><?php echo __('Operator'); ?></td>
+            <td width="102"><select name="hrel_opt" id="hrel_opt">
+            	<option value="--" selected="selected"> -- </option>
+                    <option value="=" > = </option>
+                    <option value=">"> > </option>
+                    <option value="<"> < </option>
+                    <option value=">="> >= </option>
+                    <option value="<="> <= </option>
+                    <option value="NOT"> NOT </option>
+                    <option value="IN"> IN </option>
+                    <option value="EXCEPT"> <?php echo __('Except'); ?> </option>
+                    <option value="NOT IN"> NOT IN </option>
+                </select>
+            </td>
+        </tr>
+        <tr>
+        <td nowrap="nowrap"><?php echo __('Value'); ?>/<br /><?php echo __('subquery'); ?></td>
+            <td><textarea id="hQuery" value="" cols="18"></textarea>
+            </td>
+        	</tr>
+         </tbody>
+        <tbody>
+        <tr>
+            <td colspan="2" align="center" nowrap="nowrap">
+                <input type="button" class="butt" name="Button"
+                    value="<?php echo __('OK'); ?>" onclick="edit('Having')" />
+                <input type="button" class="butt" name="Button"
+                    value="<?php echo __('Cancel'); ?>"
+                    onclick="document.getElementById('query_having').style.visibility = 'hidden';" />
+            </td>
+        </tr>
+        </tbody>
+        </table>
+    </td>
+    <td class="frams6"></td>
+</tr>
+<tr>
+    <td class="frams4"><div class="bor"></div></td>
+    <td class="frams7"></td>
+    <td class="frams3"></td>
+</tr>
+</tbody>
+</table>
+
+<table id="query_Aggregate" style="visibility:<?php echo $hidden ?>;"
+    width="5%" border="0" cellpadding="0" cellspacing="0">
+<tbody>
+<tr>
+    <td class="frams1" width="10px"></td>
+    <td class="frams5" width="99%" ></td>
+    <td class="frams2" width="10px"><div class="bor"></div></td>
+</tr>
+<tr>
+    <td class="frams8"></td>
+    <td class="input_tab">
+        <table width="168" border="0" align="center" cellpadding="2" cellspacing="0">
+        <thead>
+        <tr>
+        <td colspan="2" align="center" nowrap="nowrap"><strong><?php echo __('Aggregate'); ?></strong></td>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+        <td width="58" nowrap="nowrap"><?php echo __('Operator'); ?></td>
+            <td width="102">
+            	<select name="operator" id="e_operator">
+                	<option value="---" selected="selected">---</option>
+                	<option value="sum" > SUM </option>
+                	<option value="min"> MIN </option>
+                	<option value="max"> MAX </option>
+   	            	<option value="avg"> AVG </option>
+                	<option value="avg"> COUNT </option>
+                </select>
+           </td></tr>
+        </tbody>
+        <tbody>
+        <tr>
+            <td colspan="2" align="center" nowrap="nowrap">
+                <input type="button" class="butt" name="Button"
+                    value="<?php echo __('OK'); ?>" onclick="edit('Aggregate')" />
+                <input type="button" class="butt" name="Button"
+                    value="<?php echo __('Cancel'); ?>"
+                    onclick="document.getElementById('query_Aggregate').style.visibility = 'hidden';" />
+            </td>
+        </tr>
+        </tbody>
+        </table>
+    </td>
+    <td class="frams6"></td>
+</tr>
+<tr>
+    <td class="frams4"><div class="bor"></div></td>
+    <td class="frams7"></td>
+    <td class="frams3"></td>
+</tr>
+</tbody>
+</table>
+
+<table id="query_where" style="visibility:<?php echo $hidden ?>;"
+    width="5%" border="0" cellpadding="0" cellspacing="0">
+<tbody>
+	<tr>
+    	<td class="frams1" width="10px"></td>
+    	<td class="frams5" width="99%" ></td>
+    	<td class="frams2" width="10px"><div class="bor"></div></td>
+	</tr>
+<tr>
+    <td class="frams8"></td>
+    <td class="input_tab">
+    <table width="168" border="0" align="center" cellpadding="2" cellspacing="0">
+       <thead>
+        <tr>
+          <td colspan="2" align="center" nowrap="nowrap"><strong>WHERE</strong></td>
+        </tr>
+        </thead>
+        <tbody id="rename_to">
+        <tr>
+        <td width="58" nowrap="nowrap"><?php echo __('Operator'); ?></td>
+            <td width="102"><select name="erel_opt" id="erel_opt">
+            	<option value="--" selected="selected"> -- </option>
+                    <option value="=" > = </option>
+                    <option value=">"> > </option>
+                    <option value="<"> < </option>
+                    <option value=">="> >= </option>
+                    <option value="<="> <= </option>
+                    <option value="NOT"> NOT </option>
+                    <option value="IN"> IN </option>
+                    <option value="EXCEPT"> <?php echo __('Except'); ?> </option>
+                    <option value="NOT IN"> NOT IN </option>
+                </select>
+            </td>
+        </tr>
+        <tr>
+        <td nowrap="nowrap"><?php echo __('Value'); ?>/<br /><?php echo __('subquery'); ?></td>
+            <td><textarea id="eQuery" value="" cols="18"></textarea>
+            </td>
+        	</tr>
+         </tbody>
+        <tbody>
+        <tr>
+            <td colspan="2" align="center" nowrap="nowrap">
+                <input type="button" class="butt" name="Button"
+                    value="<?php echo __('OK'); ?>" onclick="edit('Where')" />
+                <input type="button" class="butt" name="Button"
+                    value="<?php echo __('Cancel'); ?>"
+                    onclick="document.getElementById('query_where').style.visibility = 'hidden';" />
+            </td>
+        </tr>
+        </tbody>
+        </table>
+    </td>
+    <td class="frams6"></td>
+</tr>
+<tr>
+    <td class="frams4"><div class="bor"></div></td>
+    <td class="frams7"></td>
+    <td class="frams3"></td>
+</tr>
+</tbody>
+</table>
+
+<?php
+if($_REQUEST['query']) {
+	echo '<div class="panel">';
+  	echo '<div style="clear:both;"></div>';
+   	echo '<div id="ab"></div>';
+ 	echo '<div style="clear:both;"></div>';
+  	echo '</div>';
+	echo '<a class="trigger" href="#">' . __('Active options') . '</a>';
+	echo '<div id="filter"></div>';
+	echo '<div id="box">';
+  	echo '<span id="boxtitle"></span>';
+  	echo '<form method="post" action="db_qbe.php" >';
+    echo '<textarea cols="80" name="sql_query" id="textSqlquery" rows="15"></textarea><div id="tblfooter">';
+    echo '  <input type="submit" name="submit_sql" class="btn">';
+    echo '  <input type="button" name="cancel" value="Cancel" onClick="closebox()" class="btn">';
+    echo PMA_generate_common_hidden_inputs($GLOBALS['db']);
+    echo '</div></p>';
+    echo '</form></div>';
+
+} ?>
+
+
 <!-- cache images -->
 <img src="pmd/images/2leftarrow_m.png" width="0" height="0" alt="" />
 <img src="pmd/images/rightarrow1.png" width="0" height="0" alt="" />

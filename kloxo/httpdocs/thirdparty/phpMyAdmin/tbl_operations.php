@@ -2,7 +2,6 @@
 /* vim: set expandtab sw=4 ts=4 sts=4: */
 /**
  *
- * @version $Id$
  * @package phpMyAdmin
  */
 
@@ -10,7 +9,6 @@
  *
  */
 require_once './libraries/common.inc.php';
-require_once './libraries/Table.class.php';
 
 $pma_table = new PMA_Table($GLOBALS['table'], $GLOBALS['db']);
 
@@ -24,7 +22,6 @@ $url_params['goto'] = $url_params['back'] = 'tbl_operations.php';
 /**
  * Gets relation settings
  */
-require_once './libraries/relation.lib.php';
 $cfgRelation = PMA_getRelationsParam();
 
 /**
@@ -66,6 +63,20 @@ if ($is_aria) {
 $reread_info = false;
 $table_alters = array();
 
+/**
+ * If the table has to be moved to some other database
+ */
+if(isset($_REQUEST['submit_move']) || isset($_REQUEST['submit_copy'])) {
+    $_message = '';
+    require_once './tbl_move_copy.php';
+}
+/**
+ * If the table has to be maintained
+ */
+if(isset($_REQUEST['table_maintenance'])) {
+    require_once './sql.php';
+    unset($result);
+}
 /**
  * Updates table comment, type and options if required
  */
@@ -157,7 +168,7 @@ if (isset($_REQUEST['submitoptions'])) {
         $reread_info    = true;
         unset($table_alters);
         foreach (PMA_DBI_get_warnings() as $warning) {
-            // In MariaDB 5.1.44, when altering a table from Maria to MyISAM 
+            // In MariaDB 5.1.44, when altering a table from Maria to MyISAM
             // and if TRANSACTIONAL was set, the system reports an error;
             // I discussed with a Maria developer and he agrees that this
             // should not be reported with a Level of Error, so here
@@ -194,7 +205,7 @@ if (isset($_REQUEST['submit_partition']) && ! empty($_REQUEST['partition_operati
 if ($reread_info) {
     // to avoid showing the old value (for example the AUTO_INCREMENT) after
     // a change, clear the cache
-    PMA_Table::$cache = array(); 
+    PMA_Table::$cache = array();
     $page_checksum = $checksum = $delay_key_write = 0;
     require './libraries/tbl_info.inc.php';
 }
@@ -205,19 +216,19 @@ unset($reread_info);
  */
 require_once './libraries/tbl_links.inc.php';
 
-if (isset($result) && empty($zero_rows)) {
+if (isset($result) && empty($message_to_show)) {
     // set to success by default, because result set could be empty
     // (for example, a table rename)
     $_type = 'success';
     if (empty($_message)) {
-        $_message = $result ? $strSuccess : $strError;
+        $_message = $result ? __('Your SQL query has been executed successfully') : __('Error');
         // $result should exist, regardless of $_message
         $_type = $result ? 'success' : 'error';
     }
     if (! empty($warning_messages)) {
         $_message = new PMA_Message;
         $_message->addMessages($warning_messages);
-        $_message->isWarning(true);
+        $_message->isError(true);
         unset($warning_messages);
     }
     PMA_showMessage($_message, $sql_query, $_type);
@@ -242,11 +253,11 @@ unset($local_query);
  */
 ?>
 <!-- Order the table -->
-<div id="div_table_order">
+<div class="operations_half_width">
 <form method="post" action="tbl_operations.php">
 <?php echo PMA_generate_common_hidden_inputs($GLOBALS['db'], $GLOBALS['table']); ?>
 <fieldset id="fieldset_table_order">
-    <legend><?php echo $strAlterOrderBy; ?></legend>
+    <legend><?php echo __('Alter table order by'); ?></legend>
     <select name="order_field">
 <?php
 foreach ($columns as $fieldname) {
@@ -255,25 +266,27 @@ foreach ($columns as $fieldname) {
 }
 unset($columns);
 ?>
-    </select> <?php echo $strSingly; ?>
+    </select> <?php echo __('(singly)'); ?>
     <select name="order_order">
-        <option value="asc"><?php echo $strAscending; ?></option>
-        <option value="desc"><?php echo $strDescending; ?></option>
+        <option value="asc"><?php echo __('Ascending'); ?></option>
+        <option value="desc"><?php echo __('Descending'); ?></option>
     </select>
-    <input type="submit" name="submitorderby" value="<?php echo $strGo; ?>" />
+</fieldset>
+<fieldset class="tblFooters">
+    <input type="submit" name="submitorderby" value="<?php echo __('Go'); ?>" />
 </fieldset>
 </form>
 </div>
 
 <!-- Move table -->
-<div id="div_table_rename">
-<form method="post" action="tbl_move_copy.php"
+<div class="operations_half_width">
+<form method="post" action="tbl_operations.php"
     onsubmit="return emptyFormElements(this, 'new_name')">
 <?php echo PMA_generate_common_hidden_inputs($GLOBALS['db'], $GLOBALS['table']); ?>
 <input type="hidden" name="reload" value="1" />
 <input type="hidden" name="what" value="data" />
 <fieldset id="fieldset_table_rename">
-    <legend><?php echo $strMoveTable; ?></legend>
+    <legend><?php echo __('Move table to (database<b>.</b>table):'); ?></legend>
 <?php if (count($GLOBALS['pma']->databases) > $GLOBALS['cfg']['MaxDbList']) {
 ?>
     <input type="text" maxlength="100" size="30" name="target_db" value="<?php echo htmlspecialchars($GLOBALS['db']); ?>"/>
@@ -294,10 +307,10 @@ value="<?php echo htmlspecialchars($GLOBALS['table']); ?>" /><br />
     // next value but users can decide if they want it or not for the operation
     ?>
     <input type="checkbox" name="sql_auto_increment" value="1" id="checkbox_auto_increment_mv" checked="checked" />
-    <label for="checkbox_auto_increment_mv"><?php echo $strAddAutoIncrement; ?></label><br />
+    <label for="checkbox_auto_increment_mv"><?php echo __('Add AUTO_INCREMENT value'); ?></label><br />
 </fieldset>
 <fieldset class="tblFooters">
-    <input type="submit" name="submit_move" value="<?php echo $strGo; ?>" />
+    <input type="submit" name="submit_move" value="<?php echo __('Go'); ?>" />
 </fieldset>
 </form>
 </div>
@@ -320,29 +333,29 @@ if (strstr($show_comment, '; InnoDB free') === false) {
 // DELAY_KEY_WRITE, CHECKSUM, : MyISAM only
 // AUTO_INCREMENT: MyISAM and InnoDB since 5.0.3, PBXT
 
-// nijel: Here should be version check for InnoDB, however it is supported
+// Here should be version check for InnoDB, however it is supported
 // in >5.0.4, >4.1.12 and >4.0.11, so I decided not to
 // check for version
 ?>
 
 <!-- Table options -->
-<div id="div_table_options">
+<div class="operations_half_width clearfloat">
 <form method="post" action="tbl_operations.php">
 <?php echo PMA_generate_common_hidden_inputs($GLOBALS['db'], $GLOBALS['table']); ?>
 <input type="hidden" name="reload" value="1" />
 <fieldset>
-    <legend><?php echo $strTableOptions; ?></legend>
+    <legend><?php echo __('Table options'); ?></legend>
 
     <table>
     <!-- Change table name -->
-    <tr><td><?php echo $strRenameTable; ?></td>
+    <tr><td><?php echo __('Rename table to'); ?></td>
         <td><input type="text" size="20" name="new_name" onfocus="this.select()"
                 value="<?php echo htmlspecialchars($GLOBALS['table']); ?>" />
         </td>
     </tr>
 
     <!-- Table comments -->
-    <tr><td><?php echo $strTableComments; ?></td>
+    <tr><td><?php echo __('Table comments'); ?></td>
         <td><input type="text" name="comment" maxlength="60" size="30"
                 value="<?php echo htmlspecialchars($comment); ?>" onfocus="this.select()" />
             <input type="hidden" name="prev_comment" value="<?php echo htmlspecialchars($comment); ?>" />
@@ -350,7 +363,7 @@ if (strstr($show_comment, '; InnoDB free') === false) {
     </tr>
 
     <!-- Storage engine -->
-    <tr><td><?php echo $strStorageEngine; ?>
+    <tr><td><?php echo __('Storage Engine'); ?>
             <?php echo PMA_showMySQLDocu('Storage_engines', 'Storage_engines'); ?>
         </td>
         <td><?php echo PMA_StorageEngine::getHtmlSelect('new_tbl_type', null, $tbl_type); ?>
@@ -358,7 +371,7 @@ if (strstr($show_comment, '; InnoDB free') === false) {
     </tr>
 
     <!-- Table character set -->
-    <tr><td><?php echo $strCollation; ?></td>
+    <tr><td><?php echo __('Collation'); ?></td>
         <td><?php echo PMA_generateCharsetDropdownBox(PMA_CSDROPDOWN_COLLATION,
                 'tbl_collation', null, $tbl_collation, false, 3); ?>
         </td>
@@ -499,19 +512,19 @@ if (isset($possible_row_formats[$tbl_type])) {
     </table>
 </fieldset>
 <fieldset class="tblFooters">
-        <input type="submit" name="submitoptions" value="<?php echo $strGo; ?>" />
+        <input type="submit" name="submitoptions" value="<?php echo __('Go'); ?>" />
 </fieldset>
 </form>
 </div>
 
 <!-- Copy table -->
-<div id="div_table_copy">
-<form method="post" action="tbl_move_copy.php"
+<div class="operations_half_width">
+<form method="post" action="tbl_operations.php"
     onsubmit="return emptyFormElements(this, 'new_name')">
 <?php echo PMA_generate_common_hidden_inputs($GLOBALS['db'], $GLOBALS['table']); ?>
 <input type="hidden" name="reload" value="1" />
 <fieldset>
-    <legend><?php echo $strCopyTable; ?></legend>
+    <legend><?php echo __('Copy table to (database<b>.</b>table):'); ?></legend>
 <?php if (count($GLOBALS['pma']->databases) > $GLOBALS['cfg']['MaxDbList']) {
 ?>
     <input type="text" maxlength="100" size="30" name="target_db" value="<?php echo htmlspecialchars($GLOBALS['db']); ?>"/>
@@ -525,27 +538,27 @@ if (isset($possible_row_formats[$tbl_type])) {
     } // end if
 ?>
     &nbsp;<strong>.</strong>&nbsp;
-    <input type="text" size="20" name="new_name" onfocus="this.select()" /><br />
+    <input type="text" size="20" name="new_name" onfocus="this.select()" value="<?php echo htmlspecialchars($GLOBALS['table']); ?>"/><br />
 <?php
         $choices = array(
-            'structure' => $strStrucOnly,
-            'data'      => $strStrucData,
-            'dataonly'  => $strDataOnly);
+            'structure' => __('Structure only'),
+            'data'      => __('Structure and data'),
+            'dataonly'  => __('Data only'));
         PMA_display_html_radio('what', $choices, 'data', true);
         unset($choices);
 ?>
 
     <input type="checkbox" name="drop_if_exists" value="true" id="checkbox_drop" />
-    <label for="checkbox_drop"><?php echo sprintf($strAddClause, 'DROP TABLE'); ?></label><br />
+    <label for="checkbox_drop"><?php echo sprintf(__('Add %s'), 'DROP TABLE'); ?></label><br />
     <input type="checkbox" name="sql_auto_increment" value="1" id="checkbox_auto_increment_cp" />
-    <label for="checkbox_auto_increment_cp"><?php echo $strAddAutoIncrement; ?></label><br />
+    <label for="checkbox_auto_increment_cp"><?php echo __('Add AUTO_INCREMENT value'); ?></label><br />
     <?php
         // display "Add constraints" choice only if there are
         // foreign keys
         if (PMA_getForeigners($GLOBALS['db'], $GLOBALS['table'], '', 'foreign')) {
         ?>
     <input type="checkbox" name="add_constraints" value="1" id="checkbox_constraints" />
-    <label for="checkbox_constraints"><?php echo $strAddConstraints; ?></label><br />
+    <label for="checkbox_constraints"><?php echo __('Add constraints'); ?></label><br />
         <?php
         } // endif
         if (isset($_COOKIE['pma_switch_to_new'])
@@ -558,19 +571,19 @@ if (isset($possible_row_formats[$tbl_type])) {
             isset($pma_switch_to_new) && $pma_switch_to_new == 'true'
             ? ' checked="checked"'
             : ''; ?> />
-    <label for="checkbox_switch"><?php echo $strSwitchToTable; ?></label>
+    <label for="checkbox_switch"><?php echo __('Switch to copied table'); ?></label>
 </fieldset>
 <fieldset class="tblFooters">
-    <input type="submit" name="submit_copy" value="<?php echo $strGo; ?>" />
+    <input type="submit" name="submit_copy" value="<?php echo __('Go'); ?>" />
 </fieldset>
 </form>
 </div>
 
 <br class="clearfloat"/>
 
-<div id="div_table_maintenance">
+<div class="operations_half_width">
 <fieldset>
- <legend><?php echo $strTableMaintenance; ?></legend>
+ <legend><?php echo __('Table maintenance'); ?></legend>
 
 <ul>
 <?php
@@ -578,10 +591,13 @@ if (isset($possible_row_formats[$tbl_type])) {
 if ($is_myisam_or_aria || $is_innodb || $is_berkeleydb) {
     if ($is_myisam_or_aria || $is_innodb) {
         $this_url_params = array_merge($url_params,
-            array('sql_query' => 'CHECK TABLE ' . PMA_backquote($GLOBALS['table'])));
+            array(
+                'sql_query' => 'CHECK TABLE ' . PMA_backquote($GLOBALS['table']),
+                'table_maintenance' => 'Go',
+                ));
         ?>
-    <li><a href="sql.php<?php echo PMA_generate_common_url($this_url_params); ?>">
-            <?php echo $strCheckTable; ?></a>
+    <li><a href="tbl_operations.php<?php echo PMA_generate_common_url($this_url_params); ?>">
+            <?php echo __('Check table'); ?></a>
         <?php echo PMA_showMySQLDocu('MySQL_Database_Administration', 'CHECK_TABLE'); ?>
     </li>
         <?php
@@ -591,37 +607,46 @@ if ($is_myisam_or_aria || $is_innodb || $is_berkeleydb) {
             array('sql_query' => 'ALTER TABLE ' . PMA_backquote($GLOBALS['table']) . ' ENGINE = InnoDB'));
         ?>
     <li><a href="sql.php<?php echo PMA_generate_common_url($this_url_params); ?>">
-            <?php echo $strDefragment; ?></a>
+            <?php echo __('Defragment table'); ?></a>
         <?php echo PMA_showMySQLDocu('Table_types', 'InnoDB_File_Defragmenting'); ?>
     </li>
         <?php
     }
     if ($is_myisam_or_aria || $is_berkeleydb) {
         $this_url_params = array_merge($url_params,
-            array('sql_query' => 'ANALYZE TABLE ' . PMA_backquote($GLOBALS['table'])));
+            array(
+                'sql_query' => 'ANALYZE TABLE ' . PMA_backquote($GLOBALS['table']),
+                'table_maintenance' => 'Go',
+                ));
         ?>
-    <li><a href="sql.php<?php echo PMA_generate_common_url($this_url_params); ?>">
-            <?php echo $strAnalyzeTable; ?></a>
+    <li><a href="tbl_operations.php<?php echo PMA_generate_common_url($this_url_params); ?>">
+            <?php echo __('Analyze table'); ?></a>
         <?php echo PMA_showMySQLDocu('MySQL_Database_Administration', 'ANALYZE_TABLE');?>
     </li>
         <?php
     }
     if ($is_myisam_or_aria) {
         $this_url_params = array_merge($url_params,
-            array('sql_query' => 'REPAIR TABLE ' . PMA_backquote($GLOBALS['table'])));
+            array(
+                'sql_query' => 'REPAIR TABLE ' . PMA_backquote($GLOBALS['table']),
+                'table_maintenance' => 'Go',
+                ));
         ?>
-    <li><a href="sql.php<?php echo PMA_generate_common_url($this_url_params); ?>">
-            <?php echo $strRepairTable; ?></a>
+    <li><a href="tbl_operations.php<?php echo PMA_generate_common_url($this_url_params); ?>">
+            <?php echo __('Repair table'); ?></a>
         <?php echo PMA_showMySQLDocu('MySQL_Database_Administration', 'REPAIR_TABLE'); ?>
     </li>
         <?php
     }
     if ($is_myisam_or_aria || $is_innodb || $is_berkeleydb) {
         $this_url_params = array_merge($url_params,
-            array('sql_query' => 'OPTIMIZE TABLE ' . PMA_backquote($GLOBALS['table'])));
+            array(
+                'sql_query' => 'OPTIMIZE TABLE ' . PMA_backquote($GLOBALS['table']),
+                'table_maintenance' => 'Go',
+                ));
         ?>
-    <li><a href="sql.php<?php echo PMA_generate_common_url($this_url_params); ?>">
-            <?php echo $strOptimizeTable; ?></a>
+    <li><a href="tbl_operations.php<?php echo PMA_generate_common_url($this_url_params); ?>">
+            <?php echo __('Optimize table'); ?></a>
         <?php echo PMA_showMySQLDocu('MySQL_Database_Administration', 'OPTIMIZE_TABLE'); ?>
     </li>
         <?php
@@ -630,28 +655,78 @@ if ($is_myisam_or_aria || $is_innodb || $is_berkeleydb) {
 $this_url_params = array_merge($url_params,
     array(
         'sql_query' => 'FLUSH TABLE ' . PMA_backquote($GLOBALS['table']),
-        'zero_rows' => sprintf($strTableHasBeenFlushed,
+        'message_to_show' => sprintf(__('Table %s has been flushed'),
             htmlspecialchars($GLOBALS['table'])),
         'reload'    => 1,
         ));
 ?>
     <li><a href="sql.php<?php echo PMA_generate_common_url($this_url_params); ?>">
-            <?php echo $strFlushTable; ?></a>
+            <?php echo __('Flush the table (FLUSH)'); ?></a>
         <?php echo PMA_showMySQLDocu('MySQL_Database_Administration', 'FLUSH'); ?>
     </li>
 </ul>
 </fieldset>
 </div>
+<?php if (! (isset($db_is_information_schema) && $db_is_information_schema)) { ?>
+<div class="operations_half_width">
+<fieldset class="caution">
+ <legend><?php echo __('Delete data or table'); ?></legend>
+
+<ul>
+<?php
+if (! $tbl_is_view && ! (isset($db_is_information_schema) && $db_is_information_schema)) {
+    $this_sql_query = 'TRUNCATE TABLE ' . PMA_backquote($GLOBALS['table']);
+    $this_url_params = array_merge($url_params,
+        array(
+            'sql_query' => $this_sql_query,
+            'goto' => 'tbl_structure.php',
+            'reload' => '1',
+            'message_to_show' => sprintf(__('Table %s has been emptied'), htmlspecialchars($table)),
+        ));
+    ?>
+    <li><a href="sql.php<?php echo PMA_generate_common_url($this_url_params); ?>" onclick="return confirmLink(this, '<?php echo PMA_jsFormat($this_sql_query); ?>')">
+            <?php echo __('Empty the table (TRUNCATE)'); ?></a>
+        <?php echo PMA_showMySQLDocu('SQL-Syntax', 'TRUNCATE_TABLE'); ?>
+    </li>
+<?php
+}
+if (! (isset($db_is_information_schema) && $db_is_information_schema)) {
+    $this_sql_query = 'DROP TABLE ' . PMA_backquote($GLOBALS['table']);
+    $this_url_params = array_merge($url_params,
+        array(
+            'sql_query' => $this_sql_query,
+            'goto' => 'db_operations.php',
+            'reload' => '1',
+            'purge' => '1',
+            'message_to_show' => sprintf(($tbl_is_view ? __('View %s has been dropped') : __('Table %s has been dropped')), htmlspecialchars($table)),
+            // table name is needed to avoid running
+            // PMA_relationsCleanupDatabase() on the whole db later
+            'table' => $GLOBALS['table'],
+        ));
+    ?>
+    <li><a href="sql.php<?php echo PMA_generate_common_url($this_url_params); ?>" onclick="return confirmLink(this, '<?php echo PMA_jsFormat($this_sql_query); ?>')">
+            <?php echo __('Delete the table (DROP)'); ?></a>
+        <?php echo PMA_showMySQLDocu('SQL-Syntax', 'DROP_TABLE'); ?>
+    </li>
+<?php
+}
+?>
+</ul>
+</fieldset>
+</div>
+<?php
+}
+?>
 <?php if (PMA_Partition::havePartitioning()) {
     $partition_names = PMA_Partition::getPartitionNames($db, $table);
     // show the Partition maintenance section only if we detect a partition
     if (! is_null($partition_names[0])) {
     ?>
-<div id="div_partition_maintenance">
+<div class="operations_half_width">
 <form method="post" action="tbl_operations.php">
 <?php echo PMA_generate_common_hidden_inputs($GLOBALS['db'], $GLOBALS['table']); ?>
 <fieldset>
- <legend><?php echo $strPartitionMaintenance; ?></legend>
+ <legend><?php echo __('Partition maintenance'); ?></legend>
 <?php
         $html_select = '<select name="partition_name">' . "\n";
         foreach($partition_names as $one_partition) {
@@ -659,14 +734,14 @@ $this_url_params = array_merge($url_params,
             $html_select .= '<option value="' . $one_partition . '">' . $one_partition . '</option>' . "\n";
         }
         $html_select .= '</select>' . "\n";
-        printf($GLOBALS['strPartition'], $html_select);
+        printf(__('Partition %s'), $html_select);
         unset($partition_names, $one_partition, $html_select);
         $choices = array(
-            'ANALYZE' => $strAnalyze,
-            'CHECK' => $strCheck,
-            'OPTIMIZE' => $strOptimize,
-            'REBUILD' => $strRebuild,
-            'REPAIR' => $strRepair);
+            'ANALYZE' => __('Analyze'),
+            'CHECK' => __('Check'),
+            'OPTIMIZE' => __('Optimize'),
+            'REBUILD' => __('Rebuild'),
+            'REPAIR' => __('Repair'));
         PMA_display_html_radio('partition_operation', $choices, '', false);
         unset($choices);
         echo PMA_showMySQLDocu('partitioning_maintenance', 'partitioning_maintenance');
@@ -678,10 +753,10 @@ $this_url_params = array_merge($url_params,
             ));
 ?>
     <br /><a href="sql.php<?php echo PMA_generate_common_url($this_url_params); ?>">
-            <?php echo $strRemovePartitioning; ?></a>
+            <?php echo __('Remove partitioning'); ?></a>
 </fieldset>
 <fieldset class="tblFooters">
-    <input type="submit" name="submit_partition" value="<?php echo $strGo; ?>" />
+    <input type="submit" name="submit_partition" value="<?php echo __('Go'); ?>" />
 </fieldset>
 </form>
 </div>
@@ -702,9 +777,9 @@ if ($cfgRelation['relwork'] && ! $is_innodb) {
     if ($foreign) {
         ?>
     <!-- Referential integrity check -->
-<div id="div_referential_integrity">
+<div class="operations_half_width">
 <fieldset>
- <legend><?php echo $strReferentialIntegrity; ?></legend>
+ <legend><?php echo __('Check referential integrity:'); ?></legend>
     <ul>
         <?php
         echo "\n";
@@ -748,7 +823,7 @@ if ($cfgRelation['relwork'] && ! $is_innodb) {
 /**
  * Displays the footer
  */
-require_once './libraries/footer.inc.php';
+require './libraries/footer.inc.php';
 
 
 function PMA_set_global_variables_for_engine($tbl_type)

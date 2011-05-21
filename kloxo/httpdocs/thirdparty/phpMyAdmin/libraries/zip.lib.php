@@ -2,7 +2,6 @@
 /* vim: set expandtab sw=4 ts=4 sts=4: */
 /**
  *
- * @version $Id$
  * @package phpMyAdmin
  */
 
@@ -97,7 +96,7 @@ class zipfile
     {
         $name     = str_replace('\\', '/', $name);
 
-        $dtime    = dechex($this->unix2DosTime($time));
+        $dtime    = substr( "00000000" . dechex($this->unix2DosTime($time)), -8);
         $hexdtime = '\x' . $dtime[6] . $dtime[7]
                   . '\x' . $dtime[4] . $dtime[5]
                   . '\x' . $dtime[2] . $dtime[3]
@@ -128,7 +127,7 @@ class zipfile
 
         // "data descriptor" segment (optional but necessary if archive is not
         // served as file)
-        // nijel(2004-10-19): this seems not to be needed at all and causes
+        // this seems not to be needed at all and causes
         // problems in some cases (bug #1037737)
         //$fr .= pack('V', $crc);                 // crc32
         //$fr .= pack('V', $c_len);               // compressed filesize

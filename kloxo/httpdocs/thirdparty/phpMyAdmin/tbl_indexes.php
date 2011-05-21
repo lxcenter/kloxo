@@ -3,7 +3,6 @@
 /**
  * Displays index edit/creation form and handles it
  *
- * @version $Id$
  * @package phpMyAdmin
  */
 
@@ -64,7 +63,7 @@ if (isset($_REQUEST['do_save_data'])) {
             if ($index->getName() == '') {
                 $index->setName('PRIMARY');
             } elseif ($index->getName() != 'PRIMARY') {
-                $error = PMA_Message::error('strPrimaryKeyName');
+                $error = PMA_Message::error(__('The name of the primary key must be "PRIMARY"!'));
             }
             $sql_query .= ' ADD PRIMARY KEY';
             break;
@@ -72,7 +71,7 @@ if (isset($_REQUEST['do_save_data'])) {
         case 'UNIQUE':
         case 'INDEX':
             if ($index->getName() == 'PRIMARY') {
-                $error = PMA_Message::error('strCantRenameIdxToPrimary');
+                $error = PMA_Message::error(__('Can\'t rename index to PRIMARY!'));
             }
             $sql_query .= ' ADD ' . $index->getType() . ' '
                 . ($index->getName() ? PMA_backquote($index->getName()) : '');
@@ -88,14 +87,14 @@ if (isset($_REQUEST['do_save_data'])) {
     } // end while
 
     if (empty($index_fields)){
-        $error = PMA_Message::error('strNoIndexPartsDefined');
+        $error = PMA_Message::error(__('No index parts defined!'));
     } else {
         $sql_query .= ' (' . implode(', ', $index_fields) . ')';
     }
 
     if (! $error) {
         PMA_DBI_query($sql_query);
-        $message = PMA_Message::success('strTableAlteredSuccessfully');
+        $message = PMA_Message::success(__('Table %1$s has been altered successfully'));
         $message->addParam($table);
 
         $active_page = 'tbl_structure.php';
@@ -112,7 +111,6 @@ if (isset($_REQUEST['do_save_data'])) {
  */
 
 // Displays headers (if needed)
-$GLOBALS['js_include'][] = 'functions.js';
 $GLOBALS['js_include'][] = 'indexes.js';
 
 require_once './libraries/tbl_info.inc.php';
@@ -156,20 +154,22 @@ echo PMA_generate_common_hidden_inputs($form_params);
 <fieldset>
     <legend>
 <?php
-echo (isset($_REQUEST['create_index'])
-    ? $strCreateIndexTopic
-    : $strModifyIndexTopic);
+if (isset($_REQUEST['create_index'])) {
+    echo __('Create a new index');
+} else {
+    echo __('Modify an index');
+}
 ?>
     </legend>
 
 <div class="formelement">
-<label for="input_index_name"><?php echo $strIndexName; ?></label>
+<label for="input_index_name"><?php echo __('Index name:'); ?></label>
 <input type="text" name="index[Key_name]" id="input_index_name" size="25"
     value="<?php echo htmlspecialchars($index->getName()); ?>" onfocus="this.select()" />
 </div>
 
 <div class="formelement">
-<label for="select_index_type"><?php echo $strIndexType; ?></label>
+<label for="select_index_type"><?php echo __('Index type:'); ?></label>
 <select name="index[Index_type]" id="select_index_type" onchange="return checkIndexName()">
     <?php echo $index->generateIndexSelector(); ?>
 </select>
@@ -179,13 +179,13 @@ echo (isset($_REQUEST['create_index'])
 
 <br class="clearfloat" />
 <?php
-PMA_Message::warning('strPrimaryKeyWarning')->display();
+PMA_Message::error(__('("PRIMARY" <b>must</b> be the name of and <b>only of</b> a primary key!)'))->display();
 ?>
 
 <table>
 <thead>
-<tr><th><?php echo $strField; ?></th>
-    <th><?php echo $strSize; ?></th>
+<tr><th><?php echo __('Column'); ?></th>
+    <th><?php echo __('Size'); ?></th>
 </tr>
 </thead>
 <tbody>
@@ -195,7 +195,7 @@ foreach ($index->getColumns() as $column) {
     ?>
 <tr class="<?php echo $odd_row ? 'odd' : 'even'; ?>">
     <td><select name="index[columns][names][]">
-            <option value="">-- <?php echo $strIgnore; ?> --</option>
+            <option value="">-- <?php echo __('Ignore'); ?> --</option>
     <?php
     foreach ($fields as $field_name => $field_type) {
         if ($index->getType() != 'FULLTEXT'
@@ -220,7 +220,7 @@ for ($i = 0; $i < $add_fields; $i++) {
     ?>
 <tr class="<?php echo $odd_row ? 'odd' : 'even'; ?>">
     <td><select name="index[columns][names][]">
-            <option value="">-- <?php echo $strIgnore; ?> --</option>
+            <option value="">-- <?php echo __('Ignore'); ?> --</option>
     <?php
     foreach ($fields as $field_name => $field_type) {
         echo '<option value="' . htmlspecialchars($field_name) . '">'
@@ -243,15 +243,15 @@ for ($i = 0; $i < $add_fields; $i++) {
 </fieldset>
 
 <fieldset class="tblFooters">
-    <input type="submit" name="do_save_data" value="<?php echo $strSave; ?>" />
+    <input type="submit" name="do_save_data" value="<?php echo __('Save'); ?>" />
 <?php
-echo $strOr . ' ';
-echo sprintf($strAddToIndex,
+echo __('Or') . ' ';
+echo sprintf(__('Add to index &nbsp;%s&nbsp;column(s)'),
         '<input type="text" name="added_fields" size="2" value="1"'
     .' onfocus="this.select()" />') . "\n";
-echo '<input type="submit" name="add_fields" value="' . $strGo . '"'
+echo '<input type="submit" name="add_fields" value="' . __('Go') . '"'
     .' onclick="return checkFormElementInRange(this.form,'
-    ." 'added_fields', '" . PMA_jsFormat($GLOBALS['strInvalidColumnCount']) . "', 1"
+    ." 'added_fields', '" . PMA_jsFormat(__('Column count has to be larger than zero.')) . "', 1"
     .')" />' . "\n";
 ?>
 </fieldset>
@@ -261,5 +261,5 @@ echo '<input type="submit" name="add_fields" value="' . $strGo . '"'
 /**
  * Displays the footer
  */
-require_once './libraries/footer.inc.php';
+require './libraries/footer.inc.php';
 ?>

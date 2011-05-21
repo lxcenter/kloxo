@@ -21,7 +21,7 @@ function Swekey_auth_check()
 	if ($_SESSION['SWEKEY']['ENABLED'] && empty($_SESSION['SWEKEY']['CONF_LOADED'])) {
         $_SESSION['SWEKEY']['CONF_LOADED'] = true;
         $_SESSION['SWEKEY']['VALID_SWEKEYS'] = array();
-        $valid_swekeys = explode("\n",@file_get_contents($confFile));
+        $valid_swekeys = explode("\n", @file_get_contents($confFile));
         foreach ($valid_swekeys as $line) {
             if (preg_match("/^[0-9A-F]{32}:.+$/", $line) != false)
 			{
@@ -115,7 +115,7 @@ function Swekey_auth_error()
 		return null;
 
     if (count($_SESSION['SWEKEY']['VALID_SWEKEYS']) == 0)
-        return sprintf($GLOBALS['strSwekeyNoKeyId'], $GLOBALS['cfg']['Server']['auth_swekey_config']);
+        return sprintf(__('File %s does not contain any key id'), $GLOBALS['cfg']['Server']['auth_swekey_config']);
 
     require_once "./libraries/auth/swekey/swekey.php";
 
@@ -154,7 +154,7 @@ function Swekey_auth_error()
                 $res = Swekey_CheckOtp($swekey_id, $_SESSION['SWEKEY']['RND_TOKEN'], $swekey_otp);
                 unset($_SESSION['SWEKEY']['RND_TOKEN']);
                 if (! $res) {
-                    $result = $GLOBALS['strSwekeyAuthFailed'] . ' (' . Swekey_GetLastError() . ')';
+                    $result = __('Hardware authentication failed') . ' (' . Swekey_GetLastError() . ')';
                 }
                 else {
                     $_SESSION['SWEKEY']['AUTHENTICATED_SWEKEY'] = $swekey_id;
@@ -163,7 +163,7 @@ function Swekey_auth_error()
                 }
             }
             else {
-                $result = $GLOBALS['strSwekeyNoKey'];
+                $result = __('No valid authentication key plugged');
                 if ($_SESSION['SWEKEY']['CONF_DEBUG'])
                 {
                     $result .= "<br>".$swekey_id;
@@ -177,7 +177,7 @@ function Swekey_auth_error()
 
     $_SESSION['SWEKEY']['RND_TOKEN'] = Swekey_GetFastRndToken();
     if (strlen($_SESSION['SWEKEY']['RND_TOKEN']) != 64) {
-        $result = $GLOBALS['strSwekeyAuthFailed'] . ' (' . Swekey_GetLastError() . ')';
+        $result = __('Hardware authentication failed') . ' (' . Swekey_GetLastError() . ')';
         unset($_SESSION['SWEKEY']['CONF_LOADED']); // reload the conf file
     }
 
@@ -199,7 +199,7 @@ function Swekey_auth_error()
 	    }
         </script>
         <?php
-        return $GLOBALS['strSwekeyAuthenticating'];
+        return __('Authenticating...');
     }
 
     return $result;
@@ -231,7 +231,7 @@ function Swekey_login($input_name, $input_go)
         ?>
             function open_swekey_site()
             {
-                window.open("http://phpmyadmin.net/auth_key");
+                window.open("<?php echo PMA_linkURL('http://phpmyadmin.net/auth_key'); ?>");
             }
 
             var input_username = document.getElementById("<?php echo $input_name; ?>");

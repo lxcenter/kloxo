@@ -1,8 +1,6 @@
 <?php
 /* vim: set expandtab sw=4 ts=4 sts=4: */
 /**
- * @author  Ivan A Kirillov (Ivan.A.Kirillov@gmail.com)
- * @version $Id$
  * @package phpMyAdmin-Designer
  */
 
@@ -10,7 +8,6 @@
  *
  */
 include_once 'pmd_common.php';
-require_once './libraries/relation.lib.php';
 
 
 $table = $T;
@@ -46,5 +43,5 @@ if ($cfgRelation['displaywork']) {
 
 header("Content-Type: text/xml; charset=utf-8");
 header("Cache-Control: no-cache");
-die("<root act='save_pos' return='strModifications'></root>");
+die("<root act='save_pos' return=__('Modifications have been saved')></root>");
 ?>

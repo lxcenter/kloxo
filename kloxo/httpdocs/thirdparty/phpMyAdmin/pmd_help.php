@@ -2,7 +2,6 @@
 /* vim: set expandtab sw=4 ts=4 sts=4: */
 /**
  *
- * @version $Id$
  * @package phpMyAdmin-Designer
  */
 
@@ -24,9 +23,9 @@ require_once 'pmd_common.php';
 
 <body>
 <?php
-    echo '<p>' . $GLOBALS['strToSelectRelation'] . '<br />';
+    echo '<p>' . __('To select relation, click :') . '<br />';
     echo '<img src="pmd/images/help_relation.png" border="1"></p>';
-    echo '<p>' . $GLOBALS['strDesignerHelpDisplayField'] . '</p>';
+    echo '<p>' . __('The display column is shown in pink. To set/unset a column as the display column, click the "Choose column to display" icon, then click on the appropriate column name.') . '</p>';
 ?>
 </body>
 </html>

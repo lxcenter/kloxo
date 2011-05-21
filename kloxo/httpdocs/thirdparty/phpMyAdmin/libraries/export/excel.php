@@ -4,7 +4,6 @@
  * Set of functions used to build CSV dumps of tables
  *
  * @package phpMyAdmin-Export-CSV
- * @version $Id$
  */
 if (! defined('PHPMYADMIN')) {
     exit;
@@ -15,13 +14,14 @@ if (! defined('PHPMYADMIN')) {
  */
 if (isset($plugin_list)) {
     $plugin_list['excel'] = array(
-        'text' => 'strStrucExcelCSV',
+        'text' => __('CSV for MS Excel'),
         'extension' => 'csv',
         'mime_type' => 'text/comma-separated-values',
         'options' => array(
-            array('type' => 'text', 'name' => 'null', 'text' => 'strReplaceNULLBy'),
-            array('type' => 'bool', 'name' => 'removeCRLF', 'text' => 'strRemoveCRLF'),
-            array('type' => 'bool', 'name' => 'columns', 'text' => 'strPutColNames'),
+            array('type' => 'begin_group', 'name' => 'general_opts'),
+            array('type' => 'text', 'name' => 'null', 'text' => __('Replace NULL with:')),
+            array('type' => 'bool', 'name' => 'removeCRLF', 'text' => __('Remove carriage return/line feed characters within columns')),
+            array('type' => 'bool', 'name' => 'columns', 'text' => __('Put columns names in the first row')),
             array(
                 'type' => 'select', 
                 'name' => 'edition', 
@@ -29,10 +29,11 @@ if (isset($plugin_list)) {
                     'win' => 'Windows',
                     'mac_excel2003' => 'Excel 2003 / Macintosh', 
                     'mac_excel2008' => 'Excel 2008 / Macintosh'), 
-                'text' => 'strExcelEdition'),
-            array('type' => 'hidden', 'name' => 'data'),
+                'text' => __('Excel edition:')),
+            array('type' => 'hidden', 'name' => 'structure_or_data'),
+            array('type' => 'end_group'),
             ),
-        'options_text' => 'strOptions',
+        'options_text' => __('Options'),
         );
 } else {
     /* Everything rest is coded in csv plugin */

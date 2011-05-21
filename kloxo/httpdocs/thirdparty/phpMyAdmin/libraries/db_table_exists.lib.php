@@ -4,17 +4,11 @@
  * Ensure the database and the table exist (else move to the "parent" script)
  * and display headers
  *
- * @version $Id$
  * @package phpMyAdmin
  */
 if (! defined('PHPMYADMIN')) {
     exit;
 }
-
-/**
- *
- */
-require_once './libraries/Table.class.php';
 
 if (empty($is_db)) {
     if (strlen($db)) {
@@ -79,7 +73,7 @@ if (empty($is_table) && !defined('PMA_SUBMIT_MULT') && ! defined('TABLE_MAY_BE_A
             }
 
             if (! $is_table) {
-                require 'db_sql.php';
+                require './db_sql.php';
                 exit;
             }
         }

@@ -7,7 +7,6 @@
  * For changing this file you should know what you are doing. For this reason
  * options here are not part of normal configuration.
  *
- * @version $Id$
  * @package phpMyAdmin
  */
 
@@ -35,10 +34,29 @@ define('SETUP_CONFIG_FILE', './config/config.inc.php');
 define('SETUP_DIR_WRITABLE', true);
 
 /**
- * Whether to skip mtime check on config file and load it on every request.
- * This has slight performance drawback, but it is the only way to handle
- * inclusions of other php scripts from config.
+ * Directory where configuration files are stored.
+ * It is not used directly in code, just a convenient
+ * define used further in this file.
  */
-define('SKIP_MTIME_CONFIG_CHECK', false);
+define('CONFIG_DIR', './');
 
+/**
+ * Filename of a configuration file.
+ */
+define('CONFIG_FILE', CONFIG_DIR . 'config.inc.php');
+
+/**
+ * Filename of custom header file.
+ */
+define('CUSTOM_HEADER_FILE', CONFIG_DIR . 'config.header.inc.php');
+
+/**
+ * Filename of custom footer file.
+ */
+define('CUSTOM_FOOTER_FILE', CONFIG_DIR . 'config.footer.inc.php');
+
+/**
+ * Default value for check for version upgrades.
+ */
+define('VERSION_CHECK_DEFAULT', true);
 ?>

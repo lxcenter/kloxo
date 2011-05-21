@@ -4,7 +4,6 @@
  * Core script for import, this is just the glue around all other stuff
  *
  * @uses    PMA_Bookmark_getList()
- * @version $Id$
  * @package phpMyAdmin
  */
 
@@ -13,8 +12,6 @@
  */
 require_once './libraries/common.inc.php';
 //require_once './libraries/display_import_functions.lib.php';
-$GLOBALS['js_include'][] = 'functions.js';
-$GLOBALS['js_include'][] = 'mootools.js';
 
 // reset import messages for ajax request
 $_SESSION['Import_message']['message'] = null;
@@ -58,7 +55,7 @@ if (!empty($sql_query)) {
 ;
 if ($_POST == array() && $_GET == array()) {
     require_once './libraries/header.inc.php';
-    $message = PMA_Message::error('strUploadLimit');
+    $message = PMA_Message::error(__('You probably tried to upload too large file. Please refer to %sdocumentation%s for ways to workaround this limit.'));
     $message->addParam('[a@./Documentation.html#faq1_16@_blank]');
     $message->addParam('[/a]');
 
@@ -151,6 +148,7 @@ $bookmark_created = FALSE;
 
 // Bookmark Support: get a query back from bookmark if required
 if (!empty($id_bookmark)) {
+    $id_bookmark = (int)$id_bookmark;
     require_once './libraries/bookmark.lib.php';
     switch ($action_bookmark) {
         case 0: // bookmarked query that have to be run
@@ -259,14 +257,14 @@ if ($import_file != 'none' && !$error) {
         $tmp_subdir = (PMA_IS_WINDOWS ? '.\\tmp\\' : './tmp/');
 
         if (is_writable($tmp_subdir)) {
-	    
- 
+
+
             $import_file_new = $tmp_subdir . basename($import_file);
             if (move_uploaded_file($import_file, $import_file_new)) {
                 $import_file = $import_file_new;
                 $file_to_unlink = $import_file_new;
             }
-	    
+
 	    $size = filesize($import_file);
         }
     }
@@ -277,7 +275,7 @@ if ($import_file != 'none' && !$error) {
      */
     $compression = PMA_detectCompression($import_file);
     if ($compression === FALSE) {
-        $message = PMA_Message::error('strFileCouldNotBeRead');
+        $message = PMA_Message::error(__('File could not be read'));
         $error = TRUE;
     } else {
         switch ($compression) {
@@ -285,7 +283,7 @@ if ($import_file != 'none' && !$error) {
                 if ($cfg['BZipDump'] && @function_exists('bzopen')) {
                     $import_handle = @bzopen($import_file, 'r');
                 } else {
-                    $message = PMA_Message::error('strUnsupportedCompressionDetected');
+                    $message = PMA_Message::error(__('You attempted to load file with unsupported compression (%s). Either support for it is not implemented or disabled by your configuration.'));
                     $message->addParam($compression);
                     $error = TRUE;
                 }
@@ -294,7 +292,7 @@ if ($import_file != 'none' && !$error) {
                 if ($cfg['GZipDump'] && @function_exists('gzopen')) {
                     $import_handle = @gzopen($import_file, 'r');
                 } else {
-                    $message = PMA_Message::error('strUnsupportedCompressionDetected');
+                    $message = PMA_Message::error(__('You attempted to load file with unsupported compression (%s). Either support for it is not implemented or disabled by your configuration.'));
                     $message->addParam($compression);
                     $error = TRUE;
                 }
@@ -313,7 +311,7 @@ if ($import_file != 'none' && !$error) {
                         $import_text = $result['data'];
                     }
                 } else {
-                    $message = PMA_Message::error('strUnsupportedCompressionDetected');
+                    $message = PMA_Message::error(__('You attempted to load file with unsupported compression (%s). Either support for it is not implemented or disabled by your configuration.'));
                     $message->addParam($compression);
                     $error = TRUE;
                 }
@@ -322,7 +320,7 @@ if ($import_file != 'none' && !$error) {
                 $import_handle = @fopen($import_file, 'r');
                 break;
             default:
-                $message = PMA_Message::error('strUnsupportedCompressionDetected');
+                $message = PMA_Message::error(__('You attempted to load file with unsupported compression (%s). Either support for it is not implemented or disabled by your configuration.'));
                 $message->addParam($compression);
                 $error = TRUE;
                 break;
@@ -330,12 +328,12 @@ if ($import_file != 'none' && !$error) {
     }
     // use isset() because zip compression type does not use a handle
     if (!$error && isset($import_handle) && $import_handle === FALSE) {
-        $message = PMA_Message::error('strFileCouldNotBeRead');
+        $message = PMA_Message::error(__('File could not be read'));
         $error = TRUE;
     }
 } elseif (!$error) {
     if (!isset($import_text) || empty($import_text)) {
-        $message = PMA_Message::error('strNoDataReceived');
+        $message = PMA_Message::error(__('No data was received to import. Either no file name was submitted, or the file size exceeded the maximum size permitted by your PHP configuration. See [a@./Documentation.html#faq1_16@Documentation]FAQ 1.16[/a].'));
         $error = TRUE;
     }
 }
@@ -344,7 +342,7 @@ if ($import_file != 'none' && !$error) {
 //$_SESSION['Import_message'] = $message->getDisplay();
 
 // Convert the file's charset if necessary
-if ($cfg['AllowAnywhereRecoding'] && isset($charset_of_file)) {
+if ($GLOBALS['PMA_recoding_engine'] != PMA_CHARSET_NONE && isset($charset_of_file)) {
     if ($charset_of_file != $charset) {
         $charset_conversion = TRUE;
     }
@@ -370,7 +368,7 @@ if (!$error) {
     // Check for file existance
     if (!file_exists('./libraries/import/' . $format . '.php')) {
         $error = TRUE;
-        $message = PMA_Message::error('strCanNotLoadImportPlugins');
+        $message = PMA_Message::error(__('Could not load import plugins, please check your installation!'));
     } else {
         // Do the real import
         $plugin_param = $import_type;
@@ -395,34 +393,36 @@ if ($reset_charset) {
 
 // Show correct message
 if (!empty($id_bookmark) && $action_bookmark == 2) {
-    $message = PMA_Message::success('strBookmarkDeleted');
+    $message = PMA_Message::success(__('The bookmark has been deleted.'));
     $display_query = $import_text;
     $error = FALSE; // unset error marker, it was used just to skip processing
 } elseif (!empty($id_bookmark) && $action_bookmark == 1) {
-    $message = PMA_Message::notice('strShowingBookmark');
+    $message = PMA_Message::notice(__('Showing bookmark'));
 } elseif ($bookmark_created) {
-    $special_message = '[br]' . sprintf($strBookmarkCreated, htmlspecialchars($bkm_label));
+    $special_message = '[br]' . sprintf(__('Bookmark %s created'), htmlspecialchars($bkm_label));
 } elseif ($finished && !$error) {
     if ($import_type == 'query') {
         $message = PMA_Message::success();
     } else {
         if ($import_notice) {
-            $message = PMA_Message::success('<em>'.$GLOBALS['strImportSuccessfullyFinished'].'</em>');
+            $message = PMA_Message::success('<em>'.__('Import has been successfully finished, %d queries executed.').'</em>');
             $message->addParam($executed_queries);
-            
+
             $message->addString($import_notice);
+            $message->addString('(' . $_FILES['import_file']['name'] . ')');
         } else {
-            $message = PMA_Message::success('strImportSuccessfullyFinished');
+            $message = PMA_Message::success(__('Import has been successfully finished, %d queries executed.'));
             $message->addParam($executed_queries);
+            $message->addString('(' . $_FILES['import_file']['name'] . ')');
         }
     }
 }
 
 // Did we hit timeout? Tell it user.
 if ($timeout_passed) {
-    $message = PMA_Message::error('strTimeoutPassed');
+    $message = PMA_Message::error(__('Script timeout passed, if you want to finish import, please resubmit same file and import will resume.'));
     if ($offset == 0 || (isset($original_skip) && $original_skip == $offset)) {
-        $message->addString('strTimeoutNothingParsed');
+        $message->addString(__('However on last run no data has been parsed, this usually means phpMyAdmin won\'t be able to finish this import unless you increase php time limits.'));
     }
 }
 
@@ -450,7 +450,7 @@ if (isset($my_die)) {
 if (! empty($last_query_with_results)) {
     // but we want to show intermediate results too
     $disp_query = $sql_query;
-    $disp_message = $strSuccess;
+    $disp_message = __('Your SQL query has been executed successfully');
     $sql_query = $last_query_with_results;
     $go_sql = true;
 }

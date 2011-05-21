@@ -3,7 +3,6 @@
 /**
  * Functions for cleanup of user input.
  *
- * @version $Id$
  * @package phpMyAdmin
  */
 
@@ -13,7 +12,6 @@
  * @param string list of variables to allow
  * @return nothing
  * @access public
- * @author  Michal Cihar (michal@cihar.com)
  */
 function PMA_remove_request_vars(&$whitelist)
 {

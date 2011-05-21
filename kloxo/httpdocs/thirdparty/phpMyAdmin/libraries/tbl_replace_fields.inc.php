@@ -3,21 +3,20 @@
 /**
  * handle field values (possibly uploaded from a file)
  *
- * garvin: original if-clause checked, whether input was stored in a possible
+ * original if-clause checked, whether input was stored in a possible
  * fields_upload_XX var. Now check, if the field is set. If it is empty or a
  * malicious file, do not alter fields contents. If an empty or invalid file is
  * specified, the binary data gets deleter. Maybe a nice new text-variable is
  * appropriate to document this behaviour.
  *
- * garvin: security cautions! You could trick the form and submit any file the
+ * security cautions! You could trick the form and submit any file the
  * webserver has access to for upload to a binary field. Shouldn't be that easy! ;)
  *
- * garvin: default is to advance to the field-value parsing. Will only be set to
+ * default is to advance to the field-value parsing. Will only be set to
  * true when a binary file is uploaded, thus bypassing further manipulation of $val.
  *
  * note: grab_globals has extracted the fields from _FILES or HTTP_POST_FILES
  *
- * @version $Id$
  *
  * @uses $_REQUEST
  * @uses defined()
@@ -47,7 +46,7 @@ require_once './libraries/common.inc.php';
 require_once './libraries/File.class.php';
 
 $file_to_insert = new PMA_File();
-$file_to_insert->checkTblChangeForm($key, $rowcount);
+$file_to_insert->checkTblChangeForm($key, $rownumber);
 
 $possibly_uploaded_val = $file_to_insert->getContent();
 
@@ -69,51 +68,36 @@ if (false !== $possibly_uploaded_val) {
     }
 
     // $key contains the md5() of the fieldname
-    $f = 'field_' . $key;
-
-    if (0 === strlen($val)) {
-        // default
-        $val = "''";
-
-        switch ($type) {
-            case 'enum':
-                // if we have an enum, then construct the value
-            case 'set':
-                // if we have a set, then construct the value
-            case 'foreign':
-                // if we have a foreign key, then construct the value
-                if (! empty($_REQUEST[$f]['multi_edit'][$rowcount])) {
-                    $val = implode(',', $_REQUEST[$f]['multi_edit'][$rowcount]);
-                    $val = "'" . PMA_sqlAddslashes($val) . "'";
-                }
-                break;
-            case 'protected':
-                // here we are in protected mode (asked in the config)
-                // so tbl_change has put this special value in the
-                // fields array, so we do not change the field value
-                // but we can still handle field upload
-
-                // garvin: when in UPDATE mode, do not alter field's contents. When in INSERT
-                // mode, insert empty field because no values were submitted. If protected
-                // blobs where set, insert original fields content.
-                if (! empty($prot_row[$me_fields_name[$key]])) {
-                    $val = '0x' . bin2hex($prot_row[$me_fields_name[$key]]);
-                } else {
-                    $val = '';
-                }
-
-                break;
-            default:
-                // best way to avoid problems in strict mode (works also in non-strict mode)
-                if (isset($me_auto_increment)  && isset($me_auto_increment[$key])) {
-                    $val = 'NULL';
-                }
-                break;
+    if (0 === strlen($val) && $type != 'protected') {
+        // best way to avoid problems in strict mode (works also in non-strict mode)
+        if (isset($me_auto_increment)  && isset($me_auto_increment[$key])) {
+            $val = 'NULL';
+        } else {
+            $val = "''";
+        } 
+    } elseif ($type == 'set') {
+        if (! empty($_REQUEST['fields']['multi_edit'][$rownumber][$key])) {
+            $val = implode(',', $_REQUEST['fields']['multi_edit'][$rownumber][$key]);
+            $val = "'" . PMA_sqlAddslashes($val) . "'";
         }
+    } elseif ($type == 'protected') {
+        // here we are in protected mode (asked in the config)
+        // so tbl_change has put this special value in the
+        // fields array, so we do not change the field value
+        // but we can still handle field upload
+
+        // when in UPDATE mode, do not alter field's contents. When in INSERT
+        // mode, insert empty field because no values were submitted. If protected
+        // blobs where set, insert original fields content.
+            if (! empty($prot_row[$me_fields_name[$key]])) {
+                $val = '0x' . bin2hex($prot_row[$me_fields_name[$key]]);
+            } else {
+                $val = '';
+            }
     } elseif ($type == 'bit') {
         $val = preg_replace('/[^01]/', '0', $val);
         $val = "b'" . PMA_sqlAddslashes($val) . "'";
-    } elseif (! ($type == 'timestamp' && $val == 'CURRENT_TIMESTAMP')) {
+    } elseif (! (($type == 'datetime' || $type == 'timestamp') && $val == 'CURRENT_TIMESTAMP')) {
         $val = "'" . PMA_sqlAddslashes($val) . "'";
     }
 
@@ -121,7 +105,7 @@ if (false !== $possibly_uploaded_val) {
     // (if there is a value, we ignore the Null checkbox: this could
     // be possible if Javascript is disabled in the browser)
     if (isset($me_fields_null[$key])
-     && $val == "''") {
+     && ($val == "''" || $val == '')) {
         $val = 'NULL';
     }
 
@@ -130,5 +114,5 @@ if (false !== $possibly_uploaded_val) {
         $val = "''";
     }
 }  // end else (field value in the form)
-unset($type, $f);
+unset($type);
 ?>

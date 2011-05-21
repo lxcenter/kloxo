@@ -2,9 +2,6 @@
 /* vim: set expandtab sw=4 ts=4 sts=4: */
 /** SQL Parser Functions for phpMyAdmin
  *
- * Copyright 2002 Robin Johnson <robbat2@users.sourceforge.net>
- * http://www.orbis-terrarum.net/?l=people.robbat2
- *
  * These functions define an SQL parser system, capable of understanding and
  * extracting data from a MySQL type SQL query.
  *
@@ -18,8 +15,8 @@
  * If you want to extract data from it then, you just need to run
  * $sql_info = PMA_SQP_analyze($parsed_sql);
  *
- * lem9: See comments in PMA_SQP_analyze for the returned info
- *       from the analyzer.
+ * See comments in PMA_SQP_analyze for the returned info
+ * from the analyzer.
  *
  * If you want a pretty-printed version of the query, do:
  * $string = PMA_SQP_formatHtml($parsed_sql);
@@ -27,7 +24,6 @@
  * page for it to work, I recommend '<link rel="stylesheet" type="text/css"
  * href="syntax.css.php" />' at the moment.)
  *
- * @version $Id$
  * @package phpMyAdmin
  */
 if (! defined('PHPMYADMIN')) {
@@ -47,7 +43,9 @@ if (! defined('PMA_MINIMUM_COMMON')) {
      * Include data for the SQL Parser
      */
     require_once './libraries/sqlparser.data.php';
-    require_once './libraries/mysql_charsets.lib.php';
+    if (!defined('TESTSUITE')) {
+        require_once './libraries/mysql_charsets.lib.php';
+    }
     if (!isset($mysql_charsets)) {
         $mysql_charsets = array();
         $mysql_charsets_count = 0;
@@ -88,7 +86,6 @@ if (! defined('PMA_MINIMUM_COMMON')) {
      *
      * @access public
      */
-    // Added, Robbat2 - 13 Janurary 2003, 2:59PM
     function PMA_SQP_resetError()
     {
         global $SQP_errorString;
@@ -103,7 +100,6 @@ if (! defined('PMA_MINIMUM_COMMON')) {
      *
      * @access public
      */
-    // Added, Robbat2 - 13 Janurary 2003, 2:59PM
     function PMA_SQP_getErrorString()
     {
         global $SQP_errorString;
@@ -117,7 +113,6 @@ if (! defined('PMA_MINIMUM_COMMON')) {
      *
      * @access public
      */
-    // Added, Robbat2 - 13 Janurary 2003, 2:59PM
     function PMA_SQP_isError()
     {
         global $SQP_errorString;
@@ -133,11 +128,10 @@ if (! defined('PMA_MINIMUM_COMMON')) {
      * @access private
      * @scope SQL Parser internal
      */
-    // Revised, Robbat2 - 13 Janurary 2003, 2:59PM
     function PMA_SQP_throwError($message, $sql)
     {
         global $SQP_errorString;
-        $SQP_errorString = '<p>'.$GLOBALS['strSQLParserUserError'] . '</p>' . "\n"
+        $SQP_errorString = '<p>'.__('There seems to be an error in your SQL query. The MySQL server error output below, if there is any, may also help you in diagnosing the problem') . '</p>' . "\n"
             . '<pre>' . "\n"
             . 'ERROR: ' . $message . "\n"
             . 'SQL: ' . htmlspecialchars($sql) .  "\n"
@@ -158,7 +152,6 @@ if (! defined('PMA_MINIMUM_COMMON')) {
     {
         global $SQP_errorString;
         $debugstr = 'ERROR: ' . $message . "\n";
-        $debugstr .= 'SVN: $Id$' . "\n";
         $debugstr .= 'MySQL: '.PMA_MYSQL_STR_VERSION . "\n";
         $debugstr .= 'USR OS, AGENT, VER: ' . PMA_USR_OS . ' ' . PMA_USR_BROWSER_AGENT . ' ' . PMA_USR_BROWSER_VER . "\n";
         $debugstr .= 'PMA: ' . PMA_VERSION . "\n";
@@ -172,16 +165,18 @@ if (! defined('PMA_MINIMUM_COMMON')) {
         }
         $encodedstr     = preg_replace("/(\015\012)|(\015)|(\012)/", '<br />' . "\n", chunk_split(base64_encode($encodedstr)));
 
-        $SQP_errorString .= $GLOBALS['strSQLParserBugMessage'] . '<br />' . "\n"
-             . '----' . $GLOBALS['strBeginCut'] . '----' . '<br />' . "\n"
-             . $encodedstr . "\n"
-             . '----' . $GLOBALS['strEndCut'] . '----' . '<br />' . "\n";
 
-        $SQP_errorString .= '----' . $GLOBALS['strBeginRaw'] . '----<br />' . "\n"
+        $SQP_errorString .= __('There is a chance that you may have found a bug in the SQL parser. Please examine your query closely, and check that the quotes are correct and not mis-matched. Other possible failure causes may be that you are uploading a file with binary outside of a quoted text area. You can also try your query on the MySQL command line interface. The MySQL server error output below, if there is any, may also help you in diagnosing the problem. If you still have problems or if the parser fails where the command line interface succeeds, please reduce your SQL query input to the single query that causes problems, and submit a bug report with the data chunk in the CUT section below:')
+             . '<br />' . "\n"
+             . '----' . __('BEGIN CUT') . '----' . '<br />' . "\n"
+             . $encodedstr . "\n"
+             . '----' . __('END CUT') . '----' . '<br />' . "\n";
+
+        $SQP_errorString .= '----' . __('BEGIN RAW') . '----<br />' . "\n"
              . '<pre>' . "\n"
              . $debugstr
              . '</pre>' . "\n"
-             . '----' . $GLOBALS['strEndRaw'] . '----<br />' . "\n";
+             . '----' . __('END RAW') . '----<br />' . "\n";
 
     } // end of the "PMA_SQP_bug()" function
 
@@ -211,13 +206,12 @@ if (! defined('PMA_MINIMUM_COMMON')) {
      */
     function PMA_SQP_parse($sql)
     {
-        global $cfg;
         global $PMA_SQPdata_column_attrib, $PMA_SQPdata_reserved_word, $PMA_SQPdata_column_type, $PMA_SQPdata_function_name,
                $PMA_SQPdata_column_attrib_cnt, $PMA_SQPdata_reserved_word_cnt, $PMA_SQPdata_column_type_cnt, $PMA_SQPdata_function_name_cnt;
         global $mysql_charsets, $mysql_collations_flat, $mysql_charsets_count, $mysql_collations_count;
         global $PMA_SQPdata_forbidden_word, $PMA_SQPdata_forbidden_word_cnt;
 
-        // rabus: Convert all line feeds to Unix style
+        // Convert all line feeds to Unix style
         $sql = str_replace("\r\n", "\n", $sql);
         $sql = str_replace("\r", "\n", $sql);
 
@@ -250,9 +244,10 @@ if (! defined('PMA_MINIMUM_COMMON')) {
             6 => '<>',
             7 => '>=',
             8 => '>>',
-            9 => '||'
+            9 => '||',
+            10 => '==',
         );
-        $allpunct_list_pair_size = 10; //count($allpunct_list_pair);
+        $allpunct_list_pair_size = 11; //count($allpunct_list_pair);
         $quote_list              = '\'"`';
         $arraysize               = 0;
 
@@ -342,10 +337,38 @@ if (! defined('PMA_MINIMUM_COMMON')) {
                     $pos    = $GLOBALS['PMA_strpos'](' ' . $sql, $quotetype, $oldpos + 1) - 1;
                     // ($pos === FALSE)
                     if ($pos < 0) {
-                        $debugstr = $GLOBALS['strSQPBugUnclosedQuote'] . ' @ ' . $startquotepos. "\n"
-                                  . 'STR: ' . htmlspecialchars($quotetype);
-                        PMA_SQP_throwError($debugstr, $sql);
-                        return $sql_array;
+                        if ($c == '`') {
+                            /*
+                             * Behave same as MySQL and accept end of query as end of backtick.
+                             * I know this is sick, but MySQL behaves like this:
+                             *
+                             * SELECT * FROM `table
+                             *
+                             * is treated like
+                             *
+                             * SELECT * FROM `table`
+                             */
+                            $pos_quote_separator = $GLOBALS['PMA_strpos'](' ' . $sql, $GLOBALS['sql_delimiter'], $oldpos + 1) - 1;
+                            if ($pos_quote_separator < 0) {
+                                $len += 1;
+                                $sql .= '`';
+                                $sql_array['raw'] .= '`';
+                                $pos = $len;
+                            } else {
+                                $len += 1;
+                                $sql = $GLOBALS['PMA_substr']($sql, 0, $pos_quote_separator) . '`' . $GLOBALS['PMA_substr']($sql, $pos_quote_separator);
+                                $sql_array['raw'] = $sql;
+                                $pos = $pos_quote_separator;
+                            }
+                            if (class_exists('PMA_Message')) {
+                                PMA_Message::notice(__('Automatically appended backtick to the end of query!'))->display();
+                            }
+                        }  else {
+                            $debugstr = __('Unclosed quote') . ' @ ' . $startquotepos. "\n"
+                                      . 'STR: ' . htmlspecialchars($quotetype);
+                            PMA_SQP_throwError($debugstr, $sql);
+                            return $sql_array;
+                        }
                     }
 
                     // If the quote is the first character, it can't be
@@ -493,7 +516,7 @@ if (! defined('PMA_MINIMUM_COMMON')) {
                             $is_float_digit = TRUE;
                             continue;
                         } else {
-                            $debugstr = $GLOBALS['strSQPBugInvalidIdentifer'] . ' @ ' . ($count1+1) . "\n"
+                            $debugstr = __('Invalid Identifer') . ' @ ' . ($count1+1) . "\n"
                                       . 'STR: ' . htmlspecialchars(PMA_substr($sql, $count1, $count2 - $count1));
                             PMA_SQP_throwError($debugstr, $sql);
                             return $sql_array;
@@ -610,7 +633,7 @@ if (! defined('PMA_MINIMUM_COMMON')) {
                      */
 
                     } elseif ($last != '~') {
-                        $debugstr =  $GLOBALS['strSQPBugUnknownPunctuation'] . ' @ ' . ($count1+1) . "\n"
+                        $debugstr =  __('Unknown Punctuation String') . ' @ ' . ($count1+1) . "\n"
                                   . 'STR: ' . htmlspecialchars($punct_data);
                         PMA_SQP_throwError($debugstr, $sql);
                         return $sql_array;
@@ -676,7 +699,7 @@ if (! defined('PMA_MINIMUM_COMMON')) {
 
             if ($t_cur == 'alpha') {
                 $t_suffix     = '_identifier';
-                // for example: `thebit` bit(8) NOT NULL DEFAULT b'0' 
+                // for example: `thebit` bit(8) NOT NULL DEFAULT b'0'
                 if ($t_prev == 'alpha' && $d_prev == 'DEFAULT' && $d_cur == 'b' && $t_next == 'quote_single') {
                     $t_suffix = '_bitfield_constant_introducer';
                 } elseif (($t_next == 'punct_qualifier') || ($t_prev == 'punct_qualifier')) {
@@ -806,7 +829,7 @@ if (! defined('PMA_MINIMUM_COMMON')) {
      */
     function PMA_SQP_analyze($arr)
     {
-        if ($arr == array()) {
+        if ($arr == array() || !isset($arr['len'])) {
             return array();
         }
         $result          = array();
@@ -848,7 +871,7 @@ if (! defined('PMA_MINIMUM_COMMON')) {
         // for GROUP_CONCAT(...)
         $in_group_concat     = FALSE;
 
-/* Description of analyzer results by lem9
+/* Description of analyzer results
  *
  * db, table, column, alias
  * ------------------------
@@ -1725,11 +1748,11 @@ if (! defined('PMA_MINIMUM_COMMON')) {
                 }
             }
 
-	        if ($in_limit) {
+            if ($in_limit) {
                 if ($upper_data == 'OFFSET') {
                     $limit_clause .= $sep;
                 }
-		        $limit_clause .= $arr[$i]['data'];
+                $limit_clause .= $arr[$i]['data'];
                 if ($upper_data == 'LIMIT' || $upper_data == 'OFFSET') {
                     $limit_clause .= $sep;
                 }
@@ -1938,7 +1961,7 @@ if (! defined('PMA_MINIMUM_COMMON')) {
 
                 if ($seen_create_table && $in_create_table_fields) {
                     $current_identifier = $identifier;
-                    // warning: we set this one even for non TIMESTAMP type
+                    // we set this one even for non TIMESTAMP type
                     $create_table_fields[$current_identifier]['timestamp_not_null'] = FALSE;
                 }
 
@@ -2080,16 +2103,26 @@ if (! defined('PMA_MINIMUM_COMMON')) {
             case 'color':
                 $str                                = '<span class="syntax">';
                 $html_line_break                    = '<br />';
+                $docu                               = TRUE;
                 break;
             case 'query_only':
                 $str                                = '';
                 $html_line_break                    = "\n";
+                $docu                               = FALSE;
                 break;
             case 'text':
                 $str                                = '';
                 $html_line_break                    = '<br />';
+                $docu                               = TRUE;
                 break;
         } // end switch
+        // inner_sql is a span that exists for all cases, except query_only
+        // of $cfg['SQP']['fmtType'] to make possible a replacement
+        // for inline editing
+        if ($mode!='query_only') {
+            $str .= '<span class="inner_sql">';
+        }
+        $close_docu_link = false;
         $indent                                     = 0;
         $bracketlevel                               = 0;
         $functionlevel                              = 0;
@@ -2165,7 +2198,6 @@ if (! defined('PMA_MINIMUM_COMMON')) {
 // DEBUG echo "Loop format <strong>" . $arr[$i]['data'] . "</strong> " . $arr[$i]['type'] . "<br />";
             $before = '';
             $after  = '';
-            $indent = 0;
             // array_shift($typearr);
             /*
             0 prev2
@@ -2265,18 +2297,65 @@ if (! defined('PMA_MINIMUM_COMMON')) {
                     }
                     break;
                 case 'punct_bracket_close_round':
-                    $bracketlevel--;
-                    if ($infunction == TRUE) {
-                        $functionlevel--;
-                        $after     .= ' ';
-                        $before    .= ' ';
-                    } else {
-                        $indent--;
-                        $before    .= ($mode != 'query_only' ? '</div>' : ' ');
+                    // only close bracket level when it was opened before
+                    if ($bracketlevel > 0) {
+                        $bracketlevel--;
+                        if ($infunction == TRUE) {
+                            $functionlevel--;
+                            $after     .= ' ';
+                            $before    .= ' ';
+                        } else {
+                            $indent--;
+                            $before    .= ($mode != 'query_only' ? '</div>' : ' ');
+                        }
+                        $infunction    = ($functionlevel > 0) ? TRUE : FALSE;
                     }
-                    $infunction    = ($functionlevel > 0) ? TRUE : FALSE;
                     break;
                 case 'alpha_columnType':
+                    if ($docu) {
+                        switch ($arr[$i]['data']) {
+                            case 'tinyint':
+                            case 'smallint':
+                            case 'mediumint':
+                            case 'int':
+                            case 'bigint':
+                            case 'decimal':
+                            case 'float':
+                            case 'double':
+                            case 'real':
+                            case 'bit':
+                            case 'boolean':
+                            case 'serial':
+                                $before .= PMA_showMySQLDocu('data-types', 'numeric-types', false, '', true);
+                                $after = '</a>' . $after;
+                                break;
+                            case 'date':
+                            case 'datetime':
+                            case 'timestamp':
+                            case 'time':
+                            case 'year':
+                                $before .= PMA_showMySQLDocu('data-types', 'date-and-time-types', false, '', true);
+                                $after = '</a>' . $after;
+                                break;
+                            case 'char':
+                            case 'varchar':
+                            case 'tinytext':
+                            case 'text':
+                            case 'mediumtext':
+                            case 'longtext':
+                            case 'binary':
+                            case 'varbinary':
+                            case 'tinyblob':
+                            case 'mediumblob':
+                            case 'blob':
+                            case 'longblob':
+                            case 'enum':
+                            case 'set':
+                                $before .= PMA_showMySQLDocu('data-types', 'string-types', false, '', true);
+                                $after = '</a>' . $after;
+                                break;
+                        }
+                    }
                     if ($typearr[3] == 'alpha_columnAttrib') {
                         $after     .= ' ';
                     }
@@ -2326,7 +2405,7 @@ if (! defined('PMA_MINIMUM_COMMON')) {
                         && ($typearr[1] != 'punct_level_plus')
                         && (!PMA_STR_binarySearchInArr($arr[$i]['data'], $keywords_no_newline, $keywords_no_newline_cnt))) {
                         // do not put a space before the first token, because
-                        // we use a lot of pattern matching checking for the 
+                        // we use a lot of pattern matching checking for the
                         // first reserved word at beginning of query
                         // so do not put a newline before
                         //
@@ -2360,6 +2439,60 @@ if (! defined('PMA_MINIMUM_COMMON')) {
 
                     switch ($arr[$i]['data']) {
                         case 'CREATE':
+                        case 'ALTER':
+                        case 'DROP':
+                        case 'RENAME';
+                        case 'TRUNCATE':
+                        case 'ANALYZE':
+                        case 'ANALYSE':
+                        case 'OPTIMIZE':
+                            if ($docu) {
+                                switch ($arr[$i + 1]['data']) {
+                                    case 'EVENT':
+                                    case 'TABLE':
+                                    case 'TABLESPACE':
+                                    case 'FUNCTION':
+                                    case 'INDEX':
+                                    case 'PROCEDURE':
+                                    case 'TRIGGER':
+                                    case 'SERVER':
+                                    case 'DATABASE':
+                                    case 'VIEW':
+                                        $before .= PMA_showMySQLDocu('SQL-Syntax', $arr[$i]['data'] . '_' . $arr[$i + 1]['data'], false, '', true);
+                                        $close_docu_link = true;
+                                        break;
+                                }
+                                if ($arr[$i + 1]['data'] == 'LOGFILE' && $arr[$i + 2]['data'] == 'GROUP') {
+                                    $before .= PMA_showMySQLDocu('SQL-Syntax', $arr[$i]['data'] . '_LOGFILE_GROUP', false, '', true);
+                                    $close_docu_link = true;
+                                }
+                            }
+                            if (!$in_priv_list) {
+                                $space_punct_listsep       = $html_line_break;
+                                $space_alpha_reserved_word = ' ';
+                            }
+                            break;
+                        case 'EVENT':
+                        case 'TABLESPACE':
+                        case 'TABLE':
+                        case 'FUNCTION':
+                        case 'INDEX':
+                        case 'PROCEDURE':
+                        case 'SERVER':
+                        case 'TRIGGER':
+                        case 'DATABASE':
+                        case 'VIEW':
+                        case 'GROUP':
+                            if ($close_docu_link) {
+                                $after = '</a>' . $after;
+                                $close_docu_link = false;
+                            }
+                            break;
+                        case 'SET':
+                            if ($docu && ($i == 0 || $arr[$i - 1]['data'] != 'CHARACTER')) {
+                                $before .= PMA_showMySQLDocu('SQL-Syntax', $arr[$i]['data'], false, '', true);
+                                $after = '</a>' . $after;
+                            }
                             if (!$in_priv_list) {
                                 $space_punct_listsep       = $html_line_break;
                                 $space_alpha_reserved_word = ' ';
@@ -2367,15 +2500,13 @@ if (! defined('PMA_MINIMUM_COMMON')) {
                             break;
                         case 'EXPLAIN':
                         case 'DESCRIBE':
-                        case 'SET':
-                        case 'ALTER':
                         case 'DELETE':
                         case 'SHOW':
-                        case 'DROP':
                         case 'UPDATE':
-                        case 'TRUNCATE':
-                        case 'ANALYZE':
-                        case 'ANALYSE':
+                            if ($docu) {
+                                $before .= PMA_showMySQLDocu('SQL-Syntax', $arr[$i]['data'], false, '', true);
+                                $after = '</a>' . $after;
+                            }
                             if (!$in_priv_list) {
                                 $space_punct_listsep       = $html_line_break;
                                 $space_alpha_reserved_word = ' ';
@@ -2383,6 +2514,10 @@ if (! defined('PMA_MINIMUM_COMMON')) {
                             break;
                         case 'INSERT':
                         case 'REPLACE':
+                            if ($docu) {
+                                $before .= PMA_showMySQLDocu('SQL-Syntax', $arr[$i]['data'], false, '', true);
+                                $after = '</a>' . $after;
+                            }
                             if (!$in_priv_list) {
                                 $space_punct_listsep       = $html_line_break;
                                 $space_alpha_reserved_word = $html_line_break;
@@ -2393,8 +2528,20 @@ if (! defined('PMA_MINIMUM_COMMON')) {
                             $space_alpha_reserved_word = $html_line_break;
                             break;
                         case 'SELECT':
+                            if ($docu) {
+                                $before .= PMA_showMySQLDocu('SQL-Syntax', 'SELECT', false, '', true);
+                                $after = '</a>' . $after;
+                            }
                             $space_punct_listsep       = ' ';
                             $space_alpha_reserved_word = $html_line_break;
+                            break;
+                        case 'CALL':
+                        case 'DO':
+                        case 'HANDLER':
+                            if ($docu) {
+                                $before .= PMA_showMySQLDocu('SQL-Syntax', $arr[$i]['data'], false, '', true);
+                                $after = '</a>' . $after;
+                            }
                             break;
                         default:
                             break;
@@ -2466,7 +2613,22 @@ if (! defined('PMA_MINIMUM_COMMON')) {
             }
             $str .= $after;
         } // end for
+        // close unclosed indent levels
+        while ($indent > 0) {
+            $indent--;
+            $str .= ($mode != 'query_only' ? '</div>' : ' ');
+        }
+       /* End possibly unclosed documentation link */
+        if ($close_docu_link) {
+            $str .= '</a>';
+            $close_docu_link = false;
+        }
+        if ($mode!='query_only') {
+            // close inner_sql span
+                $str .= '</span>';
+        }
         if ($mode=='color') {
+            // close syntax span
             $str .= '</span>';
         }
 
@@ -2544,21 +2706,6 @@ if (! defined('PMA_MINIMUM_COMMON')) {
         return $formatted_sql;
     } // end of the "PMA_SQP_formatNone()" function
 
-
-    /**
-     * Gets SQL queries in text format
-     *
-     * @todo WRITE THIS!
-     * @param  array   The SQL queries list
-     *
-     * @return string  The SQL queries in text format
-     *
-     * @access public
-     */
-    function PMA_SQP_formatText($arr)
-    {
-         return PMA_SQP_formatNone($arr);
-    } // end of the "PMA_SQP_formatText()" function
 } // end if: minimal common.lib needed?
 
 ?>

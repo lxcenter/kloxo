@@ -1,5 +1,4 @@
 <?php
-/* $Id$ */
 // vim: expandtab sw=4 ts=4 sts=4:
 
 /**
@@ -11,6 +10,12 @@
  * The string [ENTER_FILENAME_HERE] shall be substituted with the filename without the '.inc.php'
  * extension. For further information regarding naming conventions see the /Documentation.html file.
  */
+
+function PMA_transformation_[ENTER_FILENAME_HERE]_info() {
+    return array(
+        'info' =>  __('Description of the transformation.'),
+        );
+}
 
 function PMA_transformation_[ENTER_FILENAME_HERE]($buffer, $options = array(), $meta = '') {
     // possibly use a global transform and feed it with special options:

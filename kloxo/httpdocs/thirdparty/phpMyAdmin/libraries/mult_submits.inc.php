@@ -2,7 +2,6 @@
 /* vim: set expandtab sw=4 ts=4 sts=4: */
 /**
  *
- * @version $Id$
  * @package phpMyAdmin
  */
 if (! defined('PHPMYADMIN')) {
@@ -13,7 +12,7 @@ if (! defined('PHPMYADMIN')) {
  * Prepares the work and runs some other scripts if required
  */
 if (! empty($submit_mult)
- && $submit_mult != $strWithChecked
+ && $submit_mult != __('With selected:')
  && (! empty($selected_db)
   || ! empty($selected_tbl)
   || ! empty($selected_fld)
@@ -25,41 +24,25 @@ if (! empty($submit_mult)
         $what         = 'drop_db';
     } elseif (isset($selected_tbl) && !empty($selected_tbl)) {
         // coming from database structure view - do something with selected tables
-        if ($submit_mult == $strPrintView) {
+        if ($submit_mult == 'print') {
             require './tbl_printview.php';
         } else {
            $selected = $selected_tbl;
            switch ($submit_mult) {
                case 'drop_db':
-                   $what = 'drop_db';
+               case 'drop_tbl':
+               case 'empty_tbl':
+                   $what = $submit_mult;
                    break;
-               case $strDrop:
-                   $what = 'drop_tbl';
-                   break;
-               case $strEmpty:
-                   $what = 'empty_tbl';
-                   break;
-               case $strCheckTable:
+               case 'check_tbl':
+               case 'optimize_tbl':
+               case 'repair_tbl':
+               case 'analyze_tbl':
+                   $query_type = $submit_mult;
                    unset($submit_mult);
-                   $query_type = 'check_tbl';
-                   $mult_btn   = $strYes;
+                   $mult_btn   = __('Yes');
                    break;
-               case $strOptimizeTable:
-                   unset($submit_mult);
-                   $query_type = 'optimize_tbl';
-                   $mult_btn   = $strYes;
-                   break;
-               case $strRepairTable:
-                   unset($submit_mult);
-                   $query_type = 'repair_tbl';
-                   $mult_btn   = $strYes;
-                   break;
-               case $strAnalyzeTable:
-                   unset($submit_mult);
-                   $query_type = 'analyze_tbl';
-                   $mult_btn   = $strYes;
-                   break;
-               case $strExport:
+               case 'export':
                    unset($submit_mult);
                    require('db_export.php');
                    exit;
@@ -70,10 +53,10 @@ if (! empty($submit_mult)
         // coming from table structure view - do something with selected columns/fileds
         $selected     = $selected_fld;
         switch ($submit_mult) {
-            case $strDrop:
+            case 'drop':
                 $what     = 'drop_fld';
                 break;
-            case $strPrimary:
+            case 'primary':
                 // Gets table primary key
                 PMA_DBI_select_db($db);
                 $result      = PMA_DBI_query('SHOW KEYS FROM ' . PMA_backquote($table) . ';');
@@ -89,35 +72,35 @@ if (! empty($submit_mult)
                     // no primary key, so we can safely create new
                     unset($submit_mult);
                     $query_type = 'primary_fld';
-                    $mult_btn   = $strYes;
+                    $mult_btn   = __('Yes');
                 } else {
                     // primary key exists, so lets as user
                     $what = 'primary_fld';
                 }
                 break;
-            case $strIndex:
+            case 'index':
                 unset($submit_mult);
                 $query_type = 'index_fld';
-                $mult_btn   = $strYes;
+                $mult_btn   = __('Yes');
                 break;
-            case $strUnique:
+            case 'unique':
                 unset($submit_mult);
                 $query_type = 'unique_fld';
-                $mult_btn   = $strYes;
+                $mult_btn   = __('Yes');
                 break;
-            case $strIdxFulltext:
+            case 'ftext':
                 unset($submit_mult);
                 $query_type = 'fulltext_fld';
-                $mult_btn   = $strYes;
+                $mult_btn   = __('Yes');
                 break;
-            case $strChange:
+            case 'change':
                 require './tbl_alter.php';
                 break;
-            case $strBrowse:
+            case 'browse':
                 // this should already be handled by tbl_structure.php
         }
     } else {
-        // coming from borwsing - do something with selected rows
+        // coming from browsing - do something with selected rows
         $what = 'row_delete';
         $selected = $rows_to_delete;
     }
@@ -128,7 +111,6 @@ if (! empty($submit_mult)
  * Displays the confirmation form if required
  */
 if (!empty($submit_mult) && !empty($what)) {
-    $GLOBALS['js_include'][] = 'functions.js';
     unset($message);
 
     require_once './libraries/header.inc.php';
@@ -247,7 +229,9 @@ if (!empty($submit_mult) && !empty($what)) {
     }
     if ($what == 'row_delete') {
         $_url_params['original_sql_query'] = $original_sql_query;
-        $_url_params['original_url_query'] = $original_url_query;
+        if (! empty($original_url_query)) {
+            $_url_params['original_url_query'] = $original_url_query;
+        }
     }
     ?>
 <form action="<?php echo $action; ?>" method="post">
@@ -255,22 +239,22 @@ if (!empty($submit_mult) && !empty($what)) {
     echo PMA_generate_common_hidden_inputs($_url_params);
     ?>
 <fieldset class="confirmation">
-    <legend><?php echo ($what == 'drop_db' ? $strDropDatabaseStrongWarning . '&nbsp;' : '') . $strDoYouReally; ?>:</legend>
+    <legend><?php echo ($what == 'drop_db' ? __('You are about to DESTROY a complete database!') . '&nbsp;' : '') . __('Do you really want to '); ?>:</legend>
     <tt><?php echo $full_query; ?></tt>
 </fieldset>
 <fieldset class="tblFooters">
-    <input type="submit" name="mult_btn" value="<?php echo $strYes; ?>" id="buttonYes" />
-    <input type="submit" name="mult_btn" value="<?php echo $strNo; ?>" id="buttonNo" />
+    <input type="submit" name="mult_btn" value="<?php echo __('Yes'); ?>" id="buttonYes" />
+    <input type="submit" name="mult_btn" value="<?php echo __('No'); ?>" id="buttonNo" />
 </fieldset>
     <?php
-    require_once './libraries/footer.inc.php';
+    require './libraries/footer.inc.php';
 } // end if
 
 
 /**
  * Executes the query - dropping rows, columns/fields, tables or dbs
  */
-elseif ($mult_btn == $strYes) {
+elseif ($mult_btn == __('Yes')) {
 
     if ($query_type == 'drop_db' || $query_type == 'drop_tbl' || $query_type == 'drop_fld') {
         require_once './libraries/relation_cleanup.lib.php';
@@ -355,7 +339,7 @@ elseif ($mult_btn == $strYes) {
 
             case 'empty_tbl':
                 $a_query = 'TRUNCATE ';
-                $a_query .= PMA_backquote(htmlspecialchars($selected[$i]));
+                $a_query .= PMA_backquote($selected[$i]);
                 $run_parts = TRUE;
                 break;
 
@@ -432,6 +416,6 @@ elseif ($mult_btn == $strYes) {
         $GLOBALS['pma']->databases->build();
     }
 } else {
-    $message = PMA_Message::success('strNoModification');
+    $message = PMA_Message::success(__('No change'));
 }
 ?>

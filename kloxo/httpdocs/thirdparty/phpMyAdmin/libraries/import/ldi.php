@@ -3,7 +3,6 @@
 /**
  * CSV import plugin for phpMyAdmin
  *
- * @version $Id$
  * @package phpMyAdmin-Import
  */
 if (! defined('PHPMYADMIN')) {
@@ -32,19 +31,21 @@ if (isset($plugin_list)) {
         unset($result);
     }
     $plugin_list['ldi'] = array(
-        'text' => 'strLDI',
+        'text' => __('CSV using LOAD DATA'),
         'extension' => 'ldi', // This is nonsense, however we want to default to our parser for csv
         'options' => array(
-            array('type' => 'bool', 'name' => 'replace', 'text' => 'strReplaceTable'),
-            array('type' => 'bool', 'name' => 'ignore', 'text' => 'strIgnoreDuplicates'),
-            array('type' => 'text', 'name' => 'terminated', 'text' => 'strFieldsTerminatedBy', 'size' => 2, 'len' => 2),
-            array('type' => 'text', 'name' => 'enclosed', 'text' => 'strFieldsEnclosedBy', 'size' => 2, 'len' => 2),
-            array('type' => 'text', 'name' => 'escaped', 'text' => 'strFieldsEscapedBy', 'size' => 2, 'len' => 2),
-            array('type' => 'text', 'name' => 'new_line', 'text' => 'strLinesTerminatedBy', 'size' => 2),
-            array('type' => 'text', 'name' => 'columns', 'text' => 'strColumnNames'),
-            array('type' => 'bool', 'name' => 'local_option', 'text' => 'strLDILocal'),
+            array('type' => 'begin_group', 'name' => 'general_opts'),
+            array('type' => 'bool', 'name' => 'replace', 'text' => __('Replace table data with file')),
+            array('type' => 'bool', 'name' => 'ignore', 'text' => __('Do not abort on INSERT error')),
+            array('type' => 'text', 'name' => 'terminated', 'text' => __('Columns terminated by'), 'size' => 2, 'len' => 2),
+            array('type' => 'text', 'name' => 'enclosed', 'text' => __('Columns enclosed by'), 'size' => 2, 'len' => 2),
+            array('type' => 'text', 'name' => 'escaped', 'text' => __('Columns escaped by'), 'size' => 2, 'len' => 2),
+            array('type' => 'text', 'name' => 'new_line', 'text' => __('Lines terminated by'), 'size' => 2),
+            array('type' => 'text', 'name' => 'columns', 'text' => __('Column names')),
+            array('type' => 'bool', 'name' => 'local_option', 'text' => __('Use LOCAL keyword')),
+            array('type' => 'end_group')
             ),
-        'options_text' => 'strOptions',
+        'options_text' => __('Options'),
         );
     /* We do not define function when plugin is just queried for information above */
     return;
@@ -52,7 +53,7 @@ if (isset($plugin_list)) {
 
 if ($import_file == 'none' || $compression != 'none' || $charset_conversion) {
     // We handle only some kind of data!
-    $message = PMA_Message::error('strInvalidLDIImport');
+    $message = PMA_Message::error(__('This plugin does not support compressed imports!'));
     $error = TRUE;
     return;
 }

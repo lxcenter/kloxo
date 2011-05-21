@@ -2,7 +2,6 @@
 /* vim: set expandtab sw=4 ts=4 sts=4: */
 /**
  *
- * @version $Id$
  * @package phpMyAdmin
  */
 
@@ -245,7 +244,7 @@ class PMA_Table
      *
      * @param   string   the database name
      * @param   string   the table name
-     * @return  boolean  true if it is a merge table 
+     * @return  boolean  true if it is a merge table
      * @access  public
      */
     static public function isMerge($db = null, $table = null)
@@ -452,9 +451,15 @@ class PMA_Table
             if (! $force_exact) {
                 if (! isset(PMA_Table::$cache[$db][$table]['Rows']) && ! $is_view) {
                     $tmp_tables = PMA_DBI_get_tables_full($db, $table);
-                    PMA_Table::$cache[$db][$table] = $tmp_tables[$table];
+                    if (isset($tmp_tables[$table])) {
+                        PMA_Table::$cache[$db][$table] = $tmp_tables[$table];
+                    }
                 }
-                $row_count = PMA_Table::$cache[$db][$table]['Rows'];
+                if (isset(PMA_Table::$cache[$db][$table]['Rows'])) {
+                    $row_count = PMA_Table::$cache[$db][$table]['Rows'];
+                } else {
+                    $row_count = false;
+                }
             }
 
             // for a VIEW, $row_count is always false at this point
@@ -474,7 +479,7 @@ class PMA_Table
                     } else {
                         // Counting all rows of a VIEW could be too long, so use
                         // a LIMIT clause.
-                        // Use try_query because it can fail (when a VIEW is 
+                        // Use try_query because it can fail (when a VIEW is
                         // based on a table that no longer exists)
                         $result = PMA_DBI_try_query(
                             'SELECT 1 FROM ' . PMA_backquote($db) . '.'
@@ -523,7 +528,6 @@ class PMA_Table
 
      * @global  string  relation variable
      *
-     * @author          Garvin Hicking <me@supergarv.de>
      */
     static public function duplicateInfo($work, $pma_table, $get_fields, $where_fields,
       $new_fields)
@@ -594,18 +598,21 @@ class PMA_Table
 
     /**
      * Copies or renames table
-     * @todo use RENAME for move operations
-     *        - would work only if the databases are on the same filesystem,
-     *          how can we check that? try the operation and
-     *          catch an error?
-     *        - for views, only if MYSQL > 50013
-     *        - still have to handle pmadb synch.
      *
-     * @author          Michal Cihar <michal@cihar.com>
      */
     static public function moveCopy($source_db, $source_table, $target_db, $target_table, $what, $move, $mode)
     {
         global $err_url;
+
+        /* Try moving table directly */
+        if ($move && $what == 'data') {
+            $tbl = new PMA_Table($source_table, $source_db);
+            $result = $tbl->rename($target_table, $target_db, PMA_Table::isView($source_db, $source_table));
+            if ($result) {
+                $GLOBALS['message'] = $tbl->getLastMessage();
+                return true;
+            }
+        }
 
         // set export settings we need
         $GLOBALS['sql_backquotes'] = 1;
@@ -659,7 +666,7 @@ class PMA_Table
             }
             unset($analyzed_sql);
             $server_sql_mode = PMA_DBI_fetch_value("SHOW VARIABLES LIKE 'sql_mode'", 0, 1);
-            // ANSI_QUOTES might be a subset of sql_mode, for example 
+            // ANSI_QUOTES might be a subset of sql_mode, for example
             // REAL_AS_FLOAT,PIPES_AS_CONCAT,ANSI_QUOTES,IGNORE_SPACE,ANSI
             if (false !== strpos($server_sql_mode, 'ANSI_QUOTES')) {
                 $table_delimiter = 'quote_double';
@@ -668,7 +675,7 @@ class PMA_Table
             }
             unset($server_sql_mode);
 
-            /* nijel: Find table name in query and replace it */
+            /* Find table name in query and replace it */
             while ($parsed_sql[$i]['type'] != $table_delimiter) {
                 $i++;
             }
@@ -712,7 +719,7 @@ class PMA_Table
 
                 $GLOBALS['sql_query'] .= "\n" . $drop_query . ';';
 
-                // garvin: If an existing table gets deleted, maintain any
+                // If an existing table gets deleted, maintain any
                 // entries for the PMA_* tables
                 $maintain_relations = true;
             }
@@ -774,7 +781,6 @@ class PMA_Table
             $GLOBALS['sql_query']      .= "\n\n" . $sql_insert_data . ';';
         }
 
-        require_once './libraries/relation.lib.php';
         $GLOBALS['cfgRelation'] = PMA_getRelationsParam();
 
         // Drops old table if the user has requested to move it
@@ -792,7 +798,7 @@ class PMA_Table
             $sql_drop_query .= ' ' . $source;
             PMA_DBI_query($sql_drop_query);
 
-            // garvin: Move old entries from PMA-DBs to new table
+            // Move old entries from PMA-DBs to new table
             if ($GLOBALS['cfgRelation']['commwork']) {
                 $remove_query = 'UPDATE ' . PMA_backquote($GLOBALS['cfgRelation']['db']) . '.' . PMA_backquote($GLOBALS['cfgRelation']['column_info'])
                               . ' SET     table_name = \'' . PMA_sqlAddslashes($target_table) . '\', '
@@ -803,7 +809,7 @@ class PMA_Table
                 unset($remove_query);
             }
 
-            // garvin: updating bookmarks is not possible since only a single table is moved,
+            // updating bookmarks is not possible since only a single table is moved,
             // and not the whole DB.
 
             if ($GLOBALS['cfgRelation']['displaywork']) {
@@ -835,7 +841,7 @@ class PMA_Table
             }
 
             /**
-             * @todo garvin: Can't get moving PDFs the right way. The page numbers
+             * @todo Can't get moving PDFs the right way. The page numbers
              * always get screwed up independently from duplication because the
              * numbers do not seem to be stored on a per-database basis. Would
              * the author of pdf support please have a look at it?
@@ -882,7 +888,7 @@ class PMA_Table
         // end if ($move)
         } else {
             // we are copying
-            // garvin: Create new entries as duplicates from old PMA DBs
+            // Create new entries as duplicates from old PMA DBs
             if ($what != 'dataonly' && !isset($maintain_relations)) {
                 if ($GLOBALS['cfgRelation']['commwork']) {
                     // Get all comments and MIME-Types for current table
@@ -943,7 +949,7 @@ class PMA_Table
                 PMA_Table::duplicateInfo('designerwork', 'designer_coords', $get_fields, $where_fields, $new_fields);
 
                 /**
-                 * @todo garvin: Can't get duplicating PDFs the right way. The
+                 * @todo Can't get duplicating PDFs the right way. The
                  * page numbers always get screwed up independently from
                  * duplication because the numbers do not seem to be stored on a
                  * per-database basis. Would the author of pdf support please
@@ -1000,14 +1006,15 @@ class PMA_Table
      *
      * @param   string  new table name
      * @param   string  new database name
+     * @param   boolean is this for a VIEW rename?
      * @return  boolean success
      */
-    function rename($new_name, $new_db = null)
+    function rename($new_name, $new_db = null, $is_view = false)
     {
         if (null !== $new_db && $new_db !== $this->getDbName()) {
             // Ensure the target is valid
             if (! $GLOBALS['pma']->databases->exists($new_db)) {
-                $this->errors[] = $GLOBALS['strInvalidDatabase'] . ': ' . $new_db;
+                $this->errors[] = __('Invalid database') . ': ' . $new_db;
                 return false;
             }
         } else {
@@ -1021,15 +1028,22 @@ class PMA_Table
         }
 
         if (! PMA_Table::isValidName($new_name)) {
-            $this->errors[] = $GLOBALS['strInvalidTableName'] . ': ' . $new_table->getFullName();
+            $this->errors[] = __('Invalid table name') . ': ' . $new_table->getFullName();
             return false;
         }
 
-        $GLOBALS['sql_query'] = '
-            RENAME TABLE ' . $this->getFullName(true) . '
+        if (! $is_view) {
+            $GLOBALS['sql_query'] = '
+                RENAME TABLE ' . $this->getFullName(true) . '
                       TO ' . $new_table->getFullName(true) . ';';
+        } else {
+            $GLOBALS['sql_query'] = '
+                ALTER TABLE ' . $this->getFullName(true) . '
+                RENAME ' . $new_table->getFullName(true) . ';';
+        }
+        // I don't think a specific error message for views is necessary
         if (! PMA_DBI_query($GLOBALS['sql_query'])) {
-            $this->errors[] = sprintf($GLOBALS['strErrorRenamingTable'], $this->getFullName(), $new_table->getFullName());
+            $this->errors[] = sprintf(__('Error renaming table %1$s to %2$s'), $this->getFullName(), $new_table->getFullName());
             return false;
         }
 
@@ -1041,8 +1055,7 @@ class PMA_Table
         /**
          * @todo move into extra function PMA_Relation::renameTable($new_name, $old_name, $new_db, $old_db)
          */
-        // garvin: Move old entries from comments to new table
-        require_once './libraries/relation.lib.php';
+        // Move old entries from comments to new table
         $GLOBALS['cfgRelation'] = PMA_getRelationsParam();
         if ($GLOBALS['cfgRelation']['commwork']) {
             $remove_query = '
@@ -1113,7 +1126,7 @@ class PMA_Table
             unset($table_query);
         }
 
-        $this->messages[] = sprintf($GLOBALS['strRenameTableOK'],
+        $this->messages[] = sprintf(__('Table %s has been renamed to %s'),
             htmlspecialchars($old_name), htmlspecialchars($new_name));
         return true;
     }

@@ -18,11 +18,11 @@ if (! defined('PHPMYADMIN')) {
 
 if (isset($plugin_list)) {
     $plugin_list['xml'] = array(
-        'text' => 'strXML',
+        'text' => __('XML'),
         'extension' => 'xml',
         'options' => array(
             ),
-        'options_text' => 'strOptions',
+        'options_text' => __('Options'),
         );
     /* We do not define function when plugin is just queried for information above */
     return;
@@ -63,7 +63,7 @@ unset($data);
  * result in increased performance without the need to
  * alter the code in any way. It's basically a freebee.
  */
-$xml = simplexml_load_string(utf8_encode($buffer), "SimpleXMLElement", LIBXML_COMPACT);
+$xml = simplexml_load_string($buffer, "SimpleXMLElement", LIBXML_COMPACT);
 
 unset($buffer);
 
@@ -71,7 +71,7 @@ unset($buffer);
  * The XML was malformed
  */
 if ($xml === FALSE) {
-    PMA_Message::error('strXMLError')->display();
+    PMA_Message::error(__('The XML file specified was either malformed or incomplete. Please correct the issue and try again.'))->display();
     unset($xml);
     $GLOBALS['finished'] = false;
     return;
@@ -127,7 +127,7 @@ if ($db_attr instanceof SimpleXMLElement) {
  * The XML was malformed
  */
 if ($db_name === NULL) {
-    PMA_Message::error('strXMLError')->display();
+    PMA_Message::error(__('The XML file specified was either malformed or incomplete. Please correct the issue and try again.'))->display();
     unset($xml);
     $GLOBALS['finished'] = false;
     return;

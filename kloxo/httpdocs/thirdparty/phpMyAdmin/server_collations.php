@@ -2,7 +2,6 @@
 /* vim: set expandtab sw=4 ts=4 sts=4: */
 /**
  *
- * @version $Id$
  * @package phpMyAdmin
  */
 
@@ -37,7 +36,7 @@ echo '<h2>' . "\n"
    . '    ' . ($GLOBALS['cfg']['MainPageIconic']
     ? '<img class="icon" src="'. $GLOBALS['pmaThemeImage'] . 's_asci.png" alt="" />'
     : '')
-   . '' . $strCharsetsAndCollations . "\n"
+   . '' . __('Character Sets and Collations') . "\n"
    . '</h2>' . "\n";
 
 /**
@@ -51,8 +50,8 @@ require_once './libraries/mysql_charsets.lib.php';
  */
 echo '<div id="div_mysql_charset_collations">' . "\n"
    . '<table class="data">' . "\n"
-   . '<tr><th>' . $strCollation . '</th>' . "\n"
-   . '    <th>' . $strDescription . '</th>' . "\n"
+   . '<tr><th>' . __('Collation') . '</th>' . "\n"
+   . '    <th>' . __('Description') . '</th>' . "\n"
    . '</tr>' . "\n";
 
 $i = 0;
@@ -63,8 +62,8 @@ foreach ($mysql_charsets as $current_charset) {
         $i = 0;
         echo '</table>' . "\n"
            . '<table class="data">' . "\n"
-           . '<tr><th>' . $strCollation . '</th>' . "\n"
-           . '    <th>' . $strDescription . '</th>' . "\n"
+           . '<tr><th>' . __('Collation') . '</th>' . "\n"
+           . '    <th>' . __('Description') . '</th>' . "\n"
            . '</tr>' . "\n";
     }
     $i++;
@@ -79,7 +78,7 @@ foreach ($mysql_charsets as $current_charset) {
     $odd_row = true;
     foreach ($mysql_collations[$current_charset] as $current_collation) {
         $i++;
-        echo '<tr class="'
+        echo '<tr class="noclick '
            . ($odd_row ? 'odd' : 'even')
            . ($mysql_default_collations[$current_charset] == $current_collation
                 ? ' marked'
@@ -96,6 +95,6 @@ unset($table_row_count);
 echo '</table>' . "\n"
    . '</div>' . "\n";
 
-require_once './libraries/footer.inc.php';
+require './libraries/footer.inc.php';
 
 ?>

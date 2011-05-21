@@ -2,7 +2,6 @@
 /* vim: set expandtab sw=4 ts=4 sts=4: */
 /**
 *
-* @version $Id$
 * @package phpMyAdmin
 */
 if (! defined('PHPMYADMIN')) {
@@ -11,14 +10,19 @@ if (! defined('PHPMYADMIN')) {
 
 $ID_KEY = "UPLOAD_IDENTIFIER";
 
+/**
+ * Returns upload status.
+ *
+ * This is implementation for uploadprogress extension.
+ */
 function PMA_getUploadStatus($id) {
     global $SESSION_KEY;
     global $ID_KEY;
-  
+
     if (trim($id) == "") {
         return;
     }
-  
+
     if (! array_key_exists($id, $_SESSION[$SESSION_KEY])) {
         $_SESSION[$SESSION_KEY][$id] = array(
                     'id'       => $id,
@@ -30,11 +34,11 @@ function PMA_getUploadStatus($id) {
         );
     }
     $ret = $_SESSION[$SESSION_KEY][$id];
-    
+
     if (! PMA_import_uploadprogressCheck() || $ret['finished']) {
         return $ret;
     }
-    
+
     $status = uploadprogress_get_info($id);
 
     if ($status) {
@@ -45,7 +49,7 @@ function PMA_getUploadStatus($id) {
         }
         $ret['total']    = $status['bytes_total'];
         $ret['complete'] = $status['bytes_uploaded'];
- 
+
         if ($ret['total'] > 0) {
             $ret['percent'] = $ret['complete'] / $ret['total'] * 100;
         }
@@ -59,9 +63,9 @@ function PMA_getUploadStatus($id) {
                     'plugin'   => $ID_KEY
                 );
     }
-    
+
     $_SESSION[$SESSION_KEY][$id] = $ret;
-    
+
     return $ret;
 }
 ?>

@@ -2,7 +2,6 @@
 /* vim: set expandtab sw=4 ts=4 sts=4: */
 /**
  *
- * @version $Id$
  * @package phpMyAdmin
  */
 
@@ -10,9 +9,9 @@
  *
  */
 require_once './libraries/common.inc.php';
-require_once './libraries/Table.class.php';
 
-$GLOBALS['js_include'][] = 'mootools.js';
+$GLOBALS['js_include'][] = 'jquery/jquery-ui-1.8.custom.js';
+$GLOBALS['js_include'][] = 'db_structure.js';
 
 /**
  * Prepares the tables list if the user where not redirected to this script
@@ -53,51 +52,11 @@ $db_collation = PMA_getDbCollation($db);
 
 // in a separate file to avoid redeclaration of functions in some code paths
 require_once './libraries/db_structure.lib.php';
-
-$titles = array();
-if (true == $cfg['PropertiesIconic']) {
-    $titles['Browse']     = '<img class="icon" width="16" height="16" src="' .$pmaThemeImage . 'b_browse.png" alt="' . $strBrowse . '" title="' . $strBrowse . '" />';
-    $titles['NoBrowse']   = '<img class="icon" width="16" height="16" src="' .$pmaThemeImage . 'bd_browse.png" alt="' . $strBrowse . '" title="' . $strBrowse . '" />';
-    $titles['Search']     = '<img class="icon" width="16" height="16" src="' .$pmaThemeImage . 'b_select.png" alt="' . $strSearch . '" title="' . $strSearch . '" />';
-    $titles['NoSearch']   = '<img class="icon" width="16" height="16" src="' .$pmaThemeImage . 'bd_select.png" alt="' . $strSearch . '" title="' . $strSearch . '" />';
-    $titles['Insert']     = '<img class="icon" width="16" height="16" src="' .$pmaThemeImage . 'b_insrow.png" alt="' . $strInsert . '" title="' . $strInsert . '" />';
-    $titles['NoInsert']   = '<img class="icon" width="16" height="16" src="' .$pmaThemeImage . 'bd_insrow.png" alt="' . $strInsert . '" title="' . $strInsert . '" />';
-    $titles['Structure']  = '<img class="icon" width="16" height="16" src="' .$pmaThemeImage . 'b_props.png" alt="' . $strStructure . '" title="' . $strStructure . '" />';
-    $titles['Drop']       = '<img class="icon" width="16" height="16" src="' .$pmaThemeImage . 'b_drop.png" alt="' . $strDrop . '" title="' . $strDrop . '" />';
-    $titles['NoDrop']     = '<img class="icon" width="16" height="16" src="' .$pmaThemeImage . 'bd_drop.png" alt="' . $strDrop . '" title="' . $strDrop . '" />';
-    $titles['Empty']      = '<img class="icon" width="16" height="16" src="' .$pmaThemeImage . 'b_empty.png" alt="' . $strEmpty . '" title="' . $strEmpty . '" />';
-    $titles['NoEmpty']    = '<img class="icon" width="16" height="16" src="' .$pmaThemeImage . 'bd_empty.png" alt="' . $strEmpty . '" title="' . $strEmpty . '" />';
-
-    if ('both' === $cfg['PropertiesIconic']) {
-        $titles['Browse']     .= $strBrowse;
-        $titles['Search']     .= $strSearch;
-        $titles['NoBrowse']   .= $strBrowse;
-        $titles['NoSearch']   .= $strSearch;
-        $titles['Insert']     .= $strInsert;
-        $titles['NoInsert']   .= $strInsert;
-        $titles['Structure']  .= $strStructure;
-        $titles['Drop']       .= $strDrop;
-        $titles['NoDrop']     .= $strDrop;
-        $titles['Empty']      .= $strEmpty;
-        $titles['NoEmpty']    .= $strEmpty;
-    }
-} else {
-    $titles['Browse']     = $strBrowse;
-    $titles['Search']     = $strSearch;
-    $titles['NoBrowse']   = $strBrowse;
-    $titles['NoSearch']   = $strSearch;
-    $titles['Insert']     = $strInsert;
-    $titles['NoInsert']   = $strInsert;
-    $titles['Structure']  = $strStructure;
-    $titles['Drop']       = $strDrop;
-    $titles['NoDrop']     = $strDrop;
-    $titles['Empty']      = $strEmpty;
-    $titles['NoEmpty']    = $strEmpty;
-}
+$titles = PMA_buildActionTitles();
 
 // 1. No tables
 if ($num_tables == 0) {
-	echo '<p>' . $strNoTablesFound . '</p>' . "\n";
+	echo '<p>' . __('No tables found in database') . '</p>' . "\n";
 
 	// Routines
 	require './libraries/db_routines.inc.php';
@@ -124,6 +83,7 @@ if ($num_tables == 0) {
 /**
  * Displays the tables list
  */
+echo '<div id="tableslistcontainer">';
 $_url_params = array(
     'pos' => $pos,
     'db'  => $db);
@@ -159,29 +119,15 @@ $hidden_fields = array();
 $odd_row       = true;
 $sum_row_count_pre = '';
 
-// added by rajk - for blobstreaming
-$PMA_Config = $_SESSION['PMA_Config'];
-
-if (!empty($PMA_Config))
-    $session_bs_tables = $PMA_Config->get('BLOBSTREAMING_TABLES'); // list of blobstreaming tables
-
 $tableReductionCount = 0;   // the amount to reduce the table count by
 
 foreach ($tables as $keyname => $each_table) {
-    if (isset($session_bs_tables))
-    {
-        // compare table name against blobstreaming tables
-        foreach ($session_bs_tables as $table_key=>$table_val)
-            // if the table is a blobstreaming table, reduce table count and skip outer foreach loop
-            if ($table_key == $keyname)
-            {
-                $tableReductionCount++;
-                continue 2;
-            }
+    if (PMA_BS_IsHiddenTable($keyname)) {
+        $tableReductionCount++;
+        continue;
     }
 
-    // loic1: Patch from Joshua Nye <josh at boxcarmedia.com> to get valid
-    //        statistics whatever is the table type
+    // Get valid statistics whatever is the table type
 
     $table_is_view = false;
     $table_encoded = urlencode($each_table['TABLE_NAME']);
@@ -199,11 +145,13 @@ foreach ($tables as $keyname => $each_table) {
         case 'HEAP' :
         case 'MEMORY' :
         case 'ARCHIVE' :
+        case 'Aria' :
+        case 'Maria' :
             if ($db_is_information_schema) {
                 $each_table['Rows'] = PMA_Table::countRecords($db,
                     $each_table['Name']);
             }
-                
+
             if ($is_show_stats) {
                 $tblsize                    =  doubleval($each_table['Data_length']) + doubleval($each_table['Index_length']);
                 $sum_size                   += $tblsize;
@@ -309,20 +257,25 @@ foreach ($tables as $keyname => $each_table) {
     if ($each_table['TABLE_ROWS'] > 0) {
         $browse_table = '<a href="sql.php?' . $tbl_url_query . '&amp;pos=0">' . $titles['Browse'] . '</a>';
         $search_table = '<a href="tbl_select.php?' . $tbl_url_query . '">' . $titles['Search'] . '</a>';
+        $browse_table_label = '<a href="sql.php?' . $tbl_url_query . '&amp;pos=0">' . $truename . '</a>';
     } else {
         $browse_table = $titles['NoBrowse'];
         $search_table = $titles['NoSearch'];
+        $browse_table_label = '<a href="tbl_structure.php?' . $tbl_url_query . '">' . $truename . '</a>';
     }
 
     if (! $db_is_information_schema) {
         if (! empty($each_table['TABLE_ROWS'])) {
-            $empty_table = '<a href="sql.php?' . $tbl_url_query
+            $empty_table = '<a ';
+            if ($GLOBALS['cfg']['AjaxEnable']) {
+                $empty_table .= 'class="truncate_table_anchor"';
+            }
+            $empty_table .= ' href="sql.php?' . $tbl_url_query
                  . '&amp;sql_query=';
             $empty_table .= urlencode('TRUNCATE ' . PMA_backquote($each_table['TABLE_NAME']))
-                 . '&amp;zero_rows='
-                 . urlencode(sprintf($strTableHasBeenEmptied, htmlspecialchars($each_table['TABLE_NAME'])))
-                 . '" onclick="return confirmLink(this, \'TRUNCATE ';
-            $empty_table .= PMA_jsFormat($each_table['TABLE_NAME']) . '\')">' . $titles['Empty'] . '</a>';
+                 . '&amp;message_to_show='
+                 . urlencode(sprintf(__('Table %s has been emptied'), htmlspecialchars($each_table['TABLE_NAME'])))
+                 .'">' . $titles['Empty'] . '</a>';
         } else {
             $empty_table = $titles['NoEmpty'];
         }
@@ -330,16 +283,16 @@ foreach ($tables as $keyname => $each_table) {
             . ($table_is_view ? 'VIEW' : 'TABLE')
             . ' ' . PMA_backquote($each_table['TABLE_NAME']);
         $drop_message = sprintf(
-            $table_is_view ? $strViewHasBeenDropped : $strTableHasBeenDropped,
+            $table_is_view ? __('View %s has been dropped') : __('Table %s has been dropped'),
             str_replace(' ', '&nbsp;', htmlspecialchars($each_table['TABLE_NAME'])));
     }
 
     $tracking_icon = '';
     if (PMA_Tracker::isActive()) {
         if (PMA_Tracker::isTracked($GLOBALS["db"], $truename)) {
-            $tracking_icon = '<a href="tbl_tracking.php?' . $url_query.'&amp;table=' . $truename . '"><img class="icon" width="14" height="14" src="' . $pmaThemeImage . 'eye.png" alt="' . $strTrackingIsActive . '" title="' . $strTrackingIsActive . '" /></a>';
+            $tracking_icon = '<a href="tbl_tracking.php?' . $url_query.'&amp;table=' . $truename . '"><img class="icon" width="14" height="14" src="' . $pmaThemeImage . 'eye.png" alt="' . __('Tracking is active.') . '" title="' . __('Tracking is active.') . '" /></a>';
         } elseif (PMA_Tracker::getVersion($GLOBALS["db"], $truename) > 0) {
-            $tracking_icon = '<a href="tbl_tracking.php?' . $url_query . '&amp;table=' . $truename . '"><img class="icon" width="14" height="14" src="' . $pmaThemeImage . 'eye_grey.png" alt="' . $strTrackingIsNotActive . '" title="' . $strTrackingIsNotActive . '" /></a>';
+            $tracking_icon = '<a href="tbl_tracking.php?' . $url_query . '&amp;table=' . $truename . '"><img class="icon" width="14" height="14" src="' . $pmaThemeImage . 'eye_grey.png" alt="' . __('Tracking is not active.') . '" title="' . __('Tracking is not active.') . '" /></a>';
         }
     }
 
@@ -354,45 +307,44 @@ foreach ($tables as $keyname => $each_table) {
         <?php
         PMA_TableHeader(false, $server_slave_status);
     }
-    
+
     $ignored = false;
     $do = false;
 
     if ($server_slave_status) {
         ////////////////////////////////////////////////////////////////
 
-        if ((strlen(array_search($truename, $server_slave_Do_Table)) > 0) 
-            || (strlen(array_search($db, $server_slave_Do_DB)) > 0) 
+        if ((strlen(array_search($truename, $server_slave_Do_Table)) > 0)
+            || (strlen(array_search($db, $server_slave_Do_DB)) > 0)
             || (count($server_slave_Do_DB) == 1 && count($server_slave_Ignore_DB) == 1)
         ) {
             $do = true;
         }
-        foreach ($server_slave_Wild_Do_Table as $table) {
-            if (($db == PMA_replication_strout($table)) && (preg_match("@^" . substr(PMA_replication_strout($table, true), 0, strlen(PMA_replication_strout($table, true)) - 1) . "@", $truename)))
+        foreach ($server_slave_Wild_Do_Table as $db_table) {
+            $table_part = PMA_extract_db_or_table($db_table, 'table');
+            if (($db == PMA_extract_db_or_table($db_table, 'db')) && (preg_match("@^" . substr($table_part, 0, strlen($table_part) - 1) . "@", $truename))) {
                 $do = true;
+            }
         }
         ////////////////////////////////////////////////////////////////////
         if ((strlen(array_search($truename, $server_slave_Ignore_Table)) > 0)  || (strlen(array_search($db, $server_slave_Ignore_DB)) > 0)) {
             $ignored = true;
         }
-        foreach ($server_slave_Wild_Ignore_Table as $table) {
-            if (($db == PMA_replication_strout($table)) && (preg_match("@^" . substr(PMA_replication_strout($table, true), 0, strlen(PMA_replication_strout($table, true)) - 1) . "@", $truename)))
+        foreach ($server_slave_Wild_Ignore_Table as $db_table) {
+            $table_part = PMA_extract_db_or_table($db_table, 'table');
+            if (($db == PMA_extract_db_or_table($db_table)) && (preg_match("@^" . substr($table_part, 0, strlen($table_part) - 1) . "@", $truename))) {
                 $ignored = true;
+            }
         }
-    }/* elseif ($server_master_status) {
-        if ((strlen(array_search($db, $server_master_Do_DB))>0) || count($server_master_Do_DB)==1)
-            $do = true;
-        elseif ((strlen(array_search($db, $server_master_Ignore_DB))>0) || count($server_master_Ignore_DB)==1)
-            $ignored = true;
-    }*/
+        unset($table_part);
+    }
     ?>
 <tr class="<?php echo $odd_row ? 'odd' : 'even'; $odd_row = ! $odd_row; ?>">
     <td align="center">
         <input type="checkbox" name="selected_tbl[]"
             value="<?php echo htmlspecialchars($each_table['TABLE_NAME']); ?>"
             id="checkbox_tbl_<?php echo $i; ?>"<?php echo $checked; ?> /></td>
-    <th><label for="checkbox_tbl_<?php echo $i; ?>"
-            title="<?php echo $alias; ?>" style="<?php echo $ignored ? ' ignored' : ''; ?>"><?php echo $truename; ?></label>
+    <th><?php echo $browse_table_label; ?>
         <?php echo (! empty($tracking_icon) ? $tracking_icon : ''); ?>
     </th>
    <?php if ($server_slave_status) { ?><td align="center"><?php echo $ignored ? ' <img class="icon" src="' . $pmaThemeImage . 's_cancel.png" width="16" height="16"  alt="NOT REPLICATED" />' : ''. $do ? ' <img class="icon" src="' . $pmaThemeImage . 's_success.png" width="16" height="16"  alt="REPLICATED" />' : ''; ?></td><?php } ?>
@@ -407,11 +359,10 @@ foreach ($tables as $keyname => $each_table) {
             <?php echo $titles['Insert']; ?></a></td>
     <td align="center"><?php echo $empty_table; ?></td>
     <td align="center">
-        <a href="sql.php?<?php echo $tbl_url_query;
+    <a <?php echo ($GLOBALS['cfg']['AjaxEnable'] ? 'class="drop_table_anchor"' : ''); ?> href="sql.php?<?php echo $tbl_url_query;
             ?>&amp;reload=1&amp;purge=1&amp;sql_query=<?php
-            echo urlencode($drop_query); ?>&amp;zero_rows=<?php
-            echo urlencode($drop_message); ?>"
-            onclick="return confirmLink(this, '<?php echo PMA_jsFormat($drop_query, false); ?>')">
+            echo urlencode($drop_query); ?>&amp;message_to_show=<?php
+            echo urlencode($drop_message); ?>" >
             <?php echo $titles['Drop']; ?></a></td>
     <?php } // end if (! $db_is_information_schema)
 
@@ -425,7 +376,7 @@ foreach ($tables as $keyname => $each_table) {
             if ($each_table['TABLE_ROWS'] >= $GLOBALS['cfg']['MaxExactCountViews']){
                 $row_count_pre = '~';
                 $sum_row_count_pre = '~';
-                $show_superscript = PMA_showHint(PMA_sanitize(sprintf($strViewHasAtLeast, '[a@./Documentation.html#cfg_MaxExactCountViews@_blank]', '[/a]')));
+                $show_superscript = PMA_showHint(PMA_sanitize(sprintf(__('This view has at least this number of rows. Please refer to %sdocumentation%s.'), '[a@./Documentation.html#cfg_MaxExactCountViews@_blank]', '[/a]')));
             }
         } elseif($each_table['ENGINE'] == 'InnoDB' && (! $each_table['COUNTED'])) {
             // InnoDB table: we did not get an accurate row count
@@ -437,32 +388,32 @@ foreach ($tables as $keyname => $each_table) {
             $show_superscript = '';
         }
     ?>
-    <td class="value"><?php echo $row_count_pre . PMA_formatNumber($each_table['TABLE_ROWS'], 0) . $show_superscript; ?></td>
+    <td class="value tbl_rows"><?php echo $row_count_pre . PMA_formatNumber($each_table['TABLE_ROWS'], 0) . $show_superscript; ?></td>
         <?php if (!($cfg['PropertiesNumColumns'] > 1)) { ?>
-    <td nowrap="nowrap"><?php echo ($table_is_view ? $strView : $each_table['ENGINE']); ?></td>
+    <td nowrap="nowrap"><?php echo ($table_is_view ? __('View') : $each_table['ENGINE']); ?></td>
             <?php if (isset($collation)) { ?>
     <td nowrap="nowrap"><?php echo $collation ?></td>
             <?php } ?>
         <?php } ?>
 
         <?php if ($is_show_stats) { ?>
-    <td class="value"><a
+    <td class="value tbl_size"><a
         href="tbl_structure.php?<?php echo $tbl_url_query; ?>#showusage"
         ><?php echo $formatted_size . ' ' . $unit; ?></a></td>
     <td class="value"><?php echo $overhead; ?></td>
         <?php } // end if ?>
     <?php } elseif ($table_is_view) { ?>
     <td class="value">-</td>
-    <td><?php echo $strView; ?></td>
+    <td><?php echo __('View'); ?></td>
     <td>---</td>
         <?php if ($is_show_stats) { ?>
     <td class="value">-</td>
     <td class="value">-</td>
         <?php } ?>
     <?php } else { ?>
-    <td colspan="<?php echo ($structure_tbl_col_cnt - ($db_is_information_schema ? 5 : 8)) ?>"
+    <td colspan="<?php echo ($colspan_for_structure - ($db_is_information_schema ? 5 : 8)) ?>"
         align="center">
-        <?php echo $strInUse; ?></td>
+        <?php echo __('in use'); ?></td>
     <?php } // end if (isset($each_table['TABLE_ROWS'])) else ?>
 </tr>
     <?php
@@ -476,37 +427,37 @@ if ($is_show_stats) {
 }
 ?>
 </tbody>
-<tbody>
+<tbody id="tbl_summary_row">
 <tr><th></th>
     <th align="center" nowrap="nowrap">
         <?php
             // for blobstreaming - if the number of tables is 0, set tableReductionCount to 0
-            // (we don't want negative numbers here) - rajk
+            // (we don't want negative numbers here)
             if ($num_tables == 0)
                 $tableReductionCount = 0;
 
-            echo sprintf($strTables, PMA_formatNumber($num_tables - $tableReductionCount, 0));
+            echo sprintf(_ngettext('%s table', '%s tables', $num_tables - $tableReductionCount), PMA_formatNumber($num_tables - $tableReductionCount, 0));
         ?>
     </th>
     <?php
         if ($server_slave_status) {
-            echo '    <th>' . $GLOBALS['strReplication'] . '</th>' . "\n";
+            echo '    <th>' . __('Replication') . '</th>' . "\n";
         }
     ?>
     <th colspan="<?php echo ($db_is_information_schema ? 3 : 6) ?>" align="center">
-        <?php echo $strSum; ?></th>
-    <th class="value"><?php echo $sum_row_count_pre . PMA_formatNumber($sum_entries, 0); ?></th>
+        <?php echo __('Sum'); ?></th>
+    <th class="value tbl_rows"><?php echo $sum_row_count_pre . PMA_formatNumber($sum_entries, 0); ?></th>
 <?php
 if (!($cfg['PropertiesNumColumns'] > 1)) {
     $default_engine = PMA_DBI_get_default_engine();
     echo '    <th align="center">' . "\n"
        . '        <dfn title="'
-       . sprintf($strDefaultEngine, $default_engine) . '">' .$default_engine . '</dfn></th>' . "\n";
+       . sprintf(__('%s is the default storage engine on this MySQL server.'), $default_engine) . '">' .$default_engine . '</dfn></th>' . "\n";
     // we got a case where $db_collation was empty
     echo '    <th align="center">' . "\n";
     if (! empty($db_collation)) {
         echo '        <dfn title="'
-            . PMA_getCollationDescr($db_collation) . ' (' . $strDefault . ')">' . $db_collation
+            . PMA_getCollationDescr($db_collation) . ' (' . __('Default') . ')">' . $db_collation
             . '</dfn>';
     }
     echo '</th>';
@@ -514,7 +465,7 @@ if (!($cfg['PropertiesNumColumns'] > 1)) {
 
 if ($is_show_stats) {
     ?>
-    <th class="value"><?php echo $sum_formatted . ' ' . $unit; ?></th>
+    <th class="value tbl_size"><?php echo $sum_formatted . ' ' . $unit; ?></th>
     <th class="value"><?php echo $overhead_formatted . ' ' . $overhead_unit; ?></th>
     <?php
 }
@@ -529,41 +480,44 @@ if ($is_show_stats) {
 $checkall_url = 'db_structure.php?' . PMA_generate_common_url($db);
 ?>
 <img class="selectallarrow" src="<?php echo $pmaThemeImage .'arrow_'.$text_dir.'.png'; ?>"
-    width="38" height="22" alt="<?php echo $strWithChecked; ?>" />
+    width="38" height="22" alt="<?php echo __('With selected:'); ?>" />
 <a href="<?php echo $checkall_url; ?>&amp;checkall=1"
     onclick="if (markAllRows('tablesForm')) return false;">
-    <?php echo $strCheckAll; ?></a>
+    <?php echo __('Check All'); ?></a>
 /
 <a href="<?php echo $checkall_url; ?>"
     onclick="if (unMarkAllRows('tablesForm')) return false;">
-    <?php echo $strUncheckAll; ?></a>
+    <?php echo __('Uncheck All'); ?></a>
 <?php if ($overhead_check != '') { ?>
 /
 <a href="#" onclick="unMarkAllRows('tablesForm');
     <?php echo $overhead_check; ?> return false;">
-    <?php echo $strCheckOverhead; ?></a>
+    <?php echo __('Check tables having overhead'); ?></a>
 <?php } ?>
 
 <select name="submit_mult" onchange="this.form.submit();" style="margin: 0 3em 0 3em;">
 <?php
-echo '    <option value="' . $strWithChecked . '" selected="selected">'
-     . $strWithChecked . '</option>' . "\n";
-echo '    <option value="' . $strEmpty . '" >'
-     . $strEmpty . '</option>' . "\n";
-echo '    <option value="' . $strDrop . '" >'
-     . $strDrop . '</option>' . "\n";
-echo '    <option value="' . $strPrintView . '" >'
-     . $strPrintView . '</option>' . "\n";
-echo '    <option value="' . $strCheckTable . '" >'
-     . $strCheckTable . '</option>' . "\n";
-echo '    <option value="' . $strOptimizeTable . '" >'
-     . $strOptimizeTable . '</option>' . "\n";
-echo '    <option value="' . $strRepairTable . '" >'
-     . $strRepairTable . '</option>' . "\n";
-echo '    <option value="' . $strAnalyzeTable . '" >'
-     . $strAnalyzeTable . '</option>' . "\n";
-echo '    <option value="' . $strExport . '" >'
-     . $strExport . '</option>' . "\n";
+echo '    <option value="' . __('With selected:') . '" selected="selected">'
+     . __('With selected:') . '</option>' . "\n";
+echo '    <option value="export" >'
+     . __('Export') . '</option>' . "\n";
+echo '    <option value="print" >'
+    . __('Print view') . '</option>' . "\n";
+
+if (!$db_is_information_schema) {
+    echo '    <option value="empty_tbl" >'
+         . __('Empty') . '</option>' . "\n";
+    echo '    <option value="drop_tbl" >'
+         . __('Drop') . '</option>' . "\n";
+    echo '    <option value="check_tbl" >'
+         . __('Check table') . '</option>' . "\n";
+    echo '    <option value="optimize_tbl" >'
+         . __('Optimize table') . '</option>' . "\n";
+    echo '    <option value="repair_tbl" >'
+         . __('Repair table') . '</option>' . "\n";
+    echo '    <option value="analyze_tbl" >'
+         . __('Analyze table') . '</option>' . "\n";
+}
 ?>
 </select>
 <script type="text/javascript">
@@ -572,7 +526,7 @@ echo '    <option value="' . $strExport . '" >'
 //-->
 </script>
 <noscript>
-    <input type="submit" value="<?php echo $strGo; ?>" />
+    <input type="submit" value="<?php echo __('Go'); ?>" />
 </noscript>
 <?php echo implode("\n", $hidden_fields) . "\n"; ?>
 </div>
@@ -581,6 +535,7 @@ echo '    <option value="' . $strExport . '" >'
 // display again the table list navigator
 PMA_listNavigator($total_num_tables, $pos, $_url_params, 'db_structure.php', 'frame_content', $GLOBALS['cfg']['MaxTableList']);
 ?>
+</div>
 <hr />
 
 <?php
@@ -594,7 +549,6 @@ if (PMA_MYSQL_INT_VERSION > 50100) {
 
 /**
  * Work on the database
- * redesigned 2004-05-08 by mkkeck
  */
 /* DATABASE WORK */
 /* Printable view of a table */
@@ -604,14 +558,14 @@ if ($cfg['PropertiesIconic']) {
      echo '<img class="icon" src="' . $pmaThemeImage
         .'b_print.png" width="16" height="16" alt="" />';
 }
-echo $strPrintView . '</a> ';
+echo __('Print view') . '</a> ';
 
 echo '<a href="./db_datadict.php?' . $url_query . '">';
 if ($cfg['PropertiesIconic']) {
     echo '<img class="icon" src="' . $pmaThemeImage
         .'b_tblanalyse.png" width="16" height="16" alt="" />';
 }
-echo $strDataDict . '</a>';
+echo __('Data Dictionary') . '</a>';
 echo '</p>';
 
 if (empty($db_is_information_schema)) {
@@ -621,5 +575,5 @@ if (empty($db_is_information_schema)) {
 /**
  * Displays the footer
  */
-require_once './libraries/footer.inc.php';
+require './libraries/footer.inc.php';
 ?>

@@ -28,7 +28,6 @@
  * - db connection
  * - authentication work
  *
- * @version $Id$
  * @package phpMyAdmin
  */
 
@@ -50,7 +49,7 @@ if (!defined('E_DEPRECATED')) {
 /**
  * the error handler
  */
-require_once './libraries/Error_Handler.class.php';
+require './libraries/Error_Handler.class.php';
 
 /**
  * initialize the error handler
@@ -58,18 +57,23 @@ require_once './libraries/Error_Handler.class.php';
 $GLOBALS['error_handler'] = new PMA_Error_Handler();
 $cfg['Error_Handler']['display'] = TRUE;
 
-// at this point PMA_PHP_INT_VERSION is not yet defined
-if (version_compare(phpversion(), '6', 'lt')) {
+/*
+ * This setting was removed in PHP 5.3. But at this point PMA_PHP_INT_VERSION
+ * is not yet defined so we use another way to find out the PHP version.
+ */
+if (version_compare(phpversion(), '5.3', 'lt')) {
     /**
      * Avoid object cloning errors
      */
     @ini_set('zend.ze1_compatibility_mode', false);
-
-    /**
-     * Avoid problems with magic_quotes_runtime
-     */
-    @ini_set('magic_quotes_runtime', false);
 }
+
+/**
+ * Avoid problems with magic_quotes_runtime
+ * (in the future, this setting will be removed but it's not yet
+ * known in which PHP version)
+ */
+@ini_set('magic_quotes_runtime', false);
 
 /**
  * for verification in all procedural scripts under libraries
@@ -79,42 +83,42 @@ define('PHPMYADMIN', true);
 /**
  * core functions
  */
-require_once './libraries/core.lib.php';
+require './libraries/core.lib.php';
 
 /**
  * Input sanitizing
  */
-require_once './libraries/sanitizing.lib.php';
+require './libraries/sanitizing.lib.php';
 
 /**
  * the PMA_Theme class
  */
-require_once './libraries/Theme.class.php';
+require './libraries/Theme.class.php';
 
 /**
  * the PMA_Theme_Manager class
  */
-require_once './libraries/Theme_Manager.class.php';
+require './libraries/Theme_Manager.class.php';
 
 /**
  * the PMA_Config class
  */
-require_once './libraries/Config.class.php';
+require './libraries/Config.class.php';
 
 /**
  * the relation lib, tracker needs it
  */
-require_once './libraries/relation.lib.php';
+require './libraries/relation.lib.php';
 
 /**
  * the PMA_Tracker class
  */
-require_once './libraries/Tracker.class.php';
+require './libraries/Tracker.class.php';
 
 /**
  * the PMA_Table class
  */
-require_once './libraries/Table.class.php';
+require './libraries/Table.class.php';
 
 if (!defined('PMA_MINIMUM_COMMON')) {
     /**
@@ -258,22 +262,6 @@ if (function_exists('get_magic_quotes_gpc') && get_magic_quotes_gpc()) {
 }
 
 /**
- * clean cookies on upgrade
- * when changing something related to PMA cookies, increment the cookie version
- */
-$pma_cookie_version = 4;
-if (isset($_COOKIE)
- && (isset($_COOKIE['pmaCookieVer'])
-  && $_COOKIE['pmaCookieVer'] < $pma_cookie_version)) {
-    // delete all cookies
-    foreach($_COOKIE as $cookie_name => $tmp) {
-        PMA_removeCookie($cookie_name);
-    }
-    $_COOKIE = array();
-    PMA_setCookie('pmaCookieVer', $pma_cookie_version);
-}
-
-/**
  * include deprecated grab_globals only if required
  */
 if (empty($__redirect) && !defined('PMA_NO_VARIABLES_IMPORT')) {
@@ -289,10 +277,69 @@ if (empty($__redirect) && !defined('PMA_NO_VARIABLES_IMPORT')) {
  */
 date_default_timezone_set(@date_default_timezone_get());
 
+/******************************************************************************/
+/* parsing configuration file                         LABEL_parsing_config_file      */
+
+/**
+ * We really need this one!
+ */
+if (! function_exists('preg_replace')) {
+    PMA_warnMissingExtension('pcre', true);
+}
+
+/**
+ * @global PMA_Config $GLOBALS['PMA_Config']
+ * force reading of config file, because we removed sensitive values
+ * in the previous iteration
+ */
+$GLOBALS['PMA_Config'] = new PMA_Config(CONFIG_FILE);
+
+if (!defined('PMA_MINIMUM_COMMON')) {
+    $GLOBALS['PMA_Config']->checkPmaAbsoluteUri();
+}
+
+/**
+ * BC - enable backward compatibility
+ * exports all configuration settings into $GLOBALS ($GLOBALS['cfg'])
+ */
+$GLOBALS['PMA_Config']->enableBc();
+
+/**
+ * clean cookies on upgrade
+ * when changing something related to PMA cookies, increment the cookie version
+ */
+$pma_cookie_version = 4;
+if (isset($_COOKIE)
+ && (isset($_COOKIE['pmaCookieVer'])
+  && $_COOKIE['pmaCookieVer'] < $pma_cookie_version)) {
+    // delete all cookies
+    foreach($_COOKIE as $cookie_name => $tmp) {
+        $GLOBALS['PMA_Config']->removeCookie($cookie_name);
+    }
+    $_COOKIE = array();
+    $GLOBALS['PMA_Config']->setCookie('pmaCookieVer', $pma_cookie_version);
+}
+
+
+/**
+ * check HTTPS connection
+ */
+if ($GLOBALS['PMA_Config']->get('ForceSSL')
+  && !$GLOBALS['PMA_Config']->get('is_https')) {
+    PMA_sendHeaderLocation(
+        preg_replace('/^http/', 'https',
+            $GLOBALS['PMA_Config']->get('PmaAbsoluteUri'))
+        . PMA_generate_common_url($_GET, 'text'));
+    // delete the current session, otherwise we get problems (see bug #2397877)
+    $GLOBALS['PMA_Config']->removeCookie($GLOBALS['session_name']);
+    exit;
+}
+
+
 /**
  * include session handling after the globals, to prevent overwriting
  */
-require_once './libraries/session.inc.php';
+require './libraries/session.inc.php';
 
 /**
  * init some variables LABEL_variables_init
@@ -325,7 +372,6 @@ $goto_whitelist = array(
     'db_printview.php',
     'db_search.php',
     //'Documentation.html',
-    //'error.php',
     'export.php',
     'import.php',
     //'index.php',
@@ -368,7 +414,6 @@ $goto_whitelist = array(
     //'themes.php',
     'transformation_overview.php',
     'transformation_wrapper.php',
-    'translators.html',
     'user_password.php',
 );
 
@@ -411,7 +456,7 @@ if (PMA_checkPageValidity($_REQUEST['back'], $goto_whitelist)) {
  * f.e. PMA_Config: fontsize
  *
  * @todo variables should be handled by their respective owners (objects)
- * f.e. lang, server, convcharset, collation_connection in PMA_Config
+ * f.e. lang, server, collation_connection in PMA_Config
  */
 if (! PMA_isValid($_REQUEST['token']) || $_SESSION[' PMA_token '] != $_REQUEST['token']) {
     /**
@@ -425,18 +470,18 @@ if (! PMA_isValid($_REQUEST['token']) || $_SESSION[' PMA_token '] != $_REQUEST['
         /* Session ID */
         'phpMyAdmin',
         /* Cookie preferences */
-        'pma_lang', 'pma_charset', 'pma_collation_connection',
+        'pma_lang', 'pma_collation_connection',
         /* Possible login form */
         'pma_servername', 'pma_username', 'pma_password',
-        /* rajk - for playing blobstreamable media */
+        /* for playing blobstreamable media */
         'media_type', 'custom_type', 'bs_reference',
-        /* rajk - for changing BLOB repository file MIME type */
-        'bs_db', 'bs_table', 'bs_ref', 'bs_new_mime_type'
+        /* for changing BLOB repository file MIME type */
+        'bs_db', 'bs_table', 'bs_ref', 'bs_new_mime_type',
     );
     /**
      * Require cleanup functions
      */
-    require_once './libraries/cleanup.lib.php';
+    require './libraries/cleanup.lib.php';
     /**
      * Do actual cleanup
      */
@@ -444,14 +489,6 @@ if (! PMA_isValid($_REQUEST['token']) || $_SESSION[' PMA_token '] != $_REQUEST['
 
 }
 
-
-/**
- * @global string $GLOBALS['convcharset']
- * @see select_lang.lib.php
- */
-if (isset($_REQUEST['convcharset'])) {
-    $GLOBALS['convcharset'] = strip_tags($_REQUEST['convcharset']);
-}
 
 /**
  * current selected database
@@ -502,12 +539,12 @@ $_REQUEST['js_frame'] = PMA_ifSetOr($_REQUEST['js_frame'], '');
  * @global array $js_include
  */
 $GLOBALS['js_include'] = array();
+$GLOBALS['js_include'][] = 'jquery/jquery-1.4.4.js';
+$GLOBALS['js_include'][] = 'update-location.js';
 
 /**
- * holds locale messages required by JavaScript function
- * @global array $js_messages
+ * Add common jQuery functions script here if necessary.
  */
-$GLOBALS['js_messages'] = array();
 
 /**
  * JavaScript events that will be registered
@@ -522,85 +559,35 @@ $GLOBALS['js_events'] = array();
 $GLOBALS['footnotes'] = array();
 
 /******************************************************************************/
-/* parsing configuration file                         LABEL_parsing_config_file      */
-
-/**
- * We really need this one!
- */
-if (! function_exists('preg_replace')) {
-    PMA_fatalError('strCantLoad', 'pcre');
-}
-
-/**
- * @global PMA_Config $_SESSION['PMA_Config']
- * force reading of config file, because we removed sensitive values
- * in the previous iteration
- */
-$_SESSION['PMA_Config'] = new PMA_Config('./config.inc.php');
-
-if (!defined('PMA_MINIMUM_COMMON')) {
-    $_SESSION['PMA_Config']->checkPmaAbsoluteUri();
-}
-
-/**
- * BC - enable backward compatibility
- * exports all configuration settings into $GLOBALS ($GLOBALS['cfg'])
- */
-$_SESSION['PMA_Config']->enableBc();
-
-
-/**
- * check HTTPS connection
- */
-if ($_SESSION['PMA_Config']->get('ForceSSL')
-  && !$_SESSION['PMA_Config']->get('is_https')) {
-    PMA_sendHeaderLocation(
-        preg_replace('/^http/', 'https',
-            $_SESSION['PMA_Config']->get('PmaAbsoluteUri'))
-        . PMA_generate_common_url($_GET, 'text'));
-    // delete the current session, otherwise we get problems (see bug #2397877)
-    PMA_removeCookie($GLOBALS['session_name']);
-    exit;
-}
-
-
-/******************************************************************************/
 /* loading language file                       LABEL_loading_language_file    */
-
-/**
- * Added messages while developing:
- */
-if (file_exists('./lang/added_messages.php')) {
-    include './lang/added_messages.php';
-}
 
 /**
  * lang detection is done here
  */
-require_once './libraries/select_lang.lib.php';
+require './libraries/select_lang.lib.php';
 
 /**
  * check for errors occurred while loading configuration
  * this check is done here after loading language files to present errors in locale
  */
-if ($_SESSION['PMA_Config']->error_config_file) {
-    $error = $strConfigFileError
+if ($GLOBALS['PMA_Config']->error_config_file) {
+    $error = __('phpMyAdmin was unable to read your configuration file!<br />This might happen if PHP finds a parse error in it or PHP cannot find the file.<br />Please call the configuration file directly using the link below and read the PHP error message(s) that you receive. In most cases a quote or a semicolon is missing somewhere.<br />If you receive a blank page, everything is fine.')
         . '<br /><br />'
-        . ($_SESSION['PMA_Config']->getSource() == './config.inc.php' ?
+        . ($GLOBALS['PMA_Config']->getSource() == CONFIG_FILE ?
         '<a href="show_config_errors.php"'
-        .' target="_blank">' . $_SESSION['PMA_Config']->getSource() . '</a>'
+        .' target="_blank">' . $GLOBALS['PMA_Config']->getSource() . '</a>'
         :
-        '<a href="' . $_SESSION['PMA_Config']->getSource() . '"'
-        .' target="_blank">' . $_SESSION['PMA_Config']->getSource() . '</a>');
+        '<a href="' . $GLOBALS['PMA_Config']->getSource() . '"'
+        .' target="_blank">' . $GLOBALS['PMA_Config']->getSource() . '</a>');
     trigger_error($error, E_USER_ERROR);
 }
-if ($_SESSION['PMA_Config']->error_config_default_file) {
-    $error = sprintf($strConfigDefaultFileError,
-        $_SESSION['PMA_Config']->default_source);
+if ($GLOBALS['PMA_Config']->error_config_default_file) {
+    $error = sprintf(__('Could not load default configuration from: %1$s'),
+        $GLOBALS['PMA_Config']->default_source);
     trigger_error($error, E_USER_ERROR);
 }
-if ($_SESSION['PMA_Config']->error_pma_uri) {
-    trigger_error($strPmaUriError, E_USER_ERROR);
+if ($GLOBALS['PMA_Config']->error_pma_uri) {
+    trigger_error(__('The <tt>$cfg[\'PmaAbsoluteUri\']</tt> directive MUST be set in your configuration file!'), E_USER_ERROR);
 }
 
 
@@ -630,14 +617,14 @@ if (!isset($cfg['Servers']) || count($cfg['Servers']) == 0) {
 
         // Detect wrong configuration
         if (!is_int($server_index) || $server_index < 1) {
-            trigger_error(sprintf($strInvalidServerIndex, $server_index), E_USER_ERROR);
+            trigger_error(sprintf(__('Invalid server index: %s'), $server_index), E_USER_ERROR);
         }
 
         $each_server = array_merge($default_server, $each_server);
 
         // Don't use servers with no hostname
         if ($each_server['connect_type'] == 'tcp' && empty($each_server['host'])) {
-            trigger_error(sprintf($strInvalidServerHostname, $server_index), E_USER_ERROR);
+            trigger_error(sprintf(__('Invalid hostname for server %1$s. Please review your configuration.'), $server_index), E_USER_ERROR);
         }
 
         // Final solution to bug #582890
@@ -646,7 +633,7 @@ if (!isset($cfg['Servers']) || count($cfg['Servers']) == 0) {
         // or the host field, then generate a name for the server
         // in the form of "Server 2", localized of course!
         if ($each_server['connect_type'] == 'socket' && empty($each_server['host']) && empty($each_server['verbose'])) {
-            $each_server['verbose'] = $GLOBALS['strServer'] . $server_index;
+            $each_server['verbose'] = __('Server') . $server_index;
         }
 
         $new_servers[$server_index] = $each_server;
@@ -662,13 +649,6 @@ unset($default_server);
 /******************************************************************************/
 /* setup themes                                          LABEL_theme_setup    */
 
-if (isset($_REQUEST['custom_color_reset'])) {
-    unset($_SESSION['tmp_user_values']['custom_color']);
-    unset($_SESSION['tmp_user_values']['custom_color_rgb']);
-} elseif (isset($_REQUEST['custom_color'])) {
-    $_SESSION['tmp_user_values']['custom_color'] = $_REQUEST['custom_color'];
-    $_SESSION['tmp_user_values']['custom_color_rgb'] = $_REQUEST['custom_color_rgb'];
-}
 /**
  * @global PMA_Theme_Manager $_SESSION['PMA_Theme_Manager']
  */
@@ -749,7 +729,6 @@ if (! defined('PMA_MINIMUM_COMMON')) {
 
     /**
      * Lookup server by name
-     * by Arnold - Helder Hosting
      * (see FAQ 4.8)
      */
     if (! empty($_REQUEST['server']) && is_string($_REQUEST['server'])
@@ -793,7 +772,7 @@ if (! defined('PMA_MINIMUM_COMMON')) {
      * Kanji encoding convert feature appended by Y.Kawada (2002/2/20)
      */
     if (function_exists('mb_convert_encoding')
-     && strpos($lang, 'ja-') !== false) {
+     && $lang == 'ja') {
         require_once './libraries/kanji-encoding.lib.php';
         /**
          * enable multibyte string support
@@ -805,9 +784,8 @@ if (! defined('PMA_MINIMUM_COMMON')) {
      * save some settings in cookies
      * @todo should be done in PMA_Config
      */
-    PMA_setCookie('pma_lang', $GLOBALS['lang']);
-    PMA_setCookie('pma_charset', $GLOBALS['convcharset']);
-    PMA_setCookie('pma_collation_connection', $GLOBALS['collation_connection']);
+    $GLOBALS['PMA_Config']->setCookie('pma_lang', $GLOBALS['lang']);
+    $GLOBALS['PMA_Config']->setCookie('pma_collation_connection', $GLOBALS['collation_connection']);
 
     $_SESSION['PMA_Theme_Manager']->setThemeCookie();
 
@@ -820,33 +798,45 @@ if (! defined('PMA_MINIMUM_COMMON')) {
 
         require_once './libraries/logging.lib.php';
 
+        // get LoginCookieValidity from preferences cache
+        // no generic solution for loading preferences from cache as some settings need to be kept
+        // for processing in PMA_Config::loadUserPreferences()
+        $cache_key = 'server_' . $GLOBALS['server'];
+        if (isset($_SESSION['cache'][$cache_key]['userprefs']['LoginCookieValidity'])) {
+            $value = $_SESSION['cache'][$cache_key]['userprefs']['LoginCookieValidity'];
+            $GLOBALS['PMA_Config']->set('LoginCookieValidity', $value);
+            $GLOBALS['cfg']['LoginCookieValidity'] = $value;
+            unset($value);
+        }
+        unset($cache_key);
+
         // Gets the authentication library that fits the $cfg['Server'] settings
         // and run authentication
 
         // to allow HTTP or http
         $cfg['Server']['auth_type'] = strtolower($cfg['Server']['auth_type']);
         if (! file_exists('./libraries/auth/' . $cfg['Server']['auth_type'] . '.auth.lib.php')) {
-            PMA_fatalError($strInvalidAuthMethod . ' ' . $cfg['Server']['auth_type']);
+            PMA_fatalError(__('Invalid authentication method set in configuration:') . ' ' . $cfg['Server']['auth_type']);
         }
         /**
          * the required auth type plugin
          */
         require_once './libraries/auth/' . $cfg['Server']['auth_type'] . '.auth.lib.php';
-
         if (!PMA_auth_check()) {
+            /* Force generating of new session on login */
+            PMA_secureSession();
             PMA_auth();
         } else {
             PMA_auth_set_user();
         }
 
-        // Check IP-based Allow/Deny rules as soon as possible to reject the
+         // Check IP-based Allow/Deny rules as soon as possible to reject the
         // user
         // Based on mod_access in Apache:
         // http://cvs.apache.org/viewcvs.cgi/httpd-2.0/modules/aaa/mod_access.c?rev=1.37&content-type=text/vnd.viewcvs-markup
         // Look at: "static int check_dir_access(request_rec *r)"
-        // Robbat2 - May 10, 2002
         if (isset($cfg['Server']['AllowDeny'])
-          && isset($cfg['Server']['AllowDeny']['order'])) {
+                && isset($cfg['Server']['AllowDeny']['order'])) {
 
             /**
              * ip based access library
@@ -929,7 +919,7 @@ if (! defined('PMA_MINIMUM_COMMON')) {
          *  - > 5.0.15
          */
         if (PMA_MYSQL_INT_VERSION < 50015) {
-            PMA_fatalError('strUpgrade', array('MySQL', '5.0.15'));
+            PMA_fatalError(__('You should upgrade to %s %s or later.'), array('MySQL', '5.0.15'));
         }
 
         /**
@@ -971,23 +961,52 @@ if (! defined('PMA_MINIMUM_COMMON')) {
         unset($_SESSION['profiling']);
     }
 
-    // rajk - library file for blobstreaming
+    // library file for blobstreaming
     require_once './libraries/blobstreaming.lib.php';
 
-    // rajk - checks for blobstreaming plugins and databases that support
+    // checks for blobstreaming plugins and databases that support
     // blobstreaming (by having the necessary tables for blobstreaming)
-    if (checkBLOBStreamingPlugins()) {
-        checkBLOBStreamableDatabases();
-    }
+    checkBLOBStreamingPlugins();
+
 } // end if !defined('PMA_MINIMUM_COMMON')
 
+// load user preferences
+$GLOBALS['PMA_Config']->loadUserPreferences();
+
 // remove sensitive values from session
-$_SESSION['PMA_Config']->set('blowfish_secret', '');
-$_SESSION['PMA_Config']->set('Servers', '');
-$_SESSION['PMA_Config']->set('default_server', '');
+$GLOBALS['PMA_Config']->set('blowfish_secret', '');
+$GLOBALS['PMA_Config']->set('Servers', '');
+$GLOBALS['PMA_Config']->set('default_server', '');
 
 /* Tell tracker that it can actually work */
 PMA_Tracker::enable();
+
+/**
+ * @global boolean $GLOBALS['is_ajax_request']
+ * @todo should this be moved to the variables init section above?
+ *
+ * Check if the current request is an AJAX request, and set is_ajax_request
+ * accordingly.  Suppress headers, footers and unnecessary output if set to
+ * true
+ */
+if (isset($_REQUEST['ajax_request']) && $_REQUEST['ajax_request'] == true) {
+	$GLOBALS['is_ajax_request'] = true;
+} else {
+	$GLOBALS['is_ajax_request'] = false;
+}
+
+/**
+ * @global  boolean $GLOBALS['inline_edit']
+ *
+ * Set to true if this is a request made during an inline edit process.  This
+ * request is made to retrieve the non-truncated/transformed values.
+ */
+if(isset($_REQUEST['inline_edit']) && $_REQUEST['inline_edit'] == true) {
+    $GLOBALS['inline_edit'] = true;
+}
+else {
+    $GLOBALS['inline_edit'] = false;
+}
 
 if (!empty($__redirect) && in_array($__redirect, $goto_whitelist)) {
     /**

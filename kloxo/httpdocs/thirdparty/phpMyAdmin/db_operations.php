@@ -9,7 +9,6 @@
  *  - adding tables
  *  - viewing PDF schemas
  *
- * @version $Id$
  * @package phpMyAdmin
  */
 
@@ -17,11 +16,15 @@
  * requirements
  */
 require_once './libraries/common.inc.php';
-require_once './libraries/Table.class.php';
 require_once './libraries/mysql_charsets.lib.php';
 
 // add blobstreaming library functions
 require_once "./libraries/blobstreaming.lib.php";
+
+// add a javascript file for jQuery functions to handle Ajax actions
+// also add jQueryUI
+$GLOBALS['js_include'][] = 'jquery/jquery-ui-1.8.custom.js';
+$GLOBALS['js_include'][] = 'db_operations.js';
 
 /**
  * Rename/move or copy database
@@ -35,7 +38,7 @@ if (strlen($db) && (! empty($db_rename) || ! empty($db_copy))) {
     }
 
     if (!isset($newname) || !strlen($newname)) {
-        $message = PMA_Message::error('strDatabaseEmpty');
+        $message = PMA_Message::error(__('The database name is empty!'));
     } else {
         $sql_query = ''; // in case target db exists
         $_error = false;
@@ -100,9 +103,7 @@ if (strlen($db) && (! empty($db_rename) || ! empty($db_copy))) {
         // go back to current db, just in case
         PMA_DBI_select_db($db);
 
-        if (isset($GLOBALS['add_constraints']) || $move) {
-            $GLOBALS['sql_constraints_query_full_db'] = array();
-        }
+        $GLOBALS['sql_constraints_query_full_db'] = array();
 
         $tables_full = PMA_DBI_get_tables_full($db);
         $views = array();
@@ -125,14 +126,15 @@ if (strlen($db) && (! empty($db_rename) || ! empty($db_copy))) {
 
 
         foreach ($tables_full as $each_table => $tmp) {
-            // to be able to rename a db containing views, we
-            // first collect in $views all the views we find and we
-            // will handle them after the tables
-            /**
-             * @todo support a view of a view
-             */
+            // to be able to rename a db containing views,
+            // first all the views are collected and a stand-in is created
+            // the real views are created after the tables
             if (PMA_Table::isView($db, $each_table)) {
                 $views[] = $each_table;
+                // Create stand-in definition to resolve view dependencies
+                $sql_view_standin = PMA_getTableDefStandIn($db, $each_table, "\n");
+                PMA_DBI_query($sql_view_standin);
+                $GLOBALS['sql_query'] .= "\n" . $sql_view_standin . ';';
                 continue;
             }
 
@@ -155,7 +157,7 @@ if (strlen($db) && (! empty($db_rename) || ! empty($db_copy))) {
 
             if ($this_what != 'nocopy') {
                 // keep the triggers from the original db+table
-                // (third param is empty because delimiters are only intended 
+                // (third param is empty because delimiters are only intended
                 //  for importing via the mysql client or our Import feature)
                 $triggers = PMA_DBI_get_triggers($db, $each_table, '');
 
@@ -175,7 +177,7 @@ if (strlen($db) && (! empty($db_rename) || ! empty($db_copy))) {
                     }
                     unset($trigger);
                 }
-                unset($triggers); 
+                unset($triggers);
 
                 // this does not apply to a rename operation
                 if (isset($GLOBALS['add_constraints']) && !empty($GLOBALS['sql_constraints_query'])) {
@@ -190,12 +192,24 @@ if (strlen($db) && (! empty($db_rename) || ! empty($db_copy))) {
 
         // handle the views
         if (! $_error) {
+            // temporarily force to add DROP IF EXIST to CREATE VIEW query,
+            // to remove stand-in VIEW that was created earlier
+            if (isset($GLOBALS['drop_if_exists'])) {
+                $temp_drop_if_exists = $GLOBALS['drop_if_exists'];
+            }
+            $GLOBALS['drop_if_exists'] = 'true';
+
             foreach ($views as $view) {
-                if (! PMA_Table::moveCopy($db, $view, $newname, $view,
-                 'structure', $move, 'db_copy')) {
+                if (! PMA_Table::moveCopy($db, $view, $newname, $view, 'structure', $move, 'db_copy')) {
                     $_error = true;
                     break;
                 }
+            }
+            unset($GLOBALS['drop_if_exists']);
+            if (isset($temp_drop_if_exists)) {
+                // restore previous value
+                $GLOBALS['drop_if_exists'] = $temp_drop_if_exists;
+                unset($temp_drop_if_exists);
             }
         }
         unset($view, $views);
@@ -211,6 +225,28 @@ if (strlen($db) && (! empty($db_rename) || ! empty($db_copy))) {
 
             unset($GLOBALS['sql_constraints_query_full_db'], $one_query);
         }
+
+        if (PMA_MYSQL_INT_VERSION >= 50100) {
+            // here DELIMITER is not used because it's not part of the
+            // language; each statement is sent one by one
+
+            // to avoid selecting alternatively the current and new db
+            // we would need to modify the CREATE definitions to qualify
+            // the db name
+            $event_names = PMA_DBI_fetch_result('SELECT EVENT_NAME FROM information_schema.EVENTS WHERE EVENT_SCHEMA= \'' . PMA_sqlAddslashes($db,true) . '\';');
+            if ($event_names) {
+                foreach($event_names as $event_name) {
+                    PMA_DBI_select_db($db);
+                    $tmp_query = PMA_DBI_get_definition($db, 'EVENT', $event_name);
+                    // collect for later display
+                    $GLOBALS['sql_query'] .= "\n" . $tmp_query;
+                    PMA_DBI_select_db($newname);
+                    PMA_DBI_query($tmp_query);
+                }
+            }
+    }
+    // go back to current db, just in case
+    PMA_DBI_select_db($db);
 
         // Duplicate the bookmarks for this db (done once for each db)
         if (! $_error && $db != $newname) {
@@ -233,11 +269,11 @@ if (strlen($db) && (! empty($db_rename) || ! empty($db_copy))) {
             $sql_query .= "\n" . $local_query;
             PMA_DBI_query($local_query);
 
-            $message = PMA_Message::success('strRenameDatabaseOK');
+            $message = PMA_Message::success(__('Database %s has been renamed to %s'));
             $message->addParam($db);
             $message->addParam($newname);
         } elseif (! $_error)  {
-            $message = PMA_Message::success('strCopyDatabaseOK');
+            $message = PMA_Message::success(__('Database %s has been copied to %s'));
             $message->addParam($db);
             $message->addParam($newname);
         }
@@ -248,10 +284,10 @@ if (strlen($db) && (! empty($db_rename) || ! empty($db_copy))) {
             $db = $newname;
         } elseif (! $_error) {
             if (isset($switch_to_new) && $switch_to_new == 'true') {
-                PMA_setCookie('pma_switch_to_new', 'true');
+                $GLOBALS['PMA_Config']->setCookie('pma_switch_to_new', 'true');
                 $db = $newname;
             } else {
-                PMA_setCookie('pma_switch_to_new', '');
+                $GLOBALS['PMA_Config']->setCookie('pma_switch_to_new', '');
             }
         }
 
@@ -259,73 +295,23 @@ if (strlen($db) && (! empty($db_rename) || ! empty($db_copy))) {
             $message = PMA_Message::error();
         }
     }
+
+    /**
+     * Database has been successfully renamed/moved.  If in an Ajax request,
+     * generate the output with {@link PMA_ajaxResponse} and exit
+     */
+    if( $GLOBALS['is_ajax_request'] == true) {
+        $extra_data['newname'] = $newname;
+        $extra_data['sql_query'] = PMA_showMessage(NULL, $sql_query);
+        PMA_ajaxResponse($message, $message->isSuccess(), $extra_data);
+    };
 }
 
-/*
- * Enable/Disable/Repair BLOB Repository Monitoring for current database
-*/
-if (strlen($db) > 0 && !empty($db_blob_streaming_op))
-{
-    // load PMA_Config
-    $PMA_Config = $_SESSION['PMA_Config'];
-
-    if (!empty($PMA_Config))
-    {
-        if ($PMA_Config->get('PBXT_NAME') !== strtolower($db))
-        {
-            // if Blobstreaming plugins exist, begin checking for Blobstreaming tables
-            if ($PMA_Config->get('BLOBSTREAMING_PLUGINS_EXIST'))
-            {
-                $bs_tables = $PMA_Config->get('BLOBSTREAMABLE_DATABASES');
-                $bs_tables = $bs_tables[$db];
-
-                $oneBSTableExists = FALSE;
-
-                // check if at least one blobstreaming table exists
-                foreach ($bs_tables as $table_key=>$tbl)
-                    if ($bs_tables[$table_key]['Exists'])
-                    {
-                        $oneBSTableExists = TRUE;
-                        break;
-                    }
-
-                switch ($db_blob_streaming_op)
-                {
-                    // enable BLOB repository monitoring
-                    case "enable":
-                        // if blobstreaming tables do not exist, create them
-                        if (!$oneBSTableExists)
-                            PMA_BS_CreateTables($db);
-                    break;
-                    // disable BLOB repository monitoring
-                    case "disable":
-                        // if at least one blobstreaming table exists, execute drop
-                        if ($oneBSTableExists)
-                            PMA_BS_DropTables($db);
-                    break;
-                    // repair BLOB repository
-                    case "repair":
-                        // check if a blobstreaming table is missing
-                        foreach ($bs_tables as $table_key=>$tbl)
-                        if (!$bs_tables[$table_key]['Exists'])
-                        {
-                            PMA_DBI_select_db($db);
-                            PMA_DBI_query(PMA_BS_GetTableStruct($table_key));
-                        }
-                }
-
-                // refresh side menu
-                PMA_sendHeaderLocation($cfg['PmaAbsoluteUri'] . 'db_operations.php?' . PMA_generate_common_url ('','', '&') . (isset($db) ? '&db=' . urlencode($db) : '') . (isset($token) ? '&token=' . urlencode($token) : '') . (isset($goto) ? '&goto=' . urlencode($goto) : '') . 'reload=1&purge=1');
-            }   // end  if ($PMA_Config->get('BLOBSTREAMING_PLUGINS_EXIST'))
-        }   // end if ($PMA_Config->get('PBXT_NAME') !== strtolower($db))
-    }
-}
 
 /**
  * Settings for relations stuff
  */
 
-require_once './libraries/relation.lib.php';
 $cfgRelation = PMA_getRelationsParam();
 
 /**
@@ -363,33 +349,41 @@ if ($db == 'information_schema') {
 }
 
 if (!$is_information_schema) {
-
-    require './libraries/display_create_table.lib.php';
-
     if ($cfgRelation['commwork']) {
         /**
          * database comment
          */
         ?>
+    <div class="operations_half_width">
     <form method="post" action="db_operations.php">
     <?php echo PMA_generate_common_hidden_inputs($db); ?>
     <fieldset>
         <legend>
-        <?php echo PMA_getIcon('b_comment.png', $strDBComment, false, true); ?>
+        <?php echo PMA_getIcon('b_comment.png', __('Database comment: '), false, true); ?>
         </legend>
         <input type="text" name="comment" class="textfield" size="30"
             value="<?php
             echo htmlspecialchars(PMA_getDBComment($db)); ?>" />
-        <input type="submit" value="<?php echo $strGo; ?>" />
+    </fieldset>
+    <fieldset class="tblFooters">
+        <input type="submit" value="<?php echo __('Go'); ?>" />
     </fieldset>
     </form>
+    </div>
         <?php
     }
+    ?>
+    <div class="operations_half_width">
+    <?php require './libraries/display_create_table.lib.php'; ?>
+    </div>
+    <?php
     /**
      * rename database
      */
+if ($db != 'mysql') {
     ?>
-    <form method="post" action="db_operations.php"
+        <div class="operations_half_width">
+        <form id="rename_db_form" <?php echo ($GLOBALS['cfg']['AjaxEnable'] ? ' class="ajax" ' : ''); ?>method="post" action="db_operations.php"
         onsubmit="return emptyFormElements(this, 'newname')">
         <?php
     if (isset($db_collation)) {
@@ -407,12 +401,12 @@ if (!$is_information_schema) {
         echo '<img class="icon" src="' . $pmaThemeImage . 'b_edit.png"'
             .' alt="" width="16" height="16" />';
     }
-    echo $strDBRename . ':';
+    echo __('Rename database to') . ':';
     ?>
         </legend>
-        <input type="text" name="newname" size="30" class="textfield" value="" />
+        <input id="new_db_name" type="text" name="newname" size="30" class="textfield" value="" />
         <?php
-    echo '(' . $strCommand . ': ';
+    echo '(' . __('Command') . ': ';
     /**
      * @todo (see explanations above in a previous todo)
      */
@@ -422,16 +416,58 @@ if (!$is_information_schema) {
         echo 'INSERT INTO ... SELECT';
     //}
     echo ')'; ?>
-        <input type="submit" value="<?php echo $strGo; ?>" onclick="return confirmLink(this, 'CREATE DATABASE ... <?php echo $strAndThen; ?> DROP DATABASE <?php echo PMA_jsFormat($db); ?>')" />
+    </fieldset>
+    <fieldset class="tblFooters">
+        <input id="rename_db_input" type="submit" value="<?php echo __('Go'); ?>" />
     </fieldset>
     </form>
+    </div>
+<?php
+} // end if
 
+// Drop link if allowed
+// Don't even try to drop information_schema. You won't be able to. Believe me. You won't.
+// Don't allow to easily drop mysql database, RFE #1327514.
+if (($is_superuser || $GLOBALS['cfg']['AllowUserDropDatabase']) && ! $db_is_information_schema && ($db != 'mysql')) {
+?>
+<div class="operations_half_width">
+<fieldset class="caution">
+ <legend><?php
+if ($cfg['PropertiesIconic']) {
+    echo '<img class="icon" src="' . $pmaThemeImage . 'b_deltbl.png"'
+        .' alt="" width="16" height="16" />';
+}
+echo __('Remove database');
+?></legend>
+
+<ul>
+<?php
+    $this_sql_query = 'DROP DATABASE ' . PMA_backquote($GLOBALS['db']);
+    $this_url_params = array(
+            'sql_query' => $this_sql_query,
+            'back' => 'db_operations.php',
+            'goto' => 'main.php',
+            'reload' => '1',
+            'purge' => '1',
+            'message_to_show' => sprintf(__('Database %s has been dropped.'), htmlspecialchars(PMA_backquote($db))),
+            'db' => NULL,
+        );
+    ?>
+        <li><a href="sql.php<?php echo PMA_generate_common_url($this_url_params); ?>" <?php echo ($GLOBALS['cfg']['AjaxEnable'] ? 'id="drop_db_anchor"' : ''); ?>>
+            <?php echo __('Drop the database (DROP)'); ?></a>
+        <?php echo PMA_showMySQLDocu('SQL-Syntax', 'DROP_DATABASE'); ?>
+    </li>
+</ul>
+</fieldset>
+</div>
+<?php } ?>
     <?php
     /**
      * Copy database
      */
     ?>
-    <form method="post" action="db_operations.php"
+        <div class="operations_half_width clearfloat">
+        <form id="copy_db_form" <?php echo ($GLOBALS['cfg']['AjaxEnable'] ? ' class="ajax" ' : ''); ?>method="post" action="db_operations.php"
         onsubmit="return emptyFormElements(this, 'newname')">
     <?php
     if (isset($db_collation)) {
@@ -448,35 +484,35 @@ if (!$is_information_schema) {
         echo '<img class="icon" src="' . $pmaThemeImage . 'b_edit.png"'
             .' alt="" width="16" height="16" />';
     }
-    echo $strDBCopy . ':';
+    echo __('Copy database to') . ':';
     $drop_clause = 'DROP TABLE / DROP VIEW';
     ?>
         </legend>
         <input type="text" name="newname" size="30" class="textfield" value="" /><br />
 <?php
         $choices = array(
-            'structure' => $strStrucOnly,
-            'data'      => $strStrucData,
-            'dataonly'  => $strDataOnly);
+            'structure' => __('Structure only'),
+            'data'      => __('Structure and data'),
+            'dataonly'  => __('Data only'));
         PMA_display_html_radio('what', $choices, 'data', true);
         unset($choices);
 ?>
         <input type="checkbox" name="create_database_before_copying" value="1"
             id="checkbox_create_database_before_copying"
-            style="vertical-align: middle" checked="checked" />
+            checked="checked" />
         <label for="checkbox_create_database_before_copying">
-            <?php echo $strCreateDatabaseBeforeCopying; ?></label><br />
+            <?php echo __('CREATE DATABASE before copying'); ?></label><br />
         <input type="checkbox" name="drop_if_exists" value="true"
-            id="checkbox_drop" style="vertical-align: middle" />
-        <label for="checkbox_drop"><?php echo sprintf($strAddClause, $drop_clause); ?></label><br />
+            id="checkbox_drop" />
+        <label for="checkbox_drop"><?php echo sprintf(__('Add %s'), $drop_clause); ?></label><br />
         <input type="checkbox" name="sql_auto_increment" value="1" checked="checked"
-            id="checkbox_auto_increment" style="vertical-align: middle" />
+            id="checkbox_auto_increment" />
         <label for="checkbox_auto_increment">
-            <?php echo $strAddAutoIncrement; ?></label><br />
+            <?php echo __('Add AUTO_INCREMENT value'); ?></label><br />
         <input type="checkbox" name="add_constraints" value="1"
-            id="checkbox_constraints" style="vertical-align: middle" />
+            id="checkbox_constraints" />
         <label for="checkbox_constraints">
-            <?php echo $strAddConstraints; ?></label><br />
+            <?php echo __('Add constraints'); ?></label><br />
     <?php
     unset($drop_clause);
 
@@ -488,106 +524,24 @@ if (!$is_information_schema) {
         <input type="checkbox" name="switch_to_new" value="true"
             id="checkbox_switch"
             <?php echo ((isset($pma_switch_to_new) && $pma_switch_to_new == 'true') ? ' checked="checked"' : ''); ?>
-            style="vertical-align: middle" />
-        <label for="checkbox_switch"><?php echo $strSwitchToDatabase; ?></label>
+            />
+        <label for="checkbox_switch"><?php echo __('Switch to copied database'); ?></label>
     </fieldset>
     <fieldset class="tblFooters">
-        <input type="submit" name="submit_copy" value="<?php echo $strGo; ?>" />
+        <input type="submit" name="submit_copy" value="<?php echo __('Go'); ?>" />
     </fieldset>
     </form>
-
+    </div>
     <?php
-    /*
-     * BLOB streaming support
-    */
-
-    // load PMA_Config
-    $PMA_Config = $_SESSION['PMA_Config'];
-
-    // if all blobstreaming plugins exist, begin checking for blobstreaming tables
-    if (!empty($PMA_Config))
-    {
-        if ($PMA_Config->get('PBXT_NAME') !== strtolower($db))
-        {
-            if ($PMA_Config->get('BLOBSTREAMING_PLUGINS_EXIST'))
-            {
-                $bs_tables = $PMA_Config->get('BLOBSTREAMABLE_DATABASES');
-                $bs_tables = $bs_tables[$db];
-
-                $oneBSTableExists = FALSE;
-                $allBSTablesExist = TRUE;
-
-                // first check that all blobstreaming tables do not exist
-                foreach ($bs_tables as $table_key=>$tbl)
-                    if ($bs_tables[$table_key]['Exists'])
-                        $oneBSTableExists = TRUE;
-                    else
-                        $allBSTablesExist = FALSE;
-
-                ?>
-
-                    <form method="post" action="./db_operations.php">
-                    <?php echo PMA_generate_common_hidden_inputs($db); ?>
-                    <fieldset>
-                    <legend>
-                    <?php echo PMA_getIcon('b_edit.png', $strBLOBRepository, false, true); ?>
-                    </legend>
-
-                    <?php echo $strStatus; ?>:
-
-                    <?php
-
-                    // if the blobstreaming tables exist, provide option to disable the BLOB repository
-                    if ($allBSTablesExist)
-                    {
-                        ?>
-                            <?php echo $strBLOBRepositoryEnabled; ?>
-                            </fieldset>
-                            <fieldset class="tblFooters">
-                            <input type="hidden" name="db_blob_streaming_op" value="disable" />
-                            <input type="submit" onclick="return confirmDisableRepository('<?php echo $db; ?>');" value="<?php echo $strBLOBRepositoryDisable; ?>" />
-                            </fieldset>
-                            <?php
-                    }
-                    else
-                    {
-                        // if any of the blobstreaming tables are missing, provide option to repair the BLOB repository
-                        if ($oneBSTableExists && !$allBSTablesExist)
-                        {
-                            ?>
-                                <?php echo $strBLOBRepositoryDamaged; ?>
-                                </fieldset>
-                                <fieldset class="tblFooters">
-                                <input type="hidden" name="db_blob_streaming_op" value="repair" />
-                                <input type="submit" value="<?php echo $strBLOBRepositoryRepair; ?>" />
-                                </fieldset>
-                                <?php
-                        }
-                        // if none of the blobstreaming tables exist, provide option to enable BLOB repository
-                        else
-                        {
-                            ?>
-                                <?php echo $strBLOBRepositoryDisabled; ?>
-                                </fieldset>
-                                <fieldset class="tblFooters">
-                                <input type="hidden" name="db_blob_streaming_op" value="enable" />
-                                <input type="submit" value="<?php echo $strBLOBRepositoryEnable; ?>" />
-                                </fieldset>
-                                <?php
-                        }
-                    }   // end if ($allBSTablesExist)
-
-                ?>
-                    </form>
-                <?php
-            }   // end  if ($PMA_Config->get('BLOBSTREAMING_PLUGINS_EXIST'))
-        }   // end if ($PMA_Config->get('PBXT_NAME') !== strtolower($db))
-    }
 
     /**
      * Change database charset
      */
-    echo '<form method="post" action="./db_operations.php">' . "\n"
+    echo '<div class="operations_half_width"><form id="change_db_charset_form" ';
+    if ($GLOBALS['cfg']['AjaxEnable']) {
+        echo ' class="ajax" ';
+    }
+    echo 'method="post" action="./db_operations.php">'
        . PMA_generate_common_hidden_inputs($db, $table)
        . '<fieldset>' . "\n"
        . '    <legend>';
@@ -595,25 +549,29 @@ if (!$is_information_schema) {
         echo '<img class="icon" src="' . $pmaThemeImage . 's_asci.png"'
             .' alt="" width="16" height="16" />';
     }
-    echo '    <label for="select_db_collation">' . $strCollation . ':</label>' . "\n"
+    echo '    <label for="select_db_collation">' . __('Collation') . ':</label>' . "\n"
        . '    </legend>' . "\n"
        . PMA_generateCharsetDropdownBox(PMA_CSDROPDOWN_COLLATION,
             'db_collation', 'select_db_collation', $db_collation, false, 3)
+       . '</fieldset>'
+       . '<fieldset class="tblFooters">'
        . '    <input type="submit" name="submitcollation"'
-       . ' value="' . $strGo . '" style="vertical-align: middle" />' . "\n"
+       . ' value="' . __('Go') . '" />' . "\n"
        . '</fieldset>' . "\n"
-       . '</form>' . "\n";
+       . '</form></div>' . "\n";
 
     if ($num_tables > 0
       && !$cfgRelation['allworks'] && $cfg['PmaNoRelation_DisableWarning'] == false) {
-        $message = PMA_Message::notice('strRelationNotWorking');
+        $message = PMA_Message::notice(__('The phpMyAdmin configuration storage has been deactivated. To find out why click %shere%s.'));
         $message->addParam('<a href="' . $cfg['PmaAbsoluteUri'] . 'chk_rel.php?' . $url_query . '">', false);
         $message->addParam('</a>', false);
         /* Show error if user has configured something, notice elsewhere */
         if (!empty($cfg['Servers'][$server]['pmadb'])) {
             $message->isError(true);
         }
+        echo '<div class="operations_full_width">';
         $message->display();
+        echo '</div>';
     } // end if
 } // end if (!$is_information_schema)
 
@@ -631,83 +589,19 @@ if ($cfgRelation['pdfwork'] && $num_tables > 0) { ?>
           WHERE db_name = \'' . PMA_sqlAddslashes($db) . '\'';
     $test_rs    = PMA_query_as_controluser($test_query, null, PMA_DBI_QUERY_STORE);
 
-    if ($test_rs && PMA_DBI_num_rows($test_rs) > 0) { ?>
-    <!-- PDF schema -->
-    <form method="post" action="pdf_schema.php">
-    <fieldset>
-        <legend>
-        <?php
-        echo PMA_generate_common_hidden_inputs($db);
-        if ($cfg['PropertiesIconic']) {
-            echo '<img class="icon" src="' . $pmaThemeImage . 'b_view.png"'
-                .' alt="" width="16" height="16" />';
-        }
-        echo $strDisplayPDF;
-        ?>:
-        </legend>
-        <label for="pdf_page_number_opt"><?php echo $strPageNumber; ?></label>
-        <select name="pdf_page_number" id="pdf_page_number_opt">
-        <?php
-        while ($pages = @PMA_DBI_fetch_assoc($test_rs)) {
-            echo '                <option value="' . $pages['page_nr'] . '">'
-                . $pages['page_nr'] . ': ' . htmlspecialchars($pages['page_descr']) . '</option>' . "\n";
-        } // end while
-        PMA_DBI_free_result($test_rs);
-        unset($test_rs);
-        ?>
-        </select><br />
-
-        <input type="checkbox" name="show_grid" id="show_grid_opt" />
-        <label for="show_grid_opt"><?php echo $strShowGrid; ?></label><br />
-        <input type="checkbox" name="show_color" id="show_color_opt"
-            checked="checked" />
-        <label for="show_color_opt"><?php echo $strShowColor; ?></label><br />
-        <input type="checkbox" name="show_table_dimension" id="show_table_dim_opt" />
-        <label for="show_table_dim_opt"><?php echo $strShowTableDimension; ?>
-            </label><br />
-        <input type="checkbox" name="all_tab_same_wide" id="all_tab_same_wide" />
-        <label for="all_tab_same_wide"><?php echo $strAllTableSameWidth; ?>
-            </label><br />
-        <input type="checkbox" name="with_doc" id="with_doc" checked="checked" />
-        <label for="with_doc"><?php echo $strDataDict; ?></label><br />
-		<input type="checkbox" name="show_keys" id="show_keys" />
-        <label for="show_keys"><?php echo $strShowKeys; ?></label><br />
-
-        <label for="orientation_opt"><?php echo $strShowDatadictAs; ?></label>
-        <select name="orientation" id="orientation_opt">
-            <option value="L"><?php echo $strLandscape;?></option>
-            <option value="P"><?php echo $strPortrait;?></option>
-        </select><br />
-
-        <label for="paper_opt"><?php echo $strPaperSize; ?></label>
-        <select name="paper" id="paper_opt">
-        <?php
-            foreach ($cfg['PDFPageSizes'] AS $key => $val) {
-                echo '<option value="' . $val . '"';
-                if ($val == $cfg['PDFDefaultPageSize']) {
-                    echo ' selected="selected"';
-                }
-                echo ' >' . $val . '</option>' . "\n";
-            }
-        ?>
-        </select>
-    </fieldset>
-    <fieldset class="tblFooters">
-        <input type="submit" value="<?php echo $strGo; ?>" />
-    </fieldset>
-    </form>
-        <?php
-    }   // end if
-    echo '<br /><a href="pdf_pages.php?' . $url_query . '">';
+    /*
+     * Export Relational Schema View
+     */
+    echo '<div class="operations_full_width"><fieldset><a href="schema_edit.php?' . $url_query . '">';
     if ($cfg['PropertiesIconic']) {
         echo '<img class="icon" src="' . $pmaThemeImage . 'b_edit.png"'
             .' alt="" width="16" height="16" />';
     }
-    echo $strEditPDFPages . '</a>';
+    echo __('Edit or export relational schema') . '</a></fieldset></div>';
 } // end if
 
 /**
  * Displays the footer
  */
-require_once './libraries/footer.inc.php';
+require './libraries/footer.inc.php';
 ?>

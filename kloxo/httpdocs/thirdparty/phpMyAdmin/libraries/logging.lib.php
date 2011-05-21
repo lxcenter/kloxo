@@ -5,10 +5,12 @@
  *
  * This includes web server specific code to log some information.
  *
- * @version $Id$
  * @package phpMyAdmin
  */
 
+/**
+ * Logs user information to webserver logs.
+ */
 function PMA_log_user($user, $status = 'ok'){
     if (function_exists('apache_note')) {
         apache_note('userID', $user);

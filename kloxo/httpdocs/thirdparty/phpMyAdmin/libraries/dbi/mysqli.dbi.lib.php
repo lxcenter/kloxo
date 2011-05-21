@@ -4,7 +4,6 @@
  * Interface to the improved MySQL extension (MySQLi)
  *
  * @package phpMyAdmin-DBI-MySQLi
- * @version $Id$
  */
 if (! defined('PHPMYADMIN')) {
     exit;
@@ -60,29 +59,29 @@ if (! defined('MYSQLI_TYPE_BIT')) {
  * @param   string  $user           mysql user name
  * @param   string  $password       mysql user password
  * @param   boolean $is_controluser
- * @param   array   $server host/port/socket 
+ * @param   array   $server host/port/socket
  * @param   boolean $auxiliary_connection (when true, don't go back to login if connection fails)
  * @return  mixed   false on error or a mysqli object on success
  */
 function PMA_DBI_connect($user, $password, $is_controluser = false, $server = null, $auxiliary_connection = false)
 {
     if ($server) {
-          $server_port   = (empty($server['port']))
-                   ? ''
-                   : (int)$server['port'];
-	  $server_socket = (empty($server['socket']))
-                   ? ''
-                   : $server['socket'];
-	  $server['host'] = (empty($server['host']))
-		   ? 'localhost'
-		   : $server['host'];
+        $server_port   = (empty($server['port']))
+            ? false
+            : (int)$server['port'];
+        $server_socket = (empty($server['socket']))
+            ? ''
+            : $server['socket'];
+        $server['host'] = (empty($server['host']))
+            ? 'localhost'
+            : $server['host'];
     } else {
-	  $server_port   = (empty($GLOBALS['cfg']['Server']['port']))
-			 ? false
-			 : (int) $GLOBALS['cfg']['Server']['port'];
-	  $server_socket = (empty($GLOBALS['cfg']['Server']['socket']))
-			 ? null
-			 : $GLOBALS['cfg']['Server']['socket'];
+        $server_port   = (empty($GLOBALS['cfg']['Server']['port']))
+            ? false
+            : (int) $GLOBALS['cfg']['Server']['port'];
+        $server_socket = (empty($GLOBALS['cfg']['Server']['socket']))
+            ? null
+            : $GLOBALS['cfg']['Server']['socket'];
     }
 
 
@@ -107,27 +106,27 @@ function PMA_DBI_connect($user, $password, $is_controluser = false, $server = nu
     if ($GLOBALS['cfg']['Server']['ssl'] && defined('MYSQLI_CLIENT_SSL')) {
         $client_flags |= MYSQLI_CLIENT_SSL;
     }
-    
+
     if (!$server) {
-      $return_value = @mysqli_real_connect($link, $GLOBALS['cfg']['Server']['host'], $user, $password, false, $server_port, $server_socket, $client_flags);
-      // Retry with empty password if we're allowed to
-      if ($return_value == false && isset($GLOBALS['cfg']['Server']['nopassword']) && $GLOBALS['cfg']['Server']['nopassword'] && !$is_controluser) {
-	  $return_value = @mysqli_real_connect($link, $GLOBALS['cfg']['Server']['host'], $user, '', false, $server_port, $server_socket, $client_flags);
-      }
+        $return_value = @mysqli_real_connect($link, $GLOBALS['cfg']['Server']['host'], $user, $password, false, $server_port, $server_socket, $client_flags);
+        // Retry with empty password if we're allowed to
+        if ($return_value == false && isset($GLOBALS['cfg']['Server']['nopassword']) && $GLOBALS['cfg']['Server']['nopassword'] && !$is_controluser) {
+            $return_value = @mysqli_real_connect($link, $GLOBALS['cfg']['Server']['host'], $user, '', false, $server_port, $server_socket, $client_flags);
+        }
     } else {
-      $return_value = @mysqli_real_connect($link, $server['host'], $user, $password, false, $server_port, $server_socket);
+        $return_value = @mysqli_real_connect($link, $server['host'], $user, $password, false, $server_port, $server_socket);
     }
 
     if ($return_value == false) {
-	    if ($is_controluser) {
-	        trigger_error($GLOBALS['strControluserFailed'], E_USER_WARNING);
-	        return false;
-	    }
+        if ($is_controluser) {
+            trigger_error(__('Connection for controluser as defined in your configuration failed.'), E_USER_WARNING);
+            return false;
+        }
         // we could be calling PMA_DBI_connect() to connect to another
         // server, for example in the Synchronize feature, so do not
-        // go back to main login if it fails 
+        // go back to main login if it fails
         if (! $auxiliary_connection) {
-	        PMA_log_user($user, 'mysql-denied');
+            PMA_log_user($user, 'mysql-denied');
             PMA_auth_fails();
         } else {
             return false;
@@ -143,7 +142,6 @@ function PMA_DBI_connect($user, $password, $is_controluser = false, $server = nu
  * selects given database
  *
  * @uses    $GLOBALS['userlink']
- * @uses    PMA_convert_charset()
  * @uses    mysqli_select_db()
  * @param   string          $dbname database name to select
  * @param   object mysqli   $link   the mysqli object
@@ -167,7 +165,6 @@ function PMA_DBI_select_db($dbname, $link = null)
  * @uses    PMA_DBI_QUERY_STORE
  * @uses    PMA_DBI_QUERY_UNBUFFERED
  * @uses    $GLOBALS['userlink']
- * @uses    PMA_convert_charset()
  * @uses    MYSQLI_STORE_RESULT
  * @uses    MYSQLI_USE_RESULT
  * @uses    mysqli_query()
@@ -175,9 +172,10 @@ function PMA_DBI_select_db($dbname, $link = null)
  * @param   string          $query      query to execute
  * @param   object mysqli   $link       mysqli object
  * @param   integer         $options
+ * @param   boolean         $cache_affected_rows
  * @return  mixed           true, false or result object
  */
-function PMA_DBI_try_query($query, $link = null, $options = 0)
+function PMA_DBI_try_query($query, $link = null, $options = 0, $cache_affected_rows = true)
 {
     if ($options == ($options | PMA_DBI_QUERY_STORE)) {
         $method = MYSQLI_STORE_RESULT;
@@ -199,6 +197,11 @@ function PMA_DBI_try_query($query, $link = null, $options = 0)
         $time = microtime(true);
     }
     $r = mysqli_query($link, $query, $method);
+
+    if ($cache_affected_rows) { 
+       $GLOBALS['cached_affected_rows'] = PMA_DBI_affected_rows($link, $get_from_cache = false); 
+    }
+
     if ($GLOBALS['cfg']['DBG']['sql']) {
         $time = microtime(true) - $time;
 
@@ -230,7 +233,7 @@ function PMA_DBI_try_query($query, $link = null, $options = 0)
     }
 
     if ($r != FALSE && PMA_Tracker::isActive() == TRUE ) {
-        PMA_Tracker::handleQuery($query); 
+        PMA_Tracker::handleQuery($query);
     }
 
     return $r;
@@ -365,8 +368,6 @@ function PMA_DBI_get_client_info()
  * @uses    PMA_DBI_convert_message()
  * @uses    $GLOBALS['errno']
  * @uses    $GLOBALS['userlink']
- * @uses    $GLOBALS['strServerNotResponding']
- * @uses    $GLOBALS['strSocketProblem']
  * @uses    mysqli_errno()
  * @uses    mysqli_error()
  * @uses    mysqli_connect_errno()
@@ -413,7 +414,7 @@ function PMA_DBI_getError($link = null)
     $error_message = htmlspecialchars($error_message);
 
     if ($error_number == 2002) {
-        $error = '#' . ((string) $error_number) . ' - ' . $GLOBALS['strServerNotResponding'] . ' ' . $GLOBALS['strSocketProblem'];
+        $error = '#' . ((string) $error_number) . ' - ' . __('The server is not responding') . ' ' . __('(or the local MySQL server\'s socket is not correctly configured)');
     } else {
         $error = '#' . ((string) $error_number) . ' - ' . $error_message;
     }
@@ -451,7 +452,13 @@ function PMA_DBI_insert_id($link = '')
             return false;
         }
     }
-    return mysqli_insert_id($link);
+    // When no controluser is defined, using mysqli_insert_id($link) 
+    // does not always return the last insert id due to a mixup with
+    // the tracking mechanism, but this works: 
+    return PMA_DBI_fetch_value('SELECT LAST_INSERT_ID();', 0, 0, $link);
+    // Curiously, this problem does not happen with the mysql extension but
+    // there is another problem with BIGINT primary keys so PMA_DBI_insert_id()
+    // in the mysql extension also uses this logic.
 }
 
 /**
@@ -460,9 +467,10 @@ function PMA_DBI_insert_id($link = '')
  * @uses    $GLOBALS['userlink']
  * @uses    mysqli_affected_rows()
  * @param   object mysqli   $link   the mysqli object
+ * @param   boolean         $get_from_cache 
  * @return  string integer
  */
-function PMA_DBI_affected_rows($link = null)
+function PMA_DBI_affected_rows($link = null, $get_from_cache = true)
 {
     if (empty($link)) {
         if (isset($GLOBALS['userlink'])) {
@@ -471,7 +479,11 @@ function PMA_DBI_affected_rows($link = null)
             return false;
         }
     }
-    return mysqli_affected_rows($link);
+    if ($get_from_cache) {
+        return $GLOBALS['cached_affected_rows'];
+    } else {
+        return mysqli_affected_rows($link);
+    }
 }
 
 /**

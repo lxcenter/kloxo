@@ -14,27 +14,20 @@ if (! defined('PHPMYADMIN')) {
  */
 if (isset($plugin_list)) {
     $plugin_list['texytext'] = array(
-        'text' => 'strTexyText',
+        'text' => __('Texy! text'),
         'extension' => 'txt',
         'mime_type' => 'text/plain',
         'options' => array(
-            array('type' => 'bool',
-                'name' => 'structure',
-                'text' => 'strStructure',
-                'force' => 'data'),
-            array('type' => 'bgroup',
-                'name' => 'data',
-                'text' => 'strData',
-                'force' => 'structure'),
-            array('type' => 'text',
-                'name' => 'null',
-                'text' => 'strReplaceNULLBy'),
-            array('type' => 'bool',
-                'name' => 'columns',
-                'text' => 'strPutColNames'),
-            array('type' => 'egroup'),
-            ),
-        'options_text' => 'strOptions',
+        /* what to dump (structure/data/both) */
+        array('type' => 'begin_group', 'text' => __('Dump table'), 'name' => 'general_opts'),
+        array('type' => 'radio', 'name' => 'structure_or_data', 'values' => array('structure' => __('structure'), 'data' => __('data'), 'structure_and_data' => __('structure and data'))),
+        array('type' => 'end_group'),
+        array('type' => 'begin_group', 'name' => 'data', 'text' => __('Data dump options'), 'force' => 'structure'),
+        array('type' => 'text', 'name' => 'null', 'text' => __('Replace NULL by')),
+        array('type' => 'bool', 'name' => 'columns', 'text' => __('Put columns names in the first row')),
+        array('type' => 'end_group'),
+        ),
+        'options_text' => __('Options'),
         );
 } else {
 
@@ -81,7 +74,7 @@ function PMA_exportHeader() {
  * @access  public
  */
 function PMA_exportDBHeader($db) {
-    return PMA_exportOutputHandler('===' . $GLOBALS['strDatabase'] . ' ' . $db . "\n\n");
+    return PMA_exportOutputHandler('===' . __('Database') . ' ' . $db . "\n\n");
 }
 
 /**
@@ -127,7 +120,7 @@ function PMA_exportData($db, $table, $crlf, $error_url, $sql_query)
 {
     global $what;
 
-    if (! PMA_exportOutputHandler('== ' . $GLOBALS['strDumpingData'] . ' ' . $table . "\n\n")) {
+    if (! PMA_exportOutputHandler('== ' . __('Dumping data for table') . ' ' . $table . "\n\n")) {
         return FALSE;
     }
 
@@ -174,7 +167,7 @@ function PMA_exportStructure($db, $table, $crlf, $error_url, $do_relation = fals
 {
     global $cfgRelation;
 
-    if (! PMA_exportOutputHandler('== ' . $GLOBALS['strTableStructure'] . ' ' .$table . "\n\n")) {
+    if (! PMA_exportOutputHandler('== ' . __('Table structure for table') . ' ' .$table . "\n\n")) {
         return FALSE;
     }
 
@@ -230,15 +223,15 @@ function PMA_exportStructure($db, $table, $crlf, $error_url, $do_relation = fals
     }
 
     $text_output = "|------\n";
-    $text_output .= '|' . htmlspecialchars($GLOBALS['strField']);
-    $text_output .= '|' . htmlspecialchars($GLOBALS['strType']);
-    $text_output .= '|' . htmlspecialchars($GLOBALS['strNull']);
-    $text_output .= '|' . htmlspecialchars($GLOBALS['strDefault']);
+    $text_output .= '|' . htmlspecialchars(__('Column'));
+    $text_output .= '|' . htmlspecialchars(__('Type'));
+    $text_output .= '|' . htmlspecialchars(__('Null'));
+    $text_output .= '|' . htmlspecialchars(__('Default'));
     if ($do_relation && $have_rel) {
-        $text_output .= '|' . htmlspecialchars($GLOBALS['strLinksTo']);
+        $text_output .= '|' . htmlspecialchars(__('Links to'));
     }
     if ($do_comments) {
-        $text_output .= '|' . htmlspecialchars($GLOBALS['strComments']);
+        $text_output .= '|' . htmlspecialchars(__('Comments'));
         $comments = PMA_getComments($db, $table);
     }
     if ($do_mime && $cfgRelation['mimework']) {
@@ -255,8 +248,8 @@ function PMA_exportStructure($db, $table, $crlf, $error_url, $do_relation = fals
 
         $text_output = '';
         $type             = $row['Type'];
-        // reformat mysql query output - staybyte - 9. June 2001
-        // loic1: set or enum types: slashes single quotes inside options
+        // reformat mysql query output
+        // set or enum types: slashes single quotes inside options
         if (preg_match('/^(set|enum)\((.+)\)$/i', $type, $tmp)) {
             $tmp[2]       = substr(preg_replace('/([^,])\'\'/', '\\1\\\'', ',' . $tmp[2]), 1);
             $type         = $tmp[1] . '(' . str_replace(',', ', ', $tmp[2]) . ')';
@@ -278,15 +271,15 @@ function PMA_exportStructure($db, $table, $crlf, $error_url, $do_relation = fals
             $unsigned     = preg_match('/UNSIGNED/i', $row['Type']);
             $zerofill     = preg_match('/ZEROFILL/i', $row['Type']);
         }
-        $strAttribute     = '&nbsp;';
+        $attribute     = '&nbsp;';
         if ($binary) {
-            $strAttribute = 'BINARY';
+            $attribute = 'BINARY';
         }
         if ($unsigned) {
-            $strAttribute = 'UNSIGNED';
+            $attribute = 'UNSIGNED';
         }
         if ($zerofill) {
-            $strAttribute = 'UNSIGNED ZEROFILL';
+            $attribute = 'UNSIGNED ZEROFILL';
         }
         if (! isset($row['Default'])) {
             if ($row['Null'] != 'NO') {
@@ -308,7 +301,7 @@ function PMA_exportStructure($db, $table, $crlf, $error_url, $do_relation = fals
         }
         $text_output .= '|' . $fmt_pre . htmlspecialchars($row['Field']) . $fmt_post;
         $text_output .= '|' . htmlspecialchars($type);
-        $text_output .= '|' . htmlspecialchars(($row['Null'] == '' || $row['Null'] == 'NO') ? $GLOBALS['strNo'] : $GLOBALS['strYes']);
+        $text_output .= '|' . htmlspecialchars(($row['Null'] == '' || $row['Null'] == 'NO') ? __('No') : __('Yes'));
         $text_output .= '|' . htmlspecialchars(isset($row['Default']) ? $row['Default'] : '');
 
         $field_name = $row['Field'];

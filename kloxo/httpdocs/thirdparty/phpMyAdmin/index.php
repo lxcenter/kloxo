@@ -3,8 +3,6 @@
 /**
  * forms frameset
  *
- * @version $Id$
- * @uses    $GLOBALS['strNoFrames']
  * @uses    $GLOBALS['cfg']['QueryHistoryDB']
  * @uses    $GLOBALS['cfg']['Server']['user']
  * @uses    $GLOBALS['cfg']['DefaultTabServer']     as src for the mainframe
@@ -34,11 +32,6 @@
  */
 require_once './libraries/common.inc.php';
 
-/**
- * Includes the ThemeManager if it hasn't been included yet
- */
-require_once './libraries/relation.lib.php';
-
 // free the session file, for the other frames to be loaded
 session_write_close();
 
@@ -63,7 +56,7 @@ unset($cfgRelation);
 /**
  * pass variables to child pages
  */
-$drops = array('lang', 'server', 'convcharset', 'collation_connection',
+$drops = array('lang', 'server', 'collation_connection',
     'db', 'table');
 
 foreach ($drops as $each_drop) {
@@ -92,7 +85,7 @@ if (isset($GLOBALS['target']) && is_string($GLOBALS['target']) && !empty($GLOBAL
 
 $main_target .= $url_query;
 
-$lang_iso_code = $GLOBALS['available_languages'][$GLOBALS['lang']][2];
+$lang_iso_code = $GLOBALS['available_languages'][$GLOBALS['lang']][1];
 
 
 // start output
@@ -159,7 +152,11 @@ header('Content-Type: text/html; charset=' . $GLOBALS['charset']);
     };
 // ]]>
 </script>
-<script src="./js/common.js" type="text/javascript"></script>
+<?php
+echo PMA_includeJS('jquery/jquery-1.4.4.js');
+echo PMA_includeJS('update-location.js');
+echo PMA_includeJS('common.js');
+?>
 </head>
 <frameset cols="<?php
 if ($GLOBALS['text_dir'] === 'rtl') {
@@ -185,7 +182,7 @@ if ($GLOBALS['text_dir'] === 'ltr') {
     <?php } ?>
     <noframes>
         <body>
-            <p><?php echo $GLOBALS['strNoFrames']; ?></p>
+            <p><?php echo __('phpMyAdmin is more friendly with a <b>frames-capable</b> browser.'); ?></p>
         </body>
     </noframes>
 </frameset>

@@ -3,7 +3,6 @@
 /**
  * Common Option Constants For DBI Functions
  *
- * @version $Id$
  * @package phpMyAdmin
  */
 if (! defined('PHPMYADMIN')) {
@@ -45,12 +44,7 @@ if (! PMA_DBI_checkMysqlExtension($GLOBALS['cfg']['Server']['extension'])) {
      * @todo add different messages for alternative extension
      * and complete fail (no alternative extension too)
      */
-    $error =
-        sprintf(PMA_sanitize($GLOBALS['strCantLoad']),
-            $GLOBALS['cfg']['Server']['extension'])
-        .' - <a href="./Documentation.html#faqmysql" target="documentation">'
-        .$GLOBALS['strDocu'] . '</a>';
-    trigger_error($error, E_USER_ERROR);
+    PMA_warnMissingExtension($GLOBALS['cfg']['Server']['extension'], false, PMA_showDocu('faqmysql'));
 
     if ($GLOBALS['cfg']['Server']['extension'] === 'mysql') {
         $alternativ_extension = 'mysqli';
@@ -60,11 +54,7 @@ if (! PMA_DBI_checkMysqlExtension($GLOBALS['cfg']['Server']['extension'])) {
 
     if (! PMA_DBI_checkMysqlExtension($alternativ_extension)) {
         // if alternative fails too ...
-        PMA_fatalError(
-            sprintf($GLOBALS['strCantLoad'],
-                $GLOBALS['cfg']['Server']['extension'])
-            . ' - [a@./Documentation.html#faqmysql@documentation]'
-            . $GLOBALS['strDocu'] . '[/a]');
+        PMA_warnMissingExtension($GLOBALS['cfg']['Server']['extension'], true, PMA_showDocu('faqmysql'));
     }
 
     $GLOBALS['cfg']['Server']['extension'] = $alternativ_extension;
@@ -79,8 +69,8 @@ require_once './libraries/dbi/' . $GLOBALS['cfg']['Server']['extension'] . '.dbi
 /**
  * Common Functions
  */
-function PMA_DBI_query($query, $link = null, $options = 0) {
-    $res = PMA_DBI_try_query($query, $link, $options)
+function PMA_DBI_query($query, $link = null, $options = 0, $cache_affected_rows = true) {
+    $res = PMA_DBI_try_query($query, $link, $options, $cache_affected_rows)
         or PMA_mysqlDie(PMA_DBI_getError($link), $query);
     return $res;
 }
@@ -251,8 +241,6 @@ function PMA_usort_comparison_callback($a, $b)
 function PMA_DBI_get_tables_full($database, $table = false, $tbl_is_group = false, $link = null,
      $limit_offset = 0, $limit_count = false, $sort_by = 'Name', $sort_order = 'ASC')
 {
-    require_once './libraries/Table.class.php';
-
     if (true === $limit_count) {
         $limit_count = $GLOBALS['cfg']['MaxTableList'];
     }
@@ -266,7 +254,7 @@ function PMA_DBI_get_tables_full($database, $table = false, $tbl_is_group = fals
     $tables = array();
 
     if (! $GLOBALS['cfg']['Server']['DisableIS']) {
-      // get table information from information_schema
+        // get table information from information_schema
         if ($table) {
             if (true === $tbl_is_group) {
                 $sql_where_table = 'AND `TABLE_NAME` LIKE \''
@@ -281,20 +269,20 @@ function PMA_DBI_get_tables_full($database, $table = false, $tbl_is_group = fals
             $sql_where_table = '';
         }
 
-      // for PMA bc:
-      // `SCHEMA_FIELD_NAME` AS `SHOW_TABLE_STATUS_FIELD_NAME`
-      //
-      // on non-Windows servers,
-      // added BINARY in the WHERE clause to force a case sensitive
-      // comparison (if we are looking for the db Aa we don't want
-      // to find the db aa)
+        // for PMA bc:
+        // `SCHEMA_FIELD_NAME` AS `SHOW_TABLE_STATUS_FIELD_NAME`
+        //
+        // on non-Windows servers,
+        // added BINARY in the WHERE clause to force a case sensitive
+        // comparison (if we are looking for the db Aa we don't want
+        // to find the db aa)
         $this_databases = array_map('PMA_sqlAddslashes', $databases);
 
         $sql = '
            SELECT *,
                   `TABLE_SCHEMA`       AS `Db`,
                   `TABLE_NAME`         AS `Name`,
-                  `TABLE_TYPE`         ÀS `TABLE_TYPE`,
+                  `TABLE_TYPE`         AS `TABLE_TYPE`,
                   `ENGINE`             AS `Engine`,
                   `ENGINE`             AS `Type`,
                   `VERSION`            AS `Version`,
@@ -367,8 +355,16 @@ function PMA_DBI_get_tables_full($database, $table = false, $tbl_is_group = fals
             } else {
                 // Prepare to sort by creating array of the selected sort
                 // value to pass to array_multisort
-                foreach ($each_tables as $table_name => $table_data) {
-                    ${$sort_by}[$table_name] = strtolower($table_data[$sort_by]);
+
+                // Size = Data_length + Index_length
+                if ($sort_by == 'Data_length') {
+                    foreach ($each_tables as $table_name => $table_data) {
+                        ${$sort_by}[$table_name] = strtolower($table_data['Data_length'] + $table_data['Index_length']);
+                    }
+                } else {
+                    foreach ($each_tables as $table_name => $table_data) {
+                        ${$sort_by}[$table_name] = strtolower($table_data[$sort_by]);
+                    }
                 }
 
                 if ($sort_order == 'DESC') {
@@ -483,7 +479,7 @@ function PMA_DBI_get_tables_full($database, $table = false, $tbl_is_group = fals
  * returns array with databases containing extended infos about them
  *
  * @todo    move into PMA_List_Database?
- * @param   string      $databases      database
+ * @param   string      $database      database
  * @param   boolean     $force_stats    retrieve stats also for MySQL < 5
  * @param   resource    $link           mysql link
  * @param   string      $sort_by        column to order by
@@ -512,9 +508,8 @@ function PMA_DBI_get_databases_full($database = null, $force_stats = false,
          * if $GLOBALS['cfg']['NaturalOrder'] is enabled, we cannot use LIMIT
          * cause MySQL does not support natural ordering, we have to do it afterward
          */
-        if ($GLOBALS['cfg']['NaturalOrder']) {
-            $limit = '';
-        } else {
+        $limit = '';
+        if (!$GLOBALS['cfg']['NaturalOrder']) {
             if ($limit_count) {
                 $limit = ' LIMIT ' . $limit_count . ' OFFSET ' . $limit_offset;
             }
@@ -615,7 +610,7 @@ function PMA_DBI_get_databases_full($database = null, $force_stats = false,
                     $databases[$database_name]['SCHEMA_INDEX_LENGTH']
                         += $row['Index_length'];
 
-                    // for InnoDB, this does not contain the number of 
+                    // for InnoDB, this does not contain the number of
                     // overhead bytes but the total free space
                     if ('InnoDB' != $row['Engine']) {
                         $databases[$database_name]['SCHEMA_DATA_FREE']
@@ -828,25 +823,25 @@ function PMA_DBI_get_columns($database, $table, $full = false, $link = null)
  *
  * @param   string  $database   name of database
  * @param   string  $table      name of table to retrieve columns from
- * @param   string  $column     name of the column to retrieve data from 
+ * @param   string  $column     name of the column to retrieve data from
  * @param   mixed   $link       mysql link resource
  * @return  array   $field_values
  */
 
 function PMA_DBI_get_column_values($database, $table, $column, $link = null)
-{ 
+{
     $query = 'SELECT ';
     for($i=0; $i< sizeof($column); $i++)
     {
         $query.= PMA_backquote($column[$i]);
         if($i < (sizeof($column)-1))
         {
-            $query.= ', ';   
+            $query.= ', ';
         }
     }
     $query.= ' FROM ' . PMA_backquote($database) . '.' . PMA_backquote($table);
     $field_values = PMA_DBI_fetch_result($query, null, null, $link);
-    
+
     if (! is_array($field_values) || count($field_values) < 1) {
         return false;
     }
@@ -860,23 +855,23 @@ function PMA_DBI_get_column_values($database, $table, $column, $link = null)
  * @param   mixed   $link       mysql link resource
  * @return  array   $result
  */
- 
+
  function PMA_DBI_get_table_data($database, $table, $link = null)
- { 
-                           
+ {
+
     $result = PMA_DBI_fetch_result(
         'SELECT * FROM ' . PMA_backquote($database) . '.' . PMA_backquote($table),
         null,null, $link);
-                           
+
     if (! is_array($result) || count($result) < 1) {
         return false;
-    }                                                                                         
+    }
     return $result;
  }
- 
+
 /**
 * array  PMA_DBI_get_table_indexes($database, $table, $link = null)
-* 
+*
 * @param    string  $database   name of database
 * @param    string  $table      name of the table whose indexes are to be retreived
 * @param    mixed   $link       mysql link resource
@@ -885,17 +880,17 @@ function PMA_DBI_get_column_values($database, $table, $column, $link = null)
 
 function PMA_DBI_get_table_indexes($database, $table, $link = null)
 {
- 
+
     $indexes = PMA_DBI_fetch_result(
               'SHOW INDEXES FROM ' .PMA_backquote($database) . '.' . PMA_backquote($table),
-               null, null, $link);  
-    
+               null, null, $link);
+
     if (! is_array($indexes) || count($indexes) < 1) {
         return false;
     }
     return $indexes;
 }
- 
+
  /**
  * returns value of given mysql server variable
  *
@@ -904,8 +899,8 @@ function PMA_DBI_get_table_indexes($database, $table, $link = null)
  * @param   mixed   $link   mysql link resource|object
  * @return  mixed   value for mysql server variable
  */
- 
- 
+
+
 function PMA_DBI_get_variable($var, $type = PMA_DBI_GETVAR_SESSION, $link = null)
 {
     if ($link === null) {
@@ -949,7 +944,6 @@ function PMA_DBI_get_variable($var, $type = PMA_DBI_GETVAR_SESSION, $link = null
  * @uses    $GLOBALS['mysql_charset_map']
  * @uses    $GLOBALS['charset']
  * @uses    $GLOBALS['lang']
- * @uses    $GLOBALS['server']
  * @uses    $GLOBALS['cfg']['Lang']
  * @uses    defined()
  * @uses    explode()
@@ -967,12 +961,14 @@ function PMA_DBI_postConnect($link, $is_controluser = false)
     if (! defined('PMA_MYSQL_INT_VERSION')) {
         if (PMA_cacheExists('PMA_MYSQL_INT_VERSION', true)) {
             define('PMA_MYSQL_INT_VERSION', PMA_cacheGet('PMA_MYSQL_INT_VERSION', true));
+            define('PMA_MYSQL_MAJOR_VERSION', PMA_cacheGet('PMA_MYSQL_MAJOR_VERSION', true));
             define('PMA_MYSQL_STR_VERSION', PMA_cacheGet('PMA_MYSQL_STR_VERSION', true));
         } else {
             $mysql_version = PMA_DBI_fetch_value(
                 'SELECT VERSION()', 0, 0, $link, PMA_DBI_QUERY_STORE);
             if ($mysql_version) {
                 $match = explode('.', $mysql_version);
+                define('PMA_MYSQL_MAJOR_VERSION', (int)$match[0]);
                 define('PMA_MYSQL_INT_VERSION',
                     (int) sprintf('%d%02d%02d', $match[0], $match[1],
                             intval($match[2])));
@@ -980,19 +976,25 @@ function PMA_DBI_postConnect($link, $is_controluser = false)
                 unset($mysql_version, $match);
             } else {
                 define('PMA_MYSQL_INT_VERSION', 50015);
+                define('PMA_MYSQL_MAJOR_VERSION', 5);
                 define('PMA_MYSQL_STR_VERSION', '5.00.15');
             }
             PMA_cacheSet('PMA_MYSQL_INT_VERSION', PMA_MYSQL_INT_VERSION, true);
+            PMA_cacheSet('PMA_MYSQL_MAJOR_VERSION', PMA_MYSQL_MAJOR_VERSION, true);
             PMA_cacheSet('PMA_MYSQL_STR_VERSION', PMA_MYSQL_STR_VERSION, true);
         }
+        // detect Drizzle by version number (year.month.day.?patch-version)
+        define('PMA_DRIZZLE', PMA_MYSQL_MAJOR_VERSION >= 2009);
     }
 
-    if (! empty($GLOBALS['collation_connection'])) {
-    	PMA_DBI_query("SET CHARACTER SET 'utf8';", $link, PMA_DBI_QUERY_STORE);
-        $mysql_charset = explode('_', $GLOBALS['collation_connection']);
-        PMA_DBI_query("SET collation_connection = '" . PMA_sqlAddslashes($GLOBALS['collation_connection']) . "';", $link, PMA_DBI_QUERY_STORE);
-    } else {
-        PMA_DBI_query("SET NAMES 'utf8' COLLATE 'utf8_general_ci';", $link, PMA_DBI_QUERY_STORE);
+    // Skip charsets for Drizzle
+    if (!PMA_DRIZZLE) {
+        if (! empty($GLOBALS['collation_connection'])) {
+            PMA_DBI_query("SET CHARACTER SET 'utf8';", $link, PMA_DBI_QUERY_STORE);
+            PMA_DBI_query("SET collation_connection = '" . PMA_sqlAddslashes($GLOBALS['collation_connection']) . "';", $link, PMA_DBI_QUERY_STORE);
+        } else {
+            PMA_DBI_query("SET NAMES 'utf8' COLLATE 'utf8_general_ci';", $link, PMA_DBI_QUERY_STORE);
+        }
     }
 }
 
@@ -1391,7 +1393,7 @@ function PMA_DBI_get_definition($db, $which, $name, $link = null)
  * @uses    PMA_DBI_fetch_result()
  * @param   string              $db     db name
  * @param   string              $table  table name
- * @param   string              $delimiter  the delimiter to use (may be empty) 
+ * @param   string              $delimiter  the delimiter to use (may be empty)
  *
  * @return  array               information about triggers (may be empty)
  */
@@ -1446,7 +1448,7 @@ function PMA_DBI_get_triggers($db, $table, $delimiter = '//')
 function PMA_isView($db, $view_name)
 {
     $result = PMA_DBI_fetch_result("SELECT TABLE_NAME FROM information_schema.VIEWS WHERE TABLE_SCHEMA = '".$db."' and TABLE_NAME = '".$view_name."';");
-    
+
     if ($result) {
         return TRUE;
     } else {

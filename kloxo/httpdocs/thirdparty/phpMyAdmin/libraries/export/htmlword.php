@@ -4,7 +4,6 @@
  * Set of functions used to build CSV dumps of tables
  *
  * @package phpMyAdmin-Export-HTMLWord
- * @version $Id$
  */
 if (! defined('PHPMYADMIN')) {
     exit;
@@ -15,18 +14,22 @@ if (! defined('PHPMYADMIN')) {
  */
 if (isset($plugin_list)) {
     $plugin_list['htmlword'] = array(
-        'text' => 'strHTMLWord',
+        'text' => __('Microsoft Word 2000'),
         'extension' => 'doc',
         'mime_type' => 'application/vnd.ms-word',
         'force_file' => true,
         'options' => array(
-            array('type' => 'bool', 'name' => 'structure', 'text' => 'strStructure', 'force' => 'data'),
-            array('type' => 'bgroup', 'name' => 'data', 'text' => 'strData', 'force' => 'structure'),
-            array('type' => 'text', 'name' => 'null', 'text' => 'strReplaceNULLBy'),
-            array('type' => 'bool', 'name' => 'columns', 'text' => 'strPutColNames'),
-            array('type' => 'egroup'),
+            /* what to dump (structure/data/both) */
+            array('type' => 'begin_group', 'name' => 'dump_what', 'text' => __('Dump table')),
+            array('type' => 'radio', 'name' => 'structure_or_data', 'values' => array('structure' => __('structure'), 'data' => __('data'), 'structure_and_data' => __('structure and data'))),
+            array('type' => 'end_group'),
+            /* data options */
+            array('type' => 'begin_group', 'name' => 'data', 'text' => __('Data dump options'), 'force' => 'structure'),
+            array('type' => 'text', 'name' => 'null', 'text' => __('Replace NULL with:')),
+            array('type' => 'bool', 'name' => 'columns', 'text' => __('Put columns names in the first row')),
+            array('type' => 'end_group'),
             ),
-        'options_text' => 'strOptions',
+        'options_text' => __('Options'),
         );
 } else {
 
@@ -83,7 +86,7 @@ xmlns="http://www.w3.org/TR/REC-html40">
  * @access  public
  */
 function PMA_exportDBHeader($db) {
-    return PMA_exportOutputHandler('<h1>' . $GLOBALS['strDatabase'] . ' ' . $db . '</h1>');
+    return PMA_exportOutputHandler('<h1>' . __('Database') . ' ' . $db . '</h1>');
 }
 
 /**
@@ -129,7 +132,7 @@ function PMA_exportData($db, $table, $crlf, $error_url, $sql_query)
 {
     global $what;
 
-    if (! PMA_exportOutputHandler('<h2>' . $GLOBALS['strDumpingData'] . ' ' . $table . '</h2>')) {
+    if (! PMA_exportOutputHandler('<h2>' . __('Dumping data for table') . ' ' . $table . '</h2>')) {
         return FALSE;
     }
     if (! PMA_exportOutputHandler('<table class="width100" cellspacing="1">')) {
@@ -182,7 +185,7 @@ function PMA_exportStructure($db, $table, $crlf, $error_url, $do_relation = fals
 {
     global $cfgRelation;
 
-    if (! PMA_exportOutputHandler('<h2>' . $GLOBALS['strTableStructure'] . ' ' .$table . '</h2>')) {
+    if (! PMA_exportOutputHandler('<h2>' . __('Table structure for table') . ' ' .$table . '</h2>')) {
         return FALSE;
     }
 
@@ -241,15 +244,15 @@ function PMA_exportStructure($db, $table, $crlf, $error_url, $do_relation = fals
     }
 
     $schema_insert = '<tr class="print-category">';
-    $schema_insert .= '<th class="print">' . htmlspecialchars($GLOBALS['strField']) . '</th>';
-    $schema_insert .= '<td class="print"><b>' . htmlspecialchars($GLOBALS['strType']) . '</b></td>';
-    $schema_insert .= '<td class="print"><b>' . htmlspecialchars($GLOBALS['strNull']) . '</b></td>';
-    $schema_insert .= '<td class="print"><b>' . htmlspecialchars($GLOBALS['strDefault']) . '</b></td>';
+    $schema_insert .= '<th class="print">' . htmlspecialchars(__('Column')) . '</th>';
+    $schema_insert .= '<td class="print"><b>' . htmlspecialchars(__('Type')) . '</b></td>';
+    $schema_insert .= '<td class="print"><b>' . htmlspecialchars(__('Null')) . '</b></td>';
+    $schema_insert .= '<td class="print"><b>' . htmlspecialchars(__('Default')) . '</b></td>';
     if ($do_relation && $have_rel) {
-        $schema_insert .= '<td class="print"><b>' . htmlspecialchars($GLOBALS['strLinksTo']) . '</b></td>';
+        $schema_insert .= '<td class="print"><b>' . htmlspecialchars(__('Links to')) . '</b></td>';
     }
     if ($do_comments) {
-        $schema_insert .= '<td class="print"><b>' . htmlspecialchars($GLOBALS['strComments']) . '</b></td>';
+        $schema_insert .= '<td class="print"><b>' . htmlspecialchars(__('Comments')) . '</b></td>';
         $comments = PMA_getComments($db, $table);
     }
     if ($do_mime && $cfgRelation['mimework']) {
@@ -266,8 +269,8 @@ function PMA_exportStructure($db, $table, $crlf, $error_url, $do_relation = fals
 
         $schema_insert = '<tr class="print-category">';
         $type          = $row['Type'];
-        // reformat mysql query output - staybyte - 9. June 2001
-        // loic1: set or enum types: slashes single quotes inside options
+        // reformat mysql query output
+        // set or enum types: slashes single quotes inside options
         if (preg_match('/^(set|enum)\((.+)\)$/i', $type, $tmp)) {
             $tmp[2]       = substr(preg_replace('/([^,])\'\'/', '\\1\\\'', ',' . $tmp[2]), 1);
             $type         = $tmp[1] . '(' . str_replace(',', ', ', $tmp[2]) . ')';
@@ -289,15 +292,15 @@ function PMA_exportStructure($db, $table, $crlf, $error_url, $do_relation = fals
             $unsigned     = preg_match('/UNSIGNED/i', $row['Type']);
             $zerofill     = preg_match('/ZEROFILL/i', $row['Type']);
         }
-        $strAttribute     = '&nbsp;';
+        $attribute     = '&nbsp;';
         if ($binary) {
-            $strAttribute = 'BINARY';
+            $attribute = 'BINARY';
         }
         if ($unsigned) {
-            $strAttribute = 'UNSIGNED';
+            $attribute = 'UNSIGNED';
         }
         if ($zerofill) {
-            $strAttribute = 'UNSIGNED ZEROFILL';
+            $attribute = 'UNSIGNED ZEROFILL';
         }
         if (! isset($row['Default'])) {
             if ($row['Null'] != 'NO') {
@@ -319,7 +322,7 @@ function PMA_exportStructure($db, $table, $crlf, $error_url, $do_relation = fals
         }
         $schema_insert .= '<td class="print">' . $fmt_pre . htmlspecialchars($row['Field']) . $fmt_post . '</td>';
         $schema_insert .= '<td class="print">' . htmlspecialchars($type) . '</td>';
-        $schema_insert .= '<td class="print">' . htmlspecialchars(($row['Null'] == '' || $row['Null'] == 'NO') ? $GLOBALS['strNo'] : $GLOBALS['strYes']) . '</td>';
+        $schema_insert .= '<td class="print">' . htmlspecialchars(($row['Null'] == '' || $row['Null'] == 'NO') ? __('No') : __('Yes')) . '</td>';
         $schema_insert .= '<td class="print">' . htmlspecialchars(isset($row['Default']) ? $row['Default'] : '') . '</td>';
 
         $field_name = $row['Field'];

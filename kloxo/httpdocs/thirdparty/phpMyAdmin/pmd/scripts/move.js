@@ -1,7 +1,5 @@
 /* vim: set expandtab sw=4 ts=4 sts=4: */
 /**
- * @version $Id$
- * @author  Ivan A Kirillov (Ivan.A.Kirillov@gmail.com)
  * @package phpMyAdmin-Designer
  */
 
@@ -34,6 +32,8 @@ var timeoutID;
 var layer_menu_cur_click = 0;
 var step = 10;
 var old_class;
+var from_array = [];
+var downer;
 
 //------------------------------------------------------------------------------
 //------------------------------------------------------------------------------
@@ -292,7 +292,7 @@ function Re_load()
                         + height_field;
 
                     //alert(y1 + ' - ' + key2 + "." + key3);
-                    Line0(x1 - sm_x, y1 - sm_y, x2 - sm_x, y2 - sm_y, "rgba(0,100,150,1)");
+                    Line0(x1 - sm_x, y1 - sm_y, x2 - sm_x, y2 - sm_y, getColorByTarget( contr[K][key][key2][key3][0]+'.'+contr[K][key][key2][key3][1] ) );
                 }
 }
 
@@ -316,8 +316,8 @@ function Line(x1, y1, x2, y2, color_line)
  */
 function Line0(x1, y1, x2, y2, color_line)
 {
-    Circle(x1, y1, 3, 3, "rgba(0,0,255,1)");
-    Rect(x2 - 1, y2 - 2, 4, 4, "rgba(0,0,255,1)");
+    Circle(x1, y1, 3, 3, color_line);
+    Rect(x2 - 1, y2 - 2, 4, 4, color_line);
 
     if (ON_angular_direct) {
         Line2(x1, y1, x2, y2, color_line);
@@ -485,7 +485,7 @@ function Start_relation()
     if (!ON_relation) {
         document.getElementById('foreign_relation').style.display = '';
         ON_relation = 1;
-        document.getElementById('hint').innerHTML = LangSelectReferencedKey;
+        document.getElementById('hint').innerHTML = PMA_messages['strSelectReferencedKey'];
         document.getElementById('hint').style.visibility = "visible";
         document.getElementById('rel_button').className = 'M_butt_Selected_down';
     } else {
@@ -503,7 +503,7 @@ function Click_field(T, f, PK) // table field
         if (!click_field) {
             //.style.display=='none'        .style.visibility = "hidden"
             if (!PK) {
-                alert(LangPleaseSelectPrimaryOrUniqueKey);
+                alert(PMA_messages['strPleaseSelectPrimaryOrUniqueKey']);
                 return;// 0;
             }//PK
             if (j_tabs[db + '.' + T] != '1') {
@@ -511,7 +511,7 @@ function Click_field(T, f, PK) // table field
             }
             click_field = 1;
             link_relation = "T1=" + T + "&F1=" + f;
-            document.getElementById('hint').innerHTML = LangSelectForeignKey;
+            document.getElementById('hint').innerHTML = PMA_messages['strSelectForeignKey'];
         } else {
             Start_relation(); // hidden hint...
             if (j_tabs[db + '.' + T] != '1' || !PK) {
@@ -519,7 +519,7 @@ function Click_field(T, f, PK) // table field
             }
             var left = Glob_X - (document.getElementById('layer_new_relation').offsetWidth>>1);
             document.getElementById('layer_new_relation').style.left = left + 'px';
-            var top = Glob_Y - document.getElementById('layer_new_relation').offsetHeight - 10;
+            var top = Glob_Y - document.getElementById('layer_new_relation').offsetHeight + 40;
             document.getElementById('layer_new_relation').style.top  = top + 'px';
             document.getElementById('layer_new_relation').style.visibility = "visible";
             link_relation += '&T2=' + T + '&F2=' + f;
@@ -568,7 +568,7 @@ function New_relation()
 
 function Start_table_new()
 {
-    window.location.href = 'db_operations.php?server=' + server + '&db=' + db + '&token=' + token;
+    window.location.href = 'tbl_create.php?server=' + server + '&db=' + db + '&token=' + token;
 }
 
 function Start_tab_upd(table)
@@ -622,7 +622,6 @@ function Small_tab(t, re_load)
     var id      = document.getElementById('id_tbody_' + t);
     var id_this = document.getElementById('id_hide_tbody_' + t);
     var id_t    = document.getElementById(t);
-
     id_t.style.width = id_t.offsetWidth + 'px';
     if (id_this.innerHTML == "v") {
         //---CROSS
@@ -648,7 +647,6 @@ function Select_tab(t)
     //----------
     var id_t = document.getElementById(t);
     window.scrollTo(parseInt(id_t.style.left) - 300, parseInt(id_t.style.top) - 300);
-
     setTimeout(function(){document.getElementById('id_zag_' + t).className = 'tab_zag';}, 800);
 }
 //------------------------------------------------------------------------------
@@ -718,7 +716,7 @@ function Canvas_click(id)
                         Key2 = key2; Key3 = key3;
                         Key = K;
                     } else {
-                        Line0(x1 - sm_x, y1 - sm_y, x2 - sm_x, y2 - sm_y, "rgba(0,100,150,1)");
+                        Line0(x1 - sm_x, y1 - sm_y, x2 - sm_x, y2 - sm_y, getColorByTarget( contr[K][key][key2][key3][0]+'.'+contr[K][key][key2][key3][1] ));
                     }
                 }
     if (selected) {
@@ -907,7 +905,7 @@ function Start_display_field()
     }
     if (!ON_display_field) {
         ON_display_field = 1;
-        document.getElementById('hint').innerHTML = LangChangeDisplay;
+        document.getElementById('hint').innerHTML = PMA_messages['strChangeDisplay'];
         document.getElementById('hint').style.visibility = "visible";
         document.getElementById('display_field_button').className = 'M_butt_Selected_down';//'#FFEE99';gray #AAAAAA
 
@@ -920,4 +918,227 @@ function Start_display_field()
         document.getElementById('display_field_button').className = 'M_butt';
         ON_display_field = 0;
     }
+}
+//------------------------------------------------------------------------------
+var TargetColors = new Array();
+function getColorByTarget( target )
+{
+  var color = '';  //"rgba(0,100,150,1)";
+
+  for (i in TargetColors)
+   if (TargetColors[i][0]==target) {
+    color = TargetColors[i][1];
+    break;
+   }
+
+
+  if (color.length==0)
+  {
+   var i = TargetColors.length+1;
+   var d = i % 6;
+   var j = (i - d) / 6;
+   j = j % 4;
+   j++;
+   var color_case = new Array(
+                        new Array(1, 0, 0),
+                        new Array(0, 1, 0),
+                        new Array(0, 0, 1),
+                        new Array(1, 1, 0),
+                        new Array(1, 0, 1),
+                        new Array(0, 1, 1)
+                        );
+    var a = color_case[d][0];
+    var b = color_case[d][1];
+    var c = color_case[d][2];
+    e = (1 - (j - 1) / 6);
+
+    var r = Math.round(a * 200 * e);
+    var g = Math.round(b * 200 * e);
+    var b = Math.round(c * 200 * e);
+    var color = "rgba("+r+","+g+","+b+",1)";
+
+    TargetColors.push( new Array(target, color) );
+
+
+  }
+
+  return color;
+}
+
+function Click_option(id_this,column_name,table_name) 
+{
+    var left = Glob_X - (document.getElementById(id_this).offsetWidth>>1);
+    document.getElementById(id_this).style.left = left + 'px';
+    // var top = Glob_Y - document.getElementById(id_this).offsetHeight - 10;
+    document.getElementById(id_this).style.top  = (screen.height / 4) + 'px';
+    document.getElementById(id_this).style.visibility = "visible";
+    document.getElementById('option_col_name').innerHTML = '<strong>' + PMA_messages['strAddOption'] +'"' +column_name+ '"</strong>';
+    col_name = column_name;
+    tab_name = table_name;
+}
+
+function Close_option()
+{
+    document.getElementById('pmd_optionse').style.visibility = "hidden";
+}
+
+function Select_all(id_this,owner)
+{
+    var parent= document.form1;
+    downer =owner;
+    var i;
+    var tab = [];
+    for(i = 0; i < parent.elements.length; i++) {
+        if (parent.elements[i].type == "checkbox" && parent.elements[i].id.substring(0,(9 + id_this.length)) == 'select_' + id_this + '._') {
+            if(document.getElementById('select_all_' + id_this).checked == true) {
+                parent.elements[i].checked = true;
+                parent.elements[i].disabled = true;
+                var temp = '`' + id_this.substring(owner.length +1) + '`.*';
+           }	
+           else {
+               parent.elements[i].checked = false;
+               parent.elements[i].disabled = false;	
+           }
+        }
+    }
+    if(document.getElementById('select_all_' + id_this).checked == true) {
+        select_field.push('`' + id_this.substring(owner.length +1) + '`.*');
+        tab = id_this.split(".");
+        from_array.push(tab[1]);
+    }
+    else {
+        for (i =0; i < select_field.length; i++) {
+            if (select_field[i] == ('`' + id_this.substring(owner.length +1) + '`.*')) {
+                select_field.splice(i,1);
+            }
+        }
+        for(k =0 ;k < from_array.length;k++){
+            if(from_array[k] == id_this){ 
+                from_array.splice(k,1); 
+                break;
+            }
+        }
+    }
+    Re_load();
+}
+
+function Table_onover(id_this,val,buil)
+{
+    if(!val) {
+        document.getElementById("id_zag_" + id_this).className="tab_zag_2";
+        if(buil) {
+            document.getElementById("id_zag_" + id_this + "_2").className="tab_zag_2";
+        }
+    }
+    else {
+        document.getElementById("id_zag_" + id_this).className="tab_zag";
+        if(buil) {
+            document.getElementById("id_zag_" + id_this + "_2").className="tab_zag";
+        }
+    }
+}
+
+/* This function stores selected column information in select_field[]
+ * In case column is checked it add else it deletes
+ *
+ */
+function store_column(id_this,owner,col) {
+    var i = 0;
+    var k = 0;
+    if (document.getElementById('select_' + owner + '.' + id_this + '._' + col).checked == true) {
+        select_field.push('`' + id_this + '`.`' + col +'`');	
+        from_array.push(id_this);
+    }
+    else {
+        for(i; i < select_field.length ;i++) {
+            if (select_field[i] == ('`' + id_this + '`.`' + col +'`')) {
+                select_field.splice(i,1);
+                break;
+            }
+        }
+        for(k =0 ;k < from_array.length;k++){
+            if(from_array[k] == id_this){ 
+                from_array.splice(k,1); 
+			    break;
+            }
+        }
+     }
+}
+
+/**
+ * This function builds object and adds them to history_array
+ * first it does a few checks on each object, then makes an object(where,rename,groupby,aggregate,orderby)
+ * then a new history object is made and finally all these history objects are addded to history_array[]
+ * 
+ * @uses	where()
+ * @uses	history()
+ * @uses	aggregate()
+ * @uses	rename()
+ * @uses	panel()
+ * @uses	display()
+**/
+
+function add_object() {
+    var rel = document.getElementById('rel_opt');
+    var sum = 0;
+    var init = history_array.length;
+    if (rel.value != '--') {
+        if (document.getElementById('Query').value == "") {
+            document.getElementById('hint').innerHTML = "value/subQuery is empty" ;
+            document.getElementById('hint').style.visibility = "visible";
+            return;
+        }
+        var p = document.getElementById('Query');
+        var where_obj = new where(rel.value,p.value);//make where object
+        history_array.push(new history(col_name,where_obj,tab_name,h_tabs[downer + '.' + tab_name],"Where"));
+        sum = sum + 1;
+        rel.value = '--';
+        p.value = "";
+    }
+    if (document.getElementById('new_name').value !="") {
+        var rename_obj = new rename(document.getElementById('new_name').value);//make Rename object
+        history_array.push(new history(col_name,rename_obj,tab_name,h_tabs[downer + '.' + tab_name],"Rename"));
+        sum = sum + 1;
+        document.getElementById('new_name').value = "" ;
+    }
+	if (document.getElementById('operator').value != '---') {
+        var aggregate_obj = new aggregate(document.getElementById('operator').value) ;
+        history_array.push(new history(col_name,aggregate_obj,tab_name,h_tabs[downer + '.' + tab_name],"Aggregate"));
+        sum = sum + 1;
+        document.getElementById('operator').value = '---';
+		//make aggregate operator
+    }
+    if (document.getElementById('groupby').checked == true ) {
+        history_array.push(new history(col_name,'GroupBy',tab_name,h_tabs[downer + '.' +tab_name],"GroupBy"));
+        sum = sum + 1;
+        document.getElementById('groupby').checked = false;
+	//make groupby
+    }
+    if (document.getElementById('h_rel_opt').value != '--') {
+        if (document.getElementById('having').value == "") {
+            document.getElementById('hint').innerHTML = "value/subQuery is empty" ;
+            document.getElementById('hint').style.visibility = "visible";
+           return;
+        }
+        var p = document.getElementById('having');
+        var where_obj = new having(document.getElementById('h_rel_opt').value,p.value,document.getElementById('h_operator').value);//make where object
+        history_array.push(new history(col_name,where_obj,tab_name,h_tabs[downer + '.' + tab_name],"Having"));
+        sum = sum + 1;
+        document.getElementById('h_rel_opt').value = '--';
+        document.getElementById('h_operator').value = '---';
+        p.value = ""; //make having
+    }
+    if (document.getElementById('orderby').checked == true) {
+        history_array.push(new history(col_name,'OrderBy',tab_name,h_tabs[downer + '.' + tab_name],"OrderBy"));
+        sum = sum + 1;
+        document.getElementById('orderby').checked = false;
+		//make orderby
+    }
+    document.getElementById('hint').innerHTML = sum + "object created" ;
+    document.getElementById('hint').style.visibility = "visible";
+	//output sum new objects created
+    var existingDiv = document.getElementById('ab');
+    existingDiv.innerHTML = display(init,history_array.length);
+    Close_option();
+    panel(0);
 }

@@ -3,7 +3,6 @@
 /**
  * @todo    we must handle the case if sql.php is called directly with a query
  *          that returns 0 rows - to prevent cyclic redirects or includes
- * @version $Id$
  * @package phpMyAdmin
  */
 
@@ -15,7 +14,8 @@ require_once './libraries/Table.class.php';
 require_once './libraries/check_user_privileges.lib.php';
 require_once './libraries/bookmark.lib.php';
 
-$GLOBALS['js_include'][] = 'mootools.js';
+$GLOBALS['js_include'][] = 'jquery/jquery-ui-1.8.custom.js';
+$GLOBALS['js_include'][] = 'pMap.js';
 
 /**
  * Defines the url to return to in case of error in a sql statement
@@ -49,14 +49,120 @@ if (isset($fields['dbase'])) {
     $db = $fields['dbase'];
 }
 
+/**
+ * During inline edit, if we have a relational field, show the dropdown for it
+ *
+ * Logic taken from libraries/display_tbl_lib.php
+ *
+ * This doesn't seem to be the right place to do this, but I can't think of any
+ * better place either.
+ */
+if (isset($_REQUEST['get_relational_values']) && $_REQUEST['get_relational_values'] == true) {
+    require_once 'libraries/relation.lib.php';
+
+    $column = $_REQUEST['column'];
+    $foreigners = PMA_getForeigners($db, $table, $column);
+
+    $display_field = PMA_getDisplayField($foreigners[$column]['foreign_db'], $foreigners[$column]['foreign_table']);
+
+    $foreignData = PMA_getForeignData($foreigners, $column, false, '', '');
+
+    if ($_SESSION['tmp_user_values']['relational_display'] == 'D'
+        && (isset($display_field) && strlen($display_field)
+        && (isset($_REQUEST['relation_key_or_display_column']) && $_REQUEST['relation_key_or_display_column']))) {
+            $curr_value = $_REQUEST['relation_key_or_display_column'];
+    } else {
+        $curr_value = $_REQUEST['curr_value'];
+    }
+    if ($foreignData['disp_row'] == null) {
+        //Handle the case when number of values is more than $cfg['ForeignKeyMaxLimit']
+        $_url_params = array(
+                'db' => $db,
+                'table' => $table,
+                'field' => $column
+        );
+
+        $dropdown = '<span class="curr_value">' . htmlspecialchars($_REQUEST['curr_value']) . '</span> <a href="browse_foreigners.php' . PMA_generate_common_url($_url_params) . '"'
+                    . ' target="_blank" class="browse_foreign" '
+                    .'>' . __('Browse foreign values') . '</a>';
+    }
+    else {
+        $dropdown = PMA_foreignDropdown($foreignData['disp_row'], $foreignData['foreign_field'], $foreignData['foreign_display'], $curr_value, $cfg['ForeignKeyMaxLimit']);
+        $dropdown = '<select>' . $dropdown . '</select>';
+    }
+
+    $extra_data['dropdown'] = $dropdown;
+    PMA_ajaxResponse(NULL, true, $extra_data);
+}
+
+/**
+ * Just like above, find possible values for enum fields during inline edit.
+ *
+ * Logic taken from libraries/display_tbl_lib.php
+ */
+if(isset($_REQUEST['get_enum_values']) && $_REQUEST['get_enum_values'] == true) {
+    $field_info_query = 'SHOW FIELDS FROM `' . $db . '`.`' . $table . '` LIKE \'' . $_REQUEST['column'] . '\' ;';
+
+    $field_info_result = PMA_DBI_fetch_result($field_info_query, null, null, null, PMA_DBI_QUERY_STORE);
+
+    $search = array('enum', '(', ')', "'");
+
+    $values = explode(',', str_replace($search, '', $field_info_result[0]['Type']));
+
+    $dropdown = '<option value="">&nbsp;</option>';
+    foreach($values as $value) {
+        $dropdown .= '<option value="' . htmlspecialchars($value) . '"';
+        if($value == $_REQUEST['curr_value']) {
+            $dropdown .= ' selected="selected"';
+        }
+        $dropdown .= '>' . $value . '</option>';
+    }
+
+    $dropdown = '<select>' . $dropdown . '</select>';
+
+    $extra_data['dropdown'] = $dropdown;
+    PMA_ajaxResponse(NULL, true, $extra_data);
+}
+
+/**
+ * Find possible values for set fields during inline edit.
+ */
+if(isset($_REQUEST['get_set_values']) && $_REQUEST['get_set_values'] == true) {
+    $field_info_query = 'SHOW FIELDS FROM `' . $db . '`.`' . $table . '` LIKE \'' . $_REQUEST['column'] . '\' ;';
+
+    $field_info_result = PMA_DBI_fetch_result($field_info_query, null, null, null, PMA_DBI_QUERY_STORE);
+
+    $selected_values = explode(',', $_REQUEST['curr_value']);
+
+    $search = array('set', '(', ')', "'");
+    $values = explode(',', str_replace($search, '', $field_info_result[0]['Type']));
+
+    $select = '';
+    foreach($values as $value) {
+        $select .= '<option value="' . htmlspecialchars($value) . '"';
+        if(in_array($value, $selected_values, true)) {
+            $select .= ' selected="selected"';
+        }
+        $select .= '>' . $value . '</option>';
+    }
+
+    $select_size = (sizeof($values) > 10) ? 10 : sizeof($values);
+    $select = '<select multiple="multiple" size="' . $select_size . '">' . $select . '</select>';
+
+    $extra_data['select'] = $select;
+    PMA_ajaxResponse(NULL, true, $extra_data);
+}
 // Default to browse if no query set and we have table
 // (needed for browsing from DefaultTabTable)
 if (empty($sql_query) && strlen($table) && strlen($db)) {
     require_once './libraries/bookmark.lib.php';
     $book_sql_query = PMA_Bookmark_get($db, '\'' . PMA_sqlAddslashes($table) . '\'',
-        'label');
+        'label', FALSE, TRUE);
 
     if (! empty($book_sql_query)) {
+        $GLOBALS['using_bookmark_message'] = PMA_message::notice(__('Using bookmark "%s" as default browse query.'));
+        $GLOBALS['using_bookmark_message']->addParam($table);
+        $GLOBALS['using_bookmark_message']->addMessage(PMA_showDocu('faq6_22'));
         $sql_query = $book_sql_query;
     } else {
         $sql_query = 'SELECT * FROM ' . PMA_backquote($table);
@@ -86,7 +192,7 @@ if (!defined('PMA_CHK_DROP')
  && $is_drop_database
  && !$is_superuser) {
     require_once './libraries/header.inc.php';
-    PMA_mysqlDie($strNoDropDatabases, '', '', $err_url);
+    PMA_mysqlDie(__('"DROP DATABASE" statements are disabled.'), '', '', $err_url);
 } // end if
 
 require_once './libraries/display_tbl.lib.php';
@@ -129,7 +235,7 @@ if ($goto == 'sql.php') {
 /**
  * Go back to further page if table should not be dropped
  */
-if (isset($btnDrop) && $btnDrop == $strNo) {
+if (isset($btnDrop) && $btnDrop == __('No')) {
     if (!empty($back)) {
         $goto = $back;
     }
@@ -169,29 +275,28 @@ if ($do_confirm) {
     $stripped_sql_query = $sql_query;
     require_once './libraries/header.inc.php';
     if ($is_drop_database) {
-        echo '<h1 class="warning">' . $strDropDatabaseStrongWarning . '</h1>';
+        echo '<h1 class="error">' . __('You are about to DESTROY a complete database!') . '</h1>';
     }
     echo '<form action="sql.php" method="post">' . "\n"
         .PMA_generate_common_hidden_inputs($db, $table);
     ?>
     <input type="hidden" name="sql_query" value="<?php echo htmlspecialchars($sql_query); ?>" />
-    <input type="hidden" name="zero_rows" value="<?php echo isset($zero_rows) ? PMA_sanitize($zero_rows, true) : ''; ?>" />
+    <input type="hidden" name="message_to_show" value="<?php echo isset($message_to_show) ? PMA_sanitize($message_to_show, true) : ''; ?>" />
     <input type="hidden" name="goto" value="<?php echo $goto; ?>" />
     <input type="hidden" name="back" value="<?php echo isset($back) ? PMA_sanitize($back, true) : ''; ?>" />
     <input type="hidden" name="reload" value="<?php echo isset($reload) ? PMA_sanitize($reload, true) : 0; ?>" />
     <input type="hidden" name="purge" value="<?php echo isset($purge) ? PMA_sanitize($purge, true) : ''; ?>" />
-    <input type="hidden" name="cpurge" value="<?php echo isset($cpurge) ? PMA_sanitize($cpurge, true) : ''; ?>" />
-    <input type="hidden" name="purgekey" value="<?php echo isset($purgekey) ? PMA_sanitize($purgekey, true) : ''; ?>" />
+    <input type="hidden" name="dropped_column" value="<?php echo isset($dropped_column) ? PMA_sanitize($dropped_column, true) : ''; ?>" />
     <input type="hidden" name="show_query" value="<?php echo isset($show_query) ? PMA_sanitize($show_query, true) : ''; ?>" />
     <?php
     echo '<fieldset class="confirmation">' . "\n"
-        .'    <legend>' . $strDoYouReally . '</legend>'
+        .'    <legend>' . __('Do you really want to ') . '</legend>'
         .'    <tt>' . htmlspecialchars($stripped_sql_query) . '</tt>' . "\n"
         .'</fieldset>' . "\n"
         .'<fieldset class="tblFooters">' . "\n";
     ?>
-    <input type="submit" name="btnDrop" value="<?php echo $strYes; ?>" id="buttonYes" />
-    <input type="submit" name="btnDrop" value="<?php echo $strNo; ?>" id="buttonNo" />
+    <input type="submit" name="btnDrop" value="<?php echo __('Yes'); ?>" id="buttonYes" />
+    <input type="submit" name="btnDrop" value="<?php echo __('No'); ?>" id="buttonNo" />
     <?php
     echo '</fieldset>' . "\n"
        . '</form>' . "\n";
@@ -199,7 +304,7 @@ if ($do_confirm) {
     /**
      * Displays the footer and exit
      */
-    require_once './libraries/footer.inc.php';
+    require './libraries/footer.inc.php';
 } // end if $do_confirm
 
 
@@ -294,8 +399,7 @@ if (isset($GLOBALS['show_as_php']) || !empty($GLOBALS['validatequery'])) {
         PMA_DBI_query('SET PROFILING=1;');
     }
 
-    // garvin: Measure query time.
-    // TODO-Item http://sourceforge.net/tracker/index.php?func=detail&aid=571934&group_id=23067&atid=377411
+    // Measure query time.
     $querytime_before = array_sum(explode(' ', microtime()));
 
     $result   = @PMA_DBI_try_query($full_sql_query, null, PMA_DBI_QUERY_STORE);
@@ -311,16 +415,17 @@ if (isset($GLOBALS['show_as_php']) || !empty($GLOBALS['validatequery'])) {
                 $table = '';
             }
             $active_page = $goto;
-            $message = htmlspecialchars(PMA_Message::rawError($error));
+            $message = PMA_Message::rawError($error);
+
+            if( $GLOBALS['is_ajax_request'] == true) {
+                PMA_ajaxResponse($message, false);
+            }
+
             /**
              * Go to target path.
              */
             require './' . PMA_securePath($goto);
         } else {
-            /**
-             * HTML header.
-             */
-            require_once './libraries/header.inc.php';
             $full_err_url = (preg_match('@^(db|tbl)_@', $err_url))
                           ? $err_url . '&amp;show_query=1&amp;sql_query=' . urlencode($sql_query)
                           : $err_url;
@@ -380,7 +485,7 @@ if (isset($GLOBALS['show_as_php']) || !empty($GLOBALS['validatequery'])) {
 
         // If we are "just browsing", there is only one table,
         // and no WHERE clause (or just 'WHERE 1 '),
-        // we do a quick count (which uses MaxExactCount) because 
+        // we do a quick count (which uses MaxExactCount) because
         // SQL_CALC_FOUND_ROWS is not quick on large InnoDB tables
 
         // However, do not count again if we did it previously
@@ -450,7 +555,7 @@ if (isset($GLOBALS['show_as_php']) || !empty($GLOBALS['validatequery'])) {
          $unlim_num_rows         = 0;
     } // end rows total count
 
-    // garvin: if a table or database gets dropped, check column comments.
+    // if a table or database gets dropped, check column comments.
     if (isset($purge) && $purge == '1') {
         /**
          * Cleanup relations.
@@ -459,38 +564,31 @@ if (isset($GLOBALS['show_as_php']) || !empty($GLOBALS['validatequery'])) {
 
         if (strlen($table) && strlen($db)) {
             PMA_relationsCleanupTable($db, $table);
-            // this is to avoid counting rows for nothing, below
-            // (do not unset as $table is used further down in the logic) 
-            $table = '';
         } elseif (strlen($db)) {
             PMA_relationsCleanupDatabase($db);
         } else {
-            // garvin: VOID. No DB/Table gets deleted.
+            // VOID. No DB/Table gets deleted.
         } // end if relation-stuff
     } // end if ($purge)
 
-    // garvin: If a column gets dropped, do relation magic.
-    if (isset($cpurge) && $cpurge == '1' && isset($purgekey)
-     && strlen($db) && strlen($table) && !empty($purgekey)) {
+    // If a column gets dropped, do relation magic.
+    if (isset($dropped_column) && strlen($db) && strlen($table) && !empty($dropped_column)) {
         require_once './libraries/relation_cleanup.lib.php';
-        PMA_relationsCleanupColumn($db, $table, $purgekey);
+        PMA_relationsCleanupColumn($db, $table, $dropped_column);
 
-    } // end if column PMA_* purge
+    } // end if column was dropped
 } // end else "didn't ask to see php code"
 
 // No rows returned -> move back to the calling page
 if (0 == $num_rows || $is_affected) {
     if ($is_delete) {
-        $message = PMA_Message::success('strRowsDeleted');
-        $message->addParam($num_rows);
+        $message = PMA_Message::deleted_rows($num_rows);
     } elseif ($is_insert) {
         if ($is_replace) {
             /* For replace we get DELETED + INSERTED row count, so we have to call it affected */
-            $message = PMA_Message::success('strRowsAffected');
-            $message->addParam($num_rows);
+            $message = PMA_Message::affected_rows($num_rows);
         } else {
-            $message = PMA_Message::success('strRowsInserted');
-            $message->addParam($num_rows);
+            $message = PMA_Message::inserted_rows($num_rows);
         }
         $insert_id = PMA_DBI_insert_id();
         if ($insert_id != 0) {
@@ -499,48 +597,175 @@ if (0 == $num_rows || $is_affected) {
             // need to use a temporary because the Message class
             // currently supports adding parameters only to the first
             // message
-            $_inserted = PMA_Message::notice('strInsertedRowId');
+            $_inserted = PMA_Message::notice(__('Inserted row id: %1$d'));
             $_inserted->addParam($insert_id + $num_rows - 1);
             $message->addMessage($_inserted);
         }
     } elseif ($is_affected) {
-        $message = PMA_Message::success('strRowsAffected');
-        $message->addParam($num_rows);
+        $message = PMA_Message::affected_rows($num_rows);
 
         // Ok, here is an explanation for the !$is_select.
         // The form generated by sql_query_form.lib.php
         // and db_sql.php has many submit buttons
         // on the same form, and some confusion arises from the
-        // fact that $zero_rows is sent for every case.
-        // The $zero_rows containing $strSuccess and sent with
-        // the form should not have priority over
-        // errors like $strEmptyResultSet
-    } elseif (!empty($zero_rows) && !$is_select) {
-        $message = PMA_Message::rawSuccess(htmlspecialchars($zero_rows));
+        // fact that $message_to_show is sent for every case.
+        // The $message_to_show containing a success message and sent with
+        // the form should not have priority over errors
+    } elseif (!empty($message_to_show) && !$is_select) {
+        $message = PMA_Message::rawSuccess(htmlspecialchars($message_to_show));
     } elseif (!empty($GLOBALS['show_as_php'])) {
-        $message = PMA_Message::success('strShowingPhp');
+        $message = PMA_Message::success(__('Showing as PHP code'));
     } elseif (isset($GLOBALS['show_as_php'])) {
         /* User disable showing as PHP, query is only displayed */
-        $message = PMA_Message::notice('strShowingSQL');
+        $message = PMA_Message::notice(__('Showing SQL query'));
     } elseif (!empty($GLOBALS['validatequery'])) {
-        $message = PMA_Message::notice('strValidateSQL');
+        $message = PMA_Message::notice(__('Validated SQL'));
     } else {
-        $message = PMA_Message::success('strEmptyResultSet');
+        $message = PMA_Message::success(__('MySQL returned an empty result set (i.e. zero rows).'));
     }
 
     if (isset($GLOBALS['querytime'])) {
-        $_querytime = PMA_Message::notice('strQueryTime');
+        $_querytime = PMA_Message::notice(__('Query took %01.4f sec'));
         $_querytime->addParam($GLOBALS['querytime']);
         $message->addMessage('(');
         $message->addMessage($_querytime);
         $message->addMessage(')');
     }
 
+    if( $GLOBALS['is_ajax_request'] == true) {
+
+        /**
+         * If we are in inline editing, we need to process the relational and
+         * transformed fields, if they were edited. After that, output the correct
+         * link/transformed value and exit
+         *
+         * Logic taken from libraries/display_tbl.lib.php
+         */
+
+        if(isset($_REQUEST['rel_fields_list']) && $_REQUEST['rel_fields_list'] != '') {
+            //handle relations work here for updated row.
+            require_once './libraries/relation.lib.php';
+
+            $map = PMA_getForeigners($db, $table, '', 'both');
+
+            $rel_fields = array();
+            parse_str($_REQUEST['rel_fields_list'], $rel_fields);
+
+            foreach( $rel_fields as $rel_field => $rel_field_value) {
+
+                $where_comparison = "='" . $rel_field_value . "'";
+                $display_field = PMA_getDisplayField($map[$rel_field]['foreign_db'], $map[$rel_field]['foreign_table']);
+
+                // Field to display from the foreign table?
+                if (isset($display_field) && strlen($display_field)) {
+                    $dispsql     = 'SELECT ' . PMA_backquote($display_field)
+                        . ' FROM ' . PMA_backquote($map[$rel_field]['foreign_db'])
+                        . '.' . PMA_backquote($map[$rel_field]['foreign_table'])
+                        . ' WHERE ' . PMA_backquote($map[$rel_field]['foreign_field'])
+                        . $where_comparison;
+                    $dispresult  = PMA_DBI_try_query($dispsql, null, PMA_DBI_QUERY_STORE);
+                    if ($dispresult && PMA_DBI_num_rows($dispresult) > 0) {
+                        list($dispval) = PMA_DBI_fetch_row($dispresult, 0);
+                    } else {
+                        //$dispval = __('Link not found');
+                    }
+                    @PMA_DBI_free_result($dispresult);
+                } else {
+                    $dispval     = '';
+                } // end if... else...
+
+                if ('K' == $_SESSION['tmp_user_values']['relational_display']) {
+                    // user chose "relational key" in the display options, so
+                    // the title contains the display field
+                    $title = (! empty($dispval))? ' title="' . htmlspecialchars($dispval) . '"' : '';
+                } else {
+                    $title = ' title="' . htmlspecialchars($rel_field_value) . '"';
+                }
+
+                $_url_params = array(
+                    'db'    => $map[$rel_field]['foreign_db'],
+                    'table' => $map[$rel_field]['foreign_table'],
+                    'pos'   => '0',
+                    'sql_query' => 'SELECT * FROM '
+                                        . PMA_backquote($map[$rel_field]['foreign_db']) . '.' . PMA_backquote($map[$rel_field]['foreign_table'])
+                                        . ' WHERE ' . PMA_backquote($map[$rel_field]['foreign_field'])
+                                        . $where_comparison
+                );
+                $output = '<a href="sql.php' . PMA_generate_common_url($_url_params) . '"' . $title . '>';
+
+                if ('D' == $_SESSION['tmp_user_values']['relational_display']) {
+                    // user chose "relational display field" in the
+                    // display options, so show display field in the cell
+                    $output .= (!empty($dispval)) ? htmlspecialchars($dispval) : '';
+                } else {
+                    // otherwise display data in the cell
+                    $output .= htmlspecialchars($rel_field_value);
+                }
+                $output .= '</a>';
+                $extra_data['relations'][$rel_field] = $output;
+            }
+        }
+
+        if(isset($_REQUEST['do_transformations']) && $_REQUEST['do_transformations'] == true ) {
+            require_once './libraries/transformations.lib.php';
+            //if some posted fields need to be transformed, generate them here.
+            $mime_map = PMA_getMIME($db, $table);
+
+            if ($mime_map === FALSE) {
+                $mime_map = array();
+            }
+
+            $edited_values = array();
+            parse_str($_REQUEST['transform_fields_list'], $edited_values);
+
+            foreach($mime_map as $transformation) {
+                $include_file = $transformation['transformation'];
+                $column_name = $transformation['column_name'];
+                $column_data = $edited_values[$column_name];
+
+                $_url_params = array(
+                    'db'            => $db,
+                    'table'         => $table,
+                    'where_clause'  => $_REQUEST['where_clause'],
+                    'transform_key' => $column_name,
+                );
+
+                if (file_exists('./libraries/transformations/' . $include_file)) {
+                    $transformfunction_name = str_replace('.inc.php', '', $transformation['transformation']);
+
+                    require_once './libraries/transformations/' . $include_file;
+
+                    if (function_exists('PMA_transformation_' . $transformfunction_name)) {
+                        $transform_function = 'PMA_transformation_' . $transformfunction_name;
+                        $transform_options  = PMA_transformation_getOptions((isset($transformation['transformation_options']) ? $transformation['transformation_options'] : ''));
+                        $transform_options['wrapper_link'] = PMA_generate_common_url($_url_params);
+                    }
+                }
+
+                $extra_data['transformations'][$column_name] = $transform_function($column_data, $transform_options);
+            }
+        }
+
+        if ($cfg['ShowSQL']) {
+            $extra_data['sql_query'] = PMA_showMessage($message, $GLOBALS['sql_query'], 'success');
+        }
+        if (isset($GLOBALS['reload']) && $GLOBALS['reload'] == 1) {
+            $extra_data['reload'] = 1;
+            $extra_data['db'] = $GLOBALS['db'];
+        }
+        PMA_ajaxResponse($message, $message->isSuccess(), (isset($extra_data) ? $extra_data : ''));
+    }
+
     if ($is_gotofile) {
         $goto = PMA_securePath($goto);
         // Checks for a valid target script
         $is_db = $is_table = false;
+        if (isset($_REQUEST['purge'])) {
+            $table = '';
+            unset($url_params['table']);
+        }
         include 'libraries/db_table_exists.lib.php';
+
         if (strpos($goto, 'tbl_') === 0 && ! $is_table) {
             if (strlen($table)) {
                 $table = '';
@@ -554,10 +779,6 @@ if (0 == $num_rows || $is_affected) {
             $goto = 'main.php';
         }
         // Loads to target script
-        if (strpos($goto, 'db_') === 0
-         || strpos($goto, 'tbl_') === 0) {
-            $GLOBALS['js_include'][] = 'functions.js';
-        }
         if ($goto != 'main.php') {
             require_once './libraries/header.inc.php';
         }
@@ -575,6 +796,15 @@ if (0 == $num_rows || $is_affected) {
 
 // At least one row is returned -> displays a table with results
 else {
+    //If we are retrieving the full value of a truncated field or the original
+    // value of a transformed field, show it here and exit
+    if( $GLOBALS['inline_edit'] == true && $GLOBALS['cfg']['AjaxEnable']) {
+        $row = PMA_DBI_fetch_row($result);
+        $extra_data = array();
+        $extra_data['value'] = $row[0];
+        PMA_ajaxResponse(NULL, true, $extra_data);
+    }
+
     // Displays the headers
     if (isset($show_query)) {
         unset($show_query);
@@ -582,24 +812,35 @@ else {
     if (isset($printview) && $printview == '1') {
         require_once './libraries/header_printview.inc.php';
     } else {
+
         $GLOBALS['js_include'][] = 'functions.js';
+        $GLOBALS['js_include'][] = 'sql.js';
+
         unset($message);
-        if (strlen($table)) {
-            require './libraries/tbl_common.php';
-            $url_query .= '&amp;goto=tbl_sql.php&amp;back=tbl_sql.php';
-            require './libraries/tbl_info.inc.php';
-            require './libraries/tbl_links.inc.php';
-        } elseif (strlen($db)) {
-            require './libraries/db_common.inc.php';
-            require './libraries/db_info.inc.php';
-        } else {
-            require './libraries/server_common.inc.php';
-            require './libraries/server_links.inc.php';
+
+        if( ! $GLOBALS['is_ajax_request'] || ! $GLOBALS['cfg']['AjaxEnable']) {
+            if (strlen($table)) {
+                require './libraries/tbl_common.php';
+                $url_query .= '&amp;goto=tbl_sql.php&amp;back=tbl_sql.php';
+                require './libraries/tbl_info.inc.php';
+                require './libraries/tbl_links.inc.php';
+            } elseif (strlen($db)) {
+                require './libraries/db_common.inc.php';
+                require './libraries/db_info.inc.php';
+            } else {
+                require './libraries/server_common.inc.php';
+                require './libraries/server_links.inc.php';
+            }
+        }
+        else {
+            require_once './libraries/header.inc.php';
+            //we don't need to buffer the output in PMA_showMessage here.
+            //set a global variable and check against it in the function
+            $GLOBALS['buffer_message'] = false;
         }
     }
 
     if (strlen($db)) {
-        require_once './libraries/relation.lib.php';
         $cfgRelation = PMA_getRelationsParam();
     }
 
@@ -609,13 +850,22 @@ else {
         $fields_cnt  = count($fields_meta);
     }
 
+    if( ! $GLOBALS['is_ajax_request']) {
+        //begin the sqlqueryresults div here. container div
+        echo '<div id="sqlqueryresults"';
+        if ($GLOBALS['cfg']['AjaxEnable']) {
+            echo ' class="ajax"';
+        }
+        echo '>';
+    }
+
     // Display previous update query (from tbl_replace)
     if (isset($disp_query) && $cfg['ShowSQL'] == true) {
         PMA_showMessage($disp_message, $disp_query, 'success');
     }
 
     if (isset($profiling_results)) {
-        PMA_profilingResults($profiling_results);
+        PMA_profilingResults($profiling_results, true);
     }
 
     // Displays the results in a table
@@ -631,7 +881,7 @@ else {
     }
 
     if (isset($label)) {
-        $message = PMA_message::success('strBookmarkCreated');
+        $message = PMA_message::success(__('Bookmark %s created'));
         $message->addParam($label);
         $message->display();
     }
@@ -644,7 +894,7 @@ else {
         foreach ($selected as $idx => $tbl_name) {
             $check = PMA_Index::findDuplicates($tbl_name, $db);
             if (! empty($check)) {
-                printf($strIndexWarningTable, $tbl_name);
+                printf(__('Problems with indexes of table `%s`'), $tbl_name);
                 echo $check;
             }
         }
@@ -670,25 +920,25 @@ else {
 <input type="hidden" name="fields[query]" value="<?php echo urlencode(isset($complete_query) ? $complete_query : $sql_query); ?>" />
 <fieldset>
     <legend><?php
-     echo ($cfg['PropertiesIconic'] ? '<img class="icon" src="' . $pmaThemeImage . 'b_bookmark.png" width="16" height="16" alt="' . $strBookmarkThis . '" />' : '')
-        . $strBookmarkThis;
+     echo ($cfg['PropertiesIconic'] ? '<img class="icon" src="' . $pmaThemeImage . 'b_bookmark.png" width="16" height="16" alt="' . __('Bookmark this SQL query') . '" />' : '')
+        . __('Bookmark this SQL query');
 ?>
     </legend>
 
     <div class="formelement">
-        <label for="fields_label_"><?php echo $strBookmarkLabel; ?>:</label>
+        <label for="fields_label_"><?php echo __('Label'); ?>:</label>
         <input type="text" id="fields_label_" name="fields[label]" value="" />
     </div>
 
     <div class="formelement">
         <input type="checkbox" name="bkm_all_users" id="bkm_all_users" value="true" />
-        <label for="bkm_all_users"><?php echo $strBookmarkAllUsers; ?></label>
+        <label for="bkm_all_users"><?php echo __('Let every user access this bookmark'); ?></label>
     </div>
 
     <div class="clearfloat"></div>
 </fieldset>
 <fieldset class="tblFooters">
-    <input type="submit" name="store_bkm" value="<?php echo $strBookmarkThis; ?>" />
+    <input type="submit" name="store_bkm" value="<?php echo __('Bookmark this SQL query'); ?>" />
 </fieldset>
 </form>
         <?php
@@ -710,10 +960,16 @@ window.onload = function()
 </script>
         <?php
     } // end print case
+
+    if( $GLOBALS['is_ajax_request'] != true) {
+        echo '</div>'; // end sqlqueryresults div
+    }
 } // end rows returned
 
 /**
  * Displays the footer
  */
-require_once './libraries/footer.inc.php';
+if(!isset($_REQUEST['table_maintenance'])) {
+    require './libraries/footer.inc.php';
+}
 ?>

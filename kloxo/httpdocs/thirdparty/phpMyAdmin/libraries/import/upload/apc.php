@@ -2,7 +2,6 @@
 /* vim: set expandtab sw=4 ts=4 sts=4: */
 /**
 *
-* @version $Id$
 * @package phpMyAdmin
 */
 
@@ -12,10 +11,15 @@ if (! defined('PHPMYADMIN')) {
 
 $ID_KEY      = 'APC_UPLOAD_PROGRESS';
 
+/**
+ * Returns upload status.
+ *
+ * This is implementation for APC extension.
+ */
 function PMA_getUploadStatus($id) {
     global $SESSION_KEY;
     global $ID_KEY;
-  
+
     if (trim($id) == "") {
         return;
     }
@@ -30,7 +34,7 @@ function PMA_getUploadStatus($id) {
          );
     }
     $ret = $_SESSION[$SESSION_KEY][$id];
- 
+
     if (! PMA_import_apcCheck() || $ret['finished']) {
         return $ret;
     }
@@ -40,7 +44,7 @@ function PMA_getUploadStatus($id) {
         $ret['finished'] = (bool)$status['done'];
         $ret['total']    = $status['total'];
         $ret['complete'] = $status['current'];
- 
+
         if ($ret['total'] > 0) {
             $ret['percent'] = $ret['complete'] / $ret['total'] * 100;
         }
@@ -51,7 +55,7 @@ function PMA_getUploadStatus($id) {
 
         $_SESSION[$SESSION_KEY][$id] = $ret;
     }
- 
+
     return $ret;
 }
 

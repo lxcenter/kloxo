@@ -6,17 +6,11 @@
  * @todo should be handled by class Table
  * @todo this should be recoded as functions, to avoid messing with global variables
  *
- * @version $Id$
  * @package phpMyAdmin
  */
 if (! defined('PHPMYADMIN')) {
     exit;
 }
-
-/**
- *
- */
-require_once './libraries/Table.class.php';
 
 /**
  * requirements
@@ -63,7 +57,7 @@ $GLOBALS['showtable'] = PMA_Table::sGetStatusInfo($GLOBALS['db'], $GLOBALS['tabl
 if ($showtable) {
     if (PMA_Table::isView($GLOBALS['db'], $GLOBALS['table'])) {
         $tbl_is_view     = true;
-        $tbl_type        = $GLOBALS['strView'];
+        $tbl_type        = __('View');
         $show_comment    = null;
     } else {
         $tbl_is_view     = false;

@@ -4,7 +4,6 @@
  * Set of functions used to run config authentication (ie no authentication).
  *
  * @package phpMyAdmin-Auth-Config
- * @version $Id$
  */
 
 
@@ -74,14 +73,14 @@ function PMA_auth_fails()
         if (isset($php_errormsg)) {
             $conn_error = $php_errormsg;
         } else {
-            $conn_error = $GLOBALS['strConnectionError'];
+            $conn_error = __('Cannot connect: invalid settings.');
         }
     }
 
     // Defines the charset to be used
     header('Content-Type: text/html; charset=' . $GLOBALS['charset']);
     /* HTML header */
-    $page_title = $GLOBALS['strAccessDenied'];
+    $page_title = __('Access denied');
     require './libraries/header_meta_style.inc.php';
     ?>
 </head>
@@ -89,7 +88,7 @@ function PMA_auth_fails()
 <body>
 <br /><br />
 <center>
-    <h1><?php echo sprintf($GLOBALS['strWelcome'], ' phpMyAdmin '); ?></h1>
+    <h1><?php echo sprintf(__('Welcome to %s'), ' phpMyAdmin '); ?></h1>
 </center>
 <br />
 <table border="0" cellpadding="0" cellspacing="3" align="center" width="80%">
@@ -100,20 +99,20 @@ function PMA_auth_fails()
     $GLOBALS['is_header_sent'] = TRUE;
 
     if (isset($GLOBALS['allowDeny_forbidden']) && $GLOBALS['allowDeny_forbidden']) {
-        trigger_error($GLOBALS['strAccessDenied'], E_USER_NOTICE);
+        trigger_error(__('Access denied'), E_USER_NOTICE);
     } else {
         // Check whether user has configured something
-        if ($_SESSION['PMA_Config']->source_mtime == 0) {
-            echo '<p>' . sprintf($GLOBALS['strAccessDeniedCreateConfig'], '<a href="setup/">', '</a>') . '</p>' . "\n";
+        if ($GLOBALS['PMA_Config']->source_mtime == 0) {
+            echo '<p>' . sprintf(__('You probably did not create a configuration file. You might want to use the %1$ssetup script%2$s to create one.'), '<a href="setup/">', '</a>') . '</p>' . "\n";
         } elseif (!isset($GLOBALS['errno']) || (isset($GLOBALS['errno']) && $GLOBALS['errno'] != 2002) && $GLOBALS['errno'] != 2003) {
         // if we display the "Server not responding" error, do not confuse users
         // by telling them they have a settings problem
         // (note: it's true that they could have a badly typed host name, but
-        //  anyway the current $strAccessDeniedExplanation tells that the server
+        //  anyway the current message tells that the server
         //  rejected the connection, which is not really what happened)
         // 2002 is the error given by mysqli
         // 2003 is the error given by mysql
-            trigger_error($GLOBALS['strAccessDeniedExplanation'], E_USER_WARNING);
+            trigger_error(__('phpMyAdmin tried to connect to the MySQL server, and the server rejected the connection. You should check the host, username and password in your configuration and make sure that they correspond to the information given by the administrator of the MySQL server.'), E_USER_WARNING);
         }
         PMA_mysqlDie($conn_error, '', true, '', false);
     }
@@ -132,7 +131,7 @@ function PMA_auth_fails()
         echo '</tr>' . "\n";
     }
     echo '</table>' . "\n";
-    require_once './libraries/footer.inc.php';
+    require './libraries/footer.inc.php';
     return TRUE;
 } // end of the 'PMA_auth_fails()' function
 

@@ -4,7 +4,6 @@
  * Set of functions used to build XML dumps of tables
  *
  * @todo    
- * @version $Id$
  * @package phpMyAdmin-Export-XML
  */
 if (! defined('PHPMYADMIN')) {
@@ -15,34 +14,38 @@ if (strlen($GLOBALS['db'])) { /* Can't do server export */
 
 if (isset($plugin_list)) {
     $plugin_list['xml'] = array(
-        'text' => 'strXML',
+        'text' => __('XML'),
         'extension' => 'xml',
         'mime_type' => 'text/xml',
         'options' => array(
-            array('type' => 'hidden', 'name' => 'data'),
+            array('type' => 'begin_group', 'name' => 'general_opts'),
+            array('type' => 'hidden', 'name' => 'structure_or_data'),
+            array('type' => 'end_group')
             ),
-        'options_text' => 'strOptions'
+        'options_text' => __('Options')
         );
     
     /* Export structure */
     $plugin_list['xml']['options'][] =
-        array('type' => 'bgroup', 'name' => 'export_struc', 'text' => 'strXMLExportStructs');
+        array('type' => 'begin_group', 'name' => 'structure', 'text' => __('Object creation options (all are recommended)'));
     $plugin_list['xml']['options'][] =
-        array('type' => 'bool', 'name' => 'export_functions', 'text' => 'strXMLExportFunctions');
+        array('type' => 'bool', 'name' => 'export_functions', 'text' => __('Functions'));
     $plugin_list['xml']['options'][] =
-        array('type' => 'bool', 'name' => 'export_procedures', 'text' => 'strXMLExportProcedures');
+        array('type' => 'bool', 'name' => 'export_procedures', 'text' => __('Procedures'));
     $plugin_list['xml']['options'][] =
-        array('type' => 'bool', 'name' => 'export_tables', 'text' => 'strXMLExportTables');
+        array('type' => 'bool', 'name' => 'export_tables', 'text' => __('Tables'));
     $plugin_list['xml']['options'][] =
-        array('type' => 'bool', 'name' => 'export_triggers', 'text' => 'strXMLExportTriggers');
+        array('type' => 'bool', 'name' => 'export_triggers', 'text' => __('Triggers'));
     $plugin_list['xml']['options'][] =
-        array('type' => 'bool', 'name' => 'export_views', 'text' => 'strXMLExportViews');
-    $plugin_list['xml']['options'][] =
-        array('type' => 'egroup');
+        array('type' => 'bool', 'name' => 'export_views', 'text' => __('Views'));
+    $plugin_list['xml']['options'][] = array('type' => 'end_group');
     
     /* Data */
     $plugin_list['xml']['options'][] =
-        array('type' => 'bool', 'name' => 'export_contents', 'text' => 'strXMLExportContents');
+        array('type' => 'begin_group', 'name' => 'data', 'text' => __('Data dump options'));
+    $plugin_list['xml']['options'][] =
+        array('type' => 'bool', 'name' => 'export_contents', 'text' => __('Export contents'));
+    $plugin_list['xml']['options'][] = array('type' => 'end_group');
 } else {
 
 /**
@@ -99,14 +102,14 @@ function PMA_exportHeader() {
            .  '- version ' . PMA_VERSION . $crlf
            .  '- http://www.phpmyadmin.net' . $crlf
            .  '-' . $crlf
-           .  '- ' . $GLOBALS['strHost'] . ': ' . $cfg['Server']['host'];
+           .  '- ' . __('Host') . ': ' . $cfg['Server']['host'];
     if (!empty($cfg['Server']['port'])) {
          $head .= ':' . $cfg['Server']['port'];
     }
     $head .= $crlf
-           .  '- ' . $GLOBALS['strGenTime'] . ': ' . PMA_localisedDate() . $crlf
-           .  '- ' . $GLOBALS['strServerVersion'] . ': ' . substr(PMA_MYSQL_INT_VERSION, 0, 1) . '.' . (int) substr(PMA_MYSQL_INT_VERSION, 1, 2) . '.' . (int) substr(PMA_MYSQL_INT_VERSION, 3) . $crlf
-           .  '- ' . $GLOBALS['strPHPVersion'] . ': ' . phpversion() . $crlf
+           .  '- ' . __('Generation Time') . ': ' . PMA_localisedDate() . $crlf
+           .  '- ' . __('Server version') . ': ' . substr(PMA_MYSQL_INT_VERSION, 0, 1) . '.' . (int) substr(PMA_MYSQL_INT_VERSION, 1, 2) . '.' . (int) substr(PMA_MYSQL_INT_VERSION, 3) . $crlf
+           .  '- ' . __('PHP Version') . ': ' . phpversion() . $crlf
            .  '-->' . $crlf . $crlf;
     
     $head .= '<pma_xml_export version="1.0"' . (($export_struct) ? ' xmlns:pma="http://www.phpmyadmin.net/some_doc_url/"' : '') . '>' . $crlf;
@@ -252,7 +255,7 @@ function PMA_exportDBHeader($db) {
     
     if (isset($GLOBALS[$what . '_export_contents']) && $GLOBALS[$what . '_export_contents']) {
         $head = '    <!--' . $crlf
-              . '    - ' . $GLOBALS['strDatabase'] . ': ' . (isset($GLOBALS['use_backquotes']) ? PMA_backquote($db) : '\'' . $db . '\''). $crlf
+              . '    - ' . __('Database') . ': ' . (isset($GLOBALS['use_backquotes']) ? PMA_backquote($db) : '\'' . $db . '\''). $crlf
               . '    -->' . $crlf
               . '    <database name="' . $db . '">' . $crlf;
         
@@ -325,7 +328,7 @@ function PMA_exportData($db, $table, $crlf, $error_url, $sql_query) {
         }
         unset($i);
         
-        $buffer      = '        <!-- ' . $GLOBALS['strTable'] . ' ' . $table . ' -->' . $crlf;
+        $buffer      = '        <!-- ' . __('Table') . ' ' . $table . ' -->' . $crlf;
         if (!PMA_exportOutputHandler($buffer)) {
             return FALSE;
         }

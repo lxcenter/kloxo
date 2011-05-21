@@ -2,8 +2,13 @@
 /* vim: set expandtab sw=4 ts=4 sts=4: */
 /**
  * @package phpMyAdmin-Transformation
- * @version $Id$
  */
+
+function PMA_transformation_application_octetstream__download_info() {
+    return array(
+        'info' =>  __('Displays a link to download the binary data of the column. You can use the first option to specify the filename, or use the second option as the name of a column which contains the filename. If you use the second option, you need to set the first option to the empty string.'),
+        );
+}
 
 /**
  *

@@ -3,7 +3,6 @@
 /**
  * This is in a separate script because it's called from a number of scripts
  *
- * @version $Id$
  * @package phpMyAdmin
  */
 
@@ -28,11 +27,12 @@
  *
  * @access  public
  */
-function PMA_sanitize($message, $escape = false)
+function PMA_sanitize($message, $escape = false, $safe = false)
 {
+    if (!$safe) {
+        $message = strtr($message, array('<' => '&lt;', '>' => '&gt;'));
+    }
     $replace_pairs = array(
-        '<'         => '&lt;',
-        '>'         => '&gt;',
         '[i]'       => '<em>',      // deprecated by em
         '[/i]'      => '</em>',     // deprecated by em
         '[em]'      => '<em>',
@@ -73,7 +73,11 @@ function PMA_sanitize($message, $escape = false)
             }
         }
 
-        $message = preg_replace($pattern, '<a href="\1" target="\2">', $message);
+        if (substr($found[1], 0, 4) == 'http') {
+            $message = preg_replace($pattern, '<a href="' . PMA_linkURL($found[1]) . '" target="\2">', $message);
+        } else {
+            $message = preg_replace($pattern, '<a href="\1" target="\2">', $message);
+        }
     }
 
     if ($escape) {

@@ -2,7 +2,6 @@
 /* vim: set expandtab sw=4 ts=4 sts=4: */
 /**
  *
- * @version $Id$
  * @package phpMyAdmin
  */
 
@@ -18,14 +17,17 @@ if (isset($GLOBALS["message"]) && $GLOBALS["message"]) {
 
     header('Content-type: text/html');
 
-	usleep(300000); // wait 0.3 sec before we check for $_SESSION variable, which is set inside import.php 
-    while ($_SESSION['Import_message']['message'] == null) { // wait until message is available 
+    // wait 0.3 sec before we check for $_SESSION variable, which is set inside import.php
+	usleep(300000);
+
+    // wait until message is available
+    while ($_SESSION['Import_message']['message'] == null) {
         usleep(250000); // 0.25 sec
     }
 
     echo $_SESSION['Import_message']['message'];
     echo '<fieldset class="tblFooters">' . "\n";
-    echo '	[ <a href="' . $_SESSION['Import_message']['go_back_url'] . '">' . $GLOBALS["strBack"] . '</a> ]' . "\n";
+    echo '	[ <a href="' . $_SESSION['Import_message']['go_back_url'] . '">' . __('Back') . '</a> ]' . "\n";
     echo '</fieldset>'."\n";
 
 } else {

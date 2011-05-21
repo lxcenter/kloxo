@@ -3,7 +3,6 @@
 /**
  * Set of functions used to build YAML dumps of tables
  *
- * @version $Id$
  * @package phpMyAdmin-Export-YAML
  */
 if (! defined('PHPMYADMIN')) {
@@ -20,12 +19,14 @@ if (isset($plugin_list)) {
         'mime_type'     => 'text/yaml',
         'force_file'    => true,
         'options'       => array(
+            array('type' => 'begin_group', 'name' => 'general_opts'),
             array(
                 'type' => 'hidden',
-                'name' => 'data',
+                'name' => 'structure_or_data',
             ),
+            array('type' => 'end_group')
         ),
-        'options_text'  => 'strOptions',
+        'options_text'  => __('Options'),
     );
 } else {
 
@@ -167,11 +168,8 @@ function PMA_exportData($db, $table, $crlf, $error_url, $sql_query)
                 continue;
             }
 
-            $record[$i] = preg_replace('/\r\n|\r|\n/', $crlf.'    ', $record[$i]);
-            if (strstr($record[$i], $crlf))
-              $record[$i] = '|-' . $crlf . '    '.$record[$i];
-
-            $buffer .= '  ' . $column . ': ' . $record[$i] . $crlf;
+            $record[$i] = str_replace(array('\\', '"', "\n", "\r"), array('\\\\', '\"', '\n', '\r'), $record[$i]);
+            $buffer .= '  ' . $column . ': "' . $record[$i] . '"' . $crlf;
         }
 
         if (! PMA_exportOutputHandler($buffer)) {

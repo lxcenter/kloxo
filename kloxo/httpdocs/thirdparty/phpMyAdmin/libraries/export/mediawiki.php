@@ -12,13 +12,15 @@ if (! defined('PHPMYADMIN')) {
 
 if (isset($plugin_list)) {
     $plugin_list['mediawiki'] = array(
-        'text' => 'strMediaWiki',
+        'text' => __('MediaWiki Table'),
         'extension' => 'txt',
         'mime_type' => 'text/plain',
         'options' => array(
-            array('type' => 'hidden', 'name' => 'data'),
+            array('type' => 'begin_group', 'name' => 'general_opts'),
+            array('type' => 'hidden', 'name' => 'structure_or_data'),
+            array('type' => 'end_group')
             ),
-        'options_text' => 'strOptions',
+        'options_text' => __('Options'),
         );
 } else {
 

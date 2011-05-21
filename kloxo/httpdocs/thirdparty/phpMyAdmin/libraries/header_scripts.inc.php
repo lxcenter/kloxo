@@ -2,7 +2,6 @@
 /* vim: set expandtab sw=4 ts=4 sts=4: */
 /**
  *
- * @version $Id$
  * @package phpMyAdmin
  */
 if (! defined('PHPMYADMIN')) {
@@ -17,46 +16,10 @@ require_once './libraries/common.inc.php';
 
 // Cross-framing protection
 if ( false === $GLOBALS['cfg']['AllowThirdPartyFraming']) {
-?>
-<script type="text/javascript">
-//<![CDATA[
-try {
-    // can't access this if on a different domain
-    var topdomain = top.document.domain;
-    // double-check just for sure
-    if (topdomain != self.document.domain) {
-        alert("Redirecting...");
-        top.location.replace(self.document.URL.substring(0, self.document.URL.lastIndexOf("/")+1));
-    }
-}
-catch(e) {
-    alert("Redirecting... (error: " + e);
-    top.location.replace(self.document.URL.substring(0, self.document.URL.lastIndexOf("/")+1));
-}
-//]]>
-</script>
-<?php
+    echo PMA_includeJS('cross_framing_protection.js');
 }
 // generate title
-$title = str_replace(
-            array(
-                '@HTTP_HOST@',
-                '@SERVER@',
-                '@VERBOSE@',
-                '@VSERVER@',
-                '@DATABASE@',
-                '@TABLE@',
-                '@PHPMYADMIN@',
-                ),
-            array(
-                PMA_getenv('HTTP_HOST') ? PMA_getenv('HTTP_HOST') : '',
-                isset($GLOBALS['cfg']['Server']['host']) ? $GLOBALS['cfg']['Server']['host'] : '',
-                isset($GLOBALS['cfg']['Server']['verbose']) ? $GLOBALS['cfg']['Server']['verbose'] : '',
-                !empty($GLOBALS['cfg']['Server']['verbose']) ? $GLOBALS['cfg']['Server']['verbose'] : (isset($GLOBALS['cfg']['Server']['host']) ? $GLOBALS['cfg']['Server']['host'] : ''),
-                $GLOBALS['db'],
-                $GLOBALS['table'],
-                'phpMyAdmin ' . PMA_VERSION,
-                ),
+$title = PMA_expandUserString(
             !empty($GLOBALS['table']) ? $GLOBALS['cfg']['TitleTable'] :
             (!empty($GLOBALS['db']) ? $GLOBALS['cfg']['TitleDatabase'] :
             (!empty($GLOBALS['cfg']['Server']['host']) ? $GLOBALS['cfg']['TitleServer'] :
@@ -65,57 +28,24 @@ $title = str_replace(
 // here, the function does not exist with this configuration: $cfg['ServerDefault'] = 0;
 $is_superuser    = function_exists('PMA_isSuperuser') && PMA_isSuperuser();
 
-if (in_array('functions.js', $GLOBALS['js_include'])) {
-    $GLOBALS['js_messages']['strFormEmpty'] = $GLOBALS['strFormEmpty'];
-    $GLOBALS['js_messages']['strNotNumber'] = $GLOBALS['strNotNumber'];
-    $GLOBALS['js_messages']['strClickToSelect'] = $GLOBALS['strClickToSelect'];
-    $GLOBALS['js_messages']['strClickToUnselect'] = $GLOBALS['strClickToUnselect'];
-
-    if (!$is_superuser && !$GLOBALS['cfg']['AllowUserDropDatabase']) {
-        $GLOBALS['js_messages']['strNoDropDatabases'] = $GLOBALS['strNoDropDatabases'];
-    } else {
-        $GLOBALS['js_messages']['strNoDropDatabases'] = '';
-    }
-
-    if ($GLOBALS['cfg']['Confirm']) {
-        $GLOBALS['js_messages']['strDoYouReally'] = $GLOBALS['strDoYouReally'];
-        $GLOBALS['js_messages']['strDropDatabaseStrongWarning'] = $GLOBALS['strDropDatabaseStrongWarning'];
-
-        // rajk - for blobstreaming
-        $GLOBALS['js_messages']['strBLOBRepositoryDisableStrongWarning'] = $GLOBALS['strBLOBRepositoryDisableStrongWarning'];
-        $GLOBALS['js_messages']['strBLOBRepositoryDisableAreYouSure'] = sprintf($GLOBALS['strBLOBRepositoryDisableAreYouSure'], $GLOBALS['db']);
-    } else {
-        $GLOBALS['js_messages']['strDoYouReally'] = '';
-        $GLOBALS['js_messages']['strDropDatabaseStrongWarning'] = '';
-
-        // rajk - for blobstreaming
-        $GLOBALS['js_messages']['strBLOBRepositoryDisableStrongWarning'] = '';
-        $GLOBALS['js_messages']['strBLOBRepositoryDisableAreYouSure'] = '';
-    }
-} elseif (in_array('indexes.js', $GLOBALS['js_include'])) {
-    $GLOBALS['js_messages']['strFormEmpty'] = $GLOBALS['strFormEmpty'];
-    $GLOBALS['js_messages']['strNotNumber'] = $GLOBALS['strNotNumber'];
+$GLOBALS['js_include'][] = 'functions.js';
+$GLOBALS['js_include'][] = 'jquery/jquery.qtip-1.0.0.min.js';
+$params = array('lang' => $GLOBALS['lang']);
+if (isset($GLOBALS['db'])) {
+    $params['db'] = $GLOBALS['db'];
 }
+$GLOBALS['js_include'][] = 'messages.php' . PMA_generate_common_url($params);
 
-if (in_array('server_privileges.js', $GLOBALS['js_include'])) {
-    $GLOBALS['js_messages']['strHostEmpty'] = $GLOBALS['strHostEmpty'];
-    $GLOBALS['js_messages']['strUserEmpty'] = $GLOBALS['strUserEmpty'];
-    $GLOBALS['js_messages']['strPasswordEmpty'] = $GLOBALS['strPasswordEmpty'];
-    $GLOBALS['js_messages']['strPasswordNotSame'] = $GLOBALS['strPasswordNotSame'];
-}
-
-$GLOBALS['js_include'][] = 'tooltip.js';
-
-$GLOBALS['js_events'][] = array(
-    'object'    => 'window',
-    'event'     => 'load',
-    'function'  => 'PMA_TT_init',
-);
+/**
+ * Here we add a timestamp when loading the file, so that users who
+ * upgrade phpMyAdmin are not stuck with older .js files in their
+ * browser cache. This produces an HTTP 304 request for each file.
+ */
 
 // avoid loading twice a js file
 $GLOBALS['js_include'] = array_unique($GLOBALS['js_include']);
 foreach ($GLOBALS['js_include'] as $js_script_file) {
-    echo '<script src="./js/' . $js_script_file . '" type="text/javascript"></script>' . "\n";
+    echo PMA_includeJS($js_script_file);
 }
 ?>
 <script type="text/javascript">
@@ -123,17 +53,12 @@ foreach ($GLOBALS['js_include'] as $js_script_file) {
 // Updates the title of the frameset if possible (ns4 does not allow this)
 if (typeof(parent.document) != 'undefined' && typeof(parent.document) != 'unknown'
     && typeof(parent.document.title) == 'string') {
-    parent.document.title = '<?php echo PMA_sanitize(PMA_escapeJsString($title)); ?>';
+    parent.document.title = '<?php echo PMA_sanitize(PMA_escapeJsString(htmlspecialchars($title))); ?>';
 }
 
-var PMA_messages = new Array();
 <?php
-foreach ($GLOBALS['js_messages'] as $name => $js_message) {
-    echo "PMA_messages['" . $name . "'] = '" . PMA_escapeJsString($js_message) . "';\n";
-}
-
 foreach ($GLOBALS['js_events'] as $js_event) {
-    echo "window.parent.addEvent(" . $js_event['object'] . ", '" . $js_event['event'] . "', "
+    echo "$(window.parent).bind('" . $js_event['event'] . "', "
         . $js_event['function'] . ");\n";
 }
 ?>

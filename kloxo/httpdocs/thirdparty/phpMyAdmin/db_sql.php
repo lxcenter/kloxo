@@ -2,7 +2,6 @@
 /* vim: set expandtab sw=4 ts=4 sts=4: */
 /**
  *
- * @version $Id$
  * @package phpMyAdmin
  */
 
@@ -14,6 +13,9 @@ require_once './libraries/common.inc.php';
 /**
  * Runs common work
  */
+$GLOBALS['js_include'][] = 'functions.js';
+$GLOBALS['js_include'][] = 'sql.js';
+
 require './libraries/db_common.inc.php';
 require_once './libraries/sql_query_form.lib.php';
 
@@ -42,5 +44,5 @@ PMA_sqlQueryForm(true, false, isset($_REQUEST['delimiter']) ? htmlspecialchars($
 /**
  * Displays the footer
  */
-require_once './libraries/footer.inc.php';
+require './libraries/footer.inc.php';
 ?>

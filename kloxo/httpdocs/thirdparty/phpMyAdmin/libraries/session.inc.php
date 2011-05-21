@@ -3,7 +3,6 @@
 /**
  * session handling
  *
- * @version $Id$
  * @todo    add failover or warn if sessions are not configured properly
  * @todo    add an option to use mm-module for session handler
  * @see     http://www.php.net/session
@@ -19,7 +18,7 @@ if (! defined('PHPMYADMIN')) {
 // verify if PHP supports session, die if it does not
 
 if (!@function_exists('session_name')) {
-    PMA_fatalError('strCantLoad', 'session');
+    PMA_warnMissingExtension('session', true);
 } elseif (ini_get('session.auto_start') == true && session_name() != 'phpMyAdmin') {
     // Do not delete the existing session, it might be used by other
     // applications; instead just close it.
@@ -31,11 +30,17 @@ if (!@function_exists('session_name')) {
 //ini_set('session.auto_start', 0);
 
 // session cookie settings
-session_set_cookie_params(0, PMA_Config::getCookiePath() . '; HttpOnly',
-    '', PMA_Config::isHttps());
+session_set_cookie_params(0, $GLOBALS['PMA_Config']->getCookiePath(),
+    '', $GLOBALS['PMA_Config']->isHttps(), true);
 
 // cookies are safer (use @ini_set() in case this function is disabled)
 @ini_set('session.use_cookies', true);
+
+// optionally set session_save_path
+$path = $GLOBALS['PMA_Config']->get('SessionSavePath');
+if (!empty($path)) {
+    session_save_path($path);
+}
 
 // but not all user allow cookies
 @ini_set('session.use_only_cookies', false);
@@ -75,11 +80,15 @@ if (! isset($_COOKIE[$session_name])) {
     $r = session_start();
     if ($r !== true || $orig_error_count != $GLOBALS['error_handler']->countErrors()) {
         setcookie($session_name, '', 1);
-        PMA_fatalError('strSessionStartupErrorGeneral');
+        /*
+         * Session initialization is done before selecting language, so we
+         * can not use translations here.
+         */
+        PMA_fatalError('Cannot start session without errors, please check errors given in your PHP and/or webserver log file and configure your PHP installation properly.');
     }
     unset($orig_error_count);
 } else {
-    @session_start();
+    session_start();
 }
 
 /**

@@ -2,18 +2,16 @@
 /* vim: set expandtab sw=4 ts=4 sts=4: */
 /**
  *
- * @version $Id$
  * @package phpMyAdmin
  */
 
 /**
  * Gets some core libraries and displays a top message if required
  */
-define('PMA_MOORAINBOW', true);
 require_once './libraries/common.inc.php';
-$GLOBALS['js_include'][] = 'mootools.js';
-$GLOBALS['js_include'][] = 'mooRainbow/mooRainbow.js';
-$GLOBALS['js_include'][] = 'mootools-domready-rainbow.js';
+
+$GLOBALS['js_include'][] = 'jquery/jquery-ui-1.8.custom.js';
+$GLOBALS['js_include'][] = 'jquery/jquery.sprintf.js';
 
 // Handles some variables that may have been sent by the calling script
 $GLOBALS['db'] = '';
@@ -55,17 +53,16 @@ if ($server > 0) {
 
     // should we add the port info here?
     $short_server_info = (!empty($GLOBALS['cfg']['Server']['verbose'])
-                    ? $GLOBALS['cfg']['Server']['verbose']
-                    : $GLOBALS['cfg']['Server']['host']);
+                ? $GLOBALS['cfg']['Server']['verbose']
+                : $GLOBALS['cfg']['Server']['host']);
 }
 
 echo '<div id="maincontainer">' . "\n";
 echo '<div id="main_pane_left">';
-
 if ($server > 0
  || (! $cfg['LeftDisplayServers'] && count($cfg['Servers']) > 1)) {
     echo '<div class="group">';
-    echo '<h2>' . $strActions . '</h2>';
+    echo '<h2>' . __('General Settings') . '</h2>';
     echo '<ul>';
 
     /**
@@ -85,58 +82,41 @@ if ($server > 0
     if ($server > 0) {
         require_once './libraries/check_user_privileges.lib.php';
 
-        // Logout for advanced authentication
-        if ($cfg['Server']['auth_type'] != 'config') {
-            if ($cfg['ShowChgPassword']) {
-                PMA_printListItem($strChangePassword, 'li_change_password',
-                    './user_password.php?' . $common_url_query);
-            }
+        if (!PMA_DRIZZLE) {
+            // Logout for advanced authentication
+            if ($cfg['Server']['auth_type'] != 'config') {
+                if ($cfg['ShowChgPassword']) {
+                    if ($GLOBALS['cfg']['AjaxEnable']) {
+                        $conditional_class = 'ajax';
+                    } else {
+                        $conditional_class = null;
+                    }
+                    PMA_printListItem(__('Change password'), 'li_change_password',
+                        './user_password.php?' . $common_url_query, null, null, 'change_password_anchor', null, $conditional_class);
+                }
+            } // end if
 
-            $http_logout = ($cfg['Server']['auth_type'] == 'http')
-                         ? '<a href="./Documentation.html#login_bug" target="documentation">'
-                            . ($cfg['ReplaceHelpImg'] ? '<img class="icon" src="' . $pmaThemeImage . 'b_info.png" width="11" height="11" alt="Info" />' : '(*)') . '</a>'
-                         : '';
-            PMA_printListItem('<strong>' . $strLogout . '</strong> ' . $http_logout,
-                'li_log_out',
-                './index.php?' . $common_url_query . '&amp;old_usr=' . urlencode($PHP_AUTH_USER), null, '_parent');
-        } // end if
+            echo '    <li id="li_select_mysql_collation">';
+            echo '        <form method="post" action="index.php" target="_parent">' . "\n"
+           . PMA_generate_common_hidden_inputs(null, null, 4, 'collation_connection')
+           . '            <label for="select_collation_connection">' . "\n"
+           . '                ' . __('MySQL connection collation') . "\n"
+           // put the doc link in the form so that it appears on the same line
+           . PMA_showMySQLDocu('MySQL_Database_Administration', 'Charset-connection') . ': ' .  "\n"
+           . '            </label>' . "\n"
+
+           . PMA_generateCharsetDropdownBox(PMA_CSDROPDOWN_COLLATION, 'collation_connection', 'select_collation_connection', $collation_connection, true, 4, true)
+           . '            <noscript><input type="submit" value="' . __('Go') . '" /></noscript>' . "\n"
+           . '        </form>' . "\n"
+           . '    </li>' . "\n";
+        } // not Drizzle
     } // end of if ($server > 0)
-
     echo '</ul>';
     echo '</div>';
 }
 
-
-if ($server > 0) {
-    echo '<div class="group">';
-    echo '<h2>MySQL ' . $short_server_info . '</h2>';
-    echo '<ul>' . "\n";
-
-    if ($cfg['ShowCreateDb']) {
-        echo '<li id="li_create_database">';
-        require './libraries/display_create_database.lib.php';
-        echo '</li>' . "\n";
-    }
-
-    echo '    <li id="li_select_mysql_collation">';
-    echo '        <form method="post" action="index.php" target="_parent">' . "\n"
-       . PMA_generate_common_hidden_inputs(null, null, 4, 'collation_connection')
-       . '            <label for="select_collation_connection">' . "\n"
-       . '                ' . $strMySQLConnectionCollation . ': ' . "\n"
-       . '            </label>' . "\n"
-       . PMA_generateCharsetDropdownBox(PMA_CSDROPDOWN_COLLATION, 'collation_connection', 'select_collation_connection', $collation_connection, true, 4, true)
-       . '            <noscript><input type="submit" value="' . $strGo . '" /></noscript>' . "\n"
-       // put the doc link in the form so that it appears on the same line
-       . PMA_showMySQLDocu('MySQL_Database_Administration', 'Charset-connection') . "\n"
-       . '        </form>' . "\n"
-       . '    </li>' . "\n";
-
-    echo '  </ul>';
-    echo ' </div>';
-}
-
 echo '<div class="group">';
-echo '<h2>' . $strInterface . '</h2>';
+echo '<h2>' . __('Appearance Settings') . '</h2>';
 echo '  <ul>';
 
 // Displays language selection combo
@@ -147,35 +127,26 @@ if (empty($cfg['Lang'])) {
     echo '</li>';
 }
 
-// added by Michael Keck <mail_at_michaelkeck_dot_de>
 // ThemeManager if available
 
 if ($GLOBALS['cfg']['ThemeManager']) {
     echo '<li id="li_select_theme">';
     echo $_SESSION['PMA_Theme_Manager']->getHtmlSelectBox();
     echo '</li>';
-?>
-    <script type="text/javascript">
-    //<![CDATA[
-    document.write('<li id="li_custom_color">');
-    document.write('<?php echo PMA_escapeJsString($strCustomColor) . ': '; ?>');
-    document.write('<img id="myRainbow" src="js/mooRainbow/images/rainbow.png" alt="[r]" width="16" height="16" />');
-    document.write('<form name="rainbowform" id="rainbowform" method="post" action="index.php" target="_parent">');
-    document.write('<?php echo PMA_generate_common_hidden_inputs(); ?>');
-    document.write('<input type="hidden" name="custom_color" />');
-    document.write('<input type="hidden" name="custom_color_rgb" />');
-    document.write('<input type="submit" name="custom_color_reset" value="<?php echo $strReset; ?>" />');
-    document.write('</form>');
-    document.write('</li>');
-    //]]>
-    </script>
-    <?php
 }
 echo '<li id="li_select_fontsize">';
 echo PMA_Config::getFontsizeForm();
 echo '</li>';
 
 echo '</ul>';
+
+// User preferences
+
+echo '<ul>';
+echo PMA_printListItem(__('More settings'), 'li_user_preferences',
+                    './prefs_manage.php?' . $common_url_query);
+echo '</ul>';
+
 echo '</div>';
 
 
@@ -187,15 +158,15 @@ if ($server > 0 && $GLOBALS['cfg']['ShowServerInfo']) {
     echo '<div class="group">';
     echo '<h2>MySQL</h2>';
     echo '<ul>' . "\n";
-    PMA_printListItem($strServer . ': ' . $server_info, 'li_server_info');
-    PMA_printListItem($strServerVersion . ': ' . PMA_MYSQL_STR_VERSION, 'li_server_version');
-    PMA_printListItem($strProtocolVersion . ': ' . PMA_DBI_get_proto_info(),
+    PMA_printListItem(__('Server') . ': ' . $server_info, 'li_server_info');
+    PMA_printListItem(__('Server version') . ': ' . PMA_MYSQL_STR_VERSION, 'li_server_version');
+    PMA_printListItem(__('Protocol version') . ': ' . PMA_DBI_get_proto_info(),
         'li_mysql_proto');
-    PMA_printListItem($strUser . ': ' . htmlspecialchars($mysql_cur_user_and_host),
+    PMA_printListItem(__('User') . ': ' . htmlspecialchars($mysql_cur_user_and_host),
         'li_user_info');
 
     echo '    <li id="li_select_mysql_charset">';
-    echo '        ' . $strMySQLCharset . ': '
+    echo '        ' . __('MySQL charset') . ': '
        . '        <span xml:lang="en" dir="ltr">'
        . '           ' . $mysql_charsets_descriptions[$mysql_charset_map[strtolower($charset)]] . "\n"
        . '           (' . $mysql_charset_map[strtolower($charset)] . ')' . "\n"
@@ -207,44 +178,46 @@ if ($server > 0 && $GLOBALS['cfg']['ShowServerInfo']) {
 
 if ($GLOBALS['cfg']['ShowServerInfo'] || $GLOBALS['cfg']['ShowPhpInfo']) {
     echo '<div class="group">';
-    echo '<h2>' . $strWebServer . '</h2>';
+    echo '<h2>' . __('Web server') . '</h2>';
     echo '<ul>';
     if ($GLOBALS['cfg']['ShowServerInfo']) {
         PMA_printListItem($_SERVER['SERVER_SOFTWARE'], 'li_web_server_software');
 
         if ($server > 0) {
-            PMA_printListItem($strMysqlClientVersion . ': ' . PMA_DBI_get_client_info(),
+            PMA_printListItem(__('MySQL client version') . ': ' . PMA_DBI_get_client_info(),
                 'li_mysql_client_version');
-            PMA_printListItem($strPHPExtension . ': ' . $GLOBALS['cfg']['Server']['extension'],
+            PMA_printListItem(__('PHP extension') . ': ' . $GLOBALS['cfg']['Server']['extension'] . ' ' . PMA_showPHPDocu('book.' . $GLOBALS['cfg']['Server']['extension'] . '.php'),
                 'li_used_php_extension');
         }
     }
 
     if ($cfg['ShowPhpInfo']) {
-        PMA_printListItem($strShowPHPInfo, 'li_phpinfo', './phpinfo.php?' . $common_url_query);
+        PMA_printListItem(__('Show PHP information'), 'li_phpinfo', './phpinfo.php?' . $common_url_query);
     }
     echo '  </ul>';
     echo ' </div>';
 }
 
-echo '<div class="group">';
+echo '<div class="group pmagroup">';
 echo '<h2>phpMyAdmin</h2>';
 echo '<ul>';
-PMA_printListItem($strVersionInformation . ': ' . PMA_VERSION, 'li_pma_version');
-PMA_printListItem($strDocu, 'li_pma_docs', 'Documentation.html', null, '_blank');
-PMA_printListItem($strWiki, 'li_pma_wiki', 'http://wiki.phpmyadmin.net', null, '_blank');
+$class = null;
+// workaround for bug 3302733; some browsers don't like the situation
+// where phpMyAdmin is called on a secure page but a part of the page
+// (the version check) refers to a non-secure page
+if ($GLOBALS['cfg']['VersionCheck'] && ! $GLOBALS['PMA_Config']->get('is_https')) {
+    $class = 'jsversioncheck';
+}
+PMA_printListItem(__('Version information') . ': ' . PMA_VERSION, 'li_pma_version', null, null, null, null, $class);
+PMA_printListItem(__('Documentation'), 'li_pma_docs', 'Documentation.html', null, '_blank');
+PMA_printListItem(__('Wiki'), 'li_pma_wiki', PMA_linkURL('http://wiki.phpmyadmin.net/'), null, '_blank');
 
 // does not work if no target specified, don't know why
-PMA_printListItem($strHomepageOfficial, 'li_pma_homepage', 'http://www.phpMyAdmin.net/', null, '_blank');
+PMA_printListItem(__('Official Homepage'), 'li_pma_homepage', PMA_linkURL('http://www.phpMyAdmin.net/'), null, '_blank');
+PMA_printListItem(__('Contribute'), 'li_pma_contribute', PMA_linkURL('http://www.phpmyadmin.net/home_page/improve.php'), null, '_blank');
+PMA_printListItem(__('Get support'), 'li_pma_support', PMA_linkURL('http://www.phpmyadmin.net/home_page/support.php'), null, '_blank');
+PMA_printListItem(__('List of changes'), 'li_pma_changes', PMA_linkURL('changelog.php'), null, '_blank');
 ?>
-    <li><bdo xml:lang="en" dir="ltr">
-        [<a href="changelog.php" target="_blank">ChangeLog</a>]
-        [<a href="http://phpmyadmin.git.sourceforge.net/git/gitweb-index.cgi"
-            target="_blank">Git</a>]
-        [<a href="http://sourceforge.net/mail/?group_id=23067"
-            target="_blank">Lists</a>]
-        </bdo>
-    </li>
     </ul>
  </div>
 
@@ -263,12 +236,11 @@ PMA_printListItem($strHomepageOfficial, 'li_pma_homepage', 'http://www.phpMyAdmi
 <?php
 /**
  * Warning if using the default MySQL privileged account
- * modified: 2004-05-05 mkkeck
  */
 if ($server != 0
  && $cfg['Server']['user'] == 'root'
  && $cfg['Server']['password'] == '') {
-    trigger_error($strInsecureMySQL, E_USER_WARNING);
+    trigger_error(__('Your configuration file contains settings (root with no password) that correspond to the default MySQL privileged account. Your MySQL server is running with this default, is open to intrusion, and you really should fix this security hole by setting a password for user \'root\'.'), E_USER_WARNING);
 }
 
 /**
@@ -276,7 +248,7 @@ if ($server != 0
  * break it, see bug 1063821.
  */
 if (@extension_loaded('mbstring') && @ini_get('mbstring.func_overload') > 1) {
-    trigger_error($strMbOverloadWarning, E_USER_WARNING);
+    trigger_error(__('You have enabled mbstring.func_overload in your PHP configuration. This option is incompatible with phpMyAdmin and might cause some data to be corrupted!'), E_USER_WARNING);
 }
 
 /**
@@ -284,7 +256,7 @@ if (@extension_loaded('mbstring') && @ini_get('mbstring.func_overload') > 1) {
  * to tell user something might be broken without it, see bug #1063149.
  */
 if (! @extension_loaded('mbstring')) {
-    trigger_error($strMbExtensionMissing, E_USER_WARNING);
+    trigger_error(__('The mbstring PHP extension was not found and you seem to be using a multibyte charset. Without the mbstring extension phpMyAdmin is unable to split strings correctly and it may result in unexpected results.'), E_USER_WARNING);
 }
 
 /**
@@ -292,7 +264,14 @@ if (! @extension_loaded('mbstring')) {
  */
 $gc_time = (int)@ini_get('session.gc_maxlifetime');
 if ($gc_time < $GLOBALS['cfg']['LoginCookieValidity'] ) {
-    trigger_error(PMA_Message::decodeBB($strSessionGCWarning), E_USER_WARNING);
+    trigger_error(PMA_Message::decodeBB(__('Your PHP parameter [a@http://php.net/manual/en/session.configuration.php#ini.session.gc-maxlifetime@]session.gc_maxlifetime[/a] is lower that cookie validity configured in phpMyAdmin, because of this, your login will expire sooner than configured in phpMyAdmin.')), E_USER_WARNING);
+}
+
+/**
+ * Check whether LoginCookieValidity is limited by LoginCookieStore.
+ */
+if ($GLOBALS['cfg']['LoginCookieStore'] != 0 && $GLOBALS['cfg']['LoginCookieStore'] < $GLOBALS['cfg']['LoginCookieValidity']) {
+    trigger_error(PMA_Message::decodeBB(__('Login cookie store is lower than cookie validity configured in phpMyAdmin, because of this, your login will expire sooner than configured in phpMyAdmin.')), E_USER_WARNING);
 }
 
 /**
@@ -300,7 +279,7 @@ if ($gc_time < $GLOBALS['cfg']['LoginCookieValidity'] ) {
  */
 if (!empty($_SESSION['auto_blowfish_secret']) &&
         empty($GLOBALS['cfg']['blowfish_secret'])) {
-    trigger_error($strSecretRequired, E_USER_WARNING);
+    trigger_error(__('The configuration file now needs a secret passphrase (blowfish_secret).'), E_USER_WARNING);
 }
 
 /**
@@ -308,17 +287,16 @@ if (!empty($_SESSION['auto_blowfish_secret']) &&
  * production environment.
  */
 if (file_exists('./config')) {
-    trigger_error($strConfigDirectoryWarning, E_USER_WARNING);
+    trigger_error(__('Directory [code]config[/code], which is used by the setup script, still exists in your phpMyAdmin directory. You should remove it once phpMyAdmin has been configured.'), E_USER_WARNING);
 }
 
 /**
  * Check whether relations are supported.
  */
 if ($server > 0) {
-    require_once './libraries/relation.lib.php';
     $cfgRelation = PMA_getRelationsParam();
     if(!$cfgRelation['allworks'] && $cfg['PmaNoRelation_DisableWarning'] == false) {
-        $message = PMA_Message::notice('strRelationNotWorking');
+        $message = PMA_Message::notice(__('The phpMyAdmin configuration storage is not completely configured, some extended features have been deactivated. To find out why click %shere%s.'));
         $message->addParam('<a href="' . $cfg['PmaAbsoluteUri'] . 'chk_rel.php?' . $common_url_query . '">', false);
         $message->addParam('</a>', false);
         /* Show error if user has configured something, notice elsewhere */
@@ -330,6 +308,15 @@ if ($server > 0) {
 }
 
 /**
+ * Show notice when javascript support is missing.
+ */
+echo '<noscript>';
+$message = PMA_Message::notice(__('Javascript support is missing or disabled in your browser, some phpMyAdmin functionality will be missing. For example navigation frame will not refresh automatically.'));
+$message->isError(true);
+$message->display();
+echo '</noscript>';
+
+/**
  * Warning about different MySQL library and server version
  * (a difference on the third digit does not count).
  * If someday there is a constant that we can check about mysqlnd, we can use it instead
@@ -339,7 +326,7 @@ if ($server > 0) {
 if (function_exists('PMA_DBI_get_client_info')) {
     $_client_info = PMA_DBI_get_client_info();
     if ($server > 0 && strpos($_client_info, 'mysqlnd') === false && substr(PMA_MYSQL_CLIENT_API, 0, 3) != substr(PMA_MYSQL_INT_VERSION, 0, 3)) {
-        trigger_error(PMA_sanitize(sprintf($strMysqlLibDiffersServerVersion,
+        trigger_error(PMA_sanitize(sprintf(__('Your PHP MySQL library version %s differs from your MySQL server version %s. This may cause unpredictable behavior.'),
                 $_client_info,
                 substr(PMA_MYSQL_STR_VERSION, 0, strpos(PMA_MYSQL_STR_VERSION . '-', '-')))),
             E_USER_NOTICE);
@@ -351,8 +338,25 @@ if (function_exists('PMA_DBI_get_client_info')) {
  * Warning about Suhosin
  */
 if ($cfg['SuhosinDisableWarning'] == false && @ini_get('suhosin.request.max_value_length')) {
-    trigger_error(PMA_sanitize(sprintf($strSuhosin, '[a@./Documentation.html#faq1_38@_blank]', '[/a]')), E_USER_WARNING);
+    trigger_error(PMA_sanitize(sprintf(__('Server running with Suhosin. Please refer to %sdocumentation%s for possible issues.'), '[a@./Documentation.html#faq1_38@_blank]', '[/a]')), E_USER_WARNING);
     }
+
+/**
+ * Warning about incomplete translations.
+ *
+ * The data file is created while creating release by ./scripts/remove-incomplete-mo
+ */
+if (file_exists('./libraries/language_stats.inc.php')) {
+    include('./libraries/language_stats.inc.php');
+    /*
+     * This message is intentionally not translated, because we're
+     * handling incomplete translations here and focus on english
+     * speaking users.
+     */
+    if (isset($GLOBALS['language_stats'][$lang]) && $GLOBALS['language_stats'][$lang] < $cfg['TranslationWarningThreshold']) {
+        trigger_error('You are using an incomplete translation, please help to make it better by <a href="http://www.phpmyadmin.net/home_page/improve.php#translate" target="_blank">contributing</a>.', E_USER_NOTICE);
+    }
+}
 
 /**
  * prints list item for main page
@@ -362,14 +366,27 @@ if ($cfg['SuhosinDisableWarning'] == false && @ini_get('suhosin.request.max_valu
  * @param   string  $url    make item as link with $url as target
  * @param   string  $mysql_help_page  display a link to MySQL's manual
  * @param   string  $target special target for $url
+ * @param   string  $a_id   id for the anchor, used for jQuery to hook in functions
+ * @param   string  $class  class for the li element
+ * @param   string  $a_class  class for the anchor element
  */
-function PMA_printListItem($name, $id = null, $url = null, $mysql_help_page = null, $target = null)
+function PMA_printListItem($name, $id = null, $url = null, $mysql_help_page = null, $target = null, $a_id = null, $class = null, $a_class = null)
 {
-    echo '<li id="' . $id . '">';
+    echo '<li id="' . $id . '"';
+    if (null !== $class) {
+        echo ' class="' . $class . '"';
+    }
+    echo '>';
     if (null !== $url) {
         echo '<a href="' . $url . '"';
         if (null !== $target) {
            echo ' target="' . $target . '"';
+        }
+        if (null != $a_id) {
+            echo ' id="' . $a_id .'"';
+        }
+        if (null != $a_class) {
+            echo ' class="' . $a_class .'"';
         }
         echo '>';
     }
@@ -388,5 +405,5 @@ function PMA_printListItem($name, $id = null, $url = null, $mysql_help_page = nu
 /**
  * Displays the footer
  */
-require_once './libraries/footer.inc.php';
+require './libraries/footer.inc.php';
 ?>

@@ -12,7 +12,6 @@
  *       our current sql.php.
  *       Of course the interface would need a way to pass calling parameters.
  *       Also, support DEFINER (like we do in export).
- * @version $Id$
  * @package phpMyAdmin
  */
 if (! defined('PHPMYADMIN')) {
@@ -22,9 +21,9 @@ if (! defined('PHPMYADMIN')) {
 $routines = PMA_DBI_fetch_result('SELECT SPECIFIC_NAME,ROUTINE_NAME,ROUTINE_TYPE,DTD_IDENTIFIER FROM information_schema.ROUTINES WHERE ROUTINE_SCHEMA= \'' . PMA_sqlAddslashes($db,true) . '\';');
 
 if ($routines) {
-    PMA_generate_slider_effect('routines', $strRoutines);
+    PMA_generate_slider_effect('routines', __('Routines'));
     echo '<fieldset>' . "\n";
-    echo ' <legend>' . $strRoutines . '</legend>' . "\n";
+    echo ' <legend>' . __('Routines') . '</legend>' . "\n";
     echo '<table border="0">';
     echo sprintf('<tr>
                       <th>%s</th>
@@ -33,11 +32,17 @@ if ($routines) {
                       <th>%s</th>
                       <th>%s</th>
                 </tr>',
-          $strName,
-          $strType,
-          $strRoutineReturnType);
+          __('Name'),
+          __('Type'),
+          __('Return type'));
     $ct=0;
     $delimiter = '//';
+    if ($GLOBALS['cfg']['AjaxEnable']) {
+        $conditional_class = 'class="drop_procedure_anchor"';
+    } else {
+        $conditional_class = '';
+    }
+
     foreach ($routines as $routine) {
 
         // information_schema (at least in MySQL 5.0.45)
@@ -65,17 +70,19 @@ if ($routines) {
         } else {
             $sqlDropProc = 'DROP FUNCTION ' . PMA_backquote($routine['SPECIFIC_NAME']);
         }
+
         echo sprintf('<tr class="%s">
-                          <td><strong>%s</strong></td>
+                          <td><input type="hidden" class="drop_procedure_sql" value="%s" /><strong>%s</strong></td>
                           <td>%s</td>
                           <td>%s</td>
                           <td>%s</td>
                           <td>%s</td>
                      </tr>',
                      ($ct%2 == 0) ? 'even' : 'odd',
+                     $sqlDropProc,
                      $routine['ROUTINE_NAME'],
-                     ! empty($definition) ? PMA_linkOrButton('db_sql.php?' . $url_query . '&amp;sql_query=' . urlencode($definition) . '&amp;show_query=1&amp;db_query_force=1&amp;delimiter=' . urlencode($delimiter), $titles['Structure']) : '&nbsp;',
-                     '<a href="sql.php?' . $url_query . '&amp;sql_query=' . urlencode($sqlDropProc) . '" onclick="return confirmLink(this, \'' . PMA_jsFormat($sqlDropProc, false) . '\')">' . $titles['Drop'] . '</a>',
+                     ! empty($definition) ? PMA_linkOrButton('db_sql.php?' . $url_query . '&amp;sql_query=' . urlencode($definition) . '&amp;show_query=1&amp;db_query_force=1&amp;delimiter=' . urlencode($delimiter), $titles['Edit']) : '&nbsp;',
+                     '<a ' . $conditional_class . ' href="sql.php?' . $url_query . '&amp;sql_query=' . urlencode($sqlDropProc) . '" >' . $titles['Drop'] . '</a>',
                      $routine['ROUTINE_TYPE'],
                      $routine['DTD_IDENTIFIER']);
         $ct++;

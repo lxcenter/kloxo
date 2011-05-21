@@ -2,7 +2,6 @@
 /* vim: set expandtab sw=4 ts=4 sts=4: */
 /**
  *
- * @version $Id$
  * @package phpMyAdmin-Designer
  */
 
@@ -10,7 +9,6 @@
  *
  */
 include_once 'pmd_common.php';
-require_once './libraries/relation.lib.php';
 
 $cfgRelation = PMA_getRelationsParam();
 
@@ -43,7 +41,7 @@ function PMD_err_sav() {
     if (! empty($die_save_pos)) {
         header("Content-Type: text/xml; charset=utf-8");
         header("Cache-Control: no-cache");
-        die('<root act="save_pos" return="strErrorSaveTable"></root>');
+        die('<root act="save_pos" return="' . __('Error saving coordinates for Designer.') . '"></root>');
     }
 }
 
@@ -51,7 +49,7 @@ if(! empty($die_save_pos)) {
   header("Content-Type: text/xml; charset=utf-8");
   header("Cache-Control: no-cache");
 ?>
-<root act='save_pos' return='<?php echo 'strModifications'; ?>'></root>
+<root act='save_pos' return='<?php echo __('Modifications have been saved'); ?>'></root>
 <?php
 }
 ?>
