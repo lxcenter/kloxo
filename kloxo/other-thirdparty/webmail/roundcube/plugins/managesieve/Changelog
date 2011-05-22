@@ -1,5 +1,25 @@
+- Fix escaping of backslash character in quoted strings (#1487780)
+- Fix STARTTLS for timsieved < 2.3.10
+- Fix handling of non-safe characters (double-quote, backslash)
+  or UTF-8 characters (dovecot's implementation bug workaround)
+  in script names
+
+* version 3.0 [2011-02-01]
+-----------------------------------------------------------
+- Added support for SASL proxy authentication (#1486691)
+- Fixed parsing of scripts with \r\n line separator
+- Apply forgotten changes for form errors handling
+- Fix multi-line strings parsing (#1487685)
+- Added tests for script parser
+- Rewritten script parser
+- Fix double request when clicking on Filters tab using Firefox
+
+* version 2.10 [2010-10-10]
+-----------------------------------------------------------
 - Fixed import from Avelsieve
 - Use localized size units (#1486976)
+- Added support for relational operators and i;ascii-numeric comparator
+- Added popups with form errors
 
 * version 2.9 [2010-08-02]
 -----------------------------------------------------------

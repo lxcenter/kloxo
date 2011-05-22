@@ -14,7 +14,7 @@
 | Author: Gökdeniz Karadağ <gokdenizk@gmail.com>                        |
 +-----------------------------------------------------------------------+
 
-@version $Id: messages.inc 3989 2010-09-25 13:03:53Z alec $
+@version $Id: messages.inc 4368 2010-12-27 08:51:22Z yllar $
 
 */
 
@@ -24,6 +24,9 @@ $messages['cookiesdisabled'] = 'Tarayıcınız çerezleri kabul etmiyor';
 $messages['sessionerror'] = 'Oturumunuz sona ermiş veya hatalı';
 $messages['imaperror'] = 'IMAP sunucusuna bağlanılamadı';
 $messages['servererror'] = 'Sunucu Hatası!';
+$messages['servererrormsg'] = 'Sunucu hatası: $msg';
+$messages['errorreadonly'] = 'İşlem gerçekleştirilemedi. Klasör sadece okunabilir';
+$messages['errornoperm'] = 'İşlem gerçekleştirilemedi. İzin verilmedi.';
 $messages['invalidrequest'] = 'Geçersiz İstek! Veri kaydedilmedi';
 $messages['nomessagesfound'] = 'Posta kutusunda ileti bulunamadı';
 $messages['loggedout'] = 'Oturumu başarılı bir şekilde kapattınız. Güle güle!';
@@ -55,10 +58,10 @@ $messages['deletecontactconfirm'] = 'Seçili kişileri silmek istediğinizden em
 $messages['deletemessagesconfirm'] = 'Seçili postaları silmek istediğinizden emin misiniz?';
 $messages['deletefolderconfirm'] = 'Bu klasörü silmek istediğinizden emin misiniz?';
 $messages['purgefolderconfirm'] = 'Bu klasördeki tüm postaları silmek istediğinizden emin misiniz?';
-$messages['foldercreating'] = 'Klasör oluştuluyor...';
 $messages['folderdeleting'] = 'Klasör siliniyor...';
-$messages['folderrenaming'] = 'Klasör yeniden adlandırılıyor...';
 $messages['foldermoving'] = 'Klasör taşınıyor...';
+$messages['foldersubscribing'] = 'Klasöre abone olunuyor...';
+$messages['folderunsubscribing'] = 'Klasör aboneliği kaldırılıyor...';
 $messages['formincomplete'] = 'Form tam olarak doldurulmadı';
 $messages['noemailwarning'] = 'Lütfen geçerli bir e-posta adresi girin';
 $messages['nonamewarning'] = 'Lütfen bir isim girin';
@@ -78,6 +81,10 @@ $messages['searching'] = 'Aranıyor...';
 $messages['checking'] = 'Denetleniyor...';
 $messages['nospellerrors'] = 'Yazım hatası bulunamadı';
 $messages['folderdeleted'] = 'Klasör silindi';
+$messages['foldersubscribed'] = 'Klasöre abone olundu';
+$messages['folderunsubscribed'] = 'Klasör aboneliği kaldırıldı';
+$messages['folderpurged'] = 'Klasör sıklaştırıldı';
+$messages['folderexpunged'] = 'Klasör boşaltıldı';
 $messages['deletedsuccessfully'] = 'Silindi';
 $messages['converting'] = 'Postanın biçimlendirmesi kaldırılıyor...';
 $messages['messageopenerror'] = 'Sunucudan posta yüklenemedi';
@@ -89,10 +96,11 @@ $messages['sourceisreadonly'] = 'Adres kaynağı salt okunur durumda';
 $messages['errorsavingcontact'] = 'Kişinin adresi kaydedilemedi';
 $messages['movingmessage'] = 'Posta taşınıyor...';
 $messages['copyingmessage'] = 'Posta kopyalanıyor...';
+$messages['deletingmessage'] = 'Posta(lar) siliniyor...';
+$messages['markingmessage'] = 'Posta(lar) işaretleniyor...';
 $messages['receiptsent'] = 'Okundu onayı gönderildi';
 $messages['errorsendingreceipt'] = 'Okundu onayı gönderilemedi';
 $messages['nodeletelastidentity'] = 'Son kimliğiniz olduğu için bu kimliği silemezsiniz';
-$messages['addsubfolderhint'] = 'Bu klasör, şu an seçili olanın alt klasörü olarak oluşturulacak';
 $messages['forbiddencharacter'] = 'Klasör ismi yasaklanmış bir karakter içeriyor';
 $messages['selectimportfile'] = 'Lütfen yüklenecek dosyayı seçin';
 $messages['addresswriterror'] = 'Seçili adres defterine yazılamaz';
@@ -110,10 +118,25 @@ $messages['smtpautherror'] = 'SMTP Hatası ($code): Kimlik doğrulama başarıs�
 $messages['smtpfromerror'] = 'SMTP Hatası ($code): Gönderen adresi "$from" olarak ayarlanamadı ($msg)';
 $messages['smtptoerror'] = 'SMTP Hatası ($code): "$to" alıcısı eklenemedi ($msg)';
 $messages['smtprecipientserror'] = 'SMTP Hatası: Posta alıcılarının listesi ayrıştırılamadı';
+$messages['smtpdsnerror'] = 'SMTP hatası: Teslimat durumu bildirileri desteklenmiyor';
 $messages['smtperror'] = 'SMTP Hatası: $msg';
 $messages['emailformaterror'] = 'Hatalı e-posta adresi: $email';
 $messages['toomanyrecipients'] = 'Çok fazla alıcı. En fazla $max alıcı girebilirsiniz.';
 $messages['maxgroupmembersreached'] = 'Grup üyelerinin sayısı $max sınırını aşıyor.';
 $messages['internalerror'] = 'Bir hata oluştu. Lütfen tekrar deneyin.';
+$messages['contactdelerror'] = 'Kişi(ler) silinemedi';
+$messages['contactdeleted'] = 'Kişi(ler) silindi';
+$messages['groupdeleted'] = 'Grup silindi';
+$messages['grouprenamed'] = 'Grup ismi değiştirildi';
+$messages['groupcreated'] = 'Grup oluşturuldu';
+$messages['messagedeleted'] = 'Posta(lar) silindi';
+$messages['messagemoved'] = 'Posta(lar) taşındı';
+$messages['messagecopied'] = 'Posta(lar) kopyalandı';
+$messages['messagemarked'] = 'Posta(lar) işaretlendi';
+$messages['autocompletechars'] = 'otomatik tamamlama için en az $min karakter girin';
+$messages['namecannotbeempty'] = 'İsim alanı boş olamaz';
+$messages['nametoolong'] = 'İsim çok uzun';
+$messages['folderupdated'] = 'Klasör güncellendi';
+$messages['foldercreated'] = 'Klasör oluşturuldu';
 
 ?>

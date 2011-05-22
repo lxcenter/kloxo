@@ -15,7 +15,7 @@
  | Author: Thomas Bruederli <roundcube@gmail.com>                        |
  +-----------------------------------------------------------------------+
 
- $Id: func.inc 3989 2010-09-25 13:03:53Z alec $
+ $Id: func.inc 4509 2011-02-09 10:51:50Z thomasb $
 
 */
 
@@ -72,7 +72,7 @@ function rcmail_identities_list($attrib)
   // get identities list and define 'mail' column
   $list = $USER->list_identities();
   foreach ($list as $idx => $row)
-    $list[$idx]['mail'] = trim($row['name'] . ' <' . $row['email'] .'>');
+    $list[$idx]['mail'] = trim($row['name'] . ' <' . rcube_idn_to_utf8($row['email']) .'>');
 
   // get all identites from DB and define list of cols to be displayed
   $plugin = $RCMAIL->plugins->exec_hook('identities_list', array(
@@ -323,6 +323,8 @@ function rcmail_user_prefs($current=null)
       $select_mdn_requests = new html_select(array('name' => '_mdn_requests', 'id' => $field_id));
       $select_mdn_requests->add(rcube_label('askuser'), 0);
       $select_mdn_requests->add(rcube_label('autosend'), 1);
+      $select_mdn_requests->add(rcube_label('autosendknown'), 3);
+      $select_mdn_requests->add(rcube_label('autosendknownignore'), 4);
       $select_mdn_requests->add(rcube_label('ignore'), 2);
 
       $blocks['main']['options']['mdn_requests'] = array(
@@ -332,9 +334,7 @@ function rcmail_user_prefs($current=null)
     }
 
     $RCMAIL->imap_connect();
-    $threading_supported = $RCMAIL->imap->get_capability('thread=references')
-      || $RCMAIL->imap->get_capability('thread=orderedsubject')
-      || $RCMAIL->imap->get_capability('thread=refs');
+    $threading_supported = $RCMAIL->imap->get_capability('THREAD');
 
     if (!isset($no_override['autoexpand_threads']) && $threading_supported) {
       $field_id = 'rcmfd_autoexpand_threads';
@@ -344,8 +344,8 @@ function rcmail_user_prefs($current=null)
       $select_autoexpand_threads->add(rcube_label('expand_only_unread'), 2);
 
       $blocks['main']['options']['autoexpand_threads'] = array(
-	'title' => html::label($field_id, Q(rcube_label('autoexpand_threads'))),
-	'content' => $select_autoexpand_threads->show($config['autoexpand_threads']),
+        'title' => html::label($field_id, Q(rcube_label('autoexpand_threads'))),
+        'content' => $select_autoexpand_threads->show($config['autoexpand_threads']),
       );
     }
 
@@ -464,11 +464,14 @@ function rcmail_user_prefs($current=null)
     // Show checkbox for HTML Editor
     if (!isset($no_override['htmleditor'])) {
       $field_id = 'rcmfd_htmleditor';
-      $input_htmleditor = new html_checkbox(array('name' => '_htmleditor', 'id' => $field_id, 'value' => 1));
+      $select_htmleditor = new html_select(array('name' => '_htmleditor', 'id' => $field_id));
+      $select_htmleditor->add(rcube_label('never'), 0);
+      $select_htmleditor->add(rcube_label('always'), 1);
+      $select_htmleditor->add(rcube_label('htmlonreply'), 2);
 
       $blocks['main']['options']['htmleditor'] = array(
         'title' => html::label($field_id, Q(rcube_label('htmleditor'))),
-        'content' => $input_htmleditor->show($config['htmleditor']?1:0),
+        'content' => $select_htmleditor->show(intval($config['htmleditor'])),
       );
     }
 
@@ -506,6 +509,36 @@ function rcmail_user_prefs($current=null)
       $blocks['main']['options']['force_7bit'] = array(
         'title' => html::label($field_id, Q(rcube_label('force7bit'))),
         'content' => $input_7bit->show($config['force_7bit']?1:0),
+      );
+    }
+
+    if (!isset($no_override['mdn_default'])) {
+      $field_id = 'rcmfd_mdn_default';
+      $input_mdn = new html_checkbox(array('name' => '_mdn_default', 'id' => $field_id, 'value' => 1));
+
+      $blocks['main']['options']['mdn_default'] = array(
+        'title' => html::label($field_id, Q(rcube_label('reqmdn'))),
+        'content' => $input_mdn->show($config['mdn_default']?1:0),
+      );
+    }
+
+    if (!isset($no_override['dsn_default'])) {
+      $field_id = 'rcmfd_dsn_default';
+      $input_dsn = new html_checkbox(array('name' => '_dsn_default', 'id' => $field_id, 'value' => 1));
+
+      $blocks['main']['options']['dsn_default'] = array(
+        'title' => html::label($field_id, Q(rcube_label('reqdsn'))),
+        'content' => $input_dsn->show($config['dsn_default']?1:0),
+      );
+    }
+
+    if (!isset($no_override['reply_same_folder'])) {
+      $field_id = 'rcmfd_reply_same_folder';
+      $input_reply_same_folder = new html_checkbox(array('name' => '_reply_same_folder', 'id' => $field_id, 'value' => 1));
+
+      $blocks['main']['options']['reply_same_folder'] = array(
+        'title' => html::label($field_id, Q(rcube_label('replysamefolder'))),
+        'content' => $input_reply_same_folder->show($config['reply_same_folder']?1:0),
       );
     }
 
@@ -722,7 +755,6 @@ function rcmail_get_skins()
 
   return $skins;
 }
-
 
 // register UI objects
 $OUTPUT->add_handlers(array(

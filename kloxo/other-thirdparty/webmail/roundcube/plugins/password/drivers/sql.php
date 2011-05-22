@@ -33,7 +33,7 @@ function password_save($curpass, $passwd)
 
     if ($err = $db->is_error())
         return PASSWORD_ERROR;
-    
+
     // crypted password
     if (strpos($sql, '%c') !== FALSE) {
         $salt = '';
@@ -56,7 +56,11 @@ function password_save($curpass, $passwd)
             $dovecotpw = 'dovecotpw';
         if (!($method = $rcmail->config->get('password_dovecotpw_method')))
             $method = 'CRAM-MD5';
-        $tmpfile = tempnam('/tmp', 'roundcube-');
+
+        // use common temp dir
+        $tmp_dir = $rcmail->config->get('temp_dir');
+        $tmpfile = tempnam($tmp_dir, 'roundcube-');
+
         $pipe = popen("'$dovecotpw' -s '$method' > '$tmpfile'", "w");
         if (!$pipe) {
             unlink($tmpfile);
@@ -76,7 +80,7 @@ function password_save($curpass, $passwd)
         }
         $sql = str_replace('%D', $db->quote($newpass), $sql);
     }
-    
+
     // hashed passwords
     if (preg_match('/%[n|q]/', $sql)) {
 
@@ -84,10 +88,11 @@ function password_save($curpass, $passwd)
 	        raise_error(array(
 	            'code' => 600,
 		        'type' => 'php',
-		        'file' => __FILE__,
+		        'file' => __FILE__, 'line' => __LINE__,
 		        'message' => "Password plugin: 'hash' extension not loaded!"
 		    ), true, false);
-	        return PASSWORD_ERROR;			    
+
+	        return PASSWORD_ERROR;
 	    }
 
 	    if (!($hash_algo = strtolower($rcmail->config->get('password_hash_algorithm'))))
@@ -105,15 +110,28 @@ function password_save($curpass, $passwd)
 	    $sql = str_replace('%q', $db->quote($hash_curpass, 'text'), $sql);
     }
 
+    // Handle clear text passwords securely (#1487034)
+    $sql_vars = array();
+    if (preg_match_all('/%[p|o]/', $sql, $m)) {
+        foreach ($m[0] as $var) {
+            if ($var == '%p') {
+                $sql = preg_replace('/%p/', '?', $sql, 1);
+                $sql_vars[] = (string) $passwd;
+            }
+            else { // %o
+                $sql = preg_replace('/%o/', '?', $sql, 1);
+                $sql_vars[] = (string) $curpass;
+            }
+        }
+    }
+
     // at least we should always have the local part
     $sql = str_replace('%l', $db->quote($rcmail->user->get_username('local'), 'text'), $sql);
     $sql = str_replace('%d', $db->quote($rcmail->user->get_username('domain'), 'text'), $sql);
     $sql = str_replace('%u', $db->quote($_SESSION['username'],'text'), $sql);
     $sql = str_replace('%h', $db->quote($_SESSION['imap_host'],'text'), $sql);
-    $sql = str_replace('%p', $db->quote($passwd,'text'), $sql);
-    $sql = str_replace('%o', $db->quote($curpass,'text'), $sql);
 
-    $res = $db->query($sql);
+    $res = $db->query($sql, $sql_vars);
 
     if (!$db->is_error()) {
 	    if (strtolower(substr(trim($query),0,6))=='select') {

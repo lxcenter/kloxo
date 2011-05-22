@@ -15,7 +15,7 @@
 |         http://softastur.org                                          |
 +-----------------------------------------------------------------------+
 
-@version $Id: labels.inc 3989 2010-09-25 13:03:53Z alec $
+@version $Id: labels.inc 4345 2010-12-17 14:28:38Z thomasb $
 
 */
 
@@ -265,9 +265,6 @@ $labels['subscribed'] = 'Soscrita';
 $labels['messagecount'] = 'Mensaxes';
 $labels['create'] = 'Facer';
 $labels['createfolder'] = 'Facer una bandexa nueva';
-$labels['rename'] = 'Renomar';
-$labels['renamefolder'] = 'Renomar bandexa';
-$labels['deletefolder'] = 'Desaniciar bandexa';
 $labels['managefolders'] = 'Alministrar bandexes';
 $labels['specialfolders'] = 'Bandexes especiales';
 $labels['sortby'] = 'Ordenar por';

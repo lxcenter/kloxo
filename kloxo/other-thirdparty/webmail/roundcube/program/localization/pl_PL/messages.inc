@@ -18,7 +18,7 @@
 |         Aleksander Machniak <alec@alec.pl>                            |
 +-----------------------------------------------------------------------+
 
-@version $Id: messages.inc 3989 2010-09-25 13:03:53Z alec $
+@version $Id: messages.inc 4362 2010-12-22 18:45:15Z alec $
 
 */
 
@@ -28,6 +28,7 @@ $messages['cookiesdisabled'] = 'Twoja przeglądarka nie obsługuje ciasteczek!';
 $messages['sessionerror'] = 'Błąd sesji bądź sesja wygasła!';
 $messages['imaperror'] = 'Błąd połączenia z serwerem!';
 $messages['servererror'] = 'Błąd serwera!';
+$messages['servererrormsg'] = 'Błąd serwera: $msg';
 $messages['invalidrequest'] = 'Błędne żądanie! Nie zapisano danych.';
 $messages['nomessagesfound'] = 'Brak wiadomości w skrzynce.';
 $messages['loggedout'] = 'Użytkownik wylogował się poprawnie.';
@@ -59,9 +60,7 @@ $messages['deletecontactconfirm'] = 'Czy na pewno chcesz usunąć wybrane kontak
 $messages['deletemessagesconfirm'] = 'Czy na pewno chcesz usunąć wybrane wiadomości?';
 $messages['deletefolderconfirm'] = 'Czy na pewno chcesz usunąć wybrany folder?';
 $messages['purgefolderconfirm'] = 'Czy na pewno chcesz usunąć wszystkie wiadomości w tym folderze?';
-$messages['foldercreating'] = 'Dodawanie folderu...';
 $messages['folderdeleting'] = 'Usuwanie folderu...';
-$messages['folderrenaming'] = 'Zmiana nazwy folderu...';
 $messages['foldermoving'] = 'Przenoszenie folderu...';
 $messages['formincomplete'] = 'Uzupełnij formularz!';
 $messages['noemailwarning'] = 'Podaj poprawny adres e-mail!';
@@ -93,10 +92,11 @@ $messages['sourceisreadonly'] = 'Źródło adresu jest tylko do odczytu';
 $messages['errorsavingcontact'] = 'Nie można było zapisać adresu kontaktu';
 $messages['movingmessage'] = 'Przenoszenie wiadomości...';
 $messages['copyingmessage'] = 'Kopiowanie wiadomości...';
+$messages['deletingmessage'] = 'Usuwanie wiadomości...';
+$messages['markingmessage'] = 'Oznaczanie wiadomości...';
 $messages['receiptsent'] = 'Pomyślnie wysłano potwierdzenie dostarczenia';
 $messages['errorsendingreceipt'] = 'Nie można wysłać potwierdzenia';
 $messages['nodeletelastidentity'] = 'Nie można skasować tej tożsamości, ponieważ jest ostatnią.';
-$messages['addsubfolderhint'] = 'Ten folder zostanie utworzony jako podfolder aktualnie wybranego.';
 $messages['forbiddencharacter'] = 'Nazwa folderu zawiera niedozwolony znak';
 $messages['selectimportfile'] = 'Proszę wybrać plik do wysłania';
 $messages['addresswriterror'] = 'Wybrana książka adresowa jest tylko-do-odczytu';
@@ -114,10 +114,33 @@ $messages['smtpautherror'] = 'Błąd SMTP ($code): Uwierzytelnianie nie powiodł
 $messages['smtpfromerror'] = 'Błąd SMTP ($code): Nie można ustawić nadawcy "$from" ($msg)';
 $messages['smtptoerror'] = 'Błąd SMTP ($code): Nie można dodać odbiorcy "$to" ($msg)';
 $messages['smtprecipientserror'] = 'Błąd SMTP: Parsowanie listy odbiorców nie powiodło się';
+$messages['smtpdsnerror'] = 'Błąd SMTP: Statusy dostarczenia (DSN) nie są obsługiwane przez serwer';
 $messages['smtperror'] = 'Błąd SMTP: $msg';
 $messages['emailformaterror'] = 'Błędny adres e-mail: $email';
 $messages['toomanyrecipients'] = 'Zbyt wielu odbiorców. Zmniejsz ich liczbę do $max.';
 $messages['maxgroupmembersreached'] = 'Liczba członków grupy nie może być większa niż $max';
-$messages['internalerror'] = 'Wystąpił wewnętrzny błąd systemu. Spróbuj jeszcze raz'
+$messages['internalerror'] = 'Wystąpił wewnętrzny błąd systemu. Spróbuj jeszcze raz';
+$messages['contactdelerror'] = 'Usuwanie kontaktów nie powiodło się';
+$messages['contactdeleted'] = 'Kontakt(y) został(y) usunięte';
+$messages['groupdeleted'] = 'Grupa została usunięta';
+$messages['grouprenamed'] = 'Nazwa grupy została zmieniona';
+$messages['groupcreated'] = 'Grupa została utworzona';
+$messages['messagedeleted'] = 'Wiadomości zostały usunięte';
+$messages['messagemoved'] = 'Wiadomości zostały przeniesione';
+$messages['messagecopied'] = 'Wiadomości zostały skopiowane';
+$messages['messagemarked'] = 'Wiadomości zostały oznaczone';
+$messages['autocompletechars'] = 'Wprowadź co najmniej $min znak(ów) aby skorzystać z autouzupełniania';
+$messages['foldersubscribing'] = 'Subskrybowanie folderu...';
+$messages['folderunsubscribing'] = 'Odsubskrybowanie folderu...';
+$messages['foldersubscribed'] = 'Folder został pomyślnie zasubskrybowany';
+$messages['folderunsubscribed'] = 'Folder został pomyślnie odsubskrybowany';
+$messages['folderpurged'] = 'Folder został pomyślnie opróżniony';
+$messages['folderexpunged'] = 'Folder został pomyślnie uporządkowany';
+$messages['namecannotbeempty'] = 'Nazwa nie może być pusta';
+$messages['nametoolong'] = 'Name jest zbyt długa';
+$messages['folderupdated'] = 'Folder został pomyślnie zaktualizowany';
+$messages['foldercreated'] = 'Folder został pomyślnie utworzony';
+$messages['errorreadonly'] = 'Nie można wykonać operacji. Folder tylko do odczytu';
+$messages['errornoperm'] = 'Nie można wykonać operacji. Brak uprawnień';
 
 ?>

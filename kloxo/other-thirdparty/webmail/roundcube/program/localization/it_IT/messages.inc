@@ -3,7 +3,7 @@
 /*
 
 +-----------------------------------------------------------------------+
-| language/it/messages.inc                                              |
+| language/it_IT/messages.inc                                           |
 |                                                                       |
 | Language file of the Roundcube Webmail client                         |
 | Copyright (C) 2005-2010, Roundcube Dev. - Switzerland                 |
@@ -14,7 +14,7 @@
 |         Yusef Maali <contact@yusefmaali.net>                          |
 +-----------------------------------------------------------------------+
 
-@version $Id: messages.inc 3989 2010-09-25 13:03:53Z alec $
+@version $Id: messages.inc 4469 2011-01-29 14:55:12Z thomasb $
 
 */
 
@@ -23,11 +23,14 @@ $messages['loginfailed'] = 'Impossibile accedere. Utente o password non corretti
 $messages['cookiesdisabled'] = 'Il tuo browser non accetta i cookies';
 $messages['sessionerror'] = 'Sessione non valida o scaduta';
 $messages['imaperror'] = 'Impossibile connettersi al server IMAP';
-$messages['servererror'] = 'Errore del Server!';
+$messages['servererror'] = 'Errore del server!';
+$messages['servererrormsg'] = 'Errore del server: $msg';
+$messages['errorreadonly'] = 'Impossibile eseguire l\'operazione. Cartella in sola lettura';
+$messages['errornoperm'] = 'Impossibile eseguire l\'operazione. Permesso negato';
 $messages['invalidrequest'] = 'Richiesta non valida! Nessun dato salvato.';
 $messages['nomessagesfound'] = 'Nessun messaggio trovato in questa cartella';
 $messages['loggedout'] = 'Sessione chiusa correttamente. Arrivederci!';
-$messages['mailboxempty'] = 'La cartella è vuota';
+$messages['mailboxempty'] = 'La casella è vuota';
 $messages['loading'] = 'Caricamento...';
 $messages['uploading'] = 'Caricamento file...';
 $messages['loadingdata'] = 'Caricamento dati...';
@@ -55,10 +58,10 @@ $messages['deletecontactconfirm'] = 'Sei sicuro di voler eliminare i contatti se
 $messages['deletemessagesconfirm'] = 'Sei sicuro di voler eliminare i messaggi selezionati?';
 $messages['deletefolderconfirm'] = 'Sei sicuro di voler eliminare la cartella selezionata?';
 $messages['purgefolderconfirm'] = 'Sei sicuro di voler eliminare tutti i messaggi in questa cartella?';
-$messages['foldercreating'] = 'Creazione cartella...';
 $messages['folderdeleting'] = 'Eliminazione cartella...';
-$messages['folderrenaming'] = 'Rinominazione cartella...';
 $messages['foldermoving'] = 'Spostamento cartella...';
+$messages['foldersubscribing'] = 'Sottoscrizione cartella...';
+$messages['folderunsubscribing'] = 'Cancellazione sottoscrizzione cartella...';
 $messages['formincomplete'] = 'Per favore, compila tutti i campi';
 $messages['noemailwarning'] = 'Per favore, immetti un indirizzo e-mail valido';
 $messages['nonamewarning'] = 'Per favore, immetti un nome';
@@ -78,6 +81,10 @@ $messages['searching'] = 'Ricerca...';
 $messages['checking'] = 'Controllo...';
 $messages['nospellerrors'] = 'Nessun errore ortografico trovato';
 $messages['folderdeleted'] = 'Cartella eliminata';
+$messages['foldersubscribed'] = 'Cartella sottoscritta correttamente';
+$messages['folderunsubscribed'] = 'Sottoscrizione cartella cancellata correttamente';
+$messages['folderpurged'] = 'Cartella svuotata correttamente';
+$messages['folderexpunged'] = 'Cartella compattata correttamente';
 $messages['deletedsuccessfully'] = 'Eliminato con successo';
 $messages['converting'] = 'Rimozione della formattazione dal messaggio...';
 $messages['messageopenerror'] = 'Impossibile caricare il messaggio dal server';
@@ -89,10 +96,11 @@ $messages['sourceisreadonly'] = 'La rubrica è in sola lettura';
 $messages['errorsavingcontact'] = 'Impossibile salvare il contatto';
 $messages['movingmessage'] = 'Spostamento del messaggio...';
 $messages['copyingmessage'] = 'Copia del messaggio';
+$messages['deletingmessage'] = 'Cancellazione messaggi/o';
+$messages['markingmessage'] = 'Marca messaggi/o...';
 $messages['receiptsent'] = 'Ricevuta di ritorno inviata con successo';
 $messages['errorsendingreceipt'] = 'Impossibile spedire la ricevuta di ritorno';
 $messages['nodeletelastidentity'] = 'Impossibile eliminare l\'unica identità disponibile';
-$messages['addsubfolderhint'] = 'La cartella verrà creata come sotto cartella della cartella corrente';
 $messages['forbiddencharacter'] = 'Il nome della cartella contiene un carattere vietato';
 $messages['selectimportfile'] = 'Per favore, seleziona il file da caricare';
 $messages['addresswriterror'] = 'La rubrica selezionata non è scrivibile';
@@ -110,10 +118,28 @@ $messages['smtpautherror'] = 'Errore SMTP ($code): Autenticazione fallita';
 $messages['smtpfromerror'] = 'Errore SMTP ($code): Fallita l\'impostazione del mittente "$from" ($msg)';
 $messages['smtptoerror'] = 'Errore SMTP ($code): Fallito l\'inserimento del destinatario "$to" ($msg)';
 $messages['smtprecipientserror'] = 'Errore SMTP: Impossibile processare la lista dei destinatari';
+$messages['smtpdsnerror'] = 'Errore SMTP: Ricevuta di consegna non supportata';
 $messages['smtperror'] = 'Errore SMTP: $msg';
 $messages['emailformaterror'] = 'Indirizzo e-mail non corretto: $email';
 $messages['toomanyrecipients'] = 'Numero eccessivo di destinatari, ridurlo a $max';
 $messages['maxgroupmembersreached'] = 'Il numero dei membri del gruppo eccede il massimo di $max';
 $messages['internalerror'] = 'Si è verificato un errore interno. Si prega di riprovare di nuovo.';
+$messages['contactdelerror'] = 'Impossibile eliminare contatto/i';
+$messages['contactdeleted'] = 'Contatto/i correttamente eliminato';
+$messages['groupdeleted'] = 'Gruppo correttamente eliminato';
+$messages['grouprenamed'] = 'Gruppo correttamente rinominato';
+$messages['groupcreated'] = 'Gruppo creato correttamente';
+$messages['messagedeleted'] = 'Messaggi/o cancellato correttamente';
+$messages['messagemoved'] = 'Messaggi/o spostato correttamente';
+$messages['messagecopied'] = 'Messaggi/o copiato correttamente';
+$messages['messagemarked'] = 'Messaggi/o marcato correttamente';
+$messages['autocompletechars'] = 'Inserisci almeno $min caratteri per l\'autocompletamento';
+$messages['namecannotbeempty'] = 'Il nome non può essere vuoto';
+$messages['nametoolong'] = 'Nome troppo lungo';
+$messages['folderupdated'] = 'Cartella aggiornata correttamente';
+$messages['foldercreated'] = 'Cartella creata correttamente';
+$messages['invalidimageformat'] = 'Formato non valido';
 
 ?>
+
+

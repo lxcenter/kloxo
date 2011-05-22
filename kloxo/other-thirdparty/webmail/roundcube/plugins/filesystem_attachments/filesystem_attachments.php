@@ -19,7 +19,7 @@
  */
 class filesystem_attachments extends rcube_plugin
 {
-    public $task = 'mail';
+    public $task = 'mail|addressbook';
 
     function init()
     {

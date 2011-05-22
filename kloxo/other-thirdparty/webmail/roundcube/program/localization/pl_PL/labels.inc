@@ -18,7 +18,7 @@
 |         Aleksander Machniak <alec@alec.pl>                            |
 +-----------------------------------------------------------------------+
 
-@version $Id: labels.inc 3989 2010-09-25 13:03:53Z alec $
+@version $Id: labels.inc 4362 2010-12-22 18:45:15Z alec $
 
 */
 
@@ -42,12 +42,12 @@ $labels['from'] = 'Nadawca';
 $labels['to'] = 'Odbiorca';
 $labels['cc'] = 'Kopia';
 $labels['bcc'] = 'Ukryta kopia';
-$labels['replyto'] = 'Odp. do';
+$labels['replyto'] = 'Odpowiedź do';
 $labels['date'] = 'Data';
 $labels['size'] = 'Rozmiar';
+$labels['readstatus'] = 'Przeczytano';
 $labels['priority'] = 'Priorytet';
 $labels['organization'] = 'Organizacja';
-$labels['reply-to'] = 'Odpowiedz do';
 $labels['mailboxlist'] = 'Foldery';
 $labels['messagesfromto'] = 'Wiadomości od $from do $to z $count';
 $labels['threadsfromto'] = 'Wątki od $from do $to z $count';
@@ -155,7 +155,6 @@ $labels['listorder'] = 'Kierunek sortowania';
 $labels['listmode'] = 'Typ listy';
 $labels['compact'] = 'Porządkuj';
 $labels['empty'] = 'Opróżnij';
-$labels['purge'] = 'Oczyść';
 $labels['quota'] = 'Użyte miejsce';
 $labels['unknown'] = 'nieznane';
 $labels['unlimited'] = 'bez limitu';
@@ -252,6 +251,7 @@ $labels['pagesize'] = 'Liczba wierszy na stronie';
 $labels['signature'] = 'Podpis';
 $labels['dstactive'] = 'Czas letni';
 $labels['htmleditor'] = 'Twórz wiadomości HTML';
+$labels['htmlonreply'] = 'tylko w odpowiedzi na wiadomość HTML';
 $labels['htmlsignature'] = 'Podpis w HTML';
 $labels['previewpane'] = 'Pokaż podgląd wiadomości';
 $labels['skin'] = 'Wygląd interfejsu';
@@ -260,9 +260,11 @@ $labels['logoutcompact'] = 'Przy wylogowaniu porządkuj folder Odebrane';
 $labels['uisettings'] = 'Interfejs użytkownika';
 $labels['serversettings'] = 'Ustawienia serwera';
 $labels['mailboxview'] = 'Widok skrzynki pocztowej';
-$labels['mdnrequests'] = 'Potwierdzenia odbioru';
-$labels['askuser'] = 'pytaj';
-$labels['autosend'] = 'wyślij automatycznie';
+$labels['mdnrequests'] = 'Na żadanie potwierdzenia odbioru';
+$labels['askuser'] = 'pytaj mnie';
+$labels['autosend'] = 'wyślij potwierdzenie';
+$labels['autosendknown'] = 'wyślij potwierdzenie tylko do moich kontaktów, pytaj o pozostałe';
+$labels['autosendknownignore'] = 'wyślij potwierdzenie tylko do moich kontaktów, pozostałe ignoruj';
 $labels['ignore'] = 'ignoruj';
 $labels['readwhendeleted'] = 'Podczas usuwania oznacz wiadomość jako przeczytaną';
 $labels['flagfordeletion'] = 'Oznacz wiadomość do usunięcia zamiast ją usuwać';
@@ -284,6 +286,7 @@ $labels['2231folding'] = 'RFC 2231 (Thunderbird)';
 $labels['miscfolding'] = 'RFC 2047/2231 (MS Outlook)';
 $labels['2047folding'] = 'RFC 2047 (przestarzałe)';
 $labels['force7bit'] = 'Używaj kodowania MIME dla znaków 8-bitowych';
+$labels['reqmdn'] = 'Zawsze żądaj potwierdzenia odbioru';
 $labels['advancedoptions'] = 'opcje zaawansowane';
 $labels['focusonnewmessage'] = 'Informuj przeglądarkę o nowej wiadomości';
 $labels['checkallfolders'] = 'Sprawdzaj czy nadeszły nowe wiadomości we wszystkich folderach';
@@ -314,9 +317,6 @@ $labels['subscribed'] = 'Zasubskrybowany';
 $labels['messagecount'] = 'Wiadomości';
 $labels['create'] = 'Utwórz';
 $labels['createfolder'] = 'Utwórz nowy folder';
-$labels['rename'] = 'Zmień nazwę';
-$labels['renamefolder'] = 'Zmień nazwę folderu';
-$labels['deletefolder'] = 'Usuń folder';
 $labels['managefolders'] = 'Zarządzaj folderami';
 $labels['specialfolders'] = 'Foldery specjalne';
 $labels['sortby'] = 'Sortuj wg';
@@ -347,5 +347,22 @@ $labels['chinese'] = 'chiński';
 $labels['folderactions'] = 'Działania na folderach...';
 $labels['contacts'] = 'Kontakty';
 $labels['messageoptions'] = 'Opcje wiadomości...';
+$labels['followupto'] = 'Kontynuacja do';
+$labels['replyall'] = 'Odpowiedz wszystkim';
+$labels['replylist'] = 'Odpowiedz na listę';
+$labels['editidents'] = 'Edytuj tożsamości';
+$labels['addfollowupto'] = 'Dodaj Followup-To';
+$labels['dsn'] = 'Status dostarczenia (DSN)';
+$labels['reqdsn'] = 'Zawsze żądaj statusu dostarczenia (DSN)';
+$labels['replysamefolder'] = 'Umieszczaj odpowiedzi w folderze wiadomości, na którą odpowiadam';
+$labels['contactproperties'] = 'Właściwości';
+$labels['properties'] = 'Właściwości';
+$labels['folderproperties'] = 'Włąściwości folderu';
+$labels['parentfolder'] = 'Folder nadrzędny';
+$labels['location'] = 'Położenie';
+$labels['info'] = 'Informacje';
+$labels['getfoldersize'] = 'Kliknij aby pobrać rozmiar folderu';
+$labels['changesubscription'] = 'Kliknij aby zmienić subskrypcję';
+$labels['rename'] = 'Zmień nazwę';
 
 ?>

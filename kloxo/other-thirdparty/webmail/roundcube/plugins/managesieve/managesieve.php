@@ -7,12 +7,12 @@
  * It's clickable interface which operates on text scripts and communicates
  * with server using managesieve protocol. Adds Filters tab in Settings.
  *
- * @version 2.9
+ * @version 3.0
  * @author Aleksander 'A.L.E.C' Machniak <alec@alec.pl>
  *
  * Configuration (see config.inc.php.dist)
  *
- * $Id: managesieve.php 3939 2010-09-04 12:25:32Z alec $
+ * $Id: managesieve.php 4555 2011-02-16 10:48:11Z alec $
  */
 
 class managesieve extends rcube_plugin
@@ -23,6 +23,7 @@ class managesieve extends rcube_plugin
     private $sieve;
     private $errors;
     private $form;
+    private $tips = array();
     private $script = array();
     private $exts = array();
     private $headers = array(
@@ -65,13 +66,17 @@ class managesieve extends rcube_plugin
         $host = rcube_parse_host($this->rc->config->get('managesieve_host', 'localhost'));
         $port = $this->rc->config->get('managesieve_port', 2000);
 
+        $host = rcube_idn_to_ascii($host);
+
         // try to connect to managesieve server and to fetch the script
         $this->sieve = new rcube_sieve($_SESSION['username'],
             $this->rc->decrypt($_SESSION['password']), $host, $port,
             $this->rc->config->get('managesieve_auth_type'),
             $this->rc->config->get('managesieve_usetls', false),
             $this->rc->config->get('managesieve_disabled_extensions'),
-            $this->rc->config->get('managesieve_debug', false)
+            $this->rc->config->get('managesieve_debug', false),
+            $this->rc->config->get('managesieve_auth_cid'), 
+            $this->rc->config->get('managesieve_auth_pw')
         );
 
         if (!($error = $this->sieve->error())) {
@@ -381,14 +386,14 @@ class managesieve extends rcube_plugin
                 $this->form['tests'][0]['test'] = 'true';
             }
             else {
-                foreach($headers as $idx => $header) {
+                foreach ($headers as $idx => $header) {
                     $header = $this->strip_value($header);
                     $target = $this->strip_value($targets[$idx], true);
                     $op     = $this->strip_value($ops[$idx]);
 
                     // normal header
                     if (in_array($header, $this->headers)) {
-                        if(preg_match('/^not/', $op))
+                        if (preg_match('/^not/', $op))
                             $this->form['tests'][$i]['not'] = true;
                         $type = preg_replace('/^not/', '', $op);
 
@@ -404,6 +409,8 @@ class managesieve extends rcube_plugin
 
                             if ($target == '')
                                 $this->errors['tests'][$i]['target'] = $this->gettext('cannotbeempty');
+                            else if (preg_match('/^(value|count)-/', $type) && !preg_match('/[0-9]+/', $target))
+                                $this->errors['tests'][$i]['target'] = $this->gettext('forbiddenchars');
                         }
                     }
                     else
@@ -417,13 +424,15 @@ class managesieve extends rcube_plugin
                             $this->form['tests'][$i]['type'] = $sizeop;
                             $this->form['tests'][$i]['arg']  = $sizetarget.$sizeitem;
 
-                            if (!preg_match('/^[0-9]+(K|M|G)*$/i', $sizetarget))
-                                $this->errors['tests'][$i]['sizetarget'] = $this->gettext('wrongformat');
+                            if ($sizetarget == '')
+                                $this->errors['tests'][$i]['sizetarget'] = $this->gettext('cannotbeempty');
+                            else if (!preg_match('/^[0-9]+(K|M|G)*$/i', $sizetarget))
+                                $this->errors['tests'][$i]['sizetarget'] = $this->gettext('forbiddenchars');
                             break;
                         case '...':
                             $cust_header = $headers = $this->strip_value($cust_headers[$idx]);
 
-                            if(preg_match('/^not/', $op))
+                            if (preg_match('/^not/', $op))
                                 $this->form['tests'][$i]['not'] = true;
                             $type = preg_replace('/^not/', '', $op);
 
@@ -456,6 +465,8 @@ class managesieve extends rcube_plugin
 
                                 if ($target == '')
                                     $this->errors['tests'][$i]['target'] = $this->gettext('cannotbeempty');
+                                else if (preg_match('/^(value|count)-/', $type) && !preg_match('/[0-9]+/', $target))
+                                    $this->errors['tests'][$i]['target'] = $this->gettext('forbiddenchars');
                             }
                             break;
                         }
@@ -673,20 +684,17 @@ class managesieve extends rcube_plugin
         $copy     = get_input_value('_copy', RCUBE_INPUT_POST);
         $selected = get_input_value('_from', RCUBE_INPUT_POST);
 
-        $table = new html_table(array('cols' => 2));
-
         // filter set name input
         $input_name = new html_inputfield(array('name' => '_name', 'id' => '_name', 'size' => 30,
             'class' => ($this->errors['name'] ? 'error' : '')));
 
-        $table->add('title', sprintf('<label for="%s"><b>%s:</b></label>',
-            '_name', Q($this->gettext('filtersetname'))));
-        $table->add(null, $input_name->show($name));
+        $out .= sprintf('<label for="%s"><b>%s:</b></label> %s<br /><br />',
+            '_name', Q($this->gettext('filtersetname')), $input_name->show($name));
 
-        $from ='<div class="itemlist">';
-        $from .= '<input type="radio" id="from_none" name="_from" value="none"'
+        $out .="\n<fieldset class=\"itemlist\"><legend>" . $this->gettext('filters') . ":</legend>\n";
+        $out .= '<input type="radio" id="from_none" name="_from" value="none"'
             .(!$selected || $selected=='none' ? ' checked="checked"' : '').'></input>';
-        $from .= sprintf('<label for="%s">%s</label> ', 'from_none', Q($this->gettext('none')));
+        $out .= sprintf('<label for="%s">%s</label> ', 'from_none', Q($this->gettext('none')));
 
         // filters set list
         $list   = $this->sieve->get_scripts();
@@ -700,26 +708,21 @@ class managesieve extends rcube_plugin
             foreach ($list as $set)
                 $select->add($set . ($set == $active ? ' ('.$this->gettext('active').')' : ''), $set);
 
-            $from .= '<br /><input type="radio" id="from_set" name="_from" value="set"'
+            $out .= '<br /><input type="radio" id="from_set" name="_from" value="set"'
                 .($selected=='set' ? ' checked="checked"' : '').'></input>';
-            $from .= sprintf('<label for="%s">%s:</label> ', 'from_set', Q($this->gettext('fromset')));
-            $from .= $select->show($copy);
+            $out .= sprintf('<label for="%s">%s:</label> ', 'from_set', Q($this->gettext('fromset')));
+            $out .= $select->show($copy);
         }
 
         // script upload box
         $upload = new html_inputfield(array('name' => '_file', 'id' => '_file', 'size' => 30,
             'type' => 'file', 'class' => ($this->errors['name'] ? 'error' : '')));
 
-        $from .= '<br /><input type="radio" id="from_file" name="_from" value="file"'
+        $out .= '<br /><input type="radio" id="from_file" name="_from" value="file"'
             .($selected=='file' ? ' checked="checked"' : '').'></input>';
-        $from .= sprintf('<label for="%s">%s:</label> ', 'from_file', Q($this->gettext('fromfile')));
-        $from .= $upload->show();
-        $from .= '</div>';
-
-        $table->add('title', '<label>'.$this->gettext('filters').':</label>');
-        $table->add(null, $from);
-
-        $out .= $table->show();
+        $out .= sprintf('<label for="%s">%s:</label> ', 'from_file', Q($this->gettext('fromfile')));
+        $out .= $upload->show();
+        $out .= '</fieldset>';
 
         $this->rc->output->add_gui_object('sieveform', 'filtersetform');
 
@@ -751,6 +754,9 @@ class managesieve extends rcube_plugin
         $field_id = '_name';
         $input_name = new html_inputfield(array('name' => '_name', 'id' => $field_id, 'size' => 30,
             'class' => ($this->errors['name'] ? 'error' : '')));
+
+        if ($this->errors['name'])
+            $this->add_tip($field_id, $this->errors['name'], true);
 
         if (isset($scr))
             $input_name = $input_name->show($scr['name']);
@@ -817,6 +823,8 @@ class managesieve extends rcube_plugin
 
         $out .= "</fieldset>\n";
 
+        $this->print_tips();
+
         if ($scr['disabled']) {
             $this->rc->output->set_env('rule_disabled', true);
         }
@@ -871,7 +879,8 @@ class managesieve extends rcube_plugin
             $custom = is_array($rule['arg']) ? implode(', ', $rule['arg']) : $rule['arg'];
 
         $out .= '<div id="custom_header' .$id. '" style="display:' .(isset($custom) ? 'inline' : 'none'). '">
-            <input type="text" name="_custom_header[]" '. $this->error_class($id, 'test', 'header')
+            <input type="text" name="_custom_header[]" id="custom_header_i'.$id.'" '
+            . $this->error_class($id, 'test', 'header', 'custom_header_i')
             .' value="' .Q($custom). '" size="20" />&nbsp;</div>' . "\n";
 
         // matching type select (operator)
@@ -886,6 +895,20 @@ class managesieve extends rcube_plugin
         $select_op->add(Q($this->gettext('filternotexists')), 'notexists');
 //      $select_op->add(Q($this->gettext('filtermatches')), 'matches');
 //      $select_op->add(Q($this->gettext('filternotmatches')), 'notmatches');
+		if (in_array('relational', $this->exts)) {
+			$select_op->add(Q($this->gettext('countisgreaterthan')), 'count-gt');
+			$select_op->add(Q($this->gettext('countisgreaterthanequal')), 'count-ge');
+			$select_op->add(Q($this->gettext('countislessthan')), 'count-lt');
+			$select_op->add(Q($this->gettext('countislessthanequal')), 'count-le');
+			$select_op->add(Q($this->gettext('countequals')), 'count-eq');
+			$select_op->add(Q($this->gettext('countnotequals')), 'count-ne');
+			$select_op->add(Q($this->gettext('valueisgreaterthan')), 'value-gt');
+			$select_op->add(Q($this->gettext('valueisgreaterthanequal')), 'value-ge');
+			$select_op->add(Q($this->gettext('valueislessthan')), 'value-lt');
+			$select_op->add(Q($this->gettext('valueislessthanequal')), 'value-le');
+			$select_op->add(Q($this->gettext('valueequals')), 'value-eq');
+			$select_op->add(Q($this->gettext('valuenotequals')), 'value-ne');
+		}
 
         // target input (TODO: lists)
 
@@ -895,7 +918,7 @@ class managesieve extends rcube_plugin
         }
         else if ($rule['test'] == 'size') {
             $out .= $select_op->show();
-            if(preg_match('/^([0-9]+)(K|M|G)*$/', $rule['arg'], $matches)) {
+            if (preg_match('/^([0-9]+)(K|M|G)*$/', $rule['arg'], $matches)) {
                 $sizetarget = $matches[1];
                 $sizeitem = $matches[2];
             }
@@ -906,7 +929,7 @@ class managesieve extends rcube_plugin
         }
 
         $out .= '<input type="text" name="_rule_target[]" id="rule_target' .$id. '"
-            value="' .Q($target). '" size="20" ' . $this->error_class($id, 'test', 'target')
+            value="' .Q($target). '" size="20" ' . $this->error_class($id, 'test', 'target', 'rule_target')
             . ' style="display:' . ($rule['test']!='size' && $rule['test'] != 'exists' ? 'inline' : 'none') . '" />'."\n";
 
         $select_size_op = new html_select(array('name' => "_rule_size_op[]", 'id' => 'rule_size_op'.$id));
@@ -915,8 +938,8 @@ class managesieve extends rcube_plugin
 
         $out .= '<div id="rule_size' .$id. '" style="display:' . ($rule['test']=='size' ? 'inline' : 'none') .'">';
         $out .= $select_size_op->show($rule['test']=='size' ? $rule['type'] : '');
-        $out .= '<input type="text" name="_rule_size_target[]" value="'.$sizetarget.'" size="10" ' 
-            . $this->error_class($id, 'test', 'sizetarget') .' />
+        $out .= '<input type="text" name="_rule_size_target[]" id="rule_size_i'.$id.'" value="'.$sizetarget.'" size="10" ' 
+            . $this->error_class($id, 'test', 'sizetarget', 'rule_size_i') .' />
             <input type="radio" name="_rule_size_item['.$id.']" value=""'
                 . (!$sizeitem ? ' checked="checked"' : '') .' class="radio" />'.rcube_label('B').'
             <input type="radio" name="_rule_size_item['.$id.']" value="K"'
@@ -984,9 +1007,9 @@ class managesieve extends rcube_plugin
         $out .= '<input type="text" name="_action_target[]" id="action_target' .$id. '" '
             .'value="' .($action['type']=='redirect' ? Q($action['target'], 'strict', false) : ''). '" size="40" '
             .'style="display:' .($action['type']=='redirect' ? 'inline' : 'none') .'" '
-            . $this->error_class($id, 'action', 'target') .' />';
+            . $this->error_class($id, 'action', 'target', 'action_target') .' />';
         $out .= '<textarea name="_action_target_area[]" id="action_target_area' .$id. '" '
-            .'rows="3" cols="40" '. $this->error_class($id, 'action', 'targetarea')
+            .'rows="3" cols="40" '. $this->error_class($id, 'action', 'targetarea', 'action_target_area')
             .'style="display:' .(in_array($action['type'], array('reject', 'ereject')) ? 'inline' : 'none') .'">'
             . (in_array($action['type'], array('reject', 'ereject')) ? Q($action['target'], 'strict', false) : '')
             . "</textarea>\n";
@@ -995,16 +1018,16 @@ class managesieve extends rcube_plugin
         $out .= '<div id="action_vacation' .$id.'" style="display:' .($action['type']=='vacation' ? 'inline' : 'none') .'">';
         $out .= '<span class="label">'. Q($this->gettext('vacationreason')) .'</span><br />'
             .'<textarea name="_action_reason[]" id="action_reason' .$id. '" '
-            .'rows="3" cols="40" '. $this->error_class($id, 'action', 'reason') . '>'
+            .'rows="3" cols="40" '. $this->error_class($id, 'action', 'reason', 'action_reason') . '>'
             . Q($action['reason'], 'strict', false) . "</textarea>\n";
         $out .= '<br /><span class="label">' .Q($this->gettext('vacationaddresses')) . '</span><br />'
-            .'<input type="text" name="_action_addresses[]" '
+            .'<input type="text" name="_action_addresses[]" id="action_addr'.$id.'" '
             .'value="' . (is_array($action['addresses']) ? Q(implode(', ', $action['addresses']), 'strict', false) : $action['addresses']) . '" size="40" '
-            . $this->error_class($id, 'action', 'addresses') .' />';
+            . $this->error_class($id, 'action', 'addresses', 'action_addr') .' />';
         $out .= '<br /><span class="label">' . Q($this->gettext('vacationdays')) . '</span><br />'
-            .'<input type="text" name="_action_days[]" '
+            .'<input type="text" name="_action_days[]" id="action_days'.$id.'" '
             .'value="' .Q($action['days'], 'strict', false) . '" size="2" '
-            . $this->error_class($id, 'action', 'days') .' />';
+            . $this->error_class($id, 'action', 'days', 'action_days') .' />';
         $out .= '</div>';
 
         // mailbox select
@@ -1079,13 +1102,15 @@ class managesieve extends rcube_plugin
         return trim($str);
     }
 
-    private function error_class($id, $type, $target, $name_only=false)
+    private function error_class($id, $type, $target, $elem_prefix='')
     {
         // TODO: tooltips
-        if ($type == 'test' && isset($this->errors['tests'][$id][$target]))
-            return ($name_only ? 'error' : ' class="error"');
-        else if ($type == 'action' && isset($this->errors['actions'][$id][$target]))
-            return ($name_only ? 'error' : ' class="error"');
+        if (($type == 'test' && ($str = $this->errors['tests'][$id][$target])) ||
+            ($type == 'action' && ($str = $this->errors['actions'][$id][$target]))
+        ) {
+            $this->add_tip($elem_prefix.$id, $str, true);
+            return ' class="error"';
+        }
 
         return '';
     }
@@ -1094,4 +1119,22 @@ class managesieve extends rcube_plugin
     {
         return rcube_charset_convert($text, 'UTF7-IMAP', $encoding);
     }
+
+    private function add_tip($id, $str, $error=false)
+    {
+        if ($error)
+            $str = html::span('sieve error', $str);
+
+        $this->tips[] = array($id, $str);
+    }
+
+    private function print_tips()
+    {
+        if (empty($this->tips))
+            return;
+
+        $script = JS_OBJECT_NAME.'.managesieve_tip_register('.json_encode($this->tips).');';
+        $this->rc->output->add_script($script, 'foot');
+    }
+
 }

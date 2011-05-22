@@ -15,7 +15,7 @@
  | Author: Thomas Bruederli <roundcube@gmail.com>                        |
  +-----------------------------------------------------------------------+
 
- $Id: error.inc 3989 2010-09-25 13:03:53Z alec $
+ $Id: error.inc 4509 2011-02-09 10:51:50Z thomasb $
 
 */
 
@@ -44,6 +44,13 @@ EOF;
 else if ($ERROR_CODE==401) {
   $__error_title = "AUTHORIZATION FAILED";
   $__error_text  = "Could not verify that you are authorized to access this service!<br />\n".
+                   "Please contact your server-administrator.";
+}
+
+// forbidden due to request check
+else if ($ERROR_CODE==403) {
+  $__error_title = "REQUEST CHECK FAILED";
+  $__error_text  = "Access to this service was denied due to failing security checks!<br />\n".
                    "Please contact your server-administrator.";
 }
 

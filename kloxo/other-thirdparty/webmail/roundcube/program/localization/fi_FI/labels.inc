@@ -15,7 +15,7 @@
 |         Olli <ollinpostit@gmail.com>                                  |
 +-----------------------------------------------------------------------+
 
-@version $Id: labels.inc 3989 2010-09-25 13:03:53Z alec $
+@version $Id: labels.inc 4345 2010-12-17 14:28:38Z thomasb $
 
 */
 
@@ -308,9 +308,6 @@ $labels['subscribed'] = 'Näytetään';
 $labels['messagecount'] = 'Viestejä';
 $labels['create'] = 'Luo uusi';
 $labels['createfolder'] = 'Luo uusi kansio';
-$labels['rename'] = 'Nimeä uudelleen';
-$labels['renamefolder'] = 'Nimeä kansio uudelleen';
-$labels['deletefolder'] = 'Poista kansio';
 $labels['managefolders'] = 'Kansioiden hallinta';
 $labels['specialfolders'] = 'Erikoiskansiot';
 $labels['sortby'] = 'Järjestä';

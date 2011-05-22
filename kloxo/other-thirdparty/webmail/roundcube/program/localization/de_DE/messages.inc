@@ -13,7 +13,7 @@
 | Author: Marcel Schlesinger <info@marcel-schlesinger.de>               |
 +-----------------------------------------------------------------------+
 
-@version $Id: messages.inc 3989 2010-09-25 13:03:53Z alec $
+@version $Id: messages.inc 4666 2011-04-17 09:34:02Z alec $
 
 */
 
@@ -23,6 +23,9 @@ $messages['cookiesdisabled'] = 'Ihr Browser akzeptiert keine Cookies';
 $messages['sessionerror'] = 'Ihre Session ist ungültig oder abgelaufen';
 $messages['imaperror'] = 'Keine Verbindung zum IMAP-Server';
 $messages['servererror'] = 'Serverfehler!';
+$messages['servererrormsg'] = 'Serverfehler: $msg';
+$messages['errorreadonly'] = 'Die Aktion kann nicht ausgeführt werden. Der Ordner ist schreibgeschützt.';
+$messages['errornoperm'] = 'Die Aktion kann nicht ausgeführt werden. Zugriff verweigert.';
 $messages['invalidrequest'] = 'Ungültige Anfrage! Es wurden keine Daten gespeichert.';
 $messages['nomessagesfound'] = 'Keine Nachrichten in diesem Ordner';
 $messages['loggedout'] = 'Sie haben Ihre Session erfolgreich beendet. Auf Wiedersehen!';
@@ -54,10 +57,10 @@ $messages['deletecontactconfirm'] = 'Wollen Sie die ausgewählten Kontakte wirkl
 $messages['deletemessagesconfirm'] = 'Wollen Sie die ausgewählten Nachrichten wirklich löschen?';
 $messages['deletefolderconfirm'] = 'Wollen Sie diesen Ordner wirklich löschen?';
 $messages['purgefolderconfirm'] = 'Wollen Sie diesen Ordner wirklich leeren?';
-$messages['foldercreating'] = 'Erstelle Ordner...';
 $messages['folderdeleting'] = 'Lösche Ordner...';
-$messages['folderrenaming'] = 'Nenne Ordner um...';
 $messages['foldermoving'] = 'Verschiebe Ordner...';
+$messages['foldersubscribing'] = 'Abonniere Ordner...';
+$messages['folderunsubscribing'] = 'Ordner abbstellen...';
 $messages['formincomplete'] = 'Das Formular wurde nicht vollständig ausgefüllt';
 $messages['noemailwarning'] = 'Bitte geben Sie eine gültige E-Mail-Adresse ein';
 $messages['nonamewarning'] = 'Bitte geben Sie einen Namen ein';
@@ -77,6 +80,10 @@ $messages['searching'] = 'Suche...';
 $messages['checking'] = 'Prüfe...';
 $messages['nospellerrors'] = 'Keine Rechtschreibfehler gefunden';
 $messages['folderdeleted'] = 'Ordner erfolgreich gelöscht';
+$messages['foldersubscribed'] = 'Der Ordner wurde erfolgreich abonniert';
+$messages['folderunsubscribed'] = 'Der Ordner wurde erfolgreich abbestellt';
+$messages['folderpurged'] = 'Der Ordner wurde erfolgreich gelöscht';
+$messages['folderexpunged'] = 'Der Ordner wurde erfolgreich gepackt';
 $messages['deletedsuccessfully'] = 'Erfolgreich gelöscht';
 $messages['converting'] = 'Entferne Formatierungen der Nachricht...';
 $messages['messageopenerror'] = 'Die Nachricht konnte nicht vom Server geladen werden';
@@ -88,10 +95,11 @@ $messages['sourceisreadonly'] = 'Das Adressverzeichnis kann nicht verändert wer
 $messages['errorsavingcontact'] = 'Die Änderungen konnten nicht gespeichert werden';
 $messages['movingmessage'] = 'Die E-Mail wird verschoben...';
 $messages['copyingmessage'] = 'Kopiere Nachrichten...';
+$messages['deletingmessage'] = 'Lösche Nachricht(en)...';
+$messages['markingmessage'] = 'Markiere Nachricht(en)...';
 $messages['receiptsent'] = 'Lesebestätigung erfolgreich gesendet';
 $messages['errorsendingreceipt'] = 'Bestätigung konnte nicht gesendet werden';
 $messages['nodeletelastidentity'] = 'Diese Identität kann nicht gelöscht werden, da dies die letzte ist.';
-$messages['addsubfolderhint'] = 'Wird als Unterordner des aktuell selektierten Ordners erstellt';
 $messages['forbiddencharacter'] = 'Der Ordnername enthält ein ungültiges Zeichen';
 $messages['selectimportfile'] = 'Bitte wählen Sie eine Datei zum Importieren aus';
 $messages['addresswriterror'] = 'Das ausgewählte Adressbuch kann nicht verändert werden';
@@ -109,10 +117,26 @@ $messages['smtpautherror'] = 'SMTP Fehler ($code): Die Authentisierung ist fehlg
 $messages['smtpfromerror'] = 'SMTP Fehler ($code): Der Absender "$from" konnte nicht gesetzt werden ($msg)';
 $messages['smtptoerror'] = 'SMTP Fehler ($code): Der Empfänger "$to" konnte nicht gesetzt werden ($msg)';
 $messages['smtprecipientserror'] = 'SMTP Fehler: Die Empfängerliste konnte nicht verarbeitet werden';
+$messages['smtpdsnerror'] = 'SMTP-Fehler: Empfangsbestätigungen werden nicht unterstützt';
 $messages['smtperror'] = 'SMTP Fehler: $msg';
 $messages['emailformaterror'] = 'Ungültige E-Mail-Adresse: $email';
 $messages['toomanyrecipients'] = 'Zuviele Empfänger. Reduzieren Sie die Anzahl Empfängeradressen auf $max.';
 $messages['maxgroupmembersreached'] = 'Die Anzahl Adressen in dieser Gruppe überschreitet das Maximum von $max';
 $messages['internalerror'] = 'Ein interner Fehler ist aufgetreten. Bitte versuchen Sie den Vorgang erneut.';
+$messages['contactdelerror'] = 'Fehler beim Löschen';
+$messages['contactdeleted'] = 'Kontakt(e) erfolgreich gelöscht';
+$messages['groupdeleted'] = 'Gruppe erfolgreich gelöscht';
+$messages['grouprenamed'] = 'Gruppe erlogreich umbenannt';
+$messages['groupcreated'] = 'Gruppe erlogreich erstellt';
+$messages['messagedeleted'] = 'Nachricht(en) erfolgreich gelöscht';
+$messages['messagemoved'] = 'Nachricht(en) erfolgreich verschoben';
+$messages['messagecopied'] = 'Nachricht(en) erfolgreich kopiert';
+$messages['messagemarked'] = 'Nachricht(en) erfolgreich markiert';
+$messages['autocompletechars'] = 'Geben Sie mind. $min Zeichen für die Auto-Vervollständigung ein';
+$messages['namecannotbeempty'] = 'Der Name darf nicht leer sein';
+$messages['nametoolong'] = 'Der Name ist zu lang';
+$messages['folderupdated'] = 'Der Ordner wurde erfolgreich aktualisiert';
+$messages['foldercreated'] = 'Der Ordner wurde erfolgreich erstellt';
+$messages['invalidimageformat'] = 'Kein gültiges Bildformat';
 
 ?>

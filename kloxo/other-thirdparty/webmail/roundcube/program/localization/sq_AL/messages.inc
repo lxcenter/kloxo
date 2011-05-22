@@ -13,7 +13,7 @@
  | Author: Dashamir Hoxha <dhoxha@albaniaonline.net>                     |
  +-----------------------------------------------------------------------+
 
- @version $Id: messages.inc 3989 2010-09-25 13:03:53Z alec $
+ @version $Id: messages.inc 4304 2010-12-03 10:58:40Z alec $
 
 */
 
@@ -77,6 +77,5 @@ $messages['movingmessage'] = 'Po lëviz mesazhin...';
 $messages['receiptsent'] = 'U dërgua me sukses një njoftim leximi';
 $messages['errorsendingreceipt'] = 'Nuk mund të dërgohet njoftimi';
 $messages['nodeletelastidentity'] = 'Ju nuk mund ta fshini këtë identitet sepse nuk ju ka mbetur tjetër.';
-$messages['addsubfolderhint'] = 'Kjo kuti do të krijohet si një nënkuti e asaj që është e zgjedhur';
 
 ?>

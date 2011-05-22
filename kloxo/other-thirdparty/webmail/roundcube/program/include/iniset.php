@@ -5,7 +5,7 @@
  | program/include/iniset.php                                            |
  |                                                                       |
  | This file is part of the Roundcube Webmail client                     |
- | Copyright (C) 2008-2010, Roundcube Dev, - Switzerland                 |
+ | Copyright (C) 2008-2009, Roundcube Dev, - Switzerland                 |
  | Licensed under the GNU GPL                                            |
  |                                                                       |
  | PURPOSE:                                                              |
@@ -16,7 +16,7 @@
  |         Thomas Bruederli <roundcube@gmail.com>                        |
  +-----------------------------------------------------------------------+
 
- $Id: iniset.php 4048 2010-10-06 08:02:47Z thomasb $
+ $Id: iniset.php 4674 2011-04-20 09:03:08Z thomasb $
 
 */
 
@@ -36,7 +36,7 @@ foreach ($crit_opts as $optname => $optval) {
 }
 
 // application constants
-define('RCMAIL_VERSION', '0.4.2');
+define('RCMAIL_VERSION', '0.5.2');
 define('RCMAIL_CHARSET', 'UTF-8');
 define('JS_OBJECT_NAME', 'rcmail');
 define('RCMAIL_START', microtime(true));
@@ -91,6 +91,7 @@ function rcube_autoload($classname)
             '/MDB2_(.+)/',
             '/Mail_(.+)/',
             '/Net_(.+)/',
+            '/Auth_(.+)/',
             '/^html_.+/',
             '/^utf8$/',
         ),
@@ -98,12 +99,20 @@ function rcube_autoload($classname)
             'MDB2/\\1',
             'Mail/\\1',
             'Net/\\1',
+            'Auth/\\1',
             'html',
             'utf8.class',
         ),
         $classname
     );
-    include $filename. '.php';
+
+    if ($fp = @fopen("$filename.php", 'r', true)) {
+        fclose($fp);
+        include_once("$filename.php");
+        return true;
+    }
+
+    return false;
 }
 
 spl_autoload_register('rcube_autoload');

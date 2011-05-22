@@ -10,13 +10,12 @@
 | Licensed under the GNU GPL                                            |
 |                                                                       |
 +-----------------------------------------------------------------------+
-| Author: Zark Bonfire (ikkhares@gmail.com)                             |
-|         Levente Farkas <lfarkas at lfarkas dot org>                   |
-|         Ervin Hegedűs <airween@damson.hu>                             |
-|         Barnabás Bóna <bsi at hosember dot hu>                        |
+| Author: Zark Bonfire <ikkhares at gmail dot com>                      |
+|         Peter Szabo <pete at teamlupus dot hu>                        |
+|         Barnabas Bona <bsi at hosember dot hu>                        |
 +-----------------------------------------------------------------------+
 
-@version $Id: messages.inc 3989 2010-09-25 13:03:53Z alec $
+@version $Id: messages.inc 4368 2010-12-27 08:51:22Z yllar $
 
 */
 
@@ -26,6 +25,9 @@ $messages['cookiesdisabled'] = 'A böngésző nem támogatja a sütik használat
 $messages['sessionerror'] = 'Érvénytelen vagy lejárt munkamenet';
 $messages['imaperror'] = 'Nem sikerült a kapcsolódás az IMAP szerverhez';
 $messages['servererror'] = 'Szerverhiba!';
+$messages['servererrormsg'] = 'Szerverhiba: $msg';
+$messages['errorreadonly'] = 'A műveletet nem sikerült végrehajtani. A mappa írásvédett';
+$messages['errornoperm'] = 'A műveletet nem sikerült végrehajtani. Hozzáférés megtagadva';
 $messages['invalidrequest'] = 'Érvénytelen kérés! Az adatok nem lettek elmentve.';
 $messages['nomessagesfound'] = 'A fiók nem tartalmaz leveleket';
 $messages['loggedout'] = 'Sikeres kijelentkezés. Viszontlátásra!';
@@ -57,10 +59,10 @@ $messages['deletecontactconfirm'] = 'Biztos, hogy törölni szeretné a kijelöl
 $messages['deletemessagesconfirm'] = 'Biztos, hogy törölni szeretné a kijelölt üzenete(ke)t?';
 $messages['deletefolderconfirm'] = 'Biztos, hogy törölni szeretné ezt a mappát?';
 $messages['purgefolderconfirm'] = 'Biztos benne, hogy az összes üzenet törölhető?';
-$messages['foldercreating'] = 'Mappa létrehozása...';
 $messages['folderdeleting'] = 'Mappa törlése...';
-$messages['folderrenaming'] = 'Mappa átnevezése...';
 $messages['foldermoving'] = 'Mappa mozgatása...';
+$messages['foldersubscribing'] = 'Feliratkozás a mappára...';
+$messages['folderunsubscribing'] = 'Leiratkozás a mappáról...';
 $messages['formincomplete'] = 'Az űrlap hiányosan lett kitöltve';
 $messages['noemailwarning'] = 'Adjon meg egy valós e-mail címet';
 $messages['nonamewarning'] = 'Adjon meg egy nevet';
@@ -80,6 +82,10 @@ $messages['searching'] = 'Keresés...';
 $messages['checking'] = 'Ellenőrzés...';
 $messages['nospellerrors'] = 'Nem található helyesírási hiba';
 $messages['folderdeleted'] = 'A mappa sikeresen törölve';
+$messages['foldersubscribed'] = 'A feliratkozás a mappára sikeres';
+$messages['folderunsubscribed'] = 'A leiratkozás a mappáról sikeres';
+$messages['folderpurged'] = 'Mappa sikeresen törölve';
+$messages['folderexpunged'] = 'Mappa sikeresen kiürítve';
 $messages['deletedsuccessfully'] = 'Törölve';
 $messages['converting'] = 'Formázás eltávolítása az üzenetből...';
 $messages['messageopenerror'] = 'A levelek a szerverről nem tölthetők le';
@@ -91,10 +97,11 @@ $messages['sourceisreadonly'] = 'Ez a címforrás csak olvasható';
 $messages['errorsavingcontact'] = 'A kapcsolat címe nem menthető';
 $messages['movingmessage'] = 'Üzenet mozgatása...';
 $messages['copyingmessage'] = 'Üzenet másolása...';
-$messages['receiptsent'] = 'Az Olvasási Értesítés el lett küldve';
-$messages['errorsendingreceipt'] = 'Az Olvasási Értesítést nem sikerült elküldeni';
-$messages['nodeletelastidentity'] = 'Nem törölheti ezt a profilt, ez az egyetlen';
-$messages['addsubfolderhint'] = 'Az új könyvtár az aktuálisan kiválasztott alkönyvtáraként lesz létrehozva';
+$messages['deletingmessage'] = 'Üzenet(ek) törlése....';
+$messages['markingmessage'] = 'Üzenet(ek) megjelölése...';
+$messages['receiptsent'] = 'Az olvasási visszaigazolás el lett küldve';
+$messages['errorsendingreceipt'] = 'Az olvasási visszaigazolást nem sikerült elküldeni';
+$messages['nodeletelastidentity'] = 'Nem törölheti ezt az azonosítót, ez az egyetlen';
 $messages['forbiddencharacter'] = 'A mappa neve tiltott karaktert tartalmaz';
 $messages['selectimportfile'] = 'Kérjük válassza ki a feltölteni kívánt fájlt';
 $messages['addresswriterror'] = 'A kiválasztott címjegyzék nem írható';
@@ -111,11 +118,26 @@ $messages['smtpconnerror'] = 'SMTP hiba ($code): Sikertelen kapcsolódás a szer
 $messages['smtpautherror'] = 'SMTP hiba ($code): Sikertelen bejelentkezés';
 $messages['smtpfromerror'] = 'SMTP hiba ($code): Nem sikerült a feladó beállítása: "$from" ($msg)';
 $messages['smtptoerror'] = 'SMTP hiba ($code): Nem sikerült a következő címzett hozzáadása: "$to" ($msg)';
-$messages['smtprecipientserror'] = 'SMTP hiba ($code): A címzett lista feldolgozása sikertelen';
+$messages['smtprecipientserror'] = 'SMTP hiba ($code): A címzettlista feldolgozása sikertelen';
+$messages['smtpdsnerror'] = 'SMTP hiba: A kézbesítési visszaigazolásokat a szerver nem támogatja';
 $messages['smtperror'] = 'SMTP hiba ($code): $msg';
 $messages['emailformaterror'] = 'Helytelen formátumú e-mail cím: $email';
 $messages['toomanyrecipients'] = 'Túl sok a címzett. Csökkentse a címzettek számát $max címre.';
 $messages['maxgroupmembersreached'] = 'A csoport létszáma meghaladja a maximum $max címet.';
 $messages['internalerror'] = 'Belső hiba történt, kérjük próbálja újra!';
+$messages['contactdelerror'] = 'Hiba a kapcsolat(ok) törlésekor';
+$messages['contactdeleted'] = 'Kapcsolt(ok) sikeresen törölve';
+$messages['groupdeleted'] = 'Csoport sikeresen törölve';
+$messages['grouprenamed'] = 'Csoport sikeresen átnevezve';
+$messages['groupcreated'] = 'Csoport sikeresen létrehozva';
+$messages['messagedeleted'] = 'Üzenet(ek) sikeresen törölve';
+$messages['messagemoved'] = 'Üzenet(ek) sikeresen átmozgatva';
+$messages['messagecopied'] = 'Üzenet(ek) sikeresen másolva';
+$messages['messagemarked'] = 'Üzenet(ek) sikeresen megjelölve';
+$messages['autocompletechars'] = 'Az automatikus kiegészítéshez legalább $min karakter szükséges';
+$messages['namecannotbeempty'] = 'A név nem lehet üres';
+$messages['nametoolong'] = 'A név túl hosszú';
+$messages['folderupdated'] = 'Mappa sikeresen frissítve';
+$messages['foldercreated'] = 'Mappa sikeresen létrehozva';
 
 ?>

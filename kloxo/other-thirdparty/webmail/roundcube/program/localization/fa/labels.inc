@@ -14,7 +14,7 @@
 |         Nader Aghazadeh <Nader.aghazadeh at gmail.com>                |
 +-----------------------------------------------------------------------+
 
-@version $Id: labels.inc 3989 2010-09-25 13:03:53Z alec $
+@version $Id: labels.inc 4304 2010-12-03 10:58:40Z alec $
 
 */
 
@@ -247,13 +247,9 @@ $labels['checkallfolders'] = 'همه پوشه ها رو برای مشاهده پ
 $labels['folder'] = 'پوشه';
 $labels['folders'] = 'پوشه‌ها';
 $labels['foldername'] = 'نام پوشه';
-$labels['subscribed'] = 'مورد اشتراک';
 $labels['messagecount'] = 'پیغام‌ها';
 $labels['create'] = 'ایجاد';
 $labels['createfolder'] = 'ایجاد پوشه‌ی جدید';
-$labels['rename'] = 'تغییر نام';
-$labels['renamefolder'] = 'تغییر نام پوشه';
-$labels['deletefolder'] = 'حذف پوشه';
 $labels['managefolders'] = 'مدیریت پوشه‌ها';
 $labels['specialfolders'] = 'پوشه های ویژه';
 $labels['sortby'] = 'مرتب‌سازی بر اساس';

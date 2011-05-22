@@ -18,7 +18,7 @@
 // |          Damian Alejandro Fernandez Sosa <damlists@cnba.uba.ar>      |
 // +----------------------------------------------------------------------+
 //
-// $Id: SMTP.php 3339 2010-03-08 07:13:09Z alec $
+// $Id: SMTP.php 4666 2011-04-17 09:34:02Z alec $
 
 require_once 'PEAR.php';
 require_once 'Net/Socket.php';
@@ -106,6 +106,21 @@ class Net_SMTP
     var $_socket = null;
 
     /**
+     * Array of socket options that will be passed to Net_Socket::connect().
+     * @see stream_context_create()
+     * @var array
+     * @access private
+     */
+    var $_socket_options = null;
+
+    /**
+     * The socket I/O timeout value in seconds.
+     * @var int
+     * @access private
+     */
+    var $_timeout = 0;
+
+    /**
      * The most recent server response code.
      * @var int
      * @access private
@@ -148,11 +163,14 @@ class Net_SMTP
      * @param integer $port       The port to connect to.
      * @param string  $localhost  The value to give when sending EHLO or HELO.
      * @param boolean $pipeling   Use SMTP command pipelining
+     * @param integer $timeout    Socket I/O timeout in seconds.
+     * @param array   $socket_options Socket stream_context_create() options.
      *
      * @access  public
      * @since   1.0
      */
-    function Net_SMTP($host = null, $port = null, $localhost = null, $pipelining = false)
+    function Net_SMTP($host = null, $port = null, $localhost = null,
+        $pipelining = false, $timeout = 0, $socket_options = null)
     {
         if (isset($host)) {
             $this->host = $host;
@@ -166,6 +184,8 @@ class Net_SMTP
         $this->pipelining = $pipelining;
 
         $this->_socket = new Net_Socket();
+        $this->_socket_options = $socket_options;
+        $this->_timeout = $timeout;
 
         /* Include the Auth_SASL package.  If the package is not
          * available, we disable the authentication methods that
@@ -176,6 +196,19 @@ class Net_SMTP
             $pos = array_search('CRAM-MD5', $this->auth_methods);
             unset($this->auth_methods[$pos]);
         }
+    }
+
+    /**
+     * Set the socket I/O timeout value in seconds plus microseconds.
+     *
+     * @param   integer $seconds        Timeout value in seconds.
+     * @param   integer $microseconds   Additional value in microseconds.
+     *
+     * @access  public
+     * @since   1.5.0
+     */
+    function setTimeout($seconds, $microseconds = 0) {
+        return $this->_socket->setTimeout($seconds, $microseconds);
     }
 
     /**
@@ -369,7 +402,7 @@ class Net_SMTP
      * Attempt to connect to the SMTP server.
      *
      * @param   int     $timeout    The timeout value (in seconds) for the
-     *                              socket connection.
+     *                              socket connection attempt.
      * @param   bool    $persistent Should a persistent socket connection
      *                              be used?
      *
@@ -382,10 +415,23 @@ class Net_SMTP
     {
         $this->_greeting = null;
         $result = $this->_socket->connect($this->host, $this->port,
-                                          $persistent, $timeout);
+                                          $persistent, $timeout,
+                                          $this->_socket_options);
         if (PEAR::isError($result)) {
             return PEAR::raiseError('Failed to connect socket: ' .
                                     $result->getMessage());
+        }
+
+        /*
+         * Now that we're connected, reset the socket's timeout value for 
+         * future I/O operations.  This allows us to have different socket 
+         * timeout values for the initial connection (our $timeout parameter) 
+         * and all other socket operations.
+         */
+        if ($this->_timeout > 0) {
+            if (PEAR::isError($error = $this->setTimeout($this->_timeout))) {
+                return $error;
+            }
         }
 
         if (PEAR::isError($error = $this->_parseResponse(220))) {
@@ -504,13 +550,15 @@ class Net_SMTP
      * @param string The requested authentication method.  If none is
      *               specified, the best supported method will be used.
      * @param bool   Flag indicating whether or not TLS should be attempted.
+     * @param string An optional authorization identifier.  If specified, this
+     *               identifier will be used as the authorization proxy.
      *
      * @return mixed Returns a PEAR_Error with an error message on any
      *               kind of failure, or true on success.
      * @access public
      * @since  1.0
      */
-    function auth($uid, $pwd , $method = '', $tls = true)
+    function auth($uid, $pwd , $method = '', $tls = true, $authz = '')
     {
         /* We can only attempt a TLS connection if one has been requested,
          * we're running PHP 5.1.0 or later, have access to the OpenSSL 
@@ -558,7 +606,7 @@ class Net_SMTP
 
         switch ($method) {
         case 'DIGEST-MD5':
-            $result = $this->_authDigest_MD5($uid, $pwd);
+            $result = $this->_authDigest_MD5($uid, $pwd, $authz);
             break;
 
         case 'CRAM-MD5':
@@ -570,7 +618,7 @@ class Net_SMTP
             break;
 
         case 'PLAIN':
-            $result = $this->_authPlain($uid, $pwd);
+            $result = $this->_authPlain($uid, $pwd, $authz);
             break;
 
         default:
@@ -591,13 +639,14 @@ class Net_SMTP
      *
      * @param string The userid to authenticate as.
      * @param string The password to authenticate with.
+     * @param string The optional authorization proxy identifier.
      *
      * @return mixed Returns a PEAR_Error with an error message on any
      *               kind of failure, or true on success.
      * @access private
      * @since  1.1.0
      */
-    function _authDigest_MD5($uid, $pwd)
+    function _authDigest_MD5($uid, $pwd, $authz = '')
     {
         if (PEAR::isError($error = $this->_put('AUTH', 'DIGEST-MD5'))) {
             return $error;
@@ -614,7 +663,8 @@ class Net_SMTP
         $challenge = base64_decode($this->_arguments[0]);
         $digest = &Auth_SASL::factory('digestmd5');
         $auth_str = base64_encode($digest->getResponse($uid, $pwd, $challenge,
-                                                       $this->host, "smtp"));
+                                                       $this->host, "smtp",
+                                                       $authz));
 
         if (PEAR::isError($error = $this->_put($auth_str))) {
             return $error;
@@ -725,13 +775,14 @@ class Net_SMTP
      *
      * @param string The userid to authenticate as.
      * @param string The password to authenticate with.
+     * @param string The optional authorization proxy identifier.
      *
      * @return mixed Returns a PEAR_Error with an error message on any
      *               kind of failure, or true on success.
      * @access private
      * @since  1.1.0
      */
-    function _authPlain($uid, $pwd)
+    function _authPlain($uid, $pwd, $authz = '')
     {
         if (PEAR::isError($error = $this->_put('AUTH', 'PLAIN'))) {
             return $error;
@@ -745,7 +796,7 @@ class Net_SMTP
             return $error;
         }
 
-        $auth_str = base64_encode(chr(0) . $uid . chr(0) . $pwd);
+        $auth_str = base64_encode($authz . chr(0) . $uid . chr(0) . $pwd);
 
         if (PEAR::isError($error = $this->_put($auth_str))) {
             return $error;
@@ -826,7 +877,7 @@ class Net_SMTP
             } elseif (trim($params['verp'])) {
                 $args .= ' XVERP=' . $params['verp'];
             }
-        } elseif (is_string($params)) {
+        } elseif (is_string($params) && !empty($params)) {
             $args .= ' ' . $params;
         }
 
@@ -915,31 +966,29 @@ class Net_SMTP
             return PEAR::raiseError('Expected a string or file resource');
         }
 
-        /* RFC 1870, section 3, subsection 3 states "a value of zero
-         * indicates that no fixed maximum message size is in force".
-         * Furthermore, it says that if "the parameter is omitted no
-         * information is conveyed about the server's fixed maximum
-         * message size". */
-        if (isset($this->_esmtp['SIZE']) && ($this->_esmtp['SIZE'] > 0)) {
-            /* Start by considering the size of the optional headers string.  
-             * We also account for the addition 4 character "\r\n\r\n"
-             * separator sequence. */
-            $size = (is_null($headers)) ? 0 : strlen($headers) + 4;
+        /* Start by considering the size of the optional headers string.  We
+         * also account for the addition 4 character "\r\n\r\n" separator
+         * sequence. */
+        $size = (is_null($headers)) ? 0 : strlen($headers) + 4;
 
-            if (is_resource($data)) {
-                $stat = fstat($data);
-                if ($stat === false) {
-                    return PEAR::raiseError('Failed to get file size');
-                }
-                $size += $stat['size'];
-            } else {
-                $size += strlen($data);
+        if (is_resource($data)) {
+            $stat = fstat($data);
+            if ($stat === false) {
+                return PEAR::raiseError('Failed to get file size');
             }
+            $size += $stat['size'];
+        } else {
+            $size += strlen($data);
+        }
 
-            if ($size >= $this->_esmtp['SIZE']) {
-                $this->disconnect();
-                return PEAR::raiseError('Message size exceeds server limit');
-            }
+        /* RFC 1870, section 3, subsection 3 states "a value of zero indicates
+         * that no fixed maximum message size is in force".  Furthermore, it
+         * says that if "the parameter is omitted no information is conveyed
+         * about the server's fixed maximum message size". */
+        $limit = (isset($this->_esmtp['SIZE'])) ? $this->_esmtp['SIZE'] : 0;
+        if ($limit > 0 && $size >= $limit) {
+            $this->disconnect();
+            return PEAR::raiseError('Message size exceeds server limit');
         }
 
         /* Initiate the DATA command. */
@@ -969,18 +1018,46 @@ class Net_SMTP
                     return $result;
                 }
             }
-
-            /* Finally, send the DATA terminator sequence. */
-            if (PEAR::isError($result = $this->_send("\r\n.\r\n"))) {
-                return $result;
-            }
         } else {
-            /* Just send the entire quoted string followed by the DATA 
-             * terminator. */
-            $this->quotedata($data);
-            if (PEAR::isError($result = $this->_send($data . "\r\n.\r\n"))) {
-                return $result;
+            /*
+             * Break up the data by sending one chunk (up to 512k) at a time.  
+             * This approach reduces our peak memory usage.
+             */
+            for ($offset = 0; $offset < $size;) {
+                $end = $offset + 512000;
+
+                /*
+                 * Ensure we don't read beyond our data size or span multiple 
+                 * lines.  quotedata() can't properly handle character data 
+                 * that's split across two line break boundaries.
+                 */
+                if ($end >= $size) {
+                    $end = $size;
+                } else {
+                    for (; $end < $size; $end++) {
+                        if ($data[$end] != "\n") {
+                            break;
+                        }
+                    }
+                }
+
+                /* Extract our chunk and run it through the quoting routine. */
+                $chunk = substr($data, $offset, $end - $offset);
+                $this->quotedata($chunk);
+
+                /* If we run into a problem along the way, abort. */
+                if (PEAR::isError($result = $this->_send($chunk))) {
+                    return $result;
+                }
+
+                /* Advance the offset to the end of this chunk. */
+                $offset = $end;
             }
+        }
+
+        /* Finally, send the DATA terminator sequence. */
+        if (PEAR::isError($result = $this->_send("\r\n.\r\n"))) {
+            return $result;
         }
 
         /* Verify that the data was successfully received by the server. */

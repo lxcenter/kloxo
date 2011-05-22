@@ -28,7 +28,7 @@ CREATE TABLE `users` (
  `language` varchar(5),
  `preferences` text,
  PRIMARY KEY(`user_id`),
- INDEX `username_index` (`username`),
+ UNIQUE `username` (`username`, `mail_host`),
  INDEX `alias_index` (`alias`)
 ) /*!40000 ENGINE=INNODB */ /*!40101 CHARACTER SET utf8 COLLATE utf8_general_ci */;
 
@@ -83,7 +83,7 @@ CREATE TABLE `contacts` (
  `changed` datetime NOT NULL DEFAULT '1000-01-01 00:00:00',
  `del` tinyint(1) NOT NULL DEFAULT '0',
  `name` varchar(128) NOT NULL DEFAULT '',
- `email` varchar(128) NOT NULL,
+ `email` varchar(255) NOT NULL,
  `firstname` varchar(128) NOT NULL DEFAULT '',
  `surname` varchar(128) NOT NULL DEFAULT '',
  `vcard` text NULL,

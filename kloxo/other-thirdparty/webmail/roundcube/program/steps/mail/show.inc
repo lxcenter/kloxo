@@ -15,7 +15,7 @@
  | Author: Thomas Bruederli <roundcube@gmail.com>                        |
  +-----------------------------------------------------------------------+
 
- $Id: show.inc 3991 2010-09-25 13:47:51Z alec $
+ $Id: show.inc 4294 2010-12-01 09:52:23Z alec $
 
 */
 
@@ -49,6 +49,7 @@ if ($uid = get_input_value('_uid', RCUBE_INPUT_GET)) {
   $OUTPUT->set_env('safemode', $MESSAGE->is_safe);
   $OUTPUT->set_env('sender', $MESSAGE->sender['string']);
   $OUTPUT->set_env('permaurl', rcmail_url('show', array('_uid' => $MESSAGE->uid, '_mbox' => $mbox_name)));
+  $OUTPUT->set_env('delimiter', $IMAP->get_hierarchy_delimiter());
   $OUTPUT->set_env('mailbox', $mbox_name);
 
   if ($CONFIG['trash_mbox'])
@@ -61,9 +62,12 @@ if ($uid = get_input_value('_uid', RCUBE_INPUT_GET)) {
     $OUTPUT->set_env('skip_deleted', true);
   if ($CONFIG['display_next'])
     $OUTPUT->set_env('display_next', true);
+  if ($MESSAGE->headers->others['list-post'])
+    $OUTPUT->set_env('list_post', true);
 
   if (!$OUTPUT->ajax_call)
-    $OUTPUT->add_label('checkingmail', 'deletemessage', 'movemessagetotrash', 'movingmessage');
+    $OUTPUT->add_label('checkingmail', 'deletemessage', 'movemessagetotrash',
+      'movingmessage', 'deletingmessage');
 
   // check for unset disposition notification
   if ($MESSAGE->headers->mdn_to &&
@@ -72,66 +76,23 @@ if ($uid = get_input_value('_uid', RCUBE_INPUT_GET)) {
       $mbox_name != $CONFIG['drafts_mbox'] &&
       $mbox_name != $CONFIG['sent_mbox'])
   {
-    if (intval($CONFIG['mdn_requests']) === 1)
-    {
-      if (rcmail_send_mdn($MESSAGE->uid, $smtp_error))
+    $mdn_cfg = intval($CONFIG['mdn_requests']);
+
+    if ($mdn_cfg == 1 || (($mdn_cfg == 3 || $mdn_cfg ==  4) && rcmail_contact_exists($MESSAGE->sender['mailto']))) {
+      // Send MDN
+      if (rcmail_send_mdn($MESSAGE, $smtp_error))
         $OUTPUT->show_message('receiptsent', 'confirmation');
       else if ($smtp_error)
         $OUTPUT->show_message($smtp_error['label'], 'error', $smtp_error['vars']);
-      else	
+      else
         $OUTPUT->show_message('errorsendingreceipt', 'error');
     }
-    else if (empty($CONFIG['mdn_requests']))
-    {
+    else if ($mdn_cfg != 2 && $mdn_cfg != 4) {
+      // Ask user
       $OUTPUT->add_label('mdnrequest');
       $OUTPUT->set_env('mdn_request', true);
     }
   }
-
-  // get previous, first, next and last message UID
-  if ($RCMAIL->action != 'preview' && $RCMAIL->action != 'print')
-    {
-    $next = $prev = $first = $last = -1;
-
-    if ($_SESSION['sort_col'] == 'date' && $_SESSION['sort_order'] != 'DESC'
-        && empty($_REQUEST['_search']) && !$CONFIG['skip_deleted'] && !$IMAP->threading)
-      {
-      // this assumes that we are sorted by date_DESC
-      $cnt = $IMAP->messagecount();
-      $seq = $IMAP->get_id($MESSAGE->uid);
-      $MESSAGE->index = $cnt - $seq;
-
-      $prev = $IMAP->get_uid($seq + 1);
-      $first = $IMAP->get_uid($cnt);
-      $next = $IMAP->get_uid($seq - 1);
-      $last = $IMAP->get_uid(1);
-      }
-    else 
-      {
-      // Only if we use custom sorting
-      $a_msg_index = $IMAP->message_index(NULL, $_SESSION['sort_col'], $_SESSION['sort_order']);
-
-      $MESSAGE->index = array_search($IMAP->get_id($MESSAGE->uid), $a_msg_index);
-
-      $count = count($a_msg_index);
-      $prev = isset($a_msg_index[$MESSAGE->index-1]) ? $IMAP->get_uid($a_msg_index[$MESSAGE->index-1]) : -1;
-      $first = $count > 1 ? $IMAP->get_uid($a_msg_index[0]) : -1;
-      $next = isset($a_msg_index[$MESSAGE->index+1]) ? $IMAP->get_uid($a_msg_index[$MESSAGE->index+1]) : -1;
-      $last = $count > 1 ? $IMAP->get_uid($a_msg_index[$count-1]) : -1;
-      }
-
-    if ($prev > 0)
-      $OUTPUT->set_env('prev_uid', $prev);
-    if ($first > 0)
-      $OUTPUT->set_env('first_uid', $first);
-    if ($next > 0)
-      $OUTPUT->set_env('next_uid', $next);
-    if ($last > 0)
-      $OUTPUT->set_env('last_uid', $last);
-
-    // Don't need a real messages count value
-    $OUTPUT->set_env('messagecount', 1);
-    }
 
   if (!$MESSAGE->headers->seen && ($RCMAIL->action == 'show' || ($RCMAIL->action == 'preview' && intval($CONFIG['preview_pane_mark_read']) == 0)))
     $RCMAIL->plugins->exec_hook('message_read', array('uid' => $MESSAGE->uid,
@@ -143,7 +104,7 @@ if ($uid = get_input_value('_uid', RCUBE_INPUT_GET)) {
 function rcmail_message_attachments($attrib)
 {
   global $PRINT_MODE, $MESSAGE;
-  
+
   $out = $ol = '';
 
   if (sizeof($MESSAGE->attachments)) {
@@ -168,7 +129,7 @@ function rcmail_message_attachments($attrib)
               'return %s.command(\'load-attachment\',{part:\'%s\', mimetype:\'%s\'},this)',
               JS_OBJECT_NAME,
               $attach_prop->mime_id,
-              $attach_prop->mimetype),
+              rcmail_fix_mimetype($attach_prop->mimetype)),
               'title' => Q($title),
             ),
             Q($filename)));
@@ -176,31 +137,44 @@ function rcmail_message_attachments($attrib)
     }
 
     $out = html::tag('ul', $attrib, $ol, html::$common_attrib);
-  } 
-  
+  }
+
   return $out;
 }
-
-
 
 function rcmail_remote_objects_msg($attrib)
 {
   global $MESSAGE, $RCMAIL;
-  
+
   if (!$attrib['id'])
     $attrib['id'] = 'rcmremoteobjmsg';
-  
+
   $msg = Q(rcube_label('blockedimages')) . '&nbsp;';
   $msg .= html::a(array('href' => "#loadimages", 'onclick' => JS_OBJECT_NAME.".command('load-images')"), Q(rcube_label('showimages')));
-  
+
   // add link to save sender in addressbook and reload message
   if ($MESSAGE->sender['mailto'] && $RCMAIL->config->get('show_images') == 1) {
     $msg .= ' ' . html::a(array('href' => "#alwaysload", 'onclick' => JS_OBJECT_NAME.".command('always-load')", 'style' => "white-space:nowrap"),
       Q(rcube_label(array('name' => 'alwaysshow', 'vars' => array('sender' => $MESSAGE->sender['mailto'])))));
   }
-  
+
   $RCMAIL->output->add_gui_object('remoteobjectsmsg', $attrib['id']);
   return html::div($attrib, $msg);
+}
+
+function rcmail_contact_exists($email)
+{
+  global $RCMAIL;
+
+  if ($email) {
+    // @TODO: search in all address books?
+    $CONTACTS = $RCMAIL->get_address_book(null, true);
+    $existing = $CONTACTS->search('email', $email, true, false);
+    if ($existing->count)
+      return true;
+  }
+
+  return false;
 }
 
 
@@ -210,8 +184,8 @@ $OUTPUT->add_handlers(array(
   'blockedobjects' => 'rcmail_remote_objects_msg'));
 
 
-if ($RCMAIL->action=='print' && $OUTPUT->template_exists('printmessage'))
-  $OUTPUT->send('printmessage', false);
+if ($RCMAIL->action=='print' && $OUTPUT->template_exists('messageprint'))
+  $OUTPUT->send('messageprint', false);
 else if ($RCMAIL->action=='preview' && $OUTPUT->template_exists('messagepreview'))
   $OUTPUT->send('messagepreview', false);
 else
@@ -222,10 +196,12 @@ else
 if ($MESSAGE && $MESSAGE->headers && !$MESSAGE->headers->seen &&
   ($RCMAIL->action == 'show' || ($RCMAIL->action == 'preview' && intval($CONFIG['preview_pane_mark_read']) == 0)))
 {
-  if ($IMAP->set_flag($MESSAGE->uid, 'SEEN') && $_SESSION['unseen_count'][$mbox_name])
-    $_SESSION['unseen_count'][$mbox_name] -= 1;
+  if ($IMAP->set_flag($MESSAGE->uid, 'SEEN')) {
+    if ($count = rcmail_get_unseen_count($mbox_name)) {
+      rcmail_set_unseen_count($mbox_name, $count - 1);
+    }
+  }
 }
 
 exit;
-
 

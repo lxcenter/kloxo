@@ -15,7 +15,7 @@
  | Author: Thomas Bruederli <roundcube@gmail.com>                        |
  +-----------------------------------------------------------------------+
 
- $Id: save_identity.inc 3989 2010-09-25 13:03:53Z alec $
+ $Id: save_identity.inc 4509 2011-02-09 10:51:50Z thomasb $
 
 */
 
@@ -56,6 +56,18 @@ foreach ($a_boolean_cols as $col)
 if (IDENTITIES_LEVEL == 1 || IDENTITIES_LEVEL == 3)
   unset($save_data['email']);
 
+// Validate e-mail addresses
+foreach (array('email', 'reply-to', 'bcc') as $item) {
+  if ($email = $save_data[$item]) {
+    $ascii_email = rcube_idn_to_ascii($email);
+    if (!check_email($ascii_email)) {
+      // show error message
+      $OUTPUT->show_message('emailformaterror', 'error', array('email' => $email), false);
+      rcmail_overwrite_action('edit-identity');
+      return;
+    }
+  }
+}
 
 // update an existing contact
 if ($_POST['_iid'])
@@ -64,23 +76,32 @@ if ($_POST['_iid'])
   $plugin = $RCMAIL->plugins->exec_hook('identity_update', array('id' => $iid, 'record' => $save_data));
   $save_data = $plugin['record'];
 
-  if (!$plugin['abort'] && ($updated = $USER->update_identity($iid, $save_data)))
-  {
+  if ($save_data['email'])
+    $save_data['email'] = rcube_idn_to_ascii($save_data['email']);
+  if ($save_data['bcc'])
+    $save_data['bcc'] = rcube_idn_to_ascii($save_data['bcc']);
+  if ($save_data['reply-to'])
+    $save_data['reply-to'] = rcube_idn_to_ascii($save_data['reply-to']);
+
+  if (!$plugin['abort'])
+    $updated = $USER->update_identity($iid, $save_data);
+  else
+    $updated = $plugin['result'];
+
+  if ($updated) {
     $OUTPUT->show_message('successfullysaved', 'confirmation');
-    
+
     if (!empty($_POST['_standard']))
       $default_id = get_input_value('_iid', RCUBE_INPUT_POST);
-    
-    if ($_POST['_framed'])
-    {
+
+    if ($_POST['_framed']) {
       // update the changed col in list
-      // ...      
+      // ...
     }
   }
-  else if ($plugin['abort'] || $DB->is_error())
-  {
+  else {
     // show error message
-    $OUTPUT->show_message('errorsaving', 'error', null, false);
+    $OUTPUT->show_message($plugin['message'] ? $plugin['message'] : 'errorsaving', 'error', null, false);
     rcmail_overwrite_action('edit-identity');
     return;
   }
@@ -95,8 +116,16 @@ else if (IDENTITIES_LEVEL < 2)
   $plugin = $RCMAIL->plugins->exec_hook('identity_create', array('record' => $save_data));
   $save_data = $plugin['record'];
 
-  if (!$plugin['abort'] && $save_data['email'] && ($insert_id = $USER->insert_identity($save_data)))
-  {
+  $save_data['email']    = rcube_idn_to_ascii($save_data['email']);
+  $save_data['bcc']      = rcube_idn_to_ascii($save_data['bcc']);
+  $save_data['reply-to'] = rcube_idn_to_ascii($save_data['reply-to']);
+
+  if (!$plugin['abort'])
+    $insert_id = $save_data['email'] ? $USER->insert_identity($save_data) : null;
+  else
+    $insert_id = $plugin['result'];
+
+  if ($insert_id) {
     $OUTPUT->show_message('successfullysaved', 'confirmation', null, false);
     
     $_GET['_iid'] = $insert_id;
@@ -104,10 +133,9 @@ else if (IDENTITIES_LEVEL < 2)
     if (!empty($_POST['_standard']))
       $default_id = $insert_id;
   }
-  else
-  {
+  else {
     // show error message
-    $OUTPUT->show_message('errorsaving', 'error', null, false);
+    $OUTPUT->show_message($plugin['message'] ? $plugin['message'] : 'errorsaving', 'error', null, false);
     rcmail_overwrite_action('edit-identity');
     return;
   }
@@ -122,5 +150,3 @@ if ($default_id)
 
 // go to next step
 rcmail_overwrite_action('identities');
-
-

@@ -177,11 +177,6 @@ body.iframe
   padding: 20px 10px 10px 10px;
 }
 
-fieldset
-{
-  background-color: white;
-}
-
 legend, label
 {
   color: #666666;
@@ -199,14 +194,14 @@ div.rulerow, div.actionrow
   width: auto;
   padding: 2px;
   white-space: nowrap;
-  border: 1px solid white;
+  border: 1px solid #F2F2F2;
 }
 
 div.rulerow:hover, div.actionrow:hover
 {
   padding: 2px;
   white-space: nowrap;
-  background: #F6F6F6;
+  background: #F9F9F9;
   border: 1px solid silver;
 }
 
@@ -280,12 +275,22 @@ span.label
   float: right;
 }
 
-div .itemlist
+.itemlist
 {
   line-height: 25px;
 }
 
-div .itemlist input
+.itemlist input
 {
   vertical-align: middle;
+}
+
+span.sieve.error
+{
+  color: red;
+}
+
+#managesieve-tip
+{
+  width: 200px;
 }

@@ -13,7 +13,7 @@ CREATE TABLE [dbo].[contacts] (
 	[changed] [datetime] NOT NULL ,
 	[del] [char] (1) COLLATE Latin1_General_CI_AI NOT NULL ,
 	[name] [varchar] (128) COLLATE Latin1_General_CI_AI NOT NULL ,
-	[email] [varchar] (128) COLLATE Latin1_General_CI_AI NOT NULL ,
+	[email] [varchar] (255) COLLATE Latin1_General_CI_AI NOT NULL ,
 	[firstname] [varchar] (128) COLLATE Latin1_General_CI_AI NOT NULL ,
 	[surname] [varchar] (128) COLLATE Latin1_General_CI_AI NOT NULL ,
 	[vcard] [text] COLLATE Latin1_General_CI_AI NULL 
@@ -255,7 +255,7 @@ ALTER TABLE [dbo].[users] ADD
 	CONSTRAINT [DF_users_created] DEFAULT (getdate()) FOR [created]
 GO
 
-CREATE  INDEX [IX_users_username] ON [dbo].[users]([username]) ON [PRIMARY]
+CREATE  UNIQUE INDEX [IX_users_username] ON [dbo].[users]([username],[mail_host]) ON [PRIMARY]
 GO
 
 CREATE  INDEX [IX_users_alias] ON [dbo].[users]([alias]) ON [PRIMARY]
@@ -291,8 +291,11 @@ ALTER TABLE [dbo].[contactgroupmembers] ADD CONSTRAINT [FK_contactgroupmembers_c
     ON DELETE CASCADE ON UPDATE CASCADE
 GO
 
-ALTER TABLE [dbo].[contactgroupmembers] ADD CONSTRAINT [FK_contactgroupmembers_contact_id] 
-    FOREIGN KEY ([contact_id]) REFERENCES [dbo].[contacts] ([contact_id])
-    ON DELETE CASCADE ON UPDATE CASCADE
+-- Use trigger instead of foreign key (#1487112)
+-- "Introducing FOREIGN KEY constraint ... may cause cycles or multiple cascade paths."
+CREATE TRIGGER [contact_delete_member] ON [dbo].[contacts]
+    AFTER DELETE AS
+    DELETE FROM [dbo].[contactgroupmembers]
+    WHERE [contact_id] IN (SELECT [contact_id] FROM deleted)
 GO
 

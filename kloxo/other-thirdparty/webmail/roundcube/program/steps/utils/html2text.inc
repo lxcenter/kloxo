@@ -15,14 +15,19 @@
  | Author: Thomas Bruederli <roundcube@gmail.com>                        |
  +-----------------------------------------------------------------------+
 
- $Id: html2text.inc 3989 2010-09-25 13:03:53Z alec $
+ $Id: html2text.inc 4309 2010-12-06 11:13:55Z alec $
 
 */
 
-$converter = new html2text($HTTP_RAW_POST_DATA);
+$html = $HTTP_RAW_POST_DATA;
+
+// Replace emoticon images with its text representation
+$html = rcmail_replace_emoticons($html);
+
+$converter = new html2text($html);
 
 header('Content-Type: text/plain; charset=UTF-8');
-print trim($converter->get_text());
+print rtrim($converter->get_text());
 exit;
 
 

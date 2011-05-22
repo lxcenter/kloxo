@@ -15,7 +15,7 @@
  | Author: Thomas Bruederli <roundcube@gmail.com>                        |
  +-----------------------------------------------------------------------+
 
- $Id: main.inc 3989 2010-09-25 13:03:53Z alec $
+ $Id: main.inc 4568 2011-02-24 12:12:09Z alec $
 
 */
 
@@ -151,6 +151,7 @@ function rcmail_temp_gc()
 /**
  * Garbage collector for cache entries.
  * Remove all expired message cache records
+ * @return void
  */
 function rcmail_cache_gc()
   {
@@ -187,7 +188,7 @@ function rcube_error_handler($errno, $errstr)
  * @param  string Input string
  * @param  string Suspected charset of the input string
  * @param  string Target charset to convert to; defaults to RCMAIL_CHARSET
- * @return Converted string
+ * @return string Converted string
  */
 function rcube_charset_convert($str, $from, $to=NULL)
   {
@@ -196,7 +197,7 @@ function rcube_charset_convert($str, $from, $to=NULL)
   static $mbstring_list = null;
   static $convert_warning = false;
   static $conv = null;
-  
+
   $error = false;
 
   $to = empty($to) ? strtoupper(RCMAIL_CHARSET) : rcube_parse_charset($to);
@@ -322,8 +323,8 @@ function rcube_charset_convert($str, $from, $to=NULL)
  * Sometimes charset string is malformed, there are also charset aliases 
  * but we need strict names for charset conversion (specially utf8 class)
  *
- * @param  string  Input charset name
- * @return The validated charset name
+ * @param  string Input charset name
+ * @return string The validated charset name
  */
 function rcube_parse_charset($input)
   {
@@ -339,6 +340,9 @@ function rcube_parse_charset($input)
     '/UNICODE-1-1-*/',  // RFC1641/1642
     '/^X-/',            // X- prefix (e.g. X-ROMAN8 => ROMAN8)
     ), '', $charset);
+
+  if ($charset == 'BINARY')
+    return $charsets[$input] = null;
 
   # Aliases: some of them from HTML5 spec.
   $aliases = array(
@@ -372,6 +376,8 @@ function rcube_parse_charset($input)
     '204'           => 'WINDOWS-1251',
     '222'           => 'WINDOWS-874',
     '238'           => 'WINDOWS-1250',
+    'MS950'         => 'CP950',
+    'WINDOWS949'    => 'UHC',
   );
 
   // allow A-Z and 0-9 only
@@ -427,7 +433,7 @@ function rcube_parse_charset($input)
  * Converts string from standard UTF-7 (RFC 2152) to UTF-8.
  *
  * @param  string  Input string
- * @return The converted string
+ * @return string  The converted string
  */
 function rcube_utf7_to_utf8($str)
 {
@@ -486,7 +492,7 @@ function rcube_utf7_to_utf8($str)
  * Converts string from UTF-16 to UTF-8 (helper for utf-7 to utf-8 conversion)
  *
  * @param  string  Input string
- * @return The converted string
+ * @return string  The converted string
  */
 function rcube_utf16_to_utf8($str)
 {
@@ -517,7 +523,7 @@ function rcube_utf16_to_utf8($str)
  * @param  string  Encoding type: text|html|xml|js|url
  * @param  string  Replace mode for tags: show|replace|remove
  * @param  boolean Convert newlines
- * @return The quoted string
+ * @return string  The quoted string
  */
 function rep_specialchars_output($str, $enctype='', $mode='', $newlines=TRUE)
   {
@@ -533,7 +539,7 @@ function rep_specialchars_output($str, $enctype='', $mode='', $newlines=TRUE)
     {
     if (!$html_encode_arr)
       {
-      $html_encode_arr = get_html_translation_table(HTML_SPECIALCHARS);        
+      $html_encode_arr = get_html_translation_table(HTML_SPECIALCHARS);
       unset($html_encode_arr['?']);
       }
 
@@ -550,10 +556,12 @@ function rep_specialchars_output($str, $enctype='', $mode='', $newlines=TRUE)
       }
     else if ($mode=='remove')
       $str = strip_tags($str);
-    
+
+    $out = strtr($str, $encode_arr);
+
     // avoid douple quotation of &
-    $out = preg_replace('/&amp;([A-Za-z]{2,6}|#[0-9]{2,4});/', '&\\1;', strtr($str, $encode_arr));
-      
+    $out = preg_replace('/&amp;([A-Za-z]{2,6}|#[0-9]{2,4});/', '&\\1;', $out);
+
     return $newlines ? nl2br($out) : $out;
     }
 
@@ -853,8 +861,8 @@ function rcmail_mod_css_styles($source, $container_id)
   $replacements = new rcube_string_replacer;
 
   // ignore the whole block if evil styles are detected
-  $stripped = preg_replace('/[^a-z\(:]/', '', rcmail_xss_entity_decode($source));
-  if (preg_match('/expression|behavior|url\(|import/', $stripped))
+  $stripped = preg_replace('/[^a-z\(:;]/', '', rcmail_xss_entity_decode($source));
+  if (preg_match('/expression|behavior|url\(|import[^a]/', $stripped))
     return '/* evil! */';
 
   // remove css comments (sometimes used for some ugly hacks)
@@ -967,7 +975,7 @@ function parse_attrib_string($str)
  * @return string Formatted date string
  */
 function format_date($date, $format=NULL)
-  {
+{
   global $CONFIG;
   
   $ts = NULL;
@@ -991,7 +999,7 @@ function format_date($date, $format=NULL)
 
   if (empty($ts))
     return '';
-   
+
   // get user's timezone
   if ($CONFIG['timezone'] === 'auto')
     $tz = isset($_SESSION['timezone']) ? $_SESSION['timezone'] : date('Z')/3600;
@@ -1003,7 +1011,7 @@ function format_date($date, $format=NULL)
 
   // convert time to user's timezone
   $timestamp = $ts - date('Z', $ts) + ($tz * 3600);
-  
+
   // get current timestamp in user's timezone
   $now = time();  // local time
   $now -= (int)date('Z'); // make GMT time
@@ -1011,30 +1019,33 @@ function format_date($date, $format=NULL)
   $now_date = getdate($now);
 
   $today_limit = mktime(0, 0, 0, $now_date['mon'], $now_date['mday'], $now_date['year']);
-  $week_limit = mktime(0, 0, 0, $now_date['mon'], $now_date['mday']-6, $now_date['year']);
+  $week_limit  = mktime(0, 0, 0, $now_date['mon'], $now_date['mday']-6, $now_date['year']);
 
   // define date format depending on current time
   if (!$format) {
-    if ($CONFIG['prettydate'] && $timestamp > $today_limit && $timestamp < $now)
-      return sprintf('%s %s', rcube_label('today'), date($CONFIG['date_today'] ? $CONFIG['date_today'] : 'H:i', $timestamp));
+    if ($CONFIG['prettydate'] && $timestamp > $today_limit && $timestamp < $now) {
+      $format = $CONFIG['date_today'] ? $CONFIG['date_today'] : 'H:i';
+      $today  = true;
+    }
     else if ($CONFIG['prettydate'] && $timestamp > $week_limit && $timestamp < $now)
       $format = $CONFIG['date_short'] ? $CONFIG['date_short'] : 'D H:i';
     else
       $format = $CONFIG['date_long'] ? $CONFIG['date_long'] : 'd.m.Y H:i';
-    }
+  }
 
   // strftime() format
-  if (preg_match('/%[a-z]+/i', $format))
-    return strftime($format, $timestamp);
+  if (preg_match('/%[a-z]+/i', $format)) {
+    $format = strftime($format, $timestamp);
+    return $today ? (rcube_label('today') . ' ' . $format) : $format;
+  }
 
   // parse format string manually in order to provide localized weekday and month names
   // an alternative would be to convert the date() format string to fit with strftime()
   $out = '';
-  for($i=0; $i<strlen($format); $i++)
-    {
+  for($i=0; $i<strlen($format); $i++) {
     if ($format{$i}=='\\')  // skip escape chars
       continue;
-    
+
     // write char "as-is"
     if ($format{$i}==' ' || $format{$i-1}=='\\')
       $out .= $format{$i};
@@ -1054,10 +1065,21 @@ function format_date($date, $format=NULL)
       $out .= strftime('%x %X', $timestamp);
     else
       $out .= date($format{$i}, $timestamp);
-    }
-  
-  return $out;
   }
+
+  if ($today) {
+    $label = rcube_label('today');
+    // replcae $ character with "Today" label (#1486120)
+    if (strpos($out, '$') !== false) {
+      $out = preg_replace('/\$/', $label, $out, 1);
+    }
+    else {
+      $out = $label . ' ' . $out;
+    }
+  }
+
+  return $out;
+}
 
 
 /**
@@ -1087,6 +1109,7 @@ function format_email_recipient($email, $name='')
  * Print or write debug messages
  *
  * @param mixed Debug message or data
+ * @return void
  */
 function console()
   {
@@ -1121,6 +1144,7 @@ function console()
  *
  * @param $name name of log file
  * @param line Line to append
+ * @return void
  */
 function write_log($name, $line)
   {
@@ -1173,6 +1197,8 @@ function write_log($name, $line)
 
 /**
  * Write login data (name, ID, IP address) to the 'userlogins' log file.
+ *
+ * @return void
  */
 function rcmail_log_login()
 {
@@ -1181,35 +1207,62 @@ function rcmail_log_login()
   if (!$RCMAIL->config->get('log_logins') || !$RCMAIL->user)
     return;
 
-  $address = $_SERVER['REMOTE_ADDR'];
-  // append the NGINX X-Real-IP header, if set
-  if (!empty($_SERVER['HTTP_X_REAL_IP'])) {
-    $remote_ip[] = 'X-Real-IP: ' . $_SERVER['HTTP_X_REAL_IP'];
-  }
-  // append the X-Forwarded-For header, if set
-  if (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
-    $remote_ip[] = 'X-Forwarded-For: ' . $_SERVER['HTTP_X_FORWARDED_FOR'];
-  }
-
-  if (!empty($remote_ip))
-    $address .= '(' . implode(',', $remote_ip) . ')';
-
   write_log('userlogins', sprintf('Successful login for %s (ID: %d) from %s',
-    $RCMAIL->user->get_username(), $RCMAIL->user->ID, $address));
+    $RCMAIL->user->get_username(), $RCMAIL->user->ID, rcmail_remote_ip()));
+}
+
+
+/**
+ * Returns remote IP address and forwarded addresses if found
+ *
+ * @return string Remote IP address(es)
+ */
+function rcmail_remote_ip()
+{
+    $address = $_SERVER['REMOTE_ADDR'];
+
+    // append the NGINX X-Real-IP header, if set
+    if (!empty($_SERVER['HTTP_X_REAL_IP'])) {
+        $remote_ip[] = 'X-Real-IP: ' . $_SERVER['HTTP_X_REAL_IP'];
+    }
+    // append the X-Forwarded-For header, if set
+    if (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
+        $remote_ip[] = 'X-Forwarded-For: ' . $_SERVER['HTTP_X_FORWARDED_FOR'];
+    }
+
+    if (!empty($remote_ip))
+        $address .= '(' . implode(',', $remote_ip) . ')';
+
+    return $address;
+}
+
+
+/**
+ * Check whether the HTTP referer matches the current request
+ *
+ * @return boolean True if referer is the same host+path, false if not
+ */
+function rcube_check_referer()
+{
+  $uri = parse_url($_SERVER['REQUEST_URI']);
+  $referer = parse_url(rc_request_header('Referer'));
+  return $referer['host'] == rc_request_header('Host') && $referer['path'] == $uri['path'];
 }
 
 
 /**
  * @access private
+ * @return mixed
  */
 function rcube_timer()
 {
   return microtime(true);
 }
-  
+
 
 /**
  * @access private
+ * @return void
  */
 function rcube_print_time($timer, $label='Timer', $dest='console')
 {
@@ -1261,7 +1314,7 @@ function rcmail_mailbox_list($attrib)
     foreach ($a_folders as $folder)
       rcmail_build_folder_tree($a_mailboxes, $folder, $delimiter);
   }
-  
+
   // allow plugins to alter the folder tree or to localize folder names
   $hook = $RCMAIL->plugins->exec_hook('render_mailboxlist', array('list' => $a_mailboxes, 'delimiter' => $delimiter));
 
@@ -1292,7 +1345,7 @@ function rcmail_mailbox_list($attrib)
  * Return the mailboxlist as html_select object
  *
  * @param array Named parameters
- * @return object html_select HTML drop-down object
+ * @return html_select HTML drop-down object
  */
 function rcmail_mailbox_select($p = array())
 {
@@ -1300,8 +1353,13 @@ function rcmail_mailbox_select($p = array())
   
   $p += array('maxlength' => 100, 'realnames' => false);
   $a_mailboxes = array();
-  
-  foreach ($RCMAIL->imap->list_mailboxes() as $folder)
+
+  if ($p['unsubscribed'])
+    $list = $RCMAIL->imap->list_unsubscribed();
+  else
+    $list = $RCMAIL->imap->list_mailboxes();
+
+  foreach ($list as $folder)
     if (empty($p['exceptions']) || !in_array($folder, $p['exceptions']))
       rcmail_build_folder_tree($a_mailboxes, $folder, $RCMAIL->imap->get_hierarchy_delimiter());
 
@@ -1319,14 +1377,25 @@ function rcmail_mailbox_select($p = array())
 /**
  * Create a hierarchical array of the mailbox list
  * @access private
+ * @return void
  */
 function rcmail_build_folder_tree(&$arrFolders, $folder, $delm='/', $path='')
 {
+  global $RCMAIL;
+
   $pos = strpos($folder, $delm);
+
   if ($pos !== false) {
     $subFolders = substr($folder, $pos+1);
     $currentFolder = substr($folder, 0, $pos);
-    $virtual = !isset($arrFolders[$currentFolder]);
+
+    // sometimes folder has a delimiter as the last character
+    if (!strlen($subFolders))
+      $virtual = false;
+    else if (!isset($arrFolders[$currentFolder]))
+      $virtual = true;
+    else
+      $virtual = $arrFolders[$currentFolder]['virtual'];
   }
   else {
     $subFolders = false;
@@ -1335,6 +1404,11 @@ function rcmail_build_folder_tree(&$arrFolders, $folder, $delm='/', $path='')
   }
 
   $path .= $currentFolder;
+
+  // Check \Noselect option (if options are in cache)
+  if (!$virtual && ($opts = $RCMAIL->imap->mailbox_options($path))) {
+    $virtual = in_array('\\Noselect', $opts);
+  }
 
   if (!isset($arrFolders[$currentFolder])) {
     $arrFolders[$currentFolder] = array(
@@ -1346,7 +1420,7 @@ function rcmail_build_folder_tree(&$arrFolders, $folder, $delm='/', $path='')
   else
     $arrFolders[$currentFolder]['virtual'] = $virtual;
 
-  if (!empty($subFolders))
+  if (strlen($subFolders))
     rcmail_build_folder_tree($arrFolders[$currentFolder]['folders'], $subFolders, $delm, $path.$delm);
 }
   
@@ -1354,6 +1428,7 @@ function rcmail_build_folder_tree(&$arrFolders, $folder, $delm='/', $path='')
 /**
  * Return html for a structured list &lt;ul&gt; for the mailbox tree
  * @access private
+ * @return string
  */
 function rcmail_render_folder_tree_html(&$arrFolders, &$mbox_name, &$jslist, $attrib, $nestLevel=0)
 {
@@ -1452,6 +1527,7 @@ function rcmail_render_folder_tree_html(&$arrFolders, &$mbox_name, &$jslist, $at
 /**
  * Return html for a flat list <select> for the mailbox tree
  * @access private
+ * @return string
  */
 function rcmail_render_folder_tree_select(&$arrFolders, &$mbox_name, $maxlength, &$select, $realnames=false, $nestLevel=0)
   {
@@ -1485,6 +1561,7 @@ function rcmail_render_folder_tree_select(&$arrFolders, &$mbox_name, $maxlength,
 /**
  * Return internal name for the given folder if it matches the configured special folders
  * @access private
+ * @return string
  */
 function rcmail_folder_classname($folder_id)
 {
@@ -1518,16 +1595,108 @@ function rcmail_localize_foldername($name)
 }
 
 
+function rcmail_quota_display($attrib)
+{
+  global $OUTPUT;
+
+  if (!$attrib['id'])
+    $attrib['id'] = 'rcmquotadisplay';
+
+  if(isset($attrib['display']))
+    $_SESSION['quota_display'] = $attrib['display'];
+
+  $OUTPUT->add_gui_object('quotadisplay', $attrib['id']);
+
+  $quota = rcmail_quota_content($attrib);
+
+  $OUTPUT->add_script('$(document).ready(function(){
+	rcmail.set_quota('.json_serialize($quota).')});', 'foot');
+
+  return html::span($attrib, '');
+}
+
+
+function rcmail_quota_content($attrib=NULL)
+{
+  global $RCMAIL;
+
+  $quota = $RCMAIL->imap->get_quota();
+  $quota = $RCMAIL->plugins->exec_hook('quota', $quota);
+
+  $quota_result = (array) $quota;
+  $quota_result['type'] = isset($_SESSION['quota_display']) ? $_SESSION['quota_display'] : '';
+
+  if (!$quota['total'] && $RCMAIL->config->get('quota_zero_as_unlimited')) {
+    $quota_result['title'] = rcube_label('unlimited');
+    $quota_result['percent'] = 0;
+  }
+  else if ($quota['total']) {
+    if (!isset($quota['percent']))
+      $quota_result['percent'] = min(100, round(($quota['used']/max(1,$quota['total']))*100));
+
+    $title = sprintf('%s / %s (%.0f%%)',
+        show_bytes($quota['used'] * 1024), show_bytes($quota['total'] * 1024),
+        $quota_result['percent']);
+
+    $quota_result['title'] = $title;
+
+    if ($attrib['width'])
+      $quota_result['width'] = $attrib['width'];
+    if ($attrib['height'])
+      $quota_result['height']	= $attrib['height'];
+  }
+  else {
+    $quota_result['title'] = rcube_label('unknown');
+    $quota_result['percent'] = 0;
+  }
+
+  return $quota_result;
+}
+
+
+/**
+ * Outputs error message according to server error/response codes
+ *
+ * @param string Fallback message label
+ * @param string Fallback message label arguments
+ *
+ * @return void
+ */
+function rcmail_display_server_error($fallback=null, $fallback_args=null)
+{
+    global $RCMAIL;
+
+    $err_code = $RCMAIL->imap->get_error_code();
+    $res_code = $RCMAIL->imap->get_response_code();
+
+    if ($res_code == rcube_imap::NOPERM) {
+        $RCMAIL->output->show_message('errornoperm', 'error');
+    }
+    else if ($res_code == rcube_imap::READONLY) {
+        $RCMAIL->output->show_message('errorreadonly', 'error');
+    }
+    else if ($err_code && ($err_str = $RCMAIL->imap->get_error_str())) {
+        $RCMAIL->output->show_message('servererrormsg', 'error', array('msg' => $err_str));
+    }
+    else if ($fallback) {
+        $RCMAIL->output->show_message($fallback, 'error', $fallback_args);
+    }
+
+    return true;
+}
+
+
 /**
  * Output HTML editor scripts
  *
  * @param string Editor mode
+ * @return void
  */
 function rcube_html_editor($mode='')
 {
   global $RCMAIL, $CONFIG;
 
-  $hook = $RCMAIL->plugins->exec_hook('hmtl_editor', array('mode' => $mode));
+  $hook = $RCMAIL->plugins->exec_hook('html_editor', array('mode' => $mode));
 
   if ($hook['abort'])
     return;  
@@ -1542,8 +1711,46 @@ function rcube_html_editor($mode='')
 
   $RCMAIL->output->include_script('tiny_mce/tiny_mce.js');
   $RCMAIL->output->include_script('editor.js');
-  $RCMAIL->output->add_script('rcmail_editor_init("$__skin_path",
-    "'.JQ($lang).'", '.intval($CONFIG['enable_spellcheck']).', "'.$mode.'");');
+  $RCMAIL->output->add_script(sprintf("rcmail_editor_init('\$__skin_path', '%s', %d, '%s');",
+    JQ($lang), intval($CONFIG['enable_spellcheck']), $mode),
+    'foot');
+}
+
+
+/**
+ * Replaces TinyMCE's emoticon images with plain-text representation
+ *
+ * @param string HTML content
+ * @return string HTML content
+ */
+function rcmail_replace_emoticons($html)
+{
+  $emoticons = array(
+    '8-)' => 'smiley-cool',
+    ':-#' => 'smiley-foot-in-mouth',
+    ':-*' => 'smiley-kiss',
+    ':-X' => 'smiley-sealed',
+    ':-P' => 'smiley-tongue-out',
+    ':-@' => 'smiley-yell',
+    ":'(" => 'smiley-cry',
+    ':-(' => 'smiley-frown',
+    ':-D' => 'smiley-laughing',
+    ':-)' => 'smiley-smile',
+    ':-S' => 'smiley-undecided',
+    ':-$' => 'smiley-embarassed',
+    'O:-)' => 'smiley-innocent',
+    ':-|' => 'smiley-money-mouth',
+    ':-O' => 'smiley-surprised',
+    ';-)' => 'smiley-wink',
+  );
+
+  foreach ($emoticons as $idx => $file) {
+    // <img title="Cry" src="http://.../program/js/tiny_mce/plugins/emotions/img/smiley-cry.gif" border="0" alt="Cry" />
+    $search[]  = '/<img title="[a-z ]+" src="https?:\/\/[a-z0-9_.\/-]+\/tiny_mce\/plugins\/emotions\/img\/'.$file.'.gif"[^>]+\/>/i';
+    $replace[] = $idx;
+  }
+
+  return preg_replace($search, $replace, $html);
 }
 
 
@@ -1552,6 +1759,7 @@ function rcube_html_editor($mode='')
  *
  * @param integer HTTPS port number
  * @param boolean Enables 'use_https' option checking
+ * @return boolean
  */
 function rcube_https_check($port=null, $use_https=true)
 {
@@ -1570,7 +1778,13 @@ function rcube_https_check($port=null, $use_https=true)
 }
 
 
-// for backward compatibility
+/**
+ * For backward compatibility.
+ *
+ * @global rcmail $RCMAIL
+ * @param string $var_name Variable name.
+ * @return void
+ */
 function rcube_sess_unset($var_name=null)
 {
   global $RCMAIL;
@@ -1579,15 +1793,22 @@ function rcube_sess_unset($var_name=null)
 }
 
 
-// Replaces hostname variables
-function rcube_parse_host($name)
+
+/**
+ * Replaces hostname variables
+ *
+ * @param string $name Hostname
+ * @param string $host Optional IMAP hostname
+ * @return string
+ */
+function rcube_parse_host($name, $host='')
 {
   // %n - host
   $n = preg_replace('/:\d+$/', '', $_SERVER['SERVER_NAME']);
   // %d - domain name without first part, e.g. %d=mail.domain.tld, %m=domain.tld
   $d = preg_replace('/^[^\.]+\./', '', $n);
   // %h - IMAP host
-  $h = $_SESSION['imap_host'];
+  $h = $_SESSION['imap_host'] ? $_SESSION['imap_host'] : $host;
   // %z - IMAP domain without first part, e.g. %h=imap.domain.tld, %z=domain.tld
   $z = preg_replace('/^[^\.]+\./', '', $h);
 
@@ -1598,6 +1819,10 @@ function rcube_parse_host($name)
 
 /**
  * E-mail address validation
+ *
+ * @param string $email Email address
+ * @param boolean $dns_check True to check dns
+ * @return boolean
  */
 function check_email($email, $dns_check=true)
 {
@@ -1665,6 +1890,39 @@ function check_email($email, $dns_check=true)
   return false;
 }
 
+/*
+ * Idn_to_ascii wrapper.
+ * Intl/Idn modules version of this function doesn't work with e-mail address
+ */
+function rcube_idn_to_ascii($str)
+{
+  return rcube_idn_convert($str, true);
+}
+
+/*
+ * Idn_to_ascii wrapper.
+ * Intl/Idn modules version of this function doesn't work with e-mail address
+ */
+function rcube_idn_to_utf8($str)
+{
+  return rcube_idn_convert($str, false);
+}
+
+function rcube_idn_convert($input, $is_utf=false)
+{
+  if ($at = strpos($input, '@')) {
+    $user   = substr($input, 0, $at);
+    $domain = substr($input, $at+1);
+  }
+  else {
+    $domain = $input;
+  }
+
+  $domain = $is_utf ? idn_to_ascii($domain) : idn_to_utf8($domain);
+
+  return $at ? $user . '@' . $domain : $domain;
+}
+
 
 /**
  * Helper class to turn relative urls into absolute ones
@@ -1723,6 +1981,7 @@ function raise_error($arg=array(), $log=false, $terminate=false)
  * Report error according to configured debug_level
  *
  * @param array Named parameters
+ * @return void
  * @see raise_error()
  */
 function log_bug($arg_arr)

@@ -15,7 +15,7 @@
  | Author: Thomas Bruederli <roundcube@gmail.com>                        |
  +-----------------------------------------------------------------------+
 
- $Id: delete_identity.inc 3989 2010-09-25 13:03:53Z alec $
+ $Id: delete_identity.inc 4025 2010-09-30 13:24:33Z alec $
 
 */
 
@@ -32,12 +32,13 @@ if ($iid && preg_match('/^[0-9]+(,[0-9]+)*$/', $iid))
 {
   $plugin = $RCMAIL->plugins->exec_hook('identity_delete', array('id' => $iid));
   
-  if (!$plugin['abort'] && $USER->delete_identity($iid)) {
+  $deleted = !$plugin['abort'] ? $USER->delete_identity($iid) : $plugin['result'];
+
+  if ($deleted)
     $OUTPUT->show_message('deletedsuccessfully', 'confirmation', null, false);
-  }
-  else {
-    $OUTPUT->show_message('nodeletelastidentity', 'error', null, false);
-  }
+  else
+    $OUTPUT->show_message($plugin['message'] ? $plugin['message'] : 'nodeletelastidentity', 'error', null, false);
+
   // send response
   if ($OUTPUT->ajax_call)
     $OUTPUT->send();
@@ -48,5 +49,3 @@ if ($OUTPUT->ajax_call)
 
 // go to identities page
 rcmail_overwrite_action('identities');
-
-

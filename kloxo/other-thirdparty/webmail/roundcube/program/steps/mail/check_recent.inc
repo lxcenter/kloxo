@@ -15,7 +15,7 @@
  | Author: Thomas Bruederli <roundcube@gmail.com>                        |
  +-----------------------------------------------------------------------+
 
- $Id: check_recent.inc 3989 2010-09-25 13:03:53Z alec $
+ $Id: check_recent.inc 4084 2010-10-13 19:15:51Z alec $
 
 */
 
@@ -40,8 +40,10 @@ foreach ($a_mailboxes as $mbox_name) {
 
         // refresh saved search set
         $search_request = get_input_value('_search', RCUBE_INPUT_GPC);
-        if ($search_request && isset($_SESSION['search'][$search_request])) {
-            $_SESSION['search'][$search_request] = $IMAP->refresh_search();
+        if ($search_request && isset($_SESSION['search'])
+            && $_SESSION['search_request'] == $search_request
+        ) {
+            $_SESSION['search'] = $IMAP->refresh_search();
         }
 
         if (!empty($_GET['_quota']))

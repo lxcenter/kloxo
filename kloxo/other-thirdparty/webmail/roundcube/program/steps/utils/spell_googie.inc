@@ -18,7 +18,7 @@
  | Author: Thomas Bruederli <roundcube@gmail.com>                        |
  +-----------------------------------------------------------------------+
 
- $Id: spell_googie.inc 3989 2010-09-25 13:03:53Z alec $
+ $Id: spell_googie.inc 4626 2011-03-31 12:32:44Z alec $
 
 */
 
@@ -41,6 +41,8 @@ if (!empty($CONFIG['spellcheck_uri']))
   }
 
 $data = file_get_contents('php://input');
+// Google has some problem with spaces, use \n instead
+$data = str_replace(' ', "\n", $data);
 $store = "";
 
 if ($fp = fsockopen($host, $port, $errno, $errstr, 30))

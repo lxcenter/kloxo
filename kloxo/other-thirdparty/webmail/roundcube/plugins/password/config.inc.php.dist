@@ -18,6 +18,9 @@ $rcmail_config['password_minimum_length'] = 0;
 // Change to false to remove this check.
 $rcmail_config['password_require_nonalpha'] = false;
 
+// Enables logging of password changes into logs/password
+$rcmail_config['password_log'] = false;
+
 
 // SQL Driver options
 // ------------------
@@ -127,6 +130,7 @@ $rcmail_config['password_ldap_adminPW'] = null;
 // '%login' will be replaced by the current roundcube user's login
 // '%name' will be replaced by the current roundcube user's name part
 // '%domain' will be replaced by the current roundcube user's domain part
+// '%dc' will be replaced by domain name hierarchal string e.g. "dc=test,dc=domain,dc=com"
 // Exemple: 'uid=%login,ou=people,dc=exemple,dc=com'
 $rcmail_config['password_ldap_userDN_mask'] = 'uid=%login,ou=people,dc=exemple,dc=com';
 
@@ -164,6 +168,7 @@ $rcmail_config['password_ldap_search_base'] = 'ou=people,dc=example,dc=com';
 // '%login' will be replaced by the current roundcube user's login
 // '%name' will be replaced by the current roundcube user's name part
 // '%domain' will be replaced by the current roundcube user's domain part
+// '%dc' will be replaced by domain name hierarchal string e.g. "dc=test,dc=domain,dc=com"
 // Example: '(uid=%login)'
 // Example: '(&(objectClass=posixAccount)(uid=%login))'
 $rcmail_config['password_ldap_search_filter'] = '(uid=%login)';
@@ -186,6 +191,22 @@ $rcmail_config['password_ldap_pwattr'] = 'userPassword';
 // See http://pear.php.net/package/Net_LDAP2/docs/latest/Net_LDAP2/Net_LDAP2_Entry.html#methodreplace
 // Default: true
 $rcmail_config['password_ldap_force_replace'] = true;
+
+// LDAP Password Last Change Date
+// Some places use an attribute to store the date of the last password change
+// The date is meassured in "days since epoch" (an integer value)
+// Whenever the password is changed, the attribute will be updated if set (e.g. shadowLastChange)
+$rcmail_config['password_ldap_lchattr'] = '';
+
+// LDAP Samba password attribute, e.g. sambaNTPassword
+// Name of the LDAP's Samba attribute used for storing user password
+$rcmail_config['password_ldap_samba_pwattr'] = '';
+ 
+// LDAP Samba Password Last Change Date attribute, e.g. sambaPwdLastSet
+// Some places use an attribute to store the date of the last password change
+// The date is meassured in "seconds since epoch" (an integer value)
+// Whenever the password is changed, the attribute will be updated if set
+$rcmail_config['password_ldap_samba_lchattr'] = '';
 
 
 // DirectAdmin Driver options
@@ -250,3 +271,30 @@ $rcmail_config['xmail_user'] = 'YourXmailControlUser';
 $rcmail_config['xmail_pass'] = 'YourXmailControlPass';
 $rcmail_config['xmail_port'] = 6017;
 
+
+// hMail Driver options
+// -----------------------
+// Remote hMailServer configuration
+// true:  HMailserver is on a remote box (php.ini: com.allow_dcom = true)
+// false: Hmailserver is on same box as PHP
+$rcmail_config['hmailserver_remote_dcom'] = false;
+// Windows credentials
+$rcmail_config['hmailserver_server'] = array(
+    'Server' => 'localhost', // hostname or ip address
+    'Username' => 'administrator', // windows username
+    'Password' => 'password' // windows user password
+);
+
+
+// Virtualmin Driver options
+// -------------------------
+// Username format:
+// 0: username@domain
+// 1: username%domain
+// 2: username.domain
+// 3: domain.username
+// 4: username-domain
+// 5: domain-username
+// 6: username_domain
+// 7: domain_username
+$rcmail_config['password_virtualmin_format'] = 0;

@@ -13,7 +13,7 @@
  | Author: Dashamir Hoxha <dhoxha@albaniaonline.net>                     |
  +-----------------------------------------------------------------------+
 
- @version $Id: labels.inc 3989 2010-09-25 13:03:53Z alec $
+ @version $Id: labels.inc 4345 2010-12-17 14:28:38Z thomasb $
 
 */
 
@@ -180,9 +180,6 @@ $labels['subscribed'] = 'Regjistruar';
 $labels['messagecount'] = 'Mesazhe';
 $labels['create'] = 'Krijo';
 $labels['createfolder'] = 'Krijo kuti të re';
-$labels['rename'] = 'Riemëro';
-$labels['renamefolder'] = 'Riemëro kutinë';
-$labels['deletefolder'] = 'Fshi kutinë';
 $labels['managefolders'] = 'Sistemo kutitë';
 $labels['sortby'] = 'Rradhit sipas';
 $labels['sortasc'] = 'Rradhitje rritëse';

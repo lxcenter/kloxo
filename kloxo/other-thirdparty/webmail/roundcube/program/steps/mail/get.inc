@@ -15,7 +15,7 @@
  | Author: Thomas Bruederli <roundcube@gmail.com>                        |
  +-----------------------------------------------------------------------+
 
- $Id: get.inc 3989 2010-09-25 13:03:53Z alec $
+ $Id: get.inc 4115 2010-10-20 11:41:48Z alec $
 
 */
 
@@ -91,6 +91,7 @@ else if ($pid = get_input_value('_part', RCUBE_INPUT_GET)) {
       header("Content-Type: text/$ctype_secondary; charset=" . ($part->charset ? $part->charset : RCMAIL_CHARSET));
     }
     else {
+      $mimetype = rcmail_fix_mimetype($mimetype);
       header("Content-Type: $mimetype");
       header("Content-Transfer-Encoding: binary");
     }

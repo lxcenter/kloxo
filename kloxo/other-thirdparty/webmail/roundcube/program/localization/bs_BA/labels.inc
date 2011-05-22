@@ -13,7 +13,7 @@
  | Author: Begzudin Omerovic <Begzudin.Omerovic@gmail.com>               |
  +-----------------------------------------------------------------------+
 
- @version $Id: labels.inc 3989 2010-09-25 13:03:53Z alec $
+ @version $Id: labels.inc 4345 2010-12-17 14:28:38Z thomasb $
 
 */
 
@@ -221,9 +221,6 @@ $labels['foldername']  = 'Ime fascikle';
 $labels['subscribed']  = 'Pretplaćen';
 $labels['create']  = 'Napravi';
 $labels['createfolder']  = 'Napravi novu fasciklu';
-$labels['rename'] = 'Preimenuj';
-$labels['renamefolder'] = 'Preimenuj fasciklu';
-$labels['deletefolder']  = 'Obriši fasciklu';
 $labels['managefolders']  = 'Podesi fasciklu';
 
 $labels['sortby'] = 'Sortiraj po';

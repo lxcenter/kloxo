@@ -53,7 +53,7 @@ class example_addressbook_backend extends rcube_addressbook
     return $this->result;
   }
 
-  public function search($fields, $value, $strict=false, $select=true)
+  public function search($fields, $value, $strict=false, $select=true, $nocount=false, $required=array())
   {
     // no search implemented, just list all records
     return $this->list_records();

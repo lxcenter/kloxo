@@ -58,17 +58,7 @@
   cellspacing="0"
   columns=""
   summary="Message list"
-  messageIcon="/images/icons/dot.png"
-  unreadIcon="/images/icons/unread.png"
-  deletedIcon="/images/icons/deleted.png"
-  repliedIcon="/images/icons/replied.png"
-  forwardedIcon="/images/icons/forwarded.png"
-  forwardedrepliedIcon="/images/icons/forwarded_replied.png"
-  attachmentIcon="/images/icons/attachment.png"
-  flaggedIcon="/images/icons/flagged.png"
-  unflaggedIcon="/images/icons/blank.gif"
-  unreadchildrenIcon="" 
-  optionsmenuIcon="/images/icons/columnpicker.gif" />
+  optionsmenuIcon="true" />
 </div>
 <div class="boxfooter">
     <div id="listcontrols" class="pagenav">
@@ -120,7 +110,9 @@
 <roundcube:button command="checkmail" type="link" class="button checkmail" classAct="button checkmail" classSel="button checkmailSel" title="checkmail" content=" " />
 <roundcube:button command="compose" type="link" class="button compose" classAct="button compose" classSel="button composeSel" title="writenewmessage" content=" " />
 <roundcube:button command="reply" type="link" class="buttonPas reply" classAct="button reply" classSel="button replySel" title="replytomessage" content=" " />
+<span class="dropbutton">
 <roundcube:button command="reply-all" type="link" class="buttonPas replyAll" classAct="button replyAll" classSel="button replyAllSel" title="replytoallmessage" content=" " />
+<span id="replyallmenulink" onclick="rcmail_ui.show_popup('replyallmenu');return false"></span></span>
 <roundcube:button command="forward" type="link" class="buttonPas forward" classAct="button forward" classSel="button forwardSel" title="forwardmessage" content=" " />
 <roundcube:button command="delete" type="link" class="buttonPas delete" classAct="button delete" classSel="button deleteSel" title="deletemessage" content=" " />
 <roundcube:container name="toolbar" id="messagetoolbar" />
@@ -138,6 +130,7 @@
   </ul>
 </div>
 
+<roundcube:include file="/includes/replyallmenu.html" />
 <roundcube:include file="/includes/messagemenu.html" />
 
 <div id="searchmenu" class="popupmenu">
@@ -196,6 +189,7 @@
     <li><input type="checkbox" name="list_col[]" value="cc" id="cols_cc" /><label for="cols_cc"><roundcube:label name="cc" /></label></li>
     <li><input type="checkbox" name="list_col[]" value="date" id="cols_date" /><label for="cols_date"><roundcube:label name="date" /></label></li>
     <li><input type="checkbox" name="list_col[]" value="size" id="cols_size" /><label for="cols_size"><roundcube:label name="size" /></label></li>
+    <li><input type="checkbox" name="list_col[]" value="status" id="cols_status" /><label for="cols_status"><roundcube:label name="readstatus" /></label></li>
     <li><input type="checkbox" name="list_col[]" value="attachment" id="cols_attachment" /><label for="cols_attachment"><roundcube:label name="attachment" /></label></li>
     <li><input type="checkbox" name="list_col[]" value="flag" id="cols_flag" /><label for="cols_flag"><roundcube:label name="flag" /></label></li>
   </ul>

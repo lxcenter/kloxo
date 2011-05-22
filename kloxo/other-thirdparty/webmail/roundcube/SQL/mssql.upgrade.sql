@@ -22,7 +22,7 @@ ALTER TABLE [dbo].[identities] ADD CONSTRAINT [FK_identities_user_id]
     ON DELETE CASCADE ON UPDATE CASCADE
 GO
 
-ALTER TABLE [dbo].[identities] add [changed] [datetime] NULL 
+ALTER TABLE [dbo].[identities] ADD [changed] [datetime] NULL 
 GO
 
 CREATE TABLE [dbo].[contactgroups] (
@@ -77,13 +77,23 @@ ALTER TABLE [dbo].[contactgroupmembers] ADD CONSTRAINT [FK_contactgroupmembers_c
     ON DELETE CASCADE ON UPDATE CASCADE
 GO
 
-ALTER TABLE [dbo].[contactgroupmembers] ADD CONSTRAINT [FK_contactgroupmembers_contact_id] 
-    FOREIGN KEY ([contact_id]) REFERENCES [dbo].[contacts] ([contact_id])
-    ON DELETE CASCADE ON UPDATE CASCADE
+CREATE TRIGGER [contact_delete_member] ON [dbo].[contacts]
+    AFTER DELETE AS
+    DELETE FROM [dbo].[contactgroupmembers]
+    WHERE [contact_id] IN (SELECT [contact_id] FROM deleted)
 GO
 
 ALTER TABLE [dbo].[contactgroups] ADD CONSTRAINT [FK_contactgroups_user_id]
     FOREIGN KEY ([user_id]) REFERENCES [dbo].[users] ([user_id])
     ON DELETE CASCADE ON UPDATE CASCADE
+GO
+
+-- Updates from version 0.4.2
+
+DROP INDEX [IX_users_username]
+GO
+CREATE UNIQUE INDEX [IX_users_username] ON [dbo].[users]([username],[mail_host]) ON [PRIMARY]
+GO
+ALTER TABLE [dbo].[contacts] ALTER COLUMN [email] [varchar] (255) COLLATE Latin1_General_CI_AI NOT NULL
 GO
 

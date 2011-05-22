@@ -75,6 +75,7 @@
  * - changed $ignore_elements behaviour
  * - added RFC2397 support
  * - base URL support
+ * - invalid HTML comments removal before parsing
  */
 
 class washtml
@@ -89,7 +90,7 @@ class washtml
   static $html_attribs = array('name', 'class', 'title', 'alt', 'width', 'height', 'align', 'nowrap', 'col', 'row', 'id', 'rowspan', 'colspan', 'cellspacing', 'cellpadding', 'valign', 'bgcolor', 'color', 'border', 'bordercolorlight', 'bordercolordark', 'face', 'marginwidth', 'marginheight', 'axis', 'border', 'abbr', 'char', 'charoff', 'clear', 'compact', 'coords', 'vspace', 'hspace', 'cellborder', 'size', 'lang', 'dir');  
 
   /* Block elements which could be empty but cannot be returned in short form (<tag />) */
-  static $block_elements = array('div', 'p', 'pre', 'blockquote', 'a', 'font', 'center', 'table', 'ul', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'ol', 'dl', 'strong');
+  static $block_elements = array('div', 'p', 'pre', 'blockquote', 'a', 'font', 'center', 'table', 'ul', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'ol', 'dl', 'strong', 'i', 'b');
   
   /* State for linked objects in HTML */
   public $extlinks = false;
@@ -270,6 +271,10 @@ class washtml
       $this->config['base_url'] = $matches[1];
     else
       $this->config['base_url'] = '';
+
+    // Remove invalid HTML comments (#1487759)
+    // Don't remove valid conditional comments
+    $html = preg_replace('/<!--[^->[]*>/', '', $html);
 
     @$node->loadHTML($html);
     return $this->dumpHtml($node);

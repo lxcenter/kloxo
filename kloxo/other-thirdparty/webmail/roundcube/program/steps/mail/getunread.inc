@@ -15,7 +15,7 @@
  | Author: Thomas Bruederli <roundcube@gmail.com>                        |
  +-----------------------------------------------------------------------+
 
- $Id: getunread.inc 3989 2010-09-25 13:03:53Z alec $
+ $Id: getunread.inc 4294 2010-12-01 09:52:23Z alec $
 
 */
 
@@ -28,15 +28,18 @@ if (!empty($a_folders))
   $check_all = (bool)$RCMAIL->config->get('check_all_folders');
 
   foreach ($a_folders as $mbox_row) {
-    if (!$check_all && isset($_SESSION['unseen_count'][$mbox_row]) && $mbox_row != $current)
-      $unseen = $_SESSION['unseen_count'][$mbox_row];
-    else
-      $unseen = $IMAP->messagecount($mbox_row, 'UNSEEN', !isset($_SESSION['unseen_count'][$mbox_row]));
+    $unseen_old = rcmail_get_unseen_count($mbox_row);
 
-    if ($unseen || !isset($_SESSION['unseen_count'][$mbox_row])) {
+    if (!$check_all && $unseen_old !== null && $mbox_row != $current)
+      $unseen = $unseen_old;
+    else
+      $unseen = $IMAP->messagecount($mbox_row, 'UNSEEN', $unseen_old === null);
+
+    if ($unseen || $unseen_old === null) {
       $OUTPUT->command('set_unread_count', $mbox_row, $unseen, $inbox && $mbox_row == 'INBOX');
     }
-    $_SESSION['unseen_count'][$mbox_row] = $unseen;
+
+    rcmail_set_unseen_count($mbox_row, $unseen);
   }
 }
 

@@ -14,7 +14,7 @@
 |         Cristian Nastase <cristian.nastase@itcaffe.net>               |
 +-----------------------------------------------------------------------+
 
-@version $Id: labels.inc 3989 2010-09-25 13:03:53Z alec $
+@version $Id: labels.inc 4345 2010-12-17 14:28:38Z thomasb $
 
 */
 
@@ -310,9 +310,6 @@ $labels['subscribed'] = 'Înscris';
 $labels['messagecount'] = 'Mesaje';
 $labels['create'] = 'Creează';
 $labels['createfolder'] = 'Creează dosar nou';
-$labels['rename'] = 'Redenumeşte';
-$labels['renamefolder'] = 'Redenumeşte dosar';
-$labels['deletefolder'] = 'Şterge dosar';
 $labels['managefolders'] = 'Administrează dosare';
 $labels['specialfolders'] = 'Dosare speciale';
 $labels['sortby'] = 'Sortează după';

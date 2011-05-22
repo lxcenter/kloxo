@@ -81,17 +81,17 @@ class rcube_session
 
     if ($sql_arr = $this->db->fetch_assoc($sql_result)) {
       $this->changed = $sql_arr['changed'];
-      $this->vars = $sql_arr['vars'];
-      $this->ip = $sql_arr['ip'];
-      $this->key = $key; 
+      $this->ip      = $sql_arr['ip'];
+      $this->vars    = base64_decode($sql_arr['vars']);
+      $this->key     = $key;
 
-      if (!empty($sql_arr['vars']))
-        return $sql_arr['vars'];
+      if (!empty($this->vars))
+        return $this->vars;
     }
 
     return false;
   }
-  
+
 
   // save session data
   public function write($key, $vars)
@@ -105,35 +105,41 @@ class rcube_session
     } else { // else read data again from DB
       $oldvars = $this->read($key);
     }
-    
+
     if ($oldvars !== false) {
-      $a_oldvars = $this->unserialize($oldvars); 
-      foreach ((array)$this->unsets as $k)
-        unset($a_oldvars[$k]);
+      $a_oldvars = $this->unserialize($oldvars);
+      if (is_array($a_oldvars)) {
+        foreach ((array)$this->unsets as $k)
+          unset($a_oldvars[$k]);
 
-      $newvars = $this->serialize(array_merge(
-        (array)$a_oldvars, (array)$this->unserialize($vars)));
+        $newvars = $this->serialize(array_merge(
+          (array)$a_oldvars, (array)$this->unserialize($vars)));
+      }
+      else
+        $newvars = $vars;
 
-      if ($this->keep_alive>0) {
-	$timeout = min($this->lifetime * 0.5, 
-		       $this->lifetime - $this->keep_alive);
+      if (!$this->lifetime) {
+        $timeout = 600;
+      }
+      else if ($this->keep_alive>0) {
+        $timeout = min($this->lifetime * 0.5, $this->lifetime - $this->keep_alive);
       } else {
-	$timeout = 0;
+        $timeout = 0;
       }
 
       if (!($newvars === $oldvars) || ($ts - $this->changed > $timeout)) {
         $this->db->query(
-	  sprintf("UPDATE %s SET vars = ?, changed = %s WHERE sess_id = ?",
-	    get_table_name('session'), $now),
-	  $newvars, $key);
+          sprintf("UPDATE %s SET vars = ?, changed = %s WHERE sess_id = ?",
+            get_table_name('session'), $now),
+          base64_encode($newvars), $key);
       }
     }
     else {
       $this->db->query(
         sprintf("INSERT INTO %s (sess_id, vars, ip, created, changed) ".
           "VALUES (?, ?, ?, %s, %s)",
-	  get_table_name('session'), $now, $now),
-        $key, $vars, (string)$_SERVER['REMOTE_ADDR']);
+          get_table_name('session'), $now, $now),
+        $key, base64_encode($vars), (string)$_SERVER['REMOTE_ADDR']);
     }
 
     $this->unsets = array();
@@ -148,6 +154,8 @@ class rcube_session
       sprintf("DELETE FROM %s WHERE sess_id = ?", get_table_name('session')),
       $key);
 
+    if ($key == $this->key)
+        $this->vars = false;
     return true;
   }
 
@@ -175,27 +183,12 @@ class rcube_session
   }
 
 
-  public function regenerate_id()
+  public function regenerate_id($destroy=true)
   {
-    $randval = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    session_regenerate_id($destroy);
 
-    for ($random = '', $i=1; $i <= 32; $i++) {
-      $random .= substr($randval, mt_rand(0,(strlen($randval) - 1)), 1);
-    }
-
-    // use md5 value for id or remove capitals from string $randval
-    $random = md5($random);
-
-    // delete old session record
-    $this->destroy(session_id());
-
-    session_id($random);
-
-    $cookie   = session_get_cookie_params();
-    $lifetime = $cookie['lifetime'] ? time() + $cookie['lifetime'] : 0;
-
-    rcmail::setcookie(session_name(), $random, $lifetime);
-
+    $this->vars = false;
+    $this->key  = session_id();
     return true;
   }
 

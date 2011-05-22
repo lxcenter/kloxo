@@ -14,7 +14,7 @@
 |         John Economou <hsoc@irc.gr>                                   |
 +-----------------------------------------------------------------------+
 
-@version $Id: labels.inc 3989 2010-09-25 13:03:53Z alec $
+@version $Id: labels.inc 4345 2010-12-17 14:28:38Z thomasb $
 
 */
 
@@ -238,9 +238,6 @@ $labels['subscribed'] = 'Εγγραφή';
 $labels['messagecount'] = 'Μηνύματα';
 $labels['create'] = 'Δημιουργία';
 $labels['createfolder'] = 'Δημιουργία νέου φακέλου';
-$labels['rename'] = 'Μετονομασία';
-$labels['renamefolder'] = 'Μετονομασία φακέλου';
-$labels['deletefolder'] = 'Διαγραφή φακέλου';
 $labels['managefolders'] = 'Διαχείριση φακέλων';
 $labels['specialfolders'] = 'Ειδικοί Φάκελοι';
 $labels['sortby'] = 'Ταξινόμηση κατά';

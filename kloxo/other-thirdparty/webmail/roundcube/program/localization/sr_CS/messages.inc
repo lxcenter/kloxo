@@ -13,7 +13,7 @@
  | Author: Branko Kokanovic <branko.kokanovic@gmail.com>                 |
  +-----------------------------------------------------------------------+
 
- @version $Id: messages.inc 3989 2010-09-25 13:03:53Z alec $
+ @version $Id: messages.inc 4304 2010-12-03 10:58:40Z alec $
 
 */
 
@@ -77,6 +77,5 @@ $messages['movingmessage'] = 'Премештам поруку...';
 $messages['receiptsent'] = 'Успешно послато обавештење о приспећу';
 $messages['errorsendingreceipt'] = 'Неуспело слање обавештења о приспећу';
 $messages['nodeletelastidentity'] = 'Не можете обрисати овај идентитет, он Вам је последњи.';
-$messages['addsubfolderhint'] = 'Ова фасцикла ће бити креирана као подфасцикла тренутне';
 
 ?>

@@ -4,7 +4,7 @@
  | program/include/rcube_ldap.php                                        |
  |                                                                       |
  | This file is part of the Roundcube Webmail client                     |
- | Copyright (C) 2006-2009, Roundcube Dev. - Switzerland                 |
+ | Copyright (C) 2006-2010, Roundcube Dev. - Switzerland                 |
  | Licensed under the GNU GPL                                            |
  |                                                                       |
  | PURPOSE:                                                              |
@@ -14,7 +14,7 @@
  | Author: Thomas Bruederli <roundcube@gmail.com>                        |
  +-----------------------------------------------------------------------+
 
- $Id: rcube_ldap.php 3989 2010-09-25 13:03:53Z alec $
+ $Id: rcube_ldap.php 4509 2011-02-09 10:51:50Z thomasb $
 
 */
 
@@ -29,22 +29,22 @@ class rcube_ldap extends rcube_addressbook
   var $conn;
   var $prop = array();
   var $fieldmap = array();
-  
+
   var $filter = '';
   var $result = null;
   var $ldap_result = null;
   var $sort_col = '';
   var $mail_domain = '';
   var $debug = false;
-  
+
   /** public properties */
   var $primary_key = 'ID';
   var $readonly = true;
   var $list_page = 1;
   var $page_size = 10;
   var $ready = false;
-  
-  
+
+
   /**
    * Object constructor
    *
@@ -90,7 +90,7 @@ class rcube_ldap extends rcube_addressbook
 
     if (is_resource($this->conn))
       return true;
-    
+
     if (!is_array($this->prop['hosts']))
       $this->prop['hosts'] = array($this->prop['hosts']);
 
@@ -99,7 +99,7 @@ class rcube_ldap extends rcube_addressbook
 
     foreach ($this->prop['hosts'] as $host)
     {
-      $host = rcube_parse_host($host);
+      $host = rcube_idn_to_ascii(rcube_parse_host($host));
       $this->_debug("C: Connect [$host".($this->prop['port'] ? ':'.$this->prop['port'] : '')."]");
 
       if ($lc = @ldap_connect($host, $this->prop['port']))
@@ -134,8 +134,29 @@ class rcube_ldap extends rcube_addressbook
         list($u, $d) = explode('@', $fu);
         $dc = 'dc='.strtr($d, array('.' => ',dc=')); // hierarchal domain string
 
-        // Replace the bind_dn and base_dn variables.
         $replaces = array('%dc' => $dc, '%d' => $d, '%fu' => $fu, '%u' => $u);
+
+        if ($this->prop['search_base_dn'] && $this->prop['search_filter']) {
+          // Search for the dn to use to authenticate
+          $this->prop['search_base_dn'] = strtr($this->prop['search_base_dn'], $replaces);
+          $this->prop['search_filter'] = strtr($this->prop['search_filter'], $replaces);
+
+          $this->_debug("S: searching with base {$this->prop['search_base_dn']} for {$this->prop['search_filter']}");
+
+          $res = ldap_search($this->conn, $this->prop['search_base_dn'], $this->prop['search_filter'], array('uid'));
+          if ($res && ($entry = ldap_first_entry($this->conn, $res))) {
+            $bind_dn = ldap_get_dn($this->conn, $entry);
+
+            $this->_debug("S: search returned dn: $bind_dn");
+
+            if ($bind_dn) {
+              $this->prop['bind_dn'] = $bind_dn;
+              $dn = ldap_explode_dn($bind_dn, 1);
+              $replaces['%dn'] = $dn[0];
+            }
+          }
+        }
+        // Replace the bind_dn and base_dn variables.
         $this->prop['bind_dn'] = strtr($this->prop['bind_dn'], $replaces);
         $this->prop['base_dn'] = strtr($this->prop['base_dn'], $replaces);
       }

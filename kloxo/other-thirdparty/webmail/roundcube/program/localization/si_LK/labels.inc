@@ -12,7 +12,7 @@
  | Author: Melanga Dissanayake <Melanga.Dissanayake@pabcbank.com>        |
  +-----------------------------------------------------------------------+
 
- @version $Id: labels.inc 3989 2010-09-25 13:03:53Z alec $
+ @version $Id: labels.inc 4345 2010-12-17 14:28:38Z thomasb $
 
 */
 
@@ -179,9 +179,6 @@ $labels['subscribed'] = 'සාමාජික';
 $labels['messagecount'] = 'පනිවුඩ';
 $labels['create'] = 'සෑදීම';
 $labels['createfolder'] = 'අඵත් ෆෝල්ඩරයක් සෑදීම';
-$labels['rename'] = 'නැවත නම් කිරීම';
-$labels['renamefolder'] = 'ෆෝල්ඩරය නැවත නම් කිරීම';
-$labels['deletefolder'] = 'ෆෝල්ඩරය මකා දැමීම';
 $labels['managefolders'] = 'හැසිරවීම හැසිරවීම';
 $labels['sortby'] = 'චිසින් වර්ග කිරීම';
 $labels['sortasc'] = 'ආරෝහණ වර්ග කිරීම';

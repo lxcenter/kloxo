@@ -14,7 +14,7 @@
 |         Barbara Krasovec <barbarak@arnes.si>                          |
 +-----------------------------------------------------------------------+
 
-@version $Id: labels.inc 4050 2010-10-06 08:43:32Z thomasb $
+@version $Id: labels.inc 4386 2011-01-04 08:35:46Z yllar $
 
 */
 
@@ -39,11 +39,12 @@ $labels['to'] = 'Prejemnik';
 $labels['cc'] = 'Kp';
 $labels['bcc'] = 'Skp';
 $labels['replyto'] = 'Odgovor na';
+$labels['followupto'] = 'Odgovor na';
 $labels['date'] = 'Datum';
 $labels['size'] = 'Velikost';
 $labels['priority'] = 'Prioriteta';
 $labels['organization'] = 'Organizacija';
-$labels['reply-to'] = 'Odgovor na';
+$labels['readstatus'] = 'Status';
 $labels['mailboxlist'] = 'Mape';
 $labels['messagesfromto'] = 'Sporočila $from do $to od $count';
 $labels['threadsfromto'] = 'Nit $from do $to od $count';
@@ -97,7 +98,9 @@ $labels['today'] = 'Danes';
 $labels['checkmail'] = 'Preglej nova sporočila';
 $labels['writenewmessage'] = 'Novo sporočilo';
 $labels['replytomessage'] = 'Odgovori';
-$labels['replytoallmessage'] = 'Odgovori vsem';
+$labels['replytoallmessage'] = 'Odgovori listi ali vsem prejemnikom';
+$labels['replyall'] = 'Odgovori vsem';
+$labels['replylist'] = 'Odgovori listi';
 $labels['forwardmessage'] = 'Posreduj';
 $labels['deletemessage'] = 'Izbriši';
 $labels['movemessagetotrash'] = 'Premakni v smeti';
@@ -152,7 +155,6 @@ $labels['listmode'] = 'Način prikaza seznama';
 $labels['folderactions'] = 'Upravljanje map...';
 $labels['compact'] = 'Stisni';
 $labels['empty'] = 'Izprazni';
-$labels['purge'] = 'Počisti';
 $labels['quota'] = 'Poraba prostora';
 $labels['unknown'] = 'neznana';
 $labels['unlimited'] = 'neomejena';
@@ -170,6 +172,7 @@ $labels['addattachment'] = 'Pripni datoteko';
 $labels['charset'] = 'Nabor znakov';
 $labels['editortype'] = 'Vrsta urejevalnika';
 $labels['returnreceipt'] = 'Potrdilo prejemnika';
+$labels['dsn'] = 'Status dostave sporočila';
 $labels['editidents'] = 'Uredi identitete';
 $labels['checkspelling'] = 'Preglej pravopis';
 $labels['resumeediting'] = 'Nadaljuj z urejanjem';
@@ -194,6 +197,7 @@ $labels['maxuploadsize'] = 'Največja dovoljena velikost datoteke je $size';
 $labels['addcc'] = 'Dodaj Kp';
 $labels['addbcc'] = 'Dodaj Skp';
 $labels['addreplyto'] = 'Dodaj naslov za odgovor';
+$labels['addfollowupto'] = 'Dodaj naslov za odgovor';
 $labels['mdnrequest'] = 'Pošiljatelj tega sporočila je zaprosil za potrdilo o branju. Želite o tem obvestiti pošiljatelja?';
 $labels['receiptread'] = 'Potrdilo o branju';
 $labels['yourmessage'] = 'To je potrdilo o branju.';
@@ -205,10 +209,12 @@ $labels['email'] = 'E-Pošta';
 $labels['addcontact'] = 'Dodaj izbrane stike v imenik';
 $labels['editcontact'] = 'Uredi vizitko';
 $labels['contacts'] = 'Stiki';
+$labels['contactproperties'] = 'Lastnosti stika';
 $labels['edit'] = 'Uredi';
 $labels['cancel'] = 'Prekliči';
 $labels['save'] = 'Shrani';
 $labels['delete'] = 'Izbriši';
+$labels['rename'] = 'Preimenuj';
 $labels['newcontact'] = 'Dodaj vizitko';
 $labels['deletecontact'] = 'Izbriši izbrane vizitke';
 $labels['composeto'] = 'Sestavi sporočilo za';
@@ -252,6 +258,7 @@ $labels['pagesize'] = 'Vrstic na stran';
 $labels['signature'] = 'Podpis';
 $labels['dstactive'] = 'Samodejna nastavitev zimskega/letnega časa';
 $labels['htmleditor'] = 'Sestavi sporočila z obogatenim besedilom';
+$labels['htmlonreply'] = 'le pri odgovoru na sporočila z obogatenim besedilom';
 $labels['htmlsignature'] = 'Podpis z obogatenim besedilom';
 $labels['previewpane'] = 'Prikaži predogled';
 $labels['skin'] = 'Tema uporabniškega vmesnika';
@@ -264,6 +271,7 @@ $labels['mdnrequests'] = 'Obvestila pošiljatelja';
 $labels['askuser'] = 'vprašaj uporabnika';
 $labels['autosend'] = 'pošlji povratnico samodejno';
 $labels['autosendknown'] = 'pošlji povratnico samodejno samo mojim stikom';
+$labels['autosendknownignore'] = 'pošlji potrdilo le mojim kontaktom';
 $labels['ignore'] = 'ne upoštevaj';
 $labels['readwhendeleted'] = 'Označi izbrisano sporočilo kot prebrano';
 $labels['flagfordeletion'] = 'Ne izbriši sporočila, le označi kot izbrisano';
@@ -309,6 +317,8 @@ $labels['insertsignature'] = 'Vstavi podpis';
 $labels['previewpanemarkread'] = 'Označi predogledana sporočila kot prebrana';
 $labels['afternseconds'] = 'po $n sekundah';
 $labels['reqmdn'] = 'Vedno zahtevaj povratnico';
+$labels['reqdsn'] = 'Vedno zahtevaj obvestilo o statusu dostave';
+$labels['replysamefolder'] = 'Shrani odgovore na sporočilo v mapo izvornega sporočila';
 $labels['folder'] = 'Mapa';
 $labels['folders'] = 'Mape';
 $labels['foldername'] = 'Ime mape';
@@ -316,11 +326,15 @@ $labels['subscribed'] = 'Vpisan';
 $labels['messagecount'] = 'Sporočila';
 $labels['create'] = 'Ustvari';
 $labels['createfolder'] = 'Ustvari novo mapo';
-$labels['rename'] = 'Preimenuj';
-$labels['renamefolder'] = 'Preimenuj mapo';
-$labels['deletefolder'] = 'Izbriši mapo';
 $labels['managefolders'] = 'Uredi mape';
 $labels['specialfolders'] = 'Posebne mape';
+$labels['properties'] = 'Lastnosti';
+$labels['folderproperties'] = 'Lastnosti mape';
+$labels['parentfolder'] = 'Glavna mapa';
+$labels['location'] = 'Lokacija';
+$labels['info'] = 'Podatki';
+$labels['getfoldersize'] = 'Klikni za prikaz velikosti mape';
+$labels['changesubscription'] = 'Klikni za spremembo prijave mape';
 $labels['sortby'] = 'Uredi po';
 $labels['sortasc'] = 'Uredi naraščajoče';
 $labels['sortdesc'] = 'Uredi padajoče';
@@ -348,4 +362,3 @@ $labels['korean'] = 'Korejsko';
 $labels['chinese'] = 'Kitajsko';
 
 ?>
-

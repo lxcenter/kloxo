@@ -13,7 +13,7 @@
 | Author: Hakon Orri Asgeirsson <hakon at opex.is>                      |
 +-----------------------------------------------------------------------+
 
-@version $Id: labels.inc 3989 2010-09-25 13:03:53Z alec $
+@version $Id: labels.inc 4345 2010-12-17 14:28:38Z thomasb $
 
 */
 
@@ -250,9 +250,6 @@ $labels['subscribed'] = 'Valin';
 $labels['messagecount'] = 'Skeyti';
 $labels['create'] = 'Búa til';
 $labels['createfolder'] = 'Búa til nýja möppu';
-$labels['rename'] = 'Endurnefna';
-$labels['renamefolder'] = 'Breyta nafni möppu';
-$labels['deletefolder'] = 'Eyða möppu';
 $labels['managefolders'] = 'Sýsla með möppum';
 $labels['specialfolders'] = 'Sérstakar möppur';
 $labels['sortby'] = 'Raða eftir';

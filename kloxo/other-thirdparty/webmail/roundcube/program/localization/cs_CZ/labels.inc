@@ -17,7 +17,7 @@
 |        Ales Pospichal <ales@pospichalales.info>                       |
 +-----------------------------------------------------------------------+
 
-@version $Id: labels.inc 4050 2010-10-06 08:43:32Z thomasb $
+@version $Id: labels.inc 4345 2010-12-17 14:28:38Z thomasb $
 
 */
 
@@ -319,9 +319,6 @@ $labels['subscribed'] = 'Vybráno';
 $labels['messagecount'] = 'Počet zpráv';
 $labels['create'] = 'Vytvořit';
 $labels['createfolder'] = 'Vytvořit novou složku';
-$labels['rename'] = 'Přejmenovat';
-$labels['renamefolder'] = 'Přejmenovat složku';
-$labels['deletefolder'] = 'Smazat složku';
 $labels['managefolders'] = 'Spravovat složky';
 $labels['specialfolders'] = 'Speciální složky';
 $labels['sortby'] = 'Seřadit podle';

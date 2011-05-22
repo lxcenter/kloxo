@@ -16,7 +16,7 @@
  | Author: Thomas Bruederli <roundcube@gmail.com>                        |
  +-----------------------------------------------------------------------+
 
- $Id: cleandb.sh 3989 2010-09-25 13:03:53Z alec $
+ $Id: cleandb.sh 4164 2010-10-31 10:38:16Z thomasb $
 
 */
 
@@ -36,9 +36,10 @@ $primary_keys = array(
 // connect to DB
 $RCMAIL = rcmail::get_instance();
 $db = $RCMAIL->get_dbh();
+$db->db_connect('w');
 
-if (!$db->is_connected() || $db->is_error)
-    die("No DB connection");
+if (!$db->is_connected() || $db->is_error())
+    die("No DB connection\n");
 
 if (!empty($_SERVER['argv'][1]))
     $days = intval($_SERVER['argv'][1]);

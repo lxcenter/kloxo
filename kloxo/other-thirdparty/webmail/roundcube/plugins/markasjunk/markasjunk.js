@@ -5,10 +5,10 @@ function rcmail_markasjunk(prop)
   if (!rcmail.env.uid && (!rcmail.message_list || !rcmail.message_list.get_selection().length))
     return;
   
-    var uids = rcmail.env.uid ? rcmail.env.uid : rcmail.message_list.get_selection().join(',');
-    
-    rcmail.set_busy(true, 'loading');
-    rcmail.http_post('plugin.markasjunk', '_uid='+uids+'&_mbox='+urlencode(rcmail.env.mailbox), true);
+    var uids = rcmail.env.uid ? rcmail.env.uid : rcmail.message_list.get_selection().join(','),
+      lock = rcmail.set_busy(true, 'loading');
+
+    rcmail.http_post('plugin.markasjunk', '_uid='+uids+'&_mbox='+urlencode(rcmail.env.mailbox), lock);
 }
 
 // callback for app-onload event

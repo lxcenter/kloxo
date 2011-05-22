@@ -53,7 +53,10 @@
         <table border="0" cellspacing="0" cellpadding="1" id="compose-headers">
         <tr>
             <td class="title"><label for="_from"><roundcube:label name="from" /></label></td>
-            <td class="editfield"><roundcube:object name="composeHeaders" part="from" form="form" id="_from" tabindex="1" /></td>
+            <td class="editfield formlinks">
+                <roundcube:object name="composeHeaders" part="from" form="form" id="_from" tabindex="1" />
+                <a href="#identities" onclick="return rcmail.command('identities')"><roundcube:label name="editidents" /></a>
+            </td>
         </tr><tr>
             <td class="title top"><label for="_to"><roundcube:label name="to" /></label></td>
             <td class="editfield"><roundcube:object name="composeHeaders" part="to" form="form" id="_to" cols="70" rows="2" tabindex="2" /></td>
@@ -75,35 +78,43 @@
                 <label for="_replyto"><roundcube:label name="replyto" /></label>
             </td>
             <td class="editfield"><roundcube:object name="composeHeaders" part="replyto" form="form" id="_replyto" size="70" tabindex="5" /></td>
+        </tr><tr id="compose-followupto">
+            <td class="title top">
+                <a href="#followupto" onclick="return rcmail_ui.hide_header_form('followupto');"><img src="/images/icons/minus.gif" alt="" title="<roundcube:label name='delete' />" /></a>
+                <label for="_followupto"><roundcube:label name="followupto" /></label>
+            </td>
+            <td class="editfield"><roundcube:object name="composeHeaders" part="followupto" form="form" id="_followupto" size="70" tabindex="7" /></td>
         </tr><tr>
             <td></td>
-            <td id="formlinks">
+            <td class="formlinks">
                 <a href="#cc" onclick="return rcmail_ui.show_header_form('cc')" id="cc-link"><roundcube:label name="addcc" /></a>
                 <span class="separator">|</span>
                 <a href="#bcc" onclick="return rcmail_ui.show_header_form('bcc')" id="bcc-link"><roundcube:label name="addbcc" /></a>
                 <span class="separator">|</span>
                 <a href="#reply-to" onclick="return rcmail_ui.show_header_form('replyto')" id="replyto-link"><roundcube:label name="addreplyto" /></a>
+                <span class="separator">|</span>
+                <a href="#followup-to" onclick="return rcmail_ui.show_header_form('followupto')" id="followupto-link"><roundcube:label name="addfollowupto" /></a>
             </td>
         </tr><tr>
             <td class="title"><label for="compose-subject"><roundcube:label name="subject" /></label></td>
-            <td class="editfield"><roundcube:object name="composeSubject" id="compose-subject" form="form" tabindex="6" /></td>
+            <td class="editfield"><roundcube:object name="composeSubject" id="compose-subject" form="form" tabindex="8" /></td>
         </tr>
         </table>
     </div>
     <div id="compose-div">
         <div class="boxlistcontent" style="overflow: hidden; top: 0">
-            <roundcube:object name="composeBody" id="compose-body" form="form" cols="70" rows="20" tabindex="7" />
+            <roundcube:object name="composeBody" id="compose-body" form="form" cols="70" rows="20" tabindex="9" />
         </div>
         <div class="boxfooter">
             <div id="compose-buttons">
-                <roundcube:button type="input" command="send" class="button mainaction" label="sendmessage" tabindex="8" />
-                <roundcube:button type="input" command="list" class="button" label="cancel" tabindex="9" />
+                <roundcube:button type="input" command="send" class="button mainaction" label="sendmessage" tabindex="10" />
+                <roundcube:button type="input" command="list" class="button" label="cancel" tabindex="11" />
             </div>
             <div id="compose-editorfooter">
                 <span id="spellcheck-control" style="margin-right:10px"></span>
                 <span>
                     <label><roundcube:label name="editortype" /></label>
-                    <roundcube:object name="editorSelector" editorid="compose-body" tabindex="10" />
+                    <roundcube:object name="editorSelector" editorid="compose-body" tabindex="12" />
                 </span>
             </div>
         </div>
@@ -117,6 +128,9 @@
     <tr>
         <td><label for="rcmcomposereceipt"><roundcube:label name="returnreceipt" />:</label></td>
         <td><roundcube:object name="receiptCheckBox" form="form" id="rcmcomposereceipt" /></td>
+    </tr><tr>
+        <td><label for="rcmcomposedsn"><roundcube:label name="dsn" />:</label></td>
+        <td><roundcube:object name="dsnCheckBox" form="form" id="rcmcomposedsn" /></td>
     </tr><tr>
         <td><label for="rcmcomposepriority"><roundcube:label name="priority" />:</label></td>
         <td><roundcube:object name="prioritySelector" form="form" id="rcmcomposepriority" /></td>

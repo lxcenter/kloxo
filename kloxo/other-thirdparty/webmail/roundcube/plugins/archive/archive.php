@@ -17,8 +17,6 @@ class archive extends rcube_plugin
   {
     $rcmail = rcmail::get_instance();
 
-    $this->register_action('plugin.archive', array($this, 'request_action'));
-
     // There is no "Archived flags"
     // $GLOBALS['IMAP_FLAGS']['ARCHIVED'] = 'Archive';
     if ($rcmail->task == 'mail' && ($rcmail->action == '' || $rcmail->action == 'show')
@@ -32,6 +30,8 @@ class archive extends rcube_plugin
             'command' => 'plugin.archive',
             'imagepas' => $skin_path.'/archive_pas.png',
             'imageact' => $skin_path.'/archive_act.png',
+            'width' => 32,
+            'height' => 32,
             'title' => 'buttontitle',
             'domain' => $this->ID,
         ),
@@ -80,32 +80,12 @@ class archive extends rcube_plugin
     foreach ($list as $idx => $item) {
       if ($item['id'] == $folder) {
         $list[$idx]['name'] = $new_name;
-	return true;
+        return true;
       } else if (!empty($item['folders']))
         if ($this->_mod_folder_name($list[$idx]['folders'], $folder, $new_name))
-	  return true;
+        return true;
     }
     return false;
-  }
-
-  function request_action()
-  {
-    $this->add_texts('localization');
-    
-    $uids = get_input_value('_uid', RCUBE_INPUT_POST);
-    $mbox = get_input_value('_mbox', RCUBE_INPUT_POST);
-    
-    $rcmail = rcmail::get_instance();
-    
-    // There is no "Archive flags", but I left this line in case it may be useful
-    // $rcmail->imap->set_flag($uids, 'ARCHIVE');
-    
-    if (($archive_mbox = $rcmail->config->get('archive_mbox')) && $mbox != $archive_mbox) {
-      $rcmail->output->command('move_messages', $archive_mbox);
-      $rcmail->output->command('display_message', $this->gettext('archived'), 'confirmation');
-    }
-    
-    $rcmail->output->send();
   }
 
   function prefs_table($args)

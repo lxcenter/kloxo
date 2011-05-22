@@ -70,22 +70,43 @@ $rcmail_config['default_host'] = '';
 // TCP port used for IMAP connections
 $rcmail_config['default_port'] = 143;
 
-// IMAP auth type. Can be "auth" (CRAM-MD5), "plain" (PLAIN) or "check" to auto detect.
-// Optional, defaults to "check"
+// IMAP AUTH type (DIGEST-MD5, CRAM-MD5, LOGIN, PLAIN or empty to use
+// best server supported one)
 $rcmail_config['imap_auth_type'] = null;
 
-// If you know your imap's root directory and its folder delimiter,
-// you can specify them here. Otherwise they will be determined automatically.
-$rcmail_config['imap_root'] = null;
+// If you know your imap's folder delimiter, you can specify it here.
+// Otherwise it will be determined automatically
 $rcmail_config['imap_delimiter'] = null;
+
+// If IMAP server doesn't support NAMESPACE extension, but you're
+// using shared folders or personal root folder is non-empty, you'll need to
+// set these options. All can be strings or arrays of strings.
+// Folders need to be ended with directory separator, e.g. "INBOX."
+// (special directory "~" is an exception to this rule)
+// These can be used also to overwrite server's namespaces
+$rcmail_config['imap_ns_personal'] = null;
+$rcmail_config['imap_ns_other']    = null;
+$rcmail_config['imap_ns_shared']   = null;
 
 // By default IMAP capabilities are readed after connection to IMAP server
 // In some cases, e.g. when using IMAP proxy, there's a need to refresh the list
 // after login. Set to True if you've got this case.
 $rcmail_config['imap_force_caps'] = false;
 
+// By default list of subscribed folders is determined using LIST-EXTENDED
+// extension if available. Some servers (dovecot 1.x) returns wrong results
+// for shared namespaces in this case. http://trac.roundcube.net/ticket/1486225
+// Enable this option to force LSUB command usage instead.
+$rcmail_config['imap_force_lsub'] = false;
+
 // IMAP connection timeout, in seconds. Default: 0 (no limit)
 $rcmail_config['imap_timeout'] = 0;
+
+// Optional IMAP authentication identifier to be used as authorization proxy
+$rcmail_config['imap_auth_cid'] = null;
+
+// Optional IMAP authentication password to be used for imap_auth_cid
+$rcmail_config['imap_auth_pw'] = null;
 
 // ----------------------------------
 // SMTP
@@ -116,6 +137,12 @@ $rcmail_config['smtp_pass'] = '';
 // SMTP AUTH type (DIGEST-MD5, CRAM-MD5, LOGIN, PLAIN or empty to use
 // best server supported one)
 $rcmail_config['smtp_auth_type'] = '';
+
+// Optional SMTP authentication identifier to be used as authorization proxy
+$rcmail_config['smtp_auth_cid'] = null;
+
+// Optional SMTP authentication password to be used for smtp_auth_cid
+$rcmail_config['smtp_auth_pw'] = null;
 
 // SMTP HELO host 
 // Hostname to give to the remote server for SMTP 'HELO' or 'EHLO' messages 
@@ -154,6 +181,19 @@ $rcmail_config['message_cache_lifetime'] = '10d';
 // set the port for the ssl connection as value of this option if it differs from the default 443
 $rcmail_config['force_https'] = false;
 
+// tell PHP that it should work as under secure connection
+// even if it doesn't recognize it as secure ($_SERVER['HTTPS'] is not set)
+// e.g. when you're running Roundcube behind a https proxy
+$rcmail_config['use_https'] = false;
+
+// Allow browser-autocompletion on login form.
+// 0 - disabled, 1 - username and host only, 2 - username, host, password
+$rcmail_config['login_autocomplete'] = 0;
+
+// If users authentication is not case sensitive this must be enabled.
+// You can also use it to force conversion of logins to lower case.
+$rcmail_config['login_lc'] = false;
+
 // automatically create a new Roundcube user when log-in the first time.
 // a new user will be created once the IMAP login succeeds.
 // set to false if only registered users can use this service
@@ -172,6 +212,9 @@ $rcmail_config['ip_check'] = false;
 // Use an additional frequently changing cookie to athenticate user sessions.
 // There have been problems reported with this feature.
 $rcmail_config['double_auth'] = false;
+
+// check referer of incoming requests
+$rcmail_config['referer_check'] = false;
 
 // this key is used to encrypt the users imap password which is stored
 // in the session record (and the client cookie if remember password is enabled).
@@ -290,8 +333,8 @@ $rcmail_config['message_sort_col'] = '';
 $rcmail_config['message_sort_order'] = 'DESC';
 
 // These cols are shown in the message list. Available cols are:
-// subject, from, to, cc, replyto, date, size, flag, attachment
-$rcmail_config['list_cols'] = array('subject', 'from', 'date', 'size', 'flag', 'attachment');
+// subject, from, to, cc, replyto, date, size, status, flag, attachment
+$rcmail_config['list_cols'] = array('subject', 'status', 'from', 'date', 'size', 'flag', 'attachment');
 
 // the default locale setting (leave empty for auto-detection)
 // RFC1766 formatted language name like en_US, de_DE, de_CH, fr_FR, pt_BR
@@ -304,6 +347,7 @@ $rcmail_config['date_short'] = 'D H:i';
 $rcmail_config['date_long'] = 'd.m.Y H:i';
 
 // use this format for today's date display (date or strftime format)
+// Note: $ character will be replaced with 'Today' label
 $rcmail_config['date_today'] = 'H:i';
 
 // store draft message is this mailbox
@@ -333,10 +377,6 @@ $rcmail_config['protect_default_folders'] = true;
 
 // if in your system 0 quota means no limit set this option to true 
 $rcmail_config['quota_zero_as_unlimited'] = false;
-
-// Behavior if a received message requests a message delivery notification (read receipt)
-// 0 = ask the user, 1 = send automatically, 2 = ignore (never send or ask)
-$rcmail_config['mdn_requests'] = 0;
 
 // Make use of the built-in spell checker. It is based on GoogieSpell.
 // Since Google only accepts connections over https your PHP installatation
@@ -407,16 +447,22 @@ $rcmail_config['ldap_public']['Verisign'] = array(
   // For example %n = mail.domain.tld, %d = domain.tld
   'hosts'         => array('directory.verisign.com'),
   'port'          => 389,
-  'use_tls'	    => false,
+  'use_tls'	      => false,
   'user_specific' => false,   // If true the base_dn, bind_dn and bind_pass default to the user's IMAP login.
   // %fu - The full username provided, assumes the username is an email
   //       address, uses the username_domain value if not an email address.
   // %u  - The username prior to the '@'.
   // %d  - The domain name after the '@'.
   // %dc - The domain name hierarchal string e.g. "dc=test,dc=domain,dc=com"
+  // %dn - DN found by ldap search when search_filter/search_base_dn are used
   'base_dn'       => '',
   'bind_dn'       => '',
   'bind_pass'     => '',
+  // It's possible to bind for an individual address book
+  // The login name is used to search for the DN to bind with
+  'search_base_dn' => '',
+  'search_filter'  => '',   // e.g. '(&(objectClass=posixAccount)(uid=%u))'
+
   'writable'      => false,   // Indicates if we can write to the LDAP directory or not.
   // If writable is true then these fields need to be populated:
   // LDAP_Object_Classes, required_fields, LDAP_rdn
@@ -441,6 +487,11 @@ $rcmail_config['ldap_public']['Verisign'] = array(
 // An ordered array of the ids of the addressbooks that should be searched
 // when populating address autocomplete fields server-side. ex: array('sql','Verisign');
 $rcmail_config['autocomplete_addressbooks'] = array('sql');
+
+// The minimum number of characters required to be typed in an autocomplete field
+// before address books will be searched. Most useful for LDAP directories that
+// may need to do lengthy results building given overly-broad searches
+$rcmail_config['autocomplete_min_length'] = 1;
 
 // ----------------------------------
 // USER PREFERENCES
@@ -471,7 +522,8 @@ $rcmail_config['prefer_html'] = true;
 $rcmail_config['show_images'] = 0;
 
 // compose html formatted messages by default
-$rcmail_config['htmleditor'] = false;
+// 0 - never, 1 - always, 2 - on reply to HTML message only 
+$rcmail_config['htmleditor'] = 0;
 
 // show pretty dates as standard
 $rcmail_config['prettydate'] = true;
@@ -562,5 +614,19 @@ $rcmail_config['search_mods'] = null;  // Example: array('*' => array('subject'=
 // when user is over quota and Trash is included in the quota.
 $rcmail_config['delete_always'] = false;
 
-// end of config file
+// Behavior if a received message requests a message delivery notification (read receipt)
+// 0 = ask the user, 1 = send automatically, 2 = ignore (never send or ask)
+// 3 = send automatically if sender is in addressbook, otherwise ask the user
+// 4 = send automatically if sender is in addressbook, otherwise ignore
+$rcmail_config['mdn_requests'] = 0;
 
+// Return receipt checkbox default state
+$rcmail_config['mdn_default'] = 0;
+
+// Delivery Status Notification checkbox default state
+$rcmail_config['dsn_default'] = 0;
+
+// Place replies in the folder of the message being replied to
+$rcmail_config['reply_same_folder'] = false;
+
+// end of config file

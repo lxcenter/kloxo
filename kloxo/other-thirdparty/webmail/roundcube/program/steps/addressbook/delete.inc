@@ -15,7 +15,7 @@
  | Author: Thomas Bruederli <roundcube@gmail.com>                        |
  +-----------------------------------------------------------------------+
 
- $Id: delete.inc 3989 2010-09-25 13:03:53Z alec $
+ $Id: delete.inc 4172 2010-11-03 14:19:48Z alec $
 
 */
 
@@ -23,30 +23,34 @@ if ($OUTPUT->ajax_call &&
     ($cid = get_input_value('_cid', RCUBE_INPUT_POST)) &&
     preg_match('/^[a-zA-Z0-9\+\/=_-]+(,[a-zA-Z0-9\+\/=_-]+)*$/', $cid)
 ) {
-  $plugin = $RCMAIL->plugins->exec_hook('contact_delete', array('id' => $cid, 'source' => get_input_value('_source', RCUBE_INPUT_GPC)));
+    $plugin = $RCMAIL->plugins->exec_hook('contact_delete', array(
+        'id' => $cid, 'source' => get_input_value('_source', RCUBE_INPUT_GPC)));
 
-  $deleted = !$plugin['abort'] ? $CONTACTS->delete($cid) : false;
-  if (!$deleted)
-    {
-    // send error message
-    exit;
+    $deleted = !$plugin['abort'] ? $CONTACTS->delete($cid) : $plugin['result'];
+
+    if (!$deleted) {
+        $OUTPUT->show_message($plugin['message'] ? $plugin['message'] : 'contactdelerror', 'error');
+        $OUTPUT->command('list_contacts');
+    }
+    else {
+        $OUTPUT->show_message('contactdeleted', 'confirmation');
+
+        // count contacts for this user
+        $result = $CONTACTS->count();
+
+        // update message count display
+        $OUTPUT->set_env('pagecount', ceil($result->count / $CONTACTS->page_size));
+        $OUTPUT->command('set_rowcount', rcmail_get_rowcount_text($result->count));
+
+        // add new rows from next page (if any)
+        $pages = ceil(($result->count + $deleted) / $CONTACTS->page_size);
+        if ($_GET['_from'] != 'show' && $pages > 1 && $CONTACTS->list_page < $pages)
+            rcmail_js_contacts_list($CONTACTS->list_records(null, -$deleted));
     }
 
-  // count contacts for this user
-  $result = $CONTACTS->count();
-
-  // update message count display
-  $OUTPUT->set_env('pagecount', ceil($result->count / $CONTACTS->page_size));
-  $OUTPUT->command('set_rowcount', rcmail_get_rowcount_text($result->count));
-
-  // add new rows from next page (if any)
-  $pages = ceil(($result->count + $deleted) / $CONTACTS->page_size);
-  if ($_GET['_from'] != 'show' && $pages > 1 && $CONTACTS->list_page < $pages)
-    rcmail_js_contacts_list($CONTACTS->list_records(null, -$deleted));
-
-  // send response
-  $OUTPUT->send();
-  }
+    // send response
+    $OUTPUT->send();
+}
 
 exit;
 

@@ -12,7 +12,7 @@
 | Author: Vahan Yerkanian <vahan@arminco.com>                           |
 +-----------------------------------------------------------------------+
 
-@version $Id: labels.inc 3989 2010-09-25 13:03:53Z alec $
+@version $Id: labels.inc 4345 2010-12-17 14:28:38Z thomasb $
 
 */
 
@@ -249,9 +249,6 @@ $labels['subscribed'] = 'Բաժանորդագրված';
 $labels['messagecount'] = 'Նամակներ';
 $labels['create'] = 'Ստեղծել';
 $labels['createfolder'] = 'Բացել նոր դարակ';
-$labels['rename'] = 'Վերանվանել';
-$labels['renamefolder'] = 'Վերանվանել դարակը';
-$labels['deletefolder'] = 'Ջնջել դարակը';
 $labels['managefolders'] = 'Կարգավորել դարակները';
 $labels['specialfolders'] = 'Հատուկ դարակներ';
 $labels['sortby'] = 'Դասավորել';

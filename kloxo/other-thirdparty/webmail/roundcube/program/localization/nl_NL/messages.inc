@@ -16,7 +16,7 @@
 |         Justin van Beusekom <j.v.beusekom@beus-it.nl>                 |
 +-----------------------------------------------------------------------+
 
-@version $Id: messages.inc 3989 2010-09-25 13:03:53Z alec $
+@version $Id: messages.inc 4368 2010-12-27 08:51:22Z yllar $
 
 */
 
@@ -26,6 +26,9 @@ $messages['cookiesdisabled'] = 'Uw browser accepteert geen cookies';
 $messages['sessionerror'] = 'Uw sessie is verlopen of ongeldig';
 $messages['imaperror'] = 'Connectie met IMAP server mislukt';
 $messages['servererror'] = 'Server Fout!';
+$messages['servererrormsg'] = 'Server Fout: $msg';
+$messages['errorreadonly'] = 'Niet in staat om de bewerking uit te voeren. Map is alleen-lezen';
+$messages['errornoperm'] = 'Niet in staat om de bewerking uit te voeren. Toestemming geweigerd';
 $messages['invalidrequest'] = 'Ongeldige aanvraag! Er zijn geen gegevens opgeslagen.';
 $messages['nomessagesfound'] = 'Geen berichten gevonden in deze mailbox';
 $messages['loggedout'] = 'Succesvol uitgelogd. Tot ziens!';
@@ -57,10 +60,10 @@ $messages['deletecontactconfirm'] = 'Weet u zeker dat u de geselecteerde contact
 $messages['deletemessagesconfirm'] = 'Weet u zeker dat u de geselecteerde bericht(en) wilt verwijderen?';
 $messages['deletefolderconfirm'] = 'Weet u zeker dat u deze map wilt verwijderen?';
 $messages['purgefolderconfirm'] = 'Weet u zeker dat u alle berichten in deze map wilt verwijderen?';
-$messages['foldercreating'] = 'Map aanmaken...';
 $messages['folderdeleting'] = 'Map verwijderen...';
-$messages['folderrenaming'] = 'Mapnaam wijzigen...';
 $messages['foldermoving'] = 'Map verplaatsen...';
+$messages['foldersubscribing'] = 'Abonneren map...';
+$messages['folderunsubscribing'] = 'Afmelding map ...';
 $messages['formincomplete'] = 'Het formulier was niet volledig ingevuld';
 $messages['noemailwarning'] = 'Geef een geldig e-mailadres op';
 $messages['nonamewarning'] = 'Vul een naam in';
@@ -80,6 +83,10 @@ $messages['searching'] = 'Zoeken...';
 $messages['checking'] = 'Controleren...';
 $messages['nospellerrors'] = 'Geen spelfouten gevonden';
 $messages['folderdeleted'] = 'Map successvol verwijderd';
+$messages['foldersubscribed'] = 'Folder succesvol geabonneerd';
+$messages['folderunsubscribed'] = 'Folder succesvol uitgeschreven';
+$messages['folderpurged'] = 'Folder met succes verwijderd';
+$messages['folderexpunged'] = 'Folder succesvol geleegd';
 $messages['deletedsuccessfully'] = 'Successvol verwijderd';
 $messages['converting'] = 'Opmaak van bericht verwijderen...';
 $messages['messageopenerror'] = 'Kan het bericht niet van de server laden';
@@ -91,10 +98,11 @@ $messages['sourceisreadonly'] = 'Het adres is alleen-lezen';
 $messages['errorsavingcontact'] = 'Kan het ontvanger-adres niet opslaan';
 $messages['movingmessage'] = 'Bericht verplaatsen...';
 $messages['copyingmessage'] = 'Kopiëren bericht...';
+$messages['deletingmessage'] = 'Verwijderen bericht(en)...';
+$messages['markingmessage'] = 'Markeren bericht(en)...';
 $messages['receiptsent'] = 'Ontvangstbevestiging is verstuurd';
 $messages['errorsendingreceipt'] = 'Kan de ontvangstbevestiging niet versturen';
 $messages['nodeletelastidentity'] = 'U kunt uw enige identiteit niet verwijderen';
-$messages['addsubfolderhint'] = 'Deze map zal worden aangemaakt onder de geselecteerde map';
 $messages['forbiddencharacter'] = 'De naam van de map bevat een karakter dat niet is toegestaan';
 $messages['selectimportfile'] = 'Selecteer een bestand om de uploaden';
 $messages['addresswriterror'] = 'Het geselecteerde adresboek is alleen lezen';
@@ -112,10 +120,25 @@ $messages['smtpautherror'] = 'SMTP Fout ($code): Autenticatie mislukt';
 $messages['smtpfromerror'] = 'SMTP Fout ($code): Kon afzender "$from" niet instellen ($msg)';
 $messages['smtptoerror'] = 'SMTP Fout ($code): Kon ontvanger "$to" niet toevoegen ($msg)';
 $messages['smtprecipientserror'] = 'SMTP Fout: Kon lijst van ontvangers niet verwerken';
+$messages['smtpdsnerror'] = 'SMTP Fout: Delivery Status Notifications worden niet ondersteund';
 $messages['smtperror'] = 'SMTP Fout: $msg';
 $messages['emailformaterror'] = 'Ongeldig e-mailadres: $email';
 $messages['toomanyrecipients'] = 'Te veel geadresseerden. Verminder de hoeveelheid geadresseerden tot $max';
 $messages['maxgroupmembersreached'] = 'Het aantal leden van de groep groter is dan de maximale van $max';
 $messages['internalerror'] = 'Er is een interne fout opgetreden. Probeer het nogmaals';
+$messages['contactdelerror'] = 'Kon contact(en) niet verwijderen';
+$messages['contactdeleted'] = 'Contact(en) succesvol verwijderd';
+$messages['groupdeleted'] = 'Groep succesvol verwijderd';
+$messages['grouprenamed'] = 'Groep succesvol hernoemd';
+$messages['groupcreated'] = 'Groep succesvol aangemaakt';
+$messages['messagedeleted'] = 'Bericht(en) succesvol verwijderd';
+$messages['messagemoved'] = 'Bericht(en) succesvol verplaatst';
+$messages['messagecopied'] = 'Bericht(en) succesvol gekopieerd';
+$messages['messagemarked'] = 'Bericht(en) succesvol gemarkeerd';
+$messages['autocompletechars'] = 'Voer ten minste $min karakters in voor automatisch aanvullen';
+$messages['namecannotbeempty'] = 'Naam kan niet leeg zijn';
+$messages['nametoolong'] = 'Naam is te lang';
+$messages['folderupdated'] = 'Map succesvol bijgewerkt';
+$messages['foldercreated'] = 'Map succesvol aangemaakt';
 
 ?>

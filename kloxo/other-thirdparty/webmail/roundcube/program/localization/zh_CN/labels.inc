@@ -14,7 +14,7 @@
 |         Zhang Huang bin <michaelbibby@gmail.com>                      |
 +-----------------------------------------------------------------------+
 
-@version $Id: labels.inc 3989 2010-09-25 13:03:53Z alec $
+@version $Id: labels.inc 4345 2010-12-17 14:28:38Z thomasb $
 
 */
 
@@ -311,9 +311,6 @@ $labels['subscribed'] = '已订阅';
 $labels['messagecount'] = '邮件数量';
 $labels['create'] = '建立';
 $labels['createfolder'] = '建立新邮件夹';
-$labels['rename'] = '重命名';
-$labels['renamefolder'] = '重命名邮件夹';
-$labels['deletefolder'] = '删除邮件夹';
 $labels['managefolders'] = '管理邮件夹';
 $labels['specialfolders'] = '指定邮件夹';
 $labels['sortby'] = '排序';

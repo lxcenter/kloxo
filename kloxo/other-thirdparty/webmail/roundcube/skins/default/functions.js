@@ -21,6 +21,62 @@ function rcube_show_advanced(visible)
   $('tr.advanced').css('display', (visible ? (bw.ie ? 'block' : 'table-row') : 'none'));
 }
 
+// Fieldsets-to-tabs converter
+// Warning: don't place "caller" <script> inside page element (id)
+function rcube_init_tabs(id, current)
+{
+  var content = document.getElementById(id),
+    // get fieldsets of the higher-level (skip nested fieldsets)
+    fs = $('fieldset', content).not('fieldset > fieldset');
+
+  if (!fs.length)
+    return;
+
+  current = current ? current : 0;
+
+  // first hide not selected tabs
+  fs.each(function(idx) { if (idx != current) $(this).hide(); });
+
+  // create tabs container
+  var tabs = $('<div>').addClass('tabsbar').appendTo($(content));
+
+  // convert fildsets into tabs
+  fs.each(function(idx) {
+    var tab, a, elm = $(this),
+      // get first legend element
+      legend = $(elm).children('legend');
+
+    // create a tab
+    a   = $('<a>').text(legend.text()).attr('href', '#');
+    tab = $('<span>').attr({'id': 'tab'+idx, 'class': 'tablink'})
+        .click(function() { rcube_show_tab(id, idx); return false })
+
+    // remove legend
+    legend.remove();
+    // style fieldset
+    elm.addClass('tabbed');
+    // style selected tab
+    if (idx == current)
+      tab.addClass('tablink-selected');
+
+    // add the tab to container
+    tab.append(a).appendTo(tabs);
+  });
+}
+
+function rcube_show_tab(id, index)
+{
+  var content = document.getElementById(id),
+    fs = $('fieldset', content).not('fieldset > fieldset');
+
+  fs.each(function(idx) {
+    // Show/hide fieldset (tab content)
+    $(this)[index==idx ? 'show' : 'hide']();
+    // Select/unselect tab
+    $('#tab'+idx).toggleClass('tablink-selected', idx==index);
+  });
+}
+
 /**
  * Mail UI
  */
@@ -29,6 +85,7 @@ function rcube_mail_ui()
 {
   this.popups = {
     markmenu:       {id:'markmessagemenu'},
+    replyallmenu:   {id:'replyallmenu'},
     searchmenu:     {id:'searchmenu', editable:1},
     messagemenu:    {id:'messagemenu'},
     listmenu:       {id:'listmenu', editable:1},
@@ -73,9 +130,12 @@ show_popupmenu: function(popup, show)
     show = false;
 
   if (show && ref) {
-    var pos = $(ref).offset();
+    var parent = $(ref).parent(),
+      pos = parent.hasClass('dropbutton') ? parent.offset() : $(ref).offset();
+
     if (!above && pos.top + ref.offsetHeight + obj.height() > window.innerHeight)
       above = true;
+
     obj.css({ left:pos.left, top:(pos.top + (above ? -obj.height() : ref.offsetHeight)) });
   }
 
@@ -293,16 +353,15 @@ switch_preview_pane: function(elem)
 /* Message composing */
 init_compose_form: function()
 {
-  var cc_field = document.getElementById('_cc'),
-    bcc_field = document.getElementById('_bcc'),
+  var f, field, fields = ['cc', 'bcc', 'replyto', 'followupto'],
     div = document.getElementById('compose-div'),
     headers_div = document.getElementById('compose-headers-div');
 
-  if (cc_field && cc_field.value != '')
-    rcmail_ui.show_header_form('cc');
-
-  if (bcc_field && bcc_field.value != '')
-    rcmail_ui.show_header_form('bcc');
+  // Show input elements with non-empty value
+  for (f=0; f<fields.length; f++) {
+    if ((field = $('#_'+fields[f])) && field.length && field.val() != '')
+      rcmail_ui.show_header_form(fields[f]);
+  }
 
   // prevent from form data loss when pressing ESC key in IE
   if (bw.ie) {

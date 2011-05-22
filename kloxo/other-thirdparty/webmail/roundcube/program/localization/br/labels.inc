@@ -15,7 +15,7 @@
  |         Mickaël Wolff <rcw@lupusmic.org>                              |
  +-----------------------------------------------------------------------+
 
- @version $Id: labels.inc 3989 2010-09-25 13:03:53Z alec $
+ @version $Id: labels.inc 4345 2010-12-17 14:28:38Z thomasb $
 
 */
 
@@ -171,9 +171,6 @@ $labels['foldername'] = 'Anv ar renkell';
 $labels['subscribed'] = 'Koumananer';
 $labels['create'] = 'Krouiñ';
 $labels['createfolder'] = 'Krouiñ ur renkell nevez';
-$labels['rename'] = 'Adanviñ';
-$labels['renamefolder'] = 'Adanviñ ar renkell';
-$labels['deletefolder'] = 'Dilemel ar renkell';
 $labels['managefolders'] = 'Aozañ ar renkelloù';
 $labels['sortby'] = 'Rummañ dre';
 $labels['sortasc'] = 'Rumm diagentad';

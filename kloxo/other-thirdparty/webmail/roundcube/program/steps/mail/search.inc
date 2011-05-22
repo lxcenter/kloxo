@@ -11,7 +11,7 @@
  |         Thomas Bruederli <roundcube@gmail.com>                        |
  +-----------------------------------------------------------------------+
 
- $Id: search.inc 3787 2010-06-28 17:36:26Z alec $
+ $Id: search.inc 4321 2010-12-08 12:52:04Z alec $
 
 */
 
@@ -111,19 +111,22 @@ if (!is_array($_SESSION['search']))
   $_SESSION['search'] = array();
 
 if ($search_str) {
-  $_SESSION['search'][$search_request] = $IMAP->get_search_set();
+  $_SESSION['search'] = $IMAP->get_search_set();
   $_SESSION['last_text_search'] = $str;
 }
+$_SESSION['search_request'] = $search_request;
 
 // Make sure we got the headers
-if (!empty($result_h))
-{
+if (!empty($result_h)) {
   rcmail_js_message_list($result_h);
   if ($search_str)
     $OUTPUT->show_message('searchsuccessful', 'confirmation', array('nr' => $IMAP->messagecount(NULL, 'ALL')));
 }
-else
-{
+// handle IMAP errors (e.g. #1486905)
+else  if ($err_code = $IMAP->get_error_code()) {
+  rcmail_display_server_error();
+}
+else {
   $OUTPUT->show_message('searchnomatch', 'notice');
 }
 

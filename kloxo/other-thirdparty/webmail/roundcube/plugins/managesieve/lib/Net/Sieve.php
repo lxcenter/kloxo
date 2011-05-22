@@ -475,7 +475,9 @@ class Net_Sieve
         if (NET_SIEVE_STATE_TRANSACTION != $this->_state) {
             return PEAR::raiseError('Not currently in TRANSACTION state', 1);
         }
-        if (PEAR::isError($res = $this->_doCmd(sprintf('HAVESPACE "%s" %d', $scriptname, $size)))) {
+
+        $command = sprintf('HAVESPACE %s %d', $this->_escape($scriptname), $size);
+        if (PEAR::isError($res = $this->_doCmd($command))) {
             return $res;
         }
         return true;
@@ -740,7 +742,9 @@ class Net_Sieve
         if (NET_SIEVE_STATE_TRANSACTION != $this->_state) {
             return PEAR::raiseError('Not currently in AUTHORISATION state', 1);
         }
-        if (PEAR::isError($res = $this->_doCmd(sprintf('DELETESCRIPT "%s"', $scriptname)))) {
+
+        $command = sprintf('DELETESCRIPT %s', $this->_escape($scriptname));
+        if (PEAR::isError($res = $this->_doCmd($command))) {
             return $res;
         }
         return true;
@@ -759,11 +763,12 @@ class Net_Sieve
             return PEAR::raiseError('Not currently in AUTHORISATION state', 1);
         }
 
-        if (PEAR::isError($res = $this->_doCmd(sprintf('GETSCRIPT "%s"', $scriptname)))) {
+        $command = sprintf('GETSCRIPT %s', $this->_escape($scriptname));
+        if (PEAR::isError($res = $this->_doCmd($command))) {
             return $res;
         }
 
-        return preg_replace('/{[0-9]+}\r\n/', '', $res);
+        return preg_replace('/^{[0-9]+}\r\n/', '', $res);
     }
 
     /**
@@ -779,9 +784,12 @@ class Net_Sieve
         if (NET_SIEVE_STATE_TRANSACTION != $this->_state) {
             return PEAR::raiseError('Not currently in AUTHORISATION state', 1);
         }
-        if (PEAR::isError($res = $this->_doCmd(sprintf('SETACTIVE "%s"', $scriptname)))) {
+
+        $command = sprintf('SETACTIVE %s', $this->_escape($scriptname));
+        if (PEAR::isError($res = $this->_doCmd($command))) {
             return $res;
         }
+
         $this->_activeScript = $scriptname;
         return true;
     }
@@ -808,9 +816,10 @@ class Net_Sieve
         $res = explode("\r\n", $res);
         foreach ($res as $value) {
             if (preg_match('/^"(.*)"( ACTIVE)?$/i', $value, $matches)) {
-                $scripts[] = $matches[1];
+                $script_name = stripslashes($matches[1]);
+                $scripts[] = $script_name;
                 if (!empty($matches[2])) {
-                    $activescript = $matches[1];
+                    $activescript = $script_name;
                 }
             }
         }
@@ -833,8 +842,10 @@ class Net_Sieve
         }
 
         $stringLength = $this->_getLineLength($scriptdata);
+        $command      = sprintf("PUTSCRIPT %s {%d+}\r\n%s",
+            $this->_escape($scriptname), $stringLength, $scriptdata);
 
-        if (PEAR::isError($res = $this->_doCmd(sprintf("PUTSCRIPT \"%s\" {%d+}\r\n%s", $scriptname, $stringLength, $scriptdata)))) {
+        if (PEAR::isError($res = $this->_doCmd($command))) {
             return $res;
         }
 
@@ -981,6 +992,28 @@ class Net_Sieve
     }
 
     /**
+     * Receives x bytes from the server.
+     *
+     * @param int $length  Number of bytes to read
+     *
+     * @return string  The server response.
+     */
+    function _recvBytes($length)
+    {
+        $response = '';
+        $response_length = 0;
+
+        while ($response_length < $length) {
+            $response .= $this->_sock->read($length - $response_length);
+            $response_length = $this->_getLineLength($response);
+        }
+
+        $this->_debug("S: " . rtrim($response));
+
+        return $response;
+    }
+
+    /**
      * Send a command and retrieves a response from the server.
      *
      * @param string $cmd   The command to send.
@@ -1013,11 +1046,11 @@ class Net_Sieve
 
                 if ('NO' == substr($uc_line, 0, 2)) {
                     // Check for string literal error message.
-                    if (preg_match('/^no {([0-9]+)\+?}/i', $line, $matches)) {
-                        $line .= str_replace(
-                            "\r\n", ' ', $this->_sock->read($matches[1] + 2)
-                        );
-                        $this->_debug("S: $line");
+                    if (preg_match('/{([0-9]+)}$/i', $line, $matches)) {
+                        $line = substr($line, 0, -(strlen($matches[1])+2))
+                            . str_replace(
+                                "\r\n", ' ', $this->_recvBytes($matches[1] + 2)
+                            );
                     }
                     return PEAR::raiseError(trim($response . substr($line, 2)), 3);
                 }
@@ -1052,16 +1085,9 @@ class Net_Sieve
                     return PEAR::raiseError(trim($response . $line), 6);
                 }
 
-                if (preg_match('/^{([0-9]+)\+?}/i', $line, $matches)) {
-                    // Matches String Responses.
-                    $str_size = $matches[1] + 2;
-                    $line = '';
-                    $line_length = 0;
-                    while ($line_length < $str_size) {
-                        $line .= $this->_sock->read($str_size - $line_length);
-                        $line_length = $this->_getLineLength($line);
-                    }
-                    $this->_debug("S: $line");
+                if (preg_match('/^{([0-9]+)}/i', $line, $matches)) {
+                    // Matches literal string responses.
+                    $line = $this->_recvBytes($matches[1] + 2);
 
                     if (!$auth) {
                         // Receive the pending OK only if we aren't
@@ -1146,7 +1172,13 @@ class Net_Sieve
 
         // The server should be sending a CAPABILITY response after
         // negotiating TLS. Read it, and ignore if it doesn't.
-        $this->_doCmd();
+        // Doesn't work with older timsieved versions
+        $regexp = '/^CYRUS TIMSIEVED V([0-9.]+)/';
+        if (!preg_match($regexp, $this->_capability['implementation'], $matches)
+            || version_compare($matches[1], '2.3.10', '>=')
+        ) {
+            $this->_doCmd();
+        }
 
         // RFC says we need to query the server capabilities again now that we
         // are under encryption.
@@ -1189,6 +1221,24 @@ class Net_Sieve
         $string = strtoupper($string);
         setlocale(LC_CTYPE, $language);
         return $string;
+    }
+
+    /**
+     * Convert string into RFC's quoted-string or literal-c2s form
+     *
+     * @param string $string The string to convert.
+     *
+     * @return string Result string
+     */
+    function _escape($string)
+    {
+        // Some implementations doesn't allow UTF-8 characters in quoted-string
+        // It's safe to use literal-c2s
+        if (preg_match('/[^\x01-\x09\x0B-\x0C\x0E-\x7F]/', $string)) {
+            return sprintf("{%d+}\r\n%s", $this->_getLineLength($string), $string);
+        }
+
+        return '"' . addcslashes($string, '\\"') . '"';
     }
 
     /**

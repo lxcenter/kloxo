@@ -5,10 +5,19 @@
  *
  * Driver to change passwords via Poppassd/Courierpassd
  *
- * @version 1.0
+ * @version 1.1
  * @author Philip Weir
  *
  */
+
+function format_error_result($code, $line)
+{
+    if (preg_match('/^\d\d\d\s+(\S.*)\s*$/', $line, $matches)) {
+        return array('code' => $code, 'message' => $matches[1]);
+    } else {
+        return $code;
+    }
+}
 
 function password_save($curpass, $passwd)
 {
@@ -16,35 +25,36 @@ function password_save($curpass, $passwd)
 //    include('Net/Socket.php');
     $poppassd = new Net_Socket();
 
-    if (PEAR::isError($poppassd->connect($rcmail->config->get('password_pop_host'), $rcmail->config->get('password_pop_port'), null))) {
-        return PASSWORD_CONNECT_ERROR;
+    $result = $poppassd->connect($rcmail->config->get('password_pop_host'), $rcmail->config->get('password_pop_port'), null);
+    if (PEAR::isError($result)) {
+        return format_error_result(PASSWORD_CONNECT_ERROR, $result->getMessage());
     }
     else {
         $result = $poppassd->readLine();
         if(!preg_match('/^2\d\d/', $result)) {
             $poppassd->disconnect();
-            return PASSWORD_ERROR;
+            return format_error_result(PASSWORD_ERROR, $result);
         }
         else {
             $poppassd->writeLine("user ". $_SESSION['username']);
             $result = $poppassd->readLine();
             if(!preg_match('/^[23]\d\d/', $result) ) {
                 $poppassd->disconnect();
-                return PASSWORD_CONNECT_ERROR;
+                return format_error_result(PASSWORD_CONNECT_ERROR, $result);
             }
             else {
                 $poppassd->writeLine("pass ". $curpass);
                 $result = $poppassd->readLine();
                 if(!preg_match('/^[23]\d\d/', $result) ) {
                     $poppassd->disconnect();
-                    return PASSWORD_ERROR;
+                    return format_error_result(PASSWORD_ERROR, $result);
                 }
                 else {
                     $poppassd->writeLine("newpass ". $passwd);
                     $result = $poppassd->readLine();
                     $poppassd->disconnect();
                     if (!preg_match('/^2\d\d/', $result))
-                        return PASSWORD_ERROR;
+                        return format_error_result(PASSWORD_ERROR, $result);
                     else
                         return PASSWORD_SUCCESS;
                 }
@@ -52,5 +62,3 @@ function password_save($curpass, $passwd)
         }
     }
 }
-
-?>

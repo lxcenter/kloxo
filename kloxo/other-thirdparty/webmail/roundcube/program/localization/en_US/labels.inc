@@ -13,7 +13,7 @@
  | Author: Thomas Bruederli <roundcube@gmail.com>                        |
  +-----------------------------------------------------------------------+
 
- @version $Id: labels.inc 3989 2010-09-25 13:03:53Z alec $
+ @version $Id: labels.inc 4362 2010-12-22 18:45:15Z alec $
 
 */
 
@@ -46,13 +46,12 @@ $labels['to']      = 'Recipient';
 $labels['cc']      = 'Copy';
 $labels['bcc']     = 'Bcc';
 $labels['replyto'] = 'Reply-To';
+$labels['followupto'] = 'Followup-To';
 $labels['date']    = 'Date';
 $labels['size']    = 'Size';
 $labels['priority'] = 'Priority';
 $labels['organization'] = 'Organization';
-
-// aliases
-$labels['reply-to'] = $labels['replyto'];
+$labels['readstatus'] = 'Read status';
 
 $labels['mailboxlist'] = 'Folders';
 $labels['messagesfromto'] = 'Messages $from to $to of $count';
@@ -121,7 +120,9 @@ $labels['today'] = 'Today';
 $labels['checkmail']        = 'Check for new messages';
 $labels['writenewmessage']  = 'Create a new message';
 $labels['replytomessage']   = 'Reply to sender';
-$labels['replytoallmessage'] = 'Reply to sender and all recipients';
+$labels['replytoallmessage'] = 'Reply to list or to sender and all recipients';
+$labels['replyall']         = 'Reply all';
+$labels['replylist']        = 'Reply list';
 $labels['forwardmessage']   = 'Forward the message';
 $labels['deletemessage']    = 'Delete message';
 $labels['movemessagetotrash'] = 'Move message to trash';
@@ -180,7 +181,6 @@ $labels['listmode'] = 'List view mode';
 $labels['folderactions'] = 'Folder actions...';
 $labels['compact'] = 'Compact';
 $labels['empty'] = 'Empty';
-$labels['purge'] = 'Purge';
 
 $labels['quota'] = 'Disk usage';
 $labels['unknown']  = 'unknown';
@@ -203,7 +203,9 @@ $labels['addattachment']  = 'Attach a file';
 $labels['charset']        = 'Charset';
 $labels['editortype']     = 'Editor type';
 $labels['returnreceipt']  = 'Return receipt';
+$labels['dsn']            = 'Delivery status notification';
 
+$labels['editidents']    = 'Edit identities';
 $labels['checkspelling'] = 'Check spelling';
 $labels['resumeediting'] = 'Resume editing';
 $labels['revertto']      = 'Revert to';
@@ -232,6 +234,7 @@ $labels['maxuploadsize'] = 'Maximum allowed file size is $size';
 $labels['addcc'] = 'Add Cc';
 $labels['addbcc'] = 'Add Bcc';
 $labels['addreplyto'] = 'Add Reply-To';
+$labels['addfollowupto'] = 'Add Followup-To';
 
 // mdn
 $labels['mdnrequest'] = 'The sender of this message has asked to be notified when you read this message. Do you wish to notify the sender?';
@@ -248,11 +251,13 @@ $labels['email']     = 'E-Mail';
 $labels['addcontact'] = 'Add new contact';
 $labels['editcontact'] = 'Edit contact';
 $labels['contacts'] = 'Contacts';
+$labels['contactproperties'] = 'Contact properties';
 
 $labels['edit']   = 'Edit';
 $labels['cancel'] = 'Cancel';
 $labels['save']   = 'Save';
 $labels['delete'] = 'Delete';
+$labels['rename'] = 'Rename';
 
 $labels['newcontact']     = 'Create new contact card';
 $labels['deletecontact']  = 'Delete selected contacts';
@@ -306,6 +311,7 @@ $labels['pagesize']  = 'Rows per page';
 $labels['signature'] = 'Signature';
 $labels['dstactive']  = 'Daylight saving time';
 $labels['htmleditor'] = 'Compose HTML messages';
+$labels['htmlonreply'] = 'on reply to HTML message only';
 $labels['htmlsignature'] = 'HTML signature';
 $labels['previewpane'] = 'Show preview pane';
 $labels['skin'] = 'Interface skin';
@@ -314,9 +320,11 @@ $labels['logoutcompact'] = 'Compact Inbox on logout';
 $labels['uisettings'] = 'User Interface';
 $labels['serversettings'] = 'Server Settings';
 $labels['mailboxview'] = 'Mailbox View';
-$labels['mdnrequests'] = 'Sender notifications';
-$labels['askuser'] = 'ask the user';
-$labels['autosend'] = 'send automatically';
+$labels['mdnrequests'] = 'On request for return receipt';
+$labels['askuser'] = 'ask me';
+$labels['autosend'] = 'send receipt';
+$labels['autosendknown'] = 'send receipt to my contacts, otherwise ask me';
+$labels['autosendknownignore'] = 'send receipt to my contacts, otherwise ignore';
 $labels['ignore'] = 'ignore';
 $labels['readwhendeleted'] = 'Mark the message as read on delete';
 $labels['flagfordeletion'] = 'Flag the message for deletion instead of delete';
@@ -361,6 +369,9 @@ $labels['abovequote'] = 'above the quote';
 $labels['insertsignature'] = 'Insert signature';
 $labels['previewpanemarkread']  = 'Mark previewed messages as read';
 $labels['afternseconds']  = 'after $n seconds';
+$labels['reqmdn'] = 'Always request a return receipt';
+$labels['reqdsn'] = 'Always request a delivery status notification';
+$labels['replysamefolder'] = 'Place replies in the folder of the message being replied to';
 
 $labels['folder']  = 'Folder';
 $labels['folders']  = 'Folders';
@@ -369,11 +380,15 @@ $labels['subscribed']  = 'Subscribed';
 $labels['messagecount'] = 'Messages';
 $labels['create']  = 'Create';
 $labels['createfolder']  = 'Create new folder';
-$labels['rename'] = 'Rename';
-$labels['renamefolder'] = 'Rename folder';
-$labels['deletefolder']  = 'Delete folder';
 $labels['managefolders']  = 'Manage folders';
 $labels['specialfolders'] = 'Special Folders';
+$labels['properties'] = 'Properties';
+$labels['folderproperties'] = 'Folder properties';
+$labels['parentfolder'] = 'Parent folder';
+$labels['location'] = 'Location';
+$labels['info'] = 'Information';
+$labels['getfoldersize'] = 'Click to get folder size';
+$labels['changesubscription'] = 'Click to change subscription';
 
 $labels['sortby'] = 'Sort by';
 $labels['sortasc']  = 'Sort ascending';
@@ -404,5 +419,5 @@ $labels['vietnamese'] = 'Vietnamese';
 $labels['japanese'] = 'Japanese';
 $labels['korean'] = 'Korean';
 $labels['chinese'] = 'Chinese';
-																												
+
 ?>

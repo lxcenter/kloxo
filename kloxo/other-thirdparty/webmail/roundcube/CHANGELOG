@@ -1,43 +1,180 @@
 CHANGELOG Roundcube Webmail
 ===========================
 
-- Fix handling of backslash as IMAP delimiter
-- Fix charset replacement in HTML message bodies (#1487021)
-- Fix: contact group input is empty when using rename action more than once on the same group record
-- Fix "Server Error! (Not Found)" when using utils/save-pref action (#1487023)
-- Fix handling of Thunderbird's vCards (#1487024)
+- TinyMCE 3.4.2 now compatible with IE9
+- PEAR::Net_SMTP 1.5.2, fixed timeout issue (#1487843)
+- Fix bug where template name without plugin prefix was used in render_page hook
+- Support 'abort' and 'result' response in 'preferences_save' hook, add error handling
+- Fix bug where some content would cause hang on html2text conversion (#1487863)
+- Improve space-stuffing handling in format=flowed messages (#1487861)
+- Fix bug where some dates would produce SQL error in MySQL (#1487856)
+- Added workaround for some IMAP server with broken STATUS response (#1487859)
+- Fix bug where default_charset was not used for text messages (#1487836)
+- Stateless request tokens. No keep-alive necessary on login page (#1487829)
+- Force names of unique constraints in PostgreSQL DDL
+- Add code for prevention from IMAP connection hangs when server closes socket unexpectedly
+- Remove redundant DELETE query (for old session deletion) on login
+- Get around unreliable rand() and mt_rand() in session ID generation (#1486281)
+- Fix some emails are not shown using Cyrus IMAP (#1487820)
+- Fix handling of mime-encoded words with non-integral number of octets in a word (#1487801)
+- Fix parsing links with non-printable characters inside (#1487805)
+- Fixed de_CH/de_DE localization bugs (#1487773)
+- Add variable for 'Today' label in date_today option (#1486120)
+- Applied plugin changes since 0.5-stable release
+- Fix SQL query in rcube_user::query() so it uses index on MySQL again
+- Use only one from IMAP authentication methods to prevent login delays (1487784)
+- Fix strftime format support in date_today option
+- Removed redundant </form> tags from contact add/edit pages
+- Fix CSS error in contact details screen on IE7 (#1487775)
 
-RELEASE 0.4.1
+RELEASE 0.5.1
 -------------
+- Fix handling of attachments with invalid content type (#1487767)
+- Add workaround for DBMail's bug http://www.dbmail.org/mantis/view.php?id=881 (#1487766)
+- Use IMAP's ID extension (RFC2971) to print more info into debug log
+- Security: add optional referer check to prevent CSRF in GET requests
+- Fix email_dns_check setting not used for identities/contacts (#1487740)
+- Fix ICANN example addresses doesn't validate (#1487742)
+- Security: protect login form submission from CSRF
+- Security: prevent from relaying malicious requests through modcss.inc
+- Fix handling of non-image attachments in multipart/related messages (#1487750)
+- Fix IDNA support when IDN/INTL modules are in use (#1487742)
+- Fix handling of invalid HTML comments in messages (#1487759)
+- Fix parsing FETCH response for very long headers (#1487753)
+- Fix add/remove columns in message list when message_sort_order isn't set (#1487751)
+- Fix settings UI on IE 6 (#1487724)
+- Remove double borders in folder listing (#1487713)
+- Separate full message headers UI element from headers table (#1487715)
+- Add part MIME ID to message_part_* hooks (#1487718) 
+- Updated PEAR::Net_Socket to 1.0.10
+- Updated PEAR::Net_IDNA2 to 0.1.1
+- Fix handling of comments inside an email address spec. (#1487673)
+- Show full mail subject as title when hovering a cut subject link (#1487128)
+- Fix randomly disappearing folders list in IE (#1487704)
+- Fix list column add/removal in IE (#1487703)
+- Fix login redirect issues (#1487686)
+- Require PHP 5.2.1 or greater
+- Fix %h/%z variables in username_domain option (#1487701)
+- Workaround for setting charset in case of malformed bodystructure response (#1487700)
+- Fix impossible to subscribe to protected folders (#1487656)
+- Fix setting timezone in Preferences (#1487705)
 
-- Fix space-stuffing in format=flowed messages (#1487018)
-- Fix msgexport.sh now using the new imap wrapper
-- Avoid displaying password on shell (#1486947)
-- Only lower-case user name if first login attempt failed (#1486393)
-- Make alias setting in squirrelmail_usercopy plugin configurable (patch by pommi, #1487007)
-- Prevent from saving a non-existing skin path in user prefs (#1486936)
-- Improve handling of single-part messages with bogus BODYSTRUCTURE (#1486898)
-- Fix path to SQL files when using pgsql/mysqli/sqlsrv drivers (#1486902)
-- Fix upgrade script for SQLite (#1486903)
-- Fixes in SQL init script + added update script for MSSQL database
-- Remove redundant date in syslog messages (#1486945)
-- Fix contacts list page controls when a group is selected (#1486946)
-- Fix SMTP test in Installer (#1486952)
-- Fix "Select all" causes message to be opened in folder with exactly one message (#1486913)
-- Fix Tab key doesn't work in HTML editor in Google Chrome (#1486925)
-- Fix TinyMCE uses zh_CN when zh_TW locale is set (#1486929)
-- Fix TinyMCE buttons are hidden in Opera (#1486922)
-- Fix JS error on IE when trying to send HTML message with enabled spellchecker (#1486940)
-- Display inline images with known extensions and non-image content-type (#1486934)
-- Fix "Threaded" checkbox after subfolder creation (#1486928)
-- Fix timezone string in sent mail (#1486961)
-- Show disabled checkboxes for protected folders instead of dots (#1485498)
-- Added fieldsets in Identity form, added 'identity_form' hook
-- Re-added 'Close' button in upload form (#1486930, #1486823)
-- Fix handling of charsets with LATIN-* label
-- Fix messages background image handling in some cases (#1486990)
-- Fix format=flowed handling (#1486989)
-- Fix when IMAP connection fails in 'get' action session shouldn't be destroyed (#1486995)
-- Fix list_cols is not updated after column dragging (#1486999)
-- Support %z variable in host configuration options (#1487003)
+RELEASE 0.5
+-----------
+- Fix double-login/session issue (#1487104)
+- Wrap HTML parts with <html><body> and add Doctype declaration (#1487098)
+- Make rcube_autoload silently skip unknown classes (#1487109)
+- Fix charset detection in vcards with encoded values (#1485542)
+- Better CSS cursors for splitters (#1486874)
+- Show the same message only once (#1487641)
+- Fix namespaces handling (#1487649)
+- Add handling of multifolder METADATA/ANNOTATION responses
+- Fix handling of INBOX when personal namespace prefix is non-empty (#1487657)
+- Fix handling square brackets in links (#1487672)
+- Add description of 'use_https' option in main.inc.php.dist file
+
+RELEASE 0.5-RC
+--------------
+- Plugin API: Add 'pass' argument in 'authenticate' hook (#1487134)
+- Fix attachments of type message/rfc822 are not listed on attachments list
+- Add 'login_lc' config option for case-insensitive authentication (#1487113)
+- Fix window is blur'ed in IE when selecting a message (#1487316)
+- Fix cursor position on compose form in Webkit browsers (#1486674)
+- Fix setting charset of attachment filenames (#1487122)
+- Allow setting autocomplete attribute for all inputs separately (#1487313)
+- New Folder Manager UI
+- Fix invalid Request when creating a folder (#1487443)
+- Add folder size and quota indicator in folder manager (#1485780)
+- Add possibility to move a subfolder into root folder (#1486791)
+- Fix copying all messages in a folder copies only messages from current page
+- Improve performance of moving or copying of all messages in a folder
+- Fix plaintext versions of HTML messages don't contain placeholders for emotions (#1485206)
+- Improve performance of folder rename and delete actions
+- Better support for READ-ONLY and NOPERM responses handling (#1487083)
+- Add confirmation message on purge/expunge command response
+- Fix handling of untagged responses for AUTHENTICATE command (#1487450)
+- Add username and IP address to log message on unsuccessful login (#1487626)
+- Improved Mail-Followup-To and Mail-Reply-To headers handling
+- Fix charset conversion for text attachments without charset specification (#1487634)
+
+RELEASE 0.5-BETA
+----------------
+- Make session data storage more robust against garbage session data (#1487136)
+- Config option for autocomplete on login screen
+- Allow plugin templates to include local files (#1487133)
+- List groups in address detail view and allow to subscribe/unsubscribe from there (#1486753)
+- Messages caching: performance improvements, fixed syncing, fixes related with #1486748
+- Add link to identities in compose window (#1486729)
+- Add Internationalized Domain Name (IDNA) support (#1483894)
+- Add option to automatically send read notifications for known senders (#1485883)
+- Add option to "Return receipt" will be always checked (#1486352)
+- Fix HTML to plain text conversion doesn't handle citation blocks (#1486921)
+- Use custom sorting when SORT is disabled by IMAP admin (#1486959)
+- Allow setting some washtml options from plugin (#1486578)
+- Add option do bind for an individual LDAP address book (#1486997)
+- Change reply prefix to display email address only if sender name doesn't exist (#1486550)
+- Plugin API: improved 'abort' flag handling, added 'result' item in some hooks (#1486914)
+- Fix mailto optional params in plain text messages aren't handled (#1487026)
+- Add Reply-to-List feature (#1484252)
+- Add Mail-Followup-To/Mail-Reply-To support (#1485547)
+- Fix confirmation message isn't displayed after sending mail on Chrome (#1486177)
+- Fix keyboard doesn't work with autocomplete list with Chrome (#1487029)
+- Improve tabs to fixed width and add tabs in identities info (#1486974)
+- Add unique index on users.username+users.mail_host
+- Make htmleditor option more consistent and add option to use HTML on reply to HTML message (#1485840)
+- Use empty envelope sender address for message disposition notifications (RFC 2298.3)
+- Support SMTP Delivery Status Notifications - RFC 3461 (#1486142)
+- Use css sprite image for messages list
+- Add (different) attachment icon for messages of type multipart/report (#1486165)
+- Prevent from inserting empty link when composing HTML message (#1486944)
+- Add caching support in id2uid and uid2id functions (#1487019)
+- Add SASL proxy authentication for SMTP (#1486693)
+- Improve displaying of UI messages (#1486977)
+- Fix double e-mail filed in identity form (#1487054)
+- Display IMAP errors for LIST/THREAD/SEARCH commands (#1486905)
+- Add LITERAL+ (IMAP4 non-synchronizing literals) support (RFC 2088)
+- Add separate column for message status icon (#1486665)
+- Add ACL extension support into IMAP classes (RFC 4314)
+- Add ANNOTATEMORE extension support into IMAP classes (draft-daboo-imap-annotatemore)
+- Add METADATA extension support into IMAP classes (RFC 5464)
+- Fix decoding of e-mail address strings in message headers (#1487068)
+- Fix handling of attachments when Content-Disposition is not inline nor attachment (#1487051)
+- Improve performance of unseen messages counting (#1487058)
+- Improve performance of messages counting using ESEARCH extension (RFC4731)
+- Add LIST-STATUS support in rcube_imap_generic class (RFC 5819)
+- Add SASL-IR support in IMAP (RFC 4959)
+- Add LOGINDISABLED support (RFC 2595)
+- Add support for AUTH=PLAIN in IMAP authentication
+- Re-implemented SMTP proxy authentication support
+- Add support for IMAP proxy authentication (#1486690)
+- Add support for AUTH=DIGEST-MD5 in IMAP (RFC 2831)
+- Fix parent folder with unread subfolder not bold when message is open (#1487078)
+- Add basic IMAP LIST's \Noselect option support
+- Add support for selection options from LIST-EXTENDED extension (RFC 5258)
+- Don't list subscribed but non-existent folders (#1486225)
+- Fix handling of URLs with tilde (~) or semicolon (;) character (#1487087, #1487088)
+- Plugin API: added 'contact_form' hook
+- Add SORT=DISPLAY support (RFC 5957)
+- Plugin API: add possibility to disable plugin in AJAX mode, 'noajax' property
+- Plugin API: add possibility to disable plugin in framed mode, 'noframe' property
+- Improve performance of setting IMAP flags using .SILENT suffix
+- Improve performance of message cache status checking with skip_disabled=true
+- Support contact's email addresses up to 255 characters long (#1487095)
+- Add option to place replies in the folder of the message being replied to (#1485945)
+- Add missing confirmation/error messages on contact/group/message actions (#1486845)
+- Add 'loading' message on message move/copy/delete/mark actions
+- Improve responsiveness of messages displaying (#1486986)
+- Add option for minimum length of autocomplete's string (#1486428)
+- Fix operations on messages in unsubscribed folder (#1487107)
+- Add support for shared folders (#1403507)
+- Fix handling of folders with name "0" (#1487119)
+- Fix handling of folders with "<>" characters in name
+- jQuery 1.4.4
+- Fix handling of HTML entity strings in plain text messages
+- Fix focused elements aren't unfocused when clicking on the list (#1487123)
+- Fix error in MSSQL DDL scripts (#1487112)
+- Lock submit button in onsubmit event on login page (#1487036)
+- Don't set attachment's charset in Content-type header (#1487122)
+- Fix handling of message bodies (quoted-printable encoded) with NULL characters (#1486189)
+- Add workaround for MSOE's multipart/related messages with non-related attachments
 

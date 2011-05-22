@@ -15,7 +15,7 @@
 |         Maximilien Cuony <theglu@theglu.org>                          |
 +-----------------------------------------------------------------------+
 
-@version $Id: messages.inc 3989 2010-09-25 13:03:53Z alec $
+@version $Id: messages.inc 4469 2011-01-29 14:55:12Z thomasb $
 
 */
 
@@ -25,6 +25,9 @@ $messages['cookiesdisabled'] = 'Votre navigateur n\'accepte pas les cookies';
 $messages['sessionerror'] = 'Votre session est invalide ou a expiré';
 $messages['imaperror'] = 'Erreur de connexion au serveur IMAP';
 $messages['servererror'] = 'Erreur Serveur !';
+$messages['servererrormsg'] = 'Erreur du serveur: $msg';
+$messages['errorreadonly'] = 'Impossible d\'effectuer cette opération. Le dossier est en lecture seule';
+$messages['errornoperm'] = 'Impossible d\'effectuer cette opération. Permission refusée';
 $messages['invalidrequest'] = 'Requête invalide ! Aucune donnée n\'a été sauvegardée.';
 $messages['nomessagesfound'] = 'Aucun message trouvé dans cette boîte aux lettres';
 $messages['loggedout'] = 'Vous venez de vous déconnecter avec succès. Au revoir !';
@@ -56,10 +59,10 @@ $messages['deletecontactconfirm'] = 'Voulez-vous vraiment effacer le(s) contact(
 $messages['deletemessagesconfirm'] = 'Voulez-vous vraiment supprimer le(s) message(s) sélectionné(s) ?';
 $messages['deletefolderconfirm'] = 'Voulez-vous vraiment effacer ce dossier ?';
 $messages['purgefolderconfirm'] = 'Voulez-vous vraiment effacer tous les messages de ce dossier ?';
-$messages['foldercreating'] = 'Création du dossier...';
 $messages['folderdeleting'] = 'Suppression du dossier...';
-$messages['folderrenaming'] = 'Renommage du dossier...';
 $messages['foldermoving'] = 'Déplacement du dossier...';
+$messages['foldersubscribing'] = 'Inscription du dossier...';
+$messages['folderunsubscribing'] = 'Désinscription du dossier...';
 $messages['formincomplete'] = 'Le formulaire n\'a pas été entièrement rempli';
 $messages['noemailwarning'] = 'Veuillez spécifier un courriel valide';
 $messages['nonamewarning'] = 'Veuillez fournir un nom';
@@ -79,6 +82,10 @@ $messages['searching'] = 'En cours de recherche...';
 $messages['checking'] = 'Vérification...';
 $messages['nospellerrors'] = 'Aucune faute trouvée';
 $messages['folderdeleted'] = 'Dossier effacé';
+$messages['foldersubscribed'] = 'Le dossier a bien été inscrit';
+$messages['folderunsubscribed'] = 'Le dossier a bien été désinscrit';
+$messages['folderpurged'] = 'Le dossier a bien été vidé';
+$messages['folderexpunged'] = 'Le dossier a bien été comptacté';
 $messages['deletedsuccessfully'] = 'Supprimé(s) avec succès';
 $messages['converting'] = 'Suppression de la mise en forme...';
 $messages['messageopenerror'] = 'Impossible de charger le message depuis serveur';
@@ -90,10 +97,11 @@ $messages['sourceisreadonly'] = 'Cette source d\'adresse est en lecture seule';
 $messages['errorsavingcontact'] = 'Ne peut pas enregistrer l\'adresse du contact';
 $messages['movingmessage'] = 'Déplacement du message...';
 $messages['copyingmessage'] = 'Copie du message ...';
+$messages['deletingmessage'] = 'Suppression des messages...';
+$messages['markingmessage'] = 'Marquage des messages...';
 $messages['receiptsent'] = 'L\'accusé de réception a bien été envoyé';
 $messages['errorsendingreceipt'] = 'L\'accusé de réception n\'a pas pu être envoyé';
 $messages['nodeletelastidentity'] = 'Vous ne pouvez pas effacer votre seule identité.';
-$messages['addsubfolderhint'] = 'Ce dossier sera créé comme sous-dossier de celui sélectionné.';
 $messages['forbiddencharacter'] = 'Le nom du dossier contient un caractère interdit';
 $messages['selectimportfile'] = 'Veuillez sélectionner un fichier à envoyer';
 $messages['addresswriterror'] = 'Impossible d\'écrire dans le carnet d\'adresse sélectionné';
@@ -111,10 +119,25 @@ $messages['smtpautherror'] = 'Erreur SMTP ($code): Echec de l\'authentification'
 $messages['smtpfromerror'] = 'Erreur SMTP ($code): Impossible de définir l\'expéditeur "$from" ($msg)';
 $messages['smtptoerror'] = 'Erreur SMTP ($code): Impossible d\'ajouter le destinataire "$to" ($msg)';
 $messages['smtprecipientserror'] = 'Erreur SMTP: Impossible de lire la liste des destinataires';
+$messages['smtpdsnerror'] = 'Erreur SMTP: Pas de support des notifications d\'état de distribution';
 $messages['smtperror'] = 'Erreur SMTP: $msg';
 $messages['emailformaterror'] = 'Adresse email incorrecte: $email';
 $messages['toomanyrecipients'] = 'Trop de destinataires. Réduisez leur nombre à $max maximum.';
 $messages['maxgroupmembersreached'] = 'Le nombre de membres du groupe dépasse le maximum de $max.';
 $messages['internalerror'] = 'Une erreur interne est survenue. Merci de réessayer';
+$messages['contactdelerror'] = 'Les contacts n\'ont pas pu être supprimés';
+$messages['contactdeleted'] = 'Les contacts ont bien été supprimés';
+$messages['groupdeleted'] = 'Le groupe a bien été supprimé';
+$messages['grouprenamed'] = 'Le groupe a bien été renommé';
+$messages['groupcreated'] = 'Le groupe a bien été créé';
+$messages['messagedeleted'] = 'Les messages ont bien été supprimés';
+$messages['messagemoved'] = 'Les messages ont bien été déplacés';
+$messages['messagecopied'] = 'Les messages ont bien été copiés';
+$messages['messagemarked'] = 'Les messages ont bien été marqués';
+$messages['autocompletechars'] = 'Entrez au moins $min caractères pour l\'auto-complétion';
+$messages['namecannotbeempty'] = 'Le nom ne peut pas être vide';
+$messages['nametoolong'] = 'Le nom est trop long';
+$messages['folderupdated'] = 'Le dossier a bien été mis à jour';
+$messages['foldercreated'] = 'Le dossier a bien été créé';
 
 ?>

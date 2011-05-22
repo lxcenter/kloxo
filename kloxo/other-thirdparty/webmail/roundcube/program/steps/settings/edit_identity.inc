@@ -15,7 +15,7 @@
  | Author: Thomas Bruederli <roundcube@gmail.com>                        |
  +-----------------------------------------------------------------------+
 
- $Id: edit_identity.inc 3989 2010-09-25 13:03:53Z alec $
+ $Id: edit_identity.inc 4509 2011-02-09 10:51:50Z thomasb $
 
 */
 
@@ -90,9 +90,13 @@ function rcube_identity_form($attrib)
 
   // disable some field according to access level
   if (IDENTITIES_LEVEL == 1 || IDENTITIES_LEVEL == 3) {
-    $form['adressing']['content']['email']['disabled'] = true;
-    $form['adressing']['content']['email']['class'] = 'disabled';
+    $form['addressing']['content']['email']['disabled'] = true;
+    $form['addressing']['content']['email']['class'] = 'disabled';
   }
+
+  $IDENTITY_RECORD['email']    = rcube_idn_to_utf8($IDENTITY_RECORD['email']);
+  $IDENTITY_RECORD['reply-to'] = rcube_idn_to_utf8($IDENTITY_RECORD['reply-to']);
+  $IDENTITY_RECORD['bcc']      = rcube_idn_to_utf8($IDENTITY_RECORD['bcc']);
 
   // Allow plugins to modify identity form content
   $plugin = $RCMAIL->plugins->exec_hook('identity_form', array(
@@ -122,7 +126,8 @@ function rcube_identity_form($attrib)
       foreach ($fieldset['content'] as $col => $colprop) {
         $colprop['id'] = 'rcmfd_'.$col;
 
-        $label = !empty($colprop['label']) ? $colprop['label'] : rcube_label($col);
+        $label = !empty($colprop['label']) ? $colprop['label'] :
+            rcube_label(str_replace('-', '', $col));
         $value = !empty($colprop['value']) ? $colprop['value'] :
             rcmail_get_edit_field($col, $IDENTITY_RECORD[$col], $colprop, $colprop['type']);
 
@@ -149,9 +154,9 @@ $OUTPUT->set_env('identities_level', IDENTITIES_LEVEL);
 
 $OUTPUT->set_pagetitle(rcube_label(($RCMAIL->action=='add-identity' ? 'newidentity' : 'edititem')));
 
-if ($RCMAIL->action=='add-identity' && $OUTPUT->template_exists('addidentity'))
-  $OUTPUT->send('addidentity');
+if ($RCMAIL->action=='add-identity' && $OUTPUT->template_exists('identityadd'))
+  $OUTPUT->send('identityadd');
 
-$OUTPUT->send('editidentity');
+$OUTPUT->send('identityedit');
 
 

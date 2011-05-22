@@ -13,7 +13,7 @@
 | Author: lordmiss <lordmiss@lordmiss.com>                              |
 +-----------------------------------------------------------------------+
 
-@version $Id: labels.inc 3989 2010-09-25 13:03:53Z alec $
+@version $Id: labels.inc 4345 2010-12-17 14:28:38Z thomasb $
 
 */
 
@@ -250,9 +250,6 @@ $labels['subscribed'] = '가입됨';
 $labels['messagecount'] = '메시지';
 $labels['create'] = '만들기';
 $labels['createfolder'] = '새 폴더 만들기';
-$labels['rename'] = '이름 바꾸기';
-$labels['renamefolder'] = '폴더 이름 바꾸기';
-$labels['deletefolder'] = '폴더 지우기';
 $labels['managefolders'] = '폴더 관리';
 $labels['specialfolders'] = '특수 폴더';
 $labels['sortby'] = '정렬';

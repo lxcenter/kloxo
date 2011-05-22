@@ -14,7 +14,7 @@
  | Author: Thomas Bruederli <roundcube@gmail.com>                        |
  +-----------------------------------------------------------------------+
 
- $Id: mark.inc 3989 2010-09-25 13:03:53Z alec $
+ $Id: mark.inc 4321 2010-12-08 12:52:04Z alec $
 
 */
 
@@ -43,20 +43,23 @@ if (($uids = get_input_value('_uid', RCUBE_INPUT_POST)) && ($flag = get_input_va
 
   $marked = $IMAP->set_flag($uids, $flag);
 
-  if ($marked == -1) {
+  if (!$marked) {
     // send error message
     if ($_POST['_from'] != 'show')
       $OUTPUT->command('list_mailbox');
-    $OUTPUT->show_message('errormarking', 'error');
+    rcmail_display_server_error('errormarking');
     $OUTPUT->send();
     exit;
+  }
+  else if (empty($_POST['_quiet'])) {
+    $OUTPUT->show_message('messagemarked', 'confirmation');
   }
 
   if ($flag == 'DELETED' && $CONFIG['read_when_deleted'] && !empty($_POST['_ruid'])) {
     $ruids = get_input_value('_ruid', RCUBE_INPUT_POST);
     $read = $IMAP->set_flag($ruids, 'SEEN');
 
-    if ($read != -1 && !$CONFIG['skip_deleted'])
+    if ($read && !$CONFIG['skip_deleted'])
       $OUTPUT->command('flag_deleted_as_read', $ruids);
   }
 
@@ -72,7 +75,7 @@ if (($uids = get_input_value('_uid', RCUBE_INPUT_POST)) && ($flag = get_input_va
     } else {
       // refresh saved search set after moving some messages
       if (($search_request = get_input_value('_search', RCUBE_INPUT_GPC)) && $IMAP->search_set) {
-        $_SESSION['search'][$search_request] = $IMAP->refresh_search();
+        $_SESSION['search'] = $IMAP->refresh_search();
       }
 
       $msg_count      = $IMAP->messagecount(NULL, $IMAP->threading ? 'THREADS' : 'ALL');
@@ -95,11 +98,11 @@ if (($uids = get_input_value('_uid', RCUBE_INPUT_POST)) && ($flag = get_input_va
       // update mailboxlist
       $mbox = $IMAP->get_mailbox_name();
       $unseen_count = $msg_count ? $IMAP->messagecount($mbox, 'UNSEEN') : 0;
-      $old_unseen = $_SESSION['unseen_count'][$mbox];
+      $old_unseen = rcmail_get_unseen_count($mbox);
 
       if ($old_unseen != $unseen_count) {
         $OUTPUT->command('set_unread_count', $mbox, $unseen_count, ($mbox == 'INBOX'));
-	    $_SESSION['unseen_count'][$mbox] = $unseen_count;
+        rcmail_set_unseen_count($mbox, $unseen_count);
       }
       $OUTPUT->command('set_rowcount', rcmail_get_messagecount_text($msg_count));
 

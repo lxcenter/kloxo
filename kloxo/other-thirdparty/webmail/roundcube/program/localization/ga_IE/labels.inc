@@ -12,7 +12,7 @@
  | Author:   Noel Bourke  (cros13)                                       |
  +-----------------------------------------------------------------------+
 
- @version $Id: labels.inc 3989 2010-09-25 13:03:53Z alec $
+ @version $Id: labels.inc 4345 2010-12-17 14:28:38Z thomasb $
 
 */
 
@@ -167,9 +167,6 @@ $labels['foldername'] = 'Ainm fillteán';
 $labels['subscribed'] = 'Síntiú';
 $labels['create'] = 'Cruthaigh';
 $labels['createfolder'] = 'Cruthaigh fillteán nua';
-$labels['rename'] = 'Ainmnigh arís';
-$labels['renamefolder'] = 'Ainmnigh fillteán arís';
-$labels['deletefolder'] = 'Scrios fillteán';
 $labels['managefolders'] = 'Stiúir na fillteán';
 $labels['sortby'] = 'Sórtáil trí';
 $labels['sortasc'] = 'Sórtáil in ord méadaitheach';

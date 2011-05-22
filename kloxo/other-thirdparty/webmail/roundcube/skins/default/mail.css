@@ -13,7 +13,7 @@
 /*  border: 1px solid #cccccc; */
 }
 
-#messagetoolbar > a
+#messagetoolbar a
 {
   display: block;
   float: left;
@@ -27,7 +27,7 @@
   width: 32px;
   height: 32px;
   padding: 0;
-  margin-right: 10px;
+  margin: 0 5px;
   overflow: hidden;
   background: url(images/mail_toolbar.png) 0 0 no-repeat transparent;
   opacity: 0.99; /* this is needed to make buttons appear correctly in Chrome */
@@ -207,24 +207,29 @@
   background-position: 7px -71px;
 }
 
-#markmessagemenu a.readlink
+#markmessagemenu li a
 {
-  background: url(images/icons/dot.png) no-repeat 7px 2px;
+  background: url(images/messageicons.png) no-repeat;
 }
 
-#markmessagemenu a.unreadlink
+#markmessagemenu li a.readlink
 {
-  background: url(images/icons/unread.png) no-repeat 7px 2px;
+  background-position: 7px -51px;
 }
 
-#markmessagemenu a.flaggedlink
+#markmessagemenu li a.unreadlink
 {
-  background: url(images/icons/flagged.png) no-repeat 7px 2px;
+  background-position: 7px -119px;
 }
 
-#markmessagemenu a.unflaggedlink
+#markmessagemenu li a.flaggedlink
 {
-  background: url(images/icons/unflagged.png) no-repeat 7px 2px;
+  background-position: 7px -153px;
+}
+
+#markmessagemenu li a.unflaggedlink
+{
+  background-position: 7px -136px;
 }
 
 #searchfilter
@@ -378,6 +383,11 @@
   border-bottom: 1px solid #EBEBEB;
 }
 
+#mailboxlist li ul li:last-child
+{
+  border-bottom: none;
+}
+
 #mailboxlist li div
 {
   position: absolute;
@@ -472,8 +482,8 @@
 #mailboxlist ul {
   list-style: none;
   padding: 0;
-  margin:0;
-  border-top: 1px solid #EBEBEB;  
+  margin: 0;
+  border-top: 1px solid #EBEBEB;
   padding-left: 15px;
   background-position: 25px 1px;
   background-color: #FFF;
@@ -689,50 +699,134 @@ body.messagelist
   cursor: inherit;
 }
 
-#messagelist tr td.icon,
-#messagelist tr td.threads,
-#messagelist tr td.attachment,
-#messagelist tr td.flag
-{
-  width: 18px;
-  padding: 0px 1px 1px 3px;
-}
-
-#messagelist tbody td span.branch,
-#messagelist tbody td img
+#messagelist td span,
+#messagelist td img
 {
   vertical-align: middle;
   display: inline-block;
 }
 
-#messagelist tbody td img.msgicon
-{
-  margin: 0 2px;
-}
-
-#messagelist tr td div.collapsed,
-#messagelist tr td div.expanded,
-#messagelist tr td img.flagicon,
-#messagelist tr td img.msgicon,
-#messagelist tbody tr td.flag
+#messagelist tbody tr td.flag,
+#messagelist tbody tr td.status,
+#messagelist tbody tr td.subject span.status
 {
   cursor: pointer;
 }
 
+#messagelist tr td.flag span,
+#messagelist tr td.status span,
+#messagelist tr td.attachment span
+{
+  width: 15px;
+}
+
+#messagelist tr td div.collapsed,
+#messagelist tr td div.expanded,
+#messagelist tr td.threads div.listmenu,
+#messagelist tr td.attachment span.attachment,
+#messagelist tr td.attachment span.report,
+#messagelist tr td.flag span.flagged,
+#messagelist tr td.flag span.unflagged:hover,
+#messagelist tr td.status span.status,
+#messagelist tr td.status span.msgicon,
+#messagelist tr td.status span.deleted,
+#messagelist tr td.status span.unread,
+#messagelist tr td.status span.unreadchildren,
+#messagelist tr td.subject span.msgicon,
+#messagelist tr td.subject span.deleted,
+#messagelist tr td.subject span.unread,
+#messagelist tr td.subject span.replied,
+#messagelist tr td.subject span.forwarded,
+#messagelist tr td.subject span.unreadchildren
+{
+  vertical-align: middle;
+  height: 17px;
+  width: 15px;
+  background: url(images/messageicons.png) center no-repeat;
+}
+
+#messagelist tr td.attachment span.attachment
+{
+  background-position: 0 -170px;
+}
+
+#messagelist tr td.attachment span.report
+{
+  background-position: 0 -255px;
+}
+
+#messagelist tr td.flag span.flagged
+{
+  background-position: 0 -153px;
+}
+
+#messagelist tr td.flag span.unflagged:hover
+{
+  background-position: 0 -136px;
+}
+
+#messagelist tr td.subject span.msgicon,
+#messagelist tr td.subject span.unreadchildren
+{
+  background-position: 0 -51px;
+  margin: 0 2px;
+}
+
+#messagelist tr td.subject span.replied
+{
+  background-position: 0 -85px;
+}
+
+#messagelist tr td.subject span.forwarded
+{
+  background-position: 0 -68px;
+}
+
+#messagelist tr td.subject span.replied.forwarded
+{
+  background-position: 0 -102px;
+}
+
+#messagelist tr td.status span.msgicon,
+#messagelist tr td.status span.unreadchildren
+{
+  background-position: 0 17px; /* no icon */
+}
+
+#messagelist tr td.status span.msgicon:hover
+{
+  background-position: 0 -272px;
+}
+
+#messagelist tr td.status span.deleted,
+#messagelist tr td.subject span.deleted
+{
+  background-position: 0 -187px;
+}
+
+#messagelist tr td.status span.status,
+#messagelist tr td.status span.unread,
+#messagelist tr td.subject span.unread
+{
+  background-position: 0 -119px;
+}
+
 #messagelist tr td div.collapsed
 {
-  background: url(images/messageactions.png) -1px -91px no-repeat;
+  background-position: 0 -221px;
+  cursor: pointer;
 }
 
 #messagelist tr td div.expanded
 {
-  background: url(images/messageactions.png) -1px -109px no-repeat;
+  background-position: 0 -204px;
+  cursor: pointer;
 }
 
-#messagelist tbody tr td.flag img:hover,
-#messagelist thead tr td.flag img
+#messagelist tr td.threads div.listmenu
 {
-  background: url(images/icons/unflagged.png) center no-repeat;
+  background-position: 0 -238px;
+  cursor: pointer;
 }
 
 #messagelist tbody tr td.subject
@@ -743,12 +837,23 @@ body.messagelist
 #messagelist tbody tr td.subject a
 {
   cursor: default;
+  display: inline-block;
+  vertical-align: middle;
 }
 
 /* thread parent message with unread children */
 #messagelist tbody tr.unroot td.subject a
 {
   text-decoration: underline;
+}
+
+#messagelist tr td.attachment,
+#messagelist tr td.threads,
+#messagelist tr td.status,
+#messagelist tr td.flag
+{
+  width: 17px;
+  padding: 0 0 0 2px;
 }
 
 #messagelist tr td.size
@@ -897,7 +1002,7 @@ td span.branch div.l3
 
 div.messageheaderbox
 {
-  margin: 6px 8px 0px 8px;
+  margin: -14px 8px 0px 8px;
   border: 1px solid #ccc;
 }
 
@@ -905,20 +1010,14 @@ table.headers-table
 {
   width: 100%;
   background-color: #EBEBEB;
-  table-layout: fixed;
 }
 
+#messagebody #full-headers,
 #messagebody table.headers-table
 {
   width: auto;
   margin: 6px 8px;
   background-color: #F4F4F4;
-  border: 1px solid #ccc;
-}
-
-#messageframe table.headers-table
-{
-  border-bottom: 1px solid #ccc;
 }
 
 table.headers-table tr td
@@ -927,49 +1026,44 @@ table.headers-table tr td
   border-bottom:1px solid #FFFFFF;
 }
 
-table.headers-table td.header-title
+table.headers-table tr td.header-title
 {
-  width: 80px;
+  width: 1%;
   color: #666666;
   font-weight: bold;
   text-align: right;
   white-space: nowrap;
-  padding-right: 4px;
+  padding: 0 4px 0 8px;
+}
+
+table.headers-table tr td.header
+{
+  width: 99%;
 }
 
 table.headers-table tr td.subject
 {
-  width: 90%;
   font-weight: bold;
-}
-
-table.headers-table tr td.all
-{
-  width: 100%;
-  color: #666666;
-  text-align: left;
-  padding-right: 10px;
-  text-align: center;
-  padding: 2px 6px 4px 6px;
-  border-bottom: 0;
-}
-
-table.headers-table tr td.more-headers
-{
-  cursor: pointer;
-  width: 100%;
-  height: 8px;
-  border-bottom: 0;
 }
 
 #attachment-list
 {
-  margin: 0px;
-  padding: 0px 0px 0px 72px;
+  margin: 0;
+  padding: 0 4px 0 8px;
   min-height: 16px;
   list-style-image: none;
   list-style-type: none;
-  background: url(images/icons/attachment.png) 60px 2px no-repeat #DFDFDF;
+  background: url(images/icons/attachment.png) 4px 2px no-repeat #DFDFDF;
+}
+
+#messageframe #attachment-list
+{
+  border-bottom: 1px solid #ccc;
+}
+
+.messageheaderbox #attachment-list
+{
+  border-top: 1px solid #ccc;
 }
 
 #attachment-list:after
@@ -1107,31 +1201,45 @@ div.message-htmlpart div.rcmBody
   border: 0;
 }
 
-td.show-headers
+#full-headers
+{
+  color: #666666;
+  text-align: center;
+  padding: 2px 6px;
+  border-bottom: 1px solid #ccc;
+  background-color: #EBEBEB;
+}
+
+.messageheaderbox #full-headers
+{
+  border-bottom: 0;
+}
+
+div.more-headers
+{
+  cursor: pointer;
+  height: 8px;
+  border-bottom: 0;
+}
+
+div.show-headers
 {
   background: url(images/icons/down_small.gif) no-repeat center;
 }
 
-td.hide-headers
+div.hide-headers
 {
   background: url(images/icons/up_small.gif) no-repeat center;
 }
 
-#all-headers
-{
-  height: 150px;
-  display: none;
-}
-
 #headers-source
 {
-  margin: 0 5px;
+  margin: 0 0 2px 0;
   padding: 0.5em;
   height: 145px;
   background: white;
   overflow: auto;
   font-size: 11px;
-  white-space: nowrap;
   border: 1px solid #999999;
   display: none;
   text-align: left;
@@ -1226,23 +1334,29 @@ td.hide-headers
   height: 32px;
 }
 
+input.from_address
+{
+  width: 80% !important;
+}
+
 #compose-cc,
 #compose-bcc,
-#compose-replyto
+#compose-replyto,
+#compose-followupto
 {
   display: none;
 }
 
-#formlinks a,
-#formlinks a:visited
+.formlinks a,
+.formlinks a:visited
 {
   color: #999999;
   font-size: 11px;
   text-decoration: none;
 }
 
-#formlinks a,
-#formlinks a:visited
+.formlinks a,
+.formlinks a:visited
 {
   color: #CC0000;
 }
@@ -1325,9 +1439,6 @@ td.hide-headers
   margin-top: 4px;
 }
 
-
-/** quota indicator */
-
 #quota
 {
   position: absolute;
@@ -1343,19 +1454,3 @@ td.hide-headers
   right: 6px;
   z-index: 101;
 }
-
-.quota_text {
-  text-align: center;
-  font-size: 10px;
-  color: #666;
-  border: 1px solid #999;
-  cursor: default;
-}
-.quota_bg { background-color: white; }
-.quota_high { background-color: #F33131; }
-.quota_mid { background-color: #F5AD3C; }
-.quota_low { background-color: #91E164; }
-.quota_text_high { color: white; }
-.quota_text_mid { color: #666; }
-.quota_text_low { color: #666; }
-

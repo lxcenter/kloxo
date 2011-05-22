@@ -16,7 +16,7 @@
 | Author: Odd Henriksen <odd@digicon.no>                                |
 +-----------------------------------------------------------------------+
 
-@version $Id: labels.inc 3989 2010-09-25 13:03:53Z alec $
+@version $Id: labels.inc 4345 2010-12-17 14:28:38Z thomasb $
 
 */
 
@@ -312,9 +312,6 @@ $labels['subscribed'] = 'Abonnere';
 $labels['messagecount'] = 'Meldinger';
 $labels['create'] = 'Opprett';
 $labels['createfolder'] = 'Lag ny mappe';
-$labels['rename'] = 'Endre navn';
-$labels['renamefolder'] = 'Endre navn på mappe';
-$labels['deletefolder'] = 'Slett mappe';
 $labels['managefolders'] = 'Rediger mapper';
 $labels['specialfolders'] = 'Spesielle mapper';
 $labels['sortby'] = 'Sorter etter';

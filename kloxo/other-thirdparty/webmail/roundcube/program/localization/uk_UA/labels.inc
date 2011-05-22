@@ -3,7 +3,7 @@
 /*
 
 +-----------------------------------------------------------------------+
-| language/uk/labels.inc                                                |
+| language/uk_UA/labels.inc                                             |
 |                                                                       |
 | Language file of the Roundcube Webmail client                         |
 | Copyright (C) 2005-2010, Roundcube Dev. - Switzerland                 |
@@ -13,12 +13,12 @@
 | Author: Volodymyr M. Kononenko aka kvm <vmkononenko@gmail.com>        |
 +-----------------------------------------------------------------------+
 
-@version $Id: labels.inc 3989 2010-09-25 13:03:53Z alec $
+@version $Id: labels.inc 4368 2010-12-27 08:51:22Z yllar $
 
 */
 
 $labels = array();
-$labels['welcome'] = '$product';
+$labels['welcome'] = 'Ласкаво просимо до $product';
 $labels['username'] = 'Ім\'я користувача';
 $labels['password'] = 'Пароль';
 $labels['server'] = 'Сервер';
@@ -38,15 +38,16 @@ $labels['to'] = 'Кому';
 $labels['cc'] = 'Копія';
 $labels['bcc'] = 'Прихована';
 $labels['replyto'] = 'Зворотня адреса';
+$labels['followupto'] = 'Followup-To';
 $labels['date'] = 'Дата';
 $labels['size'] = 'Розмір';
 $labels['priority'] = 'Пріоритет';
 $labels['organization'] = 'Організація';
-$labels['reply-to'] = 'Зворотня адреса';
+$labels['readstatus'] = 'Статус прочитання';
 $labels['mailboxlist'] = 'Папки';
-$labels['messagesfromto'] = '$from-$to / $count';
-$labels['threadsfromto'] = '$from-$to / $count';
-$labels['messagenrof'] = 'Лист $nr / $count';
+$labels['messagesfromto'] = 'Повідомлення з $from по $to із $count';
+$labels['threadsfromto'] = 'Обговорення з $from по $to із $count';
+$labels['messagenrof'] = 'Лист $nr із $count';
 $labels['copy'] = 'Копіювати';
 $labels['move'] = 'Перемістити';
 $labels['moveto'] = 'Перемістити до...';
@@ -95,9 +96,11 @@ $labels['longdec'] = 'Грудень';
 $labels['today'] = 'Сьогодні';
 $labels['checkmail'] = 'Перевірити пошту';
 $labels['writenewmessage'] = 'Написати листа';
-$labels['replytomessage'] = 'Відповісти';
-$labels['replytoallmessage'] = 'Відповісти всім';
-$labels['forwardmessage'] = 'Переслати';
+$labels['replytomessage'] = 'Відповісти відправнику';
+$labels['replytoallmessage'] = 'Відповісти до листа або відправнику та усім отримувачам';
+$labels['replyall'] = 'Відповісти усім';
+$labels['replylist'] = 'Відповісти до листа';
+$labels['forwardmessage'] = 'Переслати повідомлення';
 $labels['deletemessage'] = 'У кошик';
 $labels['movemessagetotrash'] = 'Перемістити лист у кошик';
 $labels['printmessage'] = 'Друкувати';
@@ -169,6 +172,8 @@ $labels['addattachment'] = 'Вкласти файл';
 $labels['charset'] = 'Кодування';
 $labels['editortype'] = 'Редактор';
 $labels['returnreceipt'] = 'Запит відповіді';
+$labels['dsn'] = 'Повідомлення про доставку';
+$labels['editidents'] = 'Змінити данні';
 $labels['checkspelling'] = 'Перевірити орфографію';
 $labels['resumeediting'] = 'Продовжити редагування';
 $labels['revertto'] = 'Відмінити редагування';
@@ -192,6 +197,7 @@ $labels['maxuploadsize'] = 'Максимальний розмір файлу $si
 $labels['addcc'] = 'Додати копію';
 $labels['addbcc'] = 'Додати приховану копію';
 $labels['addreplyto'] = 'Додати зворотню адресу';
+$labels['addfollowupto'] = 'Додати Followup-To';
 $labels['mdnrequest'] = 'Відправник цього листа запитав про прочитання. Повідомити відправника?';
 $labels['receiptread'] = 'Повідомлення про прочитання';
 $labels['yourmessage'] = 'Повідомлення про прочитання Вашого листа';
@@ -203,6 +209,7 @@ $labels['email'] = 'Електронна адреса';
 $labels['addcontact'] = 'Додати вибрані контакти до списку контактів';
 $labels['editcontact'] = 'Редагувати контакт';
 $labels['contacts'] = 'Контакти';
+$labels['contactproperties'] = 'Властивості контакта';
 $labels['edit'] = 'Правка';
 $labels['cancel'] = 'Скасувати';
 $labels['save'] = 'Зберегти';
@@ -250,6 +257,7 @@ $labels['pagesize'] = 'Рядків на сторінці';
 $labels['signature'] = 'Підпис';
 $labels['dstactive'] = 'Літній/зимовий час';
 $labels['htmleditor'] = 'Створювати листи в HTML';
+$labels['htmlonreply'] = 'тільки у відповідь на HTML повідомлення';
 $labels['htmlsignature'] = 'Підпис в HTML';
 $labels['previewpane'] = 'Показати панель перегляду';
 $labels['skin'] = 'Тема';
@@ -261,6 +269,8 @@ $labels['mailboxview'] = 'Вид інтерфейсу';
 $labels['mdnrequests'] = 'Повідомлення про прочитання';
 $labels['askuser'] = 'запитати користувача';
 $labels['autosend'] = 'відправляти автоматично';
+$labels['autosendknown'] = 'відправити повідомлення моим контактам, в іншому випадку запитати мене';
+$labels['autosendknownignore'] = 'відправити повідомлення моим контактам, в іншому випадку ігнорувати';
 $labels['ignore'] = 'ігнорувати';
 $labels['readwhendeleted'] = 'Позначати як прочитане при видаленні';
 $labels['flagfordeletion'] = 'Позначати для видалення замість видалення';
@@ -305,6 +315,9 @@ $labels['abovequote'] = 'перед цитатою';
 $labels['insertsignature'] = 'Додати підпис';
 $labels['previewpanemarkread'] = 'Позначити переглянуті листи як прочитані';
 $labels['afternseconds'] = 'через $n секунд';
+$labels['reqmdn'] = 'Завжди вимагати повідомлення про доставку';
+$labels['reqdsn'] = 'Завжди вимагати повідомлення про статус доставки';
+$labels['replysamefolder'] = 'Розмістити відповіді у тій же папці, де знаходиться оригінал';
 $labels['folder'] = 'Папка';
 $labels['folders'] = 'Папки';
 $labels['foldername'] = 'Назва папки';
@@ -312,11 +325,15 @@ $labels['subscribed'] = 'Підписані';
 $labels['messagecount'] = 'Листи';
 $labels['create'] = 'Створити';
 $labels['createfolder'] = 'Створити нову папку';
-$labels['rename'] = 'Перейменувати';
-$labels['renamefolder'] = 'Перейменувати папку';
-$labels['deletefolder'] = 'Видалити папку';
 $labels['managefolders'] = 'Керування папками';
 $labels['specialfolders'] = 'Особливі папки';
+$labels['properties'] = 'Властивості';
+$labels['folderproperties'] = 'Властивості папки';
+$labels['parentfolder'] = 'Батьківська папка';
+$labels['location'] = 'Розташування';
+$labels['info'] = 'Інформація';
+$labels['getfoldersize'] = 'Показати розмір папки';
+$labels['changesubscription'] = 'Змінити підписку';
 $labels['sortby'] = 'Відсортувати за';
 $labels['sortasc'] = 'Сортувати за зростанням';
 $labels['sortdesc'] = 'Сортувати за спаданням';

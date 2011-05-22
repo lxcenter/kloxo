@@ -15,7 +15,7 @@
  | Author: Thomas Bruederli <roundcube@gmail.com>                        |
  +-----------------------------------------------------------------------+
 
- $Id: list.inc 3989 2010-09-25 13:03:53Z alec $
+ $Id: list.inc 4321 2010-12-08 12:52:04Z alec $
 
 */
 
@@ -58,7 +58,8 @@ if ($_SESSION['search_filter'] && $_SESSION['search_filter'] != 'ALL')
 {
   $search_request = md5($mbox_name.$_SESSION['search_filter']);
   $IMAP->search($mbox_name, $_SESSION['search_filter'], RCMAIL_CHARSET, $sort_col);
-  $_SESSION['search'][$search_request] = $IMAP->get_search_set();
+  $_SESSION['search'] = $IMAP->get_search_set();
+  $_SESSION['search_request'] = $search_request;
   $OUTPUT->set_env('search_request', $search_request);
 }
 
@@ -67,8 +68,16 @@ if ($count = $IMAP->messagecount($mbox_name, $IMAP->threading ? 'THREADS' : 'ALL
   $a_headers = $IMAP->list_headers($mbox_name, NULL, $sort_col, $sort_order);
 
 // update search set (possible change of threading mode)
-if (!empty($_REQUEST['_search']) && isset($_SESSION['search'][$_REQUEST['_search']]))
-  $_SESSION['search'][$_REQUEST['_search']] = $IMAP->get_search_set();
+if (!empty($_REQUEST['_search']) && isset($_SESSION['search'])
+    && $_SESSION['search_request'] == $_REQUEST['_search']
+) {
+  $_SESSION['search'] = $IMAP->get_search_set();
+}
+// remove old search data
+else if (empty($_REQUEST['_search']) && isset($_SESSION['search'])) {
+  $RCMAIL->session->remove('search');
+}
+
 
 // empty result? we'll skip UNSEEN counting in rcmail_send_unread_count()
 if (empty($search_request) && empty($a_headers)) {
@@ -94,10 +103,16 @@ if (isset($a_headers) && count($a_headers))
   if ($search_request)
     $OUTPUT->show_message('searchsuccessful', 'confirmation', array('nr' => $count));
 }
-else if ($search_request)
-  $OUTPUT->show_message('searchnomatch', 'notice');
-else
-  $OUTPUT->show_message('nomessagesfound', 'notice');
+else {
+  // handle IMAP errors (e.g. #1486905)
+  if ($err_code = $IMAP->get_error_code()) {
+    rcmail_display_server_error();
+  }
+  else if ($search_request)
+    $OUTPUT->show_message('searchnomatch', 'notice');
+  else
+    $OUTPUT->show_message('nomessagesfound', 'notice');
+}
 
 // send response
 $OUTPUT->send();

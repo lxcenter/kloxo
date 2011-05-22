@@ -28,7 +28,7 @@ CREATE TABLE contacts (
   changed datetime NOT NULL default '0000-00-00 00:00:00',
   del tinyint NOT NULL default '0',
   name varchar(128) NOT NULL default '',
-  email varchar(128) NOT NULL default '',
+  email varchar(255) NOT NULL default '',
   firstname varchar(128) NOT NULL default '',
   surname varchar(128) NOT NULL default '',
   vcard text NOT NULL default ''
@@ -97,7 +97,7 @@ CREATE TABLE users (
   preferences text NOT NULL default ''
 );
 
-CREATE INDEX ix_users_username ON users(username);
+CREATE UNIQUE INDEX ix_users_username ON users(username, mail_host);
 CREATE INDEX ix_users_alias ON users(alias);
 
 -- --------------------------------------------------------

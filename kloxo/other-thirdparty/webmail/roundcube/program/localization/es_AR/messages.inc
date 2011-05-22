@@ -16,7 +16,7 @@
 |         http://www.netsud.com                                         |
 +-----------------------------------------------------------------------+
 
-@version $Id: messages.inc 3989 2010-09-25 13:03:53Z alec $
+@version $Id: messages.inc 4304 2010-12-03 10:58:40Z alec $
 
 */
 
@@ -57,9 +57,7 @@ $messages['deletecontactconfirm'] = '¿Realmente quiere eliminar los contactos s
 $messages['deletemessagesconfirm'] = '¿Realmente quiere eliminar los mensajes seleccionados?';
 $messages['deletefolderconfirm'] = '¿Realmente quiere eliminar esta carpeta?';
 $messages['purgefolderconfirm'] = '¿Realmente quiere eliminar todos los mensajes de esta carpeta?';
-$messages['foldercreating'] = 'Creando carpeta...';
 $messages['folderdeleting'] = 'Eliminando carpeta...';
-$messages['folderrenaming'] = 'Renombrando carpeta...';
 $messages['foldermoving'] = 'Moviendo carpeta...';
 $messages['formincomplete'] = 'No se han llenado todos los campos del formulario';
 $messages['noemailwarning'] = 'Por favor, introduzca un e-mail válido';
@@ -94,7 +92,6 @@ $messages['copyingmessage'] = 'Copiando mensaje...';
 $messages['receiptsent'] = 'La notificación de lectura se ha enviado con éxito.';
 $messages['errorsendingreceipt'] = 'No se ha podido enviar la notificación de lectura.';
 $messages['nodeletelastidentity'] = 'No se puede borrar esta identidad puesto que es la última.';
-$messages['addsubfolderhint'] = 'Esta carpeta se creará como una subcarpeta dentro de la carpeta seleccionada';
 $messages['forbiddencharacter'] = 'El nombre de la carpeta contiene un carácter prohibido';
 $messages['selectimportfile'] = 'Por favor, seleccione el archivo a subir';
 $messages['addresswriterror'] = 'La libreta de direcciones seleccionada es de solo-lectura';

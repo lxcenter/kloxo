@@ -15,7 +15,7 @@
  | Author: Thomas Bruederli <roundcube@gmail.com>                        |
  +-----------------------------------------------------------------------+
 
- $Id: rcube_html_page.php 3989 2010-09-25 13:03:53Z alec $
+ $Id: rcube_html_page.php 4469 2011-01-29 14:55:12Z thomasb $
 
 */
 
@@ -28,11 +28,13 @@ class rcube_html_page
 {
     protected $scripts_path = '';
     protected $script_files = array();
+    protected $css_files = array();
     protected $scripts = array();
     protected $charset = RCMAIL_CHARSET;
 
     protected $script_tag_file = "<script type=\"text/javascript\" src=\"%s\"></script>\n";
     protected $script_tag  =  "<script type=\"text/javascript\">\n/* <![CDATA[ */\n%s\n/* ]]> */\n</script>";
+    protected $link_css_file = "<link rel=\"stylesheet\" type=\"text/css\" href=\"%s\" />\n";
     protected $default_template = "<html>\n<head><title></title></head>\n<body></body>\n</html>";
 
     protected $title = '';
@@ -61,6 +63,9 @@ class rcube_html_page
         if (in_array($file, $sa_files)) {
             return;
         }
+
+        $sa_files[] = $file;
+
         if (!is_array($this->script_files[$position])) {
             $this->script_files[$position] = array();
         }
@@ -83,7 +88,19 @@ class rcube_html_page
     }
 
     /**
+     * Link an external css file
+     *
+     * @param string File URL
+     */
+    public function include_css($file)
+    {
+        $this->css_files[] = $file;
+    }
+
+    /**
      * Add HTML code to the page header
+     *
+     * @param string $str HTML code
      */
     public function add_header($str)
     {
@@ -93,6 +110,8 @@ class rcube_html_page
     /**
      * Add HTML code to the page footer
      * To be added right befor </body>
+     *
+     * @param string $str HTML code
      */
     public function add_footer($str)
     {
@@ -101,6 +120,8 @@ class rcube_html_page
 
     /**
      * Setter for page title
+     *
+     * @param string $t Page title
      */
     public function set_title($t)
     {
@@ -110,6 +131,8 @@ class rcube_html_page
     /**
      * Setter for output charset.
      * To be specified in a meta tag and sent as http-header
+     *
+     * @param string $charset Charset
      */
     public function set_charset($charset)
     {
@@ -118,6 +141,8 @@ class rcube_html_page
 
     /**
      * Getter for output charset
+     *
+     * @return string Output charset
      */
     public function get_charset()
     {
@@ -153,52 +178,53 @@ class rcube_html_page
         }
 
         // replace specialchars in content
-        $__page_title = Q($this->title, 'show', FALSE);
-        $__page_header = $__page_body = $__page_footer = '';
+        $page_title  = Q($this->title, 'show', FALSE);
+        $page_header = '';
+        $page_footer = '';
 
         // include meta tag with charset
         if (!empty($this->charset)) {
             if (!headers_sent()) {
                 header('Content-Type: text/html; charset=' . $this->charset);
             }
-            $__page_header = '<meta http-equiv="content-type"';
-            $__page_header.= ' content="text/html; charset=';
-            $__page_header.= $this->charset . '" />'."\n";
+            $page_header = '<meta http-equiv="content-type"';
+            $page_header.= ' content="text/html; charset=';
+            $page_header.= $this->charset . '" />'."\n";
         }
 
         // definition of the code to be placed in the document header and footer
         if (is_array($this->script_files['head'])) {
             foreach ($this->script_files['head'] as $file) {
-                $__page_header .= sprintf($this->script_tag_file, $file);
+                $page_header .= sprintf($this->script_tag_file, $file);
             }
         }
 
         $head_script = $this->scripts['head_top'] . $this->scripts['head'];
         if (!empty($head_script)) {
-            $__page_header .= sprintf($this->script_tag, $head_script);
+            $page_header .= sprintf($this->script_tag, $head_script);
         }
 
         if (!empty($this->header)) {
-            $__page_header .= $this->header;
+            $page_header .= $this->header;
         }
 
         if (is_array($this->script_files['foot'])) {
             foreach ($this->script_files['foot'] as $file) {
-                $__page_footer .= sprintf($this->script_tag_file, $file);
+                $page_footer .= sprintf($this->script_tag_file, $file);
             }
         }
 
         if (!empty($this->scripts['foot'])) {
-            $__page_footer .= sprintf($this->script_tag, $this->scripts['foot']);
+            $page_footer .= sprintf($this->script_tag, $this->scripts['foot']);
         }
 
         if (!empty($this->footer)) {
-            $__page_footer .= $this->footer;
+            $page_footer .= $this->footer;
         }
 
         // find page header
         if ($hpos = stripos($output, '</head>')) {
-            $__page_header .= "\n";
+            $page_header .= "\n";
         }
         else {
             if (!is_numeric($hpos)) {
@@ -210,49 +236,43 @@ class rcube_html_page
                 }
                 $hpos++;
             }
-            $__page_header = "<head>\n<title>$__page_title</title>\n$__page_header\n</head>\n";
+            $page_header = "<head>\n<title>$page_title</title>\n$page_header\n</head>\n";
         }
 
         // add page hader
         if ($hpos) {
-            $output = substr($output,0,$hpos) . $__page_header . substr($output,$hpos,strlen($output));
+            $output = substr($output,0,$hpos) . $page_header . substr($output,$hpos,strlen($output));
         }
         else {
-            $output = $__page_header . $output;
+            $output = $page_header . $output;
         }
 
-        // find page body
-        if ($bpos = stripos($output, '<body')) {
-            while ($output[$bpos] != '>') {
-                $bpos++;
-            }
-            $bpos++;
-        }
-        else {
-            $bpos = stripos($output, '</head>')+7;
-        }
-
-        // add page body
-        if ($bpos && $__page_body) {
-            $output = substr($output,0,$bpos) . "\n$__page_body\n" . substr($output,$bpos,strlen($output));
-        }
-
-        // find and add page footer
+        // add page footer
         if (($fpos = strripos($output, '</body>')) || ($fpos = strripos($output, '</html>'))) {
-            $output = substr($output, 0, $fpos) . "$__page_footer\n" . substr($output, $fpos);
+            $output = substr($output, 0, $fpos) . "$page_footer\n" . substr($output, $fpos);
         }
         else {
-            $output .= "\n".$__page_footer;
+            $output .= "\n".$page_footer;
         }
 
-        // reset those global vars
-        $__page_header = $__page_footer = '';
+        // add css files in head, before scripts, for speed up with parallel downloads
+        if (!empty($this->css_files) && 
+            (($pos = stripos($output, '<script ')) || ($pos = stripos($output, '</head>')))
+        ) {
+            $css = '';
+            foreach ($this->css_files as $file) {
+                $css .= sprintf($this->link_css_file, $file);
+            }
+            $output = substr($output, 0, $pos) . $css . substr($output, $pos);
+        }
 
 	    $this->base_path = $base_path;
+
         // correct absolute paths in images and other tags
 	    // add timestamp to .js and .css filename
-        $output = preg_replace_callback('!(src|href|background)=(["\']?)([a-z0-9/_.-]+)(["\'\s>])!i',
-	    array($this, 'file_callback'), $output);
+        $output = preg_replace_callback(
+            '!(src|href|background)=(["\']?)([a-z0-9/_.-]+)(["\'\s>])!i',
+	        array($this, 'file_callback'), $output);
         $output = str_replace('$__skin_path', $base_path, $output);
 
         if ($this->charset != RCMAIL_CHARSET)
@@ -263,6 +283,8 @@ class rcube_html_page
     
     /**
      * Callback function for preg_replace_callback in write()
+     *
+     * @return string Parsed string
      */
     private function file_callback($matches)
     {

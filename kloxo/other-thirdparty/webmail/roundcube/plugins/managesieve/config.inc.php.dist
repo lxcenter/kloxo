@@ -15,6 +15,14 @@ $rcmail_config['managesieve_host'] = 'localhost';
 // or none. Optional, defaults to best method supported by server.
 $rcmail_config['managesieve_auth_type'] = null;
 
+// Optional managesieve authentication identifier to be used as authorization proxy.
+// Authenticate as a different user but act on behalf of the logged in user.
+// Works with PLAIN and DIGEST-MD5 auth.
+$rcmail_config['managesieve_auth_cid'] = null;
+
+// Optional managesieve authentication password to be used for imap_auth_cid
+$rcmail_config['managesieve_auth_pw'] = null;
+
 // use or not TLS for managesieve server connection
 // it's because I've problems with TLS and dovecot's managesieve plugin
 // and it's not needed on localhost

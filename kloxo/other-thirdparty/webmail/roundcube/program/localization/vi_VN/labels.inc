@@ -13,7 +13,7 @@
  | Author: Vinh Bui <bqvinh@buivinh.info>                                |
  +-----------------------------------------------------------------------+
 
- @version $Id: labels.inc 3989 2010-09-25 13:03:53Z alec $
+ @version $Id: labels.inc 4345 2010-12-17 14:28:38Z thomasb $
 
 */
 
@@ -205,9 +205,6 @@ $labels['foldername']  = 'Tên thư mục';
 $labels['subscribed']  = 'Cho sử dụng';
 $labels['create']  = 'Tạo';
 $labels['createfolder']  = 'Tạo thư mục mới';
-$labels['rename'] = 'Đổi tên';
-$labels['renamefolder'] = 'Đổi tên thư mục';
-$labels['deletefolder']  = 'Xóa thư mục';
 $labels['managefolders']  = 'Quản trị thư mục';
 
 $labels['sortby'] = 'Sắp xếp';

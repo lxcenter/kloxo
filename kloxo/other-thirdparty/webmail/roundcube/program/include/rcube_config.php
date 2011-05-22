@@ -15,7 +15,7 @@
  | Author: Thomas Bruederli <roundcube@gmail.com>                        |
  +-----------------------------------------------------------------------+
 
- $Id: rcube_config.php 3989 2010-09-25 13:03:53Z alec $
+ $Id: rcube_config.php 4509 2011-02-09 10:51:50Z thomasb $
 
 */
 
@@ -47,10 +47,6 @@ class rcube_config
      */
     private function load()
     {
-        // start output buffering, we don't need any output yet, 
-        // it'll be cleared after reading of config files, etc.
-        ob_start();
-    
         // load main config file
         if (!$this->load_from_file(RCMAIL_CONFIG_DIR . '/main.inc.php'))
             $this->errors[] = 'main.inc.php was not found.';
@@ -98,9 +94,6 @@ class rcube_config
             ini_set('display_errors', 0);
         }
 
-        // clear output buffer
-        ob_end_clean();
-
         // export config data
         $GLOBALS['CONFIG'] = &$this->prop;
     }
@@ -130,13 +123,17 @@ class rcube_config
      * Read configuration from a file
      * and merge with the already stored config values
      *
-     * @param string Full path to the config file to be loaded
+     * @param string $fpath Full path to the config file to be loaded
      * @return booelan True on success, false on failure
      */
     public function load_from_file($fpath)
     {
         if (is_file($fpath) && is_readable($fpath)) {
+            // use output buffering, we don't need any output here 
+            ob_start();
             include($fpath);
+            ob_end_clean();
+
             if (is_array($rcmail_config)) {
                 $this->prop = array_merge($this->prop, $rcmail_config, $this->userprefs);
                 return true;
@@ -150,8 +147,8 @@ class rcube_config
     /**
      * Getter for a specific config parameter
      *
-     * @param  string Parameter name
-     * @param  mixed  Default value if not set
+     * @param  string $name Parameter name
+     * @param  mixed  $def  Default value if not set
      * @return mixed  The requested config value
      */
     public function get($name, $def = null)
@@ -163,8 +160,8 @@ class rcube_config
     /**
      * Setter for a config parameter
      *
-     * @param string Parameter name
-     * @param mixed  Parameter value
+     * @param string $name  Parameter name
+     * @param mixed  $value Parameter value
      */
     public function set($name, $value)
     {
@@ -175,7 +172,7 @@ class rcube_config
     /**
      * Override config options with the given values (eg. user prefs)
      *
-     * @param array Hash array with config props to merge over
+     * @param array $prefs Hash array with config props to merge over
      */
     public function merge($prefs)
     {
@@ -187,7 +184,7 @@ class rcube_config
      * Merge the given prefs over the current config
      * and make sure that they survive further merging.
      *
-     * @param array  Hash array with user prefs
+     * @param array $prefs Hash array with user prefs
      */
     public function set_user_prefs($prefs)
     {
@@ -210,7 +207,7 @@ class rcube_config
     /**
      * Return requested DES crypto key.
      *
-     * @param string Crypto key name
+     * @param string $key Crypto key name
      * @return string Crypto key
      */
     public function get_crypto_key($key)
@@ -274,10 +271,11 @@ class rcube_config
     /**
      * Return the mail domain configured for the given host
      *
-     * @param string IMAP host
+     * @param string  $host   IMAP host
+     * @param boolean $encode If true, domain name will be converted to IDN ASCII
      * @return string Resolved SMTP host
      */
-    public function mail_domain($host)
+    public function mail_domain($host, $encode=true)
     {
         $domain = $host;
 
@@ -287,6 +285,9 @@ class rcube_config
         }
         else if (!empty($this->prop['mail_domain']))
             $domain = rcube_parse_host($this->prop['mail_domain']);
+
+        if ($encode)
+            $domain = rcube_idn_to_ascii($domain);
 
         return $domain;
     }

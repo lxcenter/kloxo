@@ -14,7 +14,7 @@
 |         Søren Aggeboe <soren@aggeboe.dk>                              |
 +-----------------------------------------------------------------------+
 
-@version $Id: messages.inc 3989 2010-09-25 13:03:53Z alec $
+@version $Id: messages.inc 4469 2011-01-29 14:55:12Z thomasb $
 
 */
 
@@ -24,6 +24,9 @@ $messages['cookiesdisabled'] = 'Din browser accepterer ikke cookies';
 $messages['sessionerror'] = 'Din session er ugyldig eller udløbet';
 $messages['imaperror'] = 'Forbindelse til IMAP serveren fejlede';
 $messages['servererror'] = 'Server fejl!';
+$messages['servererrormsg'] = 'Server fejl: $msg';
+$messages['errorreadonly'] = 'Kunne ikke udføre den ønskede handling. Mappen er skrivebeskyttet';
+$messages['errornoperm'] = 'Kunne ikke udføre den ønskede handling. Adgang nægtet';
 $messages['invalidrequest'] = 'Ugyldig forespørgsel! Ingen data blev gemt.';
 $messages['nomessagesfound'] = 'Der blev ikke fundet nogen beskeder i denne postkasse';
 $messages['loggedout'] = 'Du er nu logget af webmail. Farvel så længe!';
@@ -55,10 +58,10 @@ $messages['deletecontactconfirm'] = 'Vil du virkelig slette den/de valgte kontak
 $messages['deletemessagesconfirm'] = 'Vil du virkelig slette den/de valgte besked(er)?';
 $messages['deletefolderconfirm'] = 'Vil du virkelig slette den valgte mappe';
 $messages['purgefolderconfirm'] = 'Vil du virkelig slette alle beskeder i denne mappe?';
-$messages['foldercreating'] = 'Opretter mappen...';
 $messages['folderdeleting'] = 'Sletter mappen...';
-$messages['folderrenaming'] = 'Omdøber mappen...';
 $messages['foldermoving'] = 'Flytter mappen...';
+$messages['foldersubscribing'] = 'Abonnere på mappen...';
+$messages['folderunsubscribing'] = 'Fjerner abonnement på mappen...';
 $messages['formincomplete'] = 'Formularen var ikke fuldstændig fyldt ud';
 $messages['noemailwarning'] = 'Indtast venligst en gyldig e-mail adresse';
 $messages['nonamewarning'] = 'Angiv venligst et navn';
@@ -78,6 +81,10 @@ $messages['searching'] = 'Søger...';
 $messages['checking'] = 'Tjekker...';
 $messages['nospellerrors'] = 'Ingen stavefejl fundet';
 $messages['folderdeleted'] = 'Mappen er slettet';
+$messages['foldersubscribed'] = 'Mappe abonnement oprettet';
+$messages['folderunsubscribed'] = 'Mappe abonnement opsagt';
+$messages['folderpurged'] = 'Mappen er tømt';
+$messages['folderexpunged'] = 'Mappen er blevet optimeret';
 $messages['deletedsuccessfully'] = 'Slettet';
 $messages['converting'] = 'Fjerner formatering fra besked...';
 $messages['messageopenerror'] = 'Beskeden kunne ikke hentes fra serveren';
@@ -89,10 +96,11 @@ $messages['sourceisreadonly'] = 'Denne adressekilde er kun til læsning';
 $messages['errorsavingcontact'] = 'Kunne ikke gemme kontakt adressen';
 $messages['movingmessage'] = 'Flytter besked...';
 $messages['copyingmessage'] = 'Kopierer besked...';
+$messages['deletingmessage'] = 'Sletter besked(er)...';
+$messages['markingmessage'] = 'Markerer besked(er)...';
 $messages['receiptsent'] = 'Kvittering for læsning er sendt';
 $messages['errorsendingreceipt'] = 'Kvitteringen kunne ikke sendes';
 $messages['nodeletelastidentity'] = 'Du kan ikke slette denne identitet, da det er den eneste der er tilbage.';
-$messages['addsubfolderhint'] = 'Denne mappe vil blive oprettet som en undermappe til den mappe der er valgt i øjeblikket.';
 $messages['forbiddencharacter'] = 'Mappe-navnet indeholder ugyldige tegn';
 $messages['selectimportfile'] = 'Vælg venligst den fil der skal uploades';
 $messages['addresswriterror'] = 'Der kan ikke skrives i den valgte adressebog';
@@ -110,9 +118,26 @@ $messages['smtpautherror'] = 'SMTP fejl ($code): Autenticering fejlede';
 $messages['smtpfromerror'] = 'SMTP fejl ($code): Kunne ikke afsende som "$from" ($msg)';
 $messages['smtptoerror'] = 'SMTP fejl ($code): Kunne ikke tilføje modtageren "$to" ($msg)';
 $messages['smtprecipientserror'] = 'SMTP fejl: kan ikke fortolke listen af modtagere';
+$messages['smtpdsnerror'] = 'SMTP fejl: Ingen understøttelse af leveringsnotifikation';
 $messages['smtperror'] = 'SMTP fejl: $msg';
 $messages['emailformaterror'] = 'Ugyldig email-adresse: $email';
 $messages['toomanyrecipients'] = 'For mange modtagere. Reducer antallet af modtagere til $max';
 $messages['maxgroupmembersreached'] = 'Antallet af gruppemedlemmer overstiger maksimum på $max';
+$messages['internalerror'] = 'Der opstod en intern fejl - prøv venligst igen';
+$messages['contactdelerror'] = 'Kunne ikke slette kontakt(er)';
+$messages['contactdeleted'] = 'Kontakt(er) slettet';
+$messages['groupdeleted'] = 'Gruppen er slettet';
+$messages['grouprenamed'] = 'Gruppen er omdøbt';
+$messages['groupcreated'] = 'Gruppen er oprettet';
+$messages['messagedeleted'] = 'Besked(er) slettet';
+$messages['messagemoved'] = 'Besked(er) flyttet';
+$messages['messagecopied'] = 'Besked(er) kopieret';
+$messages['messagemarked'] = 'Besked(er) markeret';
+$messages['autocompletechars'] = 'Du skal min. indtaste $min for at benytte autoopslag';
+$messages['namecannotbeempty'] = 'Navnet kan ikke været tomt';
+$messages['nametoolong'] = 'Navnet er for langt';
+$messages['folderupdated'] = 'Mappen er opdateret';
+$messages['foldercreated'] = 'Mappen er oprettet';
+$messages['invalidimageformat'] = 'Ikke et gyldigt billedformat';
 
 ?>

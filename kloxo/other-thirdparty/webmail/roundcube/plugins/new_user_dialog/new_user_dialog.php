@@ -62,7 +62,7 @@ class new_user_dialog extends rcube_plugin
       $table->add(null, html::tag('input', array(
         'type' => 'text',
         'name' => '_email',
-        'value' => $identity['email'],
+        'value' => idn_to_utf8($identity['email']),
         'disabled' => ($identities_level == 1 || $identities_level == 3)
       )));
 
@@ -85,6 +85,7 @@ class new_user_dialog extends rcube_plugin
         "$(document).ready(function () {
           rcmail.message_list.key_press = function(){};
           rcmail.message_list.key_down = function(){};
+          $('input[name=_name]').focus();
           });", 'foot');
 
       $this->include_stylesheet('newuserdialog.css');
@@ -111,6 +112,8 @@ class new_user_dialog extends rcube_plugin
     // don't let the user alter the e-mail address if disabled by config
     if ($identities_level == 1 || $identities_level == 3)
       $save_data['email'] = $identity['email'];
+    else
+      $save_data['email'] = idn_to_ascii($save_data['email']);
 
     // save data if not empty
     if (!empty($save_data['name']) && !empty($save_data['email'])) {

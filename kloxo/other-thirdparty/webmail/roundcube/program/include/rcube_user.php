@@ -16,7 +16,7 @@
  | Author: Thomas Bruederli <roundcube@gmail.com>                        |
  +-----------------------------------------------------------------------+
 
- $Id: rcube_user.php 3989 2010-09-25 13:03:53Z alec $
+ $Id: rcube_user.php 4554 2011-02-16 09:42:31Z alec $
 
 */
 
@@ -33,18 +33,24 @@ class rcube_user
     public $data = null;
     public $language = null;
 
+    /**
+     * Holds database connection.
+     *
+     * @var rcube_mdb2
+     */
     private $db = null;
 
 
     /**
      * Object constructor
      *
-     * @param object DB Database connection
+     * @param int   $id      User id
+     * @param array $sql_arr SQL result set
      */
     function __construct($id = null, $sql_arr = null)
     {
         $this->db = rcmail::get_instance()->get_dbh();
-    
+
         if ($id && !$sql_arr) {
             $sql_result = $this->db->query(
                 "SELECT * FROM ".get_table_name('users')." WHERE user_id = ?", $id);
@@ -62,7 +68,7 @@ class rcube_user
     /**
      * Build a user name string (as e-mail address)
      *
-     * @param string Username part (empty or 'local' or 'domain')
+     * @param  string $part Username part (empty or 'local' or 'domain')
      * @return string Full user name or its part
      */
     function get_username($part = null)
@@ -114,21 +120,21 @@ class rcube_user
     /**
      * Write the given user prefs to the user's record
      *
-     * @param array User prefs to save
+     * @param array $a_user_prefs User prefs to save
      * @return boolean True on success, False on failure
      */
     function save_prefs($a_user_prefs)
     {
         if (!$this->ID)
             return false;
-      
+
         $config = rcmail::get_instance()->config;
         $old_prefs = (array)$this->get_prefs();
 
         // merge (partial) prefs array with existing settings
         $save_prefs = $a_user_prefs + $old_prefs;
         unset($save_prefs['language']);
-    
+
         // don't save prefs with default values if they haven't been changed yet
         foreach ($a_user_prefs as $key => $value) {
             if (!isset($old_prefs[$key]) && ($value == $config->get($key)))
@@ -161,7 +167,7 @@ class rcube_user
     /**
      * Get default identity of this user
      *
-     * @param int  Identity ID. If empty, the default identity is returned
+     * @param  int   $id Identity ID. If empty, the default identity is returned
      * @return array Hash array with all cols of the identity record
      */
     function get_identity($id = null)
@@ -174,6 +180,7 @@ class rcube_user
     /**
      * Return a list of all identities linked with this user
      *
+     * @param string $sql_add Optional WHERE clauses
      * @return array List of identities
      */
     function list_identities($sql_add = '')
@@ -186,11 +193,11 @@ class rcube_user
             ($sql_add ? " ".$sql_add : "").
             " ORDER BY ".$this->db->quoteIdentifier('standard')." DESC, name ASC, identity_id ASC",
             $this->ID);
-    
+
         while ($sql_arr = $this->db->fetch_assoc($sql_result)) {
             $result[] = $sql_arr;
         }
-    
+
         return $result;
     }
 
@@ -198,8 +205,8 @@ class rcube_user
     /**
      * Update a specific identity record
      *
-     * @param int    Identity ID
-     * @param array  Hash array with col->value pairs to save
+     * @param int    $iid  Identity ID
+     * @param array  $data Hash array with col->value pairs to save
      * @return boolean True if saved successfully, false if nothing changed
      */
     function update_identity($iid, $data)
@@ -208,7 +215,7 @@ class rcube_user
             return false;
 
         $query_cols = $query_params = array();
-    
+
         foreach ((array)$data as $col => $value) {
             $query_cols[]   = $this->db->quoteIdentifier($col) . ' = ?';
             $query_params[] = $value;
@@ -224,15 +231,15 @@ class rcube_user
 
         call_user_func_array(array($this->db, 'query'),
             array_merge(array($sql), $query_params));
-    
+
         return $this->db->affected_rows();
     }
-  
-  
+
+
     /**
      * Create a new identity record linked with this user
      *
-     * @param array  Hash array with col->value pairs to save
+     * @param array $data Hash array with col->value pairs to save
      * @return int  The inserted identity ID or false on error
      */
     function insert_identity($data)
@@ -259,12 +266,12 @@ class rcube_user
 
         return $this->db->insert_id('identities');
     }
-  
-  
+
+
     /**
      * Mark the given identity as deleted
      *
-     * @param int  Identity ID
+     * @param  int     $iid Identity ID
      * @return boolean True if deleted successfully, false if nothing changed
      */
     function delete_identity($iid)
@@ -282,7 +289,7 @@ class rcube_user
         // we'll not delete last identity
         if ($sql_arr['ident_count'] <= 1)
             return false;
-    
+
         $this->db->query(
             "UPDATE ".get_table_name('identities').
             " SET del = 1, changed = ".$this->db->now().
@@ -293,12 +300,12 @@ class rcube_user
 
         return $this->db->affected_rows();
     }
-  
-  
+
+
     /**
      * Make this identity the default one for this user
      *
-     * @param int The identity ID
+     * @param int $iid The identity ID
      */
     function set_default($iid)
     {
@@ -313,8 +320,8 @@ class rcube_user
                 $iid);
         }
     }
-  
-  
+
+
     /**
      * Update user's last_login timestamp
      */
@@ -328,8 +335,8 @@ class rcube_user
                 $this->ID);
         }
     }
-  
-  
+
+
     /**
      * Clear the saved object state
      */
@@ -338,43 +345,46 @@ class rcube_user
         $this->ID = null;
         $this->data = null;
     }
-  
-  
+
+
     /**
      * Find a user record matching the given name and host
      *
-     * @param string IMAP user name
-     * @param string IMAP host name
-     * @return object rcube_user New user instance
+     * @param string $user IMAP user name
+     * @param string $host IMAP host name
+     * @return rcube_user New user instance
      */
     static function query($user, $host)
     {
         $dbh = rcmail::get_instance()->get_dbh();
-    
+
+        // use BINARY (case-sensitive) comparison on MySQL, other engines are case-sensitive
+        $mod = preg_match('/^mysql/', $dbh->db_provider) ? 'BINARY' : '';
+
         // query for matching user name
-        $query = "SELECT * FROM ".get_table_name('users')." WHERE mail_host = ? AND %s = ?";
+        $query = "SELECT * FROM ".get_table_name('users')." WHERE mail_host = ? AND %s = $mod ?";
         $sql_result = $dbh->query(sprintf($query, 'username'), $host, $user);
-    
+
         // query for matching alias
         if (!($sql_arr = $dbh->fetch_assoc($sql_result))) {
             $sql_result = $dbh->query(sprintf($query, 'alias'), $host, $user);
             $sql_arr = $dbh->fetch_assoc($sql_result);
         }
-    
+
         // user already registered -> overwrite username
         if ($sql_arr)
             return new rcube_user($sql_arr['user_id'], $sql_arr);
         else
             return false;
     }
-  
-  
+
+
     /**
      * Create a new user record and return a rcube_user instance
      *
-     * @param string IMAP user name
-     * @param string IMAP host
-     * @return object rcube_user New user instance
+     * @param string $user IMAP user name
+     * @param string $host IMAP host
+     * @return rcube_user New user instance
      */
     static function create($user, $host)
     {
@@ -448,7 +458,7 @@ class rcube_user
 
                 $plugin = $rcmail->plugins->exec_hook('identity_create',
 	                array('login' => true, 'record' => $record));
-          
+
                 if (!$plugin['abort'] && $plugin['record']['email']) {
                     $rcmail->user->insert_identity($plugin['record']);
                 }
@@ -463,15 +473,15 @@ class rcube_user
                 'file' => __FILE__,
                 'message' => "Failed to create new user"), true, false);
         }
-    
+
         return $user_id ? $user_instance : false;
     }
-  
-  
+
+
     /**
      * Resolve username using a virtuser plugins
      *
-     * @param string E-mail address to resolve
+     * @param string $email E-mail address to resolve
      * @return string Resolved IMAP username
      */
     static function email2user($email)
@@ -487,9 +497,9 @@ class rcube_user
     /**
      * Resolve e-mail address from virtuser plugins
      *
-     * @param string User name
-     * @param boolean If true returns first found entry
-     * @param boolean If true returns email as array (email and name for identity)
+     * @param string $user User name
+     * @param boolean $first If true returns first found entry
+     * @param boolean $extended If true returns email as array (email and name for identity)
      * @return mixed Resolved e-mail address string or array of strings
      */
     static function user2email($user, $first=true, $extended=false)

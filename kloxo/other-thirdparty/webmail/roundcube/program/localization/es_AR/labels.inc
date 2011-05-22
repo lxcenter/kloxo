@@ -17,7 +17,7 @@
 |         http://www.netsud.com                                         |
 +-----------------------------------------------------------------------+
 
-@version $Id: labels.inc 3989 2010-09-25 13:03:53Z alec $
+@version $Id: labels.inc 4345 2010-12-17 14:28:38Z thomasb $
 
 */
 
@@ -301,9 +301,6 @@ $labels['subscribed'] = 'Suscripta';
 $labels['messagecount'] = 'Mensajes';
 $labels['create'] = 'Crear';
 $labels['createfolder'] = 'Crear nueva carpeta';
-$labels['rename'] = 'Renombrar';
-$labels['renamefolder'] = 'Renombrar carpeta';
-$labels['deletefolder'] = 'Eliminar carpeta';
 $labels['managefolders'] = 'Administrar carpetas';
 $labels['specialfolders'] = 'Carpetas Especiales';
 $labels['sortby'] = 'Ordenar por';

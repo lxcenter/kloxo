@@ -13,7 +13,7 @@
  | Author: Thomas Bruederli <roundcube@gmail.com>                        |
  +-----------------------------------------------------------------------+
 
- @version $Id: messages.inc 3989 2010-09-25 13:03:53Z alec $
+ @version $Id: messages.inc 4359 2010-12-22 17:41:41Z thomasb $
 
 */
 
@@ -23,6 +23,9 @@ $messages['cookiesdisabled'] = 'Your browser does not accept cookies';
 $messages['sessionerror'] = 'Your session is invalid or expired';
 $messages['imaperror'] = 'Connection to IMAP server failed';
 $messages['servererror'] = 'Server Error!';
+$messages['servererrormsg'] = 'Server Error: $msg';
+$messages['errorreadonly'] = 'Unable to perform operation. Folder is read-only';
+$messages['errornoperm'] = 'Unable to perform operation. Permission denied';
 $messages['invalidrequest'] = 'Invalid request! No data was saved.';
 $messages['nomessagesfound'] = 'No messages found in this mailbox';
 $messages['loggedout'] = 'You have successfully terminated the session. Good bye!';
@@ -54,10 +57,10 @@ $messages['deletecontactconfirm']  = 'Do you really want to delete the selected 
 $messages['deletemessagesconfirm'] = 'Do you really want to delete the selected message(s)?';
 $messages['deletefolderconfirm']  = 'Do you really want to delete this folder?';
 $messages['purgefolderconfirm']  = 'Do you really want to delete all messages in this folder?';
-$messages['foldercreating'] = 'Creating folder...';
 $messages['folderdeleting'] = 'Deleting folder...';
-$messages['folderrenaming'] = 'Renaming folder...';
 $messages['foldermoving'] = 'Moving folder...';
+$messages['foldersubscribing'] = 'Subscribing folder...';
+$messages['folderunsubscribing'] = 'Unsubscribing folder...';
 $messages['formincomplete'] = 'The form was not completely filled out';
 $messages['noemailwarning'] = 'Please enter a valid email address';
 $messages['nonamewarning']  = 'Please enter a name';
@@ -77,6 +80,10 @@ $messages['searching'] = 'Searching...';
 $messages['checking'] = 'Checking...';
 $messages['nospellerrors'] = 'No spelling errors found';
 $messages['folderdeleted'] = 'Folder successfully deleted';
+$messages['foldersubscribed'] = 'Folder successfully subscribed';
+$messages['folderunsubscribed'] = 'Folder successfully unsubscribed';
+$messages['folderpurged'] = 'Folder has successfully been emptied';
+$messages['folderexpunged'] = 'Folder has successfully been compacted';
 $messages['deletedsuccessfully'] = 'Successfully deleted';
 $messages['converting'] = 'Removing formatting...';
 $messages['messageopenerror'] = 'Could not load message from server';
@@ -86,12 +93,13 @@ $messages['copysuccess'] = 'Successfully copied $nr addresses';
 $messages['copyerror'] = 'Could not copy any addresses';
 $messages['sourceisreadonly'] = 'This address source is read only';
 $messages['errorsavingcontact'] = 'Could not save the contact address';
-$messages['movingmessage'] = 'Moving message...';
-$messages['copyingmessage'] = 'Copying message...';
+$messages['movingmessage'] = 'Moving message(s)...';
+$messages['copyingmessage'] = 'Copying message(s)...';
+$messages['deletingmessage'] = 'Deleting message(s)...';
+$messages['markingmessage'] = 'Marking message(s)...';
 $messages['receiptsent'] = 'Successfully sent a read receipt';
 $messages['errorsendingreceipt'] = 'Could not send the receipt';
 $messages['nodeletelastidentity'] = 'You cannot delete this identity, it\'s your last one.';
-$messages['addsubfolderhint'] = 'This folder will be created as subfolder of the currently selected one';
 $messages['forbiddencharacter'] = 'Folder name contains a forbidden character';
 $messages['selectimportfile'] = 'Please select a file to upload';
 $messages['addresswriterror'] = 'The selected address book is not writeable';
@@ -109,10 +117,25 @@ $messages['smtpautherror'] = 'SMTP Error ($code): Authentication failed';
 $messages['smtpfromerror'] = 'SMTP Error ($code): Failed to set sender "$from" ($msg)';
 $messages['smtptoerror'] = 'SMTP Error ($code): Failed to add recipient "$to" ($msg)';
 $messages['smtprecipientserror'] = 'SMTP Error: Unable to parse recipients list';
+$messages['smtpdsnerror'] = 'SMTP Error: No support for Delivery Status Notifications';
 $messages['smtperror'] = 'SMTP Error: $msg';
 $messages['emailformaterror'] = 'Invalid e-mail address: $email';
 $messages['toomanyrecipients'] = 'Too many recipients. Reduce the number of recipients to $max.';
 $messages['maxgroupmembersreached'] = 'The number of group members exceeds the maximum of $max';
 $messages['internalerror'] = 'An internal error occured. Please try again';
+$messages['contactdelerror'] = 'Could not delete contact(s)';
+$messages['contactdeleted'] = 'Contact(s) deleted successfully';
+$messages['groupdeleted'] = 'Group deleted successfully';
+$messages['grouprenamed'] = 'Group renamed successfully';
+$messages['groupcreated'] = 'Group created successfully';
+$messages['messagedeleted'] = 'Message(s) deleted successfully';
+$messages['messagemoved'] = 'Message(s) moved successfully';
+$messages['messagecopied'] = 'Message(s) copied successfully';
+$messages['messagemarked'] = 'Message(s) marked successfully';
+$messages['autocompletechars'] = 'Enter at least $min characters for autocompletion';
+$messages['namecannotbeempty'] = 'Name cannot be empty';
+$messages['nametoolong'] = 'Name is too long';
+$messages['folderupdated'] = 'Folder updated successfully';
+$messages['foldercreated'] = 'Folder created successfully';
 
 ?>

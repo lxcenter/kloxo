@@ -15,7 +15,7 @@
  | Author: Thomas Bruederli <roundcube@gmail.com>                        |
  +-----------------------------------------------------------------------+
 
- $Id: move_del.inc 3989 2010-09-25 13:03:53Z alec $
+ $Id: move_del.inc 4321 2010-12-08 12:52:04Z alec $
 
 */
 
@@ -28,10 +28,10 @@ $old_count = $IMAP->messagecount(NULL, $IMAP->threading ? 'THREADS' : 'ALL');
 $old_pages = ceil($old_count / $IMAP->page_size);
 
 // move messages
-if ($RCMAIL->action=='moveto' && !empty($_POST['_uid']) && !empty($_POST['_target_mbox'])) {
+if ($RCMAIL->action=='moveto' && !empty($_POST['_uid']) && strlen($_POST['_target_mbox'])) {
     $count = sizeof(explode(',', ($uids = get_input_value('_uid', RCUBE_INPUT_POST))));
-    $target = get_input_value('_target_mbox', RCUBE_INPUT_POST);
-    $mbox = get_input_value('_mbox', RCUBE_INPUT_POST);
+    $target = get_input_value('_target_mbox', RCUBE_INPUT_POST, true);
+    $mbox = get_input_value('_mbox', RCUBE_INPUT_POST, true);
 
     $moved = $IMAP->move_message($uids, $target, $mbox);
 
@@ -39,9 +39,12 @@ if ($RCMAIL->action=='moveto' && !empty($_POST['_uid']) && !empty($_POST['_targe
         // send error message
 	    if ($_POST['_from'] != 'show')
             $OUTPUT->command('list_mailbox');
-        $OUTPUT->show_message('errormoving', 'error');
+        rcmail_display_server_error('errormoving');
         $OUTPUT->send();
         exit;
+    }
+    else {
+      $OUTPUT->show_message('messagemoved', 'confirmation');
     }
 
     $addrows = true;
@@ -49,19 +52,22 @@ if ($RCMAIL->action=='moveto' && !empty($_POST['_uid']) && !empty($_POST['_targe
 // delete messages 
 else if ($RCMAIL->action=='delete' && !empty($_POST['_uid'])) {
     $count = sizeof(explode(',', ($uids = get_input_value('_uid', RCUBE_INPUT_POST))));
-    $mbox = get_input_value('_mbox', RCUBE_INPUT_POST);
+    $mbox = get_input_value('_mbox', RCUBE_INPUT_POST, true);
 
     $del = $IMAP->delete_message($uids, $mbox);
-  
+
     if (!$del) {
         // send error message
 	    if ($_POST['_from'] != 'show')
             $OUTPUT->command('list_mailbox');
-        $OUTPUT->show_message('errordeleting', 'error');
+        rcmail_display_server_error('errordeleting');
         $OUTPUT->send();
         exit;
     }
-    
+    else {
+      $OUTPUT->show_message('messagedeleted', 'confirmation');
+    }
+
     $addrows = true;
 }
 // unknown action or missing query param
@@ -71,7 +77,7 @@ else {
 
 // refresh saved search set after moving some messages
 if (($search_request = get_input_value('_search', RCUBE_INPUT_GPC)) && $IMAP->search_set) {
-    $_SESSION['search'][$search_request] = $IMAP->refresh_search();
+    $_SESSION['search'] = $IMAP->refresh_search();
 }
 
 if ($_POST['_from'] == 'show')
@@ -103,14 +109,14 @@ else
   // update mailboxlist
   $mbox = $IMAP->get_mailbox_name();
   $unseen_count = $msg_count ? $IMAP->messagecount($mbox, 'UNSEEN') : 0;
-  $old_unseen = $_SESSION['unseen_count'][$mbox];
-  
+  $old_unseen = rcmail_get_unseen_count($mbox);
+
   if ($old_unseen != $unseen_count) {
     $OUTPUT->command('set_unread_count', $mbox, $unseen_count, ($mbox == 'INBOX'));
-    $_SESSION['unseen_count'][$mbox] = $unseen_count;
+    rcmail_set_unseen_count($mbox, $unseen_count);
   }
 
-  if ($RCMAIL->action=='moveto' && $target) {
+  if ($RCMAIL->action=='moveto' && strlen($target)) {
     rcmail_send_unread_count($target, true);
   }
 

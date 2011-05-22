@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Simple LDAP Password Driver
  *
@@ -12,20 +13,20 @@
 function password_save($curpass, $passwd)
 {
 	$rcmail = rcmail::get_instance();
-	
-	/* Connect */
+
+	// Connect
 	if (!$ds = ldap_connect($rcmail->config->get('password_ldap_host'), $rcmail->config->get('password_ldap_port'))) {
 		ldap_unbind($ds);
 		return PASSWORD_CONNECT_ERROR;
 	}
 
-	/* Set protocol version */	
+	// Set protocol version
 	if (!ldap_set_option($ds, LDAP_OPT_PROTOCOL_VERSION, $rcmail->config->get('password_ldap_version'))) {
 		ldap_unbind($ds);
 		return PASSWORD_CONNECT_ERROR;
 	}
-	
-	/* Start TLS */
+
+	// Start TLS
 	if ($rcmail->config->get('password_ldap_starttls')) {
 		if (!ldap_start_tls($ds)) {
 			ldap_unbind($ds);
@@ -33,19 +34,19 @@ function password_save($curpass, $passwd)
 		}
 	}
 
-	/* Build user DN */
+	// Build user DN
 	if ($user_dn = $rcmail->config->get('password_ldap_userDN_mask')) {
 		$user_dn = ldap_simple_substitute_vars($user_dn);
 	} else {
 		$user_dn = ldap_simple_search_userdn($rcmail, $ds);
 	}
-	
+
 	if (empty($user_dn)) {
 		ldap_unbind($ds);
 		return PASSWORD_CONNECT_ERROR;
 	}
-	
-	/* Connection method */
+
+	// Connection method
 	switch ($rcmail->config->get('password_ldap_method')) {
 		case 'admin':
 			$binddn = $rcmail->config->get('password_ldap_adminDN');
@@ -58,27 +59,59 @@ function password_save($curpass, $passwd)
 			break;
 	}
 
-	/* Bind */
+
+	$crypted_pass = ldap_simple_hash_password($passwd, $rcmail->config->get('password_ldap_encodage'));
+	$lchattr      = $rcmail->config->get('password_ldap_lchattr');
+	$pwattr       = $rcmail->config->get('password_ldap_pwattr');
+    $smbpwattr    = $rcmail->config->get('password_ldap_samba_pwattr');
+    $smblchattr   = $rcmail->config->get('password_ldap_samba_lchattr');
+    $samba        = $rcmail->config->get('password_ldap_samba');
+
+    // Support password_ldap_samba option for backward compat.
+    if ($samba && !$smbpwattr) {
+        $smbpwattr  = 'sambaNTPassword';
+        $smblchattr = 'sambaPwdLastSet';
+    }
+
+	// Crypt new password
+	if (!$crypted_pass) {
+		return PASSWORD_CRYPT_ERROR;
+	}
+
+    // Crypt new Samba password
+    if ($smbpwattr && !($samba_pass = ldap_simple_hash_password($passwd, 'samba'))) {
+	    return PASSWORD_CRYPT_ERROR;
+    }
+
+	// Bind
 	if (!ldap_bind($ds, $binddn, $bindpw)) {
 		ldap_unbind($ds);
 		return PASSWORD_CONNECT_ERROR;
 	}
-	
-	/* Crypting new password */
-	$passwd = ldap_simple_hash_password($passwd, $rcmail->config->get('password_ldap_encodage'));
-	if (!$passwd) {
-		ldap_unbind($ds);
-		return PASSWORD_CRYPT_ERROR;
+
+	$entree[$pwattr] = $crypted_pass;
+
+	// Update PasswordLastChange Attribute if desired
+	if ($lchattr) {
+		$entree[$lchattr] = (int)(time() / 86400);
 	}
-	
-	$entree[$rcmail->config->get('password_ldap_pwattr')] = $passwd;
-	
+
+    // Update Samba password
+    if ($smbpwattr) {
+        $entree[$smbpwattr] = $samba_pass;
+    }
+
+    // Update Samba password last change
+    if ($smblchattr) {
+        $entree[$smblchattr] = time();
+    }
+
 	if (!ldap_modify($ds, $user_dn, $entree)) {
 		ldap_unbind($ds);
 		return PASSWORD_CONNECT_ERROR;
 	}
-	
-	/* All done, no error */
+
+	// All done, no error
 	ldap_unbind($ds);
 	return PASSWORD_SUCCESS;
 }
@@ -94,34 +127,37 @@ function ldap_simple_search_userdn($rcmail, $ds)
 	if (!ldap_bind($ds, $rcmail->config->get('password_ldap_searchDN'), $rcmail->config->get('password_ldap_searchPW'))) {
 		return false;
 	}
-	
+
 	/* Search for the DN */
 	if (!$sr = ldap_search($ds, $rcmail->config->get('password_ldap_search_base'), ldap_simple_substitute_vars($rcmail->config->get('password_ldap_search_filter')))) {
 		return false;
 	}
-	
+
 	/* If no or more entries were found, return false */
 	if (ldap_count_entries($ds, $sr) != 1) {
 		return false;
 	}
-	
+
 	return ldap_get_dn($ds, ldap_first_entry($ds, $sr));
 }
 
 /**
- * Substitute %login, %name and %domain in $str
+ * Substitute %login, %name, %domain, %dc in $str
  * See plugin config for details
  */
 function ldap_simple_substitute_vars($str)
 {
 	$str = str_replace('%login', $_SESSION['username'], $str);
 	$str = str_replace('%l', $_SESSION['username'], $str);
-	
+
 	$parts = explode('@', $_SESSION['username']);
+
 	if (count($parts) == 2) {
+        $dc = 'dc='.strtr($parts[1], array('.' => ',dc=')); // hierarchal domain string
+
 		$str = str_replace('%name', $parts[0], $str);
-		$str = str_replace('%n', $parts[0], $str);
-		
+        $str = str_replace('%n', $parts[0], $str);
+        $str = str_replace('%dc', $dc, $str);
 		$str = str_replace('%domain', $parts[1], $str);
 		$str = str_replace('%d', $parts[1], $str);
 	}
@@ -199,6 +235,14 @@ function ldap_simple_hash_password($password_clear, $encodage_type)
 				return false;
 			}
 			break;
+        case 'samba':
+            if (function_exists('hash')) {
+                $crypted_password = hash('md4', rcube_charset_convert($password_clear, RCMAIL_CHARSET, 'UTF-16LE'));
+            } else {
+				/* Your PHP install does not have the hash() function */
+				return false;
+            }
+            break;
 		case 'clear':
 		default:
 			$crypted_password = $password_clear;
@@ -221,6 +265,6 @@ function ldap_simple_random_salt($length)
 	while (strlen($str) < $length) {
 		$str .= substr($possible, (rand() % strlen($possible)), 1);
 	}
-	
+
 	return $str;
 }

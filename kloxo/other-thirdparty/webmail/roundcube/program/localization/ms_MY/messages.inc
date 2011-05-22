@@ -13,7 +13,7 @@
 | Author: Muhammad Zamri MS <myzamri@gmail.com>                        |
 +-----------------------------------------------------------------------+
 
-@version $Id: messages.inc 3989 2010-09-25 13:03:53Z alec $
+@version $Id: messages.inc 4304 2010-12-03 10:58:40Z alec $
 
 */
 
@@ -77,6 +77,5 @@ $messages['movingmessage'] = 'Memindah mesej...';
 $messages['receiptsent'] = 'Berjaya menghantar resip bacaan';
 $messages['errorsendingreceipt'] = 'Tidak dapat menghantar resip';
 $messages['nodeletelastidentity'] = 'Anda tidak boleh membuang identiti ini, ia milik anda yang terakhir.';
-$messages['addsubfolderhint'] = 'Folder ini akan dibina sebagai subfolder kepada folder yang dipilih sekarang';
 
 ?>

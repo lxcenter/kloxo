@@ -15,7 +15,7 @@
  | Author: Thomas Bruederli <roundcube@gmail.com>                        |
  +-----------------------------------------------------------------------+
 
- $Id: rcube_shared.inc 3993 2010-09-26 11:17:03Z thomasb $
+ $Id: rcube_shared.inc 4509 2011-02-09 10:51:50Z thomasb $
 
 */
 
@@ -476,6 +476,11 @@ function rc_mime_content_type($path, $name, $failover = 'application/octet-strea
     if (!$mime_type) {
         $mime_type = $failover;
     }
+    else {
+        // Sometimes (PHP-5.3?) content-type contains charset definition,
+        // Remove it (#1487122) also "charset=binary" is useless
+        $mime_type = array_shift(preg_split('/[; ]/', $mime_type));
+    }
 
     return $mime_type;
 }
@@ -677,6 +682,54 @@ if (!extension_loaded('mbstring'))
     function mb_strrpos($haystack, $needle, $offset=0)
     {
         return strrpos($haystack, $needle, $offset);
+    }
+}
+
+/**
+ * intl replacement functions
+ */
+
+if (!function_exists('idn_to_utf8'))
+{
+    function idn_to_utf8($domain, $flags=null)
+    {
+        static $idn, $loaded;
+
+        if (!$loaded) {
+            $idn = new Net_IDNA2();
+            $loaded = true;
+        }
+
+        if ($idn && $domain && preg_match('/(^|\.)xn--/i', $domain)) {
+            try {
+                $domain = $idn->decode($domain);
+            }
+            catch (Exception $e) {
+            }
+        }
+        return $domain;
+    }
+}
+
+if (!function_exists('idn_to_ascii'))
+{
+    function idn_to_ascii($domain, $flags=null)
+    {
+        static $idn, $loaded;
+
+        if (!$loaded) {
+            $idn = new Net_IDNA2();
+            $loaded = true;
+        }
+
+        if ($idn && $domain && preg_match('/[^\x20-\x7E]/', $domain)) {
+            try {
+                $domain = $idn->encode($domain);
+            }
+            catch (Exception $e) {
+            }
+        }
+        return $domain;
     }
 }
 

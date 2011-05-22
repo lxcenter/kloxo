@@ -3,7 +3,7 @@
 /*
 
 +-----------------------------------------------------------------------+
-| language/bg/messages.inc                                              |
+| language/bg_BG/messages.inc                                           |
 |                                                                       |
 | Language file of the Roundcube Webmail client                         |
 | Copyright (C) 2005-2010, Roundcube Dev. - Switzerland                 |
@@ -14,7 +14,7 @@
 |	  Nickolay Bunev <just4nick@gmail.com>								|
 +-----------------------------------------------------------------------+
 
-@version $Id: messages.inc 3989 2010-09-25 13:03:53Z alec $
+@version $Id: messages.inc 4469 2011-01-29 14:55:12Z thomasb $
 
 */
 
@@ -24,6 +24,9 @@ $messages['cookiesdisabled'] = 'Вашият браузър не приема co
 $messages['sessionerror'] = 'Невалидна или изтекла сесия';
 $messages['imaperror'] = 'Неуспешно свързване към IMAP сървъра';
 $messages['servererror'] = 'Грешка!';
+$messages['servererrormsg'] = 'Сървърна грешка: $msg';
+$messages['errorreadonly'] = 'Операцията не може да бъде изпълнена. Папката е с права само за четене';
+$messages['errornoperm'] = 'Операцията не може да бъде изпълнена. Отказани права за достъп';
 $messages['invalidrequest'] = 'Невалидна заявка! Данните не са съхранени.';
 $messages['nomessagesfound'] = 'Няма съобщения';
 $messages['loggedout'] = 'Довиждане!';
@@ -48,16 +51,17 @@ $messages['senttooquickly'] = 'Моля, изчакайте $sec секунда(
 $messages['errorsavingsent'] = 'Възникна грешка при записването на съобщението';
 $messages['errorsaving'] = 'Възникна грешка при записването';
 $messages['errormoving'] = 'Писмото не може да бъде преместено';
+$messages['errorcopying'] = 'Съобщенията не могат да бъдат копирани';
 $messages['errordeleting'] = 'Писмото не може да бъде изтрито';
 $messages['errormarking'] = 'Съобщението не може да бъде маркирано';
 $messages['deletecontactconfirm'] = 'Искате ли да изтриете маркираните контакти?';
 $messages['deletemessagesconfirm'] = 'Искате ли да изтриете маркираните съобщения?';
 $messages['deletefolderconfirm'] = 'Искате ли да изтриете тази папка?';
 $messages['purgefolderconfirm'] = 'Искате ли да изтриете всички писма в тази папка?';
-$messages['foldercreating'] = 'Създаване на папка...';
 $messages['folderdeleting'] = 'Изтриване на папка...';
-$messages['folderrenaming'] = 'Преименуване на папка...';
 $messages['foldermoving'] = 'Преместване на папка...';
+$messages['foldersubscribing'] = 'Абониране...';
+$messages['folderunsubscribing'] = 'Отписване на папка...';
 $messages['formincomplete'] = 'Не сте попълнили всички полета';
 $messages['noemailwarning'] = 'Моля, въведете валиден e-mail адрес';
 $messages['nonamewarning'] = 'Моля, въведете име';
@@ -77,6 +81,10 @@ $messages['searching'] = 'Търсене...';
 $messages['checking'] = 'Проверка...';
 $messages['nospellerrors'] = 'Не са открити правописни грешки';
 $messages['folderdeleted'] = 'Папката е изтрита';
+$messages['foldersubscribed'] = 'Абонирането успешно';
+$messages['folderunsubscribed'] = 'Отписването успешно';
+$messages['folderpurged'] = 'Папката е изпразнена';
+$messages['folderexpunged'] = 'Уплътняването успешно';
 $messages['deletedsuccessfully'] = 'Изтриването е успешно';
 $messages['converting'] = 'Премахване форматирането на писмото...';
 $messages['messageopenerror'] = 'Писмото не може да бъде заредено от сървъра';
@@ -87,13 +95,17 @@ $messages['copyerror'] = 'Грешка при копирането на адре
 $messages['sourceisreadonly'] = 'Този източник на адреси е само за четене';
 $messages['errorsavingcontact'] = 'Грешка при записването на адреса';
 $messages['movingmessage'] = 'Преместване на писмото...';
+$messages['copyingmessage'] = 'Копиране на съобщение...';
+$messages['deletingmessage'] = 'Изтриване на съобщение';
+$messages['markingmessage'] = 'Маркиране на съобщение';
 $messages['receiptsent'] = 'Обратната разписка е изпратена.';
 $messages['errorsendingreceipt'] = 'Грешка при изпращането на обратна разписка.';
 $messages['nodeletelastidentity'] = 'Не можете да изтриете тази самоличност, трябва да имате поне една.';
-$messages['addsubfolderhint'] = 'Тази папка ще бъде създадена като подпапка на текущо избраната';
 $messages['forbiddencharacter'] = 'Името на папката съдържа непозволени символи';
 $messages['selectimportfile'] = 'Моля изберете файл за качване';
 $messages['addresswriterror'] = 'Избраната адресна книга не може да бъде записвана';
+$messages['contactaddedtogroup'] = 'Контактите бяха успешно добавени към групата';
+$messages['contactremovedfromgroup'] = 'Контактите бяха успешно премахнати от групата';
 $messages['importwait'] = 'Внасяне, моля изчакайте...';
 $messages['importerror'] = 'Внасянето неуспешно! Каченият файл не е във валиден vCard формат.';
 $messages['importconfirm'] = '<b>Успешно са внесени $inserted контакта, вече съществуващите $skipped контакта са пропуснати</b>:<p><em>$names</em></p>';
@@ -106,7 +118,26 @@ $messages['smtpautherror'] = 'SMTP грешка ($code): Грешни потре
 $messages['smtpfromerror'] = 'SMTP грешка ($code): Не може да бъде изпратено писмо от "$from" ($msg)';
 $messages['smtptoerror'] = 'SMTP грешка ($code): Не може да бъде изпратено писмо до "$to" ($msg)';
 $messages['smtprecipientserror'] = 'SMTP грешка: Не може да бъде обработен списъка с получатели';
+$messages['smtpdsnerror'] = 'SMTP грешка: Не се поддържа съобщаване за успешни получено съобщение';
 $messages['smtperror'] = 'SMTP грешка: $msg';
 $messages['emailformaterror'] = 'Невалиден e-mail адрес: $email';
+$messages['toomanyrecipients'] = 'Прекалено много адреси за изпращане (максимум: $max).';
+$messages['maxgroupmembersreached'] = 'Броя на членовете на групата е повече от максималния: $max.';
+$messages['internalerror'] = 'Възникна вътрешна грешка. Моля опитайте отново';
+$messages['contactdelerror'] = 'Не мога да изтрия контакта';
+$messages['contactdeleted'] = 'Контактът беше изтрит';
+$messages['groupdeleted'] = 'Групата беше  изтрита';
+$messages['grouprenamed'] = 'Групата беше преименувана ';
+$messages['groupcreated'] = 'Групата беше създадена';
+$messages['messagedeleted'] = 'Съобщението  беше  изтрито';
+$messages['messagemoved'] = 'Съобщението беше преместено';
+$messages['messagecopied'] = 'Съобщението беше копирано';
+$messages['messagemarked'] = 'Съобщението беше маркирано';
+$messages['autocompletechars'] = 'Въведете минимум $min знака, за да започне автоматичното попълване';
+$messages['namecannotbeempty'] = 'Полето за име не може да бъде празно';
+$messages['nametoolong'] = 'Името е прекалено дълго';
+$messages['folderupdated'] = 'Папката е обновена';
+$messages['foldercreated'] = 'Папката е създадена';
+$messages['invalidimageformat'] = 'Невалиден формат на изображението';
 
 ?>

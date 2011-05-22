@@ -13,7 +13,7 @@
 | Author: Muhammad Zamri MS <myzamri@gmail.com>                        |
 +-----------------------------------------------------------------------+
 
-@version $Id: labels.inc 3989 2010-09-25 13:03:53Z alec $
+@version $Id: labels.inc 4345 2010-12-17 14:28:38Z thomasb $
 
 */
 
@@ -215,9 +215,6 @@ $labels['subscribed'] = 'Dilanggan';
 $labels['messagecount'] = 'Mesej-mesej';
 $labels['create'] = 'Cipta';
 $labels['createfolder'] = 'Cipta kabinet fail baru';
-$labels['rename'] = 'Namakan semula';
-$labels['renamefolder'] = 'Namakan semula kabinet fail';
-$labels['deletefolder'] = 'Hapus kabinet fail';
 $labels['managefolders'] = 'Urus kabinet fail';
 $labels['sortby'] = 'Susun dengan';
 $labels['sortasc'] = 'Susun menaik';

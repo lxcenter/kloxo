@@ -14,7 +14,7 @@
 | Update: Odin Omdal Hørthe <odin.omdal@gmail.com>                      |
 +-----------------------------------------------------------------------+
 
-@version $Id: labels.inc 3989 2010-09-25 13:03:53Z alec $
+@version $Id: labels.inc 4345 2010-12-17 14:28:38Z thomasb $
 
 */
 
@@ -310,9 +310,6 @@ $labels['subscribed'] = 'Abonnert';
 $labels['messagecount'] = 'Meldingar';
 $labels['create'] = 'Opprette';
 $labels['createfolder'] = 'Opprett ny mappe';
-$labels['rename'] = 'Gje nytt namn';
-$labels['renamefolder'] = 'Gje nytt namn til mappe';
-$labels['deletefolder'] = 'Slett mappe';
 $labels['managefolders'] = 'Mappehandsaming';
 $labels['specialfolders'] = 'Spesialmapper';
 $labels['sortby'] = 'Sorter etter';

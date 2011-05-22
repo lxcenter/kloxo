@@ -6,7 +6,9 @@
  */
 class userinfo extends rcube_plugin
 {
-  public $task = 'settings';
+  public $task    = 'settings';
+  public $noajax  = true;
+  public $noframe = true;
 
   function init()
   {

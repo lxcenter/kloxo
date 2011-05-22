@@ -15,7 +15,7 @@
  | Author: Thomas Bruederli <roundcube@gmail.com>                        |
  +-----------------------------------------------------------------------+
 
- $Id: rcube_plugin.php 3989 2010-09-25 13:03:53Z alec $
+ $Id: rcube_plugin.php 4363 2010-12-22 19:17:47Z alec $
 
 */
 
@@ -26,21 +26,56 @@
  */
 abstract class rcube_plugin
 {
+  /**
+   * Class name of the plugin instance
+   *
+   * @var string
+   */
   public $ID;
+
+  /**
+   * Instance of Plugin API
+   *
+   * @var rcube_plugin_api
+   */
   public $api;
+
+  /**
+   * Regular expression defining task(s) to bind with 
+   *
+   * @var string
+   */
   public $task;
+
+  /**
+   * Disables plugin in AJAX requests
+   *
+   * @var boolean
+   */
+  public $noajax = false;
+
+  /**
+   * Disables plugin in framed mode
+   *
+   * @var boolean
+   */
+  public $noframe = false;
+
   protected $home;
   protected $urlbase;
   private $mytask;
 
+
   /**
    * Default constructor.
+   *
+   * @param rcube_plugin_api $api Plugin API
    */
   public function __construct($api)
   {
     $this->ID = get_class($this);
     $this->api = $api;
-    $this->home = $api->dir . DIRECTORY_SEPARATOR . $this->ID;
+    $this->home = $api->dir . $this->ID;
     $this->urlbase = $api->url . $this->ID . '/';
   }
   
@@ -53,7 +88,7 @@ abstract class rcube_plugin
    * Load local config file from plugins directory.
    * The loaded values are patched over the global configuration.
    *
-   * @param string Config file name relative to the plugin's folder
+   * @param string $fname Config file name relative to the plugin's folder
    * @return boolean True on success, false on failure
    */
   public function load_config($fname = 'config.inc.php')
@@ -73,8 +108,8 @@ abstract class rcube_plugin
   /**
    * Register a callback function for a specific (server-side) hook
    *
-   * @param string Hook name
-   * @param mixed Callback function as string or array with object reference and method name
+   * @param string $hook Hook name
+   * @param mixed  $callback Callback function as string or array with object reference and method name
    */
   public function add_hook($hook, $callback)
   {
@@ -84,8 +119,8 @@ abstract class rcube_plugin
   /**
    * Load localized texts from the plugins dir
    *
-   * @param string Directory to search in
-   * @param mixed Make texts also available on the client (array with list or true for all)
+   * @param string $dir Directory to search in
+   * @param mixed  $add2client Make texts also available on the client (array with list or true for all)
    */
   public function add_texts($dir, $add2client = false)
   {
@@ -94,11 +129,16 @@ abstract class rcube_plugin
     $lang = $_SESSION['language'];
     $locdir = slashify(realpath(slashify($this->home) . $dir));
     $texts = array();
-    
+
+    // use buffering to handle empty lines/spaces after closing PHP tag
+    ob_start();
+
     foreach (array('en_US', $lang) as $lng) {
       @include($locdir . $lng . '.inc');
       $texts = (array)$labels + (array)$messages + (array)$texts;
     }
+
+    ob_end_clean();
 
     // prepend domain to text keys and add to the application texts repository
     if (!empty($texts)) {
@@ -120,6 +160,7 @@ abstract class rcube_plugin
   /**
    * Wrapper for rcmail::gettext() adding the plugin ID as domain
    *
+   * @param string $p Message identifier
    * @return string Localized text
    * @see rcmail::gettext()
    */
@@ -131,7 +172,7 @@ abstract class rcube_plugin
   /**
    * Register this plugin to be responsible for a specific task
    *
-   * @param string Task name (only characters [a-z0-9_.-] are allowed)
+   * @param string $task Task name (only characters [a-z0-9_.-] are allowed)
    */
   public function register_task($task)
   {
@@ -144,8 +185,8 @@ abstract class rcube_plugin
     *
     * The callback will be executed upon a request like /?_task=mail&_action=plugin.myaction
     *
-    * @param string Action name (should be unique)
-    * @param mixed Callback function as string or array with object reference and method name
+    * @param string $action  Action name (should be unique)
+    * @param mixed $callback Callback function as string or array with object reference and method name
    */
   public function register_action($action, $callback)
   {
@@ -158,8 +199,8 @@ abstract class rcube_plugin
    * When parsing a template for display, tags like <roundcube:object name="plugin.myobject" />
    * will be replaced by the return value if the registered callback function.
    *
-   * @param string Object name (should be unique and start with 'plugin.')
-   * @param mixed Callback function as string or array with object reference and method name
+   * @param string $name Object name (should be unique and start with 'plugin.')
+   * @param mixed  $callback Callback function as string or array with object reference and method name
    */
   public function register_handler($name, $callback)
   {
@@ -169,7 +210,7 @@ abstract class rcube_plugin
   /**
    * Make this javascipt file available on the client
    *
-   * @param string File path; absolute or relative to the plugin directory
+   * @param string $fn File path; absolute or relative to the plugin directory
    */
   public function include_script($fn)
   {
@@ -179,7 +220,7 @@ abstract class rcube_plugin
   /**
    * Make this stylesheet available on the client
    *
-   * @param string File path; absolute or relative to the plugin directory
+   * @param string $fn File path; absolute or relative to the plugin directory
    */
   public function include_stylesheet($fn)
   {
@@ -189,8 +230,8 @@ abstract class rcube_plugin
   /**
    * Append a button to a certain container
    *
-   * @param array Hash array with named parameters (as used in skin templates)
-   * @param string Container name where the buttons should be added to
+   * @param array $p Hash array with named parameters (as used in skin templates)
+   * @param string $container Container name where the buttons should be added to
    * @see rcube_remplate::button()
    */
   public function add_button($p, $container)
@@ -209,7 +250,7 @@ abstract class rcube_plugin
    * Generate an absolute URL to the given resource within the current
    * plugin directory
    *
-   * @param string The file name
+   * @param string $fn The file name
    * @return string Absolute URL to the given resource
    */
   public function url($fn)
@@ -219,6 +260,8 @@ abstract class rcube_plugin
 
   /**
    * Make the given file name link into the plugin directory
+   *
+   * @param string $fn Filename
    */
   private function resource_url($fn)
   {
@@ -236,7 +279,7 @@ abstract class rcube_plugin
    */
   protected function local_skin_path()
   {
-      $skin_path = 'skins/'.$this->api->output->config['skin'];
+      $skin_path = 'skins/'.$this->api->config->get('skin');
       if (!is_dir(realpath(slashify($this->home) . $skin_path)))
         $skin_path = 'skins/default';
     return $skin_path;
@@ -244,6 +287,9 @@ abstract class rcube_plugin
 
   /**
    * Callback function for array_map
+   *
+   * @param string $key Array key.
+   * @return string
    */
   private function label_map_callback($key)
   {

@@ -15,7 +15,7 @@
  | Author: Thomas Bruederli <roundcube@gmail.com>                        |
  +-----------------------------------------------------------------------+
 
- $Id: save_prefs.inc 3989 2010-09-25 13:03:53Z alec $
+ $Id: save_prefs.inc 4643 2011-04-11 12:24:00Z alec $
 
 */
 
@@ -58,14 +58,16 @@ switch ($CURR_SECTION)
       'default_charset' => get_input_value('_default_charset', RCUBE_INPUT_POST),
     );
 
-
   break;
   case 'compose':
     $a_user_prefs = array(
-      'htmleditor'         => isset($_POST['_htmleditor']) ? TRUE : FALSE,
+      'htmleditor'         => intval($_POST['_htmleditor']),
       'draft_autosave'     => isset($_POST['_draft_autosave']) ? intval($_POST['_draft_autosave']) : 0,
       'mime_param_folding' => isset($_POST['_mime_param_folding']) ? intval($_POST['_mime_param_folding']) : 0,
       'force_7bit'         => isset($_POST['_force_7bit']) ? TRUE : FALSE,
+      'mdn_default'        => isset($_POST['_mdn_default']) ? TRUE : FALSE,
+      'dsn_default'        => isset($_POST['_dsn_default']) ? TRUE : FALSE,
+      'reply_same_folder'  => isset($_POST['_reply_same_folder']) ? TRUE : FALSE,
       'show_sig'           => isset($_POST['_show_sig']) ? intval($_POST['_show_sig']) : 1,
       'top_posting'        => !empty($_POST['_top_posting']),
       'strip_existing_sig' => isset($_POST['_strip_existing_sig']),
@@ -95,10 +97,10 @@ switch ($CURR_SECTION)
   break;
 }
 
-$data = rcmail::get_instance()->plugins->exec_hook('preferences_save',
+$plugin = rcmail::get_instance()->plugins->exec_hook('preferences_save',
   array('prefs' => $a_user_prefs, 'section' => $CURR_SECTION));
 
-$a_user_prefs = $data['prefs'];
+$a_user_prefs = $plugin['prefs'];
 
 // don't override these parameters
 foreach ((array)$CONFIG['dont_override'] as $p)
@@ -126,6 +128,8 @@ switch ($CURR_SECTION)
 
     if (isset($CONFIG['max_pagesize']) && ($a_user_prefs['pagesize'] > $CONFIG['max_pagesize']))
       $a_user_prefs['pagesize'] = (int) $CONFIG['max_pagesize'];
+
+    $a_user_prefs['timezone'] = $_SESSION['timezone'] = (string) $a_user_prefs['timezone'];
 
   break;
   case 'mailbox':
@@ -155,10 +159,17 @@ switch ($CURR_SECTION)
   break;
 }
 
-if ($USER->save_prefs($a_user_prefs))
+// Save preferences
+if (!$plugin['abort'])
+  $saved = $USER->save_prefs($a_user_prefs);
+else
+  $saved = $plugin['result'];
+
+if ($saved)
   $OUTPUT->show_message('successfullysaved', 'confirmation');
+else
+  $OUTPUT->show_message($plugin['message'] ? $plugin['message'] : 'errorsaving', 'error');
 
 // display the form again
 rcmail_overwrite_action('edit-prefs');
-
 

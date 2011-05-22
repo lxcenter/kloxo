@@ -70,8 +70,14 @@ class squirrelmail_usercopy extends rcube_plugin
 			// copy address book
 			$contacts = $rcmail->get_address_book(null, true);
 			if ($contacts && count($this->abook)) {
-				foreach ($this->abook as $rec)
-					$contacts->insert($rec, true);
+				foreach ($this->abook as $rec) {
+				    // #1487096 handle multi-address and/or too long items
+				    $rec['email'] = array_shift(explode(';', $rec['email']));
+                    if (check_email(rcube_idn_to_ascii($rec['email']))) {
+                        $rec['email'] = rcube_idn_to_utf8($rec['email']);
+    					$contacts->insert($rec, true);
+			        }
+			    }
 			}
 
 			// mark identity as complete for following hooks

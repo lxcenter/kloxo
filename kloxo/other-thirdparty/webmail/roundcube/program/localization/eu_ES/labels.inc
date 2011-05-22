@@ -13,7 +13,7 @@
 |         Bihar <gaurdabihar@gmail.com>                                 |
 +-----------------------------------------------------------------------+
 
-@version $Id: labels.inc 3989 2010-09-25 13:03:53Z alec $
+@version $Id: labels.inc 4345 2010-12-17 14:28:38Z thomasb $
 
 */
 
@@ -224,9 +224,6 @@ $labels['subscribed'] = 'Harpideturik';
 $labels['messagecount'] = 'Mezuak';
 $labels['create'] = 'Sortu';
 $labels['createfolder'] = 'Karpeta berria sortu';
-$labels['rename'] = 'Berrizendatu';
-$labels['renamefolder'] = 'Karpeta berrizendatu';
-$labels['deletefolder'] = 'Karpeta ezabatu';
 $labels['managefolders'] = 'Karpeta kudeaketa';
 $labels['specialfolders'] = 'Karpeta bereziak';
 $labels['sortby'] = 'Honela ordenatu';

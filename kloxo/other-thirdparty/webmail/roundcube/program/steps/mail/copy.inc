@@ -15,7 +15,7 @@
  | Author: Aleksander Machniak <alec@alec.pl>                            |
  +-----------------------------------------------------------------------+
 
- $Id: copy.inc 3989 2010-09-25 13:03:53Z alec $
+ $Id: copy.inc 4321 2010-12-08 12:52:04Z alec $
 
 */
 
@@ -23,23 +23,22 @@
 if (!$OUTPUT->ajax_call)
   return;
 
-// count messages before changing anything
-$old_count = $IMAP->messagecount(NULL, $IMAP->threading ? 'THREADS' : 'ALL');
-$old_pages = ceil($old_count / $IMAP->page_size);
-
 // move messages
 if (!empty($_POST['_uid']) && !empty($_POST['_target_mbox'])) {
     $uids = get_input_value('_uid', RCUBE_INPUT_POST);
-    $target = get_input_value('_target_mbox', RCUBE_INPUT_POST);
-    $mbox = get_input_value('_mbox', RCUBE_INPUT_POST);
+    $target = get_input_value('_target_mbox', RCUBE_INPUT_POST, true);
+    $mbox = get_input_value('_mbox', RCUBE_INPUT_POST, true);
 
     $copied = $IMAP->copy_message($uids, $target, $mbox);
-  
+
     if (!$copied) {
         // send error message
-        $OUTPUT->show_message('errorcopying', 'error');
+        rcmail_display_server_error('errorcopying');
         $OUTPUT->send();
         exit;
+    }
+    else {
+        $OUTPUT->show_message('messagecopied', 'confirmation');
     }
 
     rcmail_send_unread_count($target, true);
@@ -53,5 +52,3 @@ else {
 
 // send response
 $OUTPUT->send();
-
-

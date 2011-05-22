@@ -18,7 +18,7 @@
 |         Jarbas Peixoto Junior <jarbas.peixoto@gmail.com>              |
 +-----------------------------------------------------------------------+
 
-@version $Id: messages.inc 3989 2010-09-25 13:03:53Z alec $
+@version $Id: messages.inc 4368 2010-12-27 08:51:22Z yllar $
 
 */
 
@@ -28,6 +28,9 @@ $messages['cookiesdisabled'] = 'Seu navegador não suporta cookies';
 $messages['sessionerror'] = 'A sessão do seu navegador é inválida ou expirou';
 $messages['imaperror'] = 'Falha na conexão com o servidor IMAP';
 $messages['servererror'] = 'Erro no Servidor!';
+$messages['servererrormsg'] = 'Erro no Servidor: $msg';
+$messages['errorreadonly'] = 'Não foi possível realizar a operação. Pasta somente leitura';
+$messages['errornoperm'] = 'Não foi possível realizar a operação. Acesso negado';
 $messages['invalidrequest'] = 'Requisição inválida! Nenhum dado foi salvo.';
 $messages['nomessagesfound'] = 'Nenhuma mensagem foi encontrada';
 $messages['loggedout'] = 'Sua sessão foi finalizada com sucesso. Até breve!';
@@ -59,10 +62,10 @@ $messages['deletecontactconfirm'] = 'Deseja realmente excluir o(s) contato(s) se
 $messages['deletemessagesconfirm'] = 'Deseja realmente excluir a(s) mensagem(s) selecionada(s)?';
 $messages['deletefolderconfirm'] = 'Deseja realmente excluir esta pasta?';
 $messages['purgefolderconfirm'] = 'Deseja realmente excluir todas mensagens desta pasta?';
-$messages['foldercreating'] = 'Criando pasta...';
 $messages['folderdeleting'] = 'Apagando pasta...';
-$messages['folderrenaming'] = 'Renomeando pasta...';
 $messages['foldermoving'] = 'Movendo pasta...';
+$messages['foldersubscribing'] = 'Ativando pasta...';
+$messages['folderunsubscribing'] = 'Desativando pasta...';
 $messages['formincomplete'] = 'Os campos não foram completamente preenchidos';
 $messages['noemailwarning'] = 'Por favor, informe um endereço de e-mail válido';
 $messages['nonamewarning'] = 'Por favor, informe o nome';
@@ -82,6 +85,10 @@ $messages['searching'] = 'Pesquisando...';
 $messages['checking'] = 'Verificando...';
 $messages['nospellerrors'] = 'Nenhum erro ortográfico foi encontrado';
 $messages['folderdeleted'] = 'Pasta excluída com sucesso';
+$messages['foldersubscribed'] = 'Pasta ativada com sucesso';
+$messages['folderunsubscribed'] = 'Pasta desativada com sucesso';
+$messages['folderpurged'] = 'Pasta excluída com sucesso';
+$messages['folderexpunged'] = 'Pasta esvaziada com sucesso';
 $messages['deletedsuccessfully'] = 'Excluído com sucesso';
 $messages['converting'] = 'Removendo formatação...';
 $messages['messageopenerror'] = 'Não foi possível carregar a mensagem do servidor';
@@ -93,10 +100,11 @@ $messages['sourceisreadonly'] = 'Esta fonte de endereço é somente leitura';
 $messages['errorsavingcontact'] = 'Não foi possível salvar o endereço de contato';
 $messages['movingmessage'] = 'Movendo mensagem...';
 $messages['copyingmessage'] = 'Copiando mensagem...';
+$messages['deletingmessage'] = 'Excluindo mensagem(s)...';
+$messages['markingmessage'] = 'Marcando mensagem(s)...';
 $messages['receiptsent'] = 'Confirmação de recebimento enviada com sucesso';
 $messages['errorsendingreceipt'] = 'Não foi possível enviar a confirmação de recebimento';
 $messages['nodeletelastidentity'] = 'Você não pode excluir a única identidade';
-$messages['addsubfolderhint'] = 'Esta pasta será criada como uma sub-pasta da que está selecionada';
 $messages['forbiddencharacter'] = 'O nome da pasta contém um caractere não permitido';
 $messages['selectimportfile'] = 'Selecione o arquivo para envio';
 $messages['addresswriterror'] = 'O catálogo de endereços selecionado não tem permissão de modificação';
@@ -114,10 +122,25 @@ $messages['smtpautherror'] = 'Erro SMTP ($code): Falha na autenticação';
 $messages['smtpfromerror'] = 'Erro SMTP ($code): Falha ao definir o remetente "$from" ($msg)';
 $messages['smtptoerror'] = 'Erro SMTP ($code): Falha ao adicionar o destinatário "$to" ($msg)';
 $messages['smtprecipientserror'] = 'Erro SMTP: Não é possível analisar a lista destinatários';
+$messages['smtpdsnerror'] = 'Erro SMTP: Sem suporte para Confirmação de Entrega (DSN)';
 $messages['smtperror'] = 'Erro SMTP: $msg';
 $messages['emailformaterror'] = 'Endereço de Email incorreto: $email';
 $messages['toomanyrecipients'] = 'Muitos destinatários. Reduza o número de destinatários para $max.';
 $messages['maxgroupmembersreached'] = 'O número de membros do grupo excede o máximo de $max';
 $messages['internalerror'] = 'Ocorreu um erro interno. Por favor tente novamente.';
+$messages['contactdelerror'] = 'Não foi possível excluir o(s) contato(s)';
+$messages['contactdeleted'] = 'Contato(s) excluído(s) com suscesso';
+$messages['groupdeleted'] = 'Grupo excluído com suscesso';
+$messages['grouprenamed'] = 'Grupo renomeado com suscesso';
+$messages['groupcreated'] = 'Grupo criado com sucesso';
+$messages['messagedeleted'] = 'Mensagem(s) excluída(s) com suscesso';
+$messages['messagemoved'] = 'Mensagem(s) movida(s) com sucesso';
+$messages['messagecopied'] = 'Mensagem(s) copiada(s) com sucesso';
+$messages['messagemarked'] = 'Mensagem(s) marcada(s) com sucesso';
+$messages['autocompletechars'] = 'Digite pelo menos $min caracter para auto-completar';
+$messages['namecannotbeempty'] = 'Nome não pode ser vazio';
+$messages['nametoolong'] = 'Nome é muito longo';
+$messages['folderupdated'] = 'Pasta atualizada com sucesso';
+$messages['foldercreated'] = 'Pasta criada com sucesso';
 
 ?>

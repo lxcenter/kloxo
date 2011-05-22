@@ -25,9 +25,7 @@ img
   background-image: url(images/display/icons.gif);
 }
 
-#messagemenu li a,
-#messagelist tr td div.expanded,
-#messagelist tr td div.collapsed
+#messagemenu li a
 {
   background-image: url(images/messageactions.gif);
 }
@@ -118,7 +116,30 @@ ul.toolbarmenu li.separator_below
   height: expression((parseInt(this.parentNode.offsetHeight)-23-parseInt(this.style.top?this.style.top:21))+'px');
 }
 
-#directorylistbox
+#directorylistbox, #folder-manager
 {
   height: expression((parseInt(document.documentElement.clientHeight)-105)+'px');
 }
+
+#messagelist tr td div.collapsed,
+#messagelist tr td div.expanded,
+#messagelist tr td.threads div.listmenu,
+#messagelist tr td.attachment span.attachment,
+#messagelist tr td.attachment span.report,
+#messagelist tr td.flag span.flagged,
+#messagelist tr td.flag span.unflagged:hover,
+#messagelist tr td.status span.status,
+#messagelist tr td.status span.msgicon,
+#messagelist tr td.status span.deleted,
+#messagelist tr td.status span.unread,
+#messagelist tr td.status span.unreadchildren,
+#messagelist tr td.subject span.msgicon,
+#messagelist tr td.subject span.deleted,
+#messagelist tr td.subject span.unread,
+#messagelist tr td.subject span.replied,
+#messagelist tr td.subject span.forwarded,
+#messagelist tr td.subject span.unreadchildren
+{
+  background-image: url(images/messageicons.gif);
+}
+

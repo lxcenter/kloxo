@@ -21,6 +21,11 @@ class vcard_attachments extends rcube_plugin
             $this->add_hook('message_load', array($this, 'message_load'));
             $this->add_hook('template_object_messagebody', array($this, 'html_output'));
         }
+        else if (!$rcmail->output->framed && (!$rcmail->action || $rcmail->action == 'list')) {
+            $icon = 'plugins/vcard_attachments/' .$this->local_skin_path(). '/vcard.png';
+            $rcmail->output->set_env('vcard_icon', $icon);
+            $this->include_script('vcardattach.js');
+        }
 
         $this->register_action('plugin.savevcard', array($this, 'save_vcard'));
     }
@@ -57,6 +62,7 @@ class vcard_attachments extends rcube_plugin
     function html_output($p)
     {
         $attach_script = false;
+        $icon = 'plugins/vcard_attachments/' .$this->local_skin_path(). '/vcard_add_contact.png';
 
         foreach ($this->vcard_parts as $part) {
             $vcards = rcube_vcard::import($this->message->get_part_content($part));
@@ -83,8 +89,7 @@ class vcard_attachments extends rcube_plugin
                         'href' => "#",
                         'onclick' => "return plugin_vcard_save_contact('".JQ($part.':'.$idx)."')",
                         'title' => $this->gettext('addvcardmsg')),
-                        html::img(array('src' => $this->url('vcard_add_contact.png'),
-                            'style' => "vertical-align:middle")))
+                        html::img(array('src' => $icon, 'style' => "vertical-align:middle")))
                     . ' ' . html::span(null, Q($display)));
             }
 

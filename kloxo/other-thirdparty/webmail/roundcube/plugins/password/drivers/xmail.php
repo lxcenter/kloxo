@@ -20,7 +20,7 @@
 function password_save($currpass, $newpass)
 {
     $rcmail = rcmail::get_instance();
-    list($user,$domain) = split('@',$_SESSION['username']);
+    list($user,$domain) = explode('@', $_SESSION['username']);
 
     $xmail = new XMail;
 
@@ -33,7 +33,7 @@ function password_save($currpass, $newpass)
         raise_error(array(
             'code' => 600,
             'type' => 'php',
-            'file' => __FILE__,
+            'file' => __FILE__, 'line' => __LINE__,
             'message' => "Password plugin: Unable to connect to mail server"
         ), true, false);
         return PASSWORD_CONNECT_ERROR;
@@ -42,7 +42,7 @@ function password_save($currpass, $newpass)
         raise_error(array(
             'code' => 600,
             'type' => 'php',
-            'file' => __FILE__,
+            'file' => __FILE__, 'line' => __LINE__,
             'message' => "Password plugin: Unable to change password"
         ), true, false);
         return PASSWORD_ERROR;

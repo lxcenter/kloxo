@@ -3,7 +3,7 @@
 /*
 
 +-----------------------------------------------------------------------+
-| language/it/labels.inc                                                |
+| language/it_IT/labels.inc                                             |
 |                                                                       |
 | Language file of the Roundcube Webmail client                         |
 | Copyright (C) 2005-2010, Roundcube Dev. - Switzerland                 |
@@ -14,7 +14,7 @@
 |         Yusef Maali <contact@yusefmaali.net>                          |
 +-----------------------------------------------------------------------+
 
-@version $Id: labels.inc 3989 2010-09-25 13:03:53Z alec $
+@version $Id: labels.inc 4469 2011-01-29 14:55:12Z thomasb $
 
 */
 
@@ -37,13 +37,14 @@ $labels['subject'] = 'Oggetto';
 $labels['from'] = 'Mittente';
 $labels['to'] = 'Destinatario';
 $labels['cc'] = 'Cc';
-$labels['bcc'] = 'Ccn';
+$labels['bcc'] = 'Bcc';
 $labels['replyto'] = 'Rispondi a';
+$labels['followupto'] = 'Followup-To';
 $labels['date'] = 'Data';
 $labels['size'] = 'Dimensione';
 $labels['priority'] = 'Priorità';
 $labels['organization'] = 'Società';
-$labels['reply-to'] = 'Rispondi a';
+$labels['readstatus'] = 'Visualizza lo stato';
 $labels['mailboxlist'] = 'Cartelle';
 $labels['messagesfromto'] = 'Messaggi da $from a $to di $count';
 $labels['threadsfromto'] = 'Thread da $from a $to di $count';
@@ -97,7 +98,9 @@ $labels['today'] = 'Oggi';
 $labels['checkmail'] = 'Controlla nuovi messaggi';
 $labels['writenewmessage'] = 'Scrivi un nuovo messaggio';
 $labels['replytomessage'] = 'Rispondi al mittente';
-$labels['replytoallmessage'] = 'Rispondi a tutti';
+$labels['replytoallmessage'] = 'Rispondi a l mittente e ai destinatari';
+$labels['replyall'] = 'Rispondi a tutti';
+$labels['replylist'] = 'Rispondi alla mailing list';
 $labels['forwardmessage'] = 'Inoltra il messaggio';
 $labels['deletemessage'] = 'Elimina il messaggio';
 $labels['movemessagetotrash'] = 'Sposta il messaggio nel cestino';
@@ -115,15 +118,15 @@ $labels['viewsource'] = 'Visualizza sorgente messaggio';
 $labels['markmessages'] = 'Marca i messaggi';
 $labels['markread'] = 'Letti';
 $labels['markunread'] = 'Non letti';
-$labels['markflagged'] = 'Contrassegnati';
-$labels['markunflagged'] = 'Non contrassegnati';
+$labels['markflagged'] = 'Contrassegnato';
+$labels['markunflagged'] = 'Non contrassegnato';
 $labels['messageactions'] = 'Altre azioni...';
 $labels['select'] = 'Seleziona';
 $labels['all'] = 'Tutti';
 $labels['none'] = 'Nessuno';
 $labels['currpage'] = 'Pagina corrente';
 $labels['unread'] = 'Non letti';
-$labels['flagged'] = 'Contrassegnati';
+$labels['flagged'] = 'Contrassegnato';
 $labels['unanswered'] = 'Senza risposta';
 $labels['deleted'] = 'Cancellato';
 $labels['invert'] = 'Inverti';
@@ -135,10 +138,10 @@ $labels['expand-unread'] = 'Espandi non letti';
 $labels['collapse-all'] = 'Richiudi tutti';
 $labels['threaded'] = 'Per argomenti';
 $labels['autoexpand_threads'] = 'Espandi';
-$labels['do_expand'] = 'Tutti i thread';
+$labels['do_expand'] = 'tutti i thread';
 $labels['expand_only_unread'] = 'solo con messaggi non letti';
 $labels['fromto'] = 'Mittente/Destinatario';
-$labels['flag'] = 'Bandiera';
+$labels['flag'] = 'Contrassegnato';
 $labels['attachment'] = 'Allegato';
 $labels['nonesort'] = 'Nessuno';
 $labels['sentdate'] = 'Data d\'invio';
@@ -148,11 +151,10 @@ $labels['desc'] = 'Discendente';
 $labels['listcolumns'] = 'Elenco Colonne';
 $labels['listsorting'] = 'Ordina per';
 $labels['listorder'] = 'Ordinamento';
-$labels['listmode'] = 'Modalit&agrave; di visualizzazione';
+$labels['listmode'] = 'Modalità di visualizzazione';
 $labels['folderactions'] = 'Azione cartella';
 $labels['compact'] = 'Compatta';
 $labels['empty'] = 'Svuota';
-$labels['purge'] = 'Pulisci';
 $labels['quota'] = 'Spazio utilizzato';
 $labels['unknown'] = 'sconosciuto';
 $labels['unlimited'] = 'illimitato';
@@ -170,6 +172,8 @@ $labels['addattachment'] = 'Allega un file';
 $labels['charset'] = 'Set di caratteri';
 $labels['editortype'] = 'Tipo editor';
 $labels['returnreceipt'] = 'Ricevuta di ritorno';
+$labels['dsn'] = 'Notifica di consegna';
+$labels['editidents'] = 'Modifica indentità';
 $labels['checkspelling'] = 'Controlla ortografia';
 $labels['resumeediting'] = 'Torna al messaggio';
 $labels['revertto'] = 'Ripristina';
@@ -193,6 +197,7 @@ $labels['maxuploadsize'] = 'La dimensione massima consentita è $size';
 $labels['addcc'] = 'Aggiungi Cc';
 $labels['addbcc'] = 'Aggiungi Bcc';
 $labels['addreplyto'] = 'Aggiungi Rispondi a';
+$labels['addfollowupto'] = 'Aggiungi Followup-To';
 $labels['mdnrequest'] = 'Il mittente ha richiesto di ricevere una notifica dell\'avvenuta lettura del messaggio. Si desidera inviare tale notifica?';
 $labels['receiptread'] = 'Ricevuta di ritorno (letto)';
 $labels['yourmessage'] = 'Questa è la ricevuta di ritorno del messaggio inviato';
@@ -200,14 +205,44 @@ $labels['receiptnote'] = 'Nota: questa Ricevuta di ritorno attesta solamente che
 $labels['name'] = 'Nome visualizzato';
 $labels['firstname'] = 'Nome';
 $labels['surname'] = 'Cognome';
+$labels['middlename'] = 'Secondo nome';
+$labels['nameprefix'] = 'Prefisso';
+$labels['namesuffix'] = 'Suffisso';
+$labels['nickname'] = 'Soprannome';
+$labels['jobtitle'] = 'Titolo';
+$labels['department'] = 'Dipartimento';
+$labels['gender'] = 'Sesso';
+$labels['maidenname'] = 'Cognome da nubile';
 $labels['email'] = 'E-Mail';
+$labels['phone'] = 'Telefono';
+$labels['address'] = 'Indirizzo';
+$labels['street'] = 'Via';
+$labels['locality'] = 'Città';
+$labels['zipcode'] = 'CAP';
+$labels['region'] = 'Regione';
+$labels['country'] = 'Stato';
+$labels['birthday'] = 'Compleanno';
+$labels['anniversary'] = 'Anniversario';
+$labels['website'] = 'Sito web';
+$labels['instantmessenger'] = 'IM';
+$labels['notes'] = 'Note';
+$labels['male'] = 'maschio';
+$labels['female'] = 'femmina';
+$labels['manager'] = 'Manager';
+$labels['assistant'] = 'Assistente';
+$labels['spouse'] = 'Coniuge';
+$labels['addfield'] = 'Aggiungi campo...';
 $labels['addcontact'] = 'Aggiungi contatto alla rubrica';
 $labels['editcontact'] = 'Modifica contatto';
 $labels['contacts'] = 'Contatti';
+$labels['contactproperties'] = 'Proprietà contatto';
 $labels['edit'] = 'Modifica';
 $labels['cancel'] = 'Annulla';
 $labels['save'] = 'Salva';
 $labels['delete'] = 'Elimina';
+$labels['rename'] = 'Rinomina';
+$labels['addphoto'] = 'Aggiungi';
+$labels['replacephoto'] = 'Sostituisci';
 $labels['newcontact'] = 'Crea un nuovo contatto';
 $labels['deletecontact'] = 'Elimina i contatti selezionati';
 $labels['composeto'] = 'Invia email a';
@@ -249,8 +284,9 @@ $labels['language'] = 'Lingua';
 $labels['timezone'] = 'Fuso orario';
 $labels['pagesize'] = 'Righe per pagina';
 $labels['signature'] = 'Firma';
-$labels['dstactive'] = 'Gestione ora legale / ora solare';
+$labels['dstactive'] = 'Gestione ora legale';
 $labels['htmleditor'] = 'Scrivi i messaggi in HTML';
+$labels['htmlonreply'] = 'solo in risposta a messaggi HTML';
 $labels['htmlsignature'] = 'Firma in HTML';
 $labels['previewpane'] = 'Mostra l\'anteprima';
 $labels['skin'] = 'Tema interfaccia';
@@ -259,9 +295,11 @@ $labels['logoutcompact'] = 'Compatta la Posta In Arrivo all\'uscita';
 $labels['uisettings'] = 'Interfaccia Utente';
 $labels['serversettings'] = 'Impostazioni Server';
 $labels['mailboxview'] = 'Vista Messaggi';
-$labels['mdnrequests'] = 'Notifiche di lettura';
-$labels['askuser'] = 'chiedi all\'utente';
-$labels['autosend'] = 'invia automaticamente';
+$labels['mdnrequests'] = 'Su richiesta per la ricevuta di ritorno';
+$labels['askuser'] = 'chiedi conferma';
+$labels['autosend'] = 'invia';
+$labels['autosendknown'] = 'invia notifica ai miei contatti, altrimenti chiedi conferma';
+$labels['autosendknownignore'] = 'invia notifica ai miei contatti, altrimenti ignora';
 $labels['ignore'] = 'ignora';
 $labels['readwhendeleted'] = 'Marca il messaggio come letto prima di eliminarlo';
 $labels['flagfordeletion'] = 'Marca il messaggio come eliminato invece di eliminarlo';
@@ -306,6 +344,9 @@ $labels['abovequote'] = 'sopra la citazione';
 $labels['insertsignature'] = 'Inserisci firma';
 $labels['previewpanemarkread'] = 'Segna i messagi in anteprima come letti';
 $labels['afternseconds'] = 'dopo $n secondi';
+$labels['reqmdn'] = 'Richiedi sempre la ricevuta di ritorno';
+$labels['reqdsn'] = 'Richiedi sempre la notifica di consegna';
+$labels['replysamefolder'] = 'Salva risposta nella cartella del messaggio a cui si risponde';
 $labels['folder'] = 'Cartella';
 $labels['folders'] = 'Cartelle';
 $labels['foldername'] = 'Nome cartella';
@@ -313,11 +354,15 @@ $labels['subscribed'] = 'Sottoscritta';
 $labels['messagecount'] = 'Messaggi';
 $labels['create'] = 'Crea';
 $labels['createfolder'] = 'Crea nuova cartella';
-$labels['rename'] = 'Rinomina';
-$labels['renamefolder'] = 'Rinomina cartella';
-$labels['deletefolder'] = 'Cancella cartella';
 $labels['managefolders'] = 'Gestione cartelle';
 $labels['specialfolders'] = 'Cartelle Speciali';
+$labels['properties'] = 'Proprietà';
+$labels['folderproperties'] = 'Proprietà cartella';
+$labels['parentfolder'] = 'Cartella padre';
+$labels['location'] = 'Ubicazione';
+$labels['info'] = 'Informazioni';
+$labels['getfoldersize'] = 'Click per la dimensione della cartella';
+$labels['changesubscription'] = 'Click per cambiare sottoscrizione';
 $labels['sortby'] = 'Ordina per';
 $labels['sortasc'] = 'Ordinamento crescente';
 $labels['sortdesc'] = 'Ordinamento decrescente';
@@ -345,3 +390,5 @@ $labels['korean'] = 'Coreano';
 $labels['chinese'] = 'Cinese';
 
 ?>
+
+

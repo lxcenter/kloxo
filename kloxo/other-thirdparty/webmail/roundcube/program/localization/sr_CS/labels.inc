@@ -13,7 +13,7 @@
  | Author: Branko Kokanovic <branko.kokanovic@gmail.com                  |
  +-----------------------------------------------------------------------+
 
- @version $Id: labels.inc 3989 2010-09-25 13:03:53Z alec $
+ @version $Id: labels.inc 4345 2010-12-17 14:28:38Z thomasb $
 
 */
 
@@ -180,9 +180,6 @@ $labels['subscribed'] = 'Потписана';
 $labels['messagecount'] = 'Поруке';
 $labels['create'] = 'Креирај';
 $labels['createfolder'] = 'Креирај нову фасциклу';
-$labels['rename'] = 'Преименуј';
-$labels['renamefolder'] = 'Преименуј фасциклу';
-$labels['deletefolder'] = 'Обриши фасциклу';
 $labels['managefolders'] = 'Подеси фасциклу';
 $labels['sortby'] = 'Сортирај по';
 $labels['sortasc'] = 'Сортирај растуће';
