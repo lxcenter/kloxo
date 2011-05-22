@@ -627,18 +627,41 @@ function slave_get_driver($class)
 function PrepareRoundCubeDb()
 {
 //  Related to issue #421
+
 	global $gbl, $sgbl, $login, $ghtml;
 	$pass = slave_get_db_pass();
-	$pstring = null;
-	if ($pass) { $pstring = "-p\"$pass\""; }
 	$user = "root";
 	$host = "localhost";
 	$link = mysql_connect($host, $user, $pass);
+	if (!$link) {
+	print("Mysql root password error\n");
+	exit;
+	}
+		$pstring = null;
+		if ($pass) {
+			$pstring = "-p\"$pass\"";
+		}
 	$result = mysql_select_db('roundcubemail', $link);
-	if ($result) { return; }
-	mysql_query("CREATE DATABASE `roundcubemail`", $link);
-	system("mysql -u root $pstring roundcubemail < /home/kloxo/httpd/webmail/roundcube/SQL/mysql.initial.sql");
-	system("mysql -u root $pstring roundcubemail < /home/kloxo/httpd/webmail/roundcube/SQL/mysql.update.sql");
+	if (!$result) {
+		print("Something went wrong, can not select RoundCube database!\n");
+		print("Try to fix database...\n");
+		$result = mysql_query("DROP DATABASE `roundcubemail`", $link);
+		$result = mysql_query("CREATE DATABASE `roundcubemail`", $link);
+		if (!$result) {
+			print("There is REALY something very very wrong... Go to http://forum.lxcenter.org/ and report.\n\n");
+			exit;
+		}
+
+		system("mysql -u root $pstring roundcubemail < /home/kloxo/httpd/webmail/roundcube/SQL/mysql.initial.sql");
+		system("mysql -u root $pstring roundcubemail < /home/kloxo/httpd/webmail/roundcube/SQL/mysql.update.sql");
+
+		$result = mysql_select_db('roundcubemail', $link);
+		if (!$result) {
+			print("Something REALY went wrong, can not create RoundCube database!\n");
+			exit;
+		}
+	}
+
 	$pass = randomString(8);
 	$roundcubefileIN = "/usr/local/lxlabs/kloxo/file/webmail-chooser/db.inc.phps";
 	$roundcubefileOUT = "/home/kloxo/httpd/webmail/roundcube/config/db.inc.php";
@@ -646,8 +669,16 @@ function PrepareRoundCubeDb()
 	$content = str_replace("mysql://roundcube:pass", "mysql://roundcube:" . $pass, $content);
 	system("chattr -i /home/kloxo/httpd/webmail/roundcube/config/db.inc.php");
 	lfile_put_contents($roundcubefileOUT, $content);
-	mysql_query("GRANT ALL ON roundcubemail.* TO roundcube@localhost IDENTIFIED BY '$pass'", $link);
+
+	$result = mysql_query("GRANT ALL ON roundcubemail.* TO roundcube@localhost IDENTIFIED BY '$pass'", $link);
 	mysql_query("flush privileges", $link);
+	if (!$result) {
+		print("Could not grant privileges\nScript Abort.\n");
+		exit;
+	}
+	print("RoundCube Database installed.\n");
+	$pass = null;
+	$pstring = null;
 }
 
 
