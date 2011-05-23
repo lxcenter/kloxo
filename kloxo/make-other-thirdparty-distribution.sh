@@ -64,17 +64,17 @@
         
 	echo "## Zend 32";
 	cd ./other-thirdparty/zend-32
-	tar cvf ../../kloxophp$kloxophp.tar.gz \
+	tar cvfz ../../kloxophp$kloxophp.tar.gz \
        	. \
-	--exclude="*/CVS/*" \
-	--exclude="*/.svn/*"
+	--exclude="CVS" \
+	--exclude=".svn"
 
 	echo "## Ioncube 32";
 	cd ../ioncube-32
-	tar rvf ../../kloxophp$kloxophp.tar.gz \
+	tar rvfz ../../kloxophp$kloxophp.tar.gz \
        	. \
-	--exclude="*/CVS/*" \
-	--exclude="*/.svn/*"
+	--exclude="CVS" \
+	--exclude=".svn"
 
         echo "### Packaging version: kloxophpsixfour$kloxophpsixfour.tar.gz"
         rm -f kloxophpsixfour$kloxophpsixfour.tar.gz
@@ -82,17 +82,17 @@
 
         echo "## Zend 64";
         cd ../zend-64
-        tar cvf ../../kloxophpsixfour$kloxophpsixfour.tar.gz \
+        tar cvfz ../../kloxophpsixfour$kloxophpsixfour.tar.gz \
         . \
-        --exclude="*/CVS/*" \
-        --exclude="*/.svn/*"
+        --exclude="CVS" \
+        --exclude=".svn"
 
         echo "## Ioncube 64";
         cd ../ioncube-64
-        tar rvf ../../kloxophpsixfour$kloxophpsixfour.tar.gz \
+        tar rvfz ../../kloxophpsixfour$kloxophpsixfour.tar.gz \
         . \
-        --exclude="*/CVS/*" \
-        --exclude="*/.svn/*"
+        --exclude="CVS" \
+        --exclude=".svn"
 
         echo "### Packaging version: lxwebmail$lxwebmail.tar.gz"
         rm -f lxwebmail$lxwebmail.tar.gz
@@ -100,17 +100,17 @@
 
         echo "## Webmail apps";
         cd ../webmail
-        tar cvf ../../lxwebmail$lxwebmail.tar.gz \
+        tar cvfz ../../lxwebmail$lxwebmail.tar.gz \
         . \
-        --exclude="*/CVS/*" \
-        --exclude="*/.svn/*"
+        --exclude="CVS" \
+        --exclude=".svn"
 
         echo "## Awstats";
         cd ../awstats
-        tar cvf ../../lxawstats$lxawstats.tar.gz \
+        tar cvfz ../../lxawstats$lxawstats.tar.gz \
         . \
-        --exclude="*/CVS/*" \
-        --exclude="*/.svn/*"
+        --exclude="CVS" \
+        --exclude=".svn"
 
         cd ../../
 
