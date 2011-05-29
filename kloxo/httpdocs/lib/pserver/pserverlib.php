@@ -124,20 +124,22 @@ function createUsedDomainList()
 
 function getMysqlDbAdmin(&$alist)
 {
+	global $gbl, $sgbl, $login, $ghtml;
+
+	$sslport = $sgbl->__var_prog_port;
+	$normalport = $sgbl->__var_prog_ssl_port;
 
 	if (!$this->isLocalhost('nname')) {
 		$fqdn = getFQDNforServer($this->nname);
-		// TODO: get user defined port numbers instead of static ones.
 		if (http_is_self_ssl()) {
-			$dbadminUrl =  "https://$fqdn:7777/thirdparty/phpMyAdmin/";
+			$dbadminUrl =  "https://$fqdn:$sslport/thirdparty/phpMyAdmin/";
 		} else {
-			$dbadminUrl = "http://$fqdn:7778/thirdparty/phpMyAdmin/";
+			$dbadminUrl = "http://$fqdn:$normalport/thirdparty/phpMyAdmin/";
 		}
 
 	} else {
 		$dbadminUrl =  "/thirdparty/phpMyAdmin/";
 	}
-	//$pass = urlencode($pass);
 
 	$server = $_SERVER['SERVER_NAME'];
 	if (csa($server, ":")) {
