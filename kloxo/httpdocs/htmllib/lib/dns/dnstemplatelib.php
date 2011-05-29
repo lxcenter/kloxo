@@ -50,7 +50,7 @@ function createUsed()
 	}
 
 	$db = new Sqlite($this->__masterserver, 'domaintemplate');
-	$res = $db->getRowsWhere('dnstemplate = :nname', array(':nname' => $this->nname));
+	$res = $db->getRowsWhere("dnstemplate = '$this->nname'");
 	if ($res) {
 		$this->used_f = 'on';
 	} else {
@@ -102,6 +102,14 @@ static function addform($parent, $class, $typetd = null)
 	$vlist['mmailipaddress'] = array('s', $res);
 	$vlist['nameserver_f'] = null;
 	$vlist['secnameserver_f'] = null;
+	
+	// 2010-06-08 LN: New values for SOA
+	$vlist['email'] = null;
+	$vlist['refresh'] = null;
+	$vlist['retry'] = null;
+	$vlist['expire'] = null;
+	$vlist['minimum'] = null;
+	
 	$ret['action'] = 'add';
 	$ret['variable'] = $vlist;
 	return $ret;
