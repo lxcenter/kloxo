@@ -127,7 +127,7 @@ function getMysqlDbAdmin(&$alist)
 
 	if (!$this->isLocalhost('nname')) {
 		$fqdn = getFQDNforServer($this->nname);
-		//$dbadminUrl =  "http://$fqdn:7778/thirdparty/phpMyAdmin/";
+		// TODO: get user defined port numbers instead of static ones.
 		if (http_is_self_ssl()) {
 			$dbadminUrl =  "https://$fqdn:7777/thirdparty/phpMyAdmin/";
 		} else {
@@ -161,7 +161,6 @@ function getMysqlDbAdmin(&$alist)
 
 function createShowPropertyList(&$alist)
 {
-	//$alist['property'][] = "o=sp_specialplay&a=updateForm&sa=skin";
 	$alist['property'][] = 'a=show';
 	$alist['property'][] = "a=updateform&sa=information";
 	if ($this->nname !== 'localhost') {
@@ -176,8 +175,8 @@ function createShowAlist(&$alist, $subaction = null)
 {
         global $gbl, $sgbl, $login, $ghtml;
 
-// LxCenter:
-// No menu structures for Domain and Advanced here?
+// TODO: LxCenter:
+// TODO: No menu structures for Domain and Advanced here?
 //
 
         $alist['__title_security'] = "Security";
