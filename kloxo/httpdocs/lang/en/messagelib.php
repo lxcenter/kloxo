@@ -102,6 +102,9 @@ $__information['vv_dns_txt_message'] = "Use &lt;%domain&gt; if you want the doma
 $__information['vv_dns_cname_message'] = "Here you can manage the CNAME record.";
 $__information['vv_dns_fcname_message'] = "Here you can manage the FCNAME record. [b]FCNAME[/b] stands for full cname and will allow you to point a subdomain to an external domain.";
 $__information['vv_dns_a_message'] = "Here you can manage the A record. Enter '__base__', if you want to get the base domain.";
+$__information['vv_dns_soa_message'] = "Here you can manage the SOA record.";
+$__information['vv_dns_rebuild_message'] = "Here you can rebuild your domain zone from a DNS Template.";
+
 // Changed Kloxo Version 6.1.6
 $__information['vv_dns_blank_message'] = "<p>DNS Manager</p>";
 

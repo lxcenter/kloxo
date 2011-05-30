@@ -521,7 +521,7 @@ function updateform($subaction, $param)
 			$vlist['retry'] = null;
 			$vlist['expire'] = null;
 			$vlist['minimum'] = null;
-			
+			$vlist['__m_message_pre'] = 'vv_dns_soa_message';
 			return $vlist;
 
 		case "switchdnsserver":
@@ -532,10 +532,10 @@ function updateform($subaction, $param)
 		case "rebuild":
 			$vlist['newdnstemplate_f'] = array('s', domainbase::getDnsTemplateList($login));
 			$vlist['__v_updateall_button'] = array();
+			$vlist['__m_message_pre'] = 'vv_dns_rebuild_message';
 			return $vlist;
 
 	}
-
 	return parent::updateform($subaction, $param);
 
 }
