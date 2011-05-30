@@ -99,6 +99,22 @@ function updatecleanup()
 
 	log_cleanup("Initialize phpMyAdmin configfile");
 	lxfile_cp("../file/phpmyadmin_config.inc.phps", "thirdparty/phpMyAdmin/config.inc.php");
+
+	log_cleanup("- phpMyAdmin: Set db password in configfile");
+	$DbPass = file_get_contents("/usr/local/lxlabs/kloxo/etc/conf/kloxo.pass");
+	$phpMyAdminCfg = "/usr/local/lxlabs/kloxo/httpdocs/thirdparty/phpMyAdmin/config.inc.php";
+	$content = file_get_contents($phpMyAdminCfg);
+	$content = str_replace("# Kloxo-Marker", "# Kloxo-Marker\n\$cfg['Servers'][\$i]['controlpass'] = '" . $DbPass . "';", $content);
+	lfile_put_contents($phpMyAdminCfg, $content);
+	$DbPass = "";
+
+// TODO: Need another way to do this (use root pass)
+/*
+	log_cleanup("- phpMyAdmin: Import PMA Database and create tables if they do not exist");
+	system("kloxodb < ../httpdocs/sql/phpMyAdmin/phpMyAdmin.sql");
+*/
+	
+
 	call_with_flag('installgroupwareagain');
 
 	log_cleanup("Initialize OS admin account description");
@@ -464,6 +480,11 @@ function updatecleanup()
 
 	log_cleanup("- Initialize awstats dirdata ...");
 	lxfile_mkdir("/home/kloxo/httpd/awstats/dirdata");
+
+	if (!lxfile_exists("/etc/logrotate.d/kloxo")) {
+		log_cleanup("- Install Kloxo Log rotate file...");
+		lxfile_cp("../file/kloxo.logrotate", "/etc/logrotate.d/kloxo");
+	}
 
 	log_cleanup("Install RoundCube");
 	installRoundCube();
