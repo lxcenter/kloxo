@@ -25,7 +25,7 @@ static $__desc_enable_dl_flag = array("f", "" , "enable_dl");
 static $__desc_sendmail_from = array("", "" , "sendmail_from");
 static $__desc_cgi_force_redirect_flag = array("f", "" , "cgi_force_redirect");
 static $__desc_mysql_allow_persistent_flag = array("f", "" , "mysql_allow_persistent_flag");
-static $__desc_disable_functions_flag = array("", "" , "disable_functions" , "Mail Account");
+static $__desc_disable_functions = array("", "" , "disable_functions" );
 static $__desc_max_execution_time_flag = array("", "" , "max_execution_time");
 static $__desc_max_input_time_flag = array("", "" , "max_input_time");
 static $__desc_memory_limit_flag = array("", "" , "memory_limit");
@@ -81,6 +81,7 @@ function getLocalList()
 
 function getExtraList()
 {
+	global $login;
 	$list[] = 'sendmail_from';
 	$list[] = 'enable_dl_flag' ;
 	$list[] = 'output_buffering_flag' ;
@@ -90,12 +91,14 @@ function getExtraList()
 	$list[] = 'register_argc_argv_flag' ;
 	$list[] = 'magic_quotes_gpc_flag' ;
 	$list[] = 'mysql_allow_persistent_flag' ;
-	//$list[] = 'disable_functions_flag'; 
-	$list[] = 'max_execution_time_flag'; 
-	$list[] = 'max_input_time_flag'; 
-	$list[] = 'memory_limit_flag'; 
-	$list[] = 'post_max_size_flag'; 
-	$list[] = "upload_max_filesize";
+    if ($login->isAdmin()) {
+		$list[] = 'disable_functions';
+		$list[] = 'max_execution_time_flag';
+		$list[] = 'max_input_time_flag';
+		$list[] = 'memory_limit_flag';
+		$list[] = 'post_max_size_flag';
+		$list[] = "upload_max_filesize";
+	}
 	$list[] = 'file_uploads_flag' ;
 	$list[] = 'magic_quotes_runtime_flag' ;
 	$list[] = 'magic_quotes_sybase_flag' ;
@@ -217,7 +220,8 @@ function setUpINitialValues()
 	$this->initialValue('register_global_flag', 'off');
 	$this->initialValue('mysql_allow_persistent_flag', 'off');
 	$this->initialValue('session_save_path_flag', '/var/lib/php/session');
-	$this->initialValue('disable_functions_flag', '');
+	$this->initialValue('disable_functions', 'exec,passthru,shell_exec,system,proc_open,popen,curl_exec,curl_multi_exec,parse_ini_file,show_source
+');
 	$this->initialValue('max_execution_time_flag', '30');
 	$this->initialValue('max_input_time_flag', '60');
 	$this->initialValue('memory_limit_flag', '32M');
