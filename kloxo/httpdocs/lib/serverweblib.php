@@ -8,30 +8,29 @@ static $__desc_php_type = array("", "",  "php_type");
 static $__acdesc_update_edit = array("", "",  "config");
 static $__acdesc_show = array("", "",  "webserver_config");
 
-
 function createShowUpdateform()
 {
-	$uflist['edit'] = null;
-	return $uflist;
+    $uflist['edit'] = null;
+    return $uflist;
 }
 
 function updateform($subaction, $param)
 {
-	global $gbl, $sgbl, $login, $ghtml; 
-	$driverapp = $gbl->getSyncClass(null, 'localhost', 'serverweb');
-	if ($driverapp === 'lighttpd') {
-		$vlist['php_type'] = array('M', "Cgi-fastcgi");
-		$vlist['__v_button'] = array();
-		return $vlist;
-	}
-	$vlist['php_type'] = array('s', array('suphp', 'mod_php'));
-	return $vlist;
+    global $gbl, $sgbl, $login, $ghtml; 
+    $driverapp = $gbl->getSyncClass(null, 'localhost', 'serverweb');
+    if ($driverapp === 'lighttpd') {
+        $vlist['php_type'] = array('M', "Cgi-fastcgi");
+        $vlist['__v_button'] = array();
+        return $vlist;
+    }
+    // suphp_event_test become suphp_event if status on apache.org no longer as 'experimental'
+    $vlist['php_type'] = array('s', array('suphp', 'suphp_worker', 'suphp_event_test', 'mod_php'));
+    return $vlist;
 }
 
 static function initThisObjectRule($parent, $class, $name = null) 
 { 
-	return $parent->getClName();
+    return $parent->getClName();
 }
-
 
 }

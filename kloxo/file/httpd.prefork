@@ -1,0 +1,7 @@
+HTTPD=/usr/sbin/httpd
+#HTTPD=/usr/sbin/httpd.worker
+#HTTPD=/usr/sbin/httpd.event
+#HTTPD=/usr/sbin/httpd.itk
+
+#OPTIONS=
+#HTTPD_LANG=C
