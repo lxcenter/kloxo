@@ -694,12 +694,17 @@ function getDirprotectCore($authname, $path, $file)
 
 function getSuexecString($username)
 {
-	$string = null;
+	$string = "\n";
+	// --- mod_suexec - begin
 	$string .= "<IfModule suexec.c>\n";
-	$string .= "SuexecUserGroup     {$this->main->username}  {$this->main->username}\n";
+	$string .= "SuexecUserGroup {$this->main->username} {$this->main->username}\n";
 	$string .= "</IfModule>\n\n";
+	// --- mod_suexec - end
 
-	$string .= "\n<IfModule mod_suphp.c>\n";
+	// --- mod_suphp - begin
+	$string .= "<IfModule mod_suphp.c>\n";
+
+/* --- too much code and overlap with suphp.conf (http://project.lxcenter.org/issues/563)
 	$string .= "AddType application/x-httpd-php .php\n";
 	$string .= "RemoveHandler .php\n";
 	$string .= "<FilesMatch \"\.php$\" >\n";
@@ -708,8 +713,27 @@ function getSuexecString($username)
 	$string .= "<Location />\n";
 	$string .= "suPHP_AddHandler x-httpd-php \n";
 	$string .= "</Location>\n";
-	$string .= "SuPhp_UserGroup     {$this->main->username}  {$this->main->username}\n";
-	$string .= "</IfModule>\n\n\n";
+--- */
+
+	$string .= "SuPhp_UserGroup {$this->main->username} {$this->main->username}\n";
+	$string .= "</IfModule>\n\n";
+	// --- mod_suphp - end
+
+	// --- mod_ruid2 - begin - http://project.lxcenter.org/issues/566
+	$string .= "<IfModule mod_ruid2.c>\n";
+	$string .= "RMode config\n";
+	$string .= "RUidGid {$this->main->username} {$this->main->username}\n";
+	$string .= "RMinUidGid {$this->main->username} {$this->main->username}\n";
+	$string .= "RGroups {$this->main->username}\n";
+	$string .= "</IfModule>\n\n";
+	// --- mod_ruid2 - end
+
+	// --- httpd-itk - begin - http://project.lxcenter.org/issues/567
+	$string .= "<IfModule itk.c>\n";
+	$string .= "AssignUserId {$this->main->username} {$this->main->username}\n";
+	$string .= "</IfModule>\n\n";
+	// --- httpd-itk - end
+
 	return $string;
 }
 
