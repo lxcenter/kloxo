@@ -4,6 +4,8 @@ class serverweb__apache extends lxDriverClass {
 
 function dbactionUpdate($subaction)
 {
+    // issue 571 - add httpd-worker and httpd-event for suphp
+	
     lxshell_return("service", "httpd", "stop");
 
     if ($this->main->php_type === 'mod_php') {
@@ -30,7 +32,11 @@ function dbactionUpdate($subaction)
 
     lxfile_cp("../file/mpm.conf", "/etc/httpd/conf.d/mpm.conf");
 
-//    createRestartFile("httpd");
+    # Fixed issue #515 - returned due to accidentally deleted
+    lxfile_generic_chmod("/home/admin", "0770");
+
+//  change to stop and restart because problem if choose htttp-worker and httpd-event
+//  createRestartFile("httpd");
 
     lxshell_return("service", "httpd", "start");
 }
