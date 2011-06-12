@@ -79,6 +79,14 @@ function isSelect()
 
 static function add($parent, $class, $param)
 {
+	if (!preg_match("/^[^\W][0-9a-zA-Z-._]+[^\W]$/", $param['nname'])) {
+			throw new lxexception('invalid_char_in_template_name', 'nname');
+	}
+
+	if (strlen($param['nname']) > 60) {
+		throw new lxException('template_name_over_char_limit', 'nname');
+	}
+
 	$param['nname'] = "{$param['nname']}.dnst";
 	$param['shared'] = 'on';
 	return $param;

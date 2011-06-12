@@ -77,26 +77,75 @@ function display($var)
 			}
 		}
 	}
-		
-
-
 	return $this->$var;
 }
 
 static function add($parent, $class, $param)
 {
 	if ($param['ttype'] === 'mx') {
+		// Validates domain
+		if (!preg_match('/^([a-z0-9]([a-z0-9-]{0,61}[a-z0-9])?\.)+(([a-z]{2,6})|(xn--[a-z0-9]{4,14}))$/i', $param['param'])) {
+			throw new lxexception('invalid_domain', 'param');
+		}
 		$param['nname'] = "{$param['ttype']}_{$param['priority']}";
 		$param['hostname'] = $parent->nname;
-	} else if ($param['ttype'] === 'ns') {
+	}
+
+	else if ($param['ttype'] === 'ns') {
+		// Validates domain
+		if (!preg_match('/^([a-z0-9]([a-z0-9-]{0,61}[a-z0-9])?\.)+(([a-z]{2,6})|(xn--[a-z0-9]{4,14}))$/i', $param['param'])) {
+			throw new lxexception('invalid_domain', 'param');
+		}
 		$param['nname'] = "{$param['ttype']}_{$param['param']}";
-	} else if ($param['ttype'] === 'a' || $param['ttype'] === 'aaaa') {
+	}
+
+	else if ($param['ttype'] === 'a' || $param['ttype'] === 'aaaa') {
+		// Validates subdomain
+		if (!preg_match("/^[^\W][0-9a-zA-Z-.]+[^\W]$/", $param['hostname'])) {
+			throw new lxexception('invalid_subdomain', 'hostname');
+		}
+		// Validates both ipv4 and ipv6
+		if (!preg_match('/^(?:(?>(?>([a-f0-9]{1,4})(?>:(?1)){7})|(?>(?!(?:.*[a-f0-9](?>:|$)){8,})((?1)(?>:(?1)){0,6})?::(?2)?))|(?>(?>(?>(?1)(?>:(?1)){5}:)|(?>(?!(?:.*[a-f0-9]:){6,})((?1)(?>:(?1)){0,4})?::(?>(?3):)?))?(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])(?>\.(?4)){3}))$/iD', $param['param'])) {
+			throw new lxexception('invalid_ip_address', 'param');
+		}
 		$param['nname'] = "{$param['ttype']}_{$param['hostname']}_{$param['param']}";
-	} else {
+	}
+
+	else if ($param['ttype'] === 'cname') {
+		// Validates hostname subdomain
+		if (!preg_match("/^[^\W][0-9a-zA-Z-.]+[^\W]$/", $param['hostname'])) {
+			throw new lxexception('invalid_subdomain', 'hostname');
+		}
+		// Validates value subdomain
+		if (!preg_match("/^[^\W][0-9a-zA-Z-.]+[^\W]$/", $param['param'])) {
+			throw new lxexception('invalid_subdomain', 'param');
+		}
 		$param['nname'] = "{$param['ttype']}_{$param['hostname']}";
 	}
 
+	else if ($param['ttype'] === 'fcname') {
+		// Validates hostname subdomain
+		if (!preg_match("/^[^\W][0-9a-zA-Z-.]+[^\W]$/", $param['hostname'])) {
+			throw new lxexception('invalid_subdomain', 'hostname');
+		}
+		// Validates value domain
+		if (!preg_match('/^([a-z0-9]([a-z0-9-]{0,61}[a-z0-9])?\.)+(([a-z]{2,6})|(xn--[a-z0-9]{4,14}))$/i', $param['param'])) {
+			throw new lxexception('invalid_domain', 'param');
+		}
+		$param['nname'] = "{$param['ttype']}_{$param['hostname']}";
+	}
 
+	else if ($param['ttype'] === 'txt') {
+		// Validates hostname subdomain
+		if (!preg_match("/^[^\W][0-9a-zA-Z-.]+[^\W]$/", $param['hostname'])) {
+			throw new lxexception('invalid_subdomain', 'hostname');
+		}
+		$param['nname'] = "{$param['ttype']}_{$param['hostname']}";
+	}
+
+	else {
+		$param['nname'] = "{$param['ttype']}_{$param['hostname']}";
+	}
 
 	return $param;
 }
@@ -162,8 +211,15 @@ static $__acdesc_update_rebuild = array("", "",  "rebuild");
 function createDefaultTemplate($webipaddress, $mmailipaddress = "0.0.0.0.0", $nameserver =  "defaultnameserver", $secnamserver = null)
 {
 	$this->ttl = "86000";
+	if (!preg_match('/^([a-z0-9]([a-z0-9-]{0,61}[a-z0-9])?\.)+(([a-z]{2,6})|(xn--[a-z0-9]{4,14}))$/i', $nameserver)) {
+		throw new lxexception('invalid_domain_in_primary_ns', 'nameserver_f');
+	}
 	$this->addRec('ns', $nameserver, $nameserver);
+
 	if ($secnamserver) {
+		if (!preg_match('/^([a-z0-9]([a-z0-9-]{0,61}[a-z0-9])?\.)+(([a-z]{2,6})|(xn--[a-z0-9]{4,14}))$/i', $secnamserver )) {
+			throw new lxexception('invalid_domain_in_secondary_ns', 'secnameserver_f');
+		}
 		$this->addRec('ns', $secnamserver, $secnamserver);
 	}
 
@@ -306,9 +362,6 @@ function postAdd()
 {
 	$this->createDefaultTemplate($this->webipaddress, $this->mmailipaddress, $this->nameserver_f, $this->secnameserver_f);
 }
-
-
-
 
 function createShowClist($subaction)
 {
