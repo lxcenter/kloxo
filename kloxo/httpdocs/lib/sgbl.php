@@ -26,7 +26,7 @@ class Sgbl
 		// Kloxo version number
 		$this->__ver_major = "6";
 		$this->__ver_minor = "1";
-		$this->__ver_release = "5";
+		$this->__ver_release = "6";
 
 		$this->__ver_enterprise = "Single Server Edition";
 		$this->__ver_type = "production";

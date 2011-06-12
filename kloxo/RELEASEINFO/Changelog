@@ -1,5 +1,21 @@
 Changelog
 
+Kloxo 6.1.6 - 12-june-2011
+##################################
+Bug #245: NameVirtualHost has no VirtualHosts
+Bug #497: Users can do too much in DNS config
+Bug #512: Ezmlm stilll active when choose Remote Mail
+Bug #516: Using suphp gives 500 internal server error (Apache)
+Bug #518: EN language shows english messages not from lang dir
+Bug #519: Spamdyke On Additional Smtp Port affects also primary port
+Bug #529: Horde does not log-out
+Bug #554: Spamassassin - wrong user_prefs
+Feature #5: Change php sendmail to indicate source domain
+Security #15: Passwords in plain text in shell_exec
+Security #435: Critical PHP security bug (disable_functions configuration in php.ini)
+Security #541: Update Roundcube to 0.5.2
+ToDo #483: Add help/help-base etc. to translations
+
 Kloxo 6.1.5 - 10-may-2011
 ##################################
 Bug #37: Call domain.tld/stats
