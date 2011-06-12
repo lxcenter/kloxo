@@ -29,13 +29,16 @@ function dbactionUpdate($subaction)
             lxfile_cp("../file/httpd.prefork", "/etc/sysconfig/httpd");
         }
     }
-
-    lxfile_cp("../file/mpm.conf", "/etc/httpd/conf.d/mpm.conf");
+	
+	// no overwrite while exist so mpm.conf can use as 'user-defined' config
+	if (!file_exists("/etc/httpd/conf.d/mpm.conf")) {
+        lxfile_cp("../file/mpm.conf", "/etc/httpd/conf.d/mpm.conf");
+	}
 
     # Fixed issue #515 - returned due to accidentally deleted
     lxfile_generic_chmod("/home/admin", "0770");
 
-//  change to stop and restart because problem if choose htttp-worker and httpd-event
+//  change to 'stop' and 'start' because problem if choose htttp-worker and httpd-event
 //  createRestartFile("httpd");
 
     lxshell_return("service", "httpd", "start");
