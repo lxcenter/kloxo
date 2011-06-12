@@ -51,7 +51,7 @@ function updateMainConfFile()
 	foreach($iplist as $ipaddr){
 		$ip = trim($ipaddr['ipaddr']);
 		if ($ip) {
-			$fdata .= "NameVirtualHost {$ip}:80\n\n";
+			$fdata .= "NameVirtualHost {$ip}:80\n";
 			$fdata .= "NameVirtualHost {$ip}:443\n\n";
 		}
 	}
@@ -59,7 +59,7 @@ function updateMainConfFile()
 
 
 	lfile_put_contents($init_file, $fdata);
-    $fdata = null;
+	$fdata = null;
 
 	$vdomlist = merge_array_object_not_deleted($vdomlist, $this->main);
 
@@ -124,13 +124,13 @@ function createVirtualHostiplist($port)
 	if ($this->getServerIp()) {
 		foreach($this->main->__var_domainipaddress as $ip => $dom) {
 			if ($this->main->nname !== $dom) { continue; }
-			$string .= "          {$ip}:{$port}\\\n";
+			$string .= "    "."{$ip}:{$port}\\\n";
 		}
 		return $string;
 	}
 	$iplist = os_get_allips();
 	foreach($iplist as $ip) {
-		$string .= "          {$ip}:{$port}\\\n";
+		$string .= "    "."{$ip}:{$port}\\\n";
 	}
 	return $string;
 }
@@ -140,23 +140,25 @@ static function staticcreateVirtualHostiplist($port)
 	$string = "";
 	$iplist = os_get_allips();
 	foreach($iplist as $ip) {
-		$string .= "          {$ip}:{$port}\\\n";
+		$string .= "    "."{$ip}:{$port}\\\n";
 	}
 	return $string;
 }
 
 function addSendmail()
 {
-	$sendmailstring = "php_admin_value sendmail_path  \"/usr/sbin/sendmail -t -i -f postmaster@{$this->main->nname}\"\n";
-	$string  = "\n\n<IfModule sapi_apache2.c>\n";
+	// enabled (rev 461)
+//	return null;
 
-	$string .= $sendmailstring;
-	$string .= "</IfModule>\n\n";
+	$sendmailstring = "php_admin_value sendmail_path \"/usr/sbin/sendmail -t -i -f emailcop@{$this->main->nname}\"\n";
 
-	$string  = "\n\n<IfModule mod_php5.c>\n";
-	$string .= $sendmailstring;
+	$string  = "    "."<IfModule sapi_apache2.c>\n";
+	$string .= "    "."    ".$sendmailstring;
+	$string .= "    "."</IfModule>\n\n";
 
-	$string .= "</IfModule>\n\n";
+	$string  = "    "."<IfModule mod_php5.c>\n";
+	$string .= "    "."    ".$sendmailstring;
+	$string .= "    "."</IfModule>\n\n";
 	return $string;
 }
 
@@ -177,17 +179,17 @@ function AddOpenBaseDir()
 
 	$path = "{$sgbl->__path_httpd_root}/{$this->main->nname}/httpdocs:{$sgbl->__path_httpd_root}/{$this->main->nname}/{$this->main->nname}:$corepath";
 
-	$openbasdstring = "php_admin_value open_basedir \"{$path}:{$adminbasedir}/tmp:/usr/share/pear:/var/lib/php/session/:/home/kloxo/httpd/script:/home/kloxo/httpd/webmail\"\n";
+	$openbasdstring = "php_admin_value open_basedir \"{$path}:{$adminbasedir}/tmp:/usr/share/pear:/var/lib/php/session/:/home/kloxo/httpd/script\"\n";
 
-	$string = "<Location />\n";
-	$string .= "<IfModule sapi_apache2.c>\n";
-	$string .= $openbasdstring;
-	$string .= "</IfModule>\n";
-	$string .= "<IfModule mod_php5.c>\n";
-	$string .= $openbasdstring;
-	$string .= "</IfModule>\n";
+	$string = "    "."<Location />\n";
+	$string .= "    "."    "."<IfModule sapi_apache2.c>\n";
+	$string .= "    "."    "."    ".$openbasdstring;
+	$string .= "    "."    "."</IfModule>\n\n";
+	$string .= "    "."    "."<IfModule mod_php5.c>\n";
+	$string .= "    "."    "."    ".$openbasdstring;
+	$string .= "    "."    "."</IfModule>\n";
+	$string .= "    "."</Location>\n\n";
 
-	$string .= "</Location>\n";
 	return $string;
 
 }
@@ -200,11 +202,11 @@ function getBlockIP()
 	if (!$t) { return; }
 	$t = str_replace(".*", "", $t);
 	$string = null;
-	$string .= "<Location />\n";
-	$string .= "Order allow,deny\n";
-	$string .= "deny from $t\n";
-	$string .= "allow from all\n";
-	$string .= "</Location>\n";
+	$string .= "    "."<Location />\n";
+	$string .= "    "."    "."Order allow,deny\n";
+	$string .= "    "."    "."deny from $t\n";
+	$string .= "    "."    "."allow from all\n";
+	$string .= "    "."</Location>\n\n";
 	return $string;
 }
 
@@ -221,9 +223,9 @@ function disablePhp()
 	if (!lxfile_exists("/home/httpd/{$this->main->nname}/php.ini")) {
 		lxuser_cp($this->main->username, "/etc/php.ini", "/home/httpd/{$this->main->nname}/php.ini");
 	}
-	$string .= "<IfModule mod_suphp.c>\n";
-	$string .= "suPHP_Configpath /home/httpd/{$this->main->nname}\n";
-	$string .= "</IfModule>\n";
+	$string .= "    "."<IfModule mod_suphp.c>\n";
+	$string .= "    "."    "."suPHP_Configpath /home/httpd/{$this->main->nname}\n";
+	$string .= "    "."</IfModule>\n\n";
 
 	return $string;
 }
@@ -275,7 +277,8 @@ function createConffile()
 
 
 	$string = null;
-	$string = "<VirtualHost  {$this->createVirtualHostiplist("80")}>\n";
+	$string = "<VirtualHost {$this->createVirtualHostiplist("80")}";
+	$string .= "    "."    ".">\n\n";
 	$string .= $this->syncToPort("80", $cust_log, $err_log);
 	$string .= $this->middlepart($web_home, $domainname, $dirp); 
 	$string .= $this->AddOpenBaseDir();
@@ -287,7 +290,7 @@ function createConffile()
 
 		// Do the ssl cert only if the ipaddress exists. Now when we migrate, 
 
-			$string .= "\n\n\n\n<IfModule mod_ssl.c>\n";
+			$string .= "\n\n<IfModule mod_ssl.c>\n";
 
 
 			if ($this->getServerIp()) {
@@ -296,30 +299,29 @@ function createConffile()
 					$string .= "#### ssl virtualhost per ip\n";
 					$ssl_cert = $this->sslsysnc($ip);
 					if (!$ssl_cert) { continue; }
-					$string .= "<VirtualHost $ip:443>\n";
+					$string .= "<VirtualHost $ip:443";
+					$string .= "    "."    ".">\n\n";
 					$string .= $this->syncToPort("443", $cust_log, $err_log);
 					$string .= $this->sslsysnc($ip);
 					$string .= $this->middlepart($web_home, $domainname, $dirp); 
 					$string .= $this->AddOpenBaseDir();
 					$string .= $this->endtag();
-					$string .= "#### ssl virtualhost per ip $ip end\n\n\n";
+					$string .= "#### ssl virtualhost per ip $ip end\n\n";
 				}
 			} else {
 				$string .= "#### ssl virtualhost per ip\n";
-				$string .= "<VirtualHost  {$this->createVirtualHostiplist("443")}>\n";
+				$string .= "<VirtualHost {$this->createVirtualHostiplist("443")}";
+				$string .= "    "."    ".">\n\n";
 				$string .= $this->syncToPort("443", $cust_log, $err_log);
 				$string .= $this->sslsysnc(null);
 				$string .= $this->middlepart($web_home, $domainname, $dirp); 
 				$string .= $this->AddOpenBaseDir();
 				$string .= $this->endtag();
-				$string .= "#### ssl virtualhost per ip end\n\n\n";
+				$string .= "#### ssl virtualhost per ip end\n";
 			}
 
-			$string .= "</IfModule>\n";
+			$string .= "</IfModule>\n\n";
 	}
-	
-
-
 
 	$string .= $this->getAddon();
 
@@ -335,26 +337,26 @@ function getAddon()
 			continue;
 		}
 		$string .= "<VirtualHost {$this->createVirtualHostiplist("80")}>\n";
-		$string .= "Servername {$v->nname}\n";
-		$string .= "ServerAlias www.{$v->nname}\n";
+		$string .= "    "."Servername {$v->nname}\n";
+		$string .= "    "."ServerAlias www.{$v->nname}\n";
 		$dst = "{$this->main->nname}/{$v->destinationdir}/";
 		$dst = remove_extra_slash($dst);
-		$string .= "Redirect / http://$dst\n";
+		$string .= "    "."Redirect / http://$dst\n";
 		$string .= "</VirtualHost>\n\n";
 	}
 
 	if ($this->main->isOn('force_www_redirect')) {
 		$string .= "<VirtualHost {$this->createVirtualHostiplist("80")}>\n";
-		$string .= "Servername {$this->main->nname}\n";
-		$string .= "Redirect / http://www.{$this->main->nname}/\n";
+		$string .= "    "."Servername {$this->main->nname}\n";
+		$string .= "    "."Redirect / http://www.{$this->main->nname}/\n";
 		$string .= "</VirtualHost>\n\n";
 
-		$string .= "\n\n\n\n<IfModule mod_ssl.c>\n";
-		$string .= "<VirtualHost {$this->createVirtualHostiplist("443")}>\n";
-		$string .= "Servername {$this->main->nname}\n";
-		$string .= "Redirect / https://www.{$this->main->nname}\n";
-		$string .= "</VirtualHost>\n\n";
-		$string .= "\n<IfModule mod_ssl.c>\n\n";
+		$string .= "<IfModule mod_ssl.c>\n";
+		$string .= "    "."<VirtualHost {$this->createVirtualHostiplist("443")}>\n";
+		$string .= "    "."    "."Servername {$this->main->nname}\n";
+		$string .= "    "."    "."Redirect / https://www.{$this->main->nname}\n";
+		$string .= "    "."</VirtualHost>\n";
+		$string .= "<IfModule mod_ssl.c>\n\n";
 
 	}
 
@@ -367,14 +369,15 @@ function createCpConfig()
 
 	$vstring = web__apache::getVipString();
 	$string = null;
-	$string .= "\n<VirtualHost {$vstring}>\n";
-	$string .= "servername cp\n";
-	$string .= "serveralias cp.*\n";
-	$string .= "DocumentRoot /home/kloxo/httpd/script/cp\n";
-	$string .= "<IfModule mod_suphp.c>\n";
-	$string .= "SuPhp_UserGroup lxlabs lxlabs\n";
-	$string .= "</Ifmodule>\n";
-	$string .= "</VirtualHost>\n";
+	$string .= "<VirtualHost {$vstring}";
+	$string .= "    "."    ".">\n\n";
+	$string .= "    "."servername cp\n";
+	$string .= "    "."serveralias cp.*\n";
+	$string .= "    "."DocumentRoot /home/kloxo/httpd/script/cp\n\n";
+	$string .= "    "."<IfModule mod_suphp.c>\n";
+	$string .= "    "."    "."SuPhp_UserGroup lxlabs lxlabs\n";
+	$string .= "    "."</Ifmodule>\n";
+	$string .= "</VirtualHost>\n\n";
 
 	$file = "/etc/httpd/conf/kloxo/cp_config.conf";
 	lfile_put_contents($file, $string);
@@ -384,7 +387,7 @@ static function getVipString()
 {
 	$iplist = os_get_allips();
 	foreach($iplist as $ip) {
-		$vstring[] = "   {$ip}:80\\\n";
+		$vstring[] = "    "."{$ip}:80\\\n";
 	}
 	$vstring = implode("", $vstring);
 	return $vstring;
@@ -397,27 +400,28 @@ static function createWebmailRedirect($list)
 	dprintr($vstring);
 	$string = null;
 	foreach($list as $l) {
-		$string .= "\n<VirtualHost  {$vstring}>\n";
-		$string .= "servername webmail.{$l['nname']}\n";
+		$string .= "<VirtualHost {$vstring}";
+		$string .= "    "."    ".">\n\n";
+		$string .= "    "."servername webmail.{$l['nname']}\n";
 		if ($l['remotelocalflag'] === 'remote') {
 			$l['webmail_url'] = add_http_if_not_exist($l['webmail_url']);
-			$string .= "Redirect / {$l['webmail_url']}\n";
+			$string .= "    "."Redirect / {$l['webmail_url']}\n";
 		} else {
 
 			if (is_disabled($prog)) {
-				$string .= "DocumentRoot /home/kloxo/httpd/webmail/disabled/\n";
+				$string .= "    "."DocumentRoot /home/kloxo/httpd/webmail/disabled/\n";
 			} else {
-				$string .= "DocumentRoot /home/kloxo/httpd/webmail/\n";
+				$string .= "    "."DocumentRoot /home/kloxo/httpd/webmail/\n";
 			}
 
 			$prog = ($l['webmailprog'] == '--chooser--')? "": $l['webmailprog'];
 			if ($prog) {
-				$string .= "DirectoryIndex redirect-to-$prog.php index.php index.html\n";
+				$string .= "    "."DirectoryIndex redirect-to-$prog.php index.php index.html\n";
 			}
-			$string .= "<Ifmodule mod_suphp.c>\n";
-			//$string .= "SuPhp_UserGroup {$l['systemuser']} {$l['systemuser']}\n";
-			$string .= "SuPhp_UserGroup lxlabs lxlabs\n";
-			$string .= "</Ifmodule>\n";
+			$string .= "    "."<Ifmodule mod_suphp.c>\n";
+			//$string .= "    "."    "."SuPhp_UserGroup {$l['systemuser']} {$l['systemuser']}\n";
+			$string .= "    "."    "."SuPhp_UserGroup lxlabs lxlabs\n";
+			$string .= "    "."</Ifmodule>\n";
 
 		}
 		$string .= "</VirtualHost>\n\n";
@@ -438,21 +442,21 @@ function getDav()
 	foreach($this->main->__var_davuser as $k => $v) {
 		$file = get_file_from_path($k);
 		$file = "{$bdir}/{$file}";
-		$string .= "<Location {$k}>\n";
-		$string .= "DAV On\n";
-		$string .= "AuthType Basic\n";
-		$string .= "AuthName \"WebDAV Restricted\"\n";
-		$string .= "AuthUserFile {$file}\n";
-		//$string .= "<LimitExcept GET HEAD OPTIONS>\n";
-		$string .= "<Limit HEAD GET POST OPTIONS PROPFIND>\n";
-		$string .= "Allow from all\n";
-		$string .= "</Limit>\n";
-		$string .= "<Limit MKCOL PUT DELETE LOCK UNLOCK COPY MOVE PROPPATCH>\n";
-		$string .= "allow from all\n";
-		$string .= "</Limit>\n";
-		$string .= "Require valid-user\n";
-		//$string .= "</LimitExcept>\n";
-		$string .= "</Location>\n";
+		$string .= "    "."<Location {$k}>\n";
+		$string .= "    "."    "."DAV On\n";
+		$string .= "    "."    "."AuthType Basic\n";
+		$string .= "    "."    "."AuthName \"WebDAV Restricted\"\n";
+		$string .= "    "."    "."AuthUserFile {$file}\n";
+		//$string .= "    "."    "."<LimitExcept GET HEAD OPTIONS>\n";
+		$string .= "    "."    "."<Limit HEAD GET POST OPTIONS PROPFIND>\n";
+		$string .= "    "."    "."    "."Allow from all\n";
+		$string .= "    "."    "."</Limit>\n";
+		$string .= "    "."    "."<Limit MKCOL PUT DELETE LOCK UNLOCK COPY MOVE PROPPATCH>\n";
+		$string .= "    "."    "."    "."allow from all\n";
+		$string .= "    "."    "."</Limit>\n";
+		$string .= "    "."    "."Require valid-user\n";
+		//$string .= "    "."    "."</LimitExcept>\n";
+		$string .= "    "."</Location>\n\n";
 	}
 	return $string;
 }
@@ -476,13 +480,13 @@ function frontPageEnable()
 	$string = null;
 	$web_path = $sgbl->__path_httpd_root;
 	$base_root = $sgbl->__path_httpd_root;
-	$v_dir 		= $web_path . "/{$this->main->nname}/conf";
-	$log_path 	= $web_path . "/{$this->main->nname}/stats";
-	$log_path1 	= $log_path . "/logs";
-	$cust_log 	= $log_path1 . "/{$this->main->nname}-custom_log"; 
-	$err_log 	= $log_path1 ."/{$this->main->nname}-error_log";
+	$v_dir	= $web_path . "/{$this->main->nname}/conf";
+	$log_path = $web_path . "/{$this->main->nname}/stats";
+	$log_path1 = $log_path . "/logs";
+	$cust_log = $log_path1 . "/{$this->main->nname}-custom_log"; 
+	$err_log = $log_path1 ."/{$this->main->nname}-error_log";
 	$awstat_conf 	= "$sgbl->__path_real_etc_root/awstats/";
-	$awstat_dirdata 	= "$sgbl->__path_kloxo_httpd_root/awstats/";
+	$awstat_dirdata = "$sgbl->__path_kloxo_httpd_root/awstats/";
 	$user_home = "{$this->main->getFullDocRoot()}/";
 	return;
     
@@ -543,7 +547,9 @@ static function createSSlConf($iplist, $domainiplist)
 		if (isset($domainiplist[$ip['ipaddr']]) && $domainiplist[$ip['ipaddr']]) {
 			continue;
 		}
-		$string .= "\n<Virtualhost {$ip['ipaddr']}:443>\n";
+		$string .= "<Virtualhost \\\n";
+		$string .= "    "."{$ip['ipaddr']}:443\\\n";
+		$string .= "    "."    ".">\n\n";
 		$ssl_cert = sslcert::getSslCertnameFromIP($ip['nname']);
 
 		$certificatef = "{$sgbl->__path_ssl_root}/{$ssl_cert}.crt";
@@ -552,16 +558,16 @@ static function createSSlConf($iplist, $domainiplist)
 
 		sslcert::checkAndThrow(lfile_get_contents($certificatef), lfile_get_contents($keyfile), $ssl_cert);
 
-		$string .= "SSLEngine On \n";
-		$string .= "SSLCertificateFile {$certificatef}\n";
-		$string .= "SSLCertificateKeyFile {$keyfile}\n";
-		$string .= "SSLCACertificatefile {$cafile}\n";
+		$string .= "    "."SSLEngine On \n";
+		$string .= "    "."SSLCertificateFile {$certificatef}\n";
+		$string .= "    "."SSLCertificateKeyFile {$keyfile}\n";
+		$string .= "    "."SSLCACertificatefile {$cafile}\n\n";
 		$string .= "</Virtualhost>\n";
 	}
 
 	//	$string .= "SSLLogFile /\n";
 	$sslfile = "/etc/httpd/conf/kloxo/ssl.conf";
-	$string = "<IfModule mod_ssl.c>\n {$string}\n</IfModule>\n\n";
+	$string = "<IfModule mod_ssl.c>\n\n{$string}\n</IfModule>\n\n";
 	//$string = null;
 	$string .= "DirectoryIndex index.php index.htm default.htm default.html\n\n";
 	lfile_put_contents($sslfile, $string);
@@ -612,11 +618,11 @@ function sslsysnc($ipad)
 
 	sslcert::checkAndThrow(lfile_get_contents($certificatef), lfile_get_contents($keyfile), $ssl_cert);
 
-	$string .= "SSLEngine On \n";
-	$string .= "SSLCertificateFile {$certificatef}\n";
-	$string .= "SSLCertificateKeyFile {$keyfile}\n";
+	$string .= "    "."SSLEngine On \n";
+	$string .= "    "."SSLCertificateFile {$certificatef}\n";
+	$string .= "    "."SSLCertificateKeyFile {$keyfile}\n";
 
-	$string .= "SSLCACertificatefile {$cafile}\n";
+	$string .= "    "."SSLCACertificatefile {$cafile}\n\n";
 
 	//	$string .= "SSLLogFile /\n";
 	return $string;
@@ -647,7 +653,7 @@ function middlepart($web_home, $domain, $dirp)
 			} else {
 				$nv = remove_extra_slash("/{$v}");
 			}
-			$string .= "ErrorDocument {$num} {$nv}\n";
+			$string .= "    "."ErrorDocument {$num} {$nv}\n";
 		}
 	}
 
@@ -680,15 +686,15 @@ function getDirprotectCore($authname, $path, $file)
 	// http://project.lxcenter.org/issues/74
 	$path = remove_extra_slash("\"/{$path}\"");
 
-	$string .= "<Location {$path}>\n";
-	$string .= "AuthType Basic\n";
-	$string .= "AuthName \"{$authname}\"\n";
+	$string .= "    "."<Location {$path}>\n";
+	$string .= "    "."    "."AuthType Basic\n";
+	$string .= "    "."    "."AuthName \"{$authname}\"\n";
 
 	// http://project.lxcenter.org/issues/74
-	$string .= "AuthUserFile \"{$sgbl->__path_httpd_root}/{$this->main->nname}/__dirprotect/{$file}\"\n";
+	$string .= "    "."    "."AuthUserFile \"{$sgbl->__path_httpd_root}/{$this->main->nname}/__dirprotect/{$file}\"\n";
 
-	$string .= "require  valid-user\n";
-	$string .= "</Location>\n";
+	$string .= "    "."    "."require  valid-user\n";
+	$string .= "    "."</Location>\n";
 	return $string;
 }
 
@@ -696,42 +702,42 @@ function getSuexecString($username)
 {
 	$string = "\n";
 	// --- mod_suexec - begin
-	$string .= "<IfModule suexec.c>\n";
-	$string .= "SuexecUserGroup {$this->main->username} {$this->main->username}\n";
-	$string .= "</IfModule>\n\n";
+	$string .= "    "."<IfModule suexec.c>\n";
+	$string .= "    "."    "."SuexecUserGroup {$this->main->username} {$this->main->username}\n";
+	$string .= "    "."</IfModule>\n\n";
 	// --- mod_suexec - end
 
 	// --- mod_suphp - begin
-	$string .= "<IfModule mod_suphp.c>\n";
+	$string .= "    "."<IfModule mod_suphp.c>\n";
 
 /* --- too much code and overlap with suphp.conf (http://project.lxcenter.org/issues/563)
-	$string .= "AddType application/x-httpd-php .php\n";
-	$string .= "RemoveHandler .php\n";
-	$string .= "<FilesMatch \"\.php$\" >\n";
-	$string .= "SetHandler x-httpd-php\n";
-	$string .= "</FilesMatch>\n";
-	$string .= "<Location />\n";
-	$string .= "suPHP_AddHandler x-httpd-php \n";
-	$string .= "</Location>\n";
+	$string .= "    "."    "."AddType application/x-httpd-php .php\n";
+	$string .= "    "."    "."RemoveHandler .php\n";
+	$string .= "    "."    "."<FilesMatch \"\.php$\" >\n";
+	$string .= "    "."    "."    "."SetHandler x-httpd-php\n";
+	$string .= "    "."    "."</FilesMatch>\n";
+	$string .= "    "."    "."<Location />\n";
+	$string .= "    "."    "."    "."suPHP_AddHandler x-httpd-php \n";
+	$string .= "    "."    "."</Location>\n";
 --- */
 
-	$string .= "SuPhp_UserGroup {$this->main->username} {$this->main->username}\n";
-	$string .= "</IfModule>\n\n";
+	$string .= "    "."    "."SuPhp_UserGroup {$this->main->username} {$this->main->username}\n";
+	$string .= "    "."</IfModule>\n\n";
 	// --- mod_suphp - end
 
 	// --- mod_ruid2 - begin - http://project.lxcenter.org/issues/566
-	$string .= "<IfModule mod_ruid2.c>\n";
-	$string .= "RMode config\n";
-	$string .= "RUidGid {$this->main->username} {$this->main->username}\n";
-	$string .= "RMinUidGid {$this->main->username} {$this->main->username}\n";
-	$string .= "RGroups {$this->main->username}\n";
-	$string .= "</IfModule>\n\n";
+	$string .= "    "."<IfModule mod_ruid2.c>\n";
+	$string .= "    "."    "."RMode config\n";
+	$string .= "    "."    "."RUidGid {$this->main->username} {$this->main->username}\n";
+	$string .= "    "."    "."RMinUidGid {$this->main->username} {$this->main->username}\n";
+	$string .= "    "."    "."RGroups {$this->main->username}\n";
+	$string .= "    "."</IfModule>\n\n";
 	// --- mod_ruid2 - end
 
 	// --- httpd-itk - begin - http://project.lxcenter.org/issues/567
-	$string .= "<IfModule itk.c>\n";
-	$string .= "AssignUserId {$this->main->username} {$this->main->username}\n";
-	$string .= "</IfModule>\n\n";
+	$string .= "    "."<IfModule itk.c>\n";
+	$string .= "    "."    "."AssignUserId {$this->main->username} {$this->main->username}\n";
+	$string .= "    "."</IfModule>\n\n";
 	// --- httpd-itk - end
 
 	return $string;
@@ -742,9 +748,9 @@ function getAwstatsString()
 	global $gbl, $sgbl, $login, $ghtml; 
 
 	$string = null;
-	$string .= "ScriptAlias     /awstats/  {$sgbl->__path_kloxo_httpd_root}/awstats/wwwroot/cgi-bin/\n";
+	$string .= "ScriptAlias /awstats/ {$sgbl->__path_kloxo_httpd_root}/awstats/wwwroot/cgi-bin/\n";
 	if ($this->main->stats_password) {
-		$string .= $this->getDirprotectCore("Awstats", "/awstats", "__stats");
+		$string .= "    ".$this->getDirprotectCore("Awstats", "/awstats", "__stats");
 	}
 	web::createstatsConf($this->main->nname, $this->main->stats_username, $this->main->stats_password);
 	return $string;
@@ -760,14 +766,14 @@ function getDocumentRoot($subweb)
 
 	$string = null;
 	if($this->main->isOn('status')) {
-		$string .= "DocumentRoot   {$path}\n";
+		$string .= "DocumentRoot {$path}\n\n";
 	} else {
 		if ($this->main->__var_disable_url) {
 			$url = add_http_if_not_exist($this->main->__var_disable_url);
-			$string .= "Redirect / {$url}\n";
+			$string .= "Redirect / {$url}\n\n";
 		} else {
 			$disableurl = "/home/kloxo/httpd/disable/";
-			$string .= "DocumentRoot {$disableurl}\n";
+			$string .= "DocumentRoot {$disableurl}\n\n";
 		}
 	}
 	return $string;
@@ -806,7 +812,7 @@ function syncToPort($port, $cust_log, $err_log, $frontpage = false)
 
 	$base_root = "$sgbl->__path_httpd_root";
 	$user_home = "{$this->main->getFullDocRoot()}/";
-	/*
+/*
 	if (!$this->main->ipaddress) {
 		throw new lxException("no_ipaddress", '');
 	}
@@ -814,69 +820,69 @@ function syncToPort($port, $cust_log, $err_log, $frontpage = false)
 	$string = null;
 
 	if ($this->main->isOn('force_www_redirect')) {
-		$string .= "servername    www.{$this->main->nname}\n" ;
+		$string .= "    "."servername www.{$this->main->nname}\n" ;
 	} else {
-		$string .= "servername    {$this->main->nname}\n" ;
+		$string .= "    "."servername {$this->main->nname}\n" ;
 	}
 
-	$string .= $this->createServerAliasLine();
+	$string .= "    ".$this->createServerAliasLine();
 	$domname = $this->main->nname;
 	
 	//$string .= $this->hotlink_protection();
-	$string .= $this->getBlockIP();
+	$string .= "    ".$this->getBlockIP();
 
 
 	$string .= $this->getDocumentRoot('www');
-	$string .= $this->getIndexFileOrder();
+	$string .= "    ".$this->getIndexFileOrder();
 
-	$string .= $this->getAwstatsString();
+	$string .= "    ".$this->getAwstatsString();
 
-	$string .= $this->getSuexecString($this->main->username);
+	$string .= "    ".$this->getSuexecString($this->main->username);
 	foreach((array) $this->main->redirect_a as $red) {
 		$rednname = remove_extra_slash("/{$red->nname}");
 		if ($red->ttype === 'local') {
-			$string .= "Alias {$rednname} {$user_home}/{$red->redirect}\n";
+			$string .= "    "."Alias {$rednname} {$user_home}/{$red->redirect}\n";
 		} else {
 			if (!redirect_a::checkForPort($port, $red->httporssl)) { continue; }
-			$string .= "Redirect {$rednname} {$red->redirect}\n";
+			$string .= "    "."Redirect {$rednname} {$red->redirect}\n";
 		}
 	}
 
 	if ($this->main->__var_statsprog === 'awstats') {
-		$string .= "Redirect     /stats http://$domname/awstats/awstats.pl?config=$domname\n";
-		$string .= "Redirect     /stats/ http://$domname/awstats/awstats.pl?config=$domname\n";
+		$string .= "    "."Redirect /stats http://$domname/awstats/awstats.pl?config=$domname\n";
+		$string .= "    "."Redirect /stats/ http://$domname/awstats/awstats.pl?config=$domname\n\n";
 	} else {
-		$string .= "Alias     /stats  {$sgbl->__path_httpd_root}/{$domname}/webstats/\n";
+		$string .= "    "."Alias /stats {$sgbl->__path_httpd_root}/{$domname}/webstats/\n\n";
 	}
-	$string .= "Alias     /__kloxo  /home/{$this->main->customer_name}/kloxoscript\n";
-	$string .= "Redirect     /kloxononssl  http://cp.{$this->main->nname}:{$this->main->__var_nonsslport}\n";
-	$string .= "Redirect     /kloxo	https://cp.{$this->main->nname}:{$this->main->__var_sslport}\n";
-	$string .= "Redirect     /webmail	https://webmail.{$this->main->nname}\n";
-	$string .= "<Directory /home/httpd/{$domname}/kloxoscript>\n";
-	$string .= "AllowOverride All\n";
-	$string .= "</Directory>\n";
+	$string .= "    "."Alias /__kloxo /home/{$this->main->customer_name}/kloxoscript\n\n";
+	$string .= "    "."Redirect /kloxononssl http://cp.{$this->main->nname}:{$this->main->__var_nonsslport}\n";
+	$string .= "    "."Redirect /kloxo	https://cp.{$this->main->nname}:{$this->main->__var_sslport}\n";
+	$string .= "    "."Redirect /webmail https://webmail.{$this->main->nname}\n\n";
+	$string .= "    "."<Directory /home/httpd/{$domname}/kloxoscript>\n";
+	$string .= "    "."    "."AllowOverride All\n";
+	$string .= "    "."</Directory>\n\n";
 
 
 	$string .= $this->addSendmail();
 
 	if ($this->main->priv->isOn('cgi_flag')) {
-		$string .= "ScriptAlias     /cgi-bin/   {$user_home}/cgi-bin/\n";
+		$string .= "    "."ScriptAlias /cgi-bin/ {$user_home}/cgi-bin/\n\n";
 	}
 	if ($port === '80') {
-		$string .= "CustomLog      {$cust_log} combined  \n";
-		$string .= "ErrorLog       {$err_log}\n";
+		$string .= "    "."CustomLog {$cust_log} combined  \n";
+		$string .= "    "."ErrorLog {$err_log}\n\n";
 	}
 
 	// hack for frontpage. It needs the proper directory.
 	if ($frontpage) {
-		$string .= "<Directory {$this->main->getFullDocRoot()}/>\n";
-		$string .= "AllowOverride All\n";
-		$string .= "</Directory>\n";
+		$string .= "    "."<Directory {$this->main->getFullDocRoot()}/>\n";
+		$string .= "    "."    "."AllowOverride All\n";
+		$string .= "    "."</Directory>\n\n";
 	} else {
-		$string .= "<Directory {$this->main->getFullDocRoot()}/>\n";
-		$string .= "AllowOverride All\n";
-		$string .= "</Directory>\n";
-		$string .= "<Location />\n";
+		$string .= "    "."<Directory {$this->main->getFullDocRoot()}/>\n";
+		$string .= "    "."    "."AllowOverride All\n";
+		$string .= "    "."</Directory>\n\n";
+		$string .= "    "."<Location />\n";
 		$extrastring = null;
 		if (isset($this->main->webmisc_b)) {
 			if ($this->main->webmisc_b->isOn('execcgi')) {
@@ -887,23 +893,23 @@ function syncToPort($port, $cust_log, $err_log, $frontpage = false)
 			}
 		}
 
-		$string .= "Options +Includes +FollowSymlinks {$extrastring}\n";
+		$string .= "    "."    "."Options +Includes +FollowSymlinks {$extrastring}\n";
 
 		if (isset($this->main->webmisc_b) && $this->main->webmisc_b->isOn('execcgi')) {
-			$string .= "AddHandler cgi-script .cgi\n";
+			$string .= "    "."    "."AddHandler cgi-script .cgi\n";
 		}
 
-		$string .= "</Location>\n";
-		$string .= "<Directory {$sgbl->__path_httpd_root}/{$this->main->nname}/webstats>\n";
-		$string .= "AllowOverride All\n";
-		$string .= "</Directory>\n";
+		$string .= "    "."</Location>\n\n";
+		$string .= "    "."<Directory {$sgbl->__path_httpd_root}/{$this->main->nname}/webstats>\n";
+		$string .= "    "."    "."AllowOverride All\n";
+		$string .= "    "."</Directory>\n\n";
 	}
 
 	if (isset($this->main->webindexdir_a)) foreach((array) $this->main->webindexdir_a as $webi) {
-		$string .= "<Directory {$this->main->getFullDocRoot()}/{$webi->nname}>\n";
-		$string .= "AllowOverride All\n";
-		$string .= "Options +Indexes\n";
-		$string .= "</Directory>\n";
+		$string .= "    "."<Directory {$this->main->getFullDocRoot()}/{$webi->nname}>\n";
+		$string .= "    "."    "."AllowOverride All\n";
+		$string .= "    "."    "."Options +Indexes\n";
+		$string .= "    "."</Directory>\n\n";
 	}
 		
 	if($this->main->text_extra_tag) {
@@ -923,18 +929,18 @@ function syncToPort($port, $cust_log, $err_log, $frontpage = false)
 
 function getRailsConf($app)
 {
-	$string .= "ProxyPass /$app http://localhost:$apport/\n";
-	$string .= "ProxyPassReverse /$app http://localhost:$apport\n";
-	$string .= "ProxyPreserveHost on\n";
+	$string .= "    "."ProxyPass /$app http://localhost:$apport/\n";
+	$string .= "    "."ProxyPassReverse /$app http://localhost:$apport\n";
+	$string .= "    "."ProxyPreserveHost on\n\n";
 }
 
 function getDirIndexCore($dir)
 {
 	$string = null;
 	$dir = remove_extra_slash("/{$dir}");
-	$string .= "<Location {$dir}>\n";
-	$string .= "Options +Indexes\n";
-	$string .= "</Location>\n";
+	$string .= "    "."<Location {$dir}>\n";
+	$string .= "    "."    "."Options +Indexes\n";
+	$string .= "    "."</Location>\n\n";
 	return $string;
 }
 
@@ -942,7 +948,7 @@ function EndTag()
 {
 	$string = null;
 	$string .= "</VirtualHost>\n";  
-    return $string;
+	return $string;
 }
 
 
@@ -996,7 +1002,7 @@ function createServerAliasLine()
 		$string .= " {$d->nname} www.{$d->nname}";
 	}
 
-	$string .= "\n";
+	$string .= "\n\n";
 
 	return $string;
 }
@@ -1032,13 +1038,13 @@ function updateForwardconf()
 function denyByIp()
 {
 	$string = null;
-	$string .= "<Ifmodule mod_access.c>\n";
-	$string .= "<Location />\n";
-	$string .= "Order Allow,Deny\n";
-	$string .= "Deny from 6.28.130.\n";
-	$string .= "Allow from all\n";
-	$string .= "</Location>\n";
-	$string .= "</Ifmodule>\n";
+	$string .= "    "."<Ifmodule mod_access.c>\n";
+	$string .= "    "."    "."<Location />\n";
+	$string .= "    "."    "."    "."Order Allow,Deny\n";
+	$string .= "    "."    "."    "."Deny from 6.28.130.\n";
+	$string .= "    "."    "."    "."Allow from all\n";
+	$string .= "    "."    "."</Location>\n";
+	$string .= "    "."</Ifmodule>\n\n";
 	return $string;
 }
 
@@ -1071,21 +1077,21 @@ function hotlink_protection()
 	$allowed_domain_list = explode("\n", $allowed_domain_string);
 
 	$string = null;
-	$string .= "RewriteEngine on\n";
-	$string .= "RewriteCond %{HTTP_REFERER} !^$\n";
+	$string .= "    "."RewriteEngine on\n";
+	$string .= "    "."RewriteCond %{HTTP_REFERER} !^$\n";
 
 	$ht = trim($this->main->hotlink_redirect, "/");
 	$ht = "/$ht";
 	foreach($allowed_domain_list as $l) {
 		$l = trim($l);
 		if (!$l) { continue; }
-		$string .= "RewriteCond %{HTTP_REFERER} !^http://.*$l.*$ [NC]\n";
-		$string .= "RewriteCond %{HTTP_REFERER} !^https://.*$l.*$ [NC]\n";
+		$string .= "    "."RewriteCond %{HTTP_REFERER} !^http://.*$l.*$ [NC]\n";
+		$string .= "    "."RewriteCond %{HTTP_REFERER} !^https://.*$l.*$ [NC]\n";
 	}
 	$l = $this->main->nname;
-	$string .= "RewriteCond %{HTTP_REFERER} !^http://.*$l.*$ [NC]\n";
-	$string .= "RewriteCond %{HTTP_REFERER} !^https://.*$l.*$ [NC]\n";
-	$string .= "RewriteRule .*[JrRjP][PpdDAa][GfFgrR]$|.*[Gg][Ii][Ff]$ $ht [L]\n";
+	$string .= "    "."RewriteCond %{HTTP_REFERER} !^http://.*$l.*$ [NC]\n";
+	$string .= "    "."RewriteCond %{HTTP_REFERER} !^https://.*$l.*$ [NC]\n";
+	$string .= "    "."RewriteRule .*[JrRjP][PpdDAa][GfFgrR]$|.*[Gg][Ii][Ff]$ $ht [L]\n";
 
 	return $string;
 }
@@ -1097,36 +1103,36 @@ static function createWebmailConfig()
 
 	$fdata = null;
 
-	$fdata .= "<VirtualHost  \\\n";
+	$fdata .= "<VirtualHost \\\n";
 
 	$fdata .= web__apache::staticcreateVirtualHostiplist("80");
-	$fdata .= "                   >\n";
+	$fdata .= "    "."    ".">\n\n";
 
 	$defaultdata = $fdata;
-	$defaultdata .= "DocumentRoot {$sgbl->__path_kloxo_httpd_root}/default/\n";
-	$defaultdata .= "servername   default\n";
-	$defaultdata .= "ServerAlias   default.*\n";
-	$defaultdata .= "<Ifmodule mod_userdir.c>\n";
-	$defaultdata .= "Userdir \"public_html\"\n";
-	$defaultdata .= "</Ifmodule>\n";
-	$defaultdata .= "</VirtualHost>\n\n\n";
+	$defaultdata .= "    "."DocumentRoot {$sgbl->__path_kloxo_httpd_root}/default/\n";
+	$defaultdata .= "    "."servername default\n";
+	$defaultdata .= "    "."ServerAlias default.*\n\n";
+	$defaultdata .= "    "."<Ifmodule mod_userdir.c>\n";
+	$defaultdata .= "    "."    "."Userdir \"public_html\"\n";
+	$defaultdata .= "    "."</Ifmodule>\n\n";
+	$defaultdata .= "</VirtualHost>\n\n";
 
 	$defaultfile = "$sgbl->__path_apache_path/kloxo/default.conf";
 	lfile_put_contents($defaultfile, $defaultdata);
 
 
 	$webdata = null;
-	$webdata .= "<VirtualHost  \\\n";
+	$webdata .= "<VirtualHost \\\n";
 	$webdata .= web__apache::staticcreateVirtualHostiplist("80");
 	$webdata .= web__apache::staticcreateVirtualHostiplist("443");
-	$webdata .= "                   >\n";
-	$webdata .= "DocumentRoot {$sgbl->__path_kloxo_httpd_root}/webmail/\n";
-	$webdata .= "servername   webmail\n";
-	$webdata .= "ServerAlias   webmail.*\n";
-	$webdata .= "<Ifmodule mod_suphp.c>\n";
-	$webdata .= "SuPhp_UserGroup lxlabs lxlabs\n";
-	$webdata .= "</Ifmodule>\n";
-	$webdata .= "</VirtualHost>\n\n\n";
+	$webdata .= "    "."    ".">\n\n";
+	$webdata .= "    "."DocumentRoot {$sgbl->__path_kloxo_httpd_root}/webmail/\n";
+	$webdata .= "    "."servername webmail\n";
+	$webdata .= "    "."ServerAlias webmail.*\n\n";
+	$webdata .= "    "."<Ifmodule mod_suphp.c>\n";
+	$webdata .= "    "."    "."SuPhp_UserGroup lxlabs lxlabs\n";
+	$webdata .= "    "."</Ifmodule>\n\n";
+	$webdata .= "</VirtualHost>\n\n";
 	$webmailfile = "__path_real_etc_root/httpd/conf/kloxo/webmail.conf";
 
 	lfile_put_contents($webmailfile, $webdata);
