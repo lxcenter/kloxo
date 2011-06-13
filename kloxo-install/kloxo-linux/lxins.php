@@ -164,6 +164,10 @@ function lxins_main()
 		print("You should open the port 7779 on this server, since this is used for the communication between master and slave\n");
 		print("To access this slave, to go admin->servers->add server, give the ip/machine name of this server. The password is 'admin'. The slave will appear in the list of slaves, and you can access it just like you access localhost\n\n");
 	}
+
+	# issue #571
+	print("Note: use '/etc/httpd/conf.d/~lxcenter.conf' for 'user-defined' config \n");
+
 }
 
 lxins_main();
