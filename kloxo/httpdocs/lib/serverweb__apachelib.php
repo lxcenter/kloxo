@@ -30,9 +30,10 @@ function dbactionUpdate($subaction)
         }
     }
 	
-	// no overwrite while exist so mpm.conf can use as 'user-defined' config
-	if (!file_exists("/etc/httpd/conf.d/mpm.conf")) {
-        lxfile_cp("../file/mpm.conf", "/etc/httpd/conf.d/mpm.conf");
+	// no overwrite while exist so ~lxcenter.conf can use as 'user-defined' config
+	// use prefix tilde to make sure the last file read/execute by httpd
+	if (!file_exists("/etc/httpd/conf.d/~lxcenter.conf")) {
+        lxfile_cp("../file/~lxcenter.conf", "/etc/httpd/conf.d/~lxcenter.conf");
 	}
 
     # Fixed issue #515 - returned due to accidentally deleted
