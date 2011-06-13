@@ -826,9 +826,7 @@ function createDir()
 	} else {
 		lxfile_generic_chown_rec($user_home, "{$this->username}:{$this->username}");
 	}
-	if ($new_user_dir) {
-		lxfile_generic_chmod_rec($user_home, "755");
-	}
+
 	lxfile_generic_chown($user_home, "{$this->username}:apache");
 	lxfile_generic_chown("__path_customer_root/$this->customer_name", "{$this->username}:apache");
 	lxfile_generic_chmod("__path_customer_root/$this->customer_name", "750");
