@@ -368,6 +368,7 @@ function os_updateApplicableToSlaveToo()
 
 	if (lxfile_exists("/etc/httpd/conf/httpd.conf")) {
 		addLineIfNotExistInside("/etc/httpd/conf/httpd.conf", "Include /etc/httpd/conf/kloxo/kloxo.conf", "");
+		lxfile_cp("../file/apache/etc_init.d", "/etc/init.d/httpd");
 	}
 	# Issue #450
 	if (lxfile_exists("/proc/user_beancounters")) {

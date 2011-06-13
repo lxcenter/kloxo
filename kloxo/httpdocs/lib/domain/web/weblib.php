@@ -1007,6 +1007,7 @@ static function switchProgramPre($old, $new)
 	if ($new === 'apache') {
 		addLineIfNotExistInside("/etc/httpd/conf/httpd.conf", "Include /etc/httpd/conf/kloxo/kloxo.conf", "");
 		lxshell_return("__path_php_path", "../bin/misc/installsuphp.php");
+		lxfile_cp("../file/apache/etc_init.d", "/etc/init.d/httpd");
 		//lxshell_return("__path_php_path", "../bin/fix/fixfrontpage.php");
 	} else {
 		lxfile_mkdir("/etc/lighttpd/");
