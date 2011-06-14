@@ -17,6 +17,8 @@ static function installMe()
 	if ($ret) { throw new lxexception('install_httpd_failed', 'parent'); }
 	lxshell_return("chkconfig", "httpd", "on");
 	addLineIfNotExistInside("/etc/httpd/conf/httpd.conf", "Include /etc/httpd/conf/kloxo/kloxo.conf", "");
+    // revision 527
+    lxfile_cp("../file/apache/etc_init.d", "/etc/init.d/httpd");
 	lxshell_return("__path_php_path", "../bin/misc/installsuphp.php");
 	//lxshell_return("__path_php_path", "../bin/fix/fixfrontpage.php");
 	createRestartFile("apache");
