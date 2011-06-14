@@ -51,7 +51,10 @@ stop() {
 
 reload() {
 	echo -n $"Reloading $prog: "
-	killproc $lighttpd -HUP
+	#SIGINT gracefully shutdowns lighttpd keeping existing connections and not listening to new ones
+	killproc $lighttpd -INT
+	#starts lighttpd with the new configuration, old connections still use the old config
+	start
 	RETVAL=$?
 	echo
 	return $RETVAL

@@ -104,7 +104,8 @@ case "$1" in
   restart)
 	#stop
 	#start
-	graceful
+	echo -e $"Gracefully restarting $prog: \n"
+	$apachectl graceful
 	;;
   condrestart)
 	if [ -f ${pidfile} ] ; then
