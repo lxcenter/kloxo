@@ -166,7 +166,7 @@ function lxins_main()
 	}
 
 	# issue #571
-	print("Note: use '/etc/httpd/conf.d/~lxcenter.conf' for 'user-defined' config \n");
+	print("Note: use '/etc/httpd/conf.d/~lxcenter.conf' for 'user-defined' config for Apache\n\n");
 
 }
 
