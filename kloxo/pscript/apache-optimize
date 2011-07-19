@@ -1,0 +1,16 @@
+#!/bin/sh
+
+# release on Kloxo 6.1.7
+# by mustafa.ramadhan@lxcenter.org
+
+if [ "$#" == 0 ] ; then
+	echo
+	echo "------------------------------------------------------------"
+	echo " format: sh $0 --select=none/optimize"
+	echo "------------------------------------------------------------"
+	echo
+	exit;
+fi
+
+. /script/directory
+lphp.exe ../bin/fix/apache-optimize.php $*

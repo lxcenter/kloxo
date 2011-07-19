@@ -1,0 +1,18 @@
+#!/bin/sh
+
+# release on Kloxo 6.1.7
+# by mustafa.ramadhan@lxcenter.org
+
+if [ "$#" == 0 ] ; then
+	echo
+	echo "------------------------------------------------------------"
+	echo " format: sh $0 --type=chown/chmod/all"
+	echo "------------------------------------------------------------"
+	echo " change - chown: ownership only; chmod: permissions only"
+	echo " - important for secure environment like suphp on Apache"
+	echo
+	exit;
+fi
+
+. /script/directory
+lphp.exe ../bin/fix/fix-chownchmod.php $*

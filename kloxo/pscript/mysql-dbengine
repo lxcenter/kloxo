@@ -1,0 +1,28 @@
+#!/bin/bash
+
+# release on Kloxo 6.1.7
+# by mustafa.ramadhan@lxcenter.org
+
+# ENVIRONMENT VARIABLE PRIMER FOR REFERENCE
+# $0 script invoked
+# $1, $2, $3 are the command line arguments
+# $# Number of command line arguments 
+# $@ all command line arguments - white space is preserved
+# $* all command line arguments - white space striped 
+
+if [ "$#" == 0 ] ; then
+	echo
+	echo "------------------------------------------------------------------------------"
+	echo " format:"
+	echo " sh $0 --rootpwd=[] --dbengine=[] --dbname=[] --dbtable=[]"
+	echo "------------------------------------------------------------------------------"
+	echo "  --rootpwd - mysql root password"
+	echo "  --dbengine - change to MyISAM/InnoDB; default: MyISAM"
+	echo "  --dbname - database name; default: all databases"
+	echo "  --dbtable - table name; default: all tables"
+	echo
+	exit;
+fi
+
+. /script/directory
+lphp.exe ../bin/fix/mysql-dbengine.php $*

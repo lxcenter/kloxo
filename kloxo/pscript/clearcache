@@ -1,0 +1,38 @@
+#!/bin/bash
+
+# release on Kloxo 6.1.7
+# by mustafa.ramadhan@lxcenter.org
+
+# ENVIRONMENT VARIABLE PRIMER FOR REFERENCE
+# $0 script invoked
+# $1, $2, $3 are the command line arguments
+# $# Number of command line arguments 
+# $@ all command line arguments - white space is preserved
+# $* all command line arguments - white space striped 
+
+# not exist in openvz vps
+grubfile="/boot/grub/grub.conf"
+
+if [ -f $grubfile ]; then
+	if [ "$1" == "--clear=1" ]; then
+		echo 1 > /proc/sys/vm/drop_caches
+	elif [ "$1" == "--clear=2" ]; then
+		echo 2 > /proc/sys/vm/drop_caches
+	elif [ "$1" == "--clear=3" ]; then
+		echo 3 > /proc/sys/vm/drop_caches
+	else
+		echo
+		echo "----------------------------------------------------"
+		echo " format: sh $0 --clear=1/2/3"
+		echo "----------------------------------------------------"
+		echo " clear: 1 = pagecache, 2 = dentries+inodes, 3 = all"
+		exit;
+	fi
+else
+	if [ "$2" != "--silent" ]; then
+		echo
+		echo "Not work on OpenVZ VPS"
+		echo
+	fi
+fi
+
