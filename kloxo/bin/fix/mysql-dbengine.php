@@ -9,12 +9,13 @@ initProgram('admin');
 
 $list = parse_opt($argv);
 
-$rootpwd = $list['rootpwd'];
+$pass = slave_get_db_pass();
+
 $dbengine = ($list['dbengine']) ? $list['dbengine'] : 'MyISAM';
 $dbname = ($list['dbname']) ? $list['dbname'] : '*';
 $dbtable = ($list['dbtable']) ? $list['dbtable'] : '*';
 
-mysql_connect('localhost', 'root', $rootpwd);
+mysql_connect('localhost', 'root', $pass);
 
 if ($dbname === '*') {
 	$dbs = mysql_query('SHOW databases');
