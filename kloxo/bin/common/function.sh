@@ -1,10 +1,18 @@
 #!/bin/sh
+
+# issue #623
+
 __path_php_path="/usr/local/lxlabs/ext/php/php";
 __path_program_root="/usr/local/lxlabs/$progname/";
 __path_slave_db="/usr/local/lxlabs/$progname/etc/conf/slave-db.db";
-__path_server_path="../sbin/$progname.php";
-__path_server_exe="../sbin/$progname.exe";
-__path_low_memory_file="../etc/flag/lowmem.flag";
+
+# __path_server_path="../sbin/$progname.php";
+# __path_server_exe="../sbin/$progname.exe";
+# __path_low_memory_file="../etc/flag/lowmem.flag";
+
+__path_server_path="/usr/local/lxlabs/kloxo/sbin/$progname.php";
+__path_server_exe="/usr/local/lxlabs/kloxo/sbin/$progname.exe";
+__path_low_memory_file="/usr/local/lxlabs/kloxo/etc/flag/lowmem.flag";
 
 kill_and_save_pid() {
 	name=$1
