@@ -84,7 +84,13 @@ static function createListNlist($parent, $view)
 
 }
 
-// The virtual domain redirect is handled differently from the forward domain 'redirect permanent'. the virtual domain ones are never edited, but rather listed and deleted, while the forward one is directly edited. So for the virtual domain ones, the 'http://' is automatically added and stored in the db itself, while for forward domain redirect_domain variable, the 'http://' is added is only added at the time of synctosystem. The 'http//' is essential, since if it is not present, apache will refuse to start at all. Dangerous.
+// The virtual domain redirect is handled differently from the forward domain 'redirect permanent'.
+// the virtual domain ones are never edited, but rather listed and deleted,
+// while the forward one is directly edited. So for the virtual domain ones,
+// the 'http://' is automatically added and stored in the db itself,
+// while for forward domain redirect_domain variable, the 'http://'
+// is added is only added at the time of synctosystem. The 'http//' is essential,
+// since if it is not present, apache will refuse to start at all. Dangerous.
 
 static function add($parent, $class, $param)
 {
@@ -423,9 +429,8 @@ function createExtraVariables()
 
 	$mydb = new Sqlite($this->__masterserver, 'ipaddress');
 	$syncserver = $this->syncserver? $this->syncserver: 'localhost';
-	$condition = 'syncserver = :syncserver';
-	$params = array(':syncserver' => $syncserver);
-	$this->__var_ipssllist = $mydb->getRowsWhere($condition, $params, array('ipaddr', 'nname'));
+	$string = "syncserver = '$syncserver'";
+	$this->__var_ipssllist = $mydb->getRowsWhere($string, array('ipaddr', 'nname'));
 
 
 	$this->__var_addonlist = $this->getTrueParentO()->getList('addondomain');
@@ -436,11 +441,13 @@ function createExtraVariables()
 	}
 
 	$dipdb = new Sqlite(null, "domainipaddress");
-	$domainip = $dipdb->getRowsWhere($condition, $params, array('domain', 'ipaddr'));
+	$string = "syncserver = '$syncserver' " ;
+	$domainip = $dipdb->getRowsWhere($string, array('domain', 'ipaddr'));
 	$this->__var_domainipaddress = get_namelist_from_arraylist($domainip, 'ipaddr', 'domain');
 
 	$ipdb = new Sqlite($this->__masterserver, 'ipaddress');
-	$iplist = $ipdb->getRowsWhere($condition, $params, array('ipaddr'));
+	$string = "syncserver = '$syncserver' " ;
+	$iplist = $ipdb->getRowsWhere($string, array('ipaddr'));
 	$this->__var_ipaddress = $iplist;
 	$mydb = new Sqlite($this->__masterserver, "web");
 	
@@ -468,7 +475,8 @@ function createExtraVariables()
 		$this->__var_clientname = $this->getTrueParentO()->getTrueParentO()->nname;
 	}
 
-	$this->__var_vdomain_list = $mydb->getRowsWhere($condition, $params, array('nname', 'ipaddress'));
+	$string = "syncserver = '$syncserver'" ;
+	$this->__var_vdomain_list = $mydb->getRowsWhere($string, array('nname', 'ipaddress'));
 	/*
 	$string = "ttype='forward' AND syncserver = '$syncserver'" ;
 	$this->__var_fdomain_list = $mydb->getRowsWhere($string, array('nname'));
@@ -802,7 +810,9 @@ function createDir()
 	lxfile_mkdir($user_home);
 
 
-	// Sort of hack.. Changes the domain.com/domain.com to domain.com/httpdocs. Which is easier to remember. Slowly we need to change all the code from dom/dom to dom/httpdocs.. but for now, just create a symlink.
+	// Sort of hack.. Changes the domain.com/domain.com to domain.com/httpdocs.
+	// Which is easier to remember. Slowly we need to change all the code from dom/dom to dom/httpdocs..
+	// but for now, just create a symlink.
 
 	lxfile_generic_chmod("$web_home/{$this->nname}", "0755");
 	lxfile_mkdir("$user_home/");
@@ -815,8 +825,11 @@ function createDir()
 	lxfile_mkdir($v_dir);
 	lxfile_mkdir($log_path);
 	//lxfile_mkdir($log_path1);
-	lxfile_mkdir("__path_apache_path/kloxo");
-	lxfile_touch("__path_apache_path/kloxo/virtualhost.conf");
+	// issue #589 - Change httpd config structure
+//	lxfile_mkdir("__path_apache_path/kloxo");
+//	lxfile_touch("__path_apache_path/kloxo/virtualhost.conf");
+	lxfile_mkdir("/home/httpd/conf/defaults");
+	lxfile_touch("/home/httpd/conf/defaults/~virtualhost.conf");
 
 	$parent_doc_root = $this->getParentFullDocRoot();
 	if ($user_home != $parent_doc_root) {
@@ -824,7 +837,9 @@ function createDir()
 	} else {
 		lxfile_generic_chown_rec($user_home, "{$this->username}:{$this->username}");
 	}
-
+	if ($new_user_dir) {
+		lxfile_generic_chmod_rec($user_home, "755");
+	}
 	lxfile_generic_chown($user_home, "{$this->username}:apache");
 	lxfile_generic_chown("__path_customer_root/$this->customer_name", "{$this->username}:apache");
 	lxfile_generic_chmod("__path_customer_root/$this->customer_name", "750");
@@ -840,13 +855,14 @@ function createDir()
 	}
 
 	$this->createstatsConf($this->nname, $this->stats_username, $this->stats_password);
-/*	print("This is the User Home : $user_home \n");                                                   
+/*
+	print("This is the User Home : $user_home \n");                                                   
 	print("This is the certificate Pah : $sgbl->__path_ssl_root/certificate/\n");            
 	print("This is the Private Key Pah: $sgbl->__path_ssl_root/privatekey/\n");             
 	print("This is the Domain Name :$web_home/{$this->nname}\n");                              
 	
 	print( "This is teh User Httpdocs  :$user_home/www/");                                         
-    print("GO to the User Dir (chmod 775");                                                    
+	print("GO to the User Dir (chmod 775");                                                    
 	print("Chown To The :{$this->username}:{$this->username}, $user_home\n");  
 	print("This is the Vdir :  $v_dir\n");                                                         
 	print("Creating log path :$log_path\n");                                                            
@@ -985,9 +1001,14 @@ static function removeOtherDriver($driverapp)
 
 static function switchProgramPre($old, $new)
 {
+	// issue #589 - Change httpd config structure
+	
 	if ($new === 'apache') {
+		lxfile_cp("/etc/sysconfig/httpd", "/etc/sysconfig/httpd.bck");
 		$ret = lxshell_return("yum", "-y", "install", "httpd", "mod_ssl");
 		if ($ret) { throw new lxexception('install_httpd_failed', 'parent'); }
+		lxfile_rm("/etc/sysconfig/httpd");
+		lxfile_mv("/etc/sysconfig/httpd.bck", "/etc/sysconfig/httpd");
 		lxshell_return("service",  "lighttpd", "stop");
 		lxshell_return("rpm", "-e", "--nodeps", "lighttpd");
 		lunlink("/etc/init.d/lighttpd");
@@ -1003,15 +1024,15 @@ static function switchProgramPre($old, $new)
 
 
 	if ($new === 'apache') {
-		addLineIfNotExistInside("/etc/httpd/conf/httpd.conf", "Include /etc/httpd/conf/kloxo/kloxo.conf", "");
+//		addLineIfNotExistInside("/etc/httpd/conf/httpd.conf", "Include /etc/httpd/conf/kloxo/kloxo.conf", "");
 		lxshell_return("__path_php_path", "../bin/misc/installsuphp.php");
 		//lxshell_return("__path_php_path", "../bin/fix/fixfrontpage.php");
 	} else {
 		lxfile_mkdir("/etc/lighttpd/");
 		lxfile_mkdir("/etc/lighttpd/conf/kloxo");
 		lxfile_cp("../file/lighttpd/lighttpd.conf", "/etc/lighttpd/lighttpd.conf");
-		lxfile_cp("../file/lighttpd/conf/kloxo/kloxo.conf", "/etc/lighttpd/conf/kloxo/kloxo.conf");
-		lxfile_cp("../file/lighttpd/conf/kloxo/webmail.conf", "/etc/lighttpd/conf/kloxo/webmail.conf");
+//		lxfile_cp("../file/lighttpd/conf/kloxo/kloxo.conf", "/etc/lighttpd/conf/kloxo/kloxo.conf");
+//		lxfile_cp("../file/lighttpd/conf/kloxo/webmail.conf", "/etc/lighttpd/conf/kloxo/webmail.conf");
 		lxfile_cp("../file/lighttpd/etc_init.d", "/etc/init.d/lighttpd");
 		lxfile_unix_chmod("/etc/init.d/lighttpd", "0755");
 		lxfile_mkdir("/home/kloxo/httpd/lighttpd");

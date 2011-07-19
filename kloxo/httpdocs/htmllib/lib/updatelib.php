@@ -148,12 +148,19 @@ function updatecleanup()
 	log_cleanup("Initialize system files...");
 	log_cleanup("- Install RoundCube database config...");
 	lxfile_cp("../file/webmail-chooser/db.inc.phps", "/home/kloxo/httpd/webmail/roundcube/config/db.inc.php");
-	log_cleanup("- Create /etc/lighttpd/conf/kloxo dir if needed...");
-	lxfile_mkdir("/etc/lighttpd/conf/kloxo");
+
+	// --- issue #598: Change lighhtpd config structure
+//	log_cleanup("- Create /etc/lighttpd/conf/kloxo dir if needed...");
+//	lxfile_mkdir("/etc/lighttpd/conf/kloxo");
+	log_cleanup("- Create /home/lighttpd/conf/ dir if needed...");
+	lxfile_mkdir("/home/lighttpd/conf/kloxo");
+
 	log_cleanup("- Create /var/bogofilter dir if needed...");
 	lxfile_mkdir("/var/bogofilter");
+
 	log_cleanup("- Create /home/kloxo/httpd/lighttpd dir if needed...");
 	lxfile_mkdir("/home/kloxo/httpd/lighttpd");
+
 	log_cleanup("- Remove dir /home/admin/domain/ if exists...");
 	rmdir("/home/admin/domain/");
 	log_cleanup("- Remove dir /home/admin/old/ if exists...");
@@ -518,6 +525,16 @@ function updatecleanup()
 	lxfile_cp("../file/default_index.html", "__path_kloxo_httpd_root/default/index.html");
 	lxfile_mkdir("__path_kloxo_httpd_root/disable/");
 	lxfile_cp("../file/disable.html", "__path_kloxo_httpd_root/disable/index.html");
+	
+	//--- issue #597 - Use cp. to redirect :7778 or :7777
+	lxshell_unzip("__system__", "__path_kloxo_httpd_root/cp/", "../file/skeleton.zip");
+	// because index.php is ready as user-customize, so don't override
+	if (!lxfile_exists("__path_kloxo_httpd_root/cp/index.php")) {
+		lxfile_cp("../file/cp_config_index.php", "__path_kloxo_httpd_root/cp/index.php");
+	}
+	lxfile_unix_chown("__path_kloxo_httpd_root/cp/index.php", "lxlabs:lxlabs");
+	lxfile_unix_chmod("__path_kloxo_httpd_root/cp/index.php", "0644");
+
 }
 
 function update_all_slave()
