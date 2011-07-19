@@ -227,8 +227,8 @@ function filterRemoteList($qfile, $string, $liststring)
 		}
 		$nlist[] = $l;
 	}
-
-// See Issue #512 for more information
+/*
+	//--- See Issue #512 for more information
 //	if ($this->main->remotelocalflag === 'remote') {
 //	} else {
 		$nlist[] = $string;
@@ -236,6 +236,16 @@ function filterRemoteList($qfile, $string, $liststring)
 			$nlist[] = $liststring;
 		}
 //	}
+*/
+	//--- See Issue #593 for more information
+	if ($this->main->remotelocalflag !== 'remote') {
+		$nlist[] = $string;
+	}
+
+	//--- always exist lists.*
+	if ($this->doesListExist()) {
+		$nlist[] = $liststring;
+	}
 
 	$out = implode("\n", $nlist);
 	lfile_put_contents($qfile, "$out\n");
