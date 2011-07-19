@@ -165,9 +165,6 @@ function lxins_main()
 		print("To access this slave, to go admin->servers->add server, give the ip/machine name of this server. The password is 'admin'. The slave will appear in the list of slaves, and you can access it just like you access localhost\n\n");
 	}
 
-	# issue #571
-	print("Note: use '/etc/httpd/conf.d/~lxcenter.conf' for 'user-defined' config for Apache\n\n");
-
 }
 
 lxins_main();

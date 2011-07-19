@@ -70,6 +70,7 @@ function install_main() {
         }
     }
 
+/* ---issue #589 - no need for new structure
     $pattern = "Include /etc/httpd/conf/kloxo/kloxo.conf";
     $file = "/etc/httpd/conf/httpd.conf";
     $comment = "#Kloxo";
@@ -82,8 +83,25 @@ function install_main() {
     touch("/etc/httpd/conf/kloxo/init.conf");
     mkdir("/etc/httpd/conf/kloxo/forward/");
     touch("/etc/httpd/conf/kloxo/forward/forwardhost.conf");
-
-
+--- */
+	copy("/~lxcenter.conf", "/etc/httpd/conf.d/~lxcenter.conf");
+	mkdir("/home/httpd/conf");
+	mkdir("/home/httpd/conf/defaults");
+	mkdir("/home/httpd/conf/domains");
+    touch("/home/httpd/conf/defaults/_default.conf");
+    touch("/home/httpd/conf/defaults/cp_config.conf");
+    touch("/home/httpd/conf/defaults/init.conf");
+    touch("/home/httpd/conf/defaults/webmail.conf");
+    touch("/home/httpd/conf/defaults/~virtualhost.conf");
+	
+	//--- for cp
+	mkdir("/home/kloxo/httpd/cp");
+	copy("/usr/local/lxlabs/kloxo/file/cp_config_index.php", "/home/kloxo/httpd/cp/index.php");
+	system("unzip -oq /usr/local/lxlabs/kloxo/file/skeleton.zip -d /home/kloxo/httpd/cp");
+	system("chown -R lxlabs:lxlabs /home/kloxo/httpd/cp");
+	
+	/usr/local/lxlabs/kloxo/file
+	
     $options_file = "/var/named/chroot/etc/global.options.named.conf";
 
     $example_options  = "acl \"lxcenter\" {\n";
