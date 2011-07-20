@@ -6,7 +6,7 @@
 if [ "$#" == 0 ] ; then
 	echo
 	echo "------------------------------------------------------------"
-	echo " format: sh $0 --select=none/optimize"
+	echo " format: sh $0 --select=status/optimize"
 	echo "------------------------------------------------------------"
 	echo
 	exit;

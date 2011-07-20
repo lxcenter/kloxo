@@ -17,23 +17,30 @@ $dbtable = ($list['dbtable']) ? $list['dbtable'] : '*';
 
 mysql_connect('localhost', 'root', $pass);
 
+echo "Convert to {$dbengine} engine start...\n";
+
 if ($dbname === '*') {
+
 	$dbs = mysql_query('SHOW databases');
 
 	while ($db = mysql_fetch_array($dbs)) {
-		// echo "database => {$db[0]}\n";
+
+		echo "  {$db[0]} database\n";
+
 		mysql_select_db($db[0]);
 
 		if ($dbtable === '*') {
+
 			$tbls = mysql_query('SHOW tables');
 
 			while ($tbl = mysql_fetch_array($tbls)) {
-				// echo "table => {$tbl[0]}\n";
+				echo "    {$tbl[0]} table\n";
 				mysql_query("ALTER TABLE {$tbl[0]} ENGINE={$dbengine}");
 			}
 		}
 		else {
 			mysql_query("ALTER TABLE {$dbtable} ENGINE={$dbengine}");
+			echo "    {$dbtable} table\n";
 		}
 
 	}
@@ -41,16 +48,20 @@ if ($dbname === '*') {
 else {
 	mysql_select_db($dbname);
 
+	echo "  {$dbname} database\n";
+
 	if ($dbtable === '*') {
 		$tbls = mysql_query('SHOW tables');
 
 		while ($tbl = mysql_fetch_array($tbls)) {
-			// echo "table => {$tbl[0]}\n";
+			echo "    {$tbl[0]} table\n";
 			mysql_query("ALTER TABLE {$tbl[0]} ENGINE={$dbengine}");
 		}
 	}
 	else {
 		mysql_query("ALTER TABLE {$dbtable} ENGINE={$dbengine}");
+		echo "    {$dbtable} table\n";
 	}
 }
 
+echo "Convert to {$dbengine} engine finish...\n";
