@@ -81,7 +81,6 @@ function getLocalList()
 
 function getExtraList()
 {
-	global $login;
 	$list[] = 'sendmail_from';
 	$list[] = 'enable_dl_flag' ;
 	$list[] = 'output_buffering_flag' ;
@@ -108,7 +107,19 @@ function getExtraList()
 	return $list;
 }
 
-
+function getAdminList()
+{
+	global $login;
+	if (!$login->isAdmin()) {
+		$list[] = 'disable_functions';
+		$list[] = 'max_execution_time_flag';
+		$list[] = 'max_input_time_flag';
+		$list[] = 'memory_limit_flag';
+		$list[] = 'post_max_size_flag';
+		$list[] = "upload_max_filesize";
+	}
+	return $list;
+}
 
 function fixphpIniFlag()
 {
@@ -195,8 +206,9 @@ function updateform($subaction, $param)
 	}
 
 	$inheritedlist = $this->getInheritedList();
+	$adminList= $this->getAdminList();
 	foreach($totallist as $l) {
-		if (!$this->getParentO()->is__table('pserver') && array_search_bool($l, $inheritedlist)) {
+		if ((!$this->getParentO()->is__table('pserver') && array_search_bool($l, $inheritedlist) ) || array_search_bool($l,$adminList)) {
 			$vlist["phpini_flag_b-$l"] = array('M', null);
 		} else {
 			$vlist["phpini_flag_b-$l"] = null;
