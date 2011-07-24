@@ -9,7 +9,7 @@ initProgram('admin');
 
 $list = parse_opt($argv);
 
-$type = strtolower($list['type']);
+$select = strtolower($list['select']);
 
 $login->loadAllObjects('client');
 $list = $login->getList('client');
@@ -19,18 +19,25 @@ foreach($list as $c) {
 	$cdir = "/home/{$clname}";
 	$dlist = $c->getList('domaina');
 
-	shell_exec("chown {$clname}:apache {$cdir}/");
-	shell_exec("chmod 770 {$cdir}/");
+	passthru("chown {$clname}:apache {$cdir}/");
+	echo "chown {$clname}:apache {$cdir}/"."\n";
+	passthru("chmod 770 {$cdir}/");
+	echo "chmod 770 {$cdir}/"."\n";
 
 	foreach((array) $dlist as $l) {
 		$web = $l->nname;
-		if (($type === "all") || ($type === 'chown')) {
-			shell_exec("chown -R {$clname}:{$clname} {$cdir}/{$web}/");
+
+		if (($select === "all") || ($select === 'chown')) {
+			passthru("chown -R {$clname}:{$clname} {$cdir}/{$web}/");
+			echo "chown -R {$clname}:{$clname} {$cdir}/{$web}/"."\n";
 		}
-		if (($type === "all") || ($type === 'chmod')) {
-			shell_exec("find {$cdir}/{$web}/ -type f -name \"*.php\" -exec chmod 644 {} \;");
-			// shell_exec("find {$cdir}/{$web}/ -type f -exec chmod 644 {} \;");
-			shell_exec("find {$cdir}/{$web}/ -type d -exec chmod 755 {} \;");
+		if (($select === "all") || ($select === 'chmod')) {
+			passthru("find {$cdir}/{$web}/ -type f -name \"*.php\" -exec chmod 644 {} \;");
+			echo "find {$cdir}/{$web}/ -type f -name \"*.php\" -exec chmod 644 {} \;"."\n";
+			// passthru("find {$cdir}/{$web}/ -type f -exec chmod 644 {} \;");
+			// echo "find {$cdir}/{$web}/ -type f -exec chmod 644 {} \;"."\n";
+			passthru("find {$cdir}/{$web}/ -type d -exec chmod 755 {} \;");
+			echo "find {$cdir}/{$web}/ -type d -exec chmod 755 {} \;"."\n";
 		}
 	}
 }

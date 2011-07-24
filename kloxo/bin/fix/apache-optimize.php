@@ -3,9 +3,6 @@
 // release on Kloxo 6.1.7
 // by mustafa.ramadhan@lxcenter.org
 
-// release on Kloxo 6.1.7
-// by mustafa.ramadhan@lxcenter.org
-
 include_once "htmllib/lib/include.php"; 
 
 initProgram('admin');
@@ -14,24 +11,28 @@ $list = parse_opt($argv);
 
 $select = $list['select'];
 
-exec("echo 3 > /proc/sys/vm/drop_caches >>/dev/null");
+passthru("echo 3 > /proc/sys/vm/drop_caches >>/dev/null");
 
-$status = shell_exec("service httpd status");
+$status = shell_exec("/etc/init.d/httpd status");
+
+//--- some vps include /etc/httpd/conf.d/swtune.conf
+passthru("rm -f /etc/httpd/conf.d/swtune.conf");
+
 
 if ($select === 'status') {
 	echo "\n".$status."\n";
-
 }
 elseif ($select === 'optimize') {
 	//--- stristr for Case-insensitive
 	if (stristr($status, 'running') !== FALSE) {
-		shell_exec("service httpd stop");
+		echo shell_exec("/etc/init.d/httpd stop");
 	}
+
+	echo "Apache optimize processing...\n";
 
 	$m = array();
 
 	// check memory -- $2=total, $3=used, $4=free, $5=shared, $6=buffers, $7=cached
-
 
 	$m['total']   = (int)shell_exec("free -m | grep Mem: | awk '{print $2}'");
 	$m['spare']   = ($m['total'] * 0.25);
@@ -53,7 +54,7 @@ elseif ($select === 'optimize') {
 	$maxpar = (int)($m['avail'] / 20);
 	$minpar = (int)($maxpar / 2);
 
-	exec("service httpd start");
+	echo shell_exec("/etc/init.d/httpd start");
 
 	$s = <<<EOF
 Timeout 150

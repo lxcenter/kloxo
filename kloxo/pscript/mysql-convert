@@ -14,14 +14,18 @@ if [ "$#" == 0 ] ; then
 	echo
 	echo "------------------------------------------------------------------------------"
 	echo " format:"
-	echo " sh $0 --dbengine=[] --dbname=[] --dbtable=[]"
+	echo "   sh $0 --engine=[] --database=[] --table=[]" --config=[]
 	echo "------------------------------------------------------------------------------"
-	echo "  --dbengine - change to MyISAM/InnoDB; default: MyISAM"
-	echo "  --dbname - database name; default: all databases"
-	echo "  --dbtable - table name; default: all tables"
+	echo "  --engine - change to MyISAM/InnoDB; default: MyISAM"
+	echo "  --database - database name; default: all databases"
+	echo "  --table - table name; default: all tables"
+	echo "  --config - yes/no; default: yes"
+	echo "      add on '/etc/my.cnf':"
+	echo "         'default-storage-engine=[engine]', and"
+	echo "         'skip-innodb' (for myisam)"
 	echo
 	exit;
 fi
 
 . /script/directory
-lphp.exe ../bin/fix/mysql-dbengine.php $*
+lphp.exe ../bin/fix/mysql-convert.php $*

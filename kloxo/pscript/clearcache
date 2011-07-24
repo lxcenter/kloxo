@@ -11,19 +11,23 @@
 # $* all command line arguments - white space striped 
 
 # not exist in openvz vps
-grubfile="/boot/grub/grub.conf"
+# grubfile="/boot/grub/grub.conf"
+proc__user_beancounters="/proc/user_beancounters"
 
-if [ -f $grubfile ]; then
-	if [ "$1" == "--clear=1" ]; then
+
+# if [ -f $grubfile ]; then
+
+if [ ! -f $proc__user_beancounters ]; then
+	if [ "$1" == "--select=1" ]; then
 		echo 1 > /proc/sys/vm/drop_caches
-	elif [ "$1" == "--clear=2" ]; then
+	elif [ "$1" == "--select=2" ]; then
 		echo 2 > /proc/sys/vm/drop_caches
-	elif [ "$1" == "--clear=3" ]; then
+	elif [ "$1" == "--select=3" ]; then
 		echo 3 > /proc/sys/vm/drop_caches
 	else
 		echo
 		echo "----------------------------------------------------"
-		echo " format: sh $0 --clear=1/2/3"
+		echo " format: sh $0 --select=1/2/3"
 		echo "----------------------------------------------------"
 		echo " clear: 1 = pagecache, 2 = dentries+inodes, 3 = all"
 		exit;
