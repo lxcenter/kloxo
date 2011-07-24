@@ -45,6 +45,7 @@ class Spam__Spamassassin extends lxDriverClass
 			$user = null;
 		}
 
+		// --- issue #578 - missing in version 6.1.6
 		$mailpath = "/home/lxadmin/mail/spamassassin";
 
 		if ($user) {
