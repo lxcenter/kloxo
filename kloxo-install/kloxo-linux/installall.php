@@ -100,7 +100,8 @@ function install_main() {
 	system("unzip -oq /usr/local/lxlabs/kloxo/file/skeleton.zip -d /home/kloxo/httpd/cp");
 	system("chown -R lxlabs:lxlabs /home/kloxo/httpd/cp");
 	
-	/usr/local/lxlabs/kloxo/file
+	//--- some vps include /etc/httpd/conf.d/swtune.conf
+	system("rm -f /etc/httpd/conf.d/swtune.conf");
 	
     $options_file = "/var/named/chroot/etc/global.options.named.conf";
 

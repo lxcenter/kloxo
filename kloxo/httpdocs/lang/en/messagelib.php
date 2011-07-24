@@ -156,15 +156,13 @@ $__emessage['certificate_key_file_empty'] = "The certificate and the Key file yo
 // by mustafa.ramadhan@lxcenter.org
 
 $__information['webserver_config'] = 
-	"* [b]PHP Type[/b] - process-based (httpd-prefork/-itk) or ".
+	"* [b]PHP Type[/b]: process-based (httpd-prefork/-itk) or ".
 		"thread-based (httpd-worker/-event) ".
 		"and secure environment (suphp/suexec/ruid2/itk)<br />".
-	"* [b]Apache Memory Optimize[/b] - optimize memory usage and without swap; ".
-	"alternative - 'sh /script/apache-optimize'<br />".
-	"* [b]Mysql Optimize[/b] - decrease memory usage 100-200 MB (depend on version) with 'skip-innodb' ".
-	"(run 'sh /script/mysql-dbengine' to convert db-engine); ".
-	"alternative - 'sh /script/mysql-skipinnodb'<br />".
-	"* [b]Fix 'ownership' And 'permissions'[/b] - prevent '500 Internal server error' on secure environment; ".
+	"* [b]Apache Memory Optimize[/b] - 'sh /script/apache-optimize': optimize memory usage without swap<br />".
+	"* [b]Mysql Convert[/b] - 'sh /script/mysql-convert': also change '/etc/my.cnf' config; ".
+		"MyISAM - less memory usage (save 100-200 MB); ".
+		"InnoDB - higher performance<br />".
+	"* [b]Fix 'ownership' And 'permissions'[/b] - 'sh /script/fix-chownchmod': prevent '500 Internal server error' on secure environment; ".
 		"fix-ownership - 'chown -R client:client' for directories and files; ".
-		"fix-permissions - 'chmod 775' for directories and 'chmod 644' for .php files; ".
-		"alternative - 'sh /script/fix-chownchmod'";
+		"fix-permissions - 'chmod 775' for directories and 'chmod 644' for .php files";

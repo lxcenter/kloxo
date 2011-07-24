@@ -1243,5 +1243,5 @@ $__description["path"] = array("Path");
 // by mustafa.ramadhan@lxcenter.org
 
 $__description["apache_optimize"] = array("Apache memory optimize");
-$__description["mysql_optimize"] = array("Mysql 'skip-innodb' enabled");
+$__description["mysql_convert"] = array("Mysql convert");
 $__description["fix_chownchmod"] = array("Fix 'ownership' and 'permissions'");

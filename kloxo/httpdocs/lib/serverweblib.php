@@ -9,7 +9,7 @@ static $__acdesc_update_edit = array("", "", "config");
 static $__acdesc_show = array("", "", "webserver_config");
 
 static $__desc_apache_optimize = array("", "", "apache_optimize");
-static $__desc_mysql_optimize = array("", "", "mysql_optimize");
+static $__desc_mysql_convert = array("", "", "mysql_convert");
 static $__desc_fix_chownchmod = array("", "", "fix_chownchmod");
 
 function createShowUpdateform()
@@ -39,8 +39,8 @@ function updateform($subaction, $param)
 
 		$vlist['apache_optimize'] = array('s', array('none', 'optimize'));
 		$this->setDefaultValue('apache_optimize', 'none');
-		$vlist['mysql_optimize'] = array('s', array('none', 'skip-innodb'));
-		$this->setDefaultValue('mysql_optimize', 'none');
+		$vlist['mysql_convert'] = array('s', array('none', 'to-myisam', 'to-innodb'));
+		$this->setDefaultValue('mysql_convert', 'none');
 		$vlist['fix_chownchmod'] = array('s', array('none', 'fix-ownership', 'fix-permissions', 'fix-ALL'));
 		$this->setDefaultValue('fix_chownchmod', 'none');
 	

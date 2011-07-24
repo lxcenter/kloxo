@@ -9,7 +9,8 @@ class web__lighttpd extends lxDriverClass {
 
 static function uninstallMe()
 {
-	lxshell_return("service",  "lighttpd", "stop");
+//	lxshell_return("service",  "lighttpd", "stop");
+ 	passthru("/etc/init.d/lighttpd stop");
 	lxshell_return("rpm", "-e", "--nodeps", "lighttpd");
 	lunlink("/etc/init.d/lighttpd");
 }
@@ -1022,6 +1023,8 @@ function dbactionUpdate($subaction)
 			$this->fullUpdate();
 			$this->main->doStatsPageProtection();
 			$this->createCpConfig();
+			// --- always update webmail_redirect too
+			Mmail::fixWebmailRedirect();
 			break;
 
 		case "changeowner":

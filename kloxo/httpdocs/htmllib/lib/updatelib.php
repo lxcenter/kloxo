@@ -149,9 +149,10 @@ function updatecleanup()
 	log_cleanup("- Install RoundCube database config...");
 	lxfile_cp("../file/webmail-chooser/db.inc.phps", "/home/kloxo/httpd/webmail/roundcube/config/db.inc.php");
 
-	// --- issue #598: Change lighhtpd config structure
-//	log_cleanup("- Create /etc/lighttpd/conf/kloxo dir if needed...");
-//	lxfile_mkdir("/etc/lighttpd/conf/kloxo");
+/* --- issue #598: Change lighhtpd config structure
+	log_cleanup("- Create /etc/lighttpd/conf/kloxo dir if needed...");
+	lxfile_mkdir("/etc/lighttpd/conf/kloxo");
+-- */
 	log_cleanup("- Create /home/lighttpd/conf/ dir if needed...");
 	lxfile_mkdir("/home/lighttpd/conf/kloxo");
 
@@ -298,6 +299,8 @@ function updatecleanup()
 	log_cleanup("Install/Fix Services/Permissions/Configfiles...");
 	log_cleanup("- Create lxphp.exe Symlink...");
 	lxfile_symlink("__path_php_path", "/usr/bin/lxphp.exe");
+
+/* --- Issue #589: Change httpd config structure
 	log_cleanup("- Install kloxo.conf...");
 	lxfile_cp("../file/apache/kloxo.conf", "/etc/httpd/conf/kloxo/kloxo.conf");
 	log_cleanup("- Install ssl.conf...");
@@ -310,6 +313,20 @@ function updatecleanup()
 	lxfile_touch("/etc/httpd/conf/kloxo/default.conf");
 	log_cleanup("- Initialize cp_config.conf...");
 	lxfile_touch("/etc/httpd/conf/kloxo/cp_config.conf");
+--- */
+	log_cleanup("- Install ~lxcenter.conf...");
+	lxfile_cp("../file/apache/~lxcenter.conf", "/etc/httpd/conf.d/~lxcenter.conf");
+	log_cleanup("- Install ssl.conf...");
+	lxfile_cp("../file/apache/default_ssl.conf", "/etc/httpd/conf.d/ssl.conf");
+	log_cleanup("- Initialize webmail_redirect.conf...");
+	lxfile_touch("/home/httpd/conf/defaults/webmail_redirect.conf");
+	log_cleanup("- Initialize ssl.conf...");
+	lxfile_touch("/home/httpd/conf/defaults/ssl.conf");
+	log_cleanup("- Initialize _default.conf...");
+	lxfile_touch("/home/httpd/conf/defaults/_default.conf");
+	log_cleanup("- Initialize cp_config.conf...");
+	lxfile_touch("/home/httpd/conf/defaults/cp_config.conf");
+
 	log_cleanup("- Remove /etc/init.d/pure-ftpd service file...");
 	@lxfile_rm("/etc/init.d/pure-ftpd");
 	if (!lxfile_exists("/etc/xinetd.d/pureftp")) {
@@ -394,6 +411,8 @@ function updatecleanup()
 	log_cleanup("- Install lighttpd.conf ...");
 	lxfile_cp("../file/lighttpd/lighttpd.conf", "/etc/lighttpd/lighttpd.conf");
 
+	
+/* --- issue #598: Change lighhtpd config structure
 	log_cleanup("- Install kloxo.conf (lighttpd)...");
 	lxfile_cp("../file/lighttpd/conf/kloxo/kloxo.conf", "/etc/lighttpd/conf/kloxo/kloxo.conf");
 
@@ -424,11 +443,43 @@ function updatecleanup()
 		log_cleanup("- Initialize mimetype.conf (lighttpd)...");
 		system("echo > /etc/lighttpd/conf/kloxo/mimetype.conf");
 	}
+--- */
+	log_cleanup("- Install ~lxcenter.conf (lighttpd)...");
+	lxfile_cp("../file/lighttpd/~lxcenter.conf", "/etc/lighttpd/conf.d/~lxcenter.conf");
+
+	log_cleanup("- Initialize webmail_reditrect.conf (lighttpd) ...");
+	lxfile_touch("/home/lighttpd/conf/defaults/webmail_redirect.conf");
+
+	if (!lxfile_real("/etc/lighttpd/local.lighttpd.conf")) {
+		log_cleanup("- Initialize local.lighttpd.conf (lighttpd) ...");
+		system("echo > /etc/lighttpd/local.lighttpd.conf");
+	}
+	if (!lxfile_real("/home/lighttpd/conf/defaults/webmail_redirect.conf")) {
+		log_cleanup("- Initialize webmail.redirect.conf (lighttpd)...");
+		system("echo > /home/lighttpd/conf/defaults/webmail_redirect.conf");
+	}
+	if (!lxfile_real("/home/lighttpd/conf/defaults/~virtualhost.conf")) {
+		log_cleanup("- Initialize ~virtualhost.conf (lighttpd)...");
+		system("echo > /home/lighttpd/conf/defaults/~virtualhost.conf");
+	}
+	if (!lxfile_real("/home/lighttpd/conf/defaults/ssl.conf")) {
+		log_cleanup("- Initialize ssl.conf (lighttpd)...");
+		system("echo > /home/lighttpd/conf/defaults/ssl.conf");
+	}
+	if (!lxfile_real("/home/lighttpd/conf/defaults/mimetype.conf")) {
+		log_cleanup("- Initialize mimetype.conf (lighttpd)...");
+		system("echo > /home/lighttpd/conf/defaults/mimetype.conf");
+	}
+
+/* --- Issue #589: Change httpd config structure
 	log_cleanup("- Initialize domainip.conf (apache)...");
 	lxfile_touch("/etc/httpd/conf/kloxo/domainip.conf");
 
 	log_cleanup("- Initialize mimetype.conf (apache)...");
 	lxfile_touch("/etc/httpd/conf/kloxo/mimetype.conf");
+--- */
+	log_cleanup("- Initialize mimetype.conf (apache)...");
+	lxfile_touch("/home/httpd/conf/defaults/mimetype.conf");
 
 	log_cleanup("- Install /etc/init.d/lighttpd service file...");
 	lxfile_cp("../file/lighttpd/etc_init.d", "/etc/init.d/lighttpd");
@@ -502,11 +553,12 @@ function updatecleanup()
 	log_cleanup("Remove old lxlabs ssh key");
  	remove_ssh_self_host_key();
 
+/* --- Issue #589: Change httpd config structure
 	if (lxfile_exists("/etc/httpd/conf/httpd.conf")) {
 		log_cleanup("Add kloxo.conf directive into httpd.conf (apache)");
 		addLineIfNotExistInside("/etc/httpd/conf/httpd.conf", "Include /etc/httpd/conf/kloxo/kloxo.conf", "");
 	}
-
+--- */
 	# Issue #450
 	log_cleanup("Running Fix #450");
 	if (lxfile_exists("/proc/user_beancounters")) {
@@ -557,9 +609,6 @@ function update_all_slave()
 	}
 
 }
-
-
-
 
 function findNextVersion($lastversion = null)
 {

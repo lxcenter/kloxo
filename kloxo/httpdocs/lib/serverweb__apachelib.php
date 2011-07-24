@@ -8,40 +8,60 @@ function dbactionUpdate($subaction)
 	// issue #566 - Mod_ruid2 on Kloxo
 	// issue #567 - httpd-itk for kloxo
 	
-	lxshell_return("service", "httpd", "stop");
+//	lxshell_return("service", "httpd", "stop");
+ 	passthru("/etc/init.d/httpd stop");
 
 	//-- old structure
-	system("rm -rf /etc/httpd/conf/kloxo");
+	lxfile_rm("/etc/httpd/conf/kloxo");
 
 	//-- new structure	
 	lxfile_mkdir("/home/httpd/conf");
 	lxfile_mkdir("/home/httpd/conf/defaults");
 	lxfile_mkdir("/home/httpd/conf/domains");
 
+	//--- some vps include /etc/httpd/conf.d/swtune.conf
+	passthru("rm -f /etc/httpd/conf.d/swtune.conf");
+
+	if (!lfile_exists("/etc/httpd/conf.d/~lxcenter.conf")) {
+		copy("/usr/local/lxlabs/kloxo/file/apache/~lxcenter.conf", "/etc/httpd/conf.d/~lxcenter.conf");
+		copy("/usr/local/lxlabs/kloxo/file/centos-5/httpd.conf", "/etc/httpd/conf/httpd.conf");
+
+	}
+
+	if (!lfile_exists("/home/kloxo/httpd/cp/index.php")) {
+		mkdir("/home/kloxo/httpd/cp");
+		copy("/usr/local/lxlabs/kloxo/file/cp_config_index.php", "/home/kloxo/httpd/cp/index.php");
+		passthru("unzip -oq /usr/local/lxlabs/kloxo/file/skeleton.zip -d /home/kloxo/httpd/cp");
+		passthru("chown -R lxlabs:lxlabs /home/kloxo/httpd/cp");
+	}
+
 	lxfile_rm("/etc/sysconfig/httpd");
 
 	$t = $this->main->php_type;
 
 	$a = $this->main->apache_optimize;
-	$m = $this->main->mysql_optimize;
+	$m = $this->main->mysql_convert;
 	$f = $this->main->fix_chownchmod;
 
-	if ($m === 'skip-innodb') {
-		system("lphp.exe /usr/local/lxlabs/kloxo/bin/fix/mysql-skipinnodb.php --innodb=skip");
+	if ($m === 'to-myisam') {
+		passthru("lphp.exe /usr/local/lxlabs/kloxo/bin/fix/mysql-convert.php --engine=myisam");
+	}
+	else if ($m === 'to-innodb') {
+		passthru("lphp.exe /usr/local/lxlabs/kloxo/bin/fix/mysql-convert.php --engine=innodb");
 	}
 
 	if ($a === 'optimize') {
-		system("lphp.exe /usr/local/lxlabs/kloxo/bin/fix/apache-optimize.php --select=optimize");
+		passthru("lphp.exe /usr/local/lxlabs/kloxo/bin/fix/apache-optimize.php --select=optimize");
 	}
 
 	if ($f === 'fix-ownership') {
-		system("lphp.exe /usr/local/lxlabs/kloxo/bin/fix/fix-chownchmod.php --type=chown");
+		passthru("lphp.exe /usr/local/lxlabs/kloxo/bin/fix/fix-chownchmod.php --select=chown");
 	}
 	else if ($f === 'fix-permissions') {
-		system("lphp.exe /usr/local/lxlabs/kloxo/bin/fix/fix-chownchmod.php --type=chmod");
+		passthru("lphp.exe /usr/local/lxlabs/kloxo/bin/fix/fix-chownchmod.php --select=chmod");
 	}
 	else if ($f === 'fix-ALL') {
-		system("lphp.exe /usr/local/lxlabs/kloxo/bin/fix/fix-chownchmod.php --type=all");
+		passthru("lphp.exe /usr/local/lxlabs/kloxo/bin/fix/fix-chownchmod.php --select=all");
 	}
 
 	//--- don't use '=== true' but '!== false'
@@ -55,23 +75,23 @@ function dbactionUpdate($subaction)
 	//	lxfile_cp("../file/httpd.prefork", "/etc/sysconfig/httpd");
 	//	lxfile_rm("/etc/sysconfig/httpd");
 		// use > that equal to lxfile_rm + echo >>
-		system("echo 'HTTPD=/usr/sbin/httpd' >/etc/sysconfig/httpd");
+		passthru("echo 'HTTPD=/usr/sbin/httpd' >/etc/sysconfig/httpd");
 
 		if ($t === 'mod_php') {
 			// nothing
 		}
 		else if ($t === 'mod_php_ruid2') {
-			system("yum -y install mod_ruid2");
+			passthru("yum -y install mod_ruid2");
 			lxfile_mv("/etc/httpd/conf.d/ruid2.nonconf", "/etc/httpd/conf.d/ruid2.conf");
 		}
 		else if ($t === 'mod_php_itk') {
-			system("yum -y install httpd-itk");
+			passthru("yum -y install httpd-itk");
 			lxfile_rm("/etc/httpd/conf.d/itk.conf");
-			system("echo 'HTTPD=/usr/sbin/httpd.itk' >/etc/sysconfig/httpd");
+			passthru("echo 'HTTPD=/usr/sbin/httpd.itk' >/etc/sysconfig/httpd");
 		}
 	}
 	else if (strpos($t, 'suphp') !== false) {
-		system("yum -y install mod_suphp");
+		passthru("yum -y install mod_suphp");
 
 		lxfile_mv("/etc/httpd/conf.d/php.conf", "/etc/httpd/conf.d/php.nonconf");
 		lxfile_mv("/etc/httpd/conf.d/fastcgi.conf", "/etc/httpd/conf.d/fastgi.nonconf");
@@ -85,13 +105,13 @@ function dbactionUpdate($subaction)
 //		lxfile_rm("/etc/sysconfig/httpd");
 
 		if ($t === 'suphp') {
-			system("echo 'HTTPD=/usr/sbin/httpd' >/etc/sysconfig/httpd");
+			passthru("echo 'HTTPD=/usr/sbin/httpd' >/etc/sysconfig/httpd");
 		}
 		else if ($t === 'suphp_worker') {
-			system("echo 'HTTPD=/usr/sbin/httpd.worker' >/etc/sysconfig/httpd");
+			passthru("echo 'HTTPD=/usr/sbin/httpd.worker' >/etc/sysconfig/httpd");
 		}
 		else if ($t === 'suphp_event') {
-			system("echo 'HTTPD=/usr/sbin/httpd.event' >/etc/sysconfig/httpd");
+			passthru("echo 'HTTPD=/usr/sbin/httpd.event' >/etc/sysconfig/httpd");
 		}
 	}
 	else if (strpos($t, 'suexec') !== false) {
@@ -107,8 +127,10 @@ function dbactionUpdate($subaction)
 //	change to 'stop-start' instead 'restart' because problem when change prefork/worker/event/itk to other
 //	createRestartFile("httpd");
 
-	lxshell_return("service", "httpd", "start");
+//	lxshell_return("service", "httpd", "start");
+ 	passthru("/etc/init.d/httpd start");
 }
 
 }
+
 

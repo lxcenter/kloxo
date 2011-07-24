@@ -15,7 +15,8 @@ class web__apache extends lxDriverClass {
 
 static function uninstallMe()
 {
-	lxshell_return("service", "httpd", "stop");
+//	lxshell_return("service", "httpd", "stop");
+ 	passthru("/etc/init.d/httpd stop");
 	lxshell_return("rpm", "-e", "--nodeps", "httpd");
 	lunlink("/etc/init.d/httpd");
 }
@@ -30,7 +31,7 @@ static function installMe()
 	lxfile_cp("/usr/local/lxlabs/kloxo/file/apache/~lxcenter.conf", "/etc/httpd/conf.d/~lxcenter.conf");
 
 	// delete old structure
-	system("rm -rf /etc/httpd/conf/kloxo");
+	passthru("rm -rf /etc/httpd/conf/kloxo");
 
 	// rev 527
 	lxfile_cp("../file/apache/etc_init.d", "/etc/init.d/httpd");
@@ -105,7 +106,7 @@ function updateMainConfFile()
 
 	lxfile_rm("/home/httpd/conf/domains/*.conf");
 	//--- command 'mv *.conf.active *.conf' so use 'rename'
-	system("rename .conf.active .conf /home/httpd/conf/domains/*.conf.active");
+	passthru("rename .conf.active .conf /home/httpd/conf/domains/*.conf.active");
 
 	//--- delete unlisted domains config - end
 
@@ -136,9 +137,9 @@ function updateMainConfFile()
 //	$this->updateIpConfFile();
 
 	// delete old structure
-	system("rm -rf /etc/httpd/conf/kloxo");
+	passthru("rm -rf /etc/httpd/conf/kloxo");
 	foreach((array) $vdomlist as $dom) {
-		system("rm -rf {$sgbl->__path_httpd_root}/{$dom['nname']}/conf");
+		passthru("rm -rf {$sgbl->__path_httpd_root}/{$dom['nname']}/conf");
 	}
 	
 }
@@ -633,7 +634,7 @@ static function createSSlConf($iplist, $domainiplist)
 		$string .= "\tSSLCertificateFile {$certificatef}\n";
 		$string .= "\tSSLCertificateKeyFile {$keyfile}\n";
 		$string .= "\tSSLCACertificatefile {$cafile}\n\n";
-		$string .= "</Virtualhost>\n";
+		$string .= "</Virtualhost>\n\n";
 	}
 
 	//	$string .= "SSLLogFile /\n";
