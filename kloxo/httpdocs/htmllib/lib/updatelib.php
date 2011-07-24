@@ -588,6 +588,7 @@ function updatecleanup()
 	lxshell_unzip("__system__", "__path_kloxo_httpd_root/cp/", "../file/skeleton.zip");
 	// because index.php is ready as user-customize, so don't override
 	if (!lxfile_exists("__path_kloxo_httpd_root/cp/index.php")) {
+		mkdir("/home/kloxo/httpd/cp");
 		lxfile_cp("../file/cp_config_index.php", "__path_kloxo_httpd_root/cp/index.php");
 	}
 	lxfile_unix_chown("__path_kloxo_httpd_root/cp/index.php", "lxlabs:lxlabs");

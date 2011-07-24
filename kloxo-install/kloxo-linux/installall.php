@@ -84,7 +84,7 @@ function install_main() {
     mkdir("/etc/httpd/conf/kloxo/forward/");
     touch("/etc/httpd/conf/kloxo/forward/forwardhost.conf");
 --- */
-	copy("/~lxcenter.conf", "/etc/httpd/conf.d/~lxcenter.conf");
+	copy("/usr/local/lxlabs/kloxo/file/apache/~lxcenter.conf", "/etc/httpd/conf.d/~lxcenter.conf");
 	mkdir("/home/httpd/conf");
 	mkdir("/home/httpd/conf/defaults");
 	mkdir("/home/httpd/conf/domains");
