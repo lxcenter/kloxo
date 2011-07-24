@@ -314,6 +314,10 @@ function updatecleanup()
 	log_cleanup("- Initialize cp_config.conf...");
 	lxfile_touch("/etc/httpd/conf/kloxo/cp_config.conf");
 --- */
+	lxfile_mkdir("/etc/httpd/conf.d");
+	lxfile_mkdir("/home/httpd/conf/defaults");
+	lxfile_mkdir("/home/httpd/conf/domains");
+	
 	log_cleanup("- Install ~lxcenter.conf...");
 	lxfile_cp("../file/apache/~lxcenter.conf", "/etc/httpd/conf.d/~lxcenter.conf");
 	log_cleanup("- Install ssl.conf...");
@@ -444,18 +448,20 @@ function updatecleanup()
 		system("echo > /etc/lighttpd/conf/kloxo/mimetype.conf");
 	}
 --- */
+
+	lxfile_mkdir("/etc/lighttpd/conf.d");
+	lxfile_mkdir("/home/lighttpd/conf/defaults");
+	lxfile_mkdir("/home/lighttpd/conf/domains");
+	
 	log_cleanup("- Install ~lxcenter.conf (lighttpd)...");
 	lxfile_cp("../file/lighttpd/~lxcenter.conf", "/etc/lighttpd/conf.d/~lxcenter.conf");
-
-	log_cleanup("- Initialize webmail_reditrect.conf (lighttpd) ...");
-	lxfile_touch("/home/lighttpd/conf/defaults/webmail_redirect.conf");
 
 	if (!lxfile_real("/etc/lighttpd/local.lighttpd.conf")) {
 		log_cleanup("- Initialize local.lighttpd.conf (lighttpd) ...");
 		system("echo > /etc/lighttpd/local.lighttpd.conf");
 	}
 	if (!lxfile_real("/home/lighttpd/conf/defaults/webmail_redirect.conf")) {
-		log_cleanup("- Initialize webmail.redirect.conf (lighttpd)...");
+		log_cleanup("- Initialize webmail_redirect.conf (lighttpd)...");
 		system("echo > /home/lighttpd/conf/defaults/webmail_redirect.conf");
 	}
 	if (!lxfile_real("/home/lighttpd/conf/defaults/~virtualhost.conf")) {
@@ -665,6 +671,3 @@ function do_upgrade($upversion)
 	system("cd ../../ ; unzip -o httpdocs/download/$programfile");
 	chdir($saveddir);
 }
-
-
-
