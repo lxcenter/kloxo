@@ -786,7 +786,7 @@ function getSuexecString($username)
 }
 
 // change to staticgetSuexecString() for accept call by static function
-function staticgetSuexecString($username, $nname = null)
+static function staticgetSuexecString($username, $nname = null)
 {
 	// issue #567 -- change '$this->main->username' to '$username' for consistence
 	$string  = "\n";
@@ -1330,7 +1330,13 @@ function dbactionUpdate($subaction)
 			$this->main->doStatsPageProtection();
 			$this->createCpConfig();
 			// --- always update webmail_redirect too
+			// --- this is wrong code but work
 			Mmail::fixWebmailRedirect();
+		/* -- this is right but weird result
+			$mmail = new $this->main->MMail();
+			$mmail->fixWebmailRedirect();
+			$mmail = null;
+		*/
 			break;
 
 		case "add_subweb_a":

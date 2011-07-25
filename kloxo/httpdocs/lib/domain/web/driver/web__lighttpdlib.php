@@ -1024,7 +1024,13 @@ function dbactionUpdate($subaction)
 			$this->main->doStatsPageProtection();
 			$this->createCpConfig();
 			// --- always update webmail_redirect too
+			// --- this is wrong code but work
 			Mmail::fixWebmailRedirect();
+		/* -- this is right but weird result
+			$mmail = new $this->main->MMail();
+			$mmail->fixWebmailRedirect();
+			$mmail = null;
+		*/
 			break;
 
 		case "changeowner":
