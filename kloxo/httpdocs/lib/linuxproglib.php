@@ -315,8 +315,8 @@ function os_updateApplicableToSlaveToo()
 	lxfile_cp("../file/lighttpd/~lxcenter.conf", "/etc/lighttpd/conf.d/~lxcenter.conf");
 	lxfile_touch("/home/lighttpd/conf/defaults/webmail_redirect.conf");
 
-	if (!lxfile_real("/etc/lighttpd/conf.d/local.lighttpd.conf")) {
-		system("echo > /etc/lighttpd/conf.d/local.lighttpd.conf");
+	if (!lxfile_real("/etc/lighttpd/local.lighttpd.conf")) {
+		system("echo > /etc/lighttpd/local.lighttpd.conf");
 	}
 
 	if (!lxfile_real("/home/lighttpd/conf/defaults/webmail_redirect.conf")) {
