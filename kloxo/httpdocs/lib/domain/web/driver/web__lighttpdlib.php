@@ -24,9 +24,24 @@ static function installMe()
 	lxfile_mkdir("/etc/lighttpd/");
 
 //	lxfile_mkdir("/etc/lighttpd/conf/kloxo");
-	lxfile_cp("../file/lighttpd/lighttpd.conf", "/etc/lighttpd/lighttpd.conf");
 
-	lxfile_cp("../file/lighttpd/~lxcenter.conf", "/etc/lighttpd/conf.d/~lxcenter.conf");
+	//-- old structure
+	lxfile_rm("/etc/lighttpd/conf/kloxo");
+
+	//-- new structure	
+	lxfile_mkdir("/home/lighttpd/conf");
+	lxfile_mkdir("/home/lighttpd/conf/defaults");
+	lxfile_mkdir("/home/lighttpd/conf/domains");
+
+	copy("/usr/local/lxlabs/kloxo/file/lighttpd/lighttpd.conf", "/etc/lighttpd/lighttpd.conf");
+	copy("/usr/local/lxlabs/kloxo/file/lighttpd/~lxcenter.conf", "/etc/lighttpd/conf.d/~lxcenter.conf");
+
+	if (!lfile_exists("/home/kloxo/httpd/cp")) {
+		mkdir("/home/kloxo/httpd/cp");
+		copy("/usr/local/lxlabs/kloxo/file/cp_config_index.php", "/home/kloxo/httpd/cp/index.php");
+		passthru("unzip -oq /usr/local/lxlabs/kloxo/file/skeleton.zip -d /home/kloxo/httpd/cp");
+		passthru("chown -R lxlabs:lxlabs /home/kloxo/httpd/cp");
+	}
 
 //	lxfile_cp("../file/lighttpd/conf/kloxo/kloxo.conf", "/etc/lighttpd/conf/kloxo/kloxo.conf");
 
@@ -1024,13 +1039,8 @@ function dbactionUpdate($subaction)
 			$this->main->doStatsPageProtection();
 			$this->createCpConfig();
 			// --- always update webmail_redirect too
-			// --- this is wrong code but work
+			// --- this call is wrong but work; call with 'new MMail()' have strange result
 			Mmail::fixWebmailRedirect();
-		/* -- this is right but weird result
-			$mmail = new $this->main->MMail();
-			$mmail->fixWebmailRedirect();
-			$mmail = null;
-		*/
 			break;
 
 		case "changeowner":

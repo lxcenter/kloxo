@@ -39,9 +39,9 @@ function update_main()
         	$ver = str_replace("\r", "", $ver);
 			if (!lxfile_real("/var/cache/kloxo/kloxo-thirdparty.$ver.zip")) {
 				$DoUpdate = true;
-				log_cleanup("Found a new ThirdParty version ($ver)");
+				log_cleanup("Found a new ThirdParty version \($ver\)");
 			} else {
-				log_cleanup("No new ThirdParty version found (Current version $ver)");
+				log_cleanup("No new ThirdParty version found \(Current version $ver\)");
 			}
 		}
 
@@ -49,9 +49,9 @@ function update_main()
 		$ver = get_package_version("lxwebmail");
 		if (!lxfile_real("/var/cache/kloxo/lxwebmail$ver.tar.gz")) {
 			$DoUpdate = true;
-			log_cleanup("Found a new WebMail version ($ver)");
+			log_cleanup("Found a new WebMail version \($ver\)");
 		}  else {
-			log_cleanup("No new Webmail version found (Current version $ver)");
+			log_cleanup("No new Webmail version found \(Current version $ver\)");
 		}
 
 		if ( $DoUpdate == false ) {
@@ -78,7 +78,7 @@ function update_main()
 function updatecleanup()
 {
 	global $gbl, $sgbl, $login, $ghtml;
-	log_cleanup("OS Create Kloxo init.d service file and copy core php.ini (lxphp)");
+	log_cleanup("OS Create Kloxo init.d service file and copy core php.ini \(lxphp\)");
 	os_create_program_service();
 
 	log_cleanup("OS Fix programroot path permissions");
@@ -145,65 +145,67 @@ function updatecleanup()
 	$ver = get_package_version("lxawstats");
 	installAwstats($ver);
 
-	log_cleanup("Initialize system files...");
-	log_cleanup("- Install RoundCube database config...");
+	log_cleanup("Initialize system files");
+	log_cleanup("- Install RoundCube database config");
 	lxfile_cp("../file/webmail-chooser/db.inc.phps", "/home/kloxo/httpd/webmail/roundcube/config/db.inc.php");
 
 /* --- issue #598: Change lighhtpd config structure
-	log_cleanup("- Create /etc/lighttpd/conf/kloxo dir if needed...");
+	log_cleanup("- Create /etc/lighttpd/conf/kloxo dir if needed");
 	lxfile_mkdir("/etc/lighttpd/conf/kloxo");
 -- */
-	log_cleanup("- Create /home/lighttpd/conf/ dir if needed...");
-	lxfile_mkdir("/home/lighttpd/conf/kloxo");
+	log_cleanup("- Create /home/lighttpd/conf/ dir if needed");
+	lxfile_mkdir("/home/lighttpd/conf");
+	lxfile_mkdir("/home/lighttpd/conf/defaults");
+	lxfile_mkdir("/home/lighttpd/conf/domains");
 
-	log_cleanup("- Create /var/bogofilter dir if needed...");
+	log_cleanup("- Create /var/bogofilter dir if needed");
 	lxfile_mkdir("/var/bogofilter");
 
-	log_cleanup("- Create /home/kloxo/httpd/lighttpd dir if needed...");
+	log_cleanup("- Create /home/kloxo/httpd/lighttpd dir if needed");
 	lxfile_mkdir("/home/kloxo/httpd/lighttpd");
 
-	log_cleanup("- Remove dir /home/admin/domain/ if exists...");
+	log_cleanup("- Remove dir /home/admin/domain/ if exists");
 	rmdir("/home/admin/domain/");
-	log_cleanup("- Remove dir /home/admin/old/ if exists...");
+	log_cleanup("- Remove dir /home/admin/old/ if exists");
 	rmdir("/home/admin/old/");
-	log_cleanup("- Remove dir /home/admin/cgi-bin/ if exists...");
+	log_cleanup("- Remove dir /home/admin/cgi-bin/ if exists");
 	rmdir("/home/admin/cgi-bin/");
-	log_cleanup("- Remove dir /etc/skel/Maildir/ if exists...");
+	log_cleanup("- Remove dir /etc/skel/Maildir/ if exists");
 	rmdir("/etc/skel/Maildir/new");
 	rmdir("/etc/skel/Maildir/cur");
 	rmdir("/etc/skel/Maildir/tmp");
 	rmdir("/etc/skel/Maildir/");
 
-	log_cleanup("- Install lxrestart binary...");
+	log_cleanup("- Install lxrestart binary");
 	system("cp ../cexe/lxrestart /usr/sbin/");
 	system("chown root:root /usr/sbin/lxrestart");
 	system("chmod 755 /usr/sbin/lxrestart");
 	system("chmod ug+s /usr/sbin/lxrestart");
 
-	log_cleanup("- Remove sendmail binary...");
+	log_cleanup("- Remove sendmail binary");
 	lunlink("/usr/sbin/sendmail");
 	lunlink("/usr/lib/sendmail");
-	log_cleanup("- Install qmail-sendmail binary...");
+	log_cleanup("- Install qmail-sendmail binary");
 	lxfile_cp("../file/linux/qmail-sendmail", "/usr/sbin/sendmail");
 	lxfile_cp("../file/linux/qmail-sendmail", "/usr/lib/sendmail");
 	lxfile_unix_chmod("/usr/lib/sendmail", "0755");
 	lxfile_unix_chmod("/usr/sbin/sendmail", "0755");
 
-	log_cleanup("- Install lxredirector binary...");
+	log_cleanup("- Install lxredirector binary");
 	system("cp ../file/linux/lxredirecter.sh /usr/bin/");
 	system("chmod 755 /usr/bin/lxredirecter.sh");
 
 	if (!lxfile_exists("/usr/bin/php-cgi")) {
-		log_cleanup("- Install php-cgi binary...");
+		log_cleanup("- Install php-cgi binary");
 		lxfile_cp("/usr/bin/php", "/usr/bin/php-cgi");
 	}
 
 	if (!lxfile_exists("/usr/local/bin/php")) {
-		log_cleanup("- Create Symlink /usr/bin/php to /usr/local/bin/php...");
+		log_cleanup("- Create Symlink /usr/bin/php to /usr/local/bin/php");
 		lxfile_symlink("/usr/bin/php", "/usr/local/bin/php");
 	}
 	if (lxfile_exists('kloxo.sql')) {
-		log_cleanup("- Remove file kloxo.sql...");
+		log_cleanup("- Remove file kloxo.sql");
 		lunlink('kloxo.sql');
 	}
 
@@ -296,217 +298,233 @@ function updatecleanup()
 	log_cleanup("Fix RedHat NetWork Source");
 	fix_rhn_sources_file();
 
-	log_cleanup("Install/Fix Services/Permissions/Configfiles...");
-	log_cleanup("- Create lxphp.exe Symlink...");
+	log_cleanup("Install/Fix Services/Permissions/Configfiles");
+	log_cleanup("- Create lxphp.exe Symlink");
 	lxfile_symlink("__path_php_path", "/usr/bin/lxphp.exe");
 
 /* --- Issue #589: Change httpd config structure
-	log_cleanup("- Install kloxo.conf...");
+	log_cleanup("- Install kloxo.conf");
 	lxfile_cp("../file/apache/kloxo.conf", "/etc/httpd/conf/kloxo/kloxo.conf");
-	log_cleanup("- Install ssl.conf...");
+	log_cleanup("- Install ssl.conf");
 	lxfile_cp("../file/apache/default_ssl.conf", "/etc/httpd/conf.d/ssl.conf");
-	log_cleanup("- Initialize webmail_redirect.conf...");
+	log_cleanup("- Initialize webmail_redirect.conf");
 	lxfile_touch("/etc/httpd/conf/kloxo/webmail_redirect.conf");
-	log_cleanup("- Initialize ssl.conf...");
+	log_cleanup("- Initialize ssl.conf");
 	lxfile_touch("/etc/httpd/conf/kloxo/ssl.conf");
-	log_cleanup("- Initialize default.conf...");
+	log_cleanup("- Initialize default.conf");
 	lxfile_touch("/etc/httpd/conf/kloxo/default.conf");
-	log_cleanup("- Initialize cp_config.conf...");
+	log_cleanup("- Initialize cp_config.conf");
 	lxfile_touch("/etc/httpd/conf/kloxo/cp_config.conf");
 --- */
+
+	log_cleanup("- Install /etc/httpd/conf/httpd.conf");
+	lxfile_cp("../file/centos-5/httpd.conf", "/etc/httpd/conf/httpd.conf");
+	log_cleanup("- Remove dir /etc/httpd/conf/kloxo if exists");
+	@lxfile_rm("/etc/httpd/conf/kloxo");
+	
+	log_cleanup("- Create /etc/httpd/conf.d");
 	lxfile_mkdir("/etc/httpd/conf.d");
+	log_cleanup("- Create /home/httpd/conf/defaults");
 	lxfile_mkdir("/home/httpd/conf/defaults");
+	log_cleanup("- Create /home/httpd/conf/domains");
 	lxfile_mkdir("/home/httpd/conf/domains");
 	
-	log_cleanup("- Install ~lxcenter.conf...");
+	log_cleanup("- Install /etc/httpd/conf.d/~lxcenter.conf");
 	lxfile_cp("../file/apache/~lxcenter.conf", "/etc/httpd/conf.d/~lxcenter.conf");
-	log_cleanup("- Install ssl.conf...");
+	log_cleanup("- Install /etc/httpd/conf.d/ssl.conf");
 	lxfile_cp("../file/apache/default_ssl.conf", "/etc/httpd/conf.d/ssl.conf");
-	log_cleanup("- Initialize webmail_redirect.conf...");
+	log_cleanup("- Initialize /home/httpd/conf/defaults/webmail_redirect.conf");
 	lxfile_touch("/home/httpd/conf/defaults/webmail_redirect.conf");
-	log_cleanup("- Initialize ssl.conf...");
+	log_cleanup("- Initialize /home/httpd/conf/defaults/ssl.conf");
 	lxfile_touch("/home/httpd/conf/defaults/ssl.conf");
-	log_cleanup("- Initialize _default.conf...");
+	log_cleanup("- Initialize /home/httpd/conf/defaults/_default.conf");
 	lxfile_touch("/home/httpd/conf/defaults/_default.conf");
-	log_cleanup("- Initialize cp_config.conf...");
+	log_cleanup("- Initialize /home/httpd/conf/defaults/cp_config.conf");
 	lxfile_touch("/home/httpd/conf/defaults/cp_config.conf");
 
-	log_cleanup("- Remove /etc/init.d/pure-ftpd service file...");
+	log_cleanup("- Remove /etc/init.d/pure-ftpd service file");
 	@lxfile_rm("/etc/init.d/pure-ftpd");
 	if (!lxfile_exists("/etc/xinetd.d/pureftp")) {
-		log_cleanup("- Install /etc/xinetd.d/pureftp TCP Wrapper file...");
+		log_cleanup("- Install /etc/xinetd.d/pureftp TCP Wrapper file");
 		lxfile_cp("../file/xinetd.pureftp", "/etc/xinetd.d/pureftp");
 	}
 
 	if(!lxfile_real("/etc/pki/pure-ftpd/pure-ftpd.pem")) {
-		log_cleanup("- Install pure-ftpd ssl/tls key...");
+		log_cleanup("- Install pure-ftpd ssl/tls key");
 		lxfile_mkdir("/etc/pki/pure-ftpd/");
 		lxfile_cp("../file/program.pem", "/etc/pki/pure-ftpd/pure-ftpd.pem");
 	}
 
 	if (!lxfile_exists("/etc/xinetd.d/smtp_lxa")) {
-		log_cleanup("- Install xinetd smtp_lxa SMTP TCP Wrapper...");
+		log_cleanup("- Install xinetd smtp_lxa SMTP TCP Wrapper");
 		lxfile_cp("../file/xinetd.smtp_lxa", "/etc/xinetd.d/smtp_lxa");
 	}
 
-	log_cleanup("- Remove /etc/xinetd.d/pure-ftpd TCP Wrapper file...");
+	log_cleanup("- Remove /etc/xinetd.d/pure-ftpd TCP Wrapper file");
 	@lxfile_rm("/etc/xinetd.d/pure-ftpd");
 
-	log_cleanup("- Install qmail service...");
+	log_cleanup("- Install qmail service");
 	lxfile_cp("../file/qmail.init", "/etc/init.d/qmail");
 	lxfile_unix_chmod("/etc/init.d/qmail", "0755");
 
-	log_cleanup("- Install /etc/lxrestricted file (lxjailshell commands restrictions)...");
+	log_cleanup("- Install /etc/lxrestricted file \(lxjailshell commands restrictions\)");
 	lxfile_cp("../file/lxrestricted", "/etc/lxrestricted");
 
-	log_cleanup("- Install /etc/sysconfig/spamassassin ...");
+	log_cleanup("- Install /etc/sysconfig/spamassassin");
 	lxfile_cp("../file/sysconfig_spamassassin", "/etc/sysconfig/spamassassin");
 
 	$name = trim(lfile_get_contents("/var/qmail/control/me"));
-	log_cleanup("- Install qmail defaultdomain and defaulthost (" . $name . ") ...");
+//	log_cleanup("- Install qmail defaultdomain and defaulthost (" . $name . ") ");
+	log_cleanup("- Install qmail defaultdomain and defaulthost \($name\)");
 	lxfile_cp("/var/qmail/control/me", "/var/qmail/control/defaultdomain");
 	lxfile_cp("/var/qmail/control/me", "/var/qmail/control/defaulthost");
-	log_cleanup("- Install qmail SMTP Greeting (" . $name . " - Welcome to Qmail) ...");
+//	log_cleanup("- Install qmail SMTP Greeting (" . $name . " - Welcome to Qmail)");
+	log_cleanup("- Install qmail SMTP Greeting \($name - Welcome to Qmail\)");
 	lfile_put_contents("/var/qmail/control/smtpgreeting", "$name - Welcome to Qmail");
 
 	if (!lxfile_exists("/usr/bin/rblsmtpd")) {
-		log_cleanup("- Initialize rblsmtpd binary ...");
+		log_cleanup("- Initialize rblsmtpd binary");
 		lxshell_return("ln", "-s", "/usr/local/bin/rblsmtpd", "/usr/bin/");
 	}
 	if (!lxfile_exists("/usr/bin/tcpserver")) {
-		log_cleanup("- Initialize tcpserver binary ...");
+		log_cleanup("- Initialize tcpserver binary");
 		lxshell_return("ln", "-s", "/usr/local/bin/tcpserver", "/usr/bin/");
 	}
 
-	log_cleanup("- Enable xinetd service ...");
+	log_cleanup("- Enable xinetd service");
 	call_with_flag("enable_xinetd");
 
-	log_cleanup("- Fix suexec ...");
+	log_cleanup("- Fix suexec");
 	fix_suexec();
 
-	log_cleanup("- Restart xinetd service ...");
+	log_cleanup("- Restart xinetd service");
 	call_with_flag("restart_xinetd_for_pureftp");
 
 	if (!lxfile_exists("/usr/bin/php-cgi")) {
-		log_cleanup("- Initialize php-cgi binary ...");
+		log_cleanup("- Initialize php-cgi binary");
 		lxfile_cp("/usr/bin/php", "/usr/bin/php-cgi");
 	}
-	log_cleanup("- Set permissions for /usr/bin/php-cgi ...");
+	log_cleanup("- Set permissions for /usr/bin/php-cgi");
 	lxfile_unix_chmod("/usr/bin/php-cgi", "0755");
-	log_cleanup("- Set permissions for closeallinput binary ...");
+	log_cleanup("- Set permissions for closeallinput binary");
 	lxfile_unix_chmod("../cexe/closeallinput", "0755");
-	log_cleanup("- Set permissions for lxphpsu binary ...");
+	log_cleanup("- Set permissions for lxphpsu binary");
 	lxfile_unix_chown("../cexe/lxphpsu", "root:root");
 	lxfile_unix_chmod("../cexe/lxphpsu", "0755");
 	lxfile_unix_chmod("../cexe/lxphpsu", "ug+s");
-	log_cleanup("- Set permissions for phpsuexec.sh script ...");
+	log_cleanup("- Set permissions for phpsuexec.sh script");
 	lxfile_unix_chmod("../file/phpsuexec.sh", "0755");
-	log_cleanup("- Set permissions for /home/kloxo/httpd/lighttpd/ dir ...");
+	log_cleanup("- Set permissions for /home/kloxo/httpd/lighttpd/ dir");
 	system("chown -R apache:apache /home/kloxo/httpd/lighttpd/");
-	log_cleanup("- Set permissions for /var/lib/php/session/ dir ...");
+	log_cleanup("- Set permissions for /var/lib/php/session/ dir");
 	system("chmod 777 /var/lib/php/session/");
 	system("chmod o+t /var/lib/php/session/");
-	log_cleanup("- Set permissions for /var/bogofilter/ dir ...");
+	log_cleanup("- Set permissions for /var/bogofilter/ dir");
 	system("chmod 777 /var/bogofilter/");
 	system("chmod o+t /var/bogofilter/");
-	log_cleanup("- Kill sisinfoc system process ...");
+	log_cleanup("- Kill sisinfoc system process");
 	system("pkill -f sisinfoc");
 
-	log_cleanup("- Install lighttpd.conf ...");
+	log_cleanup("- Install /etc/lighttpd/lighttpd.conf");
 	lxfile_cp("../file/lighttpd/lighttpd.conf", "/etc/lighttpd/lighttpd.conf");
 
 	
 /* --- issue #598: Change lighhtpd config structure
-	log_cleanup("- Install kloxo.conf (lighttpd)...");
+	log_cleanup("- Install kloxo.conf (lighttpd)");
 	lxfile_cp("../file/lighttpd/conf/kloxo/kloxo.conf", "/etc/lighttpd/conf/kloxo/kloxo.conf");
 
-	log_cleanup("- Initialize webmail_reditrect.conf (lighttpd) ...");
+	log_cleanup("- Initialize webmail_reditrect.conf (lighttpd)");
 	lxfile_touch("/etc/lighttpd/conf/kloxo/webmail_redirect.conf");
 
 	if (!lxfile_real("/etc/lighttpd/local.lighttpd.conf")) {
-		log_cleanup("- Initialize local.lighttpd.conf (lighttpd) ...");
+		log_cleanup("- Initialize local.lighttpd.conf (lighttpd)");
 		system("echo > /etc/lighttpd/local.lighttpd.conf");
 	}
 	if (!lxfile_real("/etc/lighttpd/conf/kloxo/webmail_redirect.conf")) {
-		log_cleanup("- Initialize webmail.redirect.conf (lighttpd)...");
+		log_cleanup("- Initialize webmail.redirect.conf (lighttpd)");
 		system("echo > /etc/lighttpd/conf/kloxo/webmail_redirect.conf");
 	}
 	if (!lxfile_real("/etc/lighttpd/conf/kloxo/virtualhost.conf")) {
-		log_cleanup("- Initialize virtualhost.conf (lighttpd)...");
+		log_cleanup("- Initialize virtualhost.conf (lighttpd)");
 		system("echo > /etc/lighttpd/conf/kloxo/virtualhost.conf");
 	}
 	if (!lxfile_real("/etc/lighttpd/conf/kloxo/domainip.conf")) {
-		log_cleanup("- Initialize domainip.conf (lighttpd)...");
+		log_cleanup("- Initialize domainip.conf (lighttpd)");
 		system("echo > /etc/lighttpd/conf/kloxo/domainip.conf");
 	}
 	if (!lxfile_real("/etc/lighttpd/conf/kloxo/ssl.conf")) {
-		log_cleanup("- Initialize ssl.conf (lighttpd)...");
+		log_cleanup("- Initialize ssl.conf (lighttpd)");
 		system("echo > /etc/lighttpd/conf/kloxo/ssl.conf");
 	}
 	if (!lxfile_real("/etc/lighttpd/conf/kloxo/mimetype.conf")) {
-		log_cleanup("- Initialize mimetype.conf (lighttpd)...");
+		log_cleanup("- Initialize mimetype.conf (lighttpd)");
 		system("echo > /etc/lighttpd/conf/kloxo/mimetype.conf");
 	}
 --- */
 
+	lxfile_rm("/etc/lighttpd/conf/kloxo");
+
+	log_cleanup("- Create /etc/lighttpd/conf.d");
 	lxfile_mkdir("/etc/lighttpd/conf.d");
+	log_cleanup("- Create /home/lighttpd/conf/defaults");
 	lxfile_mkdir("/home/lighttpd/conf/defaults");
+	log_cleanup("- Create /home/lighttpd/conf/domains");
 	lxfile_mkdir("/home/lighttpd/conf/domains");
 	
-	log_cleanup("- Install ~lxcenter.conf (lighttpd)...");
+	log_cleanup("- Initialize /etc/lighttpd/conf.d/~lxcenter.conf");
 	lxfile_cp("../file/lighttpd/~lxcenter.conf", "/etc/lighttpd/conf.d/~lxcenter.conf");
 
 	if (!lxfile_real("/etc/lighttpd/local.lighttpd.conf")) {
-		log_cleanup("- Initialize local.lighttpd.conf (lighttpd) ...");
+		log_cleanup("- Initialize /etc/lighttpd/local.lighttpd.conf");
 		system("echo > /etc/lighttpd/local.lighttpd.conf");
 	}
 	if (!lxfile_real("/home/lighttpd/conf/defaults/webmail_redirect.conf")) {
-		log_cleanup("- Initialize webmail_redirect.conf (lighttpd)...");
+		log_cleanup("- Initialize /home/lighttpd/conf/defaults/webmail_redirect.conf");
 		system("echo > /home/lighttpd/conf/defaults/webmail_redirect.conf");
 	}
 	if (!lxfile_real("/home/lighttpd/conf/defaults/~virtualhost.conf")) {
-		log_cleanup("- Initialize ~virtualhost.conf (lighttpd)...");
+		log_cleanup("- Initialize /home/lighttpd/conf/defaults/~virtualhost.conf");
 		system("echo > /home/lighttpd/conf/defaults/~virtualhost.conf");
 	}
 	if (!lxfile_real("/home/lighttpd/conf/defaults/ssl.conf")) {
-		log_cleanup("- Initialize ssl.conf (lighttpd)...");
+		log_cleanup("- Initialize /home/lighttpd/conf/defaults/ssl.conf");
 		system("echo > /home/lighttpd/conf/defaults/ssl.conf");
 	}
 	if (!lxfile_real("/home/lighttpd/conf/defaults/mimetype.conf")) {
-		log_cleanup("- Initialize mimetype.conf (lighttpd)...");
+		log_cleanup("- Initialize /home/lighttpd/conf/defaults/mimetype.conf");
 		system("echo > /home/lighttpd/conf/defaults/mimetype.conf");
 	}
 
 /* --- Issue #589: Change httpd config structure
-	log_cleanup("- Initialize domainip.conf (apache)...");
+	log_cleanup("- Initialize domainip.conf (apache)");
 	lxfile_touch("/etc/httpd/conf/kloxo/domainip.conf");
 
-	log_cleanup("- Initialize mimetype.conf (apache)...");
+	log_cleanup("- Initialize mimetype.conf (apache)");
 	lxfile_touch("/etc/httpd/conf/kloxo/mimetype.conf");
 --- */
-	log_cleanup("- Initialize mimetype.conf (apache)...");
+	log_cleanup("- Initialize/home/httpd/conf/defaults/mimetype.conf");
 	lxfile_touch("/home/httpd/conf/defaults/mimetype.conf");
 
-	log_cleanup("- Install /etc/init.d/lighttpd service file...");
+	log_cleanup("- Install /etc/init.d/lighttpd service file");
 	lxfile_cp("../file/lighttpd/etc_init.d", "/etc/init.d/lighttpd");
 
 	if (!lxfile_exists("/etc/pure-ftpd/pureftpd.passwd")) {
-		log_cleanup("- Initialize pure-ftpd password database...");
+		log_cleanup("- Initialize /etc/pure-ftpd/pureftpd.passwd password database");
 		lxfile_cp("/etc/pureftpd.passwd", "/etc/pure-ftpd/pureftpd.passwd");
 		lxshell_return("pure-pw", "mkdb");
 		createRestartFile("xinetd");
 	}
 
 	if (!lxfile_exists("../etc/flag/xcache_enabled.flg")) {
-		log_cleanup("- xcache flag not found, removing /etc/php.d/xcache.ini file...");
+		log_cleanup("- xcache flag not found, removing /etc/php.d/xcache.ini file");
 		lunlink("/etc/php.d/xcache.ini");
 	}
 
-	log_cleanup("- Turn off pure-ftpd service...");
+	log_cleanup("- Turn off pure-ftpd service");
 	system("chmod 666 /dev/null");
 	@ exec("chkconfig pure-ftpd off 2>/dev/null");
 
-	log_cleanup("- Initialize nobody.sh script...");
+	log_cleanup("- Initialize nobody.sh script");
 	$string = null;
 	$uid = os_get_uid_from_user("lxlabs");
 	$gid = os_get_gid_from_user("lxlabs");
@@ -519,34 +537,34 @@ function updatecleanup()
 	lfile_put_contents("/home/httpd/nobody.sh", $string);
 	lxfile_unix_chmod("/home/httpd/nobody.sh", "0755");
 
-	log_cleanup("- Execute lxpopuser.sh ...");
+	log_cleanup("- Execute lxpopuser.sh");
 	system("sh ../bin/misc/lxpopuser.sh");
 
-	log_cleanup("- Remove /home/kloxo/httpd/script dir...");
+	log_cleanup("- Remove /home/kloxo/httpd/script dir");
 	lxfile_rm_content("__path_home_root/httpd/script/");
-	log_cleanup("- Initialize /home/kloxo/httpd/script dir...");
+	log_cleanup("- Initialize /home/kloxo/httpd/script dir");
 	lxfile_mkdir("/home/kloxo/httpd/script");
 	lxfile_unix_chown_rec("/home/kloxo/httpd/script", "lxlabs:lxlabs");
-	log_cleanup("- Install phpinfo.php into /home/kloxo/httpd/script dir...");
+	log_cleanup("- Install phpinfo.php into /home/kloxo/httpd/script dir");
 	lxfile_cp("../file/script/phpinfo.phps", "/home/kloxo/httpd/script/phpinfo.php");
 
-	log_cleanup("- Install /etc/init.d/djbdns service file ...");
+	log_cleanup("- Install /etc/init.d/djbdns service file");
 	lxfile_cp("../file/djbdns.init", "/etc/init.d/djbdns");
 
-	log_cleanup("- Enable the correct drivers (Service daemons) ...");
+	log_cleanup("- Enable the correct drivers \(Service daemons\)");
 	removeOtherDriver();
 
-	log_cleanup("- Remove cache dir ...");
+	log_cleanup("- Remove cache dir");
 	lxfile_rm_rec("__path_program_root/cache");
 
-	log_cleanup("- restart syslog service ...");
+	log_cleanup("- restart syslog service");
 	createRestartFile('syslog');
 
-	log_cleanup("- Initialize awstats dirdata ...");
+	log_cleanup("- Initialize awstats dirdata");
 	lxfile_mkdir("/home/kloxo/httpd/awstats/dirdata");
 
 	if (!lxfile_exists("/etc/logrotate.d/kloxo")) {
-		log_cleanup("- Install Kloxo Log rotate file...");
+		log_cleanup("- Install /etc/logrotate.d/kloxo");
 		lxfile_cp("../file/kloxo.logrotate", "/etc/logrotate.d/kloxo");
 	}
 
@@ -576,7 +594,7 @@ function updatecleanup()
 	    }
 	}
 
-	log_cleanup("Initialize skeleton (Default web page)");
+	log_cleanup("Initialize skeleton \(Default web page\)");
 	lxfile_mkdir("__path_kloxo_httpd_root/default/");
 	lxfile_cp("../file/skeleton.zip", "__path_kloxo_httpd_root/skeleton.zip");
 	lxshell_unzip("__system__", "__path_kloxo_httpd_root/default/", "../file/skeleton.zip");
@@ -626,9 +644,9 @@ function findNextVersion($lastversion = null)
 	$nlist = getVersionList($lastversion);
 	dprintr($nlist);
 	$k = 0;
-	print("Found version(s): ");
+	print("Found version(s):");
 	foreach($nlist as $l) {
-		print("- $l ");
+		print("- $l");
 		if (version_cmp($thisversion, $l) === -1) {
 			$upgrade = $l;
 			break;
@@ -666,9 +684,14 @@ function do_upgrade($upversion)
 	lxfile_rm_rec("__path_program_htmlbase/download");
 	lxfile_mkdir("download");
 	chdir("download");
-	log_cleanup("Downloading $programfile ...");
+	log_cleanup("Downloading $programfile");
 	download_source("/$program/$programfile");
-	log_cleanup("Download Done!\n Start unzip...");
+	log_cleanup("Download Done!\n Start unzip");
 	system("cd ../../ ; unzip -o httpdocs/download/$programfile");
 	chdir($saveddir);
+}
+
+// --- just for temporary by mustafaramadhan; need confirm to 'original' author (Danny?)
+function log_cleanup($input) {
+	system("echo $input >> /var/log/kloxo/cleanup.log");
 }

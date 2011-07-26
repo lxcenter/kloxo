@@ -30,8 +30,28 @@ static function installMe()
 //	addLineIfNotExistInside("/etc/httpd/conf/httpd.conf", "Include /etc/httpd/conf/kloxo/kloxo.conf", "");
 	lxfile_cp("/usr/local/lxlabs/kloxo/file/apache/~lxcenter.conf", "/etc/httpd/conf.d/~lxcenter.conf");
 
-	// delete old structure
-	passthru("rm -rf /etc/httpd/conf/kloxo");
+	lxfile_cp("/usr/local/lxlabs/kloxo/file/centos-5/httpd.conf", "/etc/httpd/conf/httpd.conf");
+
+	//-- old structure
+	lxfile_rm("/etc/httpd/conf/kloxo");
+
+	//-- new structure	
+	lxfile_mkdir("/home/httpd/conf");
+	lxfile_mkdir("/home/httpd/conf/defaults");
+	lxfile_mkdir("/home/httpd/conf/domains");
+
+	//--- some vps include /etc/httpd/conf.d/swtune.conf
+	passthru("rm -f /etc/httpd/conf.d/swtune.conf");
+
+	copy("/usr/local/lxlabs/kloxo/file/apache/~lxcenter.conf", "/etc/httpd/conf.d/~lxcenter.conf");
+	copy("/usr/local/lxlabs/kloxo/file/centos-5/httpd.conf", "/etc/httpd/conf/httpd.conf");
+
+	if (!lfile_exists("/home/kloxo/httpd/cp")) {
+		mkdir("/home/kloxo/httpd/cp");
+		copy("/usr/local/lxlabs/kloxo/file/cp_config_index.php", "/home/kloxo/httpd/cp/index.php");
+		passthru("unzip -oq /usr/local/lxlabs/kloxo/file/skeleton.zip -d /home/kloxo/httpd/cp");
+		passthru("chown -R lxlabs:lxlabs /home/kloxo/httpd/cp");
+	}
 
 	// rev 527
 	lxfile_cp("../file/apache/etc_init.d", "/etc/init.d/httpd");
@@ -136,8 +156,11 @@ function updateMainConfFile()
 
 //	$this->updateIpConfFile();
 
+	// override httpd.conf
+	lxfile_cp("/usr/local/lxlabs/kloxo/file/centos-5/httpd.conf", "/etc/httpd/conf/httpd.conf");
 	// delete old structure
 	passthru("rm -rf /etc/httpd/conf/kloxo");
+
 	foreach((array) $vdomlist as $dom) {
 		passthru("rm -rf {$sgbl->__path_httpd_root}/{$dom['nname']}/conf");
 	}
@@ -1330,13 +1353,8 @@ function dbactionUpdate($subaction)
 			$this->main->doStatsPageProtection();
 			$this->createCpConfig();
 			// --- always update webmail_redirect too
-			// --- this is wrong code but work
+			// --- this call is wrong but work; call with 'new MMail()' have strange result
 			Mmail::fixWebmailRedirect();
-		/* -- this is right but weird result
-			$mmail = new $this->main->MMail();
-			$mmail->fixWebmailRedirect();
-			$mmail = null;
-		*/
 			break;
 
 		case "add_subweb_a":
