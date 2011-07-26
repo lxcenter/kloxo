@@ -26,21 +26,25 @@ if ($database === '_all_') {
 	while ($db = mysql_fetch_array($dbs)) {
 		echo "  {$db[0]} database\n";
 
-		mysql_select_db($db[0]);
-
-		if ($table === '_all_') {
-			$tbls = mysql_query('SHOW tables');
-
-			while ($tbl = mysql_fetch_array($tbls)) {
-				if ($tbl === 'mysql') { continue; }
-				if ($tbl === 'information_schema') { continue; }
-				echo "    {$tbl[0]} table\n";
-				mysql_query("ALTER TABLE {$tbl[0]} ENGINE={$engine}");
-			}
+		if ($db[0] === 'mysql') {
+		}
+		else if ($db[0] === 'information_schema') {
 		}
 		else {
-			mysql_query("ALTER TABLE {$table} ENGINE={$engine}");
-			echo "    {$table} table\n";
+			mysql_select_db($db[0]);
+
+			if ($table === '_all_') {
+				$tbls = mysql_query('SHOW tables');
+
+				while ($tbl = mysql_fetch_array($tbls)) {
+					echo "    {$tbl[0]} table\n";
+					mysql_query("ALTER TABLE {$tbl[0]} ENGINE={$engine}");
+				}
+			}
+			else {
+				mysql_query("ALTER TABLE {$table} ENGINE={$engine}");
+				echo "    {$table} table\n";
+			}
 		}
 	}
 }
