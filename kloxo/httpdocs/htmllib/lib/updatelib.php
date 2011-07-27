@@ -39,9 +39,9 @@ function update_main()
         	$ver = str_replace("\r", "", $ver);
 			if (!lxfile_real("/var/cache/kloxo/kloxo-thirdparty.$ver.zip")) {
 				$DoUpdate = true;
-				log_cleanup("Found a new ThirdParty version \($ver\)");
+				log_cleanup("Found a new ThirdParty version ($ver)");
 			} else {
-				log_cleanup("No new ThirdParty version found \(Current version $ver\)");
+				log_cleanup("No new ThirdParty version found (Current version $ver)");
 			}
 		}
 
@@ -49,9 +49,9 @@ function update_main()
 		$ver = get_package_version("lxwebmail");
 		if (!lxfile_real("/var/cache/kloxo/lxwebmail$ver.tar.gz")) {
 			$DoUpdate = true;
-			log_cleanup("Found a new WebMail version \($ver\)");
+			log_cleanup("Found a new WebMail version ($ver)");
 		}  else {
-			log_cleanup("No new Webmail version found \(Current version $ver\)");
+			log_cleanup("No new Webmail version found (Current version $ver)");
 		}
 
 		if ( $DoUpdate == false ) {
@@ -78,7 +78,7 @@ function update_main()
 function updatecleanup()
 {
 	global $gbl, $sgbl, $login, $ghtml;
-	log_cleanup("OS Create Kloxo init.d service file and copy core php.ini \(lxphp\)");
+	log_cleanup("OS Create Kloxo init.d service file and copy core php.ini (lxphp)");
 	os_create_program_service();
 
 	log_cleanup("OS Fix programroot path permissions");
@@ -367,7 +367,7 @@ function updatecleanup()
 	lxfile_cp("../file/qmail.init", "/etc/init.d/qmail");
 	lxfile_unix_chmod("/etc/init.d/qmail", "0755");
 
-	log_cleanup("- Install /etc/lxrestricted file \(lxjailshell commands restrictions\)");
+	log_cleanup("- Install /etc/lxrestricted file (lxjailshell commands restrictions)");
 	lxfile_cp("../file/lxrestricted", "/etc/lxrestricted");
 
 	log_cleanup("- Install /etc/sysconfig/spamassassin");
@@ -375,11 +375,11 @@ function updatecleanup()
 
 	$name = trim(lfile_get_contents("/var/qmail/control/me"));
 //	log_cleanup("- Install qmail defaultdomain and defaulthost (" . $name . ") ");
-	log_cleanup("- Install qmail defaultdomain and defaulthost \($name\)");
+	log_cleanup("- Install qmail defaultdomain and defaulthost ($name)");
 	lxfile_cp("/var/qmail/control/me", "/var/qmail/control/defaultdomain");
 	lxfile_cp("/var/qmail/control/me", "/var/qmail/control/defaulthost");
 //	log_cleanup("- Install qmail SMTP Greeting (" . $name . " - Welcome to Qmail)");
-	log_cleanup("- Install qmail SMTP Greeting \($name - Welcome to Qmail\)");
+	log_cleanup("- Install qmail SMTP Greeting ($name - Welcome to Qmail)");
 	lfile_put_contents("/var/qmail/control/smtpgreeting", "$name - Welcome to Qmail");
 
 	if (!lxfile_exists("/usr/bin/rblsmtpd")) {
@@ -551,7 +551,7 @@ function updatecleanup()
 	log_cleanup("- Install /etc/init.d/djbdns service file");
 	lxfile_cp("../file/djbdns.init", "/etc/init.d/djbdns");
 
-	log_cleanup("- Enable the correct drivers \(Service daemons\)");
+	log_cleanup("- Enable the correct drivers (Service daemons)");
 	removeOtherDriver();
 
 	log_cleanup("- Remove cache dir");
@@ -594,7 +594,7 @@ function updatecleanup()
 	    }
 	}
 
-	log_cleanup("Initialize skeleton \(Default web page\)");
+	log_cleanup("Initialize skeleton (Default web page)");
 	lxfile_mkdir("__path_kloxo_httpd_root/default/");
 	lxfile_cp("../file/skeleton.zip", "__path_kloxo_httpd_root/skeleton.zip");
 	lxshell_unzip("__system__", "__path_kloxo_httpd_root/default/", "../file/skeleton.zip");
@@ -691,7 +691,31 @@ function do_upgrade($upversion)
 	chdir($saveddir);
 }
 
-// --- just for temporary by mustafaramadhan; need confirm to 'original' author (Danny?)
-function log_cleanup($input) {
-	system("echo $input >> /var/log/kloxo/cleanup.log");
+if (!function_exists('log_cleanup')) {
+/*
+	// --- just for temporary by mustafaramadhan
+	//     need confirm to 'original' author (Danny?)
+	//     exist in trunk but not for branch (for 6.1.7)
+	function log_cleanup($input) {
+		system("echo $input >> /var/log/kloxo/cleanup.log");
+	}
+*/
+
+	// taken from '/usr/local/lxlabs/kloxo/httpdocs/htmllib/phplib/lxlib.php' trunk
+	function log_cleanup($mess)
+	{
+		// Function used in cleanup/upcp process
+		//
+		// logs to the file update and print to screen
+
+		if (!is_string($mess)) {
+			$mess = var_export($mess, true);
+		}
+		$mess = trim($mess);
+		$rf = "__path_program_root/log/update";
+
+		print( $mess . "\n" );
+		lfile_put_contents($rf, @ date("H:i M/d/Y") . ": $mess" . PHP_EOL, FILE_APPEND);
+	}
 }
+
