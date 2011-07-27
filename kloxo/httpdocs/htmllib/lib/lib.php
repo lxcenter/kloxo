@@ -661,6 +661,15 @@ function PrepareRoundCubeDb()
 			exit;
 		}
 	}
+	
+	// --- issue #583 - solutions when database already exist but no tables
+	$tbl = array();
+	$tbl[0] = mysql_fetch_array(mysql_query('SHOW tables'));
+
+	if (!$tbl[0]) {
+		system("mysql -u root $pstring roundcubemail < /home/kloxo/httpd/webmail/roundcube/SQL/mysql.initial.sql");
+		system("mysql -u root $pstring roundcubemail < /home/kloxo/httpd/webmail/roundcube/SQL/mysql.update.sql");
+	}
 
 	$pass = randomString(8);
 	$roundcubefileIN = "/usr/local/lxlabs/kloxo/file/webmail-chooser/db.inc.phps";
