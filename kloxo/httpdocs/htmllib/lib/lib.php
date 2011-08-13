@@ -16,7 +16,6 @@ function is_openvz()
 	return lxfile_exists("/proc/user_beancounters");
 }
 
-
 function auto_update()
 {
 	global $gbl, $sgbl, $login, $ghtml; 
@@ -35,8 +34,6 @@ function auto_update()
 			send_mail_to_admin($msg, $msg);
 		}
 	}
-
-	
 }
 
 function print_head_image()
@@ -83,31 +80,31 @@ function http_is_self_ssl()
 
 function core_installWithVersion($path, $file, $ver)
 {
-    global $sgbl;
-    $prgm = $sgbl->__var_program_name;
-    lxfile_mkdir("/var/cache/$prgm");
-    if (!lxfile_real("/var/cache/$prgm/$file.$ver.zip")) {
-        while (lxshell_return("unzip", "-t", "/var/cache/$prgm/$file.$ver.zip")) {
-            system("cd /var/cache/$prgm/ ; rm -f $file*.zip; wget download.lxcenter.org/download/$file.$ver.zip");
-        }
-        system("cd $path ; unzip -oq /var/cache/$prgm/$file.$ver.zip");
-    }
+	global $sgbl;
+	$prgm = $sgbl->__var_program_name;
+	lxfile_mkdir("/var/cache/$prgm");
+	if (!lxfile_real("/var/cache/$prgm/$file.$ver.zip")) {
+		while (lxshell_return("unzip", "-t", "/var/cache/$prgm/$file.$ver.zip")) {
+			system("cd /var/cache/$prgm/ ; rm -f $file*.zip; wget download.lxcenter.org/download/$file.$ver.zip");
+		}
+		system("cd $path ; unzip -oq /var/cache/$prgm/$file.$ver.zip");
+	}
 }
 
 function download_thirdparty()
 {
-    global $sgbl;
-    $prgm = $sgbl->__var_program_name;
-    // Fixes #303 and #304
-    $string = file_get_contents("http://download.lxcenter.org/download/thirdparty/$prgm-version.list");
+	global $sgbl;
+	$prgm = $sgbl->__var_program_name;
+	// Fixes #303 and #304
+	$string = file_get_contents("http://download.lxcenter.org/download/thirdparty/$prgm-version.list");
 
-    if ($string != "") {
-        $string = trim($string);
-        $string = str_replace("\n", "", $string);
-        $string = str_replace("\r", "", $string);
-        core_installWithVersion("/usr/local/lxlabs/$prgm/", "$prgm-thirdparty", $string);
-        lxfile_unix_chmod("/usr/local/lxlabs/$prgm/httpdocs/thirdparty/phpMyAdmin/config.inc.php","0644");
-    }
+	if ($string != "") {
+		$string = trim($string);
+		$string = str_replace("\n", "", $string);
+		$string = str_replace("\r", "", $string);
+		core_installWithVersion("/usr/local/lxlabs/$prgm/", "$prgm-thirdparty", $string);
+		lxfile_unix_chmod("/usr/local/lxlabs/$prgm/httpdocs/thirdparty/phpMyAdmin/config.inc.php","0644");
+	}
 }
 
 
@@ -123,8 +120,8 @@ function get_other_driver($class, $driverapp)
 		}
 	}
 	return $ret;
-
 }
+
 function csainlist($string, $ssl) 
 {
 	foreach($ssl as $ss) {
@@ -138,10 +135,10 @@ function csainlist($string, $ssl)
 function file_put_between_comments($username, $stlist, $endlist, $startstring, $endstring, $file, $string)
 {
 	global $gbl, $sgbl, $login, $ghtml; 
-    if (empty($string)) {
-    dprint("ERROR: Function file_put_between_comments\nERROR: File ". $file . " has empty \$string\n");
-    return;
-    }
+	if (empty($string)) {
+		dprint("ERROR: Function file_put_between_comments\nERROR: File ". $file . " has empty \$string\n");
+		return;
+	}
 	$prgm = $sgbl->__var_program_name;
 
 	$startcomment =  "###Please Don't edit these comments or the content in between. $prgm uses this to recognize the lines it writes to the the file. If the above line is corrupted, it may fail to recognize them, leading to multiple lines.";
@@ -184,7 +181,6 @@ function file_put_between_comments($username, $stlist, $endlist, $startstring, $
 	lxuser_put_contents($username, $file, $outstring);
 }
 
-
 function lxfile_cp_if_not_exists($src, $dst)
 {
 	if (!lxfile_exists($dst)) {
@@ -195,7 +191,7 @@ function lxfile_cp_if_not_exists($src, $dst)
 function db_get_value($table, $nname, $var)
 {
 	$sql = new Sqlite(null, $table);
-	$row = $sql->getRowsWhere("nname = :nname", array(':nname' => $nname), array($var));
+	$row = $sql->getRowsWhere("nname = '$nname'", array($var));
 	return $row[0][$var];
 }
 
@@ -228,7 +224,6 @@ function monitor_load()
 	send_to_master($rmt);
 }
 
-
 function log_load()
 {
 
@@ -245,20 +240,15 @@ function log_load()
 		$endstr = "\n";
 	}
 	lfile_put_contents("/var/log/loadvg.log", time() . ' ' . @ date("H:i:M/d/Y") . ": $mess$endstr", FILE_APPEND);
-	
 }
 
 function lxGetTimeFromString($line)
-{
-	
+{	
 	///2006-03-10 07:00:01
 	$line = trimSpaces($line);
 	$list = explode(" ", $line);
 	return $list[0];
 }
-
-
-
 
 function recursively_get_file($dir, $file)
 {
@@ -346,7 +336,13 @@ function get_favorite($class)
 		$url = base64_decode($h->url);
 		// If the link is from kloxo, it shouldn't throw up a lot of errors. Needs to fix this properly..
 		$ac_descr = @ $ghtml->getActionDetails($url, null, $iconpath, $path, $post, $_t_file, $_t_name, $_t_image, $__t_identity);
-		$tag = null;
+		if ($sgbl->isHyperVM() && $h->vpsparent_clname) {
+			$url = kloxo::generateKloxoUrl($h->vpsparent_clname, null, $url);
+			$tag = "(l)";
+		} else {
+			//$url = $url;
+			$tag = null;
+		}
 
 		if (isset($h->description)) {
 			$str = $h->description;
@@ -374,7 +370,6 @@ function get_favorite($class)
 	return $ret;
 }
 
-
 function print_favorites()
 {
 	global $gbl, $sgbl, $login, $ghtml; 
@@ -398,7 +393,6 @@ function print_favorites()
 	}
 	return $res;
 }
-
 
 function print_quick_action($class)
 {
@@ -450,7 +444,6 @@ function print_quick_action($class)
 	$res .= "</select> </td> </tr> ";
 	$res .= "</form> <tr > <td align=right> <a href=javascript:quickaction.submit() > Go </a> </td> </tr> ";
 	return $res;
-	
 }
 
 function addtoEtcHost($request, $ip)
@@ -466,7 +459,6 @@ function fill_string($string, $num = 33)
 	for($i = strlen($string); $i < $num; $i++) {
 		$string .= ".";
 	}
-
 	return $string;
 }
 
@@ -517,7 +509,6 @@ function createHtpasswordFile($object, $sdir, $list)
 	lxfile_unix_chmod($dirfile, "0755");
 }
 
-
 function get_file_from_path($path)
 {
 	return str_replace("/", "_", "slash_$path");
@@ -537,7 +528,6 @@ function convert_favorite()
 
 function fix_meta_character($v)
 {
-
 	for ($i = 0; $i < strlen($v); $i++) {
 		if (ord($v[$i]) > 128) {
 			$nv[] = strtolower(urlencode($v[$i]));
@@ -545,7 +535,6 @@ function fix_meta_character($v)
 			$nv[] = $v[$i];
 		}
 	}
-
 	return implode("", $nv);
 }
 
@@ -563,7 +552,6 @@ function changeDriver($server, $class, $pgm)
 	$os = $server->ostype;
 
 	$dr = $server->getObject('driver');
-
 
 	$v = "pg_$class";
 	$dr->driver_b->$v = $pgm;
@@ -619,29 +607,35 @@ function slave_get_db_pass()
 
 function slave_get_driver($class)
 {
-
 	$rmt = lfile_get_unserialize("../etc/slavedb/driver");
 	return $rmt->data[$class];
 }
 
 function PrepareRoundCubeDb()
 {
-//  Related to issue #421
+	//  Related to issue #421
 
 	global $gbl, $sgbl, $login, $ghtml;
 	$pass = slave_get_db_pass();
 	$user = "root";
 	$host = "localhost";
 	$link = mysql_connect($host, $user, $pass);
-	if (!$link) {
-	print("Mysql root password error\n");
-	exit;
+		if (!$link) {
+		print("Mysql root password error\n");
+		exit;
 	}
-		$pstring = null;
-		if ($pass) {
-			$pstring = "-p\"$pass\"";
-		}
+	$pstring = null;
+	if ($pass) {
+		$pstring = "-p\"$pass\"";
+	}
+
 	$result = mysql_select_db('roundcubemail', $link);
+
+	$roundcubefile = "/home/kloxo/httpd/webmail/roundcube/SQL/mysql.initial.sql";
+	$content = lfile_get_contents($roundcubefile);
+	$content = str_replace("ENGINE=INNODB", "", $content);
+	lfile_put_contents($roundcubefile, $content);
+
 	if (!$result) {
 		print("Something went wrong, can not select RoundCube database!\n");
 		print("Try to fix database...\n");
@@ -653,7 +647,8 @@ function PrepareRoundCubeDb()
 		}
 
 		system("mysql -u root $pstring roundcubemail < /home/kloxo/httpd/webmail/roundcube/SQL/mysql.initial.sql");
-		system("mysql -u root $pstring roundcubemail < /home/kloxo/httpd/webmail/roundcube/SQL/mysql.update.sql");
+		// -- don't use this update, because must be innodb
+	//	system("mysql -u root $pstring roundcubemail < /home/kloxo/httpd/webmail/roundcube/SQL/mysql.update.sql");
 
 		$result = mysql_select_db('roundcubemail', $link);
 		if (!$result) {
@@ -661,22 +656,27 @@ function PrepareRoundCubeDb()
 			exit;
 		}
 	}
-	
+
 	// --- issue #583 - solutions when database already exist but no tables
 	$tbl = array();
 	$tbl[0] = mysql_fetch_array(mysql_query('SHOW tables'));
 
 	if (!$tbl[0]) {
 		system("mysql -u root $pstring roundcubemail < /home/kloxo/httpd/webmail/roundcube/SQL/mysql.initial.sql");
-		system("mysql -u root $pstring roundcubemail < /home/kloxo/httpd/webmail/roundcube/SQL/mysql.update.sql");
+		// -- don't use this update, because must be innodb
+	//	system("mysql -u root $pstring roundcubemail < /home/kloxo/httpd/webmail/roundcube/SQL/mysql.update.sql");
 	}
 
+	system("chattr -i /home/kloxo/httpd/webmail/roundcube/config/db.inc.php");
+
+	print("Generating password..\n");
 	$pass = randomString(8);
+//	dprint("Generated Pass " . $pass . "\n");
 	$roundcubefileIN = "/usr/local/lxlabs/kloxo/file/webmail-chooser/db.inc.phps";
 	$roundcubefileOUT = "/home/kloxo/httpd/webmail/roundcube/config/db.inc.php";
-	$content = file_get_contents($roundcubefileIN);
+	$content = lfile_get_contents($roundcubefileIN);
 	$content = str_replace("mysql://roundcube:pass", "mysql://roundcube:" . $pass, $content);
-	system("chattr -i /home/kloxo/httpd/webmail/roundcube/config/db.inc.php");
+	system("chattr -i ".$roundcubefileOUT);
 	lfile_put_contents($roundcubefileOUT, $content);
 
 	$result = mysql_query("GRANT ALL ON roundcubemail.* TO roundcube@localhost IDENTIFIED BY '$pass'", $link);
@@ -688,8 +688,99 @@ function PrepareRoundCubeDb()
 	print("RoundCube Database installed.\n");
 	$pass = null;
 	$pstring = null;
+
+	//--- to make sure always 644
+	system("chmod 644 /home/kloxo/httpd/webmail/roundcube/config/db.inc.php");
 }
 
+// --- new function with 'roundcube' style to replace 'old'
+function PrepareHordeDb()
+{
+	global $gbl, $sgbl, $login, $ghtml;
+	$pass = slave_get_db_pass();
+	$user = "root";
+	$host = "localhost";
+	$link = mysql_connect($host, $user, $pass);
+	if (!$link) {
+		print("Mysql root password error\n");
+		exit;
+	}
+	$pstring = null;
+	if ($pass) {
+		$pstring = "-p\"$pass\"";
+	}
+
+	$result = mysql_select_db('horde_groupware', $link);
+
+	print("Fix database values in horde sql importfile\n");
+
+	$hordefile = "/home/kloxo/httpd/webmail/horde/scripts/sql/groupware.mysql.sql";
+	$content = lfile_get_contents($hordefile);
+	$content = str_replace("CREATE DATABASE horde;", "CREATE DATABASE IF NOT EXISTS horde_groupware;", $content);
+	lfile_put_contents($hordefile, $content);
+
+	$content = lfile_get_contents($hordefile);
+	$content = str_replace("USE horde;", "USE horde_groupware;", $content);
+	lfile_put_contents($hordefile, $content);
+
+	$content = lfile_get_contents($hordefile);
+	$content = str_replace(") ENGINE = InnoDB;", ");", $content);
+	lfile_put_contents($hordefile, $content);
+
+	if (!$result) {
+		print("Something went wrong, can not select Horde database!\n");
+		print("Try to fix database...\n");
+		$result = mysql_query("DROP DATABASE horde_groupware", $link);
+		$result = mysql_query("CREATE DATABASE horde_groupware", $link);
+		if (!$result) {
+			print("There is REALY something very very wrong... Go to http://forum.lxcenter.org/ and report.\n\n");
+			exit;
+		}
+
+		system("mysql -u root $pstring < /home/kloxo/httpd/webmail/horde/scripts/sql/groupware.mysql.sql");
+
+		$result = mysql_select_db('horde_groupware', $link);
+		if (!$result) {
+			print("Something REALY went wrong, can not create Horde database!\n");
+			exit;
+		}
+	}
+
+	// --- issue #583 - solutions when database already exist but no tables
+	$tbl = array();
+	$tbl[0] = mysql_fetch_array(mysql_query('SHOW tables'));
+
+	if (!$tbl[0]) {
+		system("mysql -u root $pstring < /home/kloxo/httpd/webmail/horde/scripts/sql/groupware.mysql.sql");
+	}
+
+	lxfile_cp("/usr/local/lxlabs/kloxo/file/horde.config.phps", "/home/kloxo/httpd/webmail/horde/config/conf.php");
+	system("chattr -i /home/kloxo/httpd/webmail/horde/config/conf.php");
+
+	print("Generating password..\n");
+	$pass = randomString(8);
+//	dprint("Generated Pass " . $pass . "\n");
+	print("Add Password to configfile\n");
+	$content = lfile_get_contents("../file/horde.config.phps");
+	$content = str_replace("__lx_horde_pass", $pass, $content);
+	print("Remove system readonly attribute from configfile\n");
+	system("chattr -i /home/kloxo/httpd/webmail/horde/config/conf.php");
+
+	lfile_put_contents("/home/kloxo/httpd/webmail/horde/config/conf.php", $content);
+
+	$result = mysql_query("GRANT ALL ON horde_groupware.* TO horde_groupware@localhost IDENTIFIED BY '$pass'", $link);
+	mysql_query("flush privileges", $link);
+	if (!$result) {
+		print("Could not grant privileges\nScript Abort.\n");
+		exit;
+	}
+	print("Horde Database installed.\n");
+	$pass = null;
+	$pstring = null;
+
+	//--- to make sure always 644
+	system("chmod 644 /home/kloxo/httpd/webmail/horde/config/conf.php");
+}
 
 function run_mail_to_ticket()
 {
@@ -736,7 +827,6 @@ FTC;
 	//lunlink($tmp);
 }
 
-
 function send_system_monitor_message_to_admin($prog)
 {
 	global $gbl, $sgbl, $login, $ghtml; 
@@ -751,7 +841,6 @@ function send_system_monitor_message_to_admin($prog)
 
 }
 
-
 function check_if_port_on($port)
 {
 	$socket = socket_create(AF_INET, SOCK_STREAM, SOL_TCP);
@@ -762,10 +851,9 @@ function check_if_port_on($port)
 	return true;
 }
 
-
 function installAppPHP($var, $cmd)
 {
-   // TODO LxCenter: The created dir and file should be owned by the user
+	// TODO LxCenter: The created dir and file should be owned by the user
 	global $gbl, $sgbl, $login, $ghtml; 
 	$domain = $var['domain'];
 	$appname = $var['appname'];
@@ -817,7 +905,7 @@ function validate_domain_name($name)
 
 function execinstallappPhp($domain, $appname, $cmd)
 {
-    // TODO LxCenter: The created dir and file should be owned by the user
+	// TODO LxCenter: The created dir and file should be owned by the user
 	global $gbl, $sgbl, $login, $ghtml; 
 	lxfile_mkdir("/home/httpd/$domain/httpdocs/__installapplog");
 	$i = 0;
@@ -838,7 +926,6 @@ function execinstallappPhp($domain, $appname, $cmd)
 	system($cmd);
 	dprint("\n*************************************************************************\n");
 }
-
 
 function update_self()
 {
@@ -904,11 +991,9 @@ function getRealPidlist($arg)
 		}
 		$nlist[] = $l;
 	}
-
 	return $nlist;
 
 }
-
 
 function get_double_hex($i)
 {
@@ -956,13 +1041,12 @@ function call_with_flag($func)
 function check_disable_admin($cgi_clientname)
 {
 	$sq = new Sqlite(null, 'general');
-	$list = $sq->getRowsWhere("nname = 'admin'", null, array("disable_admin"));
+	$list = $sq->getRowsWhere("nname = 'admin'", array("disable_admin"));
 	$val = $list[0]['disable_admin'];
 
 	if ($cgi_clientname === 'admin' && $val === 'on') {
 		return true;
 	}
-
 	return false;
 }
 
@@ -974,8 +1058,6 @@ function check_if_many_server()
 	//$lic = $login->getObject('license');
 	//$lic = $lic->licensecom_b;
 	//return ($lic->lic_pserver_num > 1);
-
-
 
 	$sql = new Sqlite(null, "pserver");
 	$res = $sql->getTable(array('nname'));
@@ -1162,8 +1244,8 @@ function testAllServers()
 	if ($flist) {
 		throw new lxException($e->getMessage(), '', $flist);
 	}
-
 }
+
 function exec_with_all_closed($cmd)
 {
 	global $gbl, $sgbl, $login, $ghtml; 
@@ -1200,11 +1282,7 @@ function mycount($olist)
 		$i++;
 	}
 	return $i;
-
 }
-
-
-
 
 function full_validate_ipaddress($ip, $variable = 'ipaddress')
 {
@@ -1243,7 +1321,6 @@ function do_actionlog($login, $object, $action, $subaction)
 		return;
 	}
 
-
 	$d = microtime(true);
 	$alog = new ActionLog(null, null, $d);
 	$res['login'] = $login->nname;
@@ -1260,7 +1337,6 @@ function do_actionlog($login, $object, $action, $subaction)
 	$alog->write();
 }
 
-
 function validate_email($email)
 {
 	$regexp = "/^([\w\!\#$\%\&\'\*\+\-\/\=\?\^\`{\|\}\~]+\.)*[\w\!\#$\%\&\'\*\+\-\/\=\?\^\`{\|\}\~]+@" .
@@ -1270,7 +1346,6 @@ function validate_email($email)
 	}
 	return true;
 }
-
 
 function validate_ipaddress_and_throw($ip, $variable)
 {
@@ -1333,7 +1408,7 @@ function getRealhostName($name)
 		return $name;
 	}
 	$sq = new Sqlite(null, 'pserver');
-	$res = $sq->getRowsWhere('nname = :name', array(':name' => $name), array('realhostname'));
+	$res = $sq->getRowsWhere("nname = '$name'", array('realhostname'));
 	if (!$res[0]['realhostname']) {
 		return 'localhost';
 	}
@@ -1397,9 +1472,7 @@ function getFQDNforServer($v)
 	}
 
 	return getOneIPForServer($v);
-	
 }
-
 
 function getOneIPForServer($v)
 {
@@ -1445,7 +1518,7 @@ function get_admin_license_var()
 		$__l = "used_q_$__l";
 	}
 	$sq = new Sqlite(null, 'client');
-	$res = $sq->getRowsWhere("nname = 'admin'", null, $list);
+	$res = $sq->getRowsWhere("nname = 'admin'", $list);
 	return $res[0];
 }
 
@@ -1467,7 +1540,6 @@ function cp_fileserv_list($root, $list)
 	}
 	return $res;
 }
-
 
 function cp_fileserv($file)
 {
@@ -1495,7 +1567,6 @@ function cp_fileserv($file)
 	//$stat = llstat("__path_serverfile/$base");
 	$res['size'] = lxfile_size($file);
 	return $res;
-
 }
 
 function do_zip_to_fileserv($type, $arg)
@@ -1534,7 +1605,6 @@ function do_zip_to_fileserv($type, $arg)
 	}
 
 	return "__path_serverfile/tmp/$base";
-	
 }
 
 
@@ -1586,7 +1656,6 @@ function printFromFileServ($serv, $filepass)
  
 function doRealGetFromFileServ($cmd, $serv, $filepass, $copyto = null)
 {
-
 	$file = $filepass['file'];
 	$pass = $filepass['pass'];
 	$size = $filepass['size'];
@@ -1615,9 +1684,6 @@ function doRealGetFromFileServ($cmd, $serv, $filepass, $copyto = null)
 		}
 
 	}
-
-
-
 
 	$fd = null;
 	if ($copyto) {
@@ -1653,7 +1719,6 @@ function doGetOrPrintFromFileServ($serv, $filepass, $type, $fd)
 	$totalsize = send_to_some_stream_server($type, $size, $serv, $string, $fd);
 
 	log_log("servfile", "Got $serv $type $file $size (Totalsize willbe +1) $totalsize");
-
 }
 
 function trimSpaces($val)
@@ -1701,7 +1766,8 @@ function redirect_to_https()
 	global $gbl, $sgbl, $login, $ghtml; 
 
 	if ($sgbl->is_this_slave()) { print("This is a Slave Server\n"); exit; }
-include_once "htmllib/phplib/lib/generallib.php";
+
+	include_once "htmllib/phplib/lib/generallib.php";
 
 	$port = db_get_value("general", "admin", "ser_portconfig_b"); 
 	$port = unserialize(base64_decode($port));
@@ -1838,7 +1904,6 @@ function rrd_graph_server($type, $list, $time)
 
 	$color = array( "000000", "b54f6f", "00bb00", "a0ad00", "0090bf", "56a656", "00bbbf", "bfbfbf", "458325", "f04050", "a0b2c5", "cf0f00", "a070ad", "cf8085", "af93af", "90bb9f", "00d500", "00ff00", "aaffaa", "00ffff", "aa00ff", "ffff00", "aaff00", "faff00", "0aff00", "6aff00", "eaffa0", "abff0a", "afffaa", "deab3d", "333333", "894367", "234567", "fbdead", "fadec1", "fa3d9c", "f54398", "f278d3", "f512d3", "43f3f9", "f643f9");
 
-
 	if ($time >= 7 * 24 * 3600) {
 		$grid = 'HOUR:12:DAY:2:WEEK:8:0:%X';
 	} else if ($time >= 24 * 3600) {
@@ -1846,8 +1911,6 @@ function rrd_graph_server($type, $list, $time)
 	} else {
 		$grid = 'MINUTE:3:MINUTE:30:HOUR:1:0:%X';
 	}
-
-
 
 	switch($type) {
 		case "traffic":
@@ -1944,7 +2007,6 @@ function getObjectFromFileWithThrow($file)
 
 function checkIfVariablesSetOr($p, &$param, $v, $list)
 {
-
 	foreach($list as $l) {
 		if (isset($p[$l]) && $p[$l]) {
 			$param[$v] = $p[$l];
@@ -2054,8 +2116,6 @@ function is_running_secondary()
 {
 	return lxfile_exists("../etc/running_secondary");
 }
-
-
 
 function exit_if_running_secondary()
 {
@@ -2176,11 +2236,8 @@ function lx_core_lock_check_only($prog, $file = null)
 	return true;
 }
 
-
 function appvault_dbfilter($inputfile, $outputfile, $cont)
 {
-
-
 	global $gbl, $sgbl, $login, $ghtml; 
 	$val = lfile_get_contents($inputfile);
 	$fullurl = "{$cont['domain']}/{$cont['installdir']}";
@@ -2237,7 +2294,6 @@ function appvault_dbfilter($inputfile, $outputfile, $cont)
 	//dprint("{$cont['output']} : $val\n");
 	lfile_put_contents($outputfile, $val);
 }
-
 
 function installLxetc()
 {
@@ -2314,7 +2370,6 @@ function getFirstKeyFromList(&$list)
 		return $k;
 	}
 }
-
 
 function getFirstFromList(&$list)
 {
@@ -2481,7 +2536,8 @@ function curl_get_file_contents($file)
 
 function install_if_package_not_exist($name)
 {
-	if (lxshell_return("rpm", "-q", $name)) {
+	$ret = lxshell_return("rpm", "-q", $name);
+	if ($ret) {
 		lxshell_return("yum", "-y", "install", $name);
 	}
 }
@@ -2589,6 +2645,7 @@ function getDownloadServer()
 
 function download_source($file)
 {
+	
 	$server = getDownloadServer();
 	download_file("$server/$file");
 }
@@ -2633,7 +2690,7 @@ function download_file($url, $localfile = null)
 		$localfile = basename($url);
 	}
 	$fp = null;
-	if ($localfile !== null) {
+	if ($localfile !== 'devnull') {
 		$fp = lfopen($localfile, "w");
 		curl_setopt($ch, CURLOPT_FILE, $fp);
 	}
@@ -2647,8 +2704,6 @@ function download_file($url, $localfile = null)
 		fclose($fp);
 	}
 }
-
-
 
 function se_submit($contact, $dom, $email)
 {
@@ -2740,7 +2795,6 @@ function download_and_print_file($server, $file)
 	curl_close($ch);
 }
 
-
 function get_title()
 {
 	global $gbl, $sgbl, $login, $ghtml; 
@@ -2795,7 +2849,6 @@ function save_admin_email()
 	$a['admin']['contactemail'] = $email;
 	slave_save_db("contactemail", $a);
 }
-
 
 function callInChild($func, $arglist)
 {
@@ -2856,7 +2909,6 @@ function get_with_cache($file, $cmdarglist)
 
 }
 
-
 function copy_script()
 {
 	global $gbl, $sgbl, $login, $ghtml; 
@@ -2883,7 +2935,7 @@ function copy_script()
 
 function copy_image()
 {
-	// TODO: Function not in use
+	// Not needed anymore - LxCenter
 	return; 
 	global $gbl, $sgbl, $login, $ghtml; 
 	$prgm = $sgbl->__var_program_name;
@@ -2918,13 +2970,12 @@ function getIpaddressList($master, $servername)
 	if (!$servername) {
 		$servername = 'localhost';
 	}
-	$list = $sql->getRowsWhere('syncserver = :servername', array(':servername' => $servername));
+	$list = $sql->getRowsWhere("syncserver = '$servername'");
 	foreach($list as $l) {
 		$ret[] = $l['ipaddr'];
 	}
 	return $ret;
 }
-
 
 function if_customer_complain_and_exit()
 {
@@ -3008,8 +3059,6 @@ function if_not_admin_complain_and_exit()
 
 }
 
-
-
 function initProgram($ctype = NULL)
 {
 	global $gbl, $sgbl, $login, $ghtml;
@@ -3017,7 +3066,6 @@ function initProgram($ctype = NULL)
 	initProgramlib($ctype);
 
 }
-
 
 function getKBOrMB($val)
 {
@@ -3069,9 +3117,6 @@ function install_general($value)
 	system("up2date-nox --nosig $value");
 }
 
-
-
-
 function readlastline($fp, $pos, $size)
 {
 
@@ -3104,8 +3149,8 @@ function getMainQuotaVar($vlist)
 	$vlist['php_flag'] = "";    
 	$vlist['modperl_flag'] = "";    
 	$vlist['cgi_flag'] = "";    
-    $vlist['frontpage_flag'] = "";    
-    $vlist['dns_manage_flag'] = "";    
+	$vlist['frontpage_flag'] = "";    
+	$vlist['dns_manage_flag'] = "";    
 	$vlist['maildisk_usage'] = "";
 	return $vlist;
 }
@@ -3182,8 +3227,6 @@ function is_star_password($pass)
 {
 	return ($pass === "****");
 }
-
-
 
 function FindRightPosition($fp, $fsize, $oldtime, $newtime, $func) 
 {
@@ -3392,111 +3435,104 @@ function lxlabsFindRightPosition($fp, $fsize, $oldtime, $newtime)
 	}
 }
 
-
-
 function monthToInt($month) 
- {
-	 $t ="";
+{
+	$t ="";
 
-	 switch($month) {
+	switch($month) {
 	
- 	 case "Jan": $t = 1;
+ 	case "Jan": $t = 1;
 	             break;
-	 case "Feb": $t = 2;
+	case "Feb": $t = 2;
 	             break;
-	 case "Mar": $t = 3;
+	case "Mar": $t = 3;
 	             break;
-	 case "Apr": $t = 4;
+	case "Apr": $t = 4;
 	             break;
-	 case "May": $t = 5;
+	case "May": $t = 5;
 	             break;
-	 case "Jun": $t = 6;
+	case "Jun": $t = 6;
 	             break;
-	 case "Jul": $t = 7;
+	case "Jul": $t = 7;
 	             break;
-	 case "Aug": $t = 8;
+	case "Aug": $t = 8;
 	             break;
-	 case "Sep": $t = 9;
+	case "Sep": $t = 9;
 	             break;
-	 case "Oct": $t = 10;
+	case "Oct": $t = 10;
 	             break;
-	 case "Nov": $t = 11;
+	case "Nov": $t = 11;
 	             break;
-	 case "Dec": $t = 12;
+	case "Dec": $t = 12;
 	             break;
-	 }
+	}
 
-	 return str_pad($t , 2, 0 , STR_PAD_LEFT);
- }
+	return str_pad($t , 2, 0 , STR_PAD_LEFT);
+}
 
+function intToMonth($month) 
+{
 
- function intToMonth($month) 
- {
+	$mon = 0;
+	switch($month) {
 
-	 $mon = 0;
-	 switch($month) {
+		case "01":
+			$mon = "Jan";
+			break;
 
-		 case "01":
-			 $mon = "Jan";
-			 break;
+		case "02":
+			$mon = "Feb";
+			break;
 
-	    case "02":
-				 $mon = "Feb";
-	  		 break;
-
-	     case "03":
-			 $mon = "Mar";
-			 break;
+		case "03":
+			$mon = "Mar";
+			break;
 
 		 case "04":
 			 $mon = "Apr";
 			 break;
 
-		 case "05":
-			 $mon = "May";
-			 break;
+		case "05":
+			$mon = "May";
+			break;
 
-	     case "06":
-		  	$mon = "Jun";
-		   	break;
+		case "06":
+			$mon = "Jun";
+			break;
   
-	      case "07":
-		     $mon = "Jul";
-			 break;
+		case "07":
+			$mon = "Jul";
+			break;
 
-		 case "08":
-			 $mon = "Aug";
-			 break;
+		case "08":
+			$mon = "Aug";
+			break;
 
-		 case "09":
-			 $mon = "Sep";
-			 break;
+		case "09":
+			$mon = "Sep";
+			break;
 
-		 case "10":
-			 $mon = "Oct";
-			 break;
+		case "10":
+			$mon = "Oct";
+			break;
 
-		 case "11":
-			 $mon = "Nov";
-			 break;
+		case "11":
+			$mon = "Nov";
+			break;
 
-		 case "12":
-			 $mon = "Dec";
-	 		 break;
-
+		case "12":
+			$mon = "Dec";
+			break;
 	 }
 
-   return $mon;
-
- } 
-
+	return $mon;
+} 
 
 function readfirstline($file){
-	 $firstline   = fgets($file);
-	 fclose($fp);
-	 return $firstline;
- }
-
+	$firstline   = fgets($file);
+	fclose($fp);
+	return $firstline;
+}
 
 function getNotexistingFile($dir, $file)
 {
@@ -3509,15 +3545,11 @@ function getNotexistingFile($dir, $file)
 
 }
 
-
 function clearLxbackup($backup)
 {
 	$backup->setUpdateSubaction();
 	$backup->write();
 }
-
-
-
 
 function createrows($list)
 {
@@ -3580,7 +3612,6 @@ function is_default_quota_flag_on($v)
 	return true;
 }
 
-
 function db_set_default($table, $variable, $default, $extra = null)
 {
 	$sq = new Sqlite(null, $table);
@@ -3602,7 +3633,6 @@ function db_set_default_variable_diskusage($table, $variable, $default, $extra =
 	$sq->rawQuery("update $table set $variable = $default where $variable = '-' $extra");
 }
 
-
 function db_set_default_variable($table, $variable, $default, $extra = null)
 {
 	$sq = new Sqlite(null, $table);
@@ -3614,12 +3644,8 @@ function db_set_default_variable($table, $variable, $default, $extra = null)
 	//$sq->rawQuery("update $table set $variable = $default where $variable = '-' $extra");
 }
 
-
-
 function updateTableProperly($__db, $table, $rr, $content)
 {
-
-
 	foreach($content as $column) {
 		if (isset($rr[$column])) {
 			//dprint("Column $column Already exists in table $table\n");
@@ -3639,7 +3665,6 @@ function updateTableProperly($__db, $table, $rr, $content)
 	return true;
 }
 
-
 function add_http_if_not_exist($url)
 {
 	if (!csb($url, "http:/") && !csb($url, "https:/")) {
@@ -3658,7 +3683,6 @@ function getAllIpaddress()
 	}
 	return $list;
 }
-
 
 function updateDatabaseProperly()
 {
@@ -3786,9 +3810,9 @@ function migrateResourceplan($class)
 	}
 
 	foreach($total as $t) {
-		$string = $ss->createQueryStringAdd($t, $params);
+		$string = $ss->createQueryStringAdd($t);
 		$addstring = "insert into resourceplan $string;";
-		$ss->rawQuery($addstring, $params);
+		$ss->rawQuery($addstring);
 	}
 }
 
@@ -3802,8 +3826,6 @@ function fprint($var, $type = 0)
 	file_put_contents("file.txt", $string ."\n", FILE_APPEND);
 }
 
-
-
 function print_and_exit($rem)
 {
 	$val = base64_encode(serialize($rem));
@@ -3813,7 +3835,6 @@ function print_and_exit($rem)
 	exit;
 }
 
-
 function getOsForServer($servername)
 {
 	if (!$servername) {
@@ -3822,7 +3843,7 @@ function getOsForServer($servername)
 
 	$sq = new Sqlite(null, 'pserver');
 
-	$res = $sq->getRowsWhere('nname = :servername', array(':servername' => $servername), array('ostype'));
+	$res = $sq->getRowsWhere("nname = '$servername'", array('ostype'));
 	return $res[0]['ostype'];
 }
 
@@ -3866,6 +3887,7 @@ function fix_self_ssl()
 	//system("/etc/init.d/$pgm restart");
 
 }
+
 function remove_line($filename, $pattern)
 {
 	$list = lfile($filename);
@@ -3943,7 +3965,6 @@ function fix_mysql_root_password($server)
 	}
 }
 
-
 function slave_save_db($file, $list)
 {
 	$rmt = new Remote();
@@ -3951,7 +3972,6 @@ function slave_save_db($file, $list)
 	lxfile_mkdir("../etc/slavedb");
 	lfile_put_serialize("../etc/slavedb/$file", $rmt);
 }
-
 
 function securityBlanketExec($table, $nname, $variable, $func, $arglist)
 {
@@ -3966,7 +3986,6 @@ function securityBlanketExec($table, $nname, $variable, $func, $arglist)
 	lfile_put_contents($name, serialize($rem));
 	lxshell_background("__path_php_path", "../bin/common/securityblanket.php", $name);
 }
-
 
 function checkClusterDiskQuota()
 {
@@ -4050,7 +4069,6 @@ function find_hop($l)
 	}
 }
 
-
 function file_server($fd, $string)
 {
 	$string = strfrom($string, "__file::");
@@ -4060,7 +4078,6 @@ function file_server($fd, $string)
 	}
 	return do_serve_file($fd, $rem);
 }
-
 
 function print_or_write($fd, $buff)
 {
@@ -4153,7 +4170,6 @@ function do_serve_file($fd, $rem)
 
 }
 
-
 function notify_admin($action, $parent, $child)
 {
 	$cclass = $child->get__table();
@@ -4170,7 +4186,6 @@ function notify_admin($action, $parent, $child)
 	$subject = "$cclass $cname was $action to $pclass $pname ";
 	send_mail_to_admin($subject, $subject);
 }
-
 
 function trafficGetIndividualObjectTotal($list, $firstofmonth, $today, $name) 
 {
@@ -4211,7 +4226,6 @@ function get_last_month_and_year()
 	return array($month, $year);
 }
 
-
 function add_to_log($file)
 {
 	$string = time();
@@ -4227,7 +4241,7 @@ function findServerTraffic()
 	$sq = new Sqlite(null, 'vps');
 	$list = $login->getList('pserver');
 	foreach($list as $l) {
-		$res = $sq->getRowsWhere('syncserver = :nname', array(':nname' => $l->nname), array('used_q_traffic_usage', 'used_q_traffic_last_usage'));
+		$res = $sq->getRowsWhere("syncserver = '$l->nname'", array('used_q_traffic_usage', 'used_q_traffic_last_usage'));
 		$tusage = 0;
 		$tlastusage = 0;
 		foreach($res as $r) {
@@ -4269,7 +4283,6 @@ function setup_ssh_channel($source, $destination, $actualname)
 	$cont = rl_exec_get(null, $source, "setup_knownhosts", array("$actualname, $cont"));
 }
 
-
 function exec_vzmigrate($vpsid, $newserver, $ssh_port)
 {
 	global $global_shell_out, $global_shell_error, $global_shell_ret;
@@ -4286,7 +4299,6 @@ function exec_vzmigrate($vpsid, $newserver, $ssh_port)
 	do_exec_system($username, null, "vzmigrate $ssh_string -r yes $newserver $vpsid", $out, $err, $ret, null);
 	return array($ret, $global_shell_error);
 }
-
 
 function getResourceOstemplate(&$vlist, $ttype = 'all')
 {
@@ -4356,8 +4368,8 @@ function lxguard_clear($list)
 
 function lxguard_main($clearflag = false)
 {
+	include_once "htmllib/lib/lxguardincludelib.php";
 
-include_once "htmllib/lib/lxguardincludelib.php";
 	lxfile_mkdir("__path_home_root/lxguard");
 	$lxgpath = "__path_home_root/lxguard";
 
@@ -4379,7 +4391,6 @@ include_once "htmllib/lib/lxguardincludelib.php";
 	}
 
 	get_total($list, $total);
-
 
 	//dprintr($list['192.168.1.11']);
 
@@ -4419,12 +4430,12 @@ include_once "htmllib/lib/lxguardincludelib.php";
 		lfile_put_serialize("$lxgpath/hitlist.info", $rmt);
 	}
 	return $list;
-	
 }
 
 function lxguard_save_hitlist($hl)
 {
-include_once "htmllib/lib/lxguardincludelib.php";
+	include_once "htmllib/lib/lxguardincludelib.php";
+
 	lxfile_mkdir("__path_home_root/lxguard");
 	$lxgpath = "__path_home_root/lxguard";
 	$rmt = new Remote();
