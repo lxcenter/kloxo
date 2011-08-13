@@ -1,16 +1,15 @@
 <?php 
 
-	// issue #598 - Change lighhtpd config structure
+// issue #598 - Change lighhtpd config structure
 
 class web__lighttpd extends lxDriverClass {
-
 
 //######################################### SyncToSystem Starts Here
 
 static function uninstallMe()
 {
 //	lxshell_return("service",  "lighttpd", "stop");
- 	passthru("/etc/init.d/lighttpd stop");
+ 	passthru("/etc/init.d/lighttpd stop >> /dev/null");
 	lxshell_return("rpm", "-e", "--nodeps", "lighttpd");
 	lunlink("/etc/init.d/lighttpd");
 }
@@ -35,13 +34,6 @@ static function installMe()
 
 	copy("/usr/local/lxlabs/kloxo/file/lighttpd/lighttpd.conf", "/etc/lighttpd/lighttpd.conf");
 	copy("/usr/local/lxlabs/kloxo/file/lighttpd/~lxcenter.conf", "/etc/lighttpd/conf.d/~lxcenter.conf");
-
-	if (!lfile_exists("/home/kloxo/httpd/cp")) {
-		mkdir("/home/kloxo/httpd/cp");
-		copy("/usr/local/lxlabs/kloxo/file/cp_config_index.php", "/home/kloxo/httpd/cp/index.php");
-		passthru("unzip -oq /usr/local/lxlabs/kloxo/file/skeleton.zip -d /home/kloxo/httpd/cp");
-		passthru("chown -R lxlabs:lxlabs /home/kloxo/httpd/cp");
-	}
 
 //	lxfile_cp("../file/lighttpd/conf/kloxo/kloxo.conf", "/etc/lighttpd/conf/kloxo/kloxo.conf");
 
@@ -544,7 +536,6 @@ function getDirIndexCore($dir)
 
 function getDirprotect()
 {
-
 	global $gbl, $sgbl, $login, $ghtml; 
 
 	$string = null;
@@ -812,7 +803,6 @@ function createSuexec()
 
 function createServerAliasLine()
 {
-
 	$list = get_namelist_from_objectlist($this->main->server_alias_a);
 
 	$iplist = null;
@@ -897,12 +887,24 @@ static function createWebmailRedirect($list)
 	createRestartFile("lighttpd");
 }
 
+function syncWebmailRedirect()
+{
+	// --- this is wrong code but work
+	Mmail::fixWebmailRedirect();
+
+/* --- this is right but weird result
+	$mmail = new MMail();
+	$mmail->fixWebmailRedirect();
+	$mmail = null;
+--- */
+}
+
 static function createWebmailConfig($iplist)
 {
 	global $gbl, $sgbl, $login, $ghtml; 
 
-//	$file = "__path_lighty_path/conf/kloxo/webmail.conf";
-	$file = "/home/lighttpd/conf/defaults/webmail.conf";
+//	$webfile = "__path_lighty_path/conf/kloxo/webmail.conf";
+	$webfile = "/home/lighttpd/conf/defaults/webmail.conf";
 
 	$webdata = null;
 
@@ -912,9 +914,24 @@ static function createWebmailConfig($iplist)
 	$webdata .= "\tcgi.assign = ( \".php\" => \"/home/httpd/nobody.sh\" )\n";
 	$webdata .= "}\n\n";  
 
-	$total = "$webdata\n";
+	$webtotal = "$webdata\n";
 
-	lfile_put_contents($file, $total);
+	lfile_put_contents($webfile, $webtotal);
+
+//	$cpfile = "__path_lighty_path/conf/kloxo/cp_config.conf";
+	$cpfile = "/home/lighttpd/conf/defaults/cp_config.conf";
+
+	$cpdata = null;
+
+	$cpdata .= "\$HTTP[\"host\"] =~ \"^cp.*\" { \n";
+	$cpdata .= "\tserver.document-root = \"$sgbl->__path_kloxo_httpd_root/cp/\"\n";
+	$cpdata .= "\tserver.errorlog = \"/home/kloxo/httpd/lighttpd/error.log\"\n";
+	$cpdata .= "\tcgi.assign = ( \".php\" => \"/home/httpd/nobody.sh\" )\n";
+	$cpdata .= "}\n\n";  
+
+	$cptotal = "$cpdata\n";
+
+	lfile_put_contents($cpfile, $cptotal);
 
 	createRestartFile("lighttpd");
 }
@@ -1024,7 +1041,6 @@ function createCpConfig()
 
 function dbactionUpdate($subaction)
 {
-
 	global $gbl, $sgbl, $login, $ghtml; 
 
 	if (!$this->main->customer_name) {
@@ -1039,13 +1055,7 @@ function dbactionUpdate($subaction)
 			$this->main->doStatsPageProtection();
 			$this->createCpConfig();
 			// --- always update webmail_redirect too
-			// --- this is wrong code but work
-			Mmail::fixWebmailRedirect();
-		/* -- this is right but weird result
-			$mmail = new $this->main->MMail();
-			$mmail->fixWebmailRedirect();
-			$mmail = null;
-		*/
+			$this->syncWebmailRedirect();
 			break;
 
 		case "changeowner":
