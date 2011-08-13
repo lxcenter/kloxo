@@ -113,7 +113,8 @@ else
     OUT=$?
     if [ $OUT -eq "0" ] ; then
         echo -en "SELinux disabled             " $C_NO
-        echo -e "\a\n$APP_NAME cannot be installed or executed with SELinux enabled. The installer can disable it, but a reboot will be required.\n"
+        echo -e "\a\n$APP_NAME cannot be installed or executed with SELinux enabled. " \
+			"The installer can disable it, but a reboot will be required.\n"
         echo -e "You will have to restart the installer again after reboot.\n"
         get_yes_no "Do you want to disable SELinux and reboot?" 1
         if [ "$?" -eq "1" ] ; then 
@@ -150,7 +151,9 @@ fi
 # Check for mysql databases and arguments.
 if  [ -d /var/lib/mysql ] && [ -z "$1" ] ; then
     echo -en "Database and arguments check " $C_NO
-    echo -e "\a\nIt seems you already have databases in this system but did not provide the MySQL root pass. If you are reinstalling, remove mysql-server and databases stored at /var/lib/mysql. Otherwise, you must provide the password.\n\nUsage: sh $0 --db-rootpassword=PASSWORD\n\nAborting ...\n"
+    echo -e "\a\nIt seems you already have databases in this system but did not provide the MySQL root pass. " \
+		"If you are reinstalling, remove mysql-server and databases stored at /var/lib/mysql. " \
+		"Otherwise, you must provide the password.\n\nUsage: sh $0 --db-rootpassword=PASSWORD\n\nAborting ...\n"
     exit $E_HASDB
 else
     echo -en "Database and arguments check " $C_OK
@@ -173,9 +176,14 @@ echo -e "    When it's finished, you will be presented with a welcome message an
 read -n 1 -p "Press any key to continue ..."
 
 yum -y install php php-mysql wget zip unzip
-rm -f kloxo-install.zip
-wget http://download.lxcenter.org/download/kloxo-install.zip
 export PATH=/usr/sbin:/sbin:$PATH
+
+if [! -f ./kloxo-install.zip ] ; then
+    wget http://download.lxcenter.org/download/kloxo-install.zip
+fi
+
 unzip -oq kloxo-install.zip
+
 cd kloxo-install/kloxo-linux
+
 php lxins.php --install-type=slave $* | tee kloxo_install.log

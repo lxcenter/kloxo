@@ -84,6 +84,8 @@ function install_main() {
     mkdir("/etc/httpd/conf/kloxo/forward/");
     touch("/etc/httpd/conf/kloxo/forward/forwardhost.conf");
 --- */
+/* --- enoguh execute in updatelib.php at next step
+	mkdir("/etc/httpd/conf.d");
 	copy("/usr/local/lxlabs/kloxo/file/apache/~lxcenter.conf", "/etc/httpd/conf.d/~lxcenter.conf");
 	mkdir("/home/httpd/conf");
 	mkdir("/home/httpd/conf/defaults");
@@ -93,42 +95,60 @@ function install_main() {
     touch("/home/httpd/conf/defaults/init.conf");
     touch("/home/httpd/conf/defaults/webmail.conf");
     touch("/home/httpd/conf/defaults/~virtualhost.conf");
-	
+
 	//--- for cp
 	mkdir("/home/kloxo/httpd/cp");
 	copy("/usr/local/lxlabs/kloxo/file/cp_config_index.php", "/home/kloxo/httpd/cp/index.php");
 	system("unzip -oq /usr/local/lxlabs/kloxo/file/skeleton.zip -d /home/kloxo/httpd/cp");
 	system("chown -R lxlabs:lxlabs /home/kloxo/httpd/cp");
 	
-	//--- some vps include /etc/httpd/conf.d/swtune.conf
-	system("rm -f /etc/httpd/conf.d/swtune.conf");
+	//--- for default
+	mkdir("/home/kloxo/httpd/default");
+	copy("/usr/local/lxlabs/kloxo/file/default_index.php", "/home/kloxo/httpd/default/index.php");
+//	system("unzip -oq /usr/local/lxlabs/kloxo/file/skeleton.zip -d /home/kloxo/httpd/default");
+	system("chown -R lxlabs:lxlabs /home/kloxo/httpd/default");
 	
+	//--- for disable
+	mkdir("/home/kloxo/httpd/disable");
+	copy("/usr/local/lxlabs/kloxo/file/disable_index.php", "/home/kloxo/httpd/disable/index.php");
+	system("unzip -oq /usr/local/lxlabs/kloxo/file/skeleton.zip -d /home/kloxo/httpd/disable");
+	system("chown -R lxlabs:lxlabs /home/kloxo/httpd/disable");
+	
+	//--- for webmail
+	mkdir("/home/kloxo/httpd/webmail");
+	copy("/usr/local/lxlabs/kloxo/file/webmail_index.php", "/home/kloxo/httpd/webmail/index.php");
+	system("unzip -oq /usr/local/lxlabs/kloxo/file/skeleton.zip -d /home/kloxo/httpd/webmail");
+	system("chown -R lxlabs:lxlabs /home/kloxo/httpd/webmail");
+	
+	//--- some vps include /etc/httpd/conf.d/swtune.conf in system
+	system("rm -f /etc/httpd/conf.d/swtune.conf");
+*/
     $options_file = "/var/named/chroot/etc/global.options.named.conf";
 
     $example_options  = "acl \"lxcenter\" {\n";
-    $example_options .= " localhost;\n";
+    $example_options .= "\tlocalhost;\n";
     $example_options .= "};\n\n";
     $example_options .= "options {\n";
-    $example_options .= " max-transfer-time-in 60;\n";
-    $example_options .= " transfer-format many-answers;\n";
-    $example_options .= " transfers-in 60;\n";
-    $example_options .= " auth-nxdomain yes;\n";
-    $example_options .= " allow-transfer { \"lxcenter\"; };\n";
-    $example_options .= " allow-recursion { \"lxcenter\"; };\n";
-    $example_options .= " recursion no;\n";
-    $example_options .= " version \"LxCenter-1.0\";\n";
+    $example_options .= "\tmax-transfer-time-in 60;\n";
+    $example_options .= "\ttransfer-format many-answers;\n";
+    $example_options .= "\ttransfers-in 60;\n";
+    $example_options .= "\tauth-nxdomain yes;\n";
+    $example_options .= "\tallow-transfer { \"lxcenter\"; };\n";
+    $example_options .= "\tallow-recursion { \"lxcenter\"; };\n";
+    $example_options .= "\trecursion no;\n";
+    $example_options .= "\tversion \"LxCenter-1.0\";\n";
     $example_options .= "};\n\n";
     $example_options .= "# Remove # to see all DNS queries\n";
-    $example_options .= "#logging {\n";
-    $example_options .= "# channel query_logging {\n";
-    $example_options .= "# file \"/var/log/named_query.log\";\n";
-    $example_options .= "# versions 3 size 100M;\n";
-    $example_options .= "# print-time yes;\n";
-    $example_options .= "# };\n\n";
-    $example_options .= "# category queries {\n";
-    $example_options .= "# query_logging;\n";
+    $example_options .= "# logging {\n";
+    $example_options .= "#\t channel query_logging {\n";
+    $example_options .= "#\t\t file \"/var/log/named_query.log\";\n";
+    $example_options .= "#\t\t versions 3 size 100M;\n";
+    $example_options .= "#\t\t print-time yes;\n";
+    $example_options .= "#\t };\n\n";
+    $example_options .= "#\t category queries {\n";
+    $example_options .= "#\t\t query_logging;\n";
+    $example_options .= "#\t };\n";
     $example_options .= "# };\n";
-    $example_options .= "#};\n";
     if (!lfile_exists($options_file)) {
         touch($options_file);
         chown($options_file, "named");
@@ -160,7 +180,6 @@ function addLineIfNotExist($filename, $pattern, $comment) {
 
 
 }
-
 
 function checkIfYes($arg) {
     return ($arg == 'y' || $arg == 'yes' || $arg == 'Y' || $arg == 'YES');
