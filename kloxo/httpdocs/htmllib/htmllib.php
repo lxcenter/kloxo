@@ -887,11 +887,6 @@ class HtmlLib
 		{
 			padding: 5px 1em;
 		}
-		
-		img
-		{
-			border: 0;
-		}
 	</style>
 	<?
 	}

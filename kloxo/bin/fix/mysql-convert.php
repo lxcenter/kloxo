@@ -11,10 +11,6 @@ $list = parse_opt($argv);
 
 $pass = slave_get_db_pass();
 
-//--- the first - to 'disable' skip- and restart mysql
-passthru("sed -i 's/skip/\;###123###skip/g' /etc/my.cnf");
-passthru("/etc/init.d/mysqld restart");
-
 $engine = ($list['engine']) ? $list['engine'] : 'MyISAM';
 $database = ($list['database']) ? $list['database'] : '_all_';
 $table = ($list['table']) ? $list['table'] : '_all_';
@@ -70,10 +66,6 @@ else {
 		echo "    {$table} table\n";
 	}
 }
-
-//--- the second - back to 'original' config and restart mysql
-passthru("sed -i 's/\;###123###skip/skip/g' /etc/my.cnf");
-passthru("/etc/init.d/mysqld restart");
 
 if ($config === 'yes') {
 	if ($database === '_all_') {

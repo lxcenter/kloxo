@@ -2,6 +2,8 @@
 
 class Spam__Spamassassin extends lxDriverClass
 {
+
+
 	static function installMe()
 	{
 
@@ -30,6 +32,7 @@ class Spam__Spamassassin extends lxDriverClass
 	{
 		//
 	}
+
 
 	function syncSpamUserPref()
 	{
@@ -87,5 +90,9 @@ class Spam__Spamassassin extends lxDriverClass
 				break;
 				}
 		}
+
+
 	}
+
+
 }

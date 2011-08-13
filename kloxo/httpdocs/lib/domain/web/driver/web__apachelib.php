@@ -10,12 +10,13 @@
 	
 class web__apache extends lxDriverClass {
 
+
 //######################################### SyncToSystem Starts Here
 
 static function uninstallMe()
 {
 //	lxshell_return("service", "httpd", "stop");
- 	passthru("/etc/init.d/httpd stop >> /dev/null");
+ 	passthru("/etc/init.d/httpd stop");
 	lxshell_return("rpm", "-e", "--nodeps", "httpd");
 	lunlink("/etc/init.d/httpd");
 }
@@ -44,6 +45,13 @@ static function installMe()
 
 	copy("/usr/local/lxlabs/kloxo/file/apache/~lxcenter.conf", "/etc/httpd/conf.d/~lxcenter.conf");
 	copy("/usr/local/lxlabs/kloxo/file/centos-5/httpd.conf", "/etc/httpd/conf/httpd.conf");
+
+	if (!lfile_exists("/home/kloxo/httpd/cp")) {
+		mkdir("/home/kloxo/httpd/cp");
+		copy("/usr/local/lxlabs/kloxo/file/cp_config_index.php", "/home/kloxo/httpd/cp/index.php");
+		passthru("unzip -oq /usr/local/lxlabs/kloxo/file/skeleton.zip -d /home/kloxo/httpd/cp");
+		passthru("chown -R lxlabs:lxlabs /home/kloxo/httpd/cp");
+	}
 
 	// rev 527
 	lxfile_cp("../file/apache/etc_init.d", "/etc/init.d/httpd");
@@ -284,6 +292,7 @@ function getBlockIP()
 
 function disablePhp()
 {
+
 	if (!$this->main->priv->isOn('php_flag'))  {
 		return  "AddType application/x-httpd-php-source .php\n";
 	}
@@ -519,20 +528,9 @@ static function createWebmailRedirect($list)
 	createRestartFile('apache');
 }
 
-function syncWebmailRedirect()
-{
-	// --- this is wrong code but work
-	Mmail::fixWebmailRedirect();
-
-/* --- this is right but weird result
-	$mmail = new $this->main->MMail();
-	$mmail->fixWebmailRedirect();
-	$mmail = null;
---- */
-}
-
 function getDav()
 {
+	
 	$string = null;
 	$bdir = "/home/httpd/{$this->main->nname}/__webdav";
 	lxfile_mkdir($bdir);
@@ -555,6 +553,7 @@ function getDav()
 		//$string .= "\t\t</LimitExcept>\n";
 		$string .= "\t</Location>\n\n";
 	}
+
 	return $string;
 }
 
@@ -621,11 +620,13 @@ function frontPageEnable()
 		lunlink($for_file);
 
 	}
+
 	return $string;
 }
 
 static function createSSlConf($iplist, $domainiplist)
 {
+
 	global $gbl, $sgbl, $login, $ghtml; 
 
 	$string = null;
@@ -672,6 +673,7 @@ static function createSSlConf($iplist, $domainiplist)
 
 function sslsysnc($ipad)
 {
+
 	global $gbl, $sgbl, $login, $ghtml; 
 
 	$ssl_cert = null;
@@ -738,6 +740,7 @@ function createShowAlist(&$alist, $subaction = null)
 
 function middlepart($web_home, $domain, $dirp) 
 {
+
 	global $gbl, $sgbl, $login, $ghtml; 
 
 	$string = null;
@@ -763,6 +766,7 @@ function middlepart($web_home, $domain, $dirp)
 
 function getDirprotect()
 {
+
 	global $gbl, $sgbl, $login, $ghtml; 
 	$string = null;
 	foreach((array) $this->main->__var_dirprotect as $prot) {
@@ -1048,6 +1052,7 @@ function syncToPort($port, $cust_log, $err_log, $frontpage = false)
 	return $string;
 }
 
+
 function getRailsConf($app)
 {
 	$string .= "\tProxyPass /$app http://localhost:$apport/\n";
@@ -1142,6 +1147,7 @@ function createForwardconf()
 
 function updateForwardconf()
 {
+
 	global $gbl, $sgbl, $login, $ghtml; 
 /* --- no need forward for new structure
 	return;
@@ -1237,8 +1243,8 @@ static function createWebmailConfig()
 	$defaultdata .= "\tDocumentRoot {$sgbl->__path_kloxo_httpd_root}/default/\n\n";
 	$defaultdata .= "\t<Ifmodule mod_userdir.c>\n";
 	//-- to make sure http://ip/~client work because maybe 'disabled' on httpd.conf
-	$defaultdata .= "\t\tUserDir enabled *\n";
-	$defaultdata .= "\t\tUserDir \"public_html\"\n";
+	$defaultdata .= "\t\tUserdir enabled *\n";
+	$defaultdata .= "\t\tUserdir \"public_html\"\n";
 	$defaultdata .= "\t</Ifmodule>\n\n";
 	$defaultdata .= "</VirtualHost>\n\n";
 
@@ -1264,24 +1270,6 @@ static function createWebmailConfig()
 	$webmailfile = "/home/httpd/conf/defaults/webmail.conf";
 
 	lfile_put_contents($webmailfile, $webdata);
-
-	$cpdata  = null;
-	$cpdata .= "<VirtualHost \\\n";
-	$cpdata .= web__apache::staticcreateVirtualHostiplist("80");
-	$cpdata .= web__apache::staticcreateVirtualHostiplist("443");
-	$cpdata .= "\t\t>\n\n";
-	$cpdata .= "\tServerName cp\n";
-	$cpdata .= "\tServerAlias cp.*\n\n";
-	$cpdata .= "\tDocumentRoot {$sgbl->__path_kloxo_httpd_root}/cp/\n";
-
-	$cpdata .= web__apache::staticgetSuexecString('lxlabs');
-
-	$cpdata .= "</VirtualHost>\n\n";
-
-//	$cpfile = "__path_real_etc_root/httpd/conf/kloxo/cp_config.conf";
-	$cpfile = "/home/httpd/conf/defaults/cp_config.conf";
-
-	lfile_put_contents($cpfile, $cpdata);
 
 	createRestartFile("apache");
 }
@@ -1327,6 +1315,7 @@ function AddSubWeb($list)
 
 function fullUpdate()
 {
+
 	$domname = $this->main->nname;
 	lxfile_mkdir("__path_httpd_root/$domname/webstats");
 
@@ -1364,7 +1353,13 @@ function dbactionUpdate($subaction)
 			$this->main->doStatsPageProtection();
 			$this->createCpConfig();
 			// --- always update webmail_redirect too
-			$this->syncWebmailRedirect();
+			// --- this is wrong code but work
+			Mmail::fixWebmailRedirect();
+		/* -- this is right but weird result
+			$mmail = new $this->main->MMail();
+			$mmail->fixWebmailRedirect();
+			$mmail = null;
+		*/
 			break;
 
 		case "add_subweb_a":

@@ -13,8 +13,6 @@
 body {
 	font-family: Tahoma, Verdana, Arial, Helvertica, sans-serif;
 	font-size: 1em;
-	background: #ddeeff;
-	margin: 0;
 }
 a {
 	text-decoration: none;
@@ -23,32 +21,24 @@ img {
 	border: 0;
 }
 </style>
-<body>
+<body topmargin="0" leftmargin="0" leftmargin="0">
 
-<table cellpadding="0" cellspacing="0" width="100%" border="0" bgcolor="#66aaddd" height="100">
+<table cellpadding="0" cellspacing="0" width="100%" border="0" background="/images/dheadbg.gif" height="96">
 	<tr>
-		<td valign="top"><img src="images/logo.png" vspace="5" hspace="5"></td>
-		<td width="130">
-		<table border="0" width="100%" cellspacing="0" cellpadding="0">
-					<tr>
-						<td>
-						<img src="images/lxcenter.png" width="120" height="35" hspace="5" vspace="5"></td>
-					</tr>
-					<tr>
-						<td>
-						<img src="images/kloxo.png" width="120" height="27" hspace="5" vspace="5"></td>
-					</tr>
-					</table></td>
-	</tr><tr><td colspan="2" bgcolor="#000000">&nbsp;</td></tr>
+		<td>&nbsp;</td>
+		<td width="176"><a href="http://lxcenter.org/" title="Go to LxCenter website"><img src="/images/kloxo.gif"></a></td>
+	</tr>
 </table>
+<br>
+<br>
 <table width="100%" height="300" cellpadding="0" cellspacing="0">
 	<tr>
 		<td width="50">&nbsp;</td>
-		<td valign="top"><br><br>
+		<td valign="top">
 		<div align="center">
-			<table width="400" style="border-collapse: collapse" border="1" bordercolor="#AAAAAA">
+			<table width="400" style="border-collapse: collapse" border="1" bordercolor="#C0C0C0">
 				<tr>
-					<td nowrap bgcolor="#CCCCCC">&nbsp;</td>
+					<td nowrap>&nbsp;</td>
 					<td colspan="2" nowrap align="center" bgcolor="#EEEEEE">Panel</td>
 				</tr>
 				<tr>
@@ -74,7 +64,7 @@ img {
 		</div>
 		</td>
 		<td width="280" valign="center">
-		<img src="images/disableskeletonbg.gif"></td>
+		<img src="/images/disableskeletonbg.gif"></td>
 	</tr>
 </table>
 

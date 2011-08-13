@@ -26,13 +26,10 @@ if [ ! -f $proc__user_beancounters ]; then
 		echo 3 > /proc/sys/vm/drop_caches
 	else
 		echo
-		echo " ----------------------------------------------------"
-		echo "  format: sh $0 --select=1/2/3"
-		echo " ----------------------------------------------------"
-		echo "  ---select: 1 = pagecache, 2 = dentries+inodes, 3 = all"
-		echo
-		echo " * no effect for Openvz VPS"
-		echo
+		echo "----------------------------------------------------"
+		echo " format: sh $0 --select=1/2/3"
+		echo "----------------------------------------------------"
+		echo " clear: 1 = pagecache, 2 = dentries+inodes, 3 = all"
 		exit;
 	fi
 else

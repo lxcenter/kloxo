@@ -4,6 +4,7 @@ class Mmail__Qmail  extends lxDriverClass {
 
 // Core
 
+
 function do_backup()
 {
 	global $gbl, $sgbl, $login, $ghtml; 
@@ -13,6 +14,8 @@ function do_backup()
 	}
 	return array($mailpath, $list);
 }
+
+
 
 static function generateDKey($domain)
 {
@@ -63,6 +66,7 @@ static function generateDKey($domain)
 
 }
 
+
 function do_restore($docd)
 {
 	global $gbl, $sgbl, $login, $ghtml; 
@@ -97,6 +101,7 @@ static function doesDomainExist($domain)
 	if ($ret) { return false; }
 	return true;
 }
+
 
 static function getUserGroup($domain, $flag_useralone = false)
 {
@@ -146,6 +151,7 @@ static function createAliasdomain($source, $maindomain)
 	$sys_cmd = "__path_mail_root/bin/vaddaliasdomain";
 	lxshell_return($sys_cmd, $maindomain, $source);
 }
+
 
 function addDomain()
 {
@@ -200,6 +206,7 @@ function addDomain()
 	//createRestartFile('courier-imap');
 
 }
+
 
 function doesListExist()
 {
@@ -291,6 +298,7 @@ function updateQmaildefault()
 	
 }
 
+
 function delDomain()
 {
 	global $gbl, $sgbl, $login, $ghtml; 
@@ -302,6 +310,8 @@ function delDomain()
 		lxshell_return("__path_mail_root/bin/vdeldomain", "lists.{$this->main->nname}");
 	}
 }
+
+
 
 function dbactionAdd()
 {
@@ -392,6 +402,9 @@ function changeOwner()
 
 }
 
+
+	
+
 function dbactionUpdate($subaction)
 {
 	switch($subaction)
@@ -436,6 +449,7 @@ function dbactionUpdate($subaction)
 			break;
 
 	}
+
 }
 
 }

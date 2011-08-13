@@ -9,13 +9,10 @@ function dbactionUpdate($subaction)
 	// issue #567 - httpd-itk for kloxo
 	
 //	lxshell_return("service", "httpd", "stop");
-// 	passthru("/etc/init.d/httpd stop");
-
-	$ret = lxshell_return("service", "httpd", "stop");
-	if ($ret) { throw new lxexception('httpd_stop_failed', 'parent'); }
+ 	passthru("/etc/init.d/httpd stop");
 
 	//-- old structure
-	passthru("rm -rf /etc/httpd/conf/kloxo");
+	lxfile_rm("/etc/httpd/conf/kloxo");
 
 	//-- new structure	
 	lxfile_mkdir("/home/httpd/conf");
@@ -29,6 +26,13 @@ function dbactionUpdate($subaction)
 		copy("/usr/local/lxlabs/kloxo/file/apache/~lxcenter.conf", "/etc/httpd/conf.d/~lxcenter.conf");
 		copy("/usr/local/lxlabs/kloxo/file/centos-5/httpd.conf", "/etc/httpd/conf/httpd.conf");
 
+	}
+
+	if (!lfile_exists("/home/kloxo/httpd/cp/index.php")) {
+		mkdir("/home/kloxo/httpd/cp");
+		copy("/usr/local/lxlabs/kloxo/file/cp_config_index.php", "/home/kloxo/httpd/cp/index.php");
+		passthru("unzip -oq /usr/local/lxlabs/kloxo/file/skeleton.zip -d /home/kloxo/httpd/cp");
+		passthru("chown -R lxlabs:lxlabs /home/kloxo/httpd/cp");
 	}
 
 	lxfile_rm("/etc/sysconfig/httpd");
@@ -48,9 +52,6 @@ function dbactionUpdate($subaction)
 
 	if ($a === 'optimize') {
 		passthru("lphp.exe /usr/local/lxlabs/kloxo/bin/fix/apache-optimize.php --select=optimize");
-		// stop again because start by apache-optimize
-		$ret = lxshell_return("service", "httpd", "stop");
-		if ($ret) { throw new lxexception('httpd_stop_failed', 'parent'); }
 	}
 
 	if ($f === 'fix-ownership') {
@@ -127,10 +128,7 @@ function dbactionUpdate($subaction)
 //	createRestartFile("httpd");
 
 //	lxshell_return("service", "httpd", "start");
-// 	passthru("/etc/init.d/httpd start");
-
-	$ret = lxshell_return("service", "httpd", "start");
-	if ($ret) { throw new lxexception('httpd_start_failed', 'parent'); }
+ 	passthru("/etc/init.d/httpd start");
 }
 
 }

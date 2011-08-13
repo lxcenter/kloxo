@@ -1,5 +1,0 @@
-#!/bin/sh
-. /script/directory
-lphp.exe ../bin/misc/installRoundCube.php
-
-

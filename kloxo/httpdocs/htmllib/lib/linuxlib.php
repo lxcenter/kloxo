@@ -188,10 +188,7 @@ function os_create_system_user($basename, $password, $id, $shell, $dir = "/tmp")
 	$ret = lxshell_return("useradd", "-m", "-c", uuser::getUserDescription($id), "-d", $dir, "-s", $shell, "-p", $password, $name);
 
 	if ($ret) {
-		// --- issue #638 - installation fails if 'admin' group already exists
-		if (!lxfile_real("/var/cache/kloxo/kloxo-install-firsttime.flg")) {
-			throw new lxexception("could_not_create_user", '', $name);
-		}
+		throw new lxexception("could_not_create_user", '', $name);
 	}
 	return $name;
 

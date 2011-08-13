@@ -53,16 +53,14 @@ function check_default_mysql($dbroot, $dbpass) {
 	}
 
 	if ($return) {
-	/*
 		print("Fatal Error: Could not connect to Mysql Localhost using user $dbroot and password \"$dbpass\"\n");
 		print("If this is a brand new install, you can completely remove mysql by running the commands below\n");
 		print("            rm -rf /var/lib/mysql\n");
 		print("            rpm -e mysql-server\n\n");
 		print("And then run the installer again\n");
 		exit;
-	*/
-		resetDBPassword($dbroot, $dbpass);
 	}
+
 }
 
 function parse_opt($argv) {
@@ -234,63 +232,5 @@ function get_yes_no($question, $default = 'n') {
 		else if ($input == 'n' || $input == 'no' || ($default == 'n' && $input == '')) {
 			return 'n';
 		}
-	}
-}
-
-// --- taken from reset-mysql-root-password.phps
-function resetDBPassword($user, $pass)
-{
-	print("Stopping MySQL\n");
-	shell_exec("service mysqld stop");
-	print("Start MySQL with skip grant tables\n");
-	shell_exec("su mysql -c \"/usr/libexec/mysqld --skip-grant-tables\" >/dev/null 2>&1 &");
-	print("Using MySQL to flush privileges and reset password\n");
-	sleep(10);
-	system("echo \"update user set password = Password('{$pass}') where User = '{$user}'\" | mysql -u [$user} mysql ", $return);
-
-	while($return) {
-		print("MySQL could not connect, will sleep and try again\n");
-		sleep(10);
-		system("echo \"update user set password = Password('{$pass}') where User = '{$user}'\" | mysql -u {$user} mysql", $return);
-	}
-
-	print("Password reset succesfully. Now killing MySQL softly\n");
-	shell_exec("killall mysqld");
-	print("Sleeping 10 seconds\n");
-	shell_exec("sleep 10");
-	print("Restarting the actual MySQL service\n");
-	system("service mysqld restart");
-	print("Password successfully reset to \"$pass\"\n");
-}
-
-// --- taken from linuxlib.php with modified
-function os_is_arch_sixfour()
-{
-	if (!file_exists("/proc/xen")) {
-		$arch = trim(`arch`);
-		return $arch === 'x86_64';
-	} else {
-		$q = system("cat /etc/rpm/platform");
-		if ($q === "i686-redhat-linux") {
-			return false;
-		}
-		return true;
-	}
-}
-
-// ref: http://ideone.com/JWKIf
-function is_64bit()
-{
-	$int = "9223372036854775807";
-	$int = intval($int);
-
-	if ($int == 9223372036854775807) {
-		return true; // 64bit
-	}
-	elseif ($int == 2147483647) {
-		return false; // 32bit
-	}
-	else {
-		return "error"; // error
 	}
 }
