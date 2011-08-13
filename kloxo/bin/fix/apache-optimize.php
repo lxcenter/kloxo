@@ -11,7 +11,7 @@ $list = parse_opt($argv);
 
 $select = $list['select'];
 
-passthru("echo 3 > /proc/sys/vm/drop_caches >>/dev/null");
+passthru("echo 3 > /proc/sys/vm/drop_caches");
 
 $status = shell_exec("/etc/init.d/httpd status");
 
@@ -39,19 +39,19 @@ elseif ($select === 'optimize') {
 
 	$m['apps']    = (int)shell_exec("free -m | grep buffers/cache: | awk '{print $3}'");
 
-	/*
+/*
 	$m['used']    = (int)shell_exec("free -m | grep Mem: | awk '{print $3}'");
 	$m['free']    = (int)shell_exec("free -m | grep Mem: | awk '{print $4}'");
 	$m['shared']  = (int)shell_exec("free -m | grep Mem: | awk '{print $5}'");
 	$m['buffers'] = (int)shell_exec("free -m | grep Mem: | awk '{print $6}'");
 	$m['cached']  = (int)shell_exec("free -m | grep Mem: | awk '{print $7}'");
-	*/
-
-	// $m['avail']   = $m['free'] + $m['shared'] + $m['buffers'] + $m['cached'] - $m['spare'];
+	
+	$m['avail']   = $m['free'] + $m['shared'] + $m['buffers'] + $m['cached'] - $m['spare'];
+*/
 
 	$m['avail'] = $m['total'] - $m['spare'] - $m['apps'];
 
-	$maxpar = (int)($m['avail'] / 20);
+	$maxpar = (int)($m['avail'] / 25);
 	$minpar = (int)($maxpar / 2);
 
 	echo shell_exec("/etc/init.d/httpd start");
@@ -84,10 +84,10 @@ KeepAliveTimeout 5
 
 <IfModule worker.c>
 	StartServers 2
-	MaxClients 150
+	MaxClients {$maxpar}
 	MinSpareThreads {$minpar}
 	MaxSpareThreads {$maxpar}
-	ThreadsPerChild 25
+	ThreadsPerChild {$maxpar}
 	MaxRequestsPerChild 0
 	ThreadStackSize 8196
 	MaxMemFree 2
@@ -95,10 +95,10 @@ KeepAliveTimeout 5
 
 <IfModule event.c>
 	StartServers 2
-	MaxClients 150
+	MaxClients {$maxpar}
 	MinSpareThreads {$minpar}
 	MaxSpareThreads {$maxpar}
-	ThreadsPerChild 25
+	ThreadsPerChild {$maxpar}
 	MaxRequestsPerChild 0
 	ThreadStackSize 8196
 	MaxMemFree 2

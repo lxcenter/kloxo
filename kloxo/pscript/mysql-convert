@@ -12,10 +12,10 @@
 
 if [ "$#" == 0 ] ; then
 	echo
-	echo "------------------------------------------------------------------------------"
-	echo " format:"
-	echo "   sh $0 --engine=[] --database=[] --table=[]" --config=[]
-	echo "------------------------------------------------------------------------------"
+	echo " ------------------------------------------------------------------------------"
+	echo "  format:"
+	echo "    sh $0 --engine=[] --database=[] --table=[] --config=[]"
+	echo " ------------------------------------------------------------------------------"
 	echo "  --engine - change to MyISAM/InnoDB; default: MyISAM"
 	echo "  --database - database name; default: all databases"
 	echo "  --table - table name; default: all tables"
