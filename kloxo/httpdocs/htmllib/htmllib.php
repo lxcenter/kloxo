@@ -614,9 +614,7 @@ class HtmlLib
 		$getskin = $login->getSkinDir();
 		$i = 0;
 
-		/// This is a mighty hack... The first element of $alist is supposed to be the main title.
-		// You use it as the first title and unset the variable. This is a hack from the previous code
-		// where the first title was preset here itself.
+		/// This is a mighty hack... The first element of $alist is supposed to be the main title. You use it as the first title and unset the variable. This is a hack from the previous code where the first title was preset here itself.
 
 
 		if (!$title) {
@@ -888,11 +886,6 @@ class HtmlLib
 		#header a img
 		{
 			padding: 5px 1em;
-		}
-		
-		img
-		{
-			border: 0;
 		}
 	</style>
 	<?
@@ -7024,9 +7017,8 @@ class HtmlLib
 
 		if ($variable->type === 'fileselect') {
 			?>
-		<?php /*--- issue #609 - "'<?=$url ?>';);"><img" to "'<?=$url ?>');"><img;" ---*/ ?>
 		<a href="javascript:void(0);"
-		   onclick="javascript:selectFolder(<?=trim($form) ?>.<?=trim($variable->name)?>, '', '<?=$url ?>');"><img
+		   onclick="javascript:selectFolder(<?=trim($form) ?>.<?=trim($variable->name)?>, '', '<?=$url ?>';);"><img
 				width=15 height=15 src="img/image/collage/button/ffile_ttype_v_directory.gif" border="0"
 				alt="Select Folder" align="absmiddle"></a>
 			<?php

@@ -30,6 +30,9 @@ static function createListAlist($parent, $class)
 	if (!$parent->isLocalhost()) {
 		$alist[] = "a=updateform&sa=password";
 	}
+	if ($sgbl->isHyperVm()) {
+		$alist[] = "a=graph&sa=vpsbase";
+	}
 	$alist[] = "a=list&c=$class";
 
 	return $alist;
@@ -312,7 +315,7 @@ static function createServerInfo($list, $class = null)
 	return $ret;
 }
 
-static function createListNlist($parent, $view)
+static function  createListNlist($parent)
 {
 
 	//$nlist['cpstatus'] = '3%';
@@ -356,7 +359,7 @@ function getVpsRam()
 	}
 
 
-	$res = $sq->getRowsWhere('syncserver = :nname', array(':nname' => $this->nname), $list);
+	$res = $sq->getRowsWhere("syncserver = '$this->nname'", $list);
 	if (!$res) { return; }
 
 	foreach($res as $r) {
@@ -395,6 +398,11 @@ function createShowRlist($subaction)
 	if ($rlist) {
 		return $rlist;
 	}
+
+	if ($sgbl->isHyperVm()) {
+		$rlist = $this->getVpsRam();
+	}
+
 
 	$driverapp = $gbl->getSyncClass($this->__masterserver, $this->__readserver, 'pserver');
 	$l = rl_exec_get($this->__masterserver, $this->__readserver,  array("pserver__$driverapp", "pserverInfo"));
@@ -444,6 +452,35 @@ function createShowRlist($subaction)
 
 }
 
+function superPostAdd()
+{
+	global $gbl, $sgbl, $login, $ghtml; 
+
+	if (!$sgbl->isHyperVm()) {
+		return;
+	}
+
+	if ($this->vpstype_f === 'xen') {
+
+		$driver = new Driver(null, $this->nname, $this->nname);
+		$driver->get();
+		$driver->driver_b->pg_vps = 'xen';
+		$driver->setUpdateSubaction();
+		$driver->write();
+		if ($this->xenlocation) {
+			$dirlocation = new Dirlocation(null, $this->nname, $this->nname);
+			$dirlocation->dbaction = 'add';
+			foreach($this->xenlocation as $k) {
+				$name = "lvm:{$k['nname']}";
+				$xenloc[$name] = new xen_location_a(null, $this->nname, $name);
+			}
+			$dirlocation->parent_clname = $this->getClName();
+			$dirlocation->xen_location_a = $xenloc;
+			$this->addToList('dirlocation', $dirlocation);
+		}
+	}
+
+}
 function postAdd()
 {
 	global $gbl, $sgbl, $login, $ghtml; 
@@ -456,10 +493,14 @@ function postAdd()
 		$this->username = "root";
 	}
 
-	if ($this->ostype === 'windows') {
-		$rlist = array('web', 'mssqldb');
+	if ($sgbl->isHyperVm()) {
+		$rlist = array('vps');
 	} else {
-		$rlist = array('web', 'mmail', 'dns', 'mysqldb');
+		if ($this->ostype === 'windows') {
+			$rlist = array('web', 'mssqldb');
+		} else {
+			$rlist = array('web', 'mmail', 'dns', 'mysqldb');
+		}
 	}
 
 	foreach($rlist as $l) {
@@ -689,30 +730,21 @@ function updateMysqlPasswordReset($param)
 function updatePoweroff($param)
 {
 	global $gbl, $sgbl, $login, $ghtml; 
-	
-	// --- issue 612 - Hide password in reboot / shutdown server
-/*
 	if (!check_password($param['retype_admin_p_f'], $login->password) && !check_password($param['retype_admin_p_f'], $this->password)) {
 		throw new lxException("Wrong_Password", "retype_admin_p_f");
 	}
 	return $param;
-*/
-	return $login->password;
 }
 
 function updateReboot($param)
 {
 	global $gbl, $sgbl, $login, $ghtml; 
-	
-	// --- issue 612 - Hide password in reboot / shutdown server
-/*
 	if (check_password($param['retype_admin_p_f'], $login->password) || check_password($param['retype_admin_p_f'], $this->password)) {
 		return $param;
 	} else {
 		throw new lxException("Wrong_Password", "retype_admin_p_f");
 	}
-*/
-	return $login->password;
+
 }
 
 function getOs()
@@ -1095,13 +1127,30 @@ function updateform($subaction, $param)
 
 		case "information":
 			$sq = new Sqlite(null, 'client');
-			$res = $sq->getRowsWhere("cttype = 'wholesale'", null, array('nname'));
+			$res = $sq->getRowsWhere("cttype = 'wholesale'", array('nname'));
 			$clientlist = get_namelist_from_arraylist($res);
 
 
 			$vlist['description'] = null;
 			$vlist['realhostname'] = null;
+			if ($sgbl->isHyperVm()) {
+				$list = get_namelist_from_objectlist($login->getList('datacenter'));
+				if (!$list) {
+					$list[] = '--no-dc--';
+					$this->datacenter = '--no-dc--';
+				}
+				$vlist['datacenter'] = array('s', $list);
+				$newclientlist = lx_array_merge(array(array('--unassigned--'), $clientlist));
+				if ($this->nname === 'localhost') {
+					$vlist['clientname'] = array('M', $login->getKeyword('master_cannot_be_assigned'));
+				} else {
+					$vlist['clientname'] = array('s', $newclientlist);
+				}
+			}
 
+			if ($sgbl->isHyperVm()) {
+				$vlist['max_vps_num'] = null;
+			}
 			$this->setDefaultValue("load_threshold", "20");
 			$vlist['load_threshold'] = null;
 			return $vlist;
@@ -1142,15 +1191,13 @@ function updateform($subaction, $param)
 			return $vlist;
 
 		case "poweroff" :
-			// --- issue 612 - Hide password in reboot / shutdown server
-		//	$vlist['retype_admin_p_f'] = null;
+			$vlist['retype_admin_p_f'] = null;
 			$vlist['__v_button'] = 'Poweroff';
 			return $vlist;
 
 
 		case "reboot":
-			// --- issue 612 - Hide password in reboot / shutdown server
-		//	$vlist['retype_admin_p_f'] = null;
+			$vlist['retype_admin_p_f'] = null;
 			$vlist['__v_button'] = 'Reboot';
 			return $vlist;
 

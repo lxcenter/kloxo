@@ -3,15 +3,9 @@
 // $Horde: horde/config/conf.xml,v 1.74.2.39 2006/06/22 05:09:01 chuck Exp $
 $conf['debug_level'] = E_ALL;
 $conf['max_exec_time'] = 0;
-/* --- issue #637
 $conf['use_ssl'] = 1;
 $conf['server']['name'] = $_SERVER['SERVER_NAME'];
 $conf['server']['port'] = 443;
---- */
-$conf['use_ssl'] = 2;
-$conf['server']['name'] = $_SERVER['SERVER_NAME'];
-$conf['server']['port'] = $_SERVER['SERVER_PORT'];
-
 $conf['compress_pages'] = true;
 $conf['umask'] = 077;
 $conf['session']['name'] = 'mm';
@@ -62,21 +56,9 @@ $conf['cache']['params']['dir'] = Horde::getTempDir();
 $conf['cache']['params']['gc'] = 86400;
 $conf['cache']['driver'] = 'file';
 $conf['token']['driver'] = 'none';
-
-// --- issue #637
-$conf['mailer']['type'] = 'smtp'; // select 'smtp' or 'sendmail'; default: 'smtp'
-
-if ($conf['mailer']['type'] === 'sendmail' ) {
-	$conf['mailer']['params']['sendmail_path'] = '/usr/lib/sendmail';
-	$conf['mailer']['params']['sendmail_args'] = '-oi';
-	$conf['mailer']['type'] = 'sendmail';
-}
-else {
-	$conf['mailer']['params']['host'] = 'localhost';
-	$conf['mailer']['params']['port'] = 25;
-	$conf['mailer']['type'] = 'smtp';
-}
-
+$conf['mailer']['params']['sendmail_path'] = '/usr/lib/sendmail';
+$conf['mailer']['params']['sendmail_args'] = '-oi';
+$conf['mailer']['type'] = 'sendmail';
 $conf['vfs']['params']['vfsroot'] = '/tmp';
 $conf['vfs']['type'] = 'file';
 $conf['sessionhandler']['type'] = 'none';

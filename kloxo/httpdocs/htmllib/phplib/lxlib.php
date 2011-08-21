@@ -690,22 +690,6 @@ function log_log($file, $mess, $id = null)
 	lfile_put_contents($rf, @ date("H:i M/d/Y") . ": $mess" . PHP_EOL, FILE_APPEND);
 }
 
-function log_cleanup($mess)
-{
-	// Function used in cleanup/upcp process
-	//
-	// logs to the file update and print to screen
-
-	if (!is_string($mess)) {
-		$mess = var_export($mess, true);
-	}
-	$mess = trim($mess);
-	$rf = "__path_program_root/log/update";
-
-	print( $mess . "\n" );
-	lfile_put_contents($rf, @ date("H:i M/d/Y") . ": $mess" . PHP_EOL, FILE_APPEND);
-}
-
 function log_ajax($mess, $id = 1)
 {
 	log_log('ajax', $mess, $id);
@@ -1862,9 +1846,8 @@ function init_language()
 	$g_language_mes->__information = $__information;
 	$g_language_mes->__emessage = $__emessage;
 	$g_language_mes->__keyword = $__keyword;
-	// __help and __helpvar until 6.1.7 doesn't exist, so disabled
-//	$g_language_mes->__help = $__help;
-//	$g_language_mes->__helpvar = $__helpvar;
+	$g_language_mes->__help = $__help;
+	$g_language_mes->__helpvar = $__helpvar;
 	$g_language_mes->__commonhelp = $g_commonhelp;
 
 	$g_language_desc = new Remote();
@@ -2019,17 +2002,15 @@ function delete_expired_ssessions()
 
 	$s_l = $login->getList("ssessionlist");
 
-	if(!empty($s_l)){
-		foreach ($s_l as $s) {
-			if (!is_object($s)) {
-				continue;
-			}
-			$timeout = $s->last_access + $login->getSpecialObject('sp_specialplay')->ssession_timeout;
-			dprint($s->nname);
-			if ($timeout < time()) {
-				$s->delete();
-				Utmp::updateUtmp($s->nname, $login, "Session Expired");
-			}
+	foreach ($s_l as $s) {
+		if (!is_object($s)) {
+			continue;
+		}
+		$timeout = $s->last_access + $login->getSpecialObject('sp_specialplay')->ssession_timeout;
+		dprint($s->nname);
+		if ($timeout < time()) {
+			$s->delete();
+			Utmp::updateUtmp($s->nname, $login, "Session Expired");
 		}
 	}
 }
@@ -2164,7 +2145,7 @@ function initProgramlib($ctype = null)
 
 	// This means the session object got created fresh.
 	if (!$sessobj || $sessobj->dbaction === 'add') {
-		dprint("Session id is empty. Clearing cookies and redirect to login.");
+		dprint("no session id");
 		clear_all_cookie();
 		$ghtml->print_redirect_self("/login/");
 	}
@@ -2290,7 +2271,7 @@ function initSession($object, $ssl_param, $consuming_parent)
 	setcookie("$ckstart-classname", $class, $cookietime, '/');
 	setcookie("$ckstart-session-id", $session, $cookietime, '/');
 
-	dprint("Set cookies<br/>");
+	dprint("Set cookies\n");
 
 	$hostname = $_SERVER['REMOTE_ADDR'];
 

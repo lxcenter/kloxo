@@ -1,4 +1,3 @@
 #!/bin/sh
 . /script/directory
-
-lphp.exe ../bin/misc/installWebmailDb.php
+lphp.exe ../bin/misc/lxinstall_hordegroupware_db.php

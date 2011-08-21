@@ -371,9 +371,7 @@ function printSelectObjectTable($name_list, $parent, $class, $blist = array(), $
 
         $basename = basename($obj->nname);
         $selectshowbase = $this->frm_selectshowbase;
-		// issue #609
-//      $ret = strfrom($parent->nname, $selectshowbase);
-        $ret = str_replace('//', '/', strfrom($parent->nname, $selectshowbase));
+        $ret = strfrom($parent->nname, $selectshowbase);
         print(" <td width=10 >");
         print("<a class=button href=\"javascript:callSetSelectFolder('/$ret/$basename')\">");
         print(" Select </a>");

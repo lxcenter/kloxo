@@ -1,6 +1,6 @@
 <?php 
 include_once "htmllib/lib/include.php";
-// include_once "lib/updatelib.php";
+include_once "lib/updatelib.php";
 include_once "htmllib/lib/updatelib.php";
 
 exit_if_another_instance_running();
@@ -38,8 +38,8 @@ function updatecleanup_main()
 		print("Removed lxlabs.repo\n");
 		print("Installing lxcenter.repo\n");
 		system("wget -O /etc/yum.repos.d/lxcenter.repo http://download.lxcenter.org/lxcenter.repo");
-		print("Installing yum-protectbase plugin\n");
-		system("yum install -y -q yum-protectbase");
+        print("Installing yum-protectbase plugin\n");
+        system("yum install -y -q yum-protectbase");
 		print("Done.\n");
 	}
 //
@@ -49,24 +49,26 @@ function updatecleanup_main()
 // If the flag isn't found, run the fix
 //
 // Disabled in Kloxo 6.1.4
-//	if (!lxfile_exists("/usr/local/lxlabs/kloxo/file/webmailReset")) {
-//		system("/usr/local/lxlabs/ext/php/php /usr/local/lxlabs/kloxo/bin/misc/secure-webmail-mysql.phps");
-//		system("/bin/rm /usr/local/lxlabs/kloxo/bin/misc/secure-webmail-mysql.phps");
-//	}
+//if (!lxfile_exists("/usr/local/lxlabs/kloxo/file/webmailReset")) {
+//	system("/usr/local/lxlabs/ext/php/php /usr/local/lxlabs/kloxo/bin/misc/secure-webmail-mysql.phps");
+//	system("/bin/rm /usr/local/lxlabs/kloxo/bin/misc/secure-webmail-mysql.phps");
+//}
 
 // Remove Flagfile in Kloxo 6.1.4, thios can be removed in 6.1.4+
-	if (lxfile_exists("/usr/local/lxlabs/kloxo/file/webmailReset")) {
-		system("/bin/rm /usr/local/lxlabs/kloxo/file/webmailReset");
-	}
+if (lxfile_exists("/usr/local/lxlabs/kloxo/file/webmailReset")) {
+      system("/bin/rm /usr/local/lxlabs/kloxo/file/webmailReset");
+}
+
+
 
 // Fix #388 - phpMyAdmin config.inc.php permission
 
-	$correct_perm = "0644";
-	$check_perm = substr(decoct( fileperms("/usr/local/lxlabs/$program/httpdocs/thirdparty/phpMyAdmin/config.inc.php") ), 2);
+    $correct_perm = "0644";
+    $check_perm = substr(decoct( fileperms("/usr/local/lxlabs/$program/httpdocs/thirdparty/phpMyAdmin/config.inc.php") ), 2);
 
-	if ($check_perm != $correct_perm) {
-		lxfile_unix_chmod("/usr/local/lxlabs/$program/httpdocs/thirdparty/phpMyAdmin/config.inc.php","0644");
-	}
+    if ($check_perm != $correct_perm) {
+        lxfile_unix_chmod("/usr/local/lxlabs/$program/httpdocs/thirdparty/phpMyAdmin/config.inc.php","0644");
+    }
 
 //
 
@@ -79,11 +81,8 @@ function updatecleanup_main()
 		$sgbl->slave = false;
 		if (!is_secondary_master()) {
 			updateDatabaseProperly();
-		//	fixExtraDB();
-		//	doUpdateExtraStuff();
-			// call new function (for 6.2.x) since 6.1.7
-			fixDataBaseIssues();
-			doUpdates();
+			fixExtraDB();
+			doUpdateExtraStuff();
 			lxshell_return("__path_php_path", "../bin/common/driverload.php");
 		}
 		update_all_slave();

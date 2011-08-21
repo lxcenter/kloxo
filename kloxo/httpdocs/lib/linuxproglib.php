@@ -5,6 +5,7 @@ function os_doUpdateExtraStuff()
 // TODO: Remove empty Function
 }
 
+
 function os_update_server()
 {
 	system("yum -y install --nosig webalizer lxjailshell autorespond unzip lxlighttpd lxphp >/dev/null 2>&1 &");
@@ -12,6 +13,7 @@ function os_update_server()
 	lxfile_touch("../etc/flag/lowmem.flag");
 	os_createLowMem();
 }
+
 
 function os_createLowMem()
 {
@@ -36,12 +38,12 @@ function os_createLowMem()
 }
 
 function os_create_kloxo_service_once() { }
-
 function os_set_iis_ftp_root_path() { }
+
 
 function os_fix_some_permissions()
 {
-	// TODO: Remove empty Function
+// TODO: Remove empty Function
 }
 
 function remove_lighttpd_error_log()
@@ -67,9 +69,10 @@ function create_dev()
 	lxshell_return('/sbin/MAKEDEV', 'urandom');
 }
 
+
 function fix_hordedb_proper()
 {
-//	lxshell_php("../bin/misc/lxinstall_hordegroupware_db.php");
+	lxshell_php("../bin/misc/lxinstall_hordegroupware_db.php");
 }
 
 function os_updateApplicableToSlaveToo()
@@ -79,7 +82,7 @@ function os_updateApplicableToSlaveToo()
 	move_clients_to_client();
 	os_doUpdateExtraStuff();
 	lxfile_cp("../file/phpmyadmin_config.inc.phps", "thirdparty/phpMyAdmin/config.inc.php");
-//	call_with_flag('installgroupwareagain');
+	call_with_flag('installgroupwareagain');
 
 	$desc = uuser::getUserDescription('admin');
 	$list = posix_getpwnam('admin');
@@ -88,28 +91,15 @@ function os_updateApplicableToSlaveToo()
 	}
 
 	// TODO: php six four symlink remove when lxphp 64bit is ready!
-//	if (os_is_php_six_four()) {
-//	if ( is_64bit() ) {
-	if (file_exists("/usr/lib64")) {
-	//	$ver = get_package_version("kloxophpsixfour");
-	//	installWithVersion("/usr/lib64/kloxophp", "kloxophpsixfour", $ver);
-		installWithVersion("/usr/lib64/kloxophp", "kloxophpsixfour");
-		if (!lxfile_exists("/usr/lib/kloxophp")) {
-			lxfile_symlink("/usr/lib64/kloxophp", "/usr/lib/kloxophp");
-		}
+	if (os_is_php_six_four()) {
+		$ver = get_package_version("kloxophpsixfour");
+		installWithVersion("/usr/lib/kloxophp", "kloxophpsixfour", $ver);
 		if (!lxfile_exists("/usr/lib/php")) {
 			lxfile_symlink("/usr/lib64/php", "/usr/lib/php");
 		}
-		if (!lxfile_exists("/usr/lib/httpd")) {
-			lxfile_symlink("/usr/lib64/httpd", "/usr/lib/httpd");
-		}
-		if (!lxfile_exists("/usr/lib/lighttpd")) {
-			lxfile_symlink("/usr/lib64/lighttpd", "/usr/lib/lighttpd");
-		}
 	} else {
-	//	$ver = get_package_version("kloxophp");
-	//	installWithVersion("/usr/lib/kloxophp", "kloxophp", $ver);
-		installWithVersion("/usr/lib/kloxophp", "kloxophp");
+		$ver = get_package_version("kloxophp");
+		installWithVersion("/usr/lib/kloxophp", "kloxophp", $ver);
 	}
 	$ver = get_package_version("lxwebmail");
 	installWebmail($ver);
@@ -117,10 +107,9 @@ function os_updateApplicableToSlaveToo()
 	installAwstats($ver);
 
 	if (!lxfile_exists("/home/kloxo/httpd/webmail/roundcube/config/db.inc.php")) {
-		lxfile_cp("../file/webmail-chooser/db.inc.phps", "/home/kloxo/httpd/webmail/roundcube/config/db.inc.php");
 	}
-	// issue # 598
-//	lxfile_mkdir("/etc/lighttpd/conf/kloxo");
+	lxfile_cp("../file/webmail-chooser/db.inc.phps", "/home/kloxo/httpd/webmail/roundcube/config/db.inc.php");
+	lxfile_mkdir("/etc/lighttpd/conf/kloxo");
 	lxfile_mkdir("/var/bogofilter");
 	lxfile_mkdir("/home/kloxo/httpd/lighttpd");
 	rmdir("/home/admin/domain/");
@@ -136,16 +125,10 @@ function os_updateApplicableToSlaveToo()
 	system("chmod ug+s /usr/sbin/lxrestart");
 	lunlink("/usr/sbin/sendmail");
 	lunlink("/usr/lib/sendmail");
-/* --- issue 637 
 	lxfile_cp("../file/linux/qmail-sendmail", "/usr/sbin/sendmail");
 	lxfile_cp("../file/linux/qmail-sendmail", "/usr/lib/sendmail");
 	lxfile_unix_chmod("/usr/lib/sendmail", "0755");
 	lxfile_unix_chmod("/usr/sbin/sendmail", "0755");
---- */
-	// --- back like on lxins.php in 6.1.6
-	system("ln -sf /var/qmail/bin/sendmail /usr/sbin/sendmail");
-	system("ln -sf /var/qmail/bin/sendmail /usr/lib/sendmail");
-
 	system("cp ../file/linux//lxredirecter.sh /usr/bin/");
 	system("chmod 755 /usr/bin/lxredirecter.sh");
 	if (!lxfile_exists("/usr/bin/php-cgi")) {
@@ -162,6 +145,7 @@ function os_updateApplicableToSlaveToo()
 	remove_lighttpd_error_log();
 	call_with_flag("fix_secure_log");
 	call_with_flag("remove_host_deny");
+
 	
 	installInstallApp();
 
@@ -186,6 +170,7 @@ function os_updateApplicableToSlaveToo()
 	lxfile_touch("/var/named/chroot/etc/kloxo.named.conf");
 	lxfile_touch("/var/named/chroot/etc/global.options.named.conf");
 	lxshell_return("pkill", "-f", "gettraffic");
+
 
 	install_if_package_not_exist("pure-ftpd");
 	install_if_package_not_exist("simscan-toaster");
@@ -222,29 +207,15 @@ function os_updateApplicableToSlaveToo()
 
 	fix_rhn_sources_file();
 	lxfile_symlink("__path_php_path", "/usr/bin/lxphp.exe");
-
-	// issue #589
-
-/*
 	lxfile_cp("../file/apache/kloxo.conf", "/etc/httpd/conf/kloxo/kloxo.conf");
 	lxfile_cp("../file/apache/default_ssl.conf", "/etc/httpd/conf.d/ssl.conf");
 	lxfile_touch("/etc/httpd/conf/kloxo/webmail_redirect.conf");
 	lxfile_touch("/etc/httpd/conf/kloxo/ssl.conf");
 	lxfile_touch("/etc/httpd/conf/kloxo/default.conf");
 	lxfile_touch("/etc/httpd/conf/kloxo/cp_config.conf");
-*/
-	lxfile_cp("../file/apache/~lxcenter.conf", "/etc/httpd/conf.d/~lxcenter.conf");
-	lxfile_cp("../file/apache/default_ssl.conf", "/etc/httpd/conf.d/ssl.conf");
-	lxfile_touch("/home/httpd/conf/defaults/webmail_redirect.conf");
-	lxfile_touch("/home/httpd/conf/defaults/ssl.conf");
-	lxfile_touch("/home/httpd/conf/defaults/_default.conf");
-	lxfile_touch("/home/httpd/conf/defaults/cp_config.conf");
-
-//	lxfile_touch("/home/httpd/conf/defaults/domainip.conf");
-	lxfile_touch("/home/httpd/conf/defaults/mimetype.conf");
-
 //	lunlink("../log/access_log");
 //	lunlink("../log/lighttpd_error.log");
+
 
 	@lxfile_rm("/etc/init.d/pure-ftpd");
 
@@ -278,6 +249,7 @@ function os_updateApplicableToSlaveToo()
 		lxshell_return("ln", "-s", "/usr/local/bin/tcpserver", "/usr/bin/");
 	}
 
+
 	call_with_flag("enable_xinetd");
 	fix_suexec();
 
@@ -298,9 +270,7 @@ function os_updateApplicableToSlaveToo()
 	system("chmod 777 /var/bogofilter/");
 	system("chmod o+t /var/bogofilter/");
 	system("pkill -f sisinfoc");
-	
-	// issue #598
-/*
+
 	lxfile_cp("../file/lighttpd/lighttpd.conf", "/etc/lighttpd/lighttpd.conf");
 	lxfile_cp("../file/lighttpd/conf/kloxo/kloxo.conf", "/etc/lighttpd/conf/kloxo/kloxo.conf");
 	lxfile_touch("/etc/lighttpd/conf/kloxo/webmail_redirect.conf");
@@ -327,39 +297,6 @@ function os_updateApplicableToSlaveToo()
 	}
 	lxfile_touch("/etc/httpd/conf/kloxo/domainip.conf");
 	lxfile_touch("/etc/httpd/conf/kloxo/mimetype.conf");
-*/
-	lxfile_cp("../file/lighttpd/lighttpd.conf", "/etc/lighttpd/lighttpd.conf");
-	lxfile_cp("../file/lighttpd/~lxcenter.conf", "/etc/lighttpd/conf.d/~lxcenter.conf");
-	lxfile_touch("/home/lighttpd/conf/defaults/webmail_redirect.conf");
-
-	if (!lxfile_real("/etc/lighttpd/local.lighttpd.conf")) {
-		system("echo > /etc/lighttpd/local.lighttpd.conf");
-	}
-
-	if (!lxfile_real("/home/lighttpd/conf/defaults/webmail_redirect.conf")) {
-		system("echo > /home/lighttpd/conf/defaults/webmail_redirect.conf");
-	}
-
-	if (!lxfile_real("/home/lighttpd/conf/defaults/~virtualhost.conf")) {
-		system("echo > /home/lighttpd/conf/defaults/~virtualhost.conf");
-	}
-
-//	if (!lxfile_real("/home/lighttpd/conf/defaults/domainip.conf")) {
-//		system("echo > /home/lighttpd/conf/defaults/domainip.conf");
-//	}
-
-	if (!lxfile_real("/home/lighttpd/conf/defaults/ssl.conf")) {
-		system("echo > /home/lighttpd/conf/defaults/ssl.conf");
-	}
-
-	if (!lxfile_real("/home/lighttpd/conf/defaults/mimetype.conf")) {
-		system("echo > /home/lighttpd/conf/defaults/mimetype.conf");
-	}
-
-/* --- move to above
-	lxfile_touch("/etc/httpd/conf/kloxo/domainip.conf");
-	lxfile_touch("/etc/httpd/conf/kloxo/mimetype.conf");
--- */
 
 	lxfile_cp("../file/lighttpd/etc_init.d", "/etc/init.d/lighttpd");
 
@@ -394,6 +331,7 @@ function os_updateApplicableToSlaveToo()
 	    lxshell_return("yum", "-y", "install", "lxphp");
 	}
 
+
 	system("chmod 666 /dev/null");
 	@ exec("chkconfig pure-ftpd off 2>/dev/null");
 	$string = null;
@@ -408,10 +346,11 @@ function os_updateApplicableToSlaveToo()
 	lfile_put_contents("/home/httpd/nobody.sh", $string);
 	lxfile_unix_chmod("/home/httpd/nobody.sh", "0755");
 
+
 	system("sh ../bin/misc/lxpopuser.sh");
 
+
 	installRoundCube();
-	installHorde();
 	installChooser();
 	installLxetc();
 	lxfile_rm_content("__path_home_root/httpd/script/");
@@ -426,21 +365,11 @@ function os_updateApplicableToSlaveToo()
 	
 	remove_test_root();
  	remove_ssh_self_host_key();
-	
-	// issue #589
-/*
+
 	if (lxfile_exists("/etc/httpd/conf/httpd.conf")) {
 		addLineIfNotExistInside("/etc/httpd/conf/httpd.conf", "Include /etc/httpd/conf/kloxo/kloxo.conf", "");
+		lxfile_cp("../file/apache/etc_init.d", "/etc/init.d/httpd");
 	}
-*/
-	if (lxfile_exists("/etc/httpd/conf.d/~lxcenter.conf")) {
-		addLineIfNotExistInside("/etc/httpd/conf.d/~lxcenter.conf", "Include /home/httpd/conf/defaults/*.conf", "");
-	}
-
-	if (lxfile_exists("/etc/lighttpd/conf.d/~lxcenter.conf")) {
-		addLineIfNotExistInside("/etc/lighttpd/conf.d/~lxcenter.conf", "include_shell \"cat /home/lighttpd/conf/defaults/*.conf\"", "");
-	}
-
 	# Issue #450
 	if (lxfile_exists("/proc/user_beancounters")) {
 	    create_dev();

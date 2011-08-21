@@ -122,7 +122,6 @@ function createIniFile()
 		} else {
 		$extrastring = "";
 		}
-/* --- ToDo #590 - disable appear on .htaccess
 		$htfile = "{$this->main->__var_docrootpath}/.htaccess";		
 		$ht1file = "/home/httpd/{$this->main->getParentName()}/kloxoscript/.htaccess";
 		$htcont = "php_value error_log $elogfile\n$htcont";
@@ -130,7 +129,6 @@ function createIniFile()
 		file_put_between_comments("{$this->main->__var_web_user}:apache", $stlist, $endlist, $startstring, $endstring, $htfile, $htcont);
 		file_put_between_comments($stlist, $endlist, $startstring, $endstring, $ht1file, $htcont);
 		lxfile_unix_chown($htfile, "{$this->main->__var_web_user}:apache");
---- */
 		$adminbasedir = trim($this->main->__var_extrabasedir);
 
 		if (!$this->main->isOn('__var_disable_openbasedir')) {

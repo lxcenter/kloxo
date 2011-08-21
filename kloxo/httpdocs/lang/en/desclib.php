@@ -21,8 +21,6 @@ $__description["quota_view"] = array("Quota View");
 $__description["normal_view"] = array("Normal View");
 $__description["last_switch_status"] = array("Last Switch Status");
 $__description["Backup_File"] = array("Backup File");
-
-// DNS management
 $__description["dns_record"] = array("Dns Record");
 $__description["value"] = array("Value");
 $__description["hostname"] = array("Hostname");
@@ -43,43 +41,25 @@ $__description["used"] = array("Used");
 $__description["not_used"] = array("Not Used");
 $__description["web_ipaddress"] = array("Web Ipaddress");
 $__description["mail_ipaddress"] = array("Mail Ipaddress");
-$__description["ipaddress"] = array("IP Address");
-$__description["ttl_(seconds)"] = array("TTL (Seconds) Recommended is 14400");
-$__description["primary_dns"] = array("Primary DNS");
-$__description["ns_record"] = array("NS Record");
+$__description["ipaddress"] = array("Ipaddress");
+$__description["ttl_(seconds)"] = array("Ttl (seconds)");
+$__description["primary_dns"] = array("Primary Dns");
+$__description["ns_record"] = array("Ns Record");
 $__description["a_record"] = array("A Record");
-$__description["mx_record"] = array("MX Record");
-$__description["cn_record"] = array("CN Record");
-$__description["type_of_dns_zone_file"] = array("Type Of DNS Zone File");
+$__description["mx_record"] = array("Mx Record");
+$__description["cn_record"] = array("Cn Record");
+$__description["type_of_dns_zone_file"] = array("Type Of Dns Zone File");
 $__description["primary_DNS"] = array("Primary DNS");
-$__description["new_dns_template"] = array("Select DNS Template");
+$__description["new_dns_template"] = array("New Dns Template");
 $__description["secondary_DNS"] = array("Secondary DNS");
 $__description["SOA_nameserver"] = array("SOA Nameserver");
 $__description["general_settings"] = array("General Settings");
 $__description["rebuild"] = array("Rebuild");
 $__description["DNS"] = array("DNS");
 $__description["domain_name"] = array("Domain Name");
-$__description["manage_dns"] = array("Manage DNS");
-$__description["dns"] = array("DNS");
-
-// Added Kloxo Version 6.1.6
-$__description["SRV"] = array("SRV");
-$__description["DDNS"] = array("DDNS");
-$__description["ttl"] = array("TTL");
-$__description["ddns_user"] = array("DDNS Username");
-$__description["ddns_pwd"] = array("DDNS Password");
-$__description["ddns_offline"] = array("DDNS Offline");
-$__description["srv_service"] = array("Service");
-$__description["srv_proto"] = array("Protocol");
-$__description["srv_weight"] = array("Weight");
-$__description["srv_port"] = array("Port");
-$__description["email"] = array("Email");
-$__description["refresh"] = array("Refresh (Seconds) Default is 3600");
-$__description["expire"] = array("Expire (Seconds) Default is 604800");
-$__description["retry"] = array("Retry (Seconds) Default is 1800");
-$__description["minimum"] = array("Minimum (Seconds) Default is 1800");
-
-
+$__description["manage_dns"] = array("Manage Dns");
+$__description["dns"] = array("Dns");
+$__description["all_dns"] = array("All Dns");
 $__description["notification"] = array("Notification");
 $__description["event_name"] = array("Event Name");
 $__description["notify_me_when_ticket_is_added"] = array("Notify Me When Ticket Is Added");
@@ -578,20 +558,16 @@ $__description["version"] = array("Version");
 $__description["schedule_updation_later"] = array(" Schedule Updation Later");
 $__description["current_version"] = array("Current Version");
 $__description["latest_version"] = array("Latest Version");
-
-//ReleaseNotes tab
 $__description["bugs_in_this_version"] = array("Bugs In This Version");
 $__description["bugs"] = array("Bugs");
 $__description["release_note"] = array("Release Note");
 $__description["note"] = array("Note");
 $__description["Past"] = array("Past");
-$__description["releasenotes_issue"] = array("Issue");
 $__description["Old_version"] = array("Old Version");
 $__description["Newer_Version"] = array("Newer Version");
 $__description["critical"] = array("Critical");
 $__description["enhancement"] = array("Enhancement");
-
-$__description["Anonymous Ftp"] = array("Anonymous Ftp");
+$__description["Anonyous Ftp"] = array("Anonyous Ftp");
 $__description["firewall_rule"] = array("Firewall Rule");
 $__description["[%v]_name"] = array("[%v] Name");
 $__description["from_address"] = array("From Address");
@@ -1263,8 +1239,3 @@ $__description["applicationname"] = array("Applicationname");
 $__description["accessible_directly"] = array("Accessible Directly");
 $__description["path"] = array("Path");
 
-// release on Kloxo 6.1.7
-// by mustafa.ramadhan@lxcenter.org
-$__description["apache_optimize"] = array("Apache memory optimize");
-$__description["mysql_convert"] = array("Mysql convert");
-$__description["fix_chownchmod"] = array("Fix 'ownership' and 'permissions'");
