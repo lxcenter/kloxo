@@ -14,31 +14,34 @@ $select = strtolower($list['select']);
 $login->loadAllObjects('client');
 $list = $login->getList('client');
 
+print("\n");
+
 foreach($list as $c) {
 	$clname = $c->getPathFromName('nname');
 	$cdir = "/home/{$clname}";
 	$dlist = $c->getList('domaina');
 
 	passthru("chown {$clname}:apache {$cdir}/");
-	echo "chown {$clname}:apache {$cdir}/"."\n";
+	print("chown {$clname}:apache FOR {$cdir}/\n" );
 	passthru("chmod 770 {$cdir}/");
-	echo "chmod 770 {$cdir}/"."\n";
+	print("chmod 770 FOR {$cdir}/\n");
 
 	foreach((array) $dlist as $l) {
 		$web = $l->nname;
 
 		if (($select === "all") || ($select === 'chown')) {
 			passthru("chown -R {$clname}:{$clname} {$cdir}/{$web}/");
-			echo "chown -R {$clname}:{$clname} {$cdir}/{$web}/"."\n";
+			print("chown {$clname}:{$clname} FOR {$cdir}/{$web}/ AND INSIDE\n");
 		}
 		if (($select === "all") || ($select === 'chmod')) {
-			passthru("find {$cdir}/{$web}/ -type f -name \"*.php\" -exec chmod 644 {} \;");
-			echo "find {$cdir}/{$web}/ -type f -name \"*.php\" -exec chmod 644 {} \;"."\n";
+			passthru("find {$cdir}/{$web}/ -type f -name \"*.php*\" -exec chmod 644 {} \;");
+			print("chmod 644 FOR *.php* INSIDE {$cdir}/{$web}/\n");
 			// passthru("find {$cdir}/{$web}/ -type f -exec chmod 644 {} \;");
-			// echo "find {$cdir}/{$web}/ -type f -exec chmod 644 {} \;"."\n";
+			// echo "find {$cdir}/{$web}/ -type f -exec chmod 644 {} \;\n";
 			passthru("find {$cdir}/{$web}/ -type d -exec chmod 755 {} \;");
-			echo "find {$cdir}/{$web}/ -type d -exec chmod 755 {} \;"."\n";
+			print("chmod 775 FOR {$cdir}/{$web}/ AND INSIDE\n");
 		}
+		print("\n");
 	}
 }
 

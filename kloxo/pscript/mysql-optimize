@@ -12,11 +12,19 @@
 
 if [ "$#" == 0 ] ; then
 	echo
-	echo "------------------------------------------------------------------------------"
-	echo " format: sh $0 --select=repair/optimize --database=[]"
-	echo "------------------------------------------------------------------------------"
+	echo " ------------------------------------------------------------------------------"
+	echo "  format: sh $0 --select=repair/optimize --database=[]"
+	echo " ------------------------------------------------------------------------------"
 	echo "  --database - database name; default: all databases"
 	echo
+	exit;
+fi
+
+request1=$1
+SELECT=${request1#--select\=}
+
+if [ ! $SELECT == 'repair' ] && [ ! $SELECT == 'optimize' ] ; then
+	echo "Wrong --select= entry..."
 	exit;
 fi
 

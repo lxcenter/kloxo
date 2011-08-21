@@ -12,11 +12,11 @@
 
 if [ "$#" == 0 ] ; then
 	echo
-	echo "------------------------------------------------------------------------------"
-	echo " format:"
-	echo "   sh $0 --engine=[] --database=[] --table=[]" --config=[]
-	echo "------------------------------------------------------------------------------"
-	echo "  --engine - change to MyISAM/InnoDB; default: MyISAM"
+	echo " ------------------------------------------------------------------------------"
+	echo "  format:"
+	echo "    sh $0 --engine=[] --database=[] --table=[] --config=[]"
+	echo " ------------------------------------------------------------------------------"
+	echo "  --engine - change to MyISAM/InnoDB"
 	echo "  --database - database name; default: all databases"
 	echo "  --table - table name; default: all tables"
 	echo "  --config - yes/no; default: yes"
@@ -24,6 +24,14 @@ if [ "$#" == 0 ] ; then
 	echo "         'default-storage-engine=[engine]', and"
 	echo "         'skip-innodb' (for myisam)"
 	echo
+	exit;
+fi
+
+request1=$1
+ENGINE=${request1#--engine\=}
+
+if [ $ENGINE == '' ] ; then
+	echo "Empty --engine= entry..."
 	exit;
 fi
 

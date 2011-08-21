@@ -5,14 +5,26 @@
 
 if [ "$#" == 0 ] ; then
 	echo
-	echo "------------------------------------------------------------"
-	echo " format: sh $0 --select=chown/chmod/all"
-	echo "------------------------------------------------------------"
-	echo " change - chown: ownership only; chmod: permissions only"
-	echo " - important for secure environment like suphp on Apache"
+	echo " ------------------------------------------------------------"
+	echo "  format: sh $0 --select=chown/chmod/all"
+	echo " ------------------------------------------------------------"
+	echo " --select -"
+	echo "   chown: ownership only"
+	echo "   chmod: permissions only (for php*)"
+	echo
+	echo " * important for secure environment like suphp on Apache"
 	echo
 	exit;
 fi
+
+request1=$1
+SELECT=${request1#--select\=}
+
+if [ ! $SELECT == 'chown' ] && [ ! $SELECT == 'chmod' ] && [ ! $SELECT == 'all' ] ; then
+	echo "Wrong --select= entry..."
+	exit;
+fi
+
 
 . /script/directory
 lphp.exe ../bin/fix/fix-chownchmod.php $*

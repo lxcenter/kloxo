@@ -9,15 +9,16 @@ initProgram('admin');
 
 $list = parse_opt($argv);
 
-$select = $list['select'];
+$select = strtolower($list['select']);
 
-passthru("echo 3 > /proc/sys/vm/drop_caches >>/dev/null");
+$spare = ($list['spare']) ? (int)$list['spare'] : null;
+
+passthru("echo 3 > /proc/sys/vm/drop_caches");
 
 $status = shell_exec("/etc/init.d/httpd status");
 
 //--- some vps include /etc/httpd/conf.d/swtune.conf
 passthru("rm -f /etc/httpd/conf.d/swtune.conf");
-
 
 if ($select === 'status') {
 	echo "\n".$status."\n";
@@ -35,23 +36,23 @@ elseif ($select === 'optimize') {
 	// check memory -- $2=total, $3=used, $4=free, $5=shared, $6=buffers, $7=cached
 
 	$m['total']   = (int)shell_exec("free -m | grep Mem: | awk '{print $2}'");
-	$m['spare']   = ($m['total'] * 0.25);
+	$m['spare']   = ($spare) ? $spare : ($m['total'] * 0.25);
 
 	$m['apps']    = (int)shell_exec("free -m | grep buffers/cache: | awk '{print $3}'");
 
-	/*
+/*
 	$m['used']    = (int)shell_exec("free -m | grep Mem: | awk '{print $3}'");
 	$m['free']    = (int)shell_exec("free -m | grep Mem: | awk '{print $4}'");
 	$m['shared']  = (int)shell_exec("free -m | grep Mem: | awk '{print $5}'");
 	$m['buffers'] = (int)shell_exec("free -m | grep Mem: | awk '{print $6}'");
 	$m['cached']  = (int)shell_exec("free -m | grep Mem: | awk '{print $7}'");
-	*/
-
-	// $m['avail']   = $m['free'] + $m['shared'] + $m['buffers'] + $m['cached'] - $m['spare'];
+	
+	$m['avail']   = $m['free'] + $m['shared'] + $m['buffers'] + $m['cached'] - $m['spare'];
+*/
 
 	$m['avail'] = $m['total'] - $m['spare'] - $m['apps'];
 
-	$maxpar = (int)($m['avail'] / 20);
+	$maxpar = (int)($m['avail'] / 25);
 	$minpar = (int)($maxpar / 2);
 
 	echo shell_exec("/etc/init.d/httpd start");
@@ -84,10 +85,10 @@ KeepAliveTimeout 5
 
 <IfModule worker.c>
 	StartServers 2
-	MaxClients 150
+	MaxClients {$maxpar}
 	MinSpareThreads {$minpar}
 	MaxSpareThreads {$maxpar}
-	ThreadsPerChild 25
+	ThreadsPerChild {$maxpar}
 	MaxRequestsPerChild 0
 	ThreadStackSize 8196
 	MaxMemFree 2
@@ -95,10 +96,10 @@ KeepAliveTimeout 5
 
 <IfModule event.c>
 	StartServers 2
-	MaxClients 150
+	MaxClients {$maxpar}
 	MinSpareThreads {$minpar}
 	MaxSpareThreads {$maxpar}
-	ThreadsPerChild 25
+	ThreadsPerChild {$maxpar}
 	MaxRequestsPerChild 0
 	ThreadStackSize 8196
 	MaxMemFree 2
