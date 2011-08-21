@@ -9,10 +9,13 @@ function dbactionUpdate($subaction)
 	// issue #567 - httpd-itk for kloxo
 	
 //	lxshell_return("service", "httpd", "stop");
- 	passthru("/etc/init.d/httpd stop");
+// 	passthru("/etc/init.d/httpd stop");
+
+	$ret = lxshell_return("service", "httpd", "stop");
+	if ($ret) { throw new lxexception('httpd_stop_failed', 'parent'); }
 
 	//-- old structure
-	lxfile_rm("/etc/httpd/conf/kloxo");
+	passthru("rm -rf /etc/httpd/conf/kloxo");
 
 	//-- new structure	
 	lxfile_mkdir("/home/httpd/conf");
@@ -28,13 +31,6 @@ function dbactionUpdate($subaction)
 
 	}
 
-	if (!lfile_exists("/home/kloxo/httpd/cp/index.php")) {
-		mkdir("/home/kloxo/httpd/cp");
-		copy("/usr/local/lxlabs/kloxo/file/cp_config_index.php", "/home/kloxo/httpd/cp/index.php");
-		passthru("unzip -oq /usr/local/lxlabs/kloxo/file/skeleton.zip -d /home/kloxo/httpd/cp");
-		passthru("chown -R lxlabs:lxlabs /home/kloxo/httpd/cp");
-	}
-
 	lxfile_rm("/etc/sysconfig/httpd");
 
 	$t = $this->main->php_type;
@@ -42,17 +38,6 @@ function dbactionUpdate($subaction)
 	$a = $this->main->apache_optimize;
 	$m = $this->main->mysql_convert;
 	$f = $this->main->fix_chownchmod;
-
-	if ($m === 'to-myisam') {
-		passthru("lphp.exe /usr/local/lxlabs/kloxo/bin/fix/mysql-convert.php --engine=myisam");
-	}
-	else if ($m === 'to-innodb') {
-		passthru("lphp.exe /usr/local/lxlabs/kloxo/bin/fix/mysql-convert.php --engine=innodb");
-	}
-
-	if ($a === 'optimize') {
-		passthru("lphp.exe /usr/local/lxlabs/kloxo/bin/fix/apache-optimize.php --select=optimize");
-	}
 
 	if ($f === 'fix-ownership') {
 		passthru("lphp.exe /usr/local/lxlabs/kloxo/bin/fix/fix-chownchmod.php --select=chown");
@@ -123,12 +108,30 @@ function dbactionUpdate($subaction)
 
 	// Fixed issue #515 - returned due to accidentally deleted
 	lxfile_generic_chmod("/home/admin", "0770");
+	
+	if ($m === 'to-myisam') {
+		passthru("lphp.exe /usr/local/lxlabs/kloxo/bin/fix/mysql-convert.php --engine=myisam");
+	}
+	else if ($m === 'to-innodb') {
+		passthru("lphp.exe /usr/local/lxlabs/kloxo/bin/fix/mysql-convert.php --engine=innodb");
+	}
+
+	if ($a === 'optimize') {
+		passthru("lphp.exe /usr/local/lxlabs/kloxo/bin/fix/apache-optimize.php --select=optimize");
+		// stop again because start by apache-optimize
+		$ret = lxshell_return("service", "httpd", "stop");
+		if ($ret) { throw new lxexception('httpd_stop_failed', 'parent'); }
+	}
+
 
 //	change to 'stop-start' instead 'restart' because problem when change prefork/worker/event/itk to other
 //	createRestartFile("httpd");
 
 //	lxshell_return("service", "httpd", "start");
- 	passthru("/etc/init.d/httpd start");
+// 	passthru("/etc/init.d/httpd start");
+
+	$ret = lxshell_return("service", "httpd", "start");
+	if ($ret) { throw new lxexception('httpd_start_failed', 'parent'); }
 }
 
 }
