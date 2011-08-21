@@ -25,8 +25,10 @@ function createMimeType()
 	foreach($result as $r) {
 		$string .= "Addtype {$r['type']} {$r['extension']}\n";
 	}
-
-	lfile_put_contents("/etc/httpd/conf/kloxo/mimetype.conf", $string);
+	
+	// issue #589
+//	lfile_put_contents("/etc/httpd/conf/kloxo/mimetype.conf", $string);
+	lfile_put_contents("/home/httpd/conf/defaults/mimetype.conf", $string);
 }
 
 }

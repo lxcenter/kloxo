@@ -30,6 +30,10 @@ function lxins_main()
 	$osversion = find_os_version();
 	$arch = `arch`;
 	$arch = trim($arch);
+	
+	//--- create temporal flags for install
+	system("mkdir -p /var/cache/kloxo/");
+	system("echo 1 > /var/cache/kloxo/kloxo-install-firsttime.flg");
 
 	if (!char_search_beg($osversion, "centos") && !char_search_beg($osversion, "rhel")) {
 		print("Kloxo is only supported on CentOS 5 and RHEL 5\n");
@@ -59,6 +63,8 @@ function lxins_main()
 		print("Installing InstallApp = NO\n");
 		print("You can install it later with /script/installapp-update\n\n");
 		$installappinst = false;
+		//--- temporal flag for no install InstallApp
+		system("echo 1 > /var/cache/kloxo/kloxo-install-disableinstallapp.flg");
 	} else {
 		print("Installing InstallApp = YES\n\n");
 		$installappinst = true;
@@ -92,12 +98,61 @@ function lxins_main()
 		}
 	}
 	print("Prepare installation directory\n");
+	
 	system("mkdir -p /usr/local/lxlabs/kloxo");
-	chdir("/usr/local/lxlabs/kloxo");
-	system("mkdir -p /usr/local/lxlabs/kloxo/log");
-	@ unlink("kloxo-current.zip");
-	print("Downloading latest Kloxo release\n");
-	system("wget ".$downloadserver."download/kloxo/production/kloxo/kloxo-current.zip");
+
+	if (file_exists("../../kloxo-current.zip")) {
+		//--- that mean install with local copy
+		@ unlink("/usr/local/lxlabs/kloxo/kloxo-current.zip");
+		print("Local copying Kloxo release\n");
+		passthru("mkdir -p /var/cache/kloxo");
+		passthru("cp -rf ../../kloxo-current.zip /usr/local/lxlabs/kloxo");
+
+		// the first step - remove 
+		passthru("rm -f /var/cache/kloxo/kloxo-thirdparty*.zip");
+		passthru("rm -f /var/cache/kloxo/lxawstats*.tar.gz");
+		passthru("rm -f /var/cache/kloxo/lxwebmail*.tar.gz");
+		passthru("rm -f /var/cache/kloxo/kloxophpsixfour*.tar.gz");
+		passthru("rm -f /var/cache/kloxo/kloxophp*.tar.gz");
+		passthru("rm -f /var/cache/kloxo/*-version");
+		// the second step - copy from packer making if exist
+		passthru("cp -rf ../../kloxo-thirdparty*.zip /var/cache/kloxo");
+		passthru("cp -rf ../../lxawstats*.tar.gz /var/cache/kloxo");
+		passthru("cp -rf ../../lxwebmail*.tar.gz /var/cache/kloxo");
+		passthru("cp -rf ../../kloxo-thirdparty-version /var/cache/kloxo");
+		passthru("cp -rf ../../lxawstats-version /var/cache/kloxo");
+		passthru("cp -rf ../../lxwebmail-version /var/cache/kloxo"); 
+//		if ( os_is_arch_sixfour() ) {
+		if (file_exists("/usr/lib64")) {
+			passthru("cp -rf ../../kloxophpsixfour*.tar.gz /var/cache/kloxo");
+			passthru("cp -rf ../../kloxophpsixfour-version /var/cache/kloxo");
+			passthru("mkdir -p /usr/lib64/kloxophp");
+			passthru("ln -s /usr/lib64/kloxophp /usr/lib/kloxophp");
+			passthru("mkdir -p /usr/lib64/php");
+			passthru("ln -s /usr/lib64/php /usr/lib/php");
+			passthru("mkdir -p /usr/lib64/httpd");
+			passthru("ln -s /usr/lib64/httpd /usr/lib/httpd");
+			passthru("mkdir -p /usr/lib64/lighttpd");
+			passthru("ln -s /usr/lib64/lighttpd /usr/lib/lighttpd");
+		}
+		else {
+			//--- use this trick because lazy to make code for version check
+			passthru("rename ../../kloxophpsixfour ../../_kloxophpsixfour ../../kloxophpsixfour*");
+			passthru("cp -rf ../../kloxophp*.tar.gz /var/cache/kloxo");
+			passthru("rename ../../_kloxophpsixfour ../../kloxophpsixfour ../../_kloxophpsixfour*");
+			passthru("cp -rf ../../kloxophp-version /var/cache/kloxo"); 
+		}
+		chdir("/usr/local/lxlabs/kloxo");
+		passthru("mkdir -p /usr/local/lxlabs/kloxo/log");
+	}
+	else {
+		chdir("/usr/local/lxlabs/kloxo");
+		system("mkdir -p /usr/local/lxlabs/kloxo/log");
+		@ unlink("kloxo-current.zip");
+		print("Downloading latest Kloxo release\n");
+		system("wget ".$downloadserver."download/kloxo/production/kloxo/kloxo-current.zip");
+	}
+
 	print("\n\nInstalling Kloxo.....\n\n");
 	system("unzip -oq kloxo-current.zip", $return);
 
@@ -130,6 +185,7 @@ function lxins_main()
 	system("echo `hostname` > /var/qmail/control/me");
 	system("service qmail restart >/dev/null 2>&1 &");
 	system("service courier-imap restart >/dev/null 2>&1 &");
+/* --- enough execute in updatelib.php at next step
 	$dbfile="/home/kloxo/httpd/webmail/horde/scripts/sql/create.mysql.sql";
 	if(file_exists($dbfile)) {
 		if($dbpass == "") {
@@ -138,6 +194,7 @@ function lxins_main()
 			system("mysql -u $dbroot -p$dbpass <$dbfile");
 		}
 	}
+--- */
 	system("mkdir -p /home/kloxo/httpd");
 	chdir("/home/kloxo/httpd");
 	@ unlink("skeleton-disable.zip");
@@ -151,6 +208,17 @@ function lxins_main()
 	if ($installappinst) {
 		system("/script/installapp-update"); // First run (gets installappdata)
 		system("/script/installapp-update"); // Second run (gets applications)
+	}
+
+	// --- remove all temporal flags because the end of install
+	system("rm -rf /var/cache/kloxo/*-version");
+	system("rm -rf /var/cache/kloxo/kloxo-install-*.flg");
+
+	//--- for prevent mysql socket problem (especially on 64bit system)
+	if (!file_exists("/var/lib/mysql/mysql.sock")) {
+		system("/etc/init.d/mysqld stop");
+		system("mksock /var/lib/mysql/mysql.sock");	
+		system("/etc/init.d/mysqld start");
 	}
 
 	print("Congratulations. Kloxo has been installed succesfully on your server as $installtype \n");

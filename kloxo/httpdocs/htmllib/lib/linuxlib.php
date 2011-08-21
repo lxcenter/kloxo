@@ -157,8 +157,10 @@ function os_fix_lxlabs_permission()
 	lxfile_unix_chmod("__path_program_etc", "0700");
 	lxfile_unix_chmod("__path_program_root/log", "0700");
 	lxfile_unix_chmod("__path_program_root/session", "0700");
-	lxfile_symlink("__path_php_path", "/usr/bin/lphp.exe");
-	
+	// prevent php warning when file exist - already since 6.1.7
+	if (!lxfile_exists("/usr/bin/lphp.exe")) {
+		lxfile_symlink("__path_php_path", "/usr/bin/lphp.exe");
+	}
 }
 
 
@@ -188,7 +190,10 @@ function os_create_system_user($basename, $password, $id, $shell, $dir = "/tmp")
 	$ret = lxshell_return("useradd", "-m", "-c", uuser::getUserDescription($id), "-d", $dir, "-s", $shell, "-p", $password, $name);
 
 	if ($ret) {
-		throw new lxexception("could_not_create_user", '', $name);
+		// --- issue #638 - installation fails if 'admin' group already exists
+		if (!lxfile_real("/var/cache/kloxo/kloxo-install-firsttime.flg")) {
+			throw new lxexception("could_not_create_user", '', $name);
+		}
 	}
 	return $name;
 
@@ -334,7 +339,8 @@ function os_getpid()
 	return posix_getpid();
 }
 
-// Please note that os_get_commandname actually returns the first argument (NOt the actual command), since the actuall command would be 'php'
+// Please note that os_get_commandname actually returns the first argument (NOt the actual command),
+// since the actuall command would be 'php'
 function os_get_commandname($pid)
 {
 	if (!lxfile_exists("/proc/$pid")) {
@@ -375,7 +381,3 @@ function os_set_path()
 	global $gbl, $sgbl, $login, $ghtml; 
 	putenv("PATH=/sbin/:/usr/sbin/:/bin/:/usr/bin:/usr/local/bin/:/usr/local/sbin:$sgbl->__path_program_root/bin:$sgbl->__path_program_root/sbin:");
 }
-
-
-
-
