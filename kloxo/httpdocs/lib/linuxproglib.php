@@ -41,7 +41,7 @@ function os_set_iis_ftp_root_path() { }
 
 function os_fix_some_permissions()
 {
-// TODO: Remove empty Function
+	// TODO: Remove empty Function
 }
 
 function remove_lighttpd_error_log()
@@ -69,7 +69,7 @@ function create_dev()
 
 function fix_hordedb_proper()
 {
-	lxshell_php("../bin/misc/lxinstall_hordegroupware_db.php");
+//	lxshell_php("../bin/misc/lxinstall_hordegroupware_db.php");
 }
 
 function os_updateApplicableToSlaveToo()
@@ -79,7 +79,7 @@ function os_updateApplicableToSlaveToo()
 	move_clients_to_client();
 	os_doUpdateExtraStuff();
 	lxfile_cp("../file/phpmyadmin_config.inc.phps", "thirdparty/phpMyAdmin/config.inc.php");
-	call_with_flag('installgroupwareagain');
+//	call_with_flag('installgroupwareagain');
 
 	$desc = uuser::getUserDescription('admin');
 	$list = posix_getpwnam('admin');
@@ -88,15 +88,28 @@ function os_updateApplicableToSlaveToo()
 	}
 
 	// TODO: php six four symlink remove when lxphp 64bit is ready!
-	if (os_is_php_six_four()) {
-		$ver = get_package_version("kloxophpsixfour");
-		installWithVersion("/usr/lib/kloxophp", "kloxophpsixfour", $ver);
+//	if (os_is_php_six_four()) {
+//	if ( is_64bit() ) {
+	if (file_exists("/usr/lib64")) {
+	//	$ver = get_package_version("kloxophpsixfour");
+	//	installWithVersion("/usr/lib64/kloxophp", "kloxophpsixfour", $ver);
+		installWithVersion("/usr/lib64/kloxophp", "kloxophpsixfour");
+		if (!lxfile_exists("/usr/lib/kloxophp")) {
+			lxfile_symlink("/usr/lib64/kloxophp", "/usr/lib/kloxophp");
+		}
 		if (!lxfile_exists("/usr/lib/php")) {
 			lxfile_symlink("/usr/lib64/php", "/usr/lib/php");
 		}
+		if (!lxfile_exists("/usr/lib/httpd")) {
+			lxfile_symlink("/usr/lib64/httpd", "/usr/lib/httpd");
+		}
+		if (!lxfile_exists("/usr/lib/lighttpd")) {
+			lxfile_symlink("/usr/lib64/lighttpd", "/usr/lib/lighttpd");
+		}
 	} else {
-		$ver = get_package_version("kloxophp");
-		installWithVersion("/usr/lib/kloxophp", "kloxophp", $ver);
+	//	$ver = get_package_version("kloxophp");
+	//	installWithVersion("/usr/lib/kloxophp", "kloxophp", $ver);
+		installWithVersion("/usr/lib/kloxophp", "kloxophp");
 	}
 	$ver = get_package_version("lxwebmail");
 	installWebmail($ver);
@@ -104,8 +117,8 @@ function os_updateApplicableToSlaveToo()
 	installAwstats($ver);
 
 	if (!lxfile_exists("/home/kloxo/httpd/webmail/roundcube/config/db.inc.php")) {
+		lxfile_cp("../file/webmail-chooser/db.inc.phps", "/home/kloxo/httpd/webmail/roundcube/config/db.inc.php");
 	}
-	lxfile_cp("../file/webmail-chooser/db.inc.phps", "/home/kloxo/httpd/webmail/roundcube/config/db.inc.php");
 	// issue # 598
 //	lxfile_mkdir("/etc/lighttpd/conf/kloxo");
 	lxfile_mkdir("/var/bogofilter");
@@ -123,10 +136,16 @@ function os_updateApplicableToSlaveToo()
 	system("chmod ug+s /usr/sbin/lxrestart");
 	lunlink("/usr/sbin/sendmail");
 	lunlink("/usr/lib/sendmail");
+/* --- issue 637 
 	lxfile_cp("../file/linux/qmail-sendmail", "/usr/sbin/sendmail");
 	lxfile_cp("../file/linux/qmail-sendmail", "/usr/lib/sendmail");
 	lxfile_unix_chmod("/usr/lib/sendmail", "0755");
 	lxfile_unix_chmod("/usr/sbin/sendmail", "0755");
+--- */
+	// --- back like on lxins.php in 6.1.6
+	system("ln -sf /var/qmail/bin/sendmail /usr/sbin/sendmail");
+	system("ln -sf /var/qmail/bin/sendmail /usr/lib/sendmail");
+
 	system("cp ../file/linux//lxredirecter.sh /usr/bin/");
 	system("chmod 755 /usr/bin/lxredirecter.sh");
 	if (!lxfile_exists("/usr/bin/php-cgi")) {
@@ -167,7 +186,6 @@ function os_updateApplicableToSlaveToo()
 	lxfile_touch("/var/named/chroot/etc/kloxo.named.conf");
 	lxfile_touch("/var/named/chroot/etc/global.options.named.conf");
 	lxshell_return("pkill", "-f", "gettraffic");
-
 
 	install_if_package_not_exist("pure-ftpd");
 	install_if_package_not_exist("simscan-toaster");
@@ -227,7 +245,6 @@ function os_updateApplicableToSlaveToo()
 
 //	lunlink("../log/access_log");
 //	lunlink("../log/lighttpd_error.log");
-
 
 	@lxfile_rm("/etc/init.d/pure-ftpd");
 
@@ -394,6 +411,7 @@ function os_updateApplicableToSlaveToo()
 	system("sh ../bin/misc/lxpopuser.sh");
 
 	installRoundCube();
+	installHorde();
 	installChooser();
 	installLxetc();
 	lxfile_rm_content("__path_home_root/httpd/script/");

@@ -17,7 +17,6 @@ class phpconfig_b extends Lxaclass {
 
 }
 
-
 class webindexdir_a extends Lxaclass {
 static $__desc = array("", "",  "Indexed Directory");
 static $__desc_nname = array("n", "",  "Location");
@@ -116,7 +115,6 @@ static function checkForPort($port, $httporssl)
 
 static function addform($parent, $class, $typetd = null)
 {
-
 	if ($typetd['val'] === 'remote') {
 		//$httporssl = array('var' => 'httporssl', 'val' => array('s', array('http', 'https', 'both')));
 		$vlist['httporssl'] = array('s', array('both', 'http', 'https'));
@@ -131,7 +129,6 @@ static function addform($parent, $class, $typetd = null)
 	$ret['action'] = 'add';
 	$ret['variable'] = $vlist;
 	return $ret;
-
 }
 
 }
@@ -190,7 +187,6 @@ static function addform($parent, $class, $typetd = null)
 }
 
 }
-
 
 class Customerror_b extends lxaClass {
    	static $__desc_url_400 = array("", "",  "_400_(bad_request)"); 
@@ -379,8 +375,6 @@ function createExtraVariables()
 	if (!$webstatsprog) { $webstatsprog = "awstats"; }
 	$this->__var_statsprog = $webstatsprog;
 
-
-
 	$ol = array("index.php", "index.html", "index.shtml", "index.htm", "default.htm",  "Default.aspx", "Default.asp", "index.pl");
 	$dirin = $login->getObject('genlist')->dirindexlist_a;
 	$list = get_namelist_from_objectlist($dirin);
@@ -396,9 +390,6 @@ function createExtraVariables()
 
 	$this->__var_extrabasedir = $gen->extrabasedir;
 	$this->__var_dirprotect = $this->getList("dirprotect");
-
-
-
 
 	if (!$this->isDeleted()) {
 		if ($this->getParentO()) {
@@ -426,15 +417,12 @@ function createExtraVariables()
 
 	$this->__var_railspp = $this->getList('rubyrails');
 
-
 	$mydb = new Sqlite($this->__masterserver, 'ipaddress');
 	$syncserver = $this->syncserver? $this->syncserver: 'localhost';
 	$string = "syncserver = '$syncserver'";
 	$this->__var_ipssllist = $mydb->getRowsWhere($string, array('ipaddr', 'nname'));
 
-
 	$this->__var_addonlist = $this->getTrueParentO()->getList('addondomain');
-
 
 	if (!isset($this->__var_sysuserpassword)) {
 		$this->__var_sysuserpassword['realpass'] = $this->getParentO()->realpass;
@@ -451,8 +439,7 @@ function createExtraVariables()
 	$this->__var_ipaddress = $iplist;
 	$mydb = new Sqlite($this->__masterserver, "web");
 	
-	 
-	/* This is to ensure that the excess domainipaddress entries are filtered out.
+/* This is to ensure that the excess domainipaddress entries are filtered out.
 	$siplist = get_namelist_from_arraylist($iplist, 'ipaddr');
 	foreach($this->__var_domainipaddress as $k) {
 		if (!isset($siplist[$k])) {
@@ -460,11 +447,6 @@ function createExtraVariables()
 		}
 	}
 */
-
-
-
-
-
 
 	if ($this->dbaction === 'update' && $this->subaction !== 'full_update' && $this->subaction !== 'fixipdomain') {
 		return ;
@@ -483,13 +465,10 @@ function createExtraVariables()
 	*/
 }
 
-
-
 function getQuotaNeedVar()
 {
 	return array("nname" => $this->nname, "customer_name" => $this->getRealClientParentO()->getPathFromName());
 }
-
 
 function isRealQuotaVariable($k)
 {
@@ -513,7 +492,6 @@ function getQuotadisk_usage()
 		return $this->used->disk_usage;
 	}
 }
-
 
 function inheritSynserverFromParent() { return false; }
 function extraBackup() { return false; }
@@ -585,7 +563,6 @@ function updateRun_stats($param)
 	$param['noval'] = 'a';
 	return $param;
 }
-
 
 function getMultiUpload($var)
 {
@@ -697,7 +674,6 @@ function getDirprotectFromVirtualList($name)
 	return $dirp;
 }
 
-
 function do_backup()
 {
 	global $gbl, $sgbl, $login, $ghtml; 
@@ -715,8 +691,6 @@ function do_restore($docd)
 	lxshell_unzip_with_throw($fullpath, $docd);
 }
 
-
-
 function makeDnsChanges($newserver)
 {
 	$ip = getOneIPForServer($newserver);
@@ -732,7 +706,6 @@ function makeDnsChanges($newserver)
 	$domain->write();
 }
 
-
 function createPhpInfo()
 {
 	$domname = $this->nname;
@@ -743,11 +716,8 @@ function createPhpInfo()
 	}
 }
 
-
-
 function createDir()
-{	
-
+{
 	global $gbl, $sgbl, $login, $ghtml; 
 
 	if (!$this->customer_name) {
@@ -755,7 +725,6 @@ function createDir()
 		return;
 	}
 
-	
 	$web_home = $sgbl->__path_httpd_root ;
 	$base_root = $sgbl->__path_httpd_root;
 	$v_dir 		= "$web_home/{$this->nname}/conf";
@@ -773,9 +742,8 @@ function createDir()
 	}
 
 	$domname = $this->nname;
-    
  
-	/*
+/*
 	print("+++++++++++++++++++++++++++++++++++++++++++++++++++++");
 
 	print("This is the Conf file Path  $v_dir 		=" );
@@ -789,7 +757,6 @@ function createDir()
 	print("+++++++++++++++++++++++++++++++++++++++++++++++++++");
 
 */
-
 	// Protection for webstats.
 
 	$new_user_dir = false;
@@ -806,9 +773,7 @@ function createDir()
 
 	lxfile_mkdir($cgi_path);
 
-
 	lxfile_mkdir($user_home);
-
 
 	// Sort of hack.. Changes the domain.com/domain.com to domain.com/httpdocs.
 	// Which is easier to remember. Slowly we need to change all the code from dom/dom to dom/httpdocs..
@@ -817,10 +782,7 @@ function createDir()
 	lxfile_generic_chmod("$web_home/{$this->nname}", "0755");
 	lxfile_mkdir("$user_home/");
 
-
 	lxfile_generic_chmod($user_home, "0755");
-
-
 
 	lxfile_mkdir($v_dir);
 	lxfile_mkdir($log_path);
@@ -837,9 +799,11 @@ function createDir()
 	} else {
 		lxfile_generic_chown_rec($user_home, "{$this->username}:{$this->username}");
 	}
+/* --- issue 524 - Domain skeleton files chmodded to 0755
 	if ($new_user_dir) {
 		lxfile_generic_chmod_rec($user_home, "755");
 	}
+*/
 	lxfile_generic_chown($user_home, "{$this->username}:apache");
 	lxfile_generic_chown("__path_customer_root/$this->customer_name", "{$this->username}:apache");
 	lxfile_generic_chmod("__path_customer_root/$this->customer_name", "750");
@@ -876,7 +840,6 @@ function createDir()
 */
 
 	dprint("end\n");
-
 }
 
 static function createstatsConf($domname, $stats_name, $stats_password)
@@ -894,7 +857,6 @@ static function createstatsConf($domname, $stats_name, $stats_password)
 	lxfile_mkdir("/home/kloxo/httpd/awstats/dirdata/$domname");
 
 }
-
 
 static function docreatestatsConf($inp, $outp, $domain, $stats_name, $stats_password)
 {
@@ -937,7 +899,7 @@ static function docreatestatsConf($inp, $outp, $domain, $stats_name, $stats_pass
 	lxfile_mkdir(dirname($outp));
 	lfile_put_contents($outp, $filecontents);
 	lxfile_generic_chmod($outp, "0744");
- }
+}
 
 function getShowInfo()
 {
@@ -945,6 +907,7 @@ function getShowInfo()
 }
 
 function hasFileResource() { return true; }
+
 function createShowClist($subaction)
 {
 	global $gbl, $sgbl, $login, $ghtml; 
@@ -953,7 +916,6 @@ function createShowClist($subaction)
 	}
 	return $clist;
 }
-
 
 static function add($parent, $class, $param)
 {
@@ -977,7 +939,6 @@ static function createSession($ar)
 	$tsess['ip_address'] = $ar['ip_address'];
 	lfile_put_serialize("/home/kloxo/httpd/script/sess_{$tsess['name']}", $tsess);
 }
-
 
 function createShowPropertyList(&$alist) 
 { 
@@ -1022,7 +983,6 @@ static function switchProgramPre($old, $new)
 		lxshell_return("chkconfig", "lighttpd", "on");
 	}
 
-
 	if ($new === 'apache') {
 //		addLineIfNotExistInside("/etc/httpd/conf/httpd.conf", "Include /etc/httpd/conf/kloxo/kloxo.conf", "");
 		lxshell_return("__path_php_path", "../bin/misc/installsuphp.php");
@@ -1045,8 +1005,6 @@ static function switchProgramPost($old, $new)
 	createRestartFile($new);
 }
 
-
-
 function createShowAlist(&$alist, $subaction = null)
 {
 	global $gbl, $sgbl, $login, $ghtml; 
@@ -1054,10 +1012,8 @@ function createShowAlist(&$alist, $subaction = null)
 	return $alist;
 }
 
-
 static function get_full_alist()
 {
-
 	$alist['__title_class_web'] = '__title_class_web';
 
 	//$alist[] = "a=list&c=webindexdir_a";
@@ -1066,8 +1022,6 @@ static function get_full_alist()
 	$alist[] = "a=show&l[class]=ffile&l[nname]=/";
 	$alist[] = "a=list&c=ftpuser";
 	$alist[] = 'a=list&c=ftpsession';
-
-
 
 	//$this->getSwitchServerUrl($alist);
 
@@ -1093,7 +1047,6 @@ static function get_full_alist()
 		$alist[] = create_simpleObject(array( 'url' => "http://$this->nname:8080", 'purl' => 'a=update&sa=frontpage_admin&l[class]=web&l[nname]=$this->nname', 'target' => "target='_blank'")); 
 	}
 */
-
 	return $alist;
 
 }
@@ -1131,7 +1084,6 @@ function isQuotaVariableSpecific($var)
 
 }
 
-
 function updatepermalink($param)
 {
 
@@ -1156,7 +1108,6 @@ function updatepermalink($param)
 	return $param;
 
 }
-
 
 function updateCron_mailto($param)
 {
@@ -1186,13 +1137,10 @@ function updateDirindex($param)
 	return $param;
 }
 
-
 function isWebVirtual()
 {
 	return ($this->ttype === 'virtual');
 }
-
-
 
 function updateSesubmit($param)
 {
@@ -1209,12 +1157,10 @@ function updateform($subaction, $param)
 
 	switch($subaction) {
 
-
 		case "run_stats":
 			$vlist['confirm_f'] = array('M', "");
 			$vlist['__v_updateall_button'] = array();
 			return $vlist;
-
 
 		case "sesubmit":
 			include "sesubmit/engines.php";
@@ -1235,7 +1181,6 @@ function updateform($subaction, $param)
 			$vlist['text_blockip'] = null;
 			$vlist['__v_updateall_button'] = array();
 			return $vlist;
-
 
 		case "fcgi_config":
 			$vlist['fcgi_children'] = null;
@@ -1274,7 +1219,6 @@ function updateform($subaction, $param)
 			$vlist['stats_password'] = null;
 			$vlist['__v_updateall_button'] = array();
 			return $vlist;
-
 
 		case "cron_mailto":
 			$vlist['cron_mailto'] = null;
@@ -1333,7 +1277,7 @@ function updateform($subaction, $param)
 				return $vlist;
 			}
 
-				//Just parent is domain.. The client is above that...
+			//Just parent is domain.. The client is above that...
 			$parent = $this->getParentO()->getParentO();
 			$iplist = $parent->getIpaddress(array($this->syncserver));
 			if (!$iplist) {
@@ -1346,12 +1290,10 @@ function updateform($subaction, $param)
 	}
 
 	return parent::updateform($subaction, $param);
-
 }
 
 static function getSelectList($parent, $var)
 {
-
 	global $gbl, $sgbl, $login, $ghtml; 
 
 	switch($var) {
@@ -1365,7 +1307,6 @@ static function getSelectList($parent, $var)
 				}
 				return lx_array_keys($iplist);
 			}
-
 	}
 }
 
@@ -1398,7 +1339,8 @@ function getAndUnzipSkeleton($ip, $filepass, $dir)
 	// File may be a variable path.
 	dprintr($filepass);
 	$file = $filepass['file'];
-	// The thing is this needs to be executed even on secondary master and then the primary master would be down. So if we cannot connect back, we just continue. Skeleton is not an important thing.
+	// The thing is this needs to be executed even on secondary master and then the primary master would be down.
+	// So if we cannot connect back, we just continue. Skeleton is not an important thing.
 	try {
 		getFromFileserv($ip, $filepass, "$dir/$file");
 	} catch (exception $e) {
@@ -1409,6 +1351,11 @@ function getAndUnzipSkeleton($ip, $filepass, $dir)
 	lunlink("$dir/$file");
 
 	$this->replaceVariables("$dir/index.html");
+
+	// --- also copy /home/kloxo/httpd/user-logo.png to each domain path
+	if (lxfile_exists("../file/user-logo.png")) {
+		lxfile_cp("../file/user-logo.png", "$dir/images/logo.png");
+	}
 }
 
 // Please note that this function is executed in the backend and thus the parent is not available.
@@ -1421,7 +1368,6 @@ function replaceVariables($filename)
 	lxuser_put_contents($this->username, $filename, $cont);
 }
 
-
 static function initThisList($parent, $class)
 {
 	if ($parent->get__table() != 'sslipaddress') {
@@ -1432,7 +1378,8 @@ static function initThisList($parent, $class)
 
 }
 
-
-
-
 }
+
+
+
+

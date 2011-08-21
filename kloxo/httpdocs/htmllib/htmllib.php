@@ -614,7 +614,9 @@ class HtmlLib
 		$getskin = $login->getSkinDir();
 		$i = 0;
 
-		/// This is a mighty hack... The first element of $alist is supposed to be the main title. You use it as the first title and unset the variable. This is a hack from the previous code where the first title was preset here itself.
+		/// This is a mighty hack... The first element of $alist is supposed to be the main title.
+		// You use it as the first title and unset the variable. This is a hack from the previous code
+		// where the first title was preset here itself.
 
 
 		if (!$title) {
@@ -886,6 +888,11 @@ class HtmlLib
 		#header a img
 		{
 			padding: 5px 1em;
+		}
+		
+		img
+		{
+			border: 0;
 		}
 	</style>
 	<?
