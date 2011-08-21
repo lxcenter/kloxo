@@ -689,21 +689,30 @@ function updateMysqlPasswordReset($param)
 function updatePoweroff($param)
 {
 	global $gbl, $sgbl, $login, $ghtml; 
+	
+	// --- issue 612 - Hide password in reboot / shutdown server
+/*
 	if (!check_password($param['retype_admin_p_f'], $login->password) && !check_password($param['retype_admin_p_f'], $this->password)) {
 		throw new lxException("Wrong_Password", "retype_admin_p_f");
 	}
 	return $param;
+*/
+	return $login->password;
 }
 
 function updateReboot($param)
 {
 	global $gbl, $sgbl, $login, $ghtml; 
+	
+	// --- issue 612 - Hide password in reboot / shutdown server
+/*
 	if (check_password($param['retype_admin_p_f'], $login->password) || check_password($param['retype_admin_p_f'], $this->password)) {
 		return $param;
 	} else {
 		throw new lxException("Wrong_Password", "retype_admin_p_f");
 	}
-
+*/
+	return $login->password;
 }
 
 function getOs()
@@ -1133,13 +1142,15 @@ function updateform($subaction, $param)
 			return $vlist;
 
 		case "poweroff" :
-			$vlist['retype_admin_p_f'] = null;
+			// --- issue 612 - Hide password in reboot / shutdown server
+		//	$vlist['retype_admin_p_f'] = null;
 			$vlist['__v_button'] = 'Poweroff';
 			return $vlist;
 
 
 		case "reboot":
-			$vlist['retype_admin_p_f'] = null;
+			// --- issue 612 - Hide password in reboot / shutdown server
+		//	$vlist['retype_admin_p_f'] = null;
 			$vlist['__v_button'] = 'Reboot';
 			return $vlist;
 
