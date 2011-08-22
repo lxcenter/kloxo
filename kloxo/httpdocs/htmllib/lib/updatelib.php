@@ -1,4 +1,12 @@
-<?php 
+<?php
+/*
+ * Used by
+ * /script/upcp
+ * /script/cleanup
+ * (Auto)Update from Kloxo GUI
+ * First installs of Kloxo
+ *
+ */
 
 function update_main()
 {
@@ -333,8 +341,12 @@ function updatecleanup()
 	log_cleanup("Initialize /script/ dir");
 	copy_script();
 
+	/*
+	 * This always installs php-xcache by default. Bad behaviour.
+	 * Disabled by Danny at aug 22 2011
 	log_cleanup("Install xcache if enabled");
 	install_xcache();
+	*/
 
 	log_cleanup("Install Kloxo service");
 	lxfile_unix_chmod("/etc/init.d/kloxo", "0755");
@@ -787,33 +799,8 @@ function do_upgrade($upversion)
 	chdir($saveddir);
 }
 
-/* --- no needed if use lxlib.php for 6.2.x
-
-if (!function_exists('log_cleanup')) {
-	// taken from '/usr/local/lxlabs/kloxo/httpdocs/htmllib/phplib/lxlib.php' trunk
-	// exist on 6.2.x (issue ##440)
-	function log_cleanup($mess)
-	{
-		// Function used in cleanup/upcp process
-		//
-		// logs to the file update and print to screen
-
-		if (!is_string($mess)) {
-			$mess = var_export($mess, true);
-		}
-		$mess = trim($mess);
-		$rf = "__path_program_root/log/update";
-
-		print( $mess . "\n" );
-		lfile_put_contents($rf, @ date("H:i M/d/Y") . ": $mess" . PHP_EOL, FILE_APPEND);
-	}
-}
-
-*/
-
-// --- move from kloxo/httpdocs/lib/updatelib.php
-// use 6.2.x function since version 6.1.7
-
+// Kloxo 6.2.x
+// --- moved from kloxo/httpdocs/lib/updatelib.php
 // old name is fixExtraDB() without log_cleanup() call
 function fixDataBaseIssues()
 {
@@ -893,6 +880,7 @@ function fixDataBaseIssues()
 	critical_change_db_pass();
 }
 
+// Kloxo 6.2.x
 // old name is doUpdateExtraStuff() without log_cleanup() call
 function doUpdates()
 {
@@ -959,8 +947,12 @@ function doUpdates()
 	log_cleanup("Fix Self SSL");
 	fix_self_ssl();
 
+	/*
+	 * Function duisabled. It freezes the update/cleanup process
+	 * Disabled by Danny Terweij aug 22 2011
 	log_cleanup("Checking freshclam (virus scanner)");
 	setFreshClam();
+	*/
 
 	// Install/Update installapp if needed or remove installapp when installapp is disabled.
 	// Added in Kloxo 6.1.4
@@ -1649,25 +1641,27 @@ function setDefaultPages()
 // new function
 function setFreshClam()
 {
-	if (!isOn(db_get_value("servermail", "localhost", "virus_scan_flag"))) {
-		system("chkconfig freshclam off > /dev/null 2>&1");
-		system("service freshclam stop >/dev/null 2>&1");
+	// EXPERIMENTAL (6.2.x code)
+	// not called by default until the problem is fixed.
+	if (!isOn(db_get_value("servermail", "localhost", "virus_scan_flag")))
+	{
+		passthru("chkconfig freshclam off > /dev/null 2>&1");
+		passthru("service freshclam stop >/dev/null 2>&1");
 		log_cleanup("Disabled freshclam service\n");
-		// also clamd not load too
-		system("svc -d /var/qmail/supervise/clamd /var/qmail/supervise/clamd/log > /dev/null 2>&1");
-		system("mv -f /var/qmail/supervise/clamd/run /var/qmail/supervise/clamd/run.stop > /dev/null 2>&1");
-		system("mv -f /var/qmail/supervise/clamd/log/run /var/qmail/supervise/clamd/log/run.stop > /dev/null 2>&1");
-		system("service qmail restart");
-	}
-	else {
-		system("chkconfig freshclam on > /dev/null 2>&1");
-		system("service freshclam start >/dev/null 2>&1");
+		// Stop clamd
+		passthru("svc -d /var/qmail/supervise/clamd /var/qmail/supervise/clamd/log > /dev/null 2>&1");
+		passthru("mv -f /var/qmail/supervise/clamd/run /var/qmail/supervise/clamd/run.stop > /dev/null 2>&1");
+		passthru("mv -f /var/qmail/supervise/clamd/log/run /var/qmail/supervise/clamd/log/run.stop > /dev/null 2>&1");
+		passthru("service qmail restart");
+	} else {
+		passthru("chkconfig freshclam on > /dev/null 2>&1");
+		passthru("service freshclam start >/dev/null 2>&1");
 		log_cleanup("Enabled freshclam service\n");
-		// also clamd load too
-		system("svc -e /var/qmail/supervise/clamd /var/qmail/supervise/clamd/log > /dev/null 2>&1");
-		system("mv -f /var/qmail/supervise/clamd/run.stop /var/qmail/supervise/clamd/run > /dev/null 2>&1");
-		system("mv -f /var/qmail/supervise/clamd/log/run.stop /var/qmail/supervise/clamd/log/run > /dev/null 2>&1");
-		system("service qmail restart");
+		// Start clamd
+		passthru("svc -u /var/qmail/supervise/clamd /var/qmail/supervise/clamd/log > /dev/null 2>&1");
+		passthru("mv -f /var/qmail/supervise/clamd/run.stop /var/qmail/supervise/clamd/run > /dev/null 2>&1");
+		passthru("mv -f /var/qmail/supervise/clamd/log/run.stop /var/qmail/supervise/clamd/log/run > /dev/null 2>&1");
+		passthru("service qmail restart");
 	}
 }
 

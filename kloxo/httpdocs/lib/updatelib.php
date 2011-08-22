@@ -1,5 +1,7 @@
 <?php
-
-
-//--- move to kloxo/httpdocs/htmllib/lib/updatelib.php
-// since version 6.1.7
+/*
+ *
+ * File not in use anymore since Kloxo 6.2.0
+ *
+ *  TODO: Remove this file
+ */
