@@ -341,12 +341,8 @@ function updatecleanup()
 	log_cleanup("Initialize /script/ dir");
 	copy_script();
 
-	/*
-	 * This always installs php-xcache by default. Bad behaviour.
-	 * Disabled by Danny at aug 22 2011
-	log_cleanup("Install xcache if enabled");
+	log_cleanup("Checking xcache");
 	install_xcache();
-	*/
 
 	log_cleanup("Install Kloxo service");
 	lxfile_unix_chmod("/etc/init.d/kloxo", "0755");
@@ -636,8 +632,10 @@ function updatecleanup()
 	}
 
 	if (!lxfile_exists("../etc/flag/xcache_enabled.flg")) {
-		log_cleanup("- xcache flag not found, removing /etc/php.d/xcache.ini file");
-		lunlink("/etc/php.d/xcache.ini");
+		if (lxfile_exists("/etc/php.d/xcache.ini")) {
+			log_cleanup("- xcache flag not found, removing /etc/php.d/xcache.ini file");
+			lunlink("/etc/php.d/xcache.ini");
+		}
 	}
 
 	log_cleanup("- Turn off pure-ftpd service");
@@ -677,7 +675,7 @@ function updatecleanup()
 	log_cleanup("- Remove cache dir");
 	lxfile_rm_rec("__path_program_root/cache");
 
-	log_cleanup("- restart syslog service");
+	log_cleanup("- Restart syslog service");
 	createRestartFile('syslog');
 
 	log_cleanup("- Initialize awstats dirdata");
@@ -697,6 +695,7 @@ function updatecleanup()
 	log_cleanup("Install Webmailchooser");
 	installChooser();
 
+	// Remove this after 6.2.0
 	log_cleanup("Remove old lxlabs ssh key");
  	remove_ssh_self_host_key();
 
@@ -720,6 +719,9 @@ function updatecleanup()
 	lxfile_cp("../file/skeleton.zip", "/home/kloxo/httpd/skeleton.zip");
 
 	setDefaultPages();
+
+	log_cleanup("Finished.");
+	// End of upcp / cleanup
 }
 
 function update_all_slave()
@@ -733,11 +735,15 @@ function update_all_slave()
 			continue;
 		}
 		try {
-			print("Upgrading Slave {$l['nname']}...\n");
+			log_cleanup("Contacting Slave {$l['nname']} to update...");
 			rl_exec_get(null, $l['nname'], 'remotetestfunc', null);
 		} catch (exception $e) {
-			print($e->getMessage());
-			print("\n");
+			$message = $e->getMessage();
+			if ($message === "no_socket_connect_to_server") {
+			log_cleanup("!!! Could not contact Slave {$l['nname']} [offline?]");
+			} else {
+			log_cleanup($message);
+			}
 		}
 	}
 
@@ -1006,22 +1012,17 @@ function fix_awstats()
 
 function install_xcache()
 {
-	//--- activate xcache control by php.ini. doesn't matter xcache install and xcache.ini exist or not.
-	//--- issue 547 - xcache failed to install
-/*
-	return;
-	if (lxfile_exists("/etc/php.d/xcache.ini")) {
-		return;
-	}
-	if (lxfile_exists("/etc/php.d/xcache.noini")) {
-		return;
-	}
-*/
-	lxshell_return("yum", "-y", "install", "php-xcache");
-/*
-	lunlink("/etc/php.d/xcache.ini");
-	lxfile_cp("../file/xcache.ini", "/etc/php.d/xcache.noini");
-*/
+    if (lxfile_exists("../etc/flag/xcache_enabled.flg")) {
+		log_cleanup("xcache enabled flag found");
+        if (!strpos(lxshell_output("yum","list","|","grep","php-xcache"),"installed")) {
+			log_cleanup("Installing php-xcache");
+            lxshell_return("yum", "-y", "install", "php-xcache");
+            // for customize?
+            lxfile_cp("../file/xcache.ini", "/etc/php.d/xcache.ini");
+        } else {
+			log_cleanup("xcache already installed");
+		}
+    }
 }
 
 function fixdomainipissue()
