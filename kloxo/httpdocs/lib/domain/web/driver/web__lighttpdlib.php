@@ -1,8 +1,8 @@
 <?php 
 
-// issue #598 - Change lighhtpd config structure
-
 class web__lighttpd extends lxDriverClass {
+
+// issue #598 - Change lighhtpd config structure
 
 //######################################### SyncToSystem Starts Here
 

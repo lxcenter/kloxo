@@ -282,7 +282,10 @@ function getBlockIP()
 	return $string;
 }
 
-function disablePhp()
+// change name to enablePhp() like on web__lighttpdlib.php
+
+// function disablePhp()
+function enablePhp()
 {
 	if (!$this->main->priv->isOn('php_flag'))  {
 		return  "AddType application/x-httpd-php-source .php\n";
@@ -292,7 +295,9 @@ function disablePhp()
 	lxfile_unix_chown("/home/httpd/{$this->main->nname}", "{$this->main->username}:apache");
 	lxfile_unix_chmod("/home/httpd/{$this->main->nname}", "0775");
 	if (!lxfile_exists("/home/httpd/{$this->main->nname}/php.ini")) {
-		lxuser_cp($this->main->username, "/etc/php.ini", "/home/httpd/{$this->main->nname}/php.ini");
+		// issue #650 - lxuser_cp doesn't work and change to lxfile_cp; lighttpd use lxfile_cp
+	//	lxuser_cp($this->main->username, "/etc/php.ini", "/home/httpd/{$this->main->nname}/php.ini");
+		lxfile_cp("/etc/php.ini", "/home/httpd/{$this->main->nname}/php.ini");	
 	}
 /* --- move to getSuexecString()
 	$string .= "\t<IfModule mod_suphp.c>\n";
@@ -754,7 +759,8 @@ function middlepart($web_home, $domain, $dirp)
 		}
 	}
 
-	$string .= $this->disablePhp();
+//	$string .= $this->disablePhp();
+	$string .= $this->enablePhp();
 
 	$string .= $this->getDirprotect('');
 
