@@ -39,16 +39,6 @@ function dbactionUpdate($subaction)
 	$m = $this->main->mysql_convert;
 	$f = $this->main->fix_chownchmod;
 
-	if ($f === 'fix-ownership') {
-		passthru("lphp.exe /usr/local/lxlabs/kloxo/bin/fix/fix-chownchmod.php --select=chown");
-	}
-	else if ($f === 'fix-permissions') {
-		passthru("lphp.exe /usr/local/lxlabs/kloxo/bin/fix/fix-chownchmod.php --select=chmod");
-	}
-	else if ($f === 'fix-ALL') {
-		passthru("lphp.exe /usr/local/lxlabs/kloxo/bin/fix/fix-chownchmod.php --select=all");
-	}
-
 	//--- don't use '=== true' but '!== false'
 	if (strpos($t, 'mod_php') !== false) {
 		lxfile_mv("/etc/httpd/conf.d/php.nonconf", "/etc/httpd/conf.d/php.conf");
@@ -108,6 +98,25 @@ function dbactionUpdate($subaction)
 
 	// Fixed issue #515 - returned due to accidentally deleted
 	lxfile_generic_chmod("/home/admin", "0770");
+
+//	change to 'stop-start' instead 'restart' because problem when change prefork/worker/event/itk to other
+//	createRestartFile("httpd");
+
+//	lxshell_return("service", "httpd", "start");
+// 	passthru("/etc/init.d/httpd start");
+
+	$ret = lxshell_return("service", "httpd", "start");
+	if ($ret) { throw new lxexception('httpd_start_failed', 'parent'); }
+
+	if ($f === 'fix-ownership') {
+		passthru("lphp.exe /usr/local/lxlabs/kloxo/bin/fix/fix-chownchmod.php --select=chown");
+	}
+	else if ($f === 'fix-permissions') {
+		passthru("lphp.exe /usr/local/lxlabs/kloxo/bin/fix/fix-chownchmod.php --select=chmod");
+	}
+	else if ($f === 'fix-ALL') {
+		passthru("lphp.exe /usr/local/lxlabs/kloxo/bin/fix/fix-chownchmod.php --select=all");
+	}
 	
 	if ($m === 'to-myisam') {
 		passthru("lphp.exe /usr/local/lxlabs/kloxo/bin/fix/mysql-convert.php --engine=myisam");
@@ -118,22 +127,8 @@ function dbactionUpdate($subaction)
 
 	if ($a === 'optimize') {
 		passthru("lphp.exe /usr/local/lxlabs/kloxo/bin/fix/apache-optimize.php --select=optimize");
-		// stop again because start by apache-optimize
-		$ret = lxshell_return("service", "httpd", "stop");
-		if ($ret) { throw new lxexception('httpd_stop_failed', 'parent'); }
 	}
 
-
-//	change to 'stop-start' instead 'restart' because problem when change prefork/worker/event/itk to other
-//	createRestartFile("httpd");
-
-//	lxshell_return("service", "httpd", "start");
-// 	passthru("/etc/init.d/httpd start");
-
-	$ret = lxshell_return("service", "httpd", "start");
-	if ($ret) { throw new lxexception('httpd_start_failed', 'parent'); }
 }
 
 }
-
-

@@ -683,6 +683,10 @@ function postAdd()
 	if (!lxfile_exists($skelf)) {
 		$skelf = "__path_client_root/admin/skeleton.zip";
 	}
+	//--- for new user-skeleton (since 6.1.7)
+	if (!lxfile_exists($skelf)) {
+		$skelf = "__path_kloxo_httpd_root/user-skeleton.zip";
+	}
 	if (!lxfile_exists($skelf)) {
 		$skelf = "__path_kloxo_httpd_root/skeleton.zip";
 	}
@@ -759,7 +763,7 @@ function postAdd()
 	$mmail->remotelocalflag = 'local';
 
 	$web->stats_username = $this->nname;
-	$web->stats_password = randomString(8);
+	$web->stats_password = null;
 
 
 	// Gotta Add postmaster...
@@ -1037,7 +1041,7 @@ static function createUusername($dname)
 		$dname = substr($dname, 0, 15);
 	}
 	$sq = new Sqlite(null, 'uuser');
-	if (!$sq->getRowsWhere('nname = :dname', array(':dname' => $dname))) {
+	if (!$sq->getRowsWhere("nname = '$dname'")) {
 		return $dname;
 	}
 
@@ -1045,7 +1049,7 @@ static function createUusername($dname)
 	$i = 0;
 	while (true) {
 		$i++;
-		if ($sq->getRowsWhere('nname = :dname', array(':dname' => $dname))) {
+		if ($sq->getRowsWhere("nname = '$dname'")) {
 			$dname = $dnamebase . "$i";
 		} else {
 			break;
@@ -1536,7 +1540,7 @@ function createShowUpdateform()
 }
 
 function hasFunctions() { return true; }
-function createShowAlistConfig(&$alist, $subaction = null)
+function createShowAlistConfig(&$alist)
 {
 	global $gbl, $sgbl, $login, $ghtml; 
 	$alist['__title_advanced'] = $login->getKeywordUc('advanced');

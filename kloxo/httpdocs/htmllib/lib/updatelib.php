@@ -719,6 +719,8 @@ function updatecleanup()
 	lxfile_cp("../file/skeleton.zip", "/home/kloxo/httpd/skeleton.zip");
 
 	setDefaultPages();
+	
+	changeMailSoftlimit();
 
 	log_cleanup("Finished.");
 	// End of upcp / cleanup
@@ -1578,56 +1580,105 @@ function installAwstats($ver = null)
 // new function for set default pages
 function setDefaultPages()
 {
-	log_cleanup("- Initialize skeleton (Default web page)");
-	lxfile_mkdir("/home/kloxo/httpd/default");
-	lxshell_unzip("__system__", "/home/kloxo/httpd/default/", "/home/kloxo/httpd/skeleton.zip");
-	if (!lxfile_exists("/home/kloxo/httpd/default/inc.php")) {
-		lxfile_cp("../file/default_inc.php", "/home/kloxo/httpd/default/inc.php");
-	}
-	lxfile_cp("../file/default_index.php", "/home/kloxo/httpd/default/index.php");
-	passthru("chown -R lxlabs:lxlabs /home/kloxo/httpd/default/");
-	passthru("find /home/kloxo/httpd/default/ -type f -name \"*.php*\" -exec chmod 644 {} \;");
-	passthru("find /home/kloxo/httpd/default/ -type d -exec chmod 755 {} \;");
+	log_cleanup("Initialize some skeletons");
 
-	log_cleanup("- Initialize skeleton (Disable web page)");
-	lxfile_mkdir("/home/kloxo/httpd/disable");
-	lxshell_unzip("__system__", "/home/kloxo/httpd/disable/", "/home/kloxo/httpd/skeleton.zip");
-	if (!lxfile_exists("/home/kloxo/httpd/disable/inc.php")) {
-		lxfile_cp("../file/disable_inc.php", "/home/kloxo/httpd/disable/inc.php");
-	}
-	lxfile_cp("../file/default_index.php", "/home/kloxo/httpd/disable/index.php");
-	passthru("chown -R lxlabs:lxlabs /home/kloxo/httpd/disable/");
-	passthru("find /home/kloxo/httpd/disable/ -type f -name \"*.php*\" -exec chmod 644 {} \;");
-	passthru("find /home/kloxo/httpd/disable/ -type d -exec chmod 755 {} \;");
-	
-	log_cleanup("- Initialize skeleton (Webmail web page)");
-	lxfile_mkdir("/home/kloxo/httpd/webmail");
-	lxshell_unzip("__system__", "/home/kloxo/httpd/webmail/", "/home/kloxo/httpd/skeleton.zip");
-	if (!lxfile_exists("/home/kloxo/httpd/webmail/inc.php")) {
-		lxfile_cp("../file/webmail_inc.php", "/home/kloxo/httpd/webmail/inc.php");
-	}
-	lxfile_cp("../file/default_index.php", "/home/kloxo/httpd/webmail/index.php");
-	passthru("chown -R lxlabs:lxlabs /home/kloxo/httpd/webmail/");
-	passthru("find /home/kloxo/httpd/webmail/ -type f -name \"*.php*\" -exec chmod 644 {} \;");
-	passthru("find /home/kloxo/httpd/webmail/ -type d -exec chmod 755 {} \;");
+	$httpdpath = "/home/kloxo/httpd";
 
-	//--- issue #597 - Use cp. to redirect :7778 or :7777
-	log_cleanup("- Initialize skeleton (CP web page)");
-	lxfile_mkdir("/home/kloxo/httpd/cp");
-	lxshell_unzip("__system__", "/home/kloxo/httpd/cp/", "/home/kloxo/httpd/skeleton.zip");
-	if (!lxfile_exists("/home/kloxo/httpd/cp/inc.php")) {
-		lxfile_cp("../file/cp_config_inc.php", "/home/kloxo/httpd/cp/inc.php");
-	}
-	lxfile_cp("../file/default_index.php", "/home/kloxo/httpd/cp/index.php");
-	passthru("chown -R lxlabs:lxlabs /home/kloxo/httpd/cp/");
-	passthru("find /home/kloxo/httpd/cp/ -type f -name \"*.php*\" -exec chmod 644 {} \;");
-	passthru("find /home/kloxo/httpd/cp/ -type d -exec chmod 755 {} \;");
+	$sourcezip = realpath("../file/skeleton.zip");
+	$targetzip = "$httpdpath/skeleton.zip";
+
+	if (file_exists($sourcezip)) {
+		if (!checkIdenticalFile($sourcezip, $targetzip)) {
+
+			echo shell_exec("cp -rf $sourcezip $targetzip");
+
+			log_cleanup("- Initialize skeleton (Default web page)");
+			lxfile_mkdir("/home/kloxo/httpd/default");
+			lxshell_unzip("__system__", "$httpdpath/default/", $targetzip);
+			if (!lxfile_exists("$httpdpath/default/inc.php")) {
+				lxfile_cp("../file/default_inc.php", "$httpdpath/default/inc.php");
+			}
+			lxfile_cp("../file/default_index.php", "$httpdpath/default/index.php");
+			passthru("chown -R lxlabs:lxlabs $httpdpath/default/");
+			passthru("find $httpdpath/default/ -type f -name \"*.php*\" -exec chmod 644 {} \;");
+			passthru("find $httpdpath/default/ -type d -exec chmod 755 {} \;");
+
+			log_cleanup("- Initialize skeleton (Disable web page)");
+			lxfile_mkdir("$httpdpath/disable");
+			lxshell_unzip("__system__", "$httpdpath/disable/", $targetzip);
+			if (!lxfile_exists("$httpdpath/disable/inc.php")) {
+				lxfile_cp("../file/disable_inc.php", "$httpdpath/disable/inc.php");
+			}
+			lxfile_cp("../file/default_index.php", "$httpdpath/disable/index.php");
+			passthru("chown -R lxlabs:lxlabs $httpdpath/disable/");
+			passthru("find $httpdpath/disable/ -type f -name \"*.php*\" -exec chmod 644 {} \;");
+			passthru("find $httpdpath/disable/ -type d -exec chmod 755 {} \;");
 	
-	if (lxfile_exists("../file/user-logo.png")) {
-		lxfile_cp("../file/user-logo.png", "/home/kloxo/httpd/default/images/logo.png");
-		lxfile_cp("../file/user-logo.png", "/home/kloxo/httpd/disable/images/logo.png");
-		lxfile_cp("../file/user-logo.png", "/home/kloxo/httpd/webmail/images/logo.png");
-		lxfile_cp("../file/user-logo.png", "/home/kloxo/httpd/cp/images/logo.png");
+			log_cleanup("- Initialize skeleton (Webmail web page)");
+			lxfile_mkdir("$httpdpath/webmail");
+			lxshell_unzip("__system__", "$httpdpath/webmail/", $targetzip);
+			if (!lxfile_exists("$httpdpath/webmail/inc.php")) {
+				lxfile_cp("../file/webmail_inc.php", "$httpdpath/webmail/inc.php");
+			}
+			lxfile_cp("../file/default_index.php", "$httpdpath/webmail/index.php");
+			passthru("chown -R lxlabs:lxlabs $httpdpath/webmail/");
+			passthru("find $httpdpath/webmail/ -type f -name \"*.php*\" -exec chmod 644 {} \;");
+			passthru("find $httpdpath/webmail/ -type d -exec chmod 755 {} \;");
+
+			//--- issue #597 - Use cp. to redirect :7778 or :7777
+			log_cleanup("- Initialize skeleton (CP web page)");
+			lxfile_mkdir("$httpdpath/cp");
+			lxshell_unzip("__system__", "$httpdpath/cp/", $targetzip);
+			if (!lxfile_exists("$httpdpath/cp/inc.php")) {
+				lxfile_cp("../file/cp_config_inc.php", "$httpdpath/cp/inc.php");
+			}
+			lxfile_cp("../file/default_index.php", "$httpdpath/cp/index.php");
+			passthru("chown -R lxlabs:lxlabs $httpdpath/cp/");
+			passthru("find $httpdpath/cp/ -type f -name \"*.php*\" -exec chmod 644 {} \;");
+			passthru("find $httpdpath/cp/ -type d -exec chmod 755 {} \;");	
+		}
+		else {
+			log_cleanup("- No initialize skeleton (already exist)");
+		}
+	}
+	else {
+		log_cleanup("- No initialize user-logo (no exist) - MUST exist!");
+	}
+
+	$usersourcezip = realpath("../file/user-skeleton.zip");
+	$usertargetzip = "/home/kloxo/user-httpd/user-skeleton.zip";
+
+	if (lxfile_exists($usersourcezip)) {
+		if (!checkIdenticalFile($usersourcezip, $usertargetzip)) {
+			log_cleanup("- Initialize user-skeleton");
+			passthru("cp -rf $usersourcezip $usertargetzip");
+		}
+		else {
+			log_cleanup("- No initialize user-skeleton (already exist)");
+		}
+	}
+	else {
+		log_cleanup("- No initialize user-skeleton (no exist)");
+	}
+
+	$sourcelogo = realpath("../file/user-logo.png");
+	$targetlogo = "$httpdpath/user-logo.png";
+
+	if (lxfile_exists($sourcelogo)) {
+		if (!checkIdenticalFile($sourcelogo, $targetlogo)) {
+			log_cleanup("- Initialize user-logo");
+			lxfile_cp($sourcelogo, $targetlogo);
+			lxfile_cp($targetlogo, "$httpdpath/default/images/logo.png");
+			lxfile_cp($targetlogo, "$httpdpath/disable/images/logo.png");
+			lxfile_cp($targetlogo, "$httpdpath/webmail/images/logo.png");
+			lxfile_cp($targetlogo, "$httpdpath/cp/images/logo.png");
+		}
+		else {
+			log_cleanup("- No initialize user-logo (already exist)");
+		}
+	}
+	else {
+		log_cleanup("- No initialize user-logo (no exist)");
 	}
 
 /* --- pending
@@ -1664,6 +1715,39 @@ function setFreshClam()
 		passthru("mv -f /var/qmail/supervise/clamd/log/run.stop /var/qmail/supervise/clamd/log/run > /dev/null 2>&1");
 		passthru("service qmail restart");
 	}
+}
+
+// solve imap problem when running webmail on 64bit
+// thanks semir - http://forum.lxcenter.org/index.php?t=msg&th=14394&goto=79404&#msg_79404
+function changeMailSoftlimit()
+{
+	log_cleanup("Change softlimit for imap4 and pop3");
+
+	log_cleanup("- Change softlimit for imap4");
+	$imap4file = "/var/qmail/supervise/imap4/run";
+	$imap4content = file_get_contents($imap4file);
+	$imap4content = str_replace("9000000", "18000000", $imap4content);
+	lfile_put_contents($imap4file, $imap4content);
+
+	log_cleanup("- Change softlimit for imap4-ssl");
+	$imap4sslfile = "/var/qmail/supervise/imap4-ssl/run";
+	$imap4sslcontent = file_get_contents($imap4sslfile);
+	$imap4sslcontent = str_replace("9000000", "18000000", $imap4sslcontent);
+	lfile_put_contents($imap4sslfile, $imap4sslcontent);
+
+	log_cleanup("- Change softlimit for pop3");
+	$pop3file = "/var/qmail/supervise/pop3/run";
+	$pop3content = file_get_contents($pop3file);
+	$pop3content = str_replace("9000000", "18000000", $pop3content);
+	lfile_put_contents($pop3file, $pop3content);
+
+	log_cleanup("- Change softlimit for pop3-ssl");
+	$pop3sslfile = "/var/qmail/supervise/pop3-ssl/run";
+	$pop3sslcontent = file_get_contents($pop3sslfile);
+	$pop3sslcontent = str_replace("9000000", "18000000", $pop3sslcontent);
+	lfile_put_contents($pop3sslfile, $pop3sslcontent);
+
+	passthru("/etc/init.d/qmail restart");
 }
 
 function restart_xinetd_for_pureftp()
@@ -1988,3 +2072,31 @@ function is_64bit()
 	}
 }
 
+function checkIdenticalFile($file1, $file2)
+{
+	$ret = false;
+
+	if (!file_exists($file1)) {
+		return false;
+	}
+
+	if (!file_exists($file2)) {
+		return false;
+	}	
+
+	if (filesize($file1) === filesize($file2)) {
+		$ret = true;
+	}
+	else {
+		return false;
+	}
+
+	if (md5_file($file1) === md5_file($file2)) {
+		$ret = true;
+	}
+	else {
+		return false;
+	}
+
+	return $ret;
+}

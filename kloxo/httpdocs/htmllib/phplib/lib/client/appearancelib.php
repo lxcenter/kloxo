@@ -13,7 +13,7 @@ static $__desc_skin_color_v_default = array("", "",  "skin");
 static $__desc_icon_name = array("", "",  "icon_name");
 static $__desc_logo_image = array("", "",  "current_logo_url");
 static $__desc_login_page = array("", "",  "login_to");
-static $__desc_logo_image_loading = array("", "",  "current_logo_url_shown_while_loading");
+// static $__desc_logo_image_loading = array("", "",  "current_logo_url_shown_while_loading");
 static $__desc_show_quickaction = array("f", "",  "show_quickaction");
 static $__desc_disable_quickaction = array("f", "",  "disable_quickaction");
 static $__desc_icon_name_v_collage = array("", "",  "skin");
@@ -68,13 +68,20 @@ function defaultValue($var)
 {
 	global $gbl, $sgbl, $login, $ghtml; 
 	$progname = $sgbl->__var_program_name;
+/*
 	if ($var === 'logo_image') {
 		return "/img/$progname-logo.gif";
 	}
+
 	if ($var === 'logo_image_loading') {
 		return "/img/$progname-splash.gif";
 	}
 
+*/
+	// temporary only for admin - 6.1.7
+	if ($var === 'logo_image') {
+		return "/img/user-logo.png";
+	}
 
 	if ($var === 'ssession_timeout') {
 		return 18000;
@@ -95,9 +102,12 @@ class sp_basespecialplay extends  LxspecialClass {
 
 
 static $__desc  = array("","",  "display"); 
-static $__desc_nname  = array("","",  "account"); 
-static $__desc_logo_image_f  = array("F","",  "upload_logo_image_(gif)"); 
-static $__desc_logo_image_loading_f  = array("F","",  "upload_logo_image_shown_while_loading_(gif)"); 
+static $__desc_nname  = array("","",  "account");
+
+// static $__desc_logo_image_f  = array("F","",  "upload_logo_image_(gif)"); 
+// static $__desc_logo_image_loading_f  = array("F","",  "upload_logo_image_shown_while_loading_(gif)"); 
+static $__desc_logo_image_f  = array("F","",  "upload_logo_image_(png)"); 
+
 static $__desc_specialplay_b = array("", "",  "skin");
 static $__acdesc_update_login_options = array("v", "",  "login_options");
 static $__acdesc_update_demo_status = array("v", "",  "demo_status");
@@ -132,7 +142,10 @@ function updateform($subaction, $param)
 	{
 		case "skin":
 			{
-				// ACtually the skin_color list should be dependent on the skin_name, but currently just reading the current skin directory itself. So all the skins should have the same color sets, which is not very practical, so this should be changed in the future.
+				// ACtually the skin_color list should be dependent on the skin_name, 
+				// but currently just reading the current skin directory itself. 
+				// So all the skins should have the same color sets, which is not very practical, 
+				// so this should be changed in the future.
 
 				if (!$this->getParentO()->isLogin() || $this->isClass('sp_childspecialplay')) {
 					$vlist['specialplay_b-dont_show_disabled_permission'] = null;
@@ -167,13 +180,13 @@ function updateform($subaction, $param)
 					$vlist['specialplay_b-logo_image_loading'] = null;
 				}
 
-				/*
+			/*
 				if ($sgbl->isKloxo()) {
 					if (!$this->getParentO()->isLogin()) {
 						$vlist['specialplay_b-disable_docroot'] = null;
 					}
 				}
-		*/
+			*/
 
 
 				//$vlist['specialplay_b_s_show_add_buttons'] =null;
@@ -190,10 +203,12 @@ function updateform($subaction, $param)
 
 		case "upload_logo":
 			if ($login->priv->isOn('logo_manage_flag')) {
-				$vlist['specialplay_b-logo_image'] =array('I', array("width" => 20, "height" => 20, "value" => $this->specialplay_b->logo_image));
+			//	$vlist['specialplay_b-logo_image'] =array('I', array("width" => 20, "height" => 20, "value" => $this->specialplay_b->logo_image));
+				// trick use 'null' for guarantee 100% size of img (not 100% size div container)
+				$vlist['specialplay_b-logo_image'] =array('I', array("width" => "null", "height" => "null", "value" => "/img/user-logo.png"));
 				$vlist['logo_image_f'] = null;
-				$vlist['specialplay_b-logo_image_loading'] =array('I', array("width" => 20, "height" => 20, "value" => $this->specialplay_b->logo_image_loading));
-				$vlist['logo_image_loading_f'] = null;
+			//	$vlist['specialplay_b-logo_image_loading'] =array('I', array("width" => 20, "height" => 20, "value" => $this->specialplay_b->logo_image_loading));
+			//	$vlist['logo_image_loading_f'] = null;
 			}
 			return $vlist;
 
@@ -214,6 +229,7 @@ function updateform($subaction, $param)
 }
 
 function createShowPropertyList(&$alist) { }
+
 function updatelogin_options($param)
 {
 	global $gbl, $sgbl, $login, $ghtml; 
@@ -237,23 +253,38 @@ function updateupload_Logo($param)
 	$progname = $sgbl->__var_program_name;
 	$parent = $this->getParentO();
 	$imgname = $parent->getClName();
-	$param['specialplay_b-logo_image'] = "/img/logo/$imgname.gif";
-	$param['specialplay_b-logo_image_loading'] = "/img/logo/$imgname-loading.gif";
-	make_sure_directory_is_lxlabs("__path_program_htmlbase/img/logo");
+//	$param['specialplay_b-logo_image'] = "/img/logo/$imgname.gif";
+//	$param['specialplay_b-logo_image_loading'] = "/img/logo/$imgname-loading.gif";
+//	make_sure_directory_is_lxlabs("__path_program_htmlbase/img/logo");
+
+	$param['specialplay_b-logo_image'] = "/img/user-logo.png";
+
+	$fullpath_logo_image = __path_program_htmlbase . $param['specialplay_b-logo_image'];
+
+	// temporary only for admin - 6.1.7
 	if ($_FILES['logo_image_f']['tmp_name']) {
-		lxfile_mv($_FILES['logo_image_f']['tmp_name'], "__path_program_htmlbase" . $param['specialplay_b-logo_image']);
-	} else {
+		lxfile_mv($_FILES['logo_image_f']['tmp_name'], $fullpath_logo_image);
+	}
+/*
+	else {
 		lxfile_cp("__path_program_htmlbase/img/$progname-logo.gif", "__path_program_htmlbase" . $param['specialplay_b-logo_image']);
 	}
+*/
+	lxfile_cp($fullpath_logo_image, "/usr/local/lxlabs/kloxo/file/user-logo.png");
+	// must chown to lxlabs for successful display on 'Upload Logo'
+	lxfile_unix_chown($fullpath_logo_image, "lxlabs");
+	passthru("lphp.exe ../bin/fix/fix-userlogo.php --select=all");
+
+/*
 	if ($_FILES['logo_image_loading_f']['tmp_name']) {
 		lxfile_mv($_FILES['logo_image_loading_f']['tmp_name'], "__path_program_htmlbase" .$param['specialplay_b-logo_image_loading']);
 	} else {
 		lxfile_cp("__path_program_htmlbase/img/$progname-splash.gif", "__path_program_htmlbase" . $param['specialplay_b-logo_image_loading']);
 	}
-
+*/
 	$tsp = $parent->getObject("sp_childspecialplay");
 	$tsp->specialplay_b->logo_image = $param['specialplay_b-logo_image'];
-	$tsp->specialplay_b->logo_image_loading = $param['specialplay_b-logo_image_loading'];
+//	$tsp->specialplay_b->logo_image_loading = $param['specialplay_b-logo_image_loading'];
 	$tsp->setUpdateSubaction('upload_logo');
 	$this->setUpdateSubaction('upload_logo');
 	return $param;
@@ -262,7 +293,8 @@ function updateupload_Logo($param)
 
 function postUpdate()
 {
-// Hack Hack Hack... Redirecting the whole frame thing after a skin change... It is supposed to be handled by the display.php, but since this is a single case, i am doing it here...
+	// Hack Hack Hack... Redirecting the whole frame thing after a skin change... 
+	// It is supposed to be handled by the display.php, but since this is a single case, i am doing it here...
 	global $gbl, $sgbl, $login, $ghtml; 
 
 	$gbl->setSessionV('show_lpanel', $login->getSpecialObject('sp_specialplay')->show_lpanel);
@@ -308,5 +340,3 @@ class sp_childSpecialPlay extends sp_basespecialplay {
 class sp_SpecialPlay extends sp_basespecialplay {
 	static $__acdesc_update_skin =  array("","",  "appearance");
 }
-
-
