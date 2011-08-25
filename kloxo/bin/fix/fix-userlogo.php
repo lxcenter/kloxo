@@ -5,7 +5,8 @@
 
 include_once "htmllib/lib/include.php"; 
 
-initProgram('admin');
+// disable because want run on master and slave
+// initProgram('admin');
 
 $list = parse_opt($argv);
 

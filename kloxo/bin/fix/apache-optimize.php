@@ -5,7 +5,8 @@
 
 include_once "htmllib/lib/include.php"; 
 
-initProgram('admin');
+// disable because want run on master and slave
+// initProgram('admin');
 
 $list = parse_opt($argv);
 
@@ -54,8 +55,6 @@ elseif ($select === 'optimize') {
 
 	$maxpar = (int)($m['avail'] / 25);
 	$minpar = (int)($maxpar / 2);
-
-	echo shell_exec("/etc/init.d/httpd start");
 
 	$s = <<<EOF
 Timeout 150
@@ -112,5 +111,7 @@ EOF;
 	// $s=implode("", file("/etc/httpd/conf.d/~lxcenter.conf"));
 	$f = fopen("/etc/httpd/conf.d/~lxcenter.conf", "w");
 	fwrite($f,$s,strlen($s));
+
+	echo shell_exec("/etc/init.d/httpd start");
 
 }
