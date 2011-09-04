@@ -43,35 +43,7 @@ function update_main()
 		} else {
 			$localversion = $sgbl->__ver_major_minor_release;
 			print("Kloxo is the latest version ($localversion)\n");
-/*
-			log_cleanup("Checking for new ThirdParty package version");
-			$ver = file_get_contents("http://download.lxcenter.org/download/thirdparty/kloxo-version.list");
-			if ($ver != "") {
- 		       	$ver = trim($ver);
- 		       	$ver = str_replace("\n", "", $ver);
- 		       	$ver = str_replace("\r", "", $ver);
-				if (!lxfile_real("/var/cache/kloxo/kloxo-thirdparty.$ver.zip")) {
-					$DoUpdate = true;
-					log_cleanup("Found a new ThirdParty version ($ver)");
-				} else {
-					log_cleanup("No new ThirdParty version found (Current version $ver)");
-				}
-			}
 
-			log_cleanup("Checking for new WebMail package version");
-			$ver = get_package_version("lxwebmail");
-			if (!lxfile_real("/var/cache/kloxo/lxwebmail$ver.tar.gz")) {
-				$DoUpdate = true;
-				log_cleanup("Found a new WebMail version ($ver)");
-			}  else {
-				log_cleanup("No new Webmail version found (Current version $ver)");
-			}
-
-			if ( $DoUpdate == false ) {
-				print("Run /script/cleanup if you want to fix/restore/(re)install non working components.\n");
-				exit;
-			}
-*/
 			installThirdparty();
 			installWebmail();
 			installAwstats();
@@ -111,14 +83,7 @@ function updatecleanup()
 
     // Fixes #303 and #304
 	log_cleanup("ThirdParty Checks");
-//	download_thirdparty();
 	installThirdparty();
-
-	log_cleanup("Check for GD");
-	install_gd();
-
-	log_cleanup("Check for bogofilter");
-	install_bogofilter();
 
 	log_cleanup("Initialize phpMyAdmin configfile");
 	lxfile_cp("../file/phpmyadmin_config.inc.phps", "thirdparty/phpMyAdmin/config.inc.php");
@@ -138,8 +103,6 @@ function updatecleanup()
 */
 	
 
-//	call_with_flag('installgroupwareagain');
-
 	log_cleanup("Initialize OS admin account description");
 	$desc = uuser::getUserDescription('admin');
 	$list = posix_getpwnam('admin');
@@ -149,11 +112,7 @@ function updatecleanup()
 
 	log_cleanup("Initialize lxphp");
 	// TODO: php six four symlink remove when lxphp 64bit is ready!
-//	if (os_is_php_six_four()) {
-//	if ( is_64bit() ) {
 	if (file_exists("/usr/lib64")) {
-	//	$ver = get_package_version("kloxophpsixfour");
-	//	installWithVersion("/usr/lib64/kloxophp", "kloxophpsixfour", $ver);
 		installWithVersion("/usr/lib64/kloxophp", "kloxophpsixfour");
 		if (!lxfile_exists("/usr/lib/kloxophp")) {
 			lxfile_symlink("/usr/lib64/kloxophp", "/usr/lib/kloxophp");
@@ -168,63 +127,53 @@ function updatecleanup()
 			lxfile_symlink("/usr/lib64/lighttpd", "/usr/lib/lighttpd");
 		}
 	} else {
-	//	$ver = get_package_version("kloxophp");
-	//	installWithVersion("/usr/lib/kloxophp", "kloxophp", $ver);
 		installWithVersion("/usr/lib/kloxophp", "kloxophp");
 	}
 
 	log_cleanup("Checking WebMail");
-//	$ver = get_package_version("lxwebmail");
-//	installWebmail($ver);
 	installWebmail();
 
 	log_cleanup("Checking awstats");
-//	$ver = get_package_version("lxawstats");
-//	installAwstats($ver);
 	installAwstats();
 
 	log_cleanup("Initialize system files");
 	log_cleanup("- Install RoundCube database config");
 	lxfile_cp("../file/webmail-chooser/db.inc.phps", "/home/kloxo/httpd/webmail/roundcube/config/db.inc.php");
 
-/* --- issue #598: Change lighhtpd config structure
-	log_cleanup("- Create /etc/lighttpd/conf/kloxo dir if needed");
-	lxfile_mkdir("/etc/lighttpd/conf/kloxo");
--- */
 	if (!lxfile_exists("/home/lighttpd/conf")) {
-		log_cleanup("- Create /home/lighttpd/conf/ dir if needed");
+		log_cleanup("- Create /home/lighttpd/conf/ dir");
 		lxfile_mkdir("/home/lighttpd/conf");
 		lxfile_mkdir("/home/lighttpd/conf/defaults");
 		lxfile_mkdir("/home/lighttpd/conf/domains");
 	}
 
-	if (!lxfile_exists("/var/bogofilter/var/bogofilter")) {
-		log_cleanup("- Create /var/bogofilter dir if needed");
+	if (!lxfile_exists("/var/bogofilter")) {
+		log_cleanup("- Create /var/bogofilter dir");
 		lxfile_mkdir("/var/bogofilter");
 	}
 
 	if (!lxfile_exists("/home/kloxo/httpd/lighttpd")) {
-		log_cleanup("- Create /home/kloxo/httpd/lighttpd dir if needed");
+		log_cleanup("- Create /home/kloxo/httpd/lighttpd dir");
 		lxfile_mkdir("/home/kloxo/httpd/lighttpd");
 	}
 
 	if (lxfile_exists("/home/admin/domain")) {
-		log_cleanup("- Remove dir /home/admin/domain/ if exists");
+		log_cleanup("- Remove dir /home/admin/domain/");
 		rmdir("/home/admin/domain/");
 	}
 
 	if (lxfile_exists("/home/admin/old")) {
-		log_cleanup("- Remove dir /home/admin/old/ if exists");
+		log_cleanup("- Remove dir /home/admin/old/");
 		rmdir("/home/admin/old/");
 	}
 
 	if (lxfile_exists("/home/admin/cgi-bin")) {
-		log_cleanup("- Remove dir /home/admin/cgi-bin/ if exists");
+		log_cleanup("- Remove dir /home/admin/cgi-bin/");
 		rmdir("/home/admin/cgi-bin/");
 	}
 
 	if (lxfile_exists("/etc/skel/Maildir")) {
-		log_cleanup("- Remove dir /etc/skel/Maildir/ if exists");
+		log_cleanup("- Remove dir /etc/skel/Maildir/");
 		rmdir("/etc/skel/Maildir/new");
 		rmdir("/etc/skel/Maildir/cur");
 		rmdir("/etc/skel/Maildir/tmp");
@@ -238,17 +187,6 @@ function updatecleanup()
 		system("chmod 755 /usr/sbin/lxrestart");
 		system("chmod ug+s /usr/sbin/lxrestart");
 	}
-
-/* --- issue #637
-	log_cleanup("- Remove sendmail binary");
-	lunlink("/usr/sbin/sendmail");
-	lunlink("/usr/lib/sendmail");
-	log_cleanup("- Install qmail-sendmail binary");
-	lxfile_cp("../file/linux/qmail-sendmail", "/usr/sbin/sendmail");
-	lxfile_cp("../file/linux/qmail-sendmail", "/usr/lib/sendmail");
-	lxfile_unix_chmod("/usr/lib/sendmail", "0755");
-	lxfile_unix_chmod("/usr/sbin/sendmail", "0755");
---- */
 
 	log_cleanup("- Add symlink for qmail-sendmail");
 	system("ln -sf /var/qmail/bin/sendmail /usr/sbin/sendmail");
@@ -292,9 +230,6 @@ function updatecleanup()
 		lxshell_return("pure-pw", "mkdb");
 	}
 
-	log_cleanup("Turn off mouse daemon");
-	system("chkconfig gpm off");
-
 	if (lxfile_exists("phpinfo.php")) {
 		log_cleanup("Remove phpinfo.php");
 		lxfile_rm("phpinfo.php");
@@ -337,9 +272,8 @@ function updatecleanup()
 	install_if_package_not_exist("libmhash");
 	log_cleanup("Checking for lxphp rpm package");
 	install_if_package_not_exist("lxphp");
-
-	log_cleanup("Initialize /script/ dir");
-	copy_script();
+	log_cleanup("Checking for php-gd rpm package");
+	install_if_package_not_exist("php-gd");
 
 	log_cleanup("Checking xcache");
 	install_xcache();
@@ -347,6 +281,9 @@ function updatecleanup()
 	log_cleanup("Install Kloxo service");
 	lxfile_unix_chmod("/etc/init.d/kloxo", "0755");
 	system("chkconfig kloxo on");
+
+	log_cleanup("Initialize /script/ dir");
+	copy_script();
 
 	if (!lxfile_exists("/usr/bin/execzsh.sh")) {
 		log_cleanup("Installing jailshell to system");
@@ -375,26 +312,11 @@ function updatecleanup()
 		lxfile_symlink("__path_php_path", "/usr/bin/lxphp.exe");
 	}
 
-/* --- Issue #589: Change httpd config structure
-	log_cleanup("- Install kloxo.conf");
-	lxfile_cp("../file/apache/kloxo.conf", "/etc/httpd/conf/kloxo/kloxo.conf");
-	log_cleanup("- Install ssl.conf");
-	lxfile_cp("../file/apache/default_ssl.conf", "/etc/httpd/conf.d/ssl.conf");
-	log_cleanup("- Initialize webmail_redirect.conf");
-	lxfile_touch("/etc/httpd/conf/kloxo/webmail_redirect.conf");
-	log_cleanup("- Initialize ssl.conf");
-	lxfile_touch("/etc/httpd/conf/kloxo/ssl.conf");
-	log_cleanup("- Initialize default.conf");
-	lxfile_touch("/etc/httpd/conf/kloxo/default.conf");
-	log_cleanup("- Initialize cp_config.conf");
-	lxfile_touch("/etc/httpd/conf/kloxo/cp_config.conf");
---- */
-
 	log_cleanup("- Install /etc/httpd/conf/httpd.conf");
 	lxfile_cp("../file/centos-5/httpd.conf", "/etc/httpd/conf/httpd.conf");
 
 	if (lxfile_exists("/etc/httpd/conf/kloxo")) {
-		log_cleanup("- Remove dir /etc/httpd/conf/kloxo if exists");
+		log_cleanup("- Remove dir /etc/httpd/conf/kloxo");
 		passthru("rm -rf /etc/httpd/conf/kloxo");
 	}
 	
@@ -484,11 +406,9 @@ function updatecleanup()
 	}
 
 	$name = trim(lfile_get_contents("/var/qmail/control/me"));
-//	log_cleanup("- Install qmail defaultdomain and defaulthost (" . $name . ") ");
 	log_cleanup("- Install qmail defaultdomain and defaulthost ($name)");
 	lxfile_cp("/var/qmail/control/me", "/var/qmail/control/defaultdomain");
 	lxfile_cp("/var/qmail/control/me", "/var/qmail/control/defaulthost");
-//	log_cleanup("- Install qmail SMTP Greeting (" . $name . " - Welcome to Qmail)");
 	log_cleanup("- Install qmail SMTP Greeting ($name - Welcome to Qmail)");
 	lfile_put_contents("/var/qmail/control/smtpgreeting", "$name - Welcome to Qmail");
 
@@ -529,6 +449,8 @@ function updatecleanup()
 	log_cleanup("- Set permissions for /var/lib/php/session/ dir");
 	system("chmod 777 /var/lib/php/session/");
 	system("chmod o+t /var/lib/php/session/");
+	log_cleanup("- Check bogofilter data");
+	install_bogofilter();
 	log_cleanup("- Set permissions for /var/bogofilter/ dir");
 	system("chmod 777 /var/bogofilter/");
 	system("chmod o+t /var/bogofilter/");
@@ -537,39 +459,6 @@ function updatecleanup()
 
 	log_cleanup("- Install /etc/lighttpd/lighttpd.conf");
 	lxfile_cp("../file/lighttpd/lighttpd.conf", "/etc/lighttpd/lighttpd.conf");
-	
-/* --- issue #598: Change lighhtpd config structure
-	log_cleanup("- Install kloxo.conf (lighttpd)");
-	lxfile_cp("../file/lighttpd/conf/kloxo/kloxo.conf", "/etc/lighttpd/conf/kloxo/kloxo.conf");
-
-	log_cleanup("- Initialize webmail_reditrect.conf (lighttpd)");
-	lxfile_touch("/etc/lighttpd/conf/kloxo/webmail_redirect.conf");
-
-	if (!lxfile_real("/etc/lighttpd/local.lighttpd.conf")) {
-		log_cleanup("- Initialize local.lighttpd.conf (lighttpd)");
-		system("echo > /etc/lighttpd/local.lighttpd.conf");
-	}
-	if (!lxfile_real("/etc/lighttpd/conf/kloxo/webmail_redirect.conf")) {
-		log_cleanup("- Initialize webmail.redirect.conf (lighttpd)");
-		system("echo > /etc/lighttpd/conf/kloxo/webmail_redirect.conf");
-	}
-	if (!lxfile_real("/etc/lighttpd/conf/kloxo/virtualhost.conf")) {
-		log_cleanup("- Initialize virtualhost.conf (lighttpd)");
-		system("echo > /etc/lighttpd/conf/kloxo/virtualhost.conf");
-	}
-	if (!lxfile_real("/etc/lighttpd/conf/kloxo/domainip.conf")) {
-		log_cleanup("- Initialize domainip.conf (lighttpd)");
-		system("echo > /etc/lighttpd/conf/kloxo/domainip.conf");
-	}
-	if (!lxfile_real("/etc/lighttpd/conf/kloxo/ssl.conf")) {
-		log_cleanup("- Initialize ssl.conf (lighttpd)");
-		system("echo > /etc/lighttpd/conf/kloxo/ssl.conf");
-	}
-	if (!lxfile_real("/etc/lighttpd/conf/kloxo/mimetype.conf")) {
-		log_cleanup("- Initialize mimetype.conf (lighttpd)");
-		system("echo > /etc/lighttpd/conf/kloxo/mimetype.conf");
-	}
---- */
 
 	if (lxfile_exists("/etc/lighttpd/conf/kloxo")) {
 		log_cleanup("- Remove /etc/lighttpd/conf/kloxo if exists");
@@ -614,13 +503,6 @@ function updatecleanup()
 		system("echo > /home/lighttpd/conf/defaults/mimetype.conf");
 	}
 
-/* --- Issue #589: Change httpd config structure
-	log_cleanup("- Initialize domainip.conf (apache)");
-	lxfile_touch("/etc/httpd/conf/kloxo/domainip.conf");
-
-	log_cleanup("- Initialize mimetype.conf (apache)");
-	lxfile_touch("/etc/httpd/conf/kloxo/mimetype.conf");
---- */
 	log_cleanup("- Install /etc/init.d/lighttpd service file");
 	lxfile_cp("../file/lighttpd/etc_init.d", "/etc/init.d/lighttpd");
 
@@ -639,7 +521,6 @@ function updatecleanup()
 	}
 
 	log_cleanup("- Turn off pure-ftpd service");
-	system("chmod 666 /dev/null");
 	@ exec("chkconfig pure-ftpd off 2>/dev/null");
 
 	log_cleanup("- Initialize nobody.sh script");
@@ -699,12 +580,6 @@ function updatecleanup()
 	log_cleanup("Remove old lxlabs ssh key");
  	remove_ssh_self_host_key();
 
-/* --- Issue #589: Change httpd config structure
-	if (lxfile_exists("/etc/httpd/conf/httpd.conf")) {
-		log_cleanup("Add kloxo.conf directive into httpd.conf (apache)");
-		addLineIfNotExistInside("/etc/httpd/conf/httpd.conf", "Include /etc/httpd/conf/kloxo/kloxo.conf", "");
-	}
---- */
 	# Issue #450
 	log_cleanup("Running Fix #450");
 	if (lxfile_exists("/proc/user_beancounters")) {
@@ -1018,7 +893,7 @@ function install_xcache()
 		log_cleanup("xcache enabled flag found");
         if (!strpos(lxshell_output("yum","list","|","grep","php-xcache"),"installed")) {
 			log_cleanup("Installing php-xcache");
-            lxshell_return("yum", "-y", "install", "php-xcache");
+            install_if_package_not_exist("php-xcache");
             // for customize?
             lxfile_cp("../file/xcache.ini", "/etc/php.d/xcache.ini");
         } else {
@@ -1085,6 +960,8 @@ function fixadminuser()
 
 function install_gd()
 {
+// TODO: Function can be removed (using now install_if_package_not_exist()) (6.2.x)
+
 	global $global_dontlogshell;
 	$global_dontlogshell = true;
 	$ret = lxshell_return("rpm", "-q", "php-gd");
@@ -1113,8 +990,7 @@ function fixdomainhomepermission()
 
 function installgroupwareagain()
 {
-//	dprint("DEBUG: running Function installgroupwareagain in updatelib.php\n");
-//	lxshell_return("__path_php_path", "../bin/misc/lxinstall_hordegroupware_db.php");
+	//TODO: remove empty function
 }
 
 function fixservice()
@@ -1282,32 +1158,12 @@ function installinstallapp()
 
 function installWithVersion($path, $file, $ver = null)
 {
-
-//	if (!is_numeric($ver)) { return; }
-
 	if (!$ver) {
 		$ver = getVersionNumber(get_package_version($file));
 		log_cleanup("- $file version is $ver");
 	}
 
 	lxfile_mkdir("/var/cache/kloxo");
-
-/* --- related to new kloxo install (kloxo-install.sh)
-	if (!lxfile_exists("/var/cache/kloxo/$file$ver.tar.gz")) {
-		$count = 0;
-		while (1) {
-			$count++;
-			if ($count > 20) { return true; }
-			system("cd /var/cache/kloxo/ ; rm -f $file*.tar.gz; wget download.lxcenter.org/download/$file$ver.tar.gz");
-			lxfile_rm_rec($path);
-			lxfile_mkdir($path);
-			$ret = lxshell_unzip("__system__", $path, "/var/cache/kloxo/$file$ver.tar.gz");
-			if (!$ret) { return true; }
-		}
-		system("cd /var/cache/kloxo/ ; rm -f $file*.tar.gz; wget download.lxcenter.org/download/$file$ver.tar.gz");
-	}
-	return false;
---- */
 
 	if (lxfile_exists("/var/cache/kloxo/kloxo-install-firsttime.flg")) {
 		//--- WARNING: don't use filename like kloxophp_version because problem with $file_version alias
@@ -1341,10 +1197,7 @@ function installWithVersion($path, $file, $ver = null)
 	if ($DoUpdate) {
 		lxfile_rm_rec("$path");
 		lxfile_mkdir($path);
-	//	system("cd $path ; tar -xzf /var/cache/kloxo/$file*.tar.gz");
-	//	system("cd $path ; for a in `ls -1 /var/cache/kloxo/$file*.tar.gz`; do gzip -dc $a | tar xf -; done");
 		$ret = lxshell_unzip("__system__", $path, "/var/cache/kloxo/$file$ver.tar.gz");
-	//	$ret = system("cd $path ; for a in `ls -1 /var/cache/kloxo/$file*.tar.gz` ; do gzip -dc $a | tar xf - ; done");
 		if (!$ret) { return true; }
 	}
 	else {
@@ -1366,20 +1219,7 @@ function installThirdparty($ver = null)
 	}
 
 	$path = "/usr/local/lxlabs/$prgm";
-/*
-	// Fixes #303 and #304
-	$string = file_get_contents("http://download.lxcenter.org/download/thirdparty/$prgm-version.list");
 
-	if ($string != "") {
-
-		$string = trim($string);
-		$string = str_replace("\n", "", $string);
-		$string = str_replace("\r", "", $string);
-	//	core_installWithVersion($path, "$prgm-thirdparty", $string);
-	//	system("cd $path ; unzip -oq /var/cache/kloxo/$prgm-thirdparty.*.zip");
-		$ret = lxshell_unzip("__system__", $path, "/var/cache/kloxo/$prgm-thirdparty.$ver.zip");
-	}
-*/
 	if (lxfile_exists("/var/cache/kloxo/kloxo-install-firsttime.flg")) {
 		$locverpath = "/var/cache/kloxo/$prgm-thirdparty-version";
 		$locver = getVersionNumber(file_get_contents($locverpath));
@@ -1409,8 +1249,6 @@ function installThirdparty($ver = null)
 	$ret = null;
 
 	if ($DoUpdate) {
-	//	core_installWithVersion($path, "$prgm-thirdparty", $string);
-	//	system("cd $path ; unzip -oq /var/cache/kloxo/$prgm-thirdparty.$ver.zip");
 		$ret = lxshell_unzip("__system__", $path, "/var/cache/kloxo/$prgm-thirdparty.$ver.zip");
 		lxfile_unix_chmod("/usr/local/lxlabs/$prgm/httpdocs/thirdparty/phpMyAdmin/config.inc.php","0644");
 	}
@@ -1420,8 +1258,6 @@ function installThirdparty($ver = null)
 
 function installWebmail($ver = null)
 {
-//	if (!is_numeric($ver)) { return; }
-
 	$file = "lxwebmail";
 
 	if (!$ver) {
@@ -1432,36 +1268,6 @@ function installWebmail($ver = null)
 	lxfile_mkdir("/var/cache/kloxo");
 	$path = "/home/kloxo/httpd/webmail";
 	lxfile_mkdir($path);
-
-/* --- related to new kloxo install (kloxo-install.sh)
-	if (lxfile_exists("/var/cache/kloxo/lxwebmail$ver.tar.gz")) {
-		return;
-	}
-
-	$count = 0;
-	while (1) {
-		$count++;
-		if ($count > 1) { return true; }
-		system("cd /var/cache/kloxo/ ; rm -f lxwebmail*.tar.gz; wget download.lxcenter.org/download/lxwebmail$ver.tar.gz");
-		if (!lxfile_exists("$path/roundcube")) {
-			$ret = lxshell_unzip("__system__", $path, "/var/cache/kloxo/lxwebmail$ver.tar.gz");
-			if (!$ret) { return true; }
-		}
-		$tfile_h = lx_tmp_file("hordeconf");
-		$tfile_r = lx_tmp_file("roundcubeconf");
-		lxfile_cp("$path/horde/config/conf.php", $tfile_h);
-		lxfile_cp("$path/roundcube/config/db.inc.php", $tfile_r);
-		lxfile_rm_rec("$path/horde");
-		lxfile_rm_rec("$path/roundcube");
-		$ret = lxshell_unzip("__system__", $path, "/var/cache/kloxo/lxwebmail$ver.tar.gz");
-		lxfile_cp($tfile_h, "$path/horde/config/conf.php");
-		lxfile_cp($tfile_r, "$path/roundcube/config/db.inc.php");
-		lxfile_rm($tfile_h);
-		lxfile_rm($tfile_r);
-		if (!$ret) { return true; }
-	}
-	return false;
---- */
 
 	if (lxfile_exists("/var/cache/kloxo/kloxo-install-firsttime.flg")) {
 		$locverpath = "/var/cache/kloxo/$file-version";
@@ -1514,7 +1320,6 @@ function installWebmail($ver = null)
 
 function installAwstats($ver = null)
 {
-//	if (!is_numeric($ver)) { return; }
 
 	$file = "lxawstats";
 
@@ -1526,17 +1331,6 @@ function installAwstats($ver = null)
 	lxfile_mkdir("/var/cache/kloxo");
 	lxfile_mkdir("/home/kloxo/httpd/awstats/");
 	
-/* --- related to new kloxo install (kloxo-install.sh)
-	if (!lxfile_exists("/var/cache/kloxo/lxawstats$ver.tar.gz")) {
-		system("cd /var/cache/kloxo/ ; rm -f lxawstats*.tar.gz; wget download.lxcenter.org/download/lxawstats$ver.tar.gz");
-
-		lxfile_rm_rec("/home/kloxo/httpd/awstats/tools/");
-		lxfile_rm_rec("/home/kloxo/httpd/awstats/wwwroot/");
-		system("cd /home/kloxo/httpd/awstats/ ; tar -xzf /var/cache/kloxo/lxawstats$ver.tar.gz tools wwwroot docs");
-
-	}
---- */
-
 	$path = "/home/kloxo/httpd/awstats";
 
 	if (lxfile_exists("/var/cache/kloxo/kloxo-install-firsttime.flg")) {
@@ -1570,7 +1364,6 @@ function installAwstats($ver = null)
 	if ($DoUpdate) {
 		lxfile_rm_rec("$path/tools/");
 		lxfile_rm_rec("$path/wwwroot/");
-	//	system("cd $path ; tar -xzf /var/cache/kloxo/$file*.tar.gz tools wwwroot docs");
 		$ret = lxshell_unzip("__system__", $path, "/var/cache/kloxo/$file$ver.tar.gz");
 	}
 
@@ -1793,7 +1586,6 @@ function removeOtherDriver()
 function updateApplicableToSlaveToo()
 {
 	// Fixes #303 and #304
-//	download_thirdparty();
 	installThirdparty();
 
 	os_updateApplicableToSlaveToo();
