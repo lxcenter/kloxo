@@ -594,8 +594,12 @@ function updatecleanup()
 	lxfile_cp("../file/skeleton.zip", "/home/kloxo/httpd/skeleton.zip");
 
 	setDefaultPages();
-	
-	changeMailSoftlimit();
+
+	/*
+	 * Function disabled. It freezes the update/cleanup process
+	 * Disabled by Danny Terweij sep 04 2011
+	 * changeMailSoftlimit();
+	 */
 
 	log_cleanup("Finished.");
 	// End of upcp / cleanup
@@ -1487,7 +1491,7 @@ function setDefaultPages()
 function setFreshClam()
 {
 	// EXPERIMENTAL (6.2.x code)
-	// not called by default until the problem is fixed.
+	// not called by default until the problem is fixed, script freezes when qmail is restarted.
 	if (!isOn(db_get_value("servermail", "localhost", "virus_scan_flag")))
 	{
 		passthru("chkconfig freshclam off > /dev/null 2>&1");
@@ -1514,6 +1518,7 @@ function setFreshClam()
 // thanks semir - http://forum.lxcenter.org/index.php?t=msg&th=14394&goto=79404&#msg_79404
 function changeMailSoftlimit()
 {
+	// not called by default until the problem is fixed, script freezes when qmail is restarted.
 	log_cleanup("Change softlimit for imap4 and pop3");
 
 	log_cleanup("- Change softlimit for imap4");
