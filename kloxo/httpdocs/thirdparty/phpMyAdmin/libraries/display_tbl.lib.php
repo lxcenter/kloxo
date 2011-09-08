@@ -445,6 +445,11 @@ function PMA_displayTableHeaders(&$is_display, &$fields_meta, $fields_cnt = 0, $
     global $sql_query, $num_rows;
     global $vertical_display, $highlight_columns;
 
+    // required to generate sort links that will remember whether the
+    // "Show all" button has been clicked
+    $sql_md5 = md5($GLOBALS['sql_query']);
+    $session_max_rows = $_SESSION['tmp_user_values']['query'][$sql_md5]['max_rows'];
+
     if ($analyzed_sql == '') {
         $analyzed_sql = array();
     }
@@ -820,9 +825,10 @@ function PMA_displayTableHeaders(&$is_display, &$fields_meta, $fields_cnt = 0, $
                 $sorted_sql_query = $unsorted_sql_query . $sort_order;
             }
             $_url_params = array(
-                'db'        => $db,
-                'table'     => $table,
-                'sql_query' => $sorted_sql_query,
+                'db'                => $db,
+                'table'             => $table,
+                'sql_query'         => $sorted_sql_query,
+                'session_max_rows'  => $session_max_rows
             );
             $order_url  = 'sql.php' . PMA_generate_common_url($_url_params);
 
@@ -861,6 +867,12 @@ function PMA_displayTableHeaders(&$is_display, &$fields_meta, $fields_cnt = 0, $
                     $th_class[] = 'condition';
                 }
                 $th_class[] = 'column_heading';
+                if ($GLOBALS['cfg']['BrowsePointerEnable'] == true) {
+                    $th_class[] = 'pointer';
+                }
+                if ($GLOBALS['cfg']['BrowseMarkerEnable'] == true) {
+                    $th_class[] = 'marker';
+                }
                 echo ' class="' . implode(' ', $th_class) . '"';
 
                 if ($_SESSION['tmp_user_values']['disp_direction'] == 'horizontalflipped') {
@@ -1020,6 +1032,11 @@ function PMA_addClass($class, $condition_field, $meta, $nowrap, $is_field_trunca
         $set_class = ' set';
     }
 
+    $bit_class = '';
+    if(strpos($meta->type, 'bit') !== false) {
+        $bit_class = ' bit';
+    }
+
     $mime_type_class = '';
     if(isset($meta->mimetype)) {
         $mime_type_class = ' ' . preg_replace('/\//', '_', $meta->mimetype);
@@ -1028,7 +1045,7 @@ function PMA_addClass($class, $condition_field, $meta, $nowrap, $is_field_trunca
     $result = $class . ($condition_field ? ' condition' : '') . $nowrap
     . ' ' . ($is_field_truncated ? ' truncated' : '')
     . ($transform_function != $default_function ? ' transformed' : '')
-    . $enum_class . $set_class . $mime_type_class;
+    . $enum_class . $set_class . $bit_class . $mime_type_class;
 
     return $result;
 }
@@ -1291,7 +1308,7 @@ function PMA_displayTableBody(&$dt_result, &$is_display, $map, $analyzed_sql) {
             if ($GLOBALS['cfgRelation']['mimework'] && $GLOBALS['cfg']['BrowseMIME']) {
 
                 if (isset($GLOBALS['mime_map'][$meta->name]['mimetype']) && isset($GLOBALS['mime_map'][$meta->name]['transformation']) && !empty($GLOBALS['mime_map'][$meta->name]['transformation'])) {
-                    $include_file = $GLOBALS['mime_map'][$meta->name]['transformation'];
+                    $include_file = PMA_securePath($GLOBALS['mime_map'][$meta->name]['transformation']);
 
                     if (file_exists('./libraries/transformations/' . $include_file)) {
                         $transformfunction_name = str_replace('.inc.php', '', $GLOBALS['mime_map'][$meta->name]['transformation']);
@@ -1920,7 +1937,7 @@ function PMA_displayTable(&$dt_result, &$the_disp_mode, $analyzed_sql)
       || $analyzed_sql[0]['where_clause'] == '1 ')) {
         // "j u s t   b r o w s i n g"
         $pre_count = '~';
-        $after_count = PMA_showHint(PMA_sanitize(__('May be approximate. See [a@./Documentation.html#faq3_11@Documentation]FAQ 3.11[/a]')), true);
+        $after_count = PMA_showHint(PMA_sanitize(__('May be approximate. See [a@./Documentation.html#faq3_11@Documentation]FAQ 3.11[/a]')));
     } else {
         $pre_count = '';
         $after_count = '';

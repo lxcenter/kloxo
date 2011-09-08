@@ -252,7 +252,7 @@ while ($row = PMA_DBI_fetch_assoc($fields_rs)) {
         // for the case ENUM('&#8211;','&ldquo;')
         $type         = htmlspecialchars($type);
         if(strlen($type) > $GLOBALS['cfg']['LimitChars']) {
-            $type = '<abbr title="full text">' . substr($type, 0, $GLOBALS['cfg']['LimitChars']) . '</abbr>';
+            $type = '<abbr title="' . $type . '">' . substr($type, 0, $GLOBALS['cfg']['LimitChars']) . '</abbr>';
         }
 
         $type_nowrap  = '';
@@ -680,7 +680,7 @@ if (! $tbl_is_view && ! $db_is_information_schema && 'ARCHIVE' !=  $tbl_type) {
     ?>
 <br />
 <form action="./tbl_indexes.php" method="post"
-    onsubmit="return checkFormElementInRange(this, 'idx_num_fields',
+    onsubmit="return checkFormElementInRange(this, 'added_fields',
         '<?php echo str_replace('\'', '\\\'', __('Column count has to be larger than zero.')); ?>',
         1)">
 <fieldset>
@@ -689,18 +689,12 @@ if (! $tbl_is_view && ! $db_is_information_schema && 'ARCHIVE' !=  $tbl_type) {
     echo sprintf(__('Create an index on &nbsp;%s&nbsp;columns'),
         '<input type="text" size="2" name="added_fields" value="1" />');
     ?>
-    <input type="submit" name="create_index" value="<?php echo __('Go'); ?>"
-        onclick="return checkFormElementInRange(this.form,
-            'idx_num_fields',
-            '<?php echo str_replace('\'', '\\\'', __('Column count has to be larger than zero.')); ?>',
-            1)" />
+    <input type="submit" name="create_index" value="<?php echo __('Go'); ?>" />
 </fieldset>
 </form>
 <br />
     <?php
 }
-
-PMA_generate_slider_effect('tablestatistics', __('Details...'));
 
 /**
  * Displays Space usage and row statistics
@@ -708,6 +702,7 @@ PMA_generate_slider_effect('tablestatistics', __('Details...'));
 // BEGIN - Calc Table Space
 // Get valid statistics whatever is the table type
 if ($cfg['ShowStats']) {
+    echo '<div id="tablestatistics">';
     if (empty($showtable)) {
         $showtable = PMA_Table::sGetStatusInfo($GLOBALS['db'], $GLOBALS['table'], null, true);
     }
@@ -926,7 +921,7 @@ if ($cfg['ShowStats']) {
     </tbody>
     </table>
 
-    <!-- close slider div -->
+    <!-- close tablestatistics div -->
     </div>
 
     <?php

@@ -1159,7 +1159,7 @@ if (!empty($update_privs)) {
         $sql_query2 .= ';';
     }
     if (! PMA_DBI_try_query($sql_query0)) {
-        // This might fail when the executing user does not have ALL PRIVILEGES himself. 
+        // This might fail when the executing user does not have ALL PRIVILEGES himself.
         // See https://sourceforge.net/tracker/index.php?func=detail&aid=3285929&group_id=23067&atid=377408
         $sql_query0 = '';
     }
@@ -1580,7 +1580,7 @@ if (empty($_REQUEST['adduser']) && (! isset($checkprivs) || ! strlen($checkprivs
                         echo '<td>' . $tmp_initial . '</td>';
                     }
                 }
-                echo '<td><a href="server_privileges.php?' . $GLOBALS['url_query'] . '&amp;showall=1">[' . __('Show all') . ']</a></td>' . "\n";
+                echo '<td><a href="server_privileges.php?' . $GLOBALS['url_query'] . '&amp;showall=1" class="nowrap">[' . __('Show all') . ']</a></td>' . "\n";
                 echo '</tr></table>';
             }
 
@@ -1698,7 +1698,7 @@ if (empty($_REQUEST['adduser']) && (! isset($checkprivs) || ! strlen($checkprivs
 
                 unset ($row);
                 echo '    <fieldset id="fieldset_add_user">' . "\n"
-                   . '        <a href="server_privileges.php?' . $GLOBALS['url_query'] . '&amp;adduser=1">' . "\n"
+                   . '        <a href="server_privileges.php?' . $GLOBALS['url_query'] . '&amp;adduser=1" class="' . $conditional_class . '">' . "\n"
                    . PMA_getIcon('b_usradd.png')
                    . '            ' . __('Add a new User') . '</a>' . "\n"
                    . '    </fieldset>' . "\n";

@@ -1,5 +1,66 @@
-﻿phpMyAdmin - ChangeLog
+phpMyAdmin - ChangeLog
 ======================
+
+3.4.4.0 (2011-08-24)
+- bug #3323060 [parser] SQL parser breaks AJAX requests if query has unclosed quotes
+- bug #3323101 [parser] Invalid escape sequence in SQL parser
+- bug #3348995 [config] $cfg['Export']['asfile'] set to false does not select asText option
+- bug #3340151 [export] Working SQL query exports error page
+- bug #3353649 [interface] "Create an index on X columns" form not validated
+- bug #3350790 [interface] JS error in Table->Structure->Index->Edit
+- bug #3353811 [interface] Info message has "error" class
+- bug #3357837 [interface] TABbing through a NULL field in the inline mode resets NULL
+- remove version number in /setup
+- bug #3367993 [usability] Missing "Generate Password" button
+- bug #3363221 [display] Missing Server Parameter on inline sql query
+- bug #3367986 [navi] Drop field -> lost active table
+- remove misleading comment on the "Rename database" interface
+- bug #3374374 [interface] Fix footnote for inexact count while browsing
+- bug #3372807 [interface] Fix security warning link in setup
+- bug #3374347 [display] Backquotes in normal text on import page
+- bug #3358750 [core] With Suhosin, urls are too long in edit links
+- [security] Missing sanitization on the table, column and index names leads to XSS vulnerabilities, see PMASA-2011-13
+
+3.4.3.2 (2011-07-23)
+- [security] Fixed XSS vulnerability, see PMASA-2011-9
+- [security] Fixed local file inclusion vulnerability, see PMASA-2011-10
+- [security] Fixed local file inclusion vulnerability and code execution, see PMASA-2011-11
+- [security] Fixed possible session manipulation in swekey authentication, see PMASA-2011-12
+
+3.4.3.1 (2011-07-02)
+- [security] Fixed possible session manipulation in swekey authentication, see PMASA-2011-5
+- [security] Fixed possible code injection incase session variables are compromised, see PMASA-2011-6
+- [security] Fixed regexp quoting issue in Synchronize code, see PMASA-2011-7
+- [security] Fixed filtering of a file path, which allowed for directory traversal, see PMASA-2011-8
+
+3.4.3.0 (2011-06-27)
+- bug #3311170 [sync] Missing helper icons in Synchronize
+- patch #3304473 [setup] Redefine a lable that was wrong
+- bug #3304544 [parser] master is not a reserved word
+- bug #3307616 [edit] Inline edit updates multiple duplicate rows
+- patch #3311539 [edit] Inline edit does not escape backslashes
+- bug #3313210 [interface] Columns class sometimes changed for nothing
+- patch #3313326 [interface] Some tooltips do not disappear
+- bug #3315720 [search] Fix search in non unicode tables
+- bug #3315741 [display] Inline query edit broken
+- patch #3317206 [privileges] Generate password option missing on new accounts
+- bug #3317293 [edit] Inline edit places HTML line breaks in edit area
+- bug #3319466 [interface] Inline query edit does not escape special characters
+- minor XSS (require a valid token)
+
+3.4.2.0 (2011-06-07)
+- bug #3301249 [interface] Iconic table operations does not remove inline edit label
+- bug #3303869 [interface] Unnecessary scrolling on Databases page
+- patch #3303813 [setup] Define a label that was missing
+- bug #3305606 [interface] Show all button wraps on privileges page
+- bug #3305517 [config] Config for export compression not used
+- bug #3305883 [interface] Table is dropped regardless of confirmation
+- [auth] Fixed error handling for signon auth method.
+- bug #3276001 [core] Avoid caching of index.php.
+- bug #3306958 [interface] Unnecessary Details slider
+- bug #3308476 [interface] "Show all" not persistent after a sort
+- bug #3308072 [auth] Version disclosure to anonymous visitors
+- bug #3306981 [interface] pmahomme and table statistics
 
 3.4.1.0 (2011-05-20)
 - bug #3301108 [interface] Synchronize and already configured host

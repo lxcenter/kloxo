@@ -719,7 +719,7 @@ if (0 == $num_rows || $is_affected) {
             parse_str($_REQUEST['transform_fields_list'], $edited_values);
 
             foreach($mime_map as $transformation) {
-                $include_file = $transformation['transformation'];
+                $include_file = PMA_securePath($transformation['transformation']);
                 $column_name = $transformation['column_name'];
                 $column_data = $edited_values[$column_name];
 
@@ -760,7 +760,7 @@ if (0 == $num_rows || $is_affected) {
         $goto = PMA_securePath($goto);
         // Checks for a valid target script
         $is_db = $is_table = false;
-        if (isset($_REQUEST['purge'])) {
+        if (isset($_REQUEST['purge']) && $_REQUEST['purge'] == '1') {
             $table = '';
             unset($url_params['table']);
         }
