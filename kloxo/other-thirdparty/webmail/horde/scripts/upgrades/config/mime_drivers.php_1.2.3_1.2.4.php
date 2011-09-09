@@ -1,1 +1,0 @@
-$mime_drivers['horde']['simple']['inline'] = false;
