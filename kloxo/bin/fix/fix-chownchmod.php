@@ -5,45 +5,60 @@
 
 include_once "htmllib/lib/include.php"; 
 
-// disable because want run on master and slave
-// initProgram('admin');
+initProgram('admin');
+
+if (isset($list['server'])) { $server = $list['server']; }
+else { $server = 'localhost'; }
 
 $list = parse_opt($argv);
 
 $select = strtolower($list['select']);
 
-$login->loadAllObjects('client');
-$list = $login->getList('client');
+setFixChownChmod($select);
 
-print("\n");
+/* ****** BEGIN - setFixChownChmod ***** */
 
-foreach($list as $c) {
-	$clname = $c->getPathFromName('nname');
-	$cdir = "/home/{$clname}";
-	$dlist = $c->getList('domaina');
+function setFixChownChmod($select)
+{
+	global $gbl, $sgbl, $login, $ghtml;
+/*
+	initProgram('admin');
 
-	passthru("chown {$clname}:apache {$cdir}/");
-	print("chown {$clname}:apache FOR {$cdir}/\n" );
-	passthru("chmod 770 {$cdir}/");
-	print("chmod 770 FOR {$cdir}/\n");
+	if (isset($list['server'])) { $server = $list['server']; }
+	else { $server = 'localhost'; }
+*/
+	$login->loadAllObjects('client');
+	$list = $login->getList('client');
 
-	foreach((array) $dlist as $l) {
-		$web = $l->nname;
+	log_cleanup("Fix chown and chmod for domains");
 
-		if (($select === "all") || ($select === 'chown')) {
-			passthru("chown -R {$clname}:{$clname} {$cdir}/{$web}/");
-			print("chown {$clname}:{$clname} FOR {$cdir}/{$web}/ AND INSIDE\n");
+	foreach($list as $c) {
+		$clname = $c->getPathFromName('nname');
+		$cdir = "/home/{$clname}";
+		$dlist = $c->getList('domaina');
+
+		passthru("chown {$clname}:apache {$cdir}/");
+		log_cleanup("- chown {$clname}:apache FOR {$cdir}/");
+		passthru("chmod 770 {$cdir}/");
+		log_cleanup("- chmod 770 FOR {$cdir}/");
+
+		foreach((array) $dlist as $l) {
+			$web = $l->nname;
+
+			if (($select === "all") || ($select === 'chown')) {
+				passthru("chown -R {$clname}:{$clname} {$cdir}/{$web}/");
+				log_cleanup("- chown {$clname}:{$clname} FOR {$cdir}/{$web}/ AND INSIDE");
+			}
+			if (($select === "all") || ($select === 'chmod')) {
+				passthru("find {$cdir}/{$web}/ -type f -name \"*.php*\" -exec chmod 644 {} \;");
+				log_cleanup("- chmod 644 FOR *.php* INSIDE {$cdir}/{$web}/");
+				passthru("find {$cdir}/{$web}/ -type d -exec chmod 755 {} \;");
+				log_cleanup("- chmod 775 FOR {$cdir}/{$web}/ AND INSIDE");
+			}
 		}
-		if (($select === "all") || ($select === 'chmod')) {
-			passthru("find {$cdir}/{$web}/ -type f -name \"*.php*\" -exec chmod 644 {} \;");
-			print("chmod 644 FOR *.php* INSIDE {$cdir}/{$web}/\n");
-			// passthru("find {$cdir}/{$web}/ -type f -exec chmod 644 {} \;");
-			// echo "find {$cdir}/{$web}/ -type f -exec chmod 644 {} \;\n";
-			passthru("find {$cdir}/{$web}/ -type d -exec chmod 755 {} \;");
-			print("chmod 775 FOR {$cdir}/{$web}/ AND INSIDE\n");
-		}
-		print("\n");
 	}
 }
+
+/* ****** END - setFixChownChmod ***** */
 
 
