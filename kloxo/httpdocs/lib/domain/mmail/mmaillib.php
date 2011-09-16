@@ -302,6 +302,10 @@ function updateform($subaction, $param)
 
 
 		case "webmail_select":
+
+			// read note on fixWebmailRedirect()
+			$this->postUpdate($subaction);
+
 			$this->setDefaultValue('webmailprog', '--system-default--');
 			$base = "/home/kloxo/httpd/webmail/";
 			$list = lscandir_without_dot_or_underscore($base);
@@ -332,6 +336,10 @@ function updateform($subaction, $param)
 			return $vlist;
 
 		case "remotelocalmail":
+
+			// read note on fixWebmailRedirect()
+			$this->postUpdate($subaction);
+
 			$vlist['remotelocalflag'] = array('s', array('local', 'remote'));
 			$vlist['webmail_url'] = null;
 			$vlist['__v_updateall_button'] = array();
@@ -360,12 +368,13 @@ function createShowPropertyList(&$alist)
 }
 
 
-function postUpdate()
+function postUpdate($subaction = null)
 {
-
-	if ($this->subaction === 'remotelocalmail' || $this->subaction === 'webmail_select') {
+//	if ($this->subaction === 'remotelocalmail' || $this->subaction === 'webmail_select') {
+	if ($subaction === 'remotelocalmail' || $subaction === 'webmail_select') {
 		$this->fixWebmailRedirect();
 	}
+
 }
 
 
@@ -385,10 +394,12 @@ function getFfileFromVirtualList($name)
 
 function fixWebmailRedirect()
 {
+/*
 	global $gbl, $sgbl, $login, $ghtml; 
+
 	$gen = $login->getObject('general')->generalmisc_b;
 	$sq = new Sqlite(null, 'mmail');
-	$res = $sq->getRowsWhere('syncserver = :syncserver', array(':syncserver' => $this->syncserver), array('nname', 'systemuser', 'webmailprog', 'webmail_url', "remotelocalflag"));
+	$res = $sq->getRowsWhere("syncserver = '$this->syncserver'", array('nname', 'parent_clname', 'systemuser', 'webmailprog', 'webmail_url', "remotelocalflag"));
 
 	$res = merge_array_object_not_deleted($res, $this);
 
@@ -403,6 +414,13 @@ function fixWebmailRedirect()
 
 	$driverapp = $gbl->getSyncClass(null, $this->syncserver, 'web');
 	rl_exec_get(null, $this->syncserver, array("web__$driverapp", 'createWebmailRedirect'), array($res));
+*/
+	// the same trick with createListSlist()
+	// on /usr/local/lxlabs/kloxo/httpdocs/lib/domain/addondomainlib.php
+
+	$web = $this->getParentO()->getObject('web');
+	// have trouble when use addondomain, so use full_update
+	$web->setUpdateSubaction('full_update');
 }
 
 

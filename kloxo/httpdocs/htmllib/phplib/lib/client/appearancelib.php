@@ -68,7 +68,7 @@ function defaultValue($var)
 {
 	global $gbl, $sgbl, $login, $ghtml; 
 	$progname = $sgbl->__var_program_name;
-/*
+
 	if ($var === 'logo_image') {
 		return "/img/$progname-logo.gif";
 	}
@@ -77,12 +77,12 @@ function defaultValue($var)
 		return "/img/$progname-splash.gif";
 	}
 
-*/
+/*
 	// temporary only for admin - 6.1.7
 	if ($var === 'logo_image') {
 		return "/img/user-logo.png";
 	}
-
+*/
 	if ($var === 'ssession_timeout') {
 		return 18000;
 	}

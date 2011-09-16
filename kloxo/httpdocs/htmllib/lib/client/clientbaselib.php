@@ -342,7 +342,10 @@ function createShowAlist(&$alist, $subaction = null)
 
 }
 
-function createShowAlistConfig(&$alist, $subaction = null)
+
+
+
+function createShowAlistConfig(&$alist)
 {
 	global $gbl, $sgbl, $login, $ghtml; 
 
@@ -363,7 +366,26 @@ function createShowAlistConfig(&$alist, $subaction = null)
 		//$alist['__v_dialog_ipcheck'] = "o=general&a=updateform&sa=session_config";
 		$alist['__v_dialog_download'] = "o=general&a=updateform&sa=download_config";
 		$alist['__v_dialog_forc'] = "a=updateform&sa=forcedeletepserver";
-		$alist[] = "o=genlist&c=dirindexlist_a&a=list";
+
+		if ($sgbl->isHyperVm()) {
+			$alist['__v_dialog_hack'] = "o=general&a=updateform&sa=hackbuttonconfig";
+			$alist['__v_dialog_rev'] = "o=general&a=updateform&sa=reversedns";
+			$alist['__v_dialog_cust'] = "o=general&a=updateform&sa=customaction";
+			$alist['__v_dialog_orph'] = "a=updateform&sa=deleteorphanedvps";
+			$alist['__v_dialog_lxc'] = "o=general&a=updateform&sa=kloxo_config";
+			//$alist[] = "a=show&o=ostemplatelist";
+			$alist[] = "a=list&c=customaction";
+		} else {
+			$alist[] = "o=genlist&c=dirindexlist_a&a=list";
+		}
+
+
+	}
+
+	if ($sgbl->isHyperVm()) {
+		if (!$this->isAdmin()) {
+			$alist[] = "a=updateform&sa=ostemplatelist";
+		}
 	}
 
 	$alist['__title_asep'] = $login->getKeywordUc('separate');
@@ -498,10 +520,10 @@ function updateWall($param)
 	global $gbl, $sgbl, $login, $ghtml; 
 	$clname = $this->getClName();
 	$db = new Sqlite($this->__masterserver, "client");
-	$clist = $db->getRowsWhere('parent_clname = :clname', array(':clname' => $clname), array('nname', 'contactemail'));
+	$clist = $db->getRowsWhere("parent_clname = '$clname'", array("nname", "contactemail"));
 
 	$db = new Sqlite($this->__masterserver, "domain");
-	$dlist = $db->getRowsWhere('parent_clname = :clname', array(':clname' => $clname), array('nname', 'contactemail'));
+	$dlist = $db->getRowsWhere("parent_clname = '$clname'", array("nname", "contactemail"));
 
 	$nlist = lx_merge_good($clist, $dlist);
 
@@ -948,13 +970,22 @@ static function validate_client_name($name)
 
 static function continueForm($parent, $class, $param, $continueaction)
 {
-	global $gbl, $sgbl, $login, $ghtml; 
+	global $gbl, $sgbl, $login, $ghtml;
 
 	$vlist = null;
 
 	self::validate_client_name($param['nname']);
 
+	// and issue #657 - Client user names with "__" are displayed with missing end
+	if (stristr($param['nname'], '__')) {
+		throw new lxexception("{$param['nname']}_use_double_underscore", 'nname');	
+	}
 
+	// also check if /home/<client> exists --> prevent use like 'httpd' as client
+	if (lxfile_exists("/home/{$param['nname']}")) {
+		throw new lxexception("{$param['nname']}_dir_exists_under_home_dir", 'nname');
+
+	}
 
 	$param['nname'] = trim($param['nname']);
 
@@ -1181,9 +1212,11 @@ static function createListAlist($parent, $class)
 
 	$alist[] = "a=list&c=client";
 
-	if ($parent->isLte('wholesale')) {
-		$alist[] = "a=addform&dta[var]=cttype&dta[val]=wholesale&c=client";
-		$alist[] = "a=addform&dta[var]=cttype&dta[val]=reseller&c=client";
+	if (!$sgbl->isHyperVm()) {
+		if ($parent->isLte('wholesale')) {
+			$alist[] = "a=addform&dta[var]=cttype&dta[val]=wholesale&c=client";
+			$alist[] = "a=addform&dta[var]=cttype&dta[val]=reseller&c=client";
+		}
 	}
 
 	if ($parent->isLte('reseller')) {

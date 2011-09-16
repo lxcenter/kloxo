@@ -60,7 +60,7 @@ function createExtraVariables()
 	$this->setDefaultValue("reject_ip_in_cc_rdns_flag","1");
 	$this->setDefaultValue("reject_missing_sender_mx_flag","1");
 	$this->setDefaultValue("reject_unresolvable_rdns_flag","1");
-    $this->setDefaultValue("alt_smtp_sdyke_flag",1);
+	$this->setDefaultValue("alt_smtp_sdyke_flag",1);
 
 }
 
@@ -70,6 +70,15 @@ function createShowPropertyList(&$alist)
 	$alist['property'][] = 'a=updateform&sa=spamdyke';
 	$alist['property'][] = "a=list&c=mail_graylist_wlist_a";
 	return $alist;
+}
+
+function postUpdate($subaction)
+{
+	if ($subaction === 'update') {
+		//--- for to make sure clam status -- function declare in lib.php
+		// function declare on lib.php
+		setFreshClam();
+	}
 }
 
 function updateform($subaction, $param)
@@ -91,7 +100,10 @@ function updateform($subaction, $param)
 			$vlist['queuelifetime'] = null;
 			$vlist['smtp_instance'] = null;
 			$vlist['additional_smtp_port'] = null;
-            $vlist['alt_smtp_sdyke_flag'] = null;
+			$vlist['alt_smtp_sdyke_flag'] = null;
+
+			$this->postUpdate($subaction);
+
 			break;
 
 		case "spamdyke":

@@ -166,7 +166,8 @@ function dbactionAdd()
 	$this->IpaddressEdit('add');
 	createRestartFile($this->main->__var_dnsdriver);
 	$result = self::getCurrentIps();
-	web__apache::createWebmailConfig($result);
+//	web__apache::createWebmailConfig($result);
+	web__apache::createWebDefaultConfig($result);
 }
 
 function dbactionUpdate($subaction)
@@ -228,7 +229,10 @@ static function listSystemIps($machinename)
 {
 	global $gbl, $sgbl, $login, $ghtml; 
 	$result = self::getCurrentIps();
-	web__apache::createWebmailConfig($result);
+	
+//	web__apache::createWebmailConfig($result);
+	web__apache::createWebDefaultConfig($result);
+	
 	$res =  ipaddress::fixstatus($result);
 	foreach($res as $r) {
 		if ($sgbl->isKloxo()) {

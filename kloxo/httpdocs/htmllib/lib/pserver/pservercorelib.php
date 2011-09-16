@@ -478,7 +478,9 @@ function postAdd()
 	if ($this->ostype !== 'windows') {
 		$this->AddMysqlDbadmin();
 	}
-	// There's a problem here. If the server is added for the second time, the ipaddress would be present, and this would lead to a 'was' happening inside here, which would turn the dbaction to clean and then the actual was wouldn't happen.
+	// There's a problem here. If the server is added for the second time, the ipaddress would be present,
+	// and this would lead to a 'was' happening inside here, which would turn the dbaction to clean and
+	// then the actual was wouldn't happen.
 	$this->getandwriteipaddress();
 
 }

@@ -376,17 +376,27 @@ function createExtraVariables()
 	$this->__var_statsprog = $webstatsprog;
 
 	$ol = array("index.php", "index.html", "index.shtml", "index.htm", "default.htm",  "Default.aspx", "Default.asp", "index.pl");
-	$dirin = $login->getObject('genlist')->dirindexlist_a;
-	$list = get_namelist_from_objectlist($dirin);
-	$this->__var_index_list = lx_array_merge(array($list, $ol));
+	if (!isset($login->getObject('genlist')->dirindexlist_a)) {
+		$this->__var_index_list = $ol;
+	}
+	else {
+		$dirin = $login->getObject('genlist')->dirindexlist_a;
+		$list = get_namelist_from_objectlist($dirin);
+		$this->__var_index_list = lx_array_merge(array($list, $ol));
+	}
 
-	$this->__var_sslport = $port->sslport;
-	if (!$this->__var_sslport) $this->__var_sslport = "7777";
-	$this->__var_nonsslport = $port->nonsslport;
-	if (!$this->__var_nonsslport) $this->__var_nonsslport = "7778";
+//	$this->__var_sslport = $port->sslport;
+//	if (!$this->__var_sslport) $this->__var_sslport = "7777";
+	$this->__var_sslport = (isset($port->sslport)) ? $port->sslport : "7777";
 
-	if (!$this->docroot) { $this->docroot = $this->nname; }
-	if (!$this->corelocation) { $this->corelocation = "__path_customer_root"; }
+//	$this->__var_nonsslport = $port->nonsslport;
+//	if (!$this->__var_nonsslport) $this->__var_nonsslport = "7778";
+	$this->__var_nonsslport = (isset($port->nonsslport)) ? $port->nonsslport : "7777";
+
+//	if (!$this->docroot) { $this->docroot = $this->nname; }
+//	if (!$this->corelocation) { $this->corelocation = "__path_customer_root"; }
+	if (!isset($this->docroot)) { $this->docroot = $this->nname; }
+	if (!isset($this->corelocation)) { $this->corelocation = "__path_customer_root"; }
 
 	$this->__var_extrabasedir = $gen->extrabasedir;
 	$this->__var_dirprotect = $this->getList("dirprotect");
@@ -463,6 +473,12 @@ function createExtraVariables()
 	$string = "ttype='forward' AND syncserver = '$syncserver'" ;
 	$this->__var_fdomain_list = $mydb->getRowsWhere($string, array('nname'));
 	*/
+
+	// new -- related to apache/lighttpd new structure
+	$mmaildb = new Sqlite($this->__masterserver, 'mmail');
+	$syncserver = $this->syncserver ? $this->syncserver : 'localhost';
+	$string = "syncserver = '$syncserver'";
+	$this->__var_mmaillist = $mmaildb->getRowsWhere($string, array('nname', 'parent_clname', 'webmailprog', 'webmail_url', 'remotelocalflag'));
 }
 
 function getQuotaNeedVar()
@@ -790,8 +806,6 @@ function createDir()
 	// issue #589 - Change httpd config structure
 //	lxfile_mkdir("__path_apache_path/kloxo");
 //	lxfile_touch("__path_apache_path/kloxo/virtualhost.conf");
-	lxfile_mkdir("/home/httpd/conf/defaults");
-	lxfile_touch("/home/httpd/conf/defaults/~virtualhost.conf");
 
 	$parent_doc_root = $this->getParentFullDocRoot();
 	if ($user_home != $parent_doc_root) {
@@ -1379,7 +1393,4 @@ static function initThisList($parent, $class)
 }
 
 }
-
-
-
 

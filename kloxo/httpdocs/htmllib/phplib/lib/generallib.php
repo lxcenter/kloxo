@@ -8,7 +8,7 @@ class helpdeskcategory_a extends Lxaclass {
 	static $__desc_nname =  array("", "",  "category");
 
 
-static function createListAlist($parent, $class)
+static function createListAlist($parent)
 {
 	$nalist = ticket::createListAlist($parent, 'ticket');
 	foreach($nalist as $a) {
@@ -48,7 +48,6 @@ static $__desc_sslport =  array("", "",  "ssl_port");
 static $__desc_nonsslport =  array("", "",  "plain_port");
 static $__desc_nonsslportdisable_flag =  array("f", "",  "disable_plainport");
 static $__desc_redirectnonssl_flag =  array("f", "",  "redirect_non_ssl_to_ssl");
-	static $__desc_sslextraconf = array("t", "", "sslextraconf");
 }
 
 class kloxoconfig_b extends lxaclass {
@@ -199,6 +198,10 @@ function createShowPropertyList(&$alist)
 	if ($ghtml->frm_subaction === 'reversedns') {
 		$alist['property'][] = 'goback=1&a=list&c=reversedns';
 		$alist['property'][] = 'a=updateform&sa=reversedns';
+		if ($sgbl->isHyperVM()) {
+			$alist['property'][] = 'goback=1&a=list&c=all_dns';
+			$alist['property'][] = 'goback=1&a=list&c=all_reversedns';
+		}
 	}
 
 	return $alist;
@@ -221,6 +224,17 @@ function updatePortConfig($param)
 {
 	if_demo_throw_exception('port');
 	return $param;
+}
+
+
+function postUpdate($subaction)
+{
+//	if ($this->subaction === 'generalsetting') {
+	if ($subaction === 'generalsetting') {
+		// update /webmails/webmail.conf
+		web__apache::createWebDefaultConfig();
+		web__lighttpd::createWebDefaultConfig();
+	}
 }
 
 function updateform($subaction, $param)
@@ -270,7 +284,6 @@ function updateform($subaction, $param)
 			$vlist['portconfig_b-nonsslport'] = null;
 			//$vlist['portconfig_b-nonsslportdisable_flag'] = null;
 			$vlist['portconfig_b-redirectnonssl_flag'] = null;
-			$vlist['portconfig_b-sslextraconf'] = null;
 			return $vlist;
 
 		case "download_config":
@@ -288,7 +301,20 @@ function updateform($subaction, $param)
 
 		case "generalsetting":
 
+			$this->postUpdate($subaction);
+
 			$vlist['generalmisc_b-autoupdate'] = null;
+			if ($sgbl->isHyperVM()) {
+				if (!isset($this->generalmisc_b->installkloxo)) {
+					$this->generalmisc_b->installkloxo = 'on';
+				}
+				$vlist['generalmisc_b-installkloxo'] = null;
+				$vlist['generalmisc_b-openvzincrement'] = null;
+				$vlist['generalmisc_b-xenimportdriver'] = null;
+				$vlist['generalmisc_b-rebuild_time_limit'] = null;
+				$vlist['generalmisc_b-no_console_user'] = null;
+				$vlist['generalmisc_b-disable_hostname_change'] = null;
+			}
 
 			if ($sgbl->isKloxo()) {
 				$vlist['generalmisc_b-extrabasedir'] = null;
@@ -315,6 +341,11 @@ function updateform($subaction, $param)
 				$this->reversedns_b = new reversedns_b(null, null, 'general');
 			}
 
+
+			if ($sgbl->isHyperVM()) {
+				$vlist['reversedns_b-enableflag'] = null;
+				$vlist['reversedns_b-forwardenableflag'] = null;
+			}
 			$this->dns_slave_list = $this->reversedns_b->dns_slave_list;
 			$vlist['reversedns_b-primarydns'] = null;
 			$vlist['reversedns_b-secondarydns'] = null;
