@@ -181,6 +181,7 @@ function install_yum_repo($osversion) {
 }
 
 function find_os_version() {
+/*
 	if (file_exists("/etc/fedora-release")) {
 		$release = trim(file_get_contents("/etc/fedora-release"));
 		$osv = explode(" ", $release);
@@ -204,9 +205,45 @@ function find_os_version() {
 		}
 		return $osversion;
 	}
-
+	
 	print("This Operating System is currently *NOT* supported.\n");
 	exit;
+
+*/
+	// list os support
+	$ossup = array('redhat' => 'rhel', 'fedora' => 'fedora', 'centos' => 'centos');
+	
+	foreach(array_keys($ossup) as $k) {
+		$osrel = file_get_contents("/etc/{$k}-release");
+		if ($osrel) {
+				$osrel = strtolower(trim($osrel));
+				break;
+		}
+	}
+	
+	// specific for 'red hat'
+	$osrel = str_replace('red hat', 'redhat', $osrel);
+
+	$osver = explode(" ", $osrel);
+
+	$verpos = sizeof($osver) - 2;
+
+	if (array_key_exists($osver[0], $ossup)) {
+		// specific for 'red hat'
+		if ($osrel === 'redhat') {
+			$oss = $osver[$verpos];
+		}
+		else {
+			$mapos = explode(".", $osver[$verpos]);
+			$oss = $mapos[0];
+		}
+		return $ossup[$osver[0]]."-".$oss;
+	}
+	else {
+		print("This Operating System is currently *NOT* supported.\n");
+		exit;
+	}
+
 }
 
 /**

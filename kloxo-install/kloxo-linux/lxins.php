@@ -88,6 +88,7 @@ function lxins_main()
 
 	$packages = array("php-mbstring", "php-mysql", "which", "gcc-c++", "php-imap", "php-pear", "php-devel", "lxlighttpd", "httpd", "mod_ssl", "zip", "unzip", "lxphp", "lxzend", "mysql", "mysql-server", "curl","autoconf","automake","libtool", "bogofilter", "gcc", "cpp", "openssl", "pure-ftpd", "yum-protectbase");
 	$list = implode(" ", $packages);
+
 	while (true) {
 		print("Installing packages $list...\n");
 		system("PATH=\$PATH:/usr/sbin yum -y install $list", $return_value);
@@ -95,8 +96,13 @@ function lxins_main()
 			break;
 		} else {
 			print("Yum Gave Error... Trying Again...\n");
+			if (get_yes_no("Try again?") == 'n') {
+				print("- BREAK: fix the problem and install again\n");			
+				break;
+			}
 		}
 	}
+
 	print("Prepare installation directory\n");
 	
 	system("mkdir -p /usr/local/lxlabs/kloxo");
@@ -124,6 +130,9 @@ function lxins_main()
 		passthru("cp -rf ../../lxwebmail-version /var/cache/kloxo"); 
 //		if ( os_is_arch_sixfour() ) {
 		if (file_exists("/usr/lib64")) {
+			if (!is_link("/usr/lib/kloxophp")) {
+				passthru("rm -rf /usr/lib/kloxophp");
+			}
 			passthru("cp -rf ../../kloxophpsixfour*.tar.gz /var/cache/kloxo");
 			passthru("cp -rf ../../kloxophpsixfour-version /var/cache/kloxo");
 			passthru("mkdir -p /usr/lib64/kloxophp");
@@ -185,7 +194,10 @@ function lxins_main()
 	system("echo `hostname` > /var/qmail/control/me");
 	system("service qmail restart >/dev/null 2>&1 &");
 	system("service courier-imap restart >/dev/null 2>&1 &");
-/* --- enough execute in updatelib.php at next step
+
+/*
+	// make install failed
+	
 	$dbfile="/home/kloxo/httpd/webmail/horde/scripts/sql/create.mysql.sql";
 	if(file_exists($dbfile)) {
 		if($dbpass == "") {
@@ -194,7 +206,7 @@ function lxins_main()
 			system("mysql -u $dbroot -p$dbpass <$dbfile");
 		}
 	}
---- */
+*/
 	system("mkdir -p /home/kloxo/httpd");
 	chdir("/home/kloxo/httpd");
 	@ unlink("skeleton-disable.zip");
@@ -221,17 +233,32 @@ function lxins_main()
 		system("/etc/init.d/mysqld start");
 	}
 
-	print("Congratulations. Kloxo has been installed succesfully on your server as $installtype \n");
+	//--- running before finish for all setting running well
+//	passthru("sh /script/cleanup");
+	
+	print("\nCongratulations. Kloxo has been installed succesfully on your server as $installtype\n\n");
 	if ($installtype === 'master') {
-		print("You can connect to the server at https://<ip-address>:7777 or http://<ip-address>:7778\n");
-		print("Please note that first is secure ssl connection, while the second is normal one.\n");
-		print("The login and password are 'admin' 'admin'. After Logging in, you will have to change your password to something more secure\n");
-		print("We hope you will find managing your hosting with Kloxo refreshingly pleasurable, and also we wish you all the success on your hosting venture\n");
-		print("Thanks for choosing Kloxo to manage your hosting, and allowing us to be of service\n");
+		print("You can connect to the server at:\n");
+		print("    https://<ip-address>:7777 - secure ssl connection, or\n");
+		print("    http://<ip-address>:7778 - normal one.\n\n");
+		print("The login and password are 'admin' 'admin'. After Logging in, you will have to\n");
+		print("change your password to something more secure\n\n");
+		print("We hope you will find managing your hosting with Kloxo\n");
+		print("refreshingly pleasurable, and also we wish you all the success\n");
+		print("on your hosting venture\n\n");
+		print("Thanks for choosing Kloxo to manage your hosting, and allowing us to be of\n");
+		print("service\n");
 	} else {
-		print("You should open the port 7779 on this server, since this is used for the communication between master and slave\n");
-		print("To access this slave, to go admin->servers->add server, give the ip/machine name of this server. The password is 'admin'. The slave will appear in the list of slaves, and you can access it just like you access localhost\n\n");
+		print("You should open the port 7779 on this server, since this is used for\n");
+		print("the communication between master and slave\n\n");
+		print("To access this slave, to go admin->servers->add server,\n");
+		print("give the ip/machine name of this server. The password is 'admin'.\n\n");
+		print("The slave will appear in the list of slaves, and you can access it\n");
+		print("just like you access localhost\n\n");
 	}
+	print("\n");
+	print("---------------------------------------------\n");
+	print("* Note: Better reboot after Kloxo install\n\n");
 }
 
 lxins_main();

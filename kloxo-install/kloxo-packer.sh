@@ -44,16 +44,19 @@ echo "Start pack..."
 request1=$1
 kloxo_path=${request1#--svnpath\=}
 
-echo "download kloxo svn from "$kloxo_path
-
 mkdir -p ./ready
 mkdir -p ./combo
 
 mkdir -p ./current
 cd ./current
 
-svn checkout http://svn.lxcenter.org/svn/kloxo/$kloxo_path/kloxo
-svn checkout http://svn.lxcenter.org/svn/kloxo/$kloxo_path/kloxo-install
+if [ ! -d ./kloxo/httpdocs ] ; then
+	echo "Download kloxo svn from "$kloxo_path
+	svn checkout http://svn.lxcenter.org/svn/kloxo/$kloxo_path/kloxo
+	svn checkout http://svn.lxcenter.org/svn/kloxo/$kloxo_path/kloxo-install
+else
+	echo "No download and use local copy"
+fi
 
 cd ../
 

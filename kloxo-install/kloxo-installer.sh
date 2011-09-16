@@ -212,9 +212,13 @@ if [ ! -f ./kloxo-install.zip ] ; then
     wget http://download.lxcenter.org/download/kloxo-install.zip
 fi
 
-unzip -oq kloxo-install.zip
+if [ -d kloxo-install/kloxo-linux ] ; then
+    cd kloxo-install/kloxo-linux
+else
+    unzip -oq kloxo-install.zip
+    cd kloxo-install/kloxo-linux
+fi
 
-cd kloxo-install/kloxo-linux
 php lxins.php --install-type=$APP_TYPE $* | tee kloxo_install.log
 
 ###TODO###
