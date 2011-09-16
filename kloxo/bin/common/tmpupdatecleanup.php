@@ -25,22 +25,22 @@ function updatecleanup_main()
 		$login = new Client(null, null, 'update');
 	}
 
-	print("Executing UpdateCleanup. This can take some time. Please be patient.\n");
-	log_log("update", "Executing Updatecleanup");
+//	print("\n\n***Executing UpdateCleanup. This can take some time. Please be patient.***\n\n");
+	log_cleanup("*** Executing Update cleanup - BEGIN ***");
 //
 // Check for lxlabs yum repo file and if exists
 // Change to lxcenter repo file
 //
 	if (lxfile_exists("/etc/yum.repos.d/lxlabs.repo")) {
-		print("Delete old repo's\n");
+		log_cleanup("- Delete old repo's");
 		lxfile_mv("/etc/yum.repos.d/lxlabs.repo","/etc/yum.repos.d/lxlabs.repo.lxsave");
 		system("rm -f /etc/yum.repos.d/lxlabs.repo");
-		print("Removed lxlabs.repo\n");
-		print("Installing lxcenter.repo\n");
+		log_cleanup("- Removed lxlabs.repo");
+		log_cleanup("- Installing lxcenter.repo");
 		system("wget -O /etc/yum.repos.d/lxcenter.repo http://download.lxcenter.org/lxcenter.repo");
-		print("Installing yum-protectbase plugin\n");
+		log_cleanup("- Installing yum-protectbase plugin");
 		system("yum install -y -q yum-protectbase");
-		print("Done.\n");
+	//	print("Done.\n");
 	}
 //
 
@@ -71,7 +71,7 @@ function updatecleanup_main()
 //
 
 	if (lxfile_exists(".svn")) {
-		print("SVN Found... Exiting\n\n");
+		log_cleanup("- SVN Found... Exiting");
 		exit;
 	}
 
@@ -97,6 +97,8 @@ function updatecleanup_main()
 	}
 
 	lxfile_touch("__path_program_start_vps_flag");
+
+	log_cleanup("*** Executing Update cleanup - END ***");
 }
 
 function cp_dbfile()

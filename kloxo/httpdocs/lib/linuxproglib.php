@@ -1,9 +1,14 @@
 <?php 
 
+function os_doUpdateExtraStuff()
+{
+// TODO: Remove empty Function
+}
 
 function os_update_server()
 {
 	system("yum -y install --nosig webalizer lxjailshell autorespond unzip lxlighttpd lxphp >/dev/null 2>&1 &");
+	os_fix_some_permissions();
 	lxfile_touch("../etc/flag/lowmem.flag");
 	os_createLowMem();
 }
@@ -30,6 +35,15 @@ function os_createLowMem()
 	}
 }
 
+function os_create_kloxo_service_once() { }
+
+function os_set_iis_ftp_root_path() { }
+
+function os_fix_some_permissions()
+{
+	// TODO: Remove empty Function
+}
+
 function remove_lighttpd_error_log()
 {
 	$f = "/home/kloxo/httpd/lighttpd/error.log";
@@ -51,6 +65,29 @@ function create_dev()
 	lxshell_return('/sbin/MAKEDEV', 'loop');
 	lxshell_return('/sbin/MAKEDEV', 'random');
 	lxshell_return('/sbin/MAKEDEV', 'urandom');
+}
+
+function fix_hordedb_proper()
+{
+//	lxshell_php("../bin/misc/lxinstall_hordegroupware_db.php");
+}
+
+function os_updateApplicableToSlaveToo()
+{
+
+	move_clients_to_client();
+	$desc = uuser::getUserDescription('admin');
+
+	// function declare in updatelib.php --> then move to lib.php
+	updatecleanup();
+}
+
+function remove_test_root()
+{
+	$pass = slave_get_db_pass();
+	$__tr = mysql_connect("localhost", "root", $pass);
+	mysql_select_db("mysql", $__tr);
+	mysql_query("delete from user where Host = 'test.lxlabs.com' and User = 'root'", $__tr);
 }
 
 function remove_ssh_self_host_key()

@@ -616,12 +616,15 @@ function PrepareRoundCubeDb()
 	//  Related to issue #421
 
 	global $gbl, $sgbl, $login, $ghtml;
+
+	log_cleanup("Prepare RoundCube database");
+
 	$pass = slave_get_db_pass();
 	$user = "root";
 	$host = "localhost";
 	$link = mysql_connect($host, $user, $pass);
 		if (!$link) {
-		print("Mysql root password error\n");
+		log_cleanup("- Mysql root password error");
 		exit;
 	}
 	$pstring = null;
@@ -631,18 +634,19 @@ function PrepareRoundCubeDb()
 
 	$result = mysql_select_db('roundcubemail', $link);
 
+	log_cleanup("- Fix database values in sql importfile");
+
 	$roundcubefile = "/home/kloxo/httpd/webmail/roundcube/SQL/mysql.initial.sql";
 	$content = lfile_get_contents($roundcubefile);
 	$content = str_replace("ENGINE=INNODB", "", $content);
 	lfile_put_contents($roundcubefile, $content);
 
 	if (!$result) {
-		print("Something went wrong, can not select RoundCube database!\n");
-		print("Try to fix database...\n");
+		log_cleanup("- Something went wrong, can not select database!. Try to fix database");
 		$result = mysql_query("DROP DATABASE `roundcubemail`", $link);
 		$result = mysql_query("CREATE DATABASE `roundcubemail`", $link);
 		if (!$result) {
-			print("There is REALY something very very wrong... Go to http://forum.lxcenter.org/ and report.\n\n");
+			log_cleanup("- There is REALY something very very wrong... Go to http://forum.lxcenter.org/ and report");
 			exit;
 		}
 
@@ -652,7 +656,7 @@ function PrepareRoundCubeDb()
 
 		$result = mysql_select_db('roundcubemail', $link);
 		if (!$result) {
-			print("Something REALY went wrong, can not create RoundCube database!\n");
+			log_cleanup("- Something REALY went wrong, can not create database!");
 			exit;
 		}
 	}
@@ -669,9 +673,10 @@ function PrepareRoundCubeDb()
 
 	system("chattr -i /home/kloxo/httpd/webmail/roundcube/config/db.inc.php");
 
-	print("Generating password..\n");
+	log_cleanup("- Generating password");
 	$pass = randomString(8);
 //	dprint("Generated Pass " . $pass . "\n");
+	log_cleanup("- Add Password to configfile");
 	$roundcubefileIN = "/usr/local/lxlabs/kloxo/file/webmail-chooser/db.inc.phps";
 	$roundcubefileOUT = "/home/kloxo/httpd/webmail/roundcube/config/db.inc.php";
 	$content = lfile_get_contents($roundcubefileIN);
@@ -682,10 +687,10 @@ function PrepareRoundCubeDb()
 	$result = mysql_query("GRANT ALL ON roundcubemail.* TO roundcube@localhost IDENTIFIED BY '$pass'", $link);
 	mysql_query("flush privileges", $link);
 	if (!$result) {
-		print("Could not grant privileges\nScript Abort.\n");
+		print("- Could not grant privileges. Script Abort");
 		exit;
 	}
-	print("RoundCube Database installed.\n");
+	log_cleanup("- Database installed");
 	$pass = null;
 	$pstring = null;
 
@@ -697,12 +702,15 @@ function PrepareRoundCubeDb()
 function PrepareHordeDb()
 {
 	global $gbl, $sgbl, $login, $ghtml;
+
+	log_cleanup("Prepare RoundCube database");
+
 	$pass = slave_get_db_pass();
 	$user = "root";
 	$host = "localhost";
 	$link = mysql_connect($host, $user, $pass);
 	if (!$link) {
-		print("Mysql root password error\n");
+		log_cleanup("- Mysql root password error");
 		exit;
 	}
 	$pstring = null;
@@ -712,7 +720,7 @@ function PrepareHordeDb()
 
 	$result = mysql_select_db('horde_groupware', $link);
 
-	print("Fix database values in horde sql importfile\n");
+	log_cleanup("- Fix database values in sql importfile");
 
 	$hordefile = "/home/kloxo/httpd/webmail/horde/scripts/sql/groupware.mysql.sql";
 	$content = lfile_get_contents($hordefile);
@@ -728,12 +736,11 @@ function PrepareHordeDb()
 	lfile_put_contents($hordefile, $content);
 
 	if (!$result) {
-		print("Something went wrong, can not select Horde database!\n");
-		print("Try to fix database...\n");
+		log_cleanup("- Something went wrong, can not select database!. Try to fix database");
 		$result = mysql_query("DROP DATABASE horde_groupware", $link);
 		$result = mysql_query("CREATE DATABASE horde_groupware", $link);
 		if (!$result) {
-			print("There is REALY something very very wrong... Go to http://forum.lxcenter.org/ and report.\n\n");
+			log_cleanup("- There is REALY something very very wrong... Go to http://forum.lxcenter.org/ and report");
 			exit;
 		}
 
@@ -741,7 +748,7 @@ function PrepareHordeDb()
 
 		$result = mysql_select_db('horde_groupware', $link);
 		if (!$result) {
-			print("Something REALY went wrong, can not create Horde database!\n");
+			log_cleanup("- Something REALY went wrong, can not create Horde database!");
 			exit;
 		}
 	}
@@ -757,13 +764,13 @@ function PrepareHordeDb()
 	lxfile_cp("/usr/local/lxlabs/kloxo/file/horde.config.phps", "/home/kloxo/httpd/webmail/horde/config/conf.php");
 	system("chattr -i /home/kloxo/httpd/webmail/horde/config/conf.php");
 
-	print("Generating password..\n");
+	log_cleanup("- Generating password");
 	$pass = randomString(8);
 //	dprint("Generated Pass " . $pass . "\n");
-	print("Add Password to configfile\n");
+	log_cleanup("- Add Password to configfile");
 	$content = lfile_get_contents("../file/horde.config.phps");
 	$content = str_replace("__lx_horde_pass", $pass, $content);
-	print("Remove system readonly attribute from configfile\n");
+	log_cleanup("- Remove system readonly attribute from configfile");
 	system("chattr -i /home/kloxo/httpd/webmail/horde/config/conf.php");
 
 	lfile_put_contents("/home/kloxo/httpd/webmail/horde/config/conf.php", $content);
@@ -771,10 +778,10 @@ function PrepareHordeDb()
 	$result = mysql_query("GRANT ALL ON horde_groupware.* TO horde_groupware@localhost IDENTIFIED BY '$pass'", $link);
 	mysql_query("flush privileges", $link);
 	if (!$result) {
-		print("Could not grant privileges\nScript Abort.\n");
+		log_cleanup("Could not grant privileges. Script Abort");
 		exit;
 	}
-	print("Horde Database installed.\n");
+	log_cleanup("- Database installed");
 	$pass = null;
 	$pstring = null;
 
@@ -2064,6 +2071,10 @@ function parse_opt($argv)
 
 function fix_rhn_sources_file()
 {
+
+	log_cleanup("Fix RedHat NetWork Source");
+	log_cleanup("- Fix process");
+
 	$os = findOperatingSystem('pointversion');
 	$list = lfile("/etc/sysconfig/rhn/sources");
 	foreach($list as $k => $l) {
@@ -2845,10 +2856,27 @@ function send_mail_to_admin($subject, $message)
 
 function save_admin_email()
 {
+	log_cleanup("Set admin contact email");
+	log_cleanup("- Set process");
+
 	$a = null;
 	$email = db_get_value("client", "admin", "contactemail");
 	$a['admin']['contactemail'] = $email;
 	slave_save_db("contactemail", $a);
+}
+
+function getKloxoLicenseInfo()
+{
+	log_cleanup("Get Kloxo License info");
+	log_cleanup("- Get process");
+	
+	lxshell_php("htmllib/lbin/getlicense.php");
+}
+
+function createDatabaseInterfaceTemplate()
+{
+	log_cleanup("- Create database interface_template (Forced)");
+	system("mysql -u kloxo -p`cat ../etc/conf/kloxo.pass` kloxo < ../file/interface/interface_template.dump");
 }
 
 function callInChild($func, $arglist)
@@ -2913,6 +2941,10 @@ function get_with_cache($file, $cmdarglist)
 function copy_script()
 {
 	global $gbl, $sgbl, $login, $ghtml; 
+
+	log_cleanup("Initialize /script/ dir");
+	log_cleanup("- Initialize process");
+
 	lxfile_tmp_rm_rec("/script");
 	lxfile_mkdir("/script");
 	lxfile_mkdir("/script/filter");
@@ -3879,6 +3911,10 @@ function addLineIfNotExistPattern($filename, $searchpattern, $pattern)
 function fix_self_ssl()
 {
 	global $gbl, $sgbl, $login, $ghtml; 
+	
+	log_cleanup("Fix Self SSL");
+	log_cleanup("- Fix process");
+
 	$pgm = $sgbl->__var_program_name;
 	$ret = lxshell_return("diff", "../etc/program.pem", "htmllib/filecore/old.program.pem");
 
@@ -4446,3 +4482,2239 @@ function lxguard_save_hitlist($hl)
 	lxguard_main();
 }
 
+// --- move from kloxo/httpdocs/htmllib/lib/updatelib.php
+
+function install_xcache()
+{
+	//--- activate xcache control by php.ini. doesn't matter xcache install and xcache.ini exist or not.
+	//--- issue 547 - xcache failed to install
+/*
+	return;
+	if (lxfile_exists("/etc/php.d/xcache.ini")) {
+		return;
+	}
+	if (lxfile_exists("/etc/php.d/xcache.noini")) {
+		return;
+	}
+*/
+	log_cleanup("Install xcache if enabled");
+
+	if (lxfile_exists("../etc/flag/xcache_enabled.flg")) {
+		log_cleanup("- Enabled status");
+//		$ret = lxshell_return("php -m | grep -i xcache");
+//		$ret = system("rpm -q php-xcache | grep -i 'not installed'");
+		$ret = system("rpm -q php-xcache | grep -i 'not installed'");
+		if ($ret) {
+			log_cleanup("- Install process");
+			lxshell_return("yum", "-y", "install", "php-xcache");
+		}
+		else {
+			log_cleanup("- Already installed");
+		}		
+		// for customize?
+		lxfile_cp("../file/xcache.ini", "/etc/php.d/xcache.ini");
+	}
+	else {
+		log_cleanup("- Disabled status");
+	}
+/*
+	if (!lxfile_exists("../etc/flag/xcache_enabled.flg")) {
+		log_cleanup("- xcache flag not found, removing /etc/php.d/xcache.ini file");
+		lunlink("/etc/php.d/xcache.ini");
+	}
+*/
+}
+
+function fix_domainkey()
+{
+	log_cleanup("Fix Domainkeys");
+	log_cleanup("- Fix process");
+
+	$svm = new ServerMail(null, null, "localhost");
+	$svm->get();
+	$svm->domainkey_flag = 'on';
+	$svm->setUpdateSubaction('update');
+	$svm->was();
+}
+
+function fix_move_to_client()
+{
+	lxshell_php("../bin/fix/fixmovetoclient.php");
+}
+
+function addcustomername()
+{
+	lxshell_return("__path_php_path", "../bin/misc/addcustomername.php");
+}
+
+function fix_phpini()
+{
+	log_cleanup("Fix php.ini");
+	log_cleanup("- Fix process");
+
+	lxshell_return("__path_php_path", "../bin/fix/fixphpini.php", "--server=localhost");
+}
+
+function switchtoaliasnext()
+{
+	global $gbl, $sgbl, $login, $ghtml; 
+	$driverapp = $gbl->getSyncClass(null, 'localhost', 'web');
+
+	if ($driverapp !== 'lighttpd') {
+		return;
+	}
+
+	lxfile_cp("../file/lighttpd/lighttpd.conf", "/etc/lighttpd/lighttpd.conf");
+	lxshell_return("__path_php_path", "../bin/fix/fixweb.php");
+	
+}
+
+function fix_awstats()
+{
+	log_cleanup("Fix awstats");
+	log_cleanup("- Fix process");
+
+	lxshell_return("__path_php_path", "../bin/fix/fixweb.php");
+}
+
+function fixdomainipissue()
+{
+	lxshell_return("__path_php_path", "../bin/fix/fixweb.php");
+}
+
+function fixrootquota()
+{
+	system("setquota -u root 0 0 0 0 -a");
+}
+
+function fixtotaldiskusageplan()
+{
+	global $gbl, $sgbl, $login, $ghtml; 
+	initProgram('admin');
+	$login->loadAllObjects('resourceplan');
+
+	$list = $login->getList('resourceplan');
+	
+	foreach($list as $l) {
+		if (!$l->priv->totaldisk_usage || $l->priv->totaldisk_usage === '-') {
+			$l->priv->totaldisk_usage = $l->priv->disk_usage;
+			$l->setUpdateSubaction();
+			$l->write();
+		}
+	}
+}
+
+function fixcmlistagain()
+{
+	lxshell_return("__path_php_path", "../bin/common/generatecmlist.php");
+}
+function fixcmlist()
+{
+	lxshell_return("__path_php_path", "../bin/common/generatecmlist.php");
+}
+
+function fixcgibin()
+{
+	lxshell_return("__path_php_path", "../bin/fix/fixcgibin.php");
+}
+
+function fixsimpledocroot()
+{
+	lxshell_return("__path_php_path", "../bin/fix/fixsimpldocroot.php");
+}
+
+function installSuphp()
+{
+	lxshell_return("__path_php_path", "../bin/misc/installsuphp.php");
+}
+
+function fixadminuser()
+{
+	lxshell_return("__path_php_path", "../bin/fix/fixadminuser.php");
+}
+
+function install_gd()
+{
+	global $global_dontlogshell;
+	$global_dontlogshell = true;
+
+	log_cleanup("Check for php-gd");
+
+	$ret = lxshell_return("rpm", "-q", "php-gd");
+
+	if ($ret) {
+		log_cleanup("- Install process");
+		system("yum -y install php-gd");
+	}
+	else {
+		log_cleanup("- No need to install");
+	}
+	
+	$global_dontlogshell = false;
+}
+
+function fixphpinfo()
+{
+	lxshell_return("__path_php_path", "../bin/fix/fixweb.php");
+}
+
+function fixdirprotectagain()
+{
+	lxshell_return("__path_php_path", "../bin/fix/fixweb.php");
+}
+
+function fixdomainhomepermission()
+{
+	lxshell_return("__path_php_path", "../bin/fix/fixweb.php");
+}
+
+function installgroupwareagain()
+{
+//	dprint("DEBUG: running Function installgroupwareagain in updatelib.php\n");
+//	lxshell_return("__path_php_path", "../bin/misc/lxinstall_hordegroupware_db.php");
+}
+
+function createOSUserAdmin()
+{
+	log_cleanup("- Create OS system user admin");
+
+	if (!posix_getpwnam('admin')) {
+	 	log_cleanup("- Account admin created");
+		os_create_system_user('admin', randomString(7), 'admin', '/sbin/nologin', "/home/admin");
+	} else {
+		log_cleanup("- Admin account exists");
+	}
+}
+
+function setWatchdogDefaults()
+{
+	global $gbl, $sgbl, $login, $ghtml;
+
+	log_cleanup("Set Watchdog defaults");
+	log_cleanup("- Set process");
+	
+	watchdog::addDefaultWatchdog('localhost');
+	$a = null;
+	$driverapp = $gbl->getSyncClass(null, 'localhost', 'web');
+	$a['web'] = $driverapp;
+	$driverapp = $gbl->getSyncClass(null, 'localhost', 'spam');
+	$a['spam'] = $driverapp;
+	$driverapp = $gbl->getSyncClass(null, 'localhost', 'dns');
+	$a['dns'] = $driverapp;
+	slave_save_db("driver", $a);
+}
+
+function fixMySQLRootPassword()
+{
+	global $gbl, $sgbl, $login, $ghtml;
+
+	log_cleanup("Fix MySQL root password");
+	log_cleanup("- Fix process");
+	
+	$a = null;
+	fix_mysql_root_password('localhost');
+	$dbadmin = new Dbadmin(null, 'localhost', "mysql___localhost");
+	$dbadmin->get();
+	$pass = $dbadmin->dbpassword;
+	$a['mysql']['dbpassword'] = $pass;
+	slave_save_db("dbadmin", $a);
+}
+
+function createFlagDir()
+{
+	log_cleanup("- Create flag dir");
+	lxfile_mkdir("__path_program_etc/flag");
+}
+
+function fixIpAddress()
+{
+	log_cleanup("Fix IP Address");
+	log_cleanup("- Fix process");
+		
+	lxshell_return("lphp.exe", "../bin/fixIpAddress.php");
+}
+
+function fixservice()
+{
+	log_cleanup("Fix Services");
+	log_cleanup("- Fix process");
+
+	lxshell_return("__path_php_path", "../bin/fix/fixservice.php");
+}
+function fixsslca()
+{
+	lxshell_return("__path_php_path", "../bin/fix/fixweb.php");
+}
+
+function dirprotectfix()
+{
+	lxshell_return("__path_php_path", "../bin/fix/fixdirprotect.php");
+}
+
+function cronfix()
+{
+	lxshell_return("__path_php_path", "../bin/cronfix.php");
+}
+
+function changetoclient()
+{
+	global $gbl, $sgbl, $login, $ghtml; 
+	system("service xinetd stop");
+	lxshell_return("__path_php_path", "../bin/changetoclientlogin.phps");
+	lxshell_return("__path_php_path", "../bin/misc/fixftpuserclient.phps");
+	restart_service("xinetd");
+	$driverapp = $gbl->getSyncClass(null, 'localhost', 'web');
+	createRestartFile($driverapp);
+}
+
+function fix_dns_zones()
+{
+	global $gbl, $sgbl, $login, $ghtml; 
+	return;
+
+	initProgram('admin');
+	$flag = "__path_program_root/etc/flag/dns_zone_fix.flag";
+	
+	if (lxfile_exists($flag)) {
+		return;
+	}
+	
+	lxfile_touch($flag);
+
+	$login->loadAllObjects('dns');
+	$list = $login->getList('dns');
+
+	foreach($list as $l) {
+		fixupDnsRec($l);
+	}
+	
+	$login->loadAllObjects('dnstemplate');
+	$list = $login->getList('dnstemplate');
+	
+	foreach($list as $l) {
+		fixupDnsRec($l);
+	}
+}
+
+function fixupDnsRec($l)
+{
+	$l->dns_record_a = null;
+	
+	foreach($l->cn_rec_a as $k => $v) {
+		$tot = new dns_record_a(null, null, "cn_$v->nname");
+		$tot->ttype = "cname";
+		$tot->hostname = $v->nname;
+		$tot->param = $v->param;
+		$l->dns_record_a["cn_$v->nname"] = $tot;
+	}
+
+	foreach($l->mx_rec_a as $k => $v) {
+		$tot = new dns_record_a(null, null, "mx_$v->nname");
+		$tot->ttype = "mx";
+		$tot->hostname = $l->nname;
+		$tot->param = $v->param;
+		$tot->priority = $v->nname;
+		$l->dns_record_a["mx_$v->nname"] = $tot;
+	}
+	
+	foreach($l->ns_rec_a as $k => $v) {
+		$tot = new dns_record_a(null, null, "ns_$v->nname");
+		$tot->ttype = "ns";
+		$tot->hostname = $v->nname;
+		$tot->param = $v->nname;
+		$l->dns_record_a["ns_$v->nname"] = $tot;
+	}
+
+	foreach($l->txt_rec_a as $k => $v) {
+		$tot = new dns_record_a(null, null, "txt_$v->nname");
+		$tot->ttype = "txt";
+		$tot->hostname = $v->nname;
+		$tot->param = $v->param;
+		$l->dns_record_a["txt_$v->nname"] = $tot;
+	}
+
+	foreach($l->a_rec_a as $k => $v) {
+		$tot = new dns_record_a(null, null, "a_$v->nname");
+		$tot->ttype = "a";
+		$tot->hostname = $v->nname;
+		$tot->param = $v->param;
+		$l->dns_record_a["a_$v->nname"] = $tot;
+	}
+
+	$l->setUpdateSubaction();
+	$l->write();
+}
+
+function installinstallapp()
+{
+	global $gbl, $sgbl, $login, $ghtml; 
+	
+	// Install/Update installapp if needed or remove installapp when installapp is disabled.
+	// Added in Kloxo 6.1.4
+
+	log_cleanup("Initialize InstallApp");
+
+	//--- trick for no install on kloxo install process
+	if (lxfile_exists("/var/cache/kloxo/kloxo-install-disableinstallapp.flg")) {
+		log_cleanup("- Disable InstallApp flag is ON");
+		passthru("echo 1 > /usr/local/lxlabs/kloxo/etc/flag/disableinstallapp.flg");
+		return;
+	}
+
+	if ($sgbl->is_this_master()) {
+		$gen = $login->getObject('general')->generalmisc_b;
+		$diflag = $gen->isOn('disableinstallapp');
+		log_cleanup("- Disable InstallApp flag is ON");
+		passthru("echo 1 > /usr/local/lxlabs/kloxo/etc/flag/disableinstallapp.flg");
+	} else {
+		$diflag = false;
+		log_cleanup("- Disable InstallApp flag is OFF");
+		lxfile_rm("/usr/local/lxlabs/kloxo/etc/flag/disableinstallapp.flg");
+	}
+
+	if (lxfile_exists("/usr/local/lxlabs/kloxo/etc/flag/disableinstallapp.flg")) {
+		log_cleanup("- InstallApp is turned off, remove InstallApp");
+		lxfile_rm_rec("/home/kloxo/httpd/installapp/");
+		lxfile_rm_rec("/home/kloxo/httpd/installappdata/");
+		system("cd /var/cache/kloxo/ ; rm -f installapp*.tar.gz;");
+		return;
+	}
+	else {
+		if (!lxfile_exists("__path_kloxo_httpd_root/installappdata")) {
+			log_cleanup("- Running InstallApp data update");
+			installapp_data_update();
+		}
+
+		if (lfile_exists("../etc/remote_installapp")) {
+			log_cleanup("- Hosting Remote InstallApp detected, remove InstallApp");
+			lxfile_rm_rec("/home/kloxo/httpd/installapp/");
+			system("cd /var/cache/kloxo/ ; rm -f installapp*.tar.gz;");
+			return;
+		}
+
+		// Line below Removed in Kloxo 6.1.4
+		// return;
+
+		log_cleanup("- Creating installapp dir");
+		lxfile_mkdir("__path_kloxo_httpd_root/installapp");
+
+		if (!lxfile_exists("__path_kloxo_httpd_root/installapp/wordpress")) {
+			log_cleanup("- Installing/Updating InstallApp");
+			lxshell_php("../bin/installapp-update.phps");
+		}
+		return;
+	}
+}
+
+function installWithVersion($path, $file, $ver = null)
+{
+
+//	if (!is_numeric($ver)) { return; }
+
+	if (!$ver) {
+		$ver = getVersionNumber(get_package_version($file));
+		log_cleanup("- $file version is $ver");
+	}
+
+	lxfile_mkdir("/var/cache/kloxo");
+
+/* --- related to new kloxo install (kloxo-install.sh)
+	if (!lxfile_exists("/var/cache/kloxo/$file$ver.tar.gz")) {
+		$count = 0;
+		while (1) {
+			$count++;
+			if ($count > 20) { return true; }
+			system("cd /var/cache/kloxo/ ; rm -f $file*.tar.gz; wget download.lxcenter.org/download/$file$ver.tar.gz");
+			lxfile_rm_rec($path);
+			lxfile_mkdir($path);
+			$ret = lxshell_unzip("__system__", $path, "/var/cache/kloxo/$file$ver.tar.gz");
+			if (!$ret) { return true; }
+		}
+		system("cd /var/cache/kloxo/ ; rm -f $file*.tar.gz; wget download.lxcenter.org/download/$file$ver.tar.gz");
+	}
+	return false;
+--- */
+
+	if (lxfile_exists("/var/cache/kloxo/kloxo-install-firsttime.flg")) {
+		//--- WARNING: don't use filename like kloxophp_version because problem with $file_version alias
+		$locverpath = "/var/cache/kloxo/$file-version";
+		$locver = getVersionNumber(file_get_contents($locverpath));
+		log_cleanup("- $file local copy version is $locver");		
+		if (lxfile_exists("/var/cache/kloxo/$file$locver.tar.gz")) {
+			log_cleanup("- Use $file version $locver local copy for installing");
+			$ver = $locver;
+		}
+		else {
+			log_cleanup("- Download and use $file version $ver for installing");
+			system("cd /var/cache/kloxo/ ; rm -f $file*.tar.gz ; wget download.lxcenter.org/download/$file$ver.tar.gz");
+		}
+		$DoUpdate = true;
+	}
+	else {
+		if (!lxfile_exists("/var/cache/kloxo/$file$ver.tar.gz")) {
+			log_cleanup("- Download and use $file version $ver for updating");
+			system("cd /var/cache/kloxo/ ; rm -f $file*.tar.gz ; wget download.lxcenter.org/download/$file$ver.tar.gz");
+			$DoUpdate = true;
+		}
+		else {
+			log_cleanup("- No update and stay $file at version $ver");
+			$DoUpdate = false;
+		}
+	}
+	
+	$ret = null;
+
+	if ($DoUpdate) {
+		lxfile_rm_rec("$path");
+		lxfile_mkdir($path);
+	//	system("cd $path ; tar -xzf /var/cache/kloxo/$file*.tar.gz");
+	//	system("cd $path ; for a in `ls -1 /var/cache/kloxo/$file*.tar.gz`; do gzip -dc $a | tar xf -; done");
+		$ret = lxshell_unzip("__system__", $path, "/var/cache/kloxo/$file$ver.tar.gz");
+	//	$ret = system("cd $path ; for a in `ls -1 /var/cache/kloxo/$file*.tar.gz` ; do gzip -dc $a | tar xf - ; done");
+		if (!$ret) { return true; }
+	}
+	else {
+		return false;
+	}
+}
+
+//--- new function for replace download_thirdparty() in kloxo/httpdocs/htmllib/lib/lib.php
+function installThirdparty($ver = null)
+{
+	global $sgbl;
+
+	$prgm = $sgbl->__var_program_name;
+
+	log_cleanup("ThirdParty Checks");
+
+	if (!$ver) {
+		$ver = file_get_contents("http://download.lxcenter.org/download/thirdparty/$prgm-version.list");
+		$ver = getVersionNumber($ver);
+		log_cleanup("- $prgm-thirdparty version is $ver");
+	}
+
+	$path = "/usr/local/lxlabs/$prgm";
+
+/*
+			log_cleanup("Checking for new ThirdParty package version");
+			$ver = file_get_contents("http://download.lxcenter.org/download/thirdparty/kloxo-version.list");
+			if ($ver != "") {
+ 		       	$ver = trim($ver);
+ 		       	$ver = str_replace("\n", "", $ver);
+ 		       	$ver = str_replace("\r", "", $ver);
+				if (!lxfile_real("/var/cache/kloxo/kloxo-thirdparty.$ver.zip")) {
+					$DoUpdate = true;
+					log_cleanup("Found a new ThirdParty version ($ver)");
+				} else {
+					log_cleanup("No new ThirdParty version found (Current version $ver)");
+				}
+			}
+
+			log_cleanup("Checking for new WebMail package version");
+			$ver = get_package_version("lxwebmail");
+			if (!lxfile_real("/var/cache/kloxo/lxwebmail$ver.tar.gz")) {
+				$DoUpdate = true;
+				log_cleanup("- Found a new WebMail version ($ver)");
+			}  else {
+				log_cleanup("- No new Webmail version found (Current version $ver)");
+			}
+
+			if ( $DoUpdate == false ) {
+				print("Run /script/cleanup if you want to fix/restore/(re)install non working components.\n");
+				exit;
+			}
+*/
+
+/*
+	// Fixes #303 and #304
+	$string = file_get_contents("http://download.lxcenter.org/download/thirdparty/$prgm-version.list");
+
+	if ($string != "") {
+
+		$string = trim($string);
+		$string = str_replace("\n", "", $string);
+		$string = str_replace("\r", "", $string);
+	//	core_installWithVersion($path, "$prgm-thirdparty", $string);
+	//	system("cd $path ; unzip -oq /var/cache/kloxo/$prgm-thirdparty.*.zip");
+		$ret = lxshell_unzip("__system__", $path, "/var/cache/kloxo/$prgm-thirdparty.$ver.zip");
+	}
+*/
+	if (lxfile_exists("/var/cache/kloxo/kloxo-install-firsttime.flg")) {
+		$locverpath = "/var/cache/kloxo/$prgm-thirdparty-version";
+		$locver = getVersionNumber(file_get_contents($locverpath));
+		log_cleanup("- $prgm-thirdparty local copy version is $locver");
+		if (lxfile_exists("/var/cache/kloxo/$prgm-thirdparty.$locver.zip")) {
+			log_cleanup("- Use $prgm-thirdparty version $locver local copy for installing");
+			$ver = $locver;
+		}
+		else {
+			log_cleanup("- Download and use version $ver for installing");
+			system("cd /var/cache/kloxo/ ; rm -f $prgm-thirdparty.*.zip ; wget download.lxcenter.org/download/$prgm-thirdparty.$ver.zip");
+		}
+		$DoUpdate = true;
+	}
+	else {
+		if (!lxfile_exists("/var/cache/kloxo/$prgm-thirdparty.$ver.zip")) {
+			log_cleanup("- Download and use version $ver for updating");
+			system("cd /var/cache/kloxo/ ; rm -f $prgm-thirdparty.*.zip ; wget download.lxcenter.org/download/$prgm-thirdparty.$ver.zip");
+			$DoUpdate = true;
+		}
+		else {
+			log_cleanup("- No update and stay at version $ver");
+			$DoUpdate = false;
+		}
+	}
+
+	$ret = null;
+
+	if ($DoUpdate) {
+	//	core_installWithVersion($path, "$prgm-thirdparty", $string);
+	//	system("cd $path ; unzip -oq /var/cache/kloxo/$prgm-thirdparty.$ver.zip");
+		$ret = lxshell_unzip("__system__", $path, "/var/cache/kloxo/$prgm-thirdparty.$ver.zip");
+		lxfile_unix_chmod("/usr/local/lxlabs/$prgm/httpdocs/thirdparty/phpMyAdmin/config.inc.php","0644");
+	}
+	
+	if (!$ret) { return true; }
+}
+
+function installWebmail($ver = null)
+{
+//	if (!is_numeric($ver)) { return; }
+
+	log_cleanup("Webmail Checks");
+
+	$file = "lxwebmail";
+
+	if (!$ver) {
+		$ver = getVersionNumber(get_package_version($file));
+		log_cleanup("- $file version is $ver");
+	}
+
+	lxfile_mkdir("/var/cache/kloxo");
+	$path = "/home/kloxo/httpd/webmail";
+	lxfile_mkdir($path);
+
+/* --- related to new kloxo install (kloxo-install.sh)
+	if (lxfile_exists("/var/cache/kloxo/lxwebmail$ver.tar.gz")) {
+		return;
+	}
+
+	$count = 0;
+	while (1) {
+		$count++;
+		if ($count > 1) { return true; }
+		system("cd /var/cache/kloxo/ ; rm -f lxwebmail*.tar.gz; wget download.lxcenter.org/download/lxwebmail$ver.tar.gz");
+		if (!lxfile_exists("$path/roundcube")) {
+			$ret = lxshell_unzip("__system__", $path, "/var/cache/kloxo/lxwebmail$ver.tar.gz");
+			if (!$ret) { return true; }
+		}
+		$tfile_h = lx_tmp_file("hordeconf");
+		$tfile_r = lx_tmp_file("roundcubeconf");
+		lxfile_cp("$path/horde/config/conf.php", $tfile_h);
+		lxfile_cp("$path/roundcube/config/db.inc.php", $tfile_r);
+		lxfile_rm_rec("$path/horde");
+		lxfile_rm_rec("$path/roundcube");
+		$ret = lxshell_unzip("__system__", $path, "/var/cache/kloxo/lxwebmail$ver.tar.gz");
+		lxfile_cp($tfile_h, "$path/horde/config/conf.php");
+		lxfile_cp($tfile_r, "$path/roundcube/config/db.inc.php");
+		lxfile_rm($tfile_h);
+		lxfile_rm($tfile_r);
+		if (!$ret) { return true; }
+	}
+	return false;
+--- */
+
+	if (lxfile_exists("/var/cache/kloxo/kloxo-install-firsttime.flg")) {
+		$locverpath = "/var/cache/kloxo/$file-version";
+		$locver = getVersionNumber(file_get_contents($locverpath));
+		log_cleanup("- local copy version is $locver");
+		if (lxfile_exists("/var/cache/kloxo/$file$locver.tar.gz")) {
+			log_cleanup("- Use $file version $locver local copy for installing");
+			$ver = $locver;
+		}
+		else {
+			log_cleanup("- Download and use version $ver for installing");
+			system("cd /var/cache/kloxo/ ; rm -f $file*.tar.gz; wget download.lxcenter.org/download/$file$ver.tar.gz");
+		}
+		$DoUpdate = true;
+	}
+	else {
+		if (!lxfile_exists("/var/cache/kloxo/$file$ver.tar.gz")) {
+			log_cleanup("- Download and use version $ver for updating");
+			system("cd /var/cache/kloxo/ ; rm -f $file*.tar.gz; wget download.lxcenter.org/download/$file$ver.tar.gz");
+			$DoUpdate = true;
+		}
+		else {
+			log_cleanup("- No update and stay at version $ver");
+			$DoUpdate = false;
+		}
+	}
+
+	$ret = null;
+
+	if ($DoUpdate) {
+		$tfile_h = lx_tmp_file("hordeconf");
+		$tfile_r = lx_tmp_file("roundcubeconf");
+		if (lxfile_exists("$path/horde/config/conf.php")) {
+			lxfile_cp("$path/horde/config/conf.php", $tfile_h);
+		}
+		if (lxfile_exists("$path/roundcube/config/db.inc.php")) {
+			lxfile_cp("$path/roundcube/config/db.inc.php", $tfile_r);
+		}
+		lxfile_rm_rec("$path/horde");
+		lxfile_rm_rec("$path/roundcube");
+		$ret = lxshell_unzip("__system__", $path, "/var/cache/kloxo/$file$ver.tar.gz");
+		lxfile_cp($tfile_h, "$path/horde/config/conf.php");
+		lxfile_cp($tfile_r, "$path/roundcube/config/db.inc.php");
+		lxfile_rm($tfile_h);
+		lxfile_rm($tfile_r);
+	}
+
+	if (!$ret) { return true; }
+}
+
+function installAwstats($ver = null)
+{
+//	if (!is_numeric($ver)) { return; }
+
+	$file = "lxawstats";
+
+	log_cleanup("Awstats Checks");
+
+	if (!$ver) {
+		$ver = getVersionNumber(get_package_version($file));
+		log_cleanup("- $file version is $ver");
+	}
+
+	lxfile_mkdir("/var/cache/kloxo");
+	lxfile_mkdir("/home/kloxo/httpd/awstats/");
+	
+/* --- related to new kloxo install (kloxo-install.sh)
+	if (!lxfile_exists("/var/cache/kloxo/lxawstats$ver.tar.gz")) {
+		system("cd /var/cache/kloxo/ ; rm -f lxawstats*.tar.gz; wget download.lxcenter.org/download/lxawstats$ver.tar.gz");
+
+		lxfile_rm_rec("/home/kloxo/httpd/awstats/tools/");
+		lxfile_rm_rec("/home/kloxo/httpd/awstats/wwwroot/");
+		system("cd /home/kloxo/httpd/awstats/ ; tar -xzf /var/cache/kloxo/lxawstats$ver.tar.gz tools wwwroot docs");
+
+	}
+--- */
+
+	$path = "/home/kloxo/httpd/awstats";
+
+	if (lxfile_exists("/var/cache/kloxo/kloxo-install-firsttime.flg")) {
+		$locverpath = "/var/cache/kloxo/$file-version";
+		$locver = getVersionNumber(file_get_contents($locverpath));
+		log_cleanup("- local copy version is $locver");
+		if (lxfile_exists("/var/cache/kloxo/$file$locver.tar.gz")) {
+			log_cleanup("- Use version $locver local copy for installing");
+			$ver = $locver;
+		}
+		else {
+			log_cleanup("- Download and use version $ver for installing");
+			system("cd /var/cache/kloxo/ ; rm -f $file*.tar.gz; wget download.lxcenter.org/download/$file$ver.tar.gz");
+		}
+		$DoUpdate = true;
+	}
+	else {
+		if (!lxfile_exists("/var/cache/kloxo/$file$ver.tar.gz")) {
+			log_cleanup("- Download and use version $ver for updating");
+			system("cd /var/cache/kloxo/ ; rm -f $file*.tar.gz; wget download.lxcenter.org/download/$file$ver.tar.gz");
+			$DoUpdate = true;
+		}
+		else {
+			log_cleanup("- No update and stay at version $ver");
+			$DoUpdate = false;
+		}
+	}
+
+	$ret = null;
+
+	if ($DoUpdate) {
+		lxfile_rm_rec("$path/tools/");
+		lxfile_rm_rec("$path/wwwroot/");
+	//	system("cd $path ; tar -xzf /var/cache/kloxo/$file*.tar.gz tools wwwroot docs");
+		$ret = lxshell_unzip("__system__", $path, "/var/cache/kloxo/$file$ver.tar.gz");
+	}
+
+	if (!$ret) { return true; }
+}
+
+function setDefaultPages()
+{
+	log_cleanup("Initialize some skeletons");
+
+	$httpdpath = "/home/kloxo/httpd";
+
+	$sourcezip = realpath("../file/skeleton.zip");
+	$targetzip = "$httpdpath/skeleton.zip";
+
+	if (file_exists($sourcezip)) {
+		if (!checkIdenticalFile($sourcezip, $targetzip)) {
+
+			echo shell_exec("cp -rf $sourcezip $targetzip");
+
+			log_cleanup("- Initialize skeleton (Default web page)");
+			lxfile_mkdir("/home/kloxo/httpd/default");
+			lxshell_unzip("__system__", "$httpdpath/default/", $targetzip);
+			if (!lxfile_exists("$httpdpath/default/inc.php")) {
+				lxfile_cp("../file/default_inc.php", "$httpdpath/default/inc.php");
+			}
+			lxfile_cp("../file/default_index.php", "$httpdpath/default/index.php");
+			passthru("chown -R lxlabs:lxlabs $httpdpath/default/");
+			passthru("find $httpdpath/default/ -type f -name \"*.php*\" -exec chmod 644 {} \;");
+			passthru("find $httpdpath/default/ -type d -exec chmod 755 {} \;");
+
+			log_cleanup("- Initialize skeleton (Disable web page)");
+			lxfile_mkdir("$httpdpath/disable");
+			lxshell_unzip("__system__", "$httpdpath/disable/", $targetzip);
+			if (!lxfile_exists("$httpdpath/disable/inc.php")) {
+				lxfile_cp("../file/disable_inc.php", "$httpdpath/disable/inc.php");
+			}
+			lxfile_cp("../file/default_index.php", "$httpdpath/disable/index.php");
+			passthru("chown -R lxlabs:lxlabs $httpdpath/disable/");
+			passthru("find $httpdpath/disable/ -type f -name \"*.php*\" -exec chmod 644 {} \;");
+			passthru("find $httpdpath/disable/ -type d -exec chmod 755 {} \;");
+	
+			log_cleanup("- Initialize skeleton (Webmail web page)");
+			lxfile_mkdir("$httpdpath/webmail");
+			lxshell_unzip("__system__", "$httpdpath/webmail/", $targetzip);
+			if (!lxfile_exists("$httpdpath/webmail/inc.php")) {
+				lxfile_cp("../file/webmail_inc.php", "$httpdpath/webmail/inc.php");
+			}
+			lxfile_cp("../file/default_index.php", "$httpdpath/webmail/index.php");
+			passthru("chown -R lxlabs:lxlabs $httpdpath/webmail/");
+			passthru("find $httpdpath/webmail/ -type f -name \"*.php*\" -exec chmod 644 {} \;");
+			passthru("find $httpdpath/webmail/ -type d -exec chmod 755 {} \;");
+
+			//--- issue #597 - Use cp. to redirect :7778 or :7777
+			log_cleanup("- Initialize skeleton (CP web page)");
+			lxfile_mkdir("$httpdpath/cp");
+			lxshell_unzip("__system__", "$httpdpath/cp/", $targetzip);
+			if (!lxfile_exists("$httpdpath/cp/inc.php")) {
+				lxfile_cp("../file/cp_config_inc.php", "$httpdpath/cp/inc.php");
+			}
+			lxfile_cp("../file/default_index.php", "$httpdpath/cp/index.php");
+			passthru("chown -R lxlabs:lxlabs $httpdpath/cp/");
+			passthru("find $httpdpath/cp/ -type f -name \"*.php*\" -exec chmod 644 {} \;");
+			passthru("find $httpdpath/cp/ -type d -exec chmod 755 {} \;");	
+		}
+		else {
+			log_cleanup("- No initialize skeleton (already exist)");
+		}
+	}
+	else {
+		log_cleanup("- No initialize user-logo (no exist) - MUST exist!");
+	}
+
+	$usersourcezip = realpath("../file/user-skeleton.zip");
+	$usertargetzip = "/home/kloxo/user-httpd/user-skeleton.zip";
+
+	if (lxfile_exists($usersourcezip)) {
+		if (!checkIdenticalFile($usersourcezip, $usertargetzip)) {
+			log_cleanup("- Initialize user-skeleton");
+			passthru("cp -rf $usersourcezip $usertargetzip");
+		}
+		else {
+			log_cleanup("- No initialize user-skeleton (already exist)");
+		}
+	}
+	else {
+		log_cleanup("- No initialize user-skeleton (no exist)");
+	}
+
+	$sourcelogo = realpath("../file/user-logo.png");
+	$targetlogo = "$httpdpath/user-logo.png";
+
+	if (lxfile_exists($sourcelogo)) {
+		if (!checkIdenticalFile($sourcelogo, $targetlogo)) {
+			log_cleanup("- Initialize user-logo");
+			lxfile_cp($sourcelogo, $targetlogo);
+			lxfile_cp($targetlogo, "$httpdpath/default/images/logo.png");
+			lxfile_cp($targetlogo, "$httpdpath/disable/images/logo.png");
+			lxfile_cp($targetlogo, "$httpdpath/webmail/images/logo.png");
+			lxfile_cp($targetlogo, "$httpdpath/cp/images/logo.png");
+		}
+		else {
+			log_cleanup("- No initialize user-logo (already exist)");
+		}
+	}
+	else {
+		log_cleanup("- No initialize user-logo (no exist)");
+	}
+
+/* --- pending
+	log_cleanup("Initialize skeleton (Login web page)");
+	lxshell_unzip("__system__", "/usr/local/lxlabs/kloxo/httpdocs/login", "../file/skeleton.zip");
+	lxfile_cp("../file/login_index.php", "/usr/local/lxlabs/kloxo/httpdocs/login/index.php");
+	lxfile_unix_chown("/usr/local/lxlabs/kloxo/httpdocs/login/index.php", "lxlabs:lxlabs");
+	lxfile_unix_chmod("/usr/local/lxlabs/kloxo/httpdocs/login/index.php", "0644");
+--- */
+}
+
+function setFreshClam()
+{
+	log_cleanup("Checking freshclam (virus scanner)");
+
+	if (!isOn(db_get_value("servermail", "localhost", "virus_scan_flag"))) {
+		passthru("chkconfig freshclam off > /dev/null 2>&1");
+		passthru("/etc/init.d/freshclam stop >/dev/null 2>&1");
+		log_cleanup("- Disabled freshclam service");
+		// also clamd not load too
+		passthru("svc -d /var/qmail/supervise/clamd /var/qmail/supervise/clamd/log > /dev/null 2>&1");
+		passthru("mv -f /var/qmail/supervise/clamd/run /var/qmail/supervise/clamd/run.stop > /dev/null 2>&1");
+		passthru("mv -f /var/qmail/supervise/clamd/log/run /var/qmail/supervise/clamd/log/run.stop > /dev/null 2>&1");
+		// disabled because freezed and not need!
+	//	passthru("/etc/init.d/qmail restart");
+	}
+	else {
+		passthru("chkconfig freshclam on > /dev/null 2>&1");
+		passthru("/etc/init.d/freshclam start >/dev/null 2>&1");
+		log_cleanup("- Enabled freshclam service");
+		// also clamd load too
+		passthru("mv -f /var/qmail/supervise/clamd/run.stop /var/qmail/supervise/clamd/run > /dev/null 2>&1");
+		passthru("mv -f /var/qmail/supervise/clamd/log/run.stop /var/qmail/supervise/clamd/log/run > /dev/null 2>&1");
+		passthru("svc -u /var/qmail/supervise/clamd /var/qmail/supervise/clamd/log > /dev/null 2>&1");
+		// disabled because freezed and not need!
+	//	passthru("/etc/init.d/qmail restart");
+	}
+
+/*	// --- not work!
+
+	// taken servermail__qmaillib.phps or servermail__postfix.phps
+	// from /usr/local/lxlabs/kloxo/httpdocs/htmllib/lib/pserver/driver
+
+	if (isOn(db_get_value("servermail", "localhost", "virus_scan_flag"))) {
+		$ret = lxshell_return("rpm", "-q", "simscan-toaster");
+		if ($ret) {
+			throw new lxException('simscan_is_not_installed_for_virus_scan', 'virus_scan_flag', '');
+		}
+		log_cleanup("- Enabled service");
+
+		lxfile_cp("../file/clamav.init", "/etc/init.d/clamav");
+		lxfile_unix_chmod("/etc/init.d/clamav", "755");
+		lxshell_return("chkconfig", "clamav", "on");
+		os_service_manage("clamav", "restart");
+		os_service_manage("freshclam", "restart");
+		lxshell_return("chkconfig", "freshclam", "on");
+		lxfile_cp("../file/linux/simcontrol", "/var/qmail/control/");
+		lxshell_return("/var/qmail/bin/simscanmk");
+		lxshell_return("/var/qmail/bin/simscanmk", "-g");
+	} else {
+		log_cleanup("- Disabled service");
+
+		lxshell_return("chkconfig", "clamav", "off");
+		os_service_manage("clamav", "stop");
+		os_service_manage("freshclam", "stop");
+		lxshell_return("chkconfig", "freshclam", "off");
+	}
+*/
+	// issue #658 - Two clamav databases, remove one if two databases are found
+//	if (lxfile_exists("/usr/share/clamav/main.cld")) {
+//		lxfile_rm("/usr/share/clamav/main.cvd");
+//	}
+}
+
+
+// solve imap problem when running webmail on 64bit
+// thanks semir - http://forum.lxcenter.org/index.php?t=msg&th=14394&goto=79404&#msg_79404
+function changeMailSoftlimit()
+{
+	log_cleanup("Change softlimit for imap4 and pop3");
+
+	log_cleanup("- Change softlimit for imap4");
+	$imap4file = "/var/qmail/supervise/imap4/run";
+	$imap4content = file_get_contents($imap4file);
+	$imap4content = str_replace("9000000", "18000000", $imap4content);
+	lfile_put_contents($imap4file, $imap4content);
+	passthru("svc -u /var/qmail/supervise/imap4 /var/qmail/supervise/imap4/log > /dev/null 2>&1");
+
+	log_cleanup("- Change softlimit for imap4-ssl");
+	$imap4sslfile = "/var/qmail/supervise/imap4-ssl/run";
+	$imap4sslcontent = file_get_contents($imap4sslfile);
+	$imap4sslcontent = str_replace("9000000", "18000000", $imap4sslcontent);
+	lfile_put_contents($imap4sslfile, $imap4sslcontent);
+	passthru("svc -u /var/qmail/supervise/imap4-ssl /var/qmail/supervise/imap4-ssl/log > /dev/null 2>&1");
+
+	log_cleanup("- Change softlimit for pop3");
+	$pop3file = "/var/qmail/supervise/pop3/run";
+	$pop3content = file_get_contents($pop3file);
+	$pop3content = str_replace("9000000", "18000000", $pop3content);
+	lfile_put_contents($pop3file, $pop3content);
+	passthru("svc -u /var/qmail/supervise/pop3 /var/qmail/supervise/pop3/log > /dev/null 2>&1");
+
+	log_cleanup("- Change softlimit for pop3-ssl");
+	$pop3sslfile = "/var/qmail/supervise/pop3-ssl/run";
+	$pop3sslcontent = file_get_contents($pop3sslfile);
+	$pop3sslcontent = str_replace("9000000", "18000000", $pop3sslcontent);
+	lfile_put_contents($pop3sslfile, $pop3sslcontent);
+	passthru("svc -u /var/qmail/supervise/pop3-ssl /var/qmail/supervise/pop3-ssl/log > /dev/null 2>&1");
+	// disabled because freezed and not need!
+//	passthru("/etc/init.d/qmail restart");
+}
+
+function setInitialApacheConfig()
+{
+/* --- Issue #589: Change httpd config structure
+	log_cleanup("- Install kloxo.conf");
+	lxfile_cp("../file/apache/kloxo.conf", "/etc/httpd/conf/kloxo/kloxo.conf");
+	log_cleanup("- Install ssl.conf");
+	lxfile_cp("../file/apache/default_ssl.conf", "/etc/httpd/conf.d/ssl.conf");
+	log_cleanup("- Initialize webmail_redirect.conf");
+	lxfile_touch("/etc/httpd/conf/kloxo/webmail_redirect.conf");
+	log_cleanup("- Initialize ssl.conf");
+	lxfile_touch("/etc/httpd/conf/kloxo/ssl.conf");
+	log_cleanup("- Initialize default.conf");
+	lxfile_touch("/etc/httpd/conf/kloxo/default.conf");
+	log_cleanup("- Initialize cp_config.conf");
+	lxfile_touch("/etc/httpd/conf/kloxo/cp_config.conf");
+--- */
+
+/* --- Issue #589: Change httpd config structure
+	log_cleanup("- Initialize domainip.conf (apache)");
+	lxfile_touch("/etc/httpd/conf/kloxo/domainip.conf");
+
+	log_cleanup("- Initialize mimetype.conf (apache)");
+	lxfile_touch("/etc/httpd/conf/kloxo/mimetype.conf");
+--- */
+
+/* --- Issue #589: Change httpd config structure
+	if (lxfile_exists("/etc/httpd/conf/httpd.conf")) {
+		log_cleanup("Add kloxo.conf directive into httpd.conf (apache)");
+		addLineIfNotExistInside("/etc/httpd/conf/httpd.conf", "Include /etc/httpd/conf/kloxo/kloxo.conf", "");
+	}
+--- */
+
+	log_cleanup("Initialize Apache Config");
+	log_cleanup("- Initialize process");
+
+	log_cleanup("- Install /etc/httpd/conf/httpd.conf");
+	lxfile_cp("../file/centos-5/httpd.conf", "/etc/httpd/conf/httpd.conf");
+
+	if (lxfile_exists("/etc/httpd/conf/kloxo")) {
+		log_cleanup("- Remove /etc/httpd/conf/kloxo dir");
+		passthru("rm -rf /etc/httpd/conf/kloxo");
+	}
+
+	if (lxfile_exists("/home/httpd/conf")) {
+		log_cleanup("- Remove /home/httpd/conf dir");
+		passthru("rm -rf /home/httpd/conf");
+	}
+	
+	if (!lxfile_exists("/etc/httpd/conf.d")) {
+		log_cleanup("- Create /etc/httpd/conf.d dir");
+		lxfile_mkdir("/etc/httpd/conf.d");
+	}
+
+	if (!lxfile_exists("/home/apache/conf")) {
+		log_cleanup("- Create /home/apache/conf dir");
+		lxfile_mkdir("/home/apache/conf");
+	}
+
+	if (!lxfile_exists("/home/apache/conf/defaults")) {
+		log_cleanup("- Create /home/apache/conf/defaults dir");
+		lxfile_mkdir("/home/apache/conf/defaults");
+	}
+
+	if (!lxfile_exists("/home/apache/conf/domains")) {
+		log_cleanup("- Create /home/apache/conf/domains dir");
+		lxfile_mkdir("/home/apache/conf/domains");
+	}
+
+	if (!lxfile_exists("/home/apache/conf/redirects")) {
+		log_cleanup("- Create /home/apache/conf/redirects dir");
+		lxfile_mkdir("/home/apache/conf/redirects");
+	}
+
+	if (!lxfile_exists("/home/apache/conf/webmails")) {
+		log_cleanup("- Create /home/apache/conf/webmails dir");
+		lxfile_mkdir("/home/apache/conf/webmails");
+	}
+
+	if (!lxfile_real("/etc/httpd/conf.d/~lxcenter.conf")) {	
+		log_cleanup("- Install /etc/httpd/conf.d/~lxcenter.conf");
+		lxfile_cp("../file/apache/~lxcenter.conf", "/etc/httpd/conf.d/~lxcenter.conf");
+	}
+
+	if (!lxfile_real("/etc/httpd/conf.d/ssl.conf")) {
+		log_cleanup("- Install /etc/httpd/conf.d/ssl.conf");
+		lxfile_cp("../file/apache/default_ssl.conf", "/etc/httpd/conf.d/ssl.conf");
+	}
+
+/* --- write directly to ./webmails/<domain>.conf -- handling for more domains
+	if (!lxfile_real("/home/apache/conf/defaults/_webmail_redirect.conf")) {
+		log_cleanup("- Initialize /home/apache/conf/defaults/_webmail_redirect.conf");
+		lxfile_touch("/home/apache/conf/defaults/_webmail_redirect.conf");
+		lxfile_rm("/home/apache/conf/defaults/webmail_redirect.conf");
+	}
+*/
+	if (!lxfile_real("/home/apache/conf/defaults/ssl.conf")) {
+		log_cleanup("- Initialize /home/apache/conf/defaults/ssl.conf");
+		lxfile_touch("/home/apache/conf/defaults/ssl.conf");
+	}
+	if (!lxfile_real("/home/apache/conf/defaults/_default.conf")) {
+		log_cleanup("- Initialize /home/apache/conf/defaults/_default.conf");
+		lxfile_touch("/home/apache/conf/defaults/_default.conf");
+	}
+	if (!lxfile_real("/home/apache/conf/defaults/cp_config.conf")) {
+		log_cleanup("- Initialize /home/apache/conf/defaults/cp_config.conf");
+		lxfile_touch("/home/apache/conf/defaults/cp_config.conf");
+	}
+	if (!lxfile_real("/home/apache/conf/defaults/mimetype.conf")) {
+		log_cleanup("- Initialize/home/apache/conf/defaults/mimetype.conf");
+		lxfile_touch("/home/apache/conf/defaults/mimetype.conf");
+	}
+}
+
+function setInitialLighttpdConfig()
+{
+
+/* --- issue #598: Change lighhtpd config structure
+	log_cleanup("- Create /etc/lighttpd/conf/kloxo dir if needed");
+	lxfile_mkdir("/etc/lighttpd/conf/kloxo");
+-- */
+
+	log_cleanup("Initialize Lighttpd config");
+	log_cleanup("- Initialize process");
+
+	if (!lxfile_exists("/home/lighttpd/conf")) {
+		log_cleanup("- Create /home/lighttpd/conf dir");
+		lxfile_mkdir("/home/lighttpd/conf");
+	}
+
+	if (!lxfile_exists("/home/kloxo/httpd/lighttpd")) {
+		log_cleanup("- Create /home/kloxo/httpd/lighttpd dir");
+		lxfile_mkdir("/home/kloxo/httpd/lighttpd");
+	}
+
+	if (lxfile_exists("/etc/lighttpd/conf/kloxo")) {
+		log_cleanup("- Remove /etc/lighttpd/conf/kloxo");
+		passthru("rm -rf /etc/lighttpd/conf/kloxo");
+	}
+
+	if (!lxfile_exists("/etc/lighttpd/conf.d")) {
+		log_cleanup("- Create /etc/lighttpd/conf.d dir");
+		lxfile_mkdir("/etc/lighttpd/conf.d");
+	}
+
+	if (!lxfile_exists("/home/lighttpd/conf/defaults")) {
+		log_cleanup("- Create /home/lighttpd/conf/defaults dir");
+		lxfile_mkdir("/home/lighttpd/conf/defaults");
+	}
+
+	if (!lxfile_exists("/home/lighttpd/conf/domains")) {
+		log_cleanup("- Create /home/lighttpd/conf/domains dir");
+		lxfile_mkdir("/home/lighttpd/conf/domains");
+	}
+
+	if (!lxfile_exists("/home/lighttpd/conf/redirects")) {
+		log_cleanup("- Create /home/lighttpd/conf/redirects dir");
+		lxfile_mkdir("/home/lighttpd/conf/redirects");
+	}
+
+	if (!lxfile_exists("/home/lighttpd/conf/webmails")) {
+		log_cleanup("- Create /home/lighttpd/conf/webmails dir");
+		lxfile_mkdir("/home/lighttpd/conf/webmails");
+	}
+
+	log_cleanup("- Install /etc/lighttpd/lighttpd.conf");
+	lxfile_cp("../file/lighttpd/lighttpd.conf", "/etc/lighttpd/lighttpd.conf");
+	
+/* --- issue #598: Change lighhtpd config structure
+	log_cleanup("- Install kloxo.conf (lighttpd)");
+	lxfile_cp("../file/lighttpd/conf/kloxo/kloxo.conf", "/etc/lighttpd/conf/kloxo/kloxo.conf");
+
+	log_cleanup("- Initialize webmail_reditrect.conf (lighttpd)");
+	lxfile_touch("/etc/lighttpd/conf/kloxo/webmail_redirect.conf");
+
+	if (!lxfile_real("/etc/lighttpd/local.lighttpd.conf")) {
+		log_cleanup("- Initialize local.lighttpd.conf (lighttpd)");
+		system("echo > /etc/lighttpd/local.lighttpd.conf");
+	}
+	if (!lxfile_real("/etc/lighttpd/conf/kloxo/webmail_redirect.conf")) {
+		log_cleanup("- Initialize webmail.redirect.conf (lighttpd)");
+		system("echo > /etc/lighttpd/conf/kloxo/webmail_redirect.conf");
+	}
+	if (!lxfile_real("/etc/lighttpd/conf/kloxo/virtualhost.conf")) {
+		log_cleanup("- Initialize virtualhost.conf (lighttpd)");
+		system("echo > /etc/lighttpd/conf/kloxo/virtualhost.conf");
+	}
+	if (!lxfile_real("/etc/lighttpd/conf/kloxo/domainip.conf")) {
+		log_cleanup("- Initialize domainip.conf (lighttpd)");
+		system("echo > /etc/lighttpd/conf/kloxo/domainip.conf");
+	}
+	if (!lxfile_real("/etc/lighttpd/conf/kloxo/ssl.conf")) {
+		log_cleanup("- Initialize ssl.conf (lighttpd)");
+		system("echo > /etc/lighttpd/conf/kloxo/ssl.conf");
+	}
+	if (!lxfile_real("/etc/lighttpd/conf/kloxo/mimetype.conf")) {
+		log_cleanup("- Initialize mimetype.conf (lighttpd)");
+		system("echo > /etc/lighttpd/conf/kloxo/mimetype.conf");
+	}
+--- */
+
+	if (!lxfile_real("/etc/lighttpd/conf.d/~lxcenter.conf")) {
+		log_cleanup("- Initialize /etc/lighttpd/conf.d/~lxcenter.conf");
+		lxfile_cp("../file/lighttpd/~lxcenter.conf", "/etc/lighttpd/conf.d/~lxcenter.conf");
+	}
+
+	if (!lxfile_real("/etc/lighttpd/local.lighttpd.conf")) {
+		log_cleanup("- Initialize /etc/lighttpd/local.lighttpd.conf");
+		lxfile_touch("/etc/lighttpd/local.lighttpd.conf");
+	}
+/* --- write directly to ./webmails/<domain>.conf -- handling for more domains
+	if (!lxfile_real("/home/lighttpd/conf/defaults/_webmail_redirect.conf")) {
+		log_cleanup("- Initialize /home/lighttpd/conf/defaults/webmail_redirect.conf");
+		lxfile_touch("/home/lighttpd/conf/defaults/_webmail_redirect.conf");
+		lxfile_rm("/home/lighttpd/conf/defaults/webmail_redirect.conf");
+	}
+*/
+	if (!lxfile_real("/home/lighttpd/conf/webmails/webmail.conf")) {
+		log_cleanup("- Initialize /home/lighttpd/conf/webmails/webmail.conf");
+		lxfile_touch("/home/lighttpd/conf/webmails/webmail.conf");
+		lxfile_rm("/home/lighttpd/conf/defaults/~webmail.conf");
+	}
+	if (!lxfile_real("/home/lighttpd/conf/defaults/ssl.conf")) {
+		log_cleanup("- Initialize /home/lighttpd/conf/defaults/ssl.conf");
+		lxfile_touch("/home/lighttpd/conf/defaults/ssl.conf");
+	}
+	if (!lxfile_real("/home/lighttpd/conf/defaults/mimetype.conf")) {
+		log_cleanup("- Initialize /home/lighttpd/conf/defaults/mimetype.conf");
+		lxfile_touch("/home/lighttpd/conf/defaults/mimetype.conf");
+	}
+	log_cleanup("- Install /etc/init.d/lighttpd service file");
+	lxfile_cp("../file/lighttpd/etc_init.d", "/etc/init.d/lighttpd");
+}
+
+function setInitialPureftpConfig()
+{
+	log_cleanup("Initialize PureFtp service");
+	log_cleanup("- Initialize process");
+
+	if (lxfile_exists("/etc/init.d/pure-ftpd")) {
+		log_cleanup("- Remove /etc/init.d/pure-ftpd service file");
+		@lxfile_rm("/etc/init.d/pure-ftpd");
+	}
+
+	if (!lxfile_exists("/etc/xinetd.d/pureftp")) {
+		log_cleanup("- Install /etc/xinetd.d/pureftp TCP Wrapper file");
+		lxfile_cp("../file/xinetd.pureftp", "/etc/xinetd.d/pureftp");
+	}
+
+	if(!lxfile_real("/etc/pki/pure-ftpd/pure-ftpd.pem")) {
+		log_cleanup("- Install pure-ftpd ssl/tls key");
+		lxfile_mkdir("/etc/pki/pure-ftpd/");
+		lxfile_cp("../file/program.pem", "/etc/pki/pure-ftpd/pure-ftpd.pem");
+	}
+
+	if (!lxfile_exists("/etc/pure-ftpd/pureftpd.pdb")) {
+		log_cleanup("Make pure-ftpd user database");
+		lxfile_touch("/etc/pure-ftpd/pureftpd.passwd");
+		lxshell_return("pure-pw", "mkdb");
+	}
+	
+	log_cleanup("- Turn off pure-ftpd service");
+	system("chmod 666 /dev/null");
+	@ exec("chkconfig pure-ftpd off 2>/dev/null");
+	
+	if (!lxfile_exists("/etc/pure-ftpd/pureftpd.passwd")) {
+		log_cleanup("- Initialize /etc/pure-ftpd/pureftpd.passwd password database");
+		lxfile_cp("/etc/pureftpd.passwd", "/etc/pure-ftpd/pureftpd.passwd");
+		lxshell_return("pure-pw", "mkdb");
+		createRestartFile("xinetd");
+	}
+
+	log_cleanup("- Restart xinetd service for pureftp");
+	call_with_flag("restart_xinetd_for_pureftp");
+
+}
+
+function setInitialPhpMyAdmin()
+{
+	log_cleanup("Initialize phpMyAdmin configfile");
+	lxfile_cp("../file/phpmyadmin_config.inc.phps", "thirdparty/phpMyAdmin/config.inc.php");
+
+	log_cleanup("- phpMyAdmin: Set db password in configfile");
+	$DbPass = file_get_contents("/usr/local/lxlabs/kloxo/etc/conf/kloxo.pass");
+	$phpMyAdminCfg = "/usr/local/lxlabs/kloxo/httpdocs/thirdparty/phpMyAdmin/config.inc.php";
+	$content = file_get_contents($phpMyAdminCfg);
+	$content = str_replace("# Kloxo-Marker", "# Kloxo-Marker\n\$cfg['Servers'][\$i]['controlpass'] = '" . $DbPass . "';", $content);
+	lfile_put_contents($phpMyAdminCfg, $content);
+	$DbPass = "";
+
+// TODO: Need another way to do this (use root pass)
+/*
+	log_cleanup("- phpMyAdmin: Import PMA Database and create tables if they do not exist");
+	system("kloxodb < ../httpdocs/sql/phpMyAdmin/phpMyAdmin.sql");
+*/
+
+}
+
+function setInitialKloxoPhp()
+{
+	log_cleanup("Initialize kloxophp");
+	// TODO: php six four symlink remove when lxphp 64bit is ready!
+//	if (os_is_php_six_four()) {
+//	if ( is_64bit() ) {
+	if (file_exists("/usr/lib64")) {
+	//	$ver = get_package_version("kloxophpsixfour");
+	//	installWithVersion("/usr/lib64/kloxophp", "kloxophpsixfour", $ver);
+
+		log_cleanup("- Install kloxophp 64bit");
+		
+		if (!is_link("/usr/lib/kloxophp")) {
+			lxfile_rm_rec("/usr/lib/kloxophp");
+		}		
+		installWithVersion("/usr/lib64/kloxophp", "kloxophpsixfour");
+		if (!lxfile_exists("/usr/lib/kloxophp")) {
+			lxfile_symlink("/usr/lib64/kloxophp", "/usr/lib/kloxophp");
+		}
+		if (!lxfile_exists("/usr/lib/php")) {
+			lxfile_symlink("/usr/lib64/php", "/usr/lib/php");
+		}
+		if (!lxfile_exists("/usr/lib/httpd")) {
+			lxfile_symlink("/usr/lib64/httpd", "/usr/lib/httpd");
+		}
+		if (!lxfile_exists("/usr/lib/lighttpd")) {
+			lxfile_symlink("/usr/lib64/lighttpd", "/usr/lib/lighttpd");
+		}
+	} else {
+	//	$ver = get_package_version("kloxophp");
+	//	installWithVersion("/usr/lib/kloxophp", "kloxophp", $ver);
+
+		log_cleanup("- Install kloxophp 32bit");
+		installWithVersion("/usr/lib/kloxophp", "kloxophp");
+	}
+
+}
+
+function setRemoveOldDirs()
+{
+	log_cleanup("Remove Old dirs");
+	log_cleanup("- Remove process");
+
+	if (lxfile_exists("/home/admin/domain")) {
+		log_cleanup("- Remove dir /home/admin/domain/ if exists");
+		rmdir("/home/admin/domain/");
+	}
+
+	if (lxfile_exists("/home/admin/old")) {
+		log_cleanup("- Remove dir /home/admin/old/ if exists");
+		rmdir("/home/admin/old/");
+	}
+
+	if (lxfile_exists("/home/admin/cgi-bin")) {
+		log_cleanup("- Remove dir /home/admin/cgi-bin/ if exists");
+		rmdir("/home/admin/cgi-bin/");
+	}
+
+	if (lxfile_exists("/etc/skel/Maildir")) {
+		log_cleanup("- Remove dir /etc/skel/Maildir/ if exists");
+		rmdir("/etc/skel/Maildir/new");
+		rmdir("/etc/skel/Maildir/cur");
+		rmdir("/etc/skel/Maildir/tmp");
+		rmdir("/etc/skel/Maildir/");
+	}
+	if (lxfile_exists('kloxo.sql')) {
+		log_cleanup("- Remove file kloxo.sql");
+		lunlink('kloxo.sql');
+	}
+
+}
+
+function setInitialBinary()
+{
+
+	log_cleanup("Initialize Some Binary files");
+
+	if (!lxfile_exists("/usr/sbin/lxrestart")) {
+		log_cleanup("- Install lxrestart binary");
+		system("cp ../cexe/lxrestart /usr/sbin/");
+		system("chown root:root /usr/sbin/lxrestart");
+		system("chmod 755 /usr/sbin/lxrestart");
+		system("chmod ug+s /usr/sbin/lxrestart");
+	}
+
+/* --- issue #637
+	log_cleanup("- Remove sendmail binary");
+	lunlink("/usr/sbin/sendmail");
+	lunlink("/usr/lib/sendmail");
+	log_cleanup("- Install qmail-sendmail binary");
+	lxfile_cp("../file/linux/qmail-sendmail", "/usr/sbin/sendmail");
+	lxfile_cp("../file/linux/qmail-sendmail", "/usr/lib/sendmail");
+	lxfile_unix_chmod("/usr/lib/sendmail", "0755");
+	lxfile_unix_chmod("/usr/sbin/sendmail", "0755");
+--- */
+
+	log_cleanup("- Add symlink for qmail-sendmail");
+	system("ln -sf /var/qmail/bin/sendmail /usr/sbin/sendmail");
+	system("ln -sf /var/qmail/bin/sendmail /usr/lib/sendmail");
+
+	if (!lxfile_exists("/usr/bin/lxredirecter.sh")) {
+		log_cleanup("- Install lxredirector binary");
+		system("cp ../file/linux/lxredirecter.sh /usr/bin/");
+		system("chmod 755 /usr/bin/lxredirecter.sh");
+	}
+
+	if (!lxfile_exists("/usr/bin/php-cgi")) {
+		log_cleanup("- Install php-cgi binary");
+		lxfile_cp("/usr/bin/php", "/usr/bin/php-cgi");
+	}
+
+	if (!lxfile_exists("/usr/local/bin/php")) {
+		log_cleanup("- Create Symlink /usr/bin/php to /usr/local/bin/php");
+		lxfile_symlink("/usr/bin/php", "/usr/local/bin/php");
+	}
+}
+
+function setCheckPackages()
+{
+	log_cleanup("Checking for rpm packages");
+
+	log_cleanup("- Checking for maildrop-toaster rpm package");
+	install_if_package_not_exist("maildrop-toaster");
+	log_cleanup("- Checking for spamdyke rpm package");
+	install_if_package_not_exist("spamdyke");
+	log_cleanup("- Checking for spamdyke-utils rpm package");
+	install_if_package_not_exist("spamdyke-utils");
+	log_cleanup("- Checking for pure-ftpd rpm package");
+	install_if_package_not_exist("pure-ftpd");
+	log_cleanup("- Checking for simscan-toaster rpm package");
+	install_if_package_not_exist("simscan-toaster");
+	log_cleanup("- Checking for webalizer rpm package");
+	install_if_package_not_exist("webalizer");
+	log_cleanup("- Checking for php-mcrypt rpm package");
+	install_if_package_not_exist("php-mcrypt");
+	log_cleanup("- Checking for dos2unix rpm package");
+	install_if_package_not_exist("dos2unix");
+	log_cleanup("- Checking for rrdtool rpm package");
+	install_if_package_not_exist("rrdtool");
+	log_cleanup("- Checking for xinetd rpm package");
+	install_if_package_not_exist("xinetd");
+	log_cleanup("- Checking for lxjailshell rpm package");
+	install_if_package_not_exist("lxjailshell");
+	log_cleanup("- Checking for php-xml rpm package");
+	install_if_package_not_exist("php-xml");
+	log_cleanup("- Checking for libmhash rpm package");
+	install_if_package_not_exist("libmhash");
+	log_cleanup("- Checking for lxphp rpm package");
+	install_if_package_not_exist("lxphp");
+}
+
+function setInstallMailserver()
+{
+	
+	if (!lxfile_exists("/etc/xinetd.d/smtp_lxa")) {
+		log_cleanup("- Install xinetd smtp_lxa SMTP TCP Wrapper");
+		lxfile_cp("../file/xinetd.smtp_lxa", "/etc/xinetd.d/smtp_lxa");
+	}
+
+	if (!lxfile_exists("/etc/init.d/qmail")) {
+		log_cleanup("- Install qmail service");
+		lxfile_cp("../file/qmail.init", "/etc/init.d/qmail");
+		lxfile_unix_chmod("/etc/init.d/qmail", "0755");
+	}
+
+	if (!lxfile_exists("/etc/lxrestricted")) {
+		log_cleanup("- Install /etc/lxrestricted file (lxjailshell commands restrictions)");
+		lxfile_cp("../file/lxrestricted", "/etc/lxrestricted");
+	}
+
+	if (!lxfile_exists("/etc/sysconfig/spamassassin")) {
+		log_cleanup("- Install /etc/sysconfig/spamassassin");
+		lxfile_cp("../file/sysconfig_spamassassin", "/etc/sysconfig/spamassassin");
+	}
+
+	$name = trim(lfile_get_contents("/var/qmail/control/me"));
+//	log_cleanup("- Install qmail defaultdomain and defaulthost (" . $name . ") ");
+	log_cleanup("- Install qmail defaultdomain and defaulthost ($name)");
+	lxfile_cp("/var/qmail/control/me", "/var/qmail/control/defaultdomain");
+	lxfile_cp("/var/qmail/control/me", "/var/qmail/control/defaulthost");
+//	log_cleanup("- Install qmail SMTP Greeting (" . $name . " - Welcome to Qmail)");
+	log_cleanup("- Install qmail SMTP Greeting ($name - Welcome to Qmail)");
+	lfile_put_contents("/var/qmail/control/smtpgreeting", "$name - Welcome to Qmail");
+
+	if (!lxfile_exists("/usr/bin/rblsmtpd")) {
+		log_cleanup("- Initialize rblsmtpd binary");
+		lxshell_return("ln", "-s", "/usr/local/bin/rblsmtpd", "/usr/bin/");
+	}
+	if (!lxfile_exists("/usr/bin/tcpserver")) {
+		log_cleanup("- Initialize tcpserver binary");
+		lxshell_return("ln", "-s", "/usr/local/bin/tcpserver", "/usr/bin/");
+	}
+}
+
+function setInitialServer()
+{
+	# Issue #450
+	log_cleanup("Initialize Server");
+	if (lxfile_exists("/proc/user_beancounters")) {
+		log_cleanup("- Initialize OpenVZ");
+		create_dev();
+		lxfile_cp("../file/openvz/inittab", "/etc/inittab");
+	} else {
+		log_cleanup("- Initialize non-OpenVZ");
+		if (!lxfile_exists("/sbin/udevd")) {
+			lxfile_mv("/sbin/udevd.back", "/sbin/udevd");
+		}
+	}
+}
+
+function setSomePermissions()
+{
+	log_cleanup("Install/Fix Services/Permissions/Configfiles");
+
+	if (!lxfile_exists("/usr/bin/lxphp.exe")) {
+		log_cleanup("- Create lxphp.exe Symlink");
+		lxfile_symlink("__path_php_path", "/usr/bin/lxphp.exe");
+	}
+
+	log_cleanup("- Set permissions for /usr/bin/php-cgi");
+	lxfile_unix_chmod("/usr/bin/php-cgi", "0755");
+	log_cleanup("- Set permissions for closeallinput binary");
+	lxfile_unix_chmod("../cexe/closeallinput", "0755");
+	log_cleanup("- Set permissions for lxphpsu binary");
+	lxfile_unix_chown("../cexe/lxphpsu", "root:root");
+	lxfile_unix_chmod("../cexe/lxphpsu", "0755");
+	lxfile_unix_chmod("../cexe/lxphpsu", "ug+s");
+	log_cleanup("- Set permissions for phpsuexec.sh script");
+	lxfile_unix_chmod("../file/phpsuexec.sh", "0755");
+	log_cleanup("- Set permissions for /home/kloxo/httpd/lighttpd/ dir");
+	system("chown -R apache:apache /home/kloxo/httpd/lighttpd/");
+	log_cleanup("- Set permissions for /var/lib/php/session/ dir");
+	system("chmod 777 /var/lib/php/session/");
+	system("chmod o+t /var/lib/php/session/");
+	log_cleanup("- Set permissions for /var/bogofilter/ dir");
+	system("chmod 777 /var/bogofilter/");
+	system("chmod o+t /var/bogofilter/");
+	log_cleanup("- Kill sisinfoc system process");
+	system("pkill -f sisinfoc");
+}
+
+function setInitialBind()
+{
+	log_cleanup("Initialize Kloxo bind config files");
+
+	if (!lxfile_exists("/var/named/chroot/etc/kloxo.named.conf")) {
+		log_cleanup("- Initialize process");
+		lxfile_touch("/var/named/chroot/etc/kloxo.named.conf");
+		lxfile_touch("/var/named/chroot/etc/global.options.named.conf");
+	}
+	else {
+		log_cleanup("- No need initialize");
+	}
+}
+
+function setExecuteCentos5Script()
+{
+	log_cleanup("Executing centos 5 script and remove epel repo");
+
+	if (is_centosfive()) {
+		log_cleanup("- Executing centos5-postpostupgrade script");
+		lxshell_return("sh", "../pscript/centos5-postpostupgrade");
+		lxfile_cp("../file/centos-5/CentOS-Base.repo", "/etc/yum.repos.d/CentOS-Base.repo");
+		log_cleanup("- Remove epel.repo from system");
+		lxfile_rm("/etc/yum.repos.d/epel.repo");
+	}
+	else {
+		log_cleanup("- No need executing and remove");
+	}
+}
+
+function setJailshellSystem()
+{
+	log_cleanup("Installing jailshell to system");
+
+	if (!lxfile_exists("/usr/bin/execzsh.sh")) {
+		log_cleanup("- Installing process");
+		addLineIfNotExistInside("/etc/shells", "/usr/bin/lxjailshell", "");
+		lxfile_cp("htmllib/filecore/execzsh.sh", "/usr/bin/execzsh.sh");
+		lxfile_unix_chmod("/usr/bin/execzsh.sh", "0755");
+	}
+	else {
+		log_cleanup("- No need installing");
+	}
+}
+
+function setInitialNobodyScript()
+{
+
+	log_cleanup("Initialize nobody.sh script");
+	log_cleanup("- Initialize process");
+
+	$string = null;
+	$uid = os_get_uid_from_user("lxlabs");
+	$gid = os_get_gid_from_user("lxlabs");
+	$string .= "#!/bin/sh\n";
+	$string .= "export MUID=$uid\n";
+	$string .= "export GID=$gid\n";
+	$string .= "export TARGET=/usr/bin/php-cgi\n";
+	$string .= "export NON_RESIDENT=1\n";
+	$string .= "exec lxsuexec $*\n";
+	lfile_put_contents("/home/httpd/nobody.sh", $string);
+	lxfile_unix_chmod("/home/httpd/nobody.sh", "0755");
+}
+
+function setSomeScript()
+{
+	log_cleanup("Execute/remove/initialize/install script");
+
+	log_cleanup("- Execute lxpopuser.sh");
+	system("sh ../bin/misc/lxpopuser.sh");
+
+	log_cleanup("- Remove /home/kloxo/httpd/script dir");
+	lxfile_rm_content("__path_home_root/httpd/script/");
+	log_cleanup("- Initialize /home/kloxo/httpd/script dir");
+	lxfile_mkdir("/home/kloxo/httpd/script");
+	lxfile_unix_chown_rec("/home/kloxo/httpd/script", "lxlabs:lxlabs");
+	log_cleanup("- Install phpinfo.php into /home/kloxo/httpd/script dir");
+	lxfile_cp("../file/script/phpinfo.phps", "/home/kloxo/httpd/script/phpinfo.php");
+}
+
+function setInitialLogrotate()
+{
+	log_cleanup("Initialize logrotate");
+
+	if (!lxfile_exists("/etc/logrotate.d/kloxo")) {
+		log_cleanup("- Initialize process");
+		lxfile_cp("../file/kloxo.logrotate", "/etc/logrotate.d/kloxo");
+	}
+	else {
+		log_cleanup("- No need initialize");
+	}
+}
+
+function restart_xinetd_for_pureftp()
+{
+	log_cleanup("Restart xinetd for pureftp");
+	log_cleanup("- Restart process");
+
+	createRestartFile("xinetd");
+}
+
+function install_bogofilter()
+{
+	log_cleanup("Check for bogofilter");
+
+	if (!lxfile_exists("/var/bogofilter")) {
+		log_cleanup("- Create /var/bogofilter dir if needed");
+		lxfile_mkdir("/var/bogofilter");
+	}
+
+	$dir = "/var/bogofilter";
+	$wordlist = "$dir/wordlist.db";
+	$kloxo_wordlist = "$dir/kloxo.wordlist.db";
+
+	if (lxfile_exists($kloxo_wordlist)) {
+		log_cleanup("- No need to download wordlist.db");
+		return;
+	}
+
+	log_cleanup("- Prepare and download wordlist.db");
+
+	lxfile_mkdir($dir);
+
+	lxfile_rm($wordlist);
+	$content = file_get_contents("http://download.lxcenter.org/download/wordlist.db");
+	file_put_contents($wordlist, $content);
+	lxfile_unix_chown_rec($dir, "lxpopuser:lxpopgroup");
+	lxfile_cp($wordlist, $kloxo_wordlist);
+}
+
+function removeOtherDrivers()
+{
+	log_cleanup("Enable the correct drivers (Service daemons)");
+
+	$list = array("web", "spam", "dns");
+	foreach($list as $l) {
+		$driverapp = slave_get_driver($l);
+		if (!$driverapp) { continue; }
+		$otherlist = get_other_driver($l, $driverapp);
+		if ($otherlist) {
+			foreach($otherlist as $o) {
+				if (class_exists("{$l}__$o")) {
+					log_cleanup("- Uninstall {$l}__$o");
+					exec_class_method("{$l}__$o", "uninstallMe");
+				}
+			}
+		}
+	}
+}
+
+function setInitialAdminAccount()
+{
+	log_cleanup("Initialize OS admin account description");
+	log_cleanup("- Initialize process");
+
+	$desc = uuser::getUserDescription('admin');
+	$list = posix_getpwnam('admin');
+	if ($list && ($list['gecos'] !== $desc)) {
+		lxshell_return("usermod", "-c", $desc, "admin");
+	}
+}
+
+function updateApplicableToSlaveToo()
+{
+	// Fixes #303 and #304
+//	download_thirdparty();
+//	installThirdparty();
+
+	os_updateApplicableToSlaveToo();
+	
+//	setDefaultPages();
+}
+
+function fix_secure_log()
+{
+	log_cleanup("Fix secure log");
+	log_cleanup("- Fix process");
+
+	lxfile_mv("/var/log/secure", "/var/log/secure.lxback");
+	lxfile_cp("../file/linux/syslog.conf", "/etc/syslog.conf");
+	createRestartFile('syslog');
+}
+
+function fix_cname()
+{
+	log_cleanup("Initialize OS admin account description");
+	log_cleanup("- Initialize process");
+
+	lxshell_return("__path_php_path", "../bin/fix/fixdns.php");
+}
+
+function installChooser()
+{
+	log_cleanup("Install Webmail chooser");
+	log_cleanup("- Install process");
+
+	$path = "/home/kloxo/httpd/webmail/";
+	lxfile_mkdir("/home/kloxo/httpd/webmail/img");
+	lxfile_cp_rec("../file/webmail-chooser/header/", "/home/kloxo/httpd/webmail/img");
+//	lxfile_cp("../file/webmail-chooser/webmail_chooser.phps", "/home/kloxo/httpd/webmail/index.php");
+	lxfile_cp("../file/webmail-chooser/roundcube-config.phps", "/home/kloxo/httpd/webmail/roundcube/config/main.inc.php");
+	$list = array("horde", "roundcube");
+	foreach($list as $l) {
+		lfile_put_contents("$path/redirect-to-$l.php", "<?php\nheader(\"Location: /$l\");\n");
+	}
+	lfile_put_contents("$path/disabled/index.html", "Disabled\n");
+}
+
+function installRoundCube()
+{
+	global $sgbl;
+
+	$path_webmail = "$sgbl->__path_kloxo_httpd_root/webmail";
+	$path_roundcube = "$sgbl->__path_kloxo_httpd_root/webmail/roundcube";
+
+	PrepareRoundCubeDb();
+
+	log_cleanup("Initialize Roundcube files");
+	log_cleanup("- Initialize process");
+
+	if (lxfile_exists($path_webmail)) {
+		lxfile_generic_chown_rec($path_webmail, 'lxlabs:lxlabs');
+		lxfile_generic_chown_rec("$path_roundcube/logs", 'apache:apache');
+		lxfile_generic_chown_rec("$path_roundcube/temp", 'apache:apache');
+		lxfile_rm('/var/cache/kloxo/roundcube.log');
+	}
+	log_cleanup("- Install database config");
+	lxfile_cp("../file/webmail-chooser/db.inc.phps", "/home/kloxo/httpd/webmail/roundcube/config/db.inc.php");
+
+}
+
+function installHorde()
+{
+	global $sgbl;
+
+	$path_webmail = "$sgbl->__path_kloxo_httpd_root/webmail";
+	$path_horde = "$sgbl->__path_kloxo_httpd_root/webmail/horde";
+
+	PrepareHordeDb();
+	
+	log_cleanup("Initialize Horde files");
+	log_cleanup("- Initialize process");
+
+	if (lxfile_exists($path_webmail)) {
+		lxfile_generic_chown_rec($path_webmail, 'lxlabs:lxlabs');
+		lxfile_generic_chown_rec("$path_horde/logs", 'apache:apache');
+		lxfile_generic_chown_rec("$path_horde/temp", 'apache:apache');
+		lxfile_rm('/var/cache/kloxo/horde.log');
+	}
+	log_cleanup("- Install database config");
+	lxfile_cp("../file/horde.config.phps", "/home/kloxo/httpd/webmail/horde/config/conf.php");
+
+}
+
+function fix_suexec()
+{
+	log_cleanup("Fix suexec");
+	log_cleanup("- Fix process");
+
+	lxfile_rm("/usr/bin/lxsuexec");
+	lxfile_rm("/usr/bin/lxexec");
+	lxfile_cp("../cexe/lxsuexec", "/usr/bin");
+	lxfile_cp("../cexe/lxexec", "/usr/bin");
+	lxshell_return("chmod", "755", "/usr/bin/lxsuexec");
+	lxshell_return("chmod", "755", "/usr/bin/lxexec");
+	lxshell_return("chmod", "ug+s", "/usr/bin/lxsuexec");
+}
+
+function enable_xinetd()
+{
+	log_cleanup("Enable xinetd");
+	log_cleanup("- enable process");
+
+	createRestartFile("qmail");
+	@ system("service pure-ftpd stop");
+	createRestartFile("xinetd");
+}
+
+function fix_mailaccount_only()
+{
+	global $gbl, $sgbl, $login, $ghtml; 
+
+	log_cleanup("Fix mailaccount only");
+	log_cleanup("- Fix process");
+
+	lxfile_unix_chown_rec("/var/bogofilter", "lxpopuser:lxpopgroup");
+	$login->loadAllObjects('mailaccount');
+	$list = $login->getList('mailaccount');
+	foreach($list as $l) {
+		$l->setUpdateSubaction('full_update');
+		$l->was();
+	}
+}
+
+function change_spam_to_bogofilter_next_next()
+{
+	global $gbl, $sgbl, $login, $ghtml; 
+	system("rpm -e --nodeps spamassassin");
+	system("yum -y install bogofilter");
+
+	$drv = $login->getFromList('pserver', 'localhost')->getObject('driver');
+	$drv->driver_b->pg_spam = 'bogofilter';
+	$drv->setUpdateSubaction();
+	$drv->write();
+
+	$login->loadAllObjects('mailaccount');
+	$list = $login->getList('mailaccount');
+	foreach($list as $l) {
+		$s = $l->getObject('spam');
+		$s->setUpdateSubaction('update');
+		$s->was();
+		$l->setUpdateSubaction('full_update');
+		$l->was();
+	}
+}
+
+function fix_mysql_name_problem()
+{
+	$sq = new Sqlite(null, 'mysqldb');
+	$res = $sq->getTable();
+
+	foreach($res as $r) {
+		if (!csa($r['nname'], "___")) {
+			return;
+		}
+		$sq->rawQuery("update mysqldb set nname = '{$r['dbname']}' where dbname = '{$r['dbname']}'");
+	}
+}
+
+function fix_mysql_username_problem()
+{
+	$sq = new Sqlite(null, 'mysqldbuser');
+	$res = $sq->getTable();
+
+	foreach($res as $r) {
+		if (!csa($r['nname'], "___")) {
+			return;
+		}
+		$sq->rawQuery("update mysqldbuser set nname = '{$r['username']}' where username = '{$r['username']}'");
+	}
+}
+
+function add_domain_backup_dir()
+{
+	log_cleanup("Create domain backup dirs");
+	log_cleanup("- Create process");
+
+	// must set this mkdir if want without php warning when cleanup
+	lxfile_mkdir("__path_program_home/domain");
+
+	lxfile_generic_chown("__path_program_home/domain", "lxlabs");
+	if (lxfile_exists("__path_program_home/domain")) {
+		dprint("Domain backupdir exists... returning\n");
+		return;
+	}
+
+	$sq = new Sqlite(null, 'domain');
+
+	$res = $sq->getTable(array('nname'));
+	foreach($res as $r) {
+		lxfile_mkdir("__path_program_home/domain/{$r['nname']}/__backup");
+		lxfile_generic_chown("__path_program_home/domain/{$r['nname']}/", "lxlabs");
+		lxfile_generic_chown("__path_program_home/domain/{$r['nname']}/__backup", "lxlabs");
+	}
+}
+
+function changeColumn($tbl_name, $changelist)
+{
+	dprint("Changing Column.............\n");
+	$db = new Sqlite($tbl_name);
+	$columnold  = $db->getColumnTypes();
+	$oldcolumns = array_keys($columnold);
+	$conlist = array_flip($changelist);
+	$query= "select * from" . " " . $tbl_name;
+	$res =$db->rawQuery($query);
+	
+	foreach($columnold as $l) {
+		$check = array_search($l , $conlist);
+		if($check) {
+			$newcollist[] = $changelist[$l];
+		}
+		else {
+			$newcollist[] = $l;
+		}
+	}
+	$newfields = implode(",", $newcollist);
+	changeValues($res, $tbl_name, $db, $newfields);
+}
+
+function changeValues($res, $tbl_name, $db, $newfields)
+{
+
+	dprint("$newfields");
+	dprint("\n\n");
+	$query = "create table lxt_" . $tbl_name . "(" . $newfields . ")";
+	$db->rawQuery($query);
+	
+	foreach($res as $r) {
+		$newtemp  = ""; 
+		foreach($r as $r1) {
+			$newtemp[] = "'" . $r1 . "'";
+		}
+		$t = implode("," , $newtemp);
+		$db->rawQuery("insert into lxt_" . $tbl_name . " values" . "(" . $t . ")");
+	}
+	$db->rawQuery("drop table " . $tbl_name );
+	$db->rawQuery("create table " .  $tbl_name . " as select * from lxt_" . "$tbl_name");
+	$db->rawQuery("drop table lxt_" . $tbl_name );
+	dprint("Table Information of $tbl_name  Updated with New Fields\n\n");
+}
+
+function droptable($tbl_name) 
+{ 
+	dprint("Dropping table...............\n");
+	$db = new Sqlite($tbl_name);
+	$db->rawQuery("drop table " . $tbl_name );
+}
+
+function dropcolumn($tbl_name, $column) 
+{
+	dprint("Dropping Column...............\n");
+
+	$db = new Sqlite($tbl_name);
+	$columnold  = $db->getColumnTypes();
+	$oldcolumns = array_keys($columnold);
+
+	foreach($oldcolumns as $key=>$l) {
+		$t= array_search(trim($l), $column);
+		if(!empty($t)) {
+			dprint("value $oldcolumns[$key] has deleted\n"); 
+			unset($oldcolumns[$key]);
+		}else {
+			$newcollist[] = $l;
+		}
+	}
+	$newfields = implode("," , $newcollist);
+	dprint("New fields are \n");
+	$query= "select " . $newfields . " from" . " " . $tbl_name;
+	$res =$db->rawQuery($query);
+	changeValues($res, $tbl_name, $db, $newfields);
+}
+
+function getTabledetails($tbl_name){
+
+	dprint("table. values are ..........\n");
+	$db = new Sqlite($tbl_name);
+	$res =  $db->rawQuery("select * from " . $tbl_name );
+	print_r($res);
+}
+
+function construct_uuser_nname($list)
+{
+	global $gbl, $sgbl, $login, $ghtml; 
+	return $list['nname'] . $sgbl->__var_nname_impstr . $list['servername'];
+}
+
+function getVersionNumber($ver)
+{
+		$ver = trim($ver);
+		$ver = str_replace("\n", "", $ver);
+		$ver = str_replace("\r", "", $ver);
+		return $ver;
+}
+
+// ref: http://ideone.com/JWKIf
+function is_64bit()
+{
+	$int = "9223372036854775807";
+	$int = intval($int);
+
+	if ($int == 9223372036854775807) {
+		return true; /* 64bit */
+	}
+	elseif ($int == 2147483647) {
+		return false; /* 32bit */
+	}
+	else {
+		return "error"; /* error */
+	}
+}
+
+function checkIdenticalFile($file1, $file2)
+{
+	$ret = false;
+
+	if (!file_exists($file1)) {
+		return false;
+	}
+
+	if (!file_exists($file2)) {
+		return false;
+	}	
+
+	if (filesize($file1) === filesize($file2)) {
+		$ret = true;
+	}
+	else {
+		return false;
+	}
+
+	if (md5_file($file1) === md5_file($file2)) {
+		$ret = true;
+	}
+	else {
+		return false;
+	}
+
+	return $ret;
+}
+
+function updatecleanup()
+{
+	global $gbl, $sgbl, $login, $ghtml;
+
+	setPrepareKloxo();
+
+    // Fixes #303 and #304
+//	log_cleanup("ThirdParty Checks");
+//	download_thirdparty();
+	installThirdparty();
+
+	install_gd();
+
+	install_bogofilter();
+	
+	setInitialPhpMyAdmin();	
+
+//	call_with_flag('installgroupwareagain');
+
+	setInitialAdminAccount();
+	
+	setInitialKloxoPhp();
+	
+//	log_cleanup("Checking WebMail");
+//	$ver = get_package_version("lxwebmail");
+//	installWebmail($ver);
+	installWebmail();
+
+//	log_cleanup("Checking awstats");
+//	$ver = get_package_version("lxawstats");
+//	installAwstats($ver);
+	installAwstats();
+	
+	setRemoveOldDirs();
+	
+	setInitialBinary();
+
+	log_cleanup("Remove lighttpd errorlog");
+	log_cleanup("- Remove process");
+	remove_lighttpd_error_log();
+
+	log_cleanup("Fix the secure logfile");
+	log_cleanup("- Fix process");
+	call_with_flag("fix_secure_log");
+
+	log_cleanup("Clean hosts.deny");
+	log_cleanup("- Clean process");
+	call_with_flag("remove_host_deny");
+
+	installInstallApp();
+
+	log_cleanup("Turn off mouse daemon");
+	log_cleanup("- Turn off process");
+	system("chkconfig gpm off");
+
+	if (lxfile_exists("phpinfo.php")) {
+		log_cleanup("Remove phpinfo.php");
+		log_cleanup("- Remove process");
+		lxfile_rm("phpinfo.php");
+	}
+
+	setInitialBind();
+
+	log_cleanup("Killing gettraffic system process");
+	log_cleanup("- Killing process");
+	lxshell_return("pkill", "-f", "gettraffic");
+	
+	setCheckPackages();
+
+//	log_cleanup("Initialize /script/ dir");
+	copy_script();
+
+	install_xcache();
+
+	log_cleanup("Install Kloxo service");
+	lxfile_unix_chmod("/etc/init.d/kloxo", "0755");
+	system("chkconfig kloxo on");
+
+	setJailshellSystem();
+	
+	log_cleanup("Set /home permission to 0755");
+	log_cleanup("- Set process");
+	lxfile_unix_chmod("/home", "0755");
+	
+	setExecuteCentos5Script();
+
+	fix_rhn_sources_file();
+
+	setInitialApacheConfig();
+	
+	setInitialPureftpConfig();
+	
+	setInstallMailserver();
+	
+	log_cleanup("Enable xinetd service");
+	log_cleanup("- Enable process");
+	call_with_flag("enable_xinetd");
+
+	fix_suexec();
+
+	if (!lxfile_exists("/usr/bin/php-cgi")) {
+		log_cleanup("Initialize php-cgi binary");
+		log_cleanup("- Initialize process");
+		lxfile_cp("/usr/bin/php", "/usr/bin/php-cgi");
+	}
+	
+	setSomePermissions();
+
+	setInitialLighttpdConfig();
+	
+	setInitialNobodyScript();
+	
+	setSomeScript();
+	
+	log_cleanup("Install /etc/init.d/djbdns service file");
+	log_cleanup("- Install process");
+	lxfile_cp("../file/djbdns.init", "/etc/init.d/djbdns");
+
+	removeOtherDrivers();
+
+	log_cleanup("Remove cache dir");
+	log_cleanup("- Remove process");
+	lxfile_rm_rec("__path_program_root/cache");
+
+	log_cleanup("Restart syslog service");
+	log_cleanup("- Restart process");
+	createRestartFile('syslog');
+
+	log_cleanup("Initialize awstats dirdata");
+	log_cleanup("- Initialize process");
+	lxfile_mkdir("/home/kloxo/httpd/awstats/dirdata");
+
+	setInitialLogrotate();
+	
+//	log_cleanup("Install RoundCube");
+	installRoundCube();
+	
+//	log_cleanup("Install Horde");
+	installHorde();
+
+	installChooser();
+
+	log_cleanup("Remove old lxlabs ssh key");
+	log_cleanup("- Remove process");
+ 	remove_ssh_self_host_key();
+	
+	setInitialServer();
+	
+//	lxfile_cp("../file/skeleton.zip", "/home/kloxo/httpd/skeleton.zip");
+
+	setDefaultPages();
+
+	changeMailSoftlimit();
+}
+
+function setPrepareKloxo()
+{
+	log_cleanup("Prepare for Kloxo");
+
+	log_cleanup("- OS Create Kloxo init.d service file and copy core php.ini (lxphp)");
+	os_create_program_service();
+
+	log_cleanup("- OS Fix programroot path permissions");
+	os_fix_lxlabs_permission();
+
+	log_cleanup("- OS Restart Kloxo service");
+	os_restart_program();
+}
+
+function update_all_slave()
+{
+	$db = new Sqlite(null, "pserver");
+
+	$list = $db->getTable(array("nname"));
+
+	foreach($list as $l) {
+		if ($l['nname'] === 'localhost') {
+			continue;
+		}
+		try {
+			print("Upgrading Slave {$l['nname']}...\n");
+			rl_exec_get(null, $l['nname'], 'remotetestfunc', null);
+		} catch (exception $e) {
+			print($e->getMessage());
+			print("\n");
+		}
+	}
+
+}
+
+function findNextVersion($lastversion = null)
+{
+	global $gbl, $sgbl, $login, $ghtml; 
+	$thisversion = $sgbl->__ver_major_minor_release;
+
+	$upgrade = null;
+	$nlist = getVersionList($lastversion);
+	dprintr($nlist);
+	$k = 0;
+	print("Found version(s):");
+	foreach($nlist as $l) {
+		print(" $l");
+		if (version_cmp($thisversion, $l) === -1) {
+			$upgrade = $l;
+			break;
+		}
+		$k++;
+	}
+	print("\n");
+	if (!$upgrade) {
+		return 0;
+	}
+
+	print("Upgrading from $thisversion to $upgrade\n");
+	return $upgrade;
+
+}
