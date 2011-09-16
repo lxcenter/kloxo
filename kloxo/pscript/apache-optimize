@@ -5,9 +5,9 @@
 
 if [ "$#" == 0 ] ; then
 	echo
-	echo " -----------------------------------------------------------------"
+	echo " ------------------------------------------------------------------------"
 	echo "  format: sh $0 --select=status/optimize" --spare=[]
-	echo " -----------------------------------------------------------------"
+	echo " ------------------------------------------------------------------------"
 	echo "   --spare - spare/unused memory in MB; default: 25% total memory"
 	echo
 	echo " * this optimize assume httpd + php use 25 MB per instance"
