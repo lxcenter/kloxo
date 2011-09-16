@@ -226,5 +226,3 @@ function doUpdates()
 
 // TODO: modified log_log() or log_cleanup
 // so call function with log must call log_cleanup(setFreshClam()) and without log may only setFreshClam()
-
-
