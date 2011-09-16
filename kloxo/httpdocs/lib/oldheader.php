@@ -139,8 +139,10 @@ function print_header_old_default()
 
     $ghtml->print_include_jscript("header");
 	$skin = $login->getSkinDir();
-	$logo = $login->getSpecialObject('sp_specialplay')->logo_image;
-	$logo_loading = $login->getSpecialObject('sp_specialplay')->logo_image_loading;
+//	$logo = $login->getSpecialObject('sp_specialplay')->logo_image;
+//	$logo_loading = $login->getSpecialObject('sp_specialplay')->logo_image_loading;
+	$logo = "/img/kloxo-logo.gif";
+	$logo_loading = "/img/kloxo-splash.gif";
 ?>
 <script>
 if (document.captureEvents) {
