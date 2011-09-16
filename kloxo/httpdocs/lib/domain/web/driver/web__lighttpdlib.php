@@ -1,15 +1,14 @@
 <?php 
 
-class web__lighttpd extends lxDriverClass {
-
 // issue #598 - Change lighhtpd config structure
+
+class web__lighttpd extends lxDriverClass {
 
 //######################################### SyncToSystem Starts Here
 
 static function uninstallMe()
 {
-//	lxshell_return("service",  "lighttpd", "stop");
- 	passthru("/etc/init.d/lighttpd stop >> /dev/null");
+	lxshell_return("service",  "lighttpd", "stop");
 	lxshell_return("rpm", "-e", "--nodeps", "lighttpd");
 	lunlink("/etc/init.d/lighttpd");
 }
@@ -31,6 +30,8 @@ static function installMe()
 	lxfile_mkdir("/home/lighttpd/conf");
 	lxfile_mkdir("/home/lighttpd/conf/defaults");
 	lxfile_mkdir("/home/lighttpd/conf/domains");
+	lxfile_mkdir("/home/lighttpd/conf/redirects");
+	lxfile_mkdir("/home/lighttpd/conf/webmails");
 
 	copy("/usr/local/lxlabs/kloxo/file/lighttpd/lighttpd.conf", "/etc/lighttpd/lighttpd.conf");
 	copy("/usr/local/lxlabs/kloxo/file/lighttpd/~lxcenter.conf", "/etc/lighttpd/conf.d/~lxcenter.conf");
@@ -38,7 +39,7 @@ static function installMe()
 //	lxfile_cp("../file/lighttpd/conf/kloxo/kloxo.conf", "/etc/lighttpd/conf/kloxo/kloxo.conf");
 
 //	lxfile_cp("../file/lighttpd/conf/kloxo/webmail.conf", "/etc/lighttpd/conf/kloxo/webmail.conf");
-	lxfile_cp("../file/lighttpd/conf/kloxo/webmail.conf", "/home/lighttpd/conf/defaults/webmail.conf");
+//	lxfile_cp("../file/lighttpd/conf/kloxo/webmail.conf", "/home/lighttpd/conf/defaults/webmail.conf");
 
 	lxfile_cp("../file/lighttpd/etc_init.d", "/etc/init.d/lighttpd");
 	lxfile_unix_chmod("/etc/init.d/lighttpd", "0755");
@@ -131,13 +132,13 @@ function updateMainConfFile()
 
 //	$virtual_file = "$sgbl->__path_lighty_path/conf/kloxo/virtualhost.conf";
 //	$init_file = "$sgbl->__path_lighty_path/conf/kloxo/init.conf";
-	$virtual_file = "/home/lighttpd/conf/defaults/~virtualhost.conf";
+	$virtual_file = "/home/lighttpd/conf/defaults/stats.conf";
 	$init_file = "/home/lighttpd/conf/defaults/init.conf";
 
 	$vdomlist = $this->main->__var_vdomain_list; 
 	$iplist = $this->main->__var_ipaddress;
 
-	/// Start agiain....
+	/// Start again....
 	$fdata = null;
 
 	$vdomlist = merge_array_object_not_deleted($vdomlist, $this->main);
@@ -149,19 +150,24 @@ function updateMainConfFile()
 		$fdata .= "include \"/home/lighttpd/conf/domains/{$dom['nname']}.conf\"\n\n";
 	}
 */
-	$fdata .= "include_shell \"cat /home/lighttpd/conf/domains/*.conf\"\n\n";
+//	$fdata .= "### include_shell \"cat /home/lighttpd/conf/domains/*.conf\"\n\n";
 
 	//--- delete unlisted domains config - begin
 
+//	rename("/home/lighttpd/conf/webmails/~webmail.conf", "/home/lighttpd/conf/webmails/~webmail.conf.active");
+
 	foreach((array) $vdomlist as $dom) {
 		if (lxfile_exists("/home/lighttpd/conf/domains/{$dom['nname']}.conf")) {
-			lxfile_mv("/home/lighttpd/conf/domains/{$dom['nname']}.conf", "/home/lighttpd/conf/domains/{$dom['nname']}.conf.active");
+			rename("/home/lighttpd/conf/domains/{$dom['nname']}.conf", "/home/lighttpd/conf/domains/{$dom['nname']}.conf.active");
+			rename("/home/lighttpd/conf/redirects/{$dom['nname']}.conf", "/home/lighttpd/conf/redirects/{$dom['nname']}.conf.active");
 		}
 	}
 
-	lxfile_rm("/home/lighttpd/conf/domains/*.conf");
-	//--- command 'mv *.conf.active *.conf' so use 'rename'
-	system("rename .conf.active .conf /home/lighttpd/conf/domains/*.conf.active");
+	passthru("rm -rf /home/lighttpd/conf/domains/*.conf");
+	passthru("rm -rf /home/lighttpd/conf/redirects/*.conf");
+
+	passthru("rename .conf.active .conf /home/lighttpd/conf/domains/*.conf.active");
+	passthru("rename .conf.active .conf /home/lighttpd/conf/redirects/*.conf.active");
 
 	//--- delete unlisted domains config - end
 
@@ -336,8 +342,38 @@ function createConffile()
 		}
 	}
 
-	$string .= $this->getAddon();
+/*
+	// --- using Sqlite not work here, so make __var_mmaillist in weblib.php
 
+	$sq = new Sqlite(null, 'mmail');
+
+
+//	$res = $sq->getRowsWhere("nname = '{$domainname}'");
+
+	$res = $sq->rl_query("SELECT * WHERE nname = '{$domainname}'");
+
+	$string .= web__lighttpd::getCreateWebmail($res);
+*/
+
+	$mmaillist = $this->main->__var_mmaillist;
+
+	foreach($mmaillist as $m) {
+		if ($m['nname'] === $domainname) {
+			$list = $m;
+			break;
+		}
+	}
+
+	// --- for the first time domain create
+	if (!isset($list)) {
+		$list = array('nname' => $domainname, 'parent_clname' => 'domain-'.$domainname, 'webmailprog' => '', 'webmail_url' => '', 'remotelocalflag' => 'local');
+	}
+
+	$string .= web__lighttpd::getCreateWebmail(array($list));
+
+	lfile_put_contents($v_file, $string);
+
+/*
 	$tmp = lx_tmp_file("light.{$this->main->nname}");
 	lfile_put_contents($tmp, $string);
 
@@ -352,32 +388,54 @@ function createConffile()
 	if ($res) {
 		throw new lxException("lighttpd_configuration_check_failed", '', "{$this->main->nname}: $global_shell_error");
 	}
+*/
 
 	lfile_put_contents($v_file, $string);
+
+	$this->setAddon();
 }
 
-function getAddon()
+// function getAddon()
+function setAddon()
 {
 	$string = null;
-	foreach((array) $this->main->__var_addonlist as $v) {
-		if ($v->ttype !== 'redirect') {
-			continue;
+
+	$vaddonlist = $this->main->__var_addonlist;
+
+//	foreach((array) $this->main->__var_addonlist as $v) {
+	foreach((array) $vaddonlist as $v) {
+		if ($v->ttype === 'redirect') {
+			$string .= "\$HTTP[\"host\"] =~ \"^(www.)?$v->nname\" {\n\n";
+			$dst = "{$this->main->nname}/$v->destinationdir";
+			$dst = remove_extra_slash($dst);
+			//$dst = trim($dst, "/");
+			$string .= "\turl.redirect = ( \"/\" => \"http://$dst\")\n\n";
+			$string .= "}\n\n";
 		}
-		$string .= "\$HTTP[\"host\"] =~ \"^(www.)?$v->nname\" {\n";
-		$dst = "{$this->main->nname}/$v->destinationdir";
-		$dst = remove_extra_slash($dst);
-		//$dst = trim($dst, "/");
-		$string .= "url.redirect = ( \"/\" => \"http://$dst\")\n";
-		$string .= "}\n\n";
+
+		$domto = str_replace("domain-","", $v->parent_clname);
+		$rlflag = ($v->mail_flag === 'on') ? 'remote' : 'local';
+
+		$list = array('nname' => $v->nname, 'parent_clname' => $v->parent_clname, 'webmailprog' => '', 'webmail_url' => 'webmail.'.$domto, 'remotelocalflag' => $rlflag);
+		$string .= web__lighttpd::getCreateWebmail(array($list));
 	}
 
 	if ($this->main->isOn('force_www_redirect')) {
-		$string .= "\$HTTP[\"host\"] =~ \"^{$this->main->nname}$\" {\n";
-		$string .= "url.redirect = ( \"^/(.*)\" => \"http://www.{$this->main->nname}/\$1\")\n";
-		$string .= "}\n";
+		$string .= "\$HTTP[\"host\"] =~ \"^{$this->main->nname}$\" {\n\n";
+		$string .= "\turl.redirect = ( \"^/(.*)\" => \"http://www.{$this->main->nname}/\$1\")\n\n";
+		$string .= "}\n\n";
 	}
 
-	return $string;
+//	return $string;
+
+	if (!$string) {
+		$string = "### No domain(s) redirect to '{$this->main->nname}' ###\n\n";
+	}
+
+	$v_file = "/home/lighttpd/conf/redirects/{$this->main->nname}.conf";
+
+	lfile_put_contents($v_file, $string);
+
 }
 
 function getBlockIP()
@@ -422,10 +480,10 @@ static function createSSlConf($iplist, $domainiplist)
 		$string .= "\$SERVER[\"socket\"] == \"{$ip['ipaddr']}:80\" {\n";
 		$string .= "	}\n";
 */
-		$string .= "\$SERVER[\"socket\"] == \"{$ip['ipaddr']}:443\" {\n";
+		$string .= "\$SERVER[\"socket\"] == \"{$ip['ipaddr']}:443\" {\n\n";
 		$string .= "\tssl.engine = \"enable\"\n";
 		$string .= "\tssl.pemfile = \"$pemfile\"\n";
-		$string .= "\tssl.ca-file = \"$cafile\"\n";
+		$string .= "\tssl.ca-file = \"$cafile\"\n\n";
 		$string .= "}\n\n";
 	}
 
@@ -606,7 +664,7 @@ function getDocumentRoot($subweb)
 
 	$string = null;
 	$string .= "\talias.url  = (\"/__kloxo\" => \"/home/{$this->main->customer_name}/kloxoscript\")\n\n";
-	$string .= "\turl.redirect  = (\"/webmail\" => \"https://webmail.$domname\")\n";
+	$string .= "\turl.redirect  = (\"/webmail\" => \"http://webmail.$domname\")\n";
 
 /* --- change to cp. (cp_config.conf)
 	if ($this->main->nname !== 'lxlabs.com') {
@@ -833,6 +891,10 @@ function createServerAliasLine()
 	}
 
 	foreach((array) $this->main->__var_addonlist as $d) {
+		// forget this if?
+		if ($d->ttype === 'redirect') {
+			continue;
+		}
 		$list[] = $d->nname;
 		$list[] = "www.$d->nname";
 	}
@@ -846,7 +908,7 @@ function createServerAliasLine()
 
 function addDomain()
 {
-	self::createWebmailConfig(null);
+//	self::createWebDefaultConfig(null);
 	$this->main->createDir();
 	$this->createConffile();
 	$this->updateMainConfFile();
@@ -856,64 +918,89 @@ function addDomain()
 
 static function createWebmailRedirect($list)
 {
+	// un-used
+}
+
+static function getCreateWebmail($list)
+{
 	global $gbl, $sgbl, $login, $ghtml; 
 
-	$webdata = null;
+//	$webdata = null;
 	foreach($list as $l) {
-		$webdata .= "\$HTTP[\"host\"] =~ \"^webmail.{$l['nname']}\" { \n";
+		$webdata = null;
+
+		$rlflag = (!isset($l['remotelocalflag'])) ? 'local' : $l['remotelocalflag'];
+
+	//	$rlflag = $l['remotelocalflag'];
+
+		$prog = (!isset($l['webmailprog']) || ($l['webmailprog'] === '--system-default--')) ? "" : $l['webmailprog'];
+
+		if ((!$prog) && ($rlflag !== 'remote')) {
+			$webdata .= "### 'webmail.{$l['nname']}' handled by ../webmails/webmail.conf ###\n\n";
+			continue;
+		}
+
+		$webdata .= "\$HTTP[\"host\"] =~ \"^webmail.{$l['nname']}\" { \n\n";
 		if ($l['remotelocalflag'] === 'remote') {
 			$l['webmail_url'] = add_http_if_not_exist($l['webmail_url']);
-			$webdata .= "\turl.redirect = ( \"/\" =>  \"{$l['webmail_url']}\")\n";
+			$webdata .= "\turl.redirect = ( \"/\" =>  \"{$l['webmail_url']}\")\n\n";
 		} else {
-
-			$prog = ($l['webmailprog'] == '--chooser--')? "": $l['webmailprog'];
-			if (is_disabled($prog)) {
+			if (is_disabled($l['webmailprog'])) {
 				$webdata .= "\tserver.document-root = \"$sgbl->__path_kloxo_httpd_root/webmail/disabled/\"\n\n";
 			} else {
-				$webdata .= "\tserver.document-root = \"$sgbl->__path_kloxo_httpd_root/webmail/\"\n\n";
+			//	$webdata .= "\tserver.document-root = \"$sgbl->__path_kloxo_httpd_root/webmail/\"\n\n";
+				$prog = ($l['webmailprog'] === '--chooser--') ? "" : $l['webmailprog'];
+				if ($prog) {
+					$webdata .= "\tserver.document-root = \"$sgbl->__path_kloxo_httpd_root/webmail/{$prog}/\"\n\n";
+				}
+				else {
+					$webdata .= "\tserver.document-root = \"$sgbl->__path_kloxo_httpd_root/webmail/\"\n\n";
+				}
 			}
-
+		/*
 			if ($prog) {
 				$webdata .= "\tindex-file.names = ( \"redirect-to-$prog.php\", \"index.php\")\n\n";
 			}
+		*/
 			//$webdata .= "cgi.assign = ( \".php\" => \"/home/httpd/{$l['nname']}/phpsuexec.sh\" )\n";
 			$webdata .= "\tcgi.assign = ( \".php\" => \"/home/httpd/nobody.sh\" )\n\n";
 		}
 		$webdata .= "}\n\n";
 
+	//	lfile_put_contents("/home/lighttpd/conf/webmails/{$l['nname']}.conf", $webdata);
 	}
 
+	return $webdata;
+
 //	lfile_put_contents("__path_lighty_path/conf/kloxo/webmail_redirect.conf", $webdata);
-	lfile_put_contents("/home/lighttpd/conf/defaults/webmail_redirect.conf", $webdata);
+//	lfile_put_contents("/home/lighttpd/conf/defaults/_webmail_redirect.conf", $webdata);
 
 	createRestartFile("lighttpd");
 }
 
-function syncWebmailRedirect()
-{
-	// --- this is wrong code but work
-	Mmail::fixWebmailRedirect();
-
-/* --- this is right but weird result
-	$mmail = new MMail();
-	$mmail->fixWebmailRedirect();
-	$mmail = null;
---- */
-}
-
-static function createWebmailConfig($iplist)
+// static function createWebmailConfig($iplist)
+static function createWebDefaultConfig($iplist = null)
 {
 	global $gbl, $sgbl, $login, $ghtml; 
 
 //	$webfile = "__path_lighty_path/conf/kloxo/webmail.conf";
-	$webfile = "/home/lighttpd/conf/defaults/webmail.conf";
+	$webfile = "/home/lighttpd/conf/webmails/webmail.conf";
+
+	$webmaildef = $login->getObject('general')->generalmisc_b->webmail_system_default;
+
+	if ($webmaildef) {
+		$webmaildefpath = $webmaildef."/";
+	}
+	else {
+		$webmaildefpath = '';
+	}
 
 	$webdata = null;
 
-	$webdata .= "\$HTTP[\"host\"] =~ \"^webmail.*\" { \n";
-	$webdata .= "\tserver.document-root = \"$sgbl->__path_kloxo_httpd_root/webmail/\"\n";
+	$webdata .= "\$HTTP[\"host\"] =~ \"^webmail.*\" { \n\n";
+	$webdata .= "\tserver.document-root = \"$sgbl->__path_kloxo_httpd_root/webmail/$webmaildefpath\"\n";
 	$webdata .= "\tserver.errorlog = \"/home/kloxo/httpd/lighttpd/error.log\"\n";
-	$webdata .= "\tcgi.assign = ( \".php\" => \"/home/httpd/nobody.sh\" )\n";
+	$webdata .= "\tcgi.assign = ( \".php\" => \"/home/httpd/nobody.sh\" )\n\n";
 	$webdata .= "}\n\n";  
 
 	$webtotal = "$webdata\n";
@@ -925,10 +1012,10 @@ static function createWebmailConfig($iplist)
 
 	$cpdata = null;
 
-	$cpdata .= "\$HTTP[\"host\"] =~ \"^cp.*\" { \n";
+	$cpdata .= "\$HTTP[\"host\"] =~ \"^cp.*\" { \n\n";
 	$cpdata .= "\tserver.document-root = \"$sgbl->__path_kloxo_httpd_root/cp/\"\n";
 	$cpdata .= "\tserver.errorlog = \"/home/kloxo/httpd/lighttpd/error.log\"\n";
-	$cpdata .= "\tcgi.assign = ( \".php\" => \"/home/httpd/nobody.sh\" )\n";
+	$cpdata .= "\tcgi.assign = ( \".php\" => \"/home/httpd/nobody.sh\" )\n\n";
 	$cpdata .= "}\n\n";  
 
 	$cptotal = "$cpdata\n";
@@ -1007,7 +1094,7 @@ function fullUpdate()
 	$this->createSuexec();
 	$this->updateMainConfFile();
 	self::createSSlConf($this->main->__var_ipssllist, $this->main->__var_domainipaddress);
-	self::createWebmailConfig(null);
+	self::createWebDefaultConfig(null);
 	web::createstatsConf($this->main->nname, $this->main->stats_username, $this->main->stats_password);
 	$log_path = "/home/httpd/{$this->main->nname}/stats";
 	lxfile_unix_chown_rec($log_path, "{$this->main->username}:apache");
@@ -1028,10 +1115,10 @@ function createCpConfig()
 
 	$webdata = null;
 
-	$webdata .= "\$HTTP[\"host\"] =~ \"^cp.*\" { \n";
+	$webdata .= "\$HTTP[\"host\"] =~ \"^cp.*\" { \n\n";
 	$webdata .= "\tserver.document-root = \"$sgbl->__path_kloxo_httpd_root/cp/\"\n";
 	$webdata .= "\tserver.errorlog = \"/home/lighttpd/logs/error.log\"\n";
-	$webdata .= "\tcgi.assign = ( \".php\" => \"/home/httpd/nobody.sh\" )\n";
+	$webdata .= "\tcgi.assign = ( \".php\" => \"/home/httpd/nobody.sh\" )\n\n";
 	$webdata .= "}\n\n";  
 
 	$total = "$webdata\n";
@@ -1056,8 +1143,6 @@ function dbactionUpdate($subaction)
 			$this->fullUpdate();
 			$this->main->doStatsPageProtection();
 			$this->createCpConfig();
-			// --- always update webmail_redirect too
-			$this->syncWebmailRedirect();
 			break;
 
 		case "changeowner":
@@ -1078,6 +1163,9 @@ function dbactionUpdate($subaction)
 			break;
 
 		case "addondomain":
+			$this->createConffile();
+			break;
+
 		case "phpconfig":
 		case "add_delete_dirprotect":
 		case "extra_tag" : 

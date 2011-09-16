@@ -14,8 +14,7 @@ class web__apache extends lxDriverClass {
 
 static function uninstallMe()
 {
-//	lxshell_return("service", "httpd", "stop");
- 	passthru("/etc/init.d/httpd stop >> /dev/null");
+	lxshell_return("service", "httpd", "stop");
 	lxshell_return("rpm", "-e", "--nodeps", "httpd");
 	lunlink("/etc/init.d/httpd");
 }
@@ -33,11 +32,14 @@ static function installMe()
 
 	//-- old structure
 	lxfile_rm("/etc/httpd/conf/kloxo");
-
+	lxfile_rm("/home/httpd/conf");
+	
 	//-- new structure	
-	lxfile_mkdir("/home/httpd/conf");
-	lxfile_mkdir("/home/httpd/conf/defaults");
-	lxfile_mkdir("/home/httpd/conf/domains");
+	lxfile_mkdir("/home/apache/conf");
+	lxfile_mkdir("/home/apache/conf/defaults");
+	lxfile_mkdir("/home/apache/conf/domains");
+	lxfile_mkdir("/home/apache/conf/redirects");
+	lxfile_mkdir("/home/apache/conf/webmails");
 
 	//--- some vps include /etc/httpd/conf.d/swtune.conf
 	passthru("rm -f /etc/httpd/conf.d/swtune.conf");
@@ -78,11 +80,12 @@ function updateMainConfFile()
 
 //	$virtual_file = "$sgbl->__path_apache_path/kloxo/virtualhost.conf";
 //	$init_file = "$sgbl->__path_apache_path/kloxo/init.conf";
-	$virtual_file = "/home/httpd/conf/defaults/~virtualhost.conf";
-	$init_file = "/home/httpd/conf/defaults/init.conf";
+	$virtual_file = "/home/apache/conf/defaults/stats.conf";
+	$init_file = "/home/apache/conf/defaults/init.conf";
 
 	$vdomlist = $this->main->__var_vdomain_list; 
 	$iplist = $this->main->__var_ipaddress;
+
 	$fdata = null;
 	foreach($iplist as $ipaddr){
 		$ip = trim($ipaddr['ipaddr']);
@@ -93,6 +96,8 @@ function updateMainConfFile()
 	}
 
 	lfile_put_contents($init_file, $fdata);
+
+	/// Start again....
 	$fdata = null;
 
 	$vdomlist = merge_array_object_not_deleted($vdomlist, $this->main);
@@ -105,24 +110,27 @@ function updateMainConfFile()
 		}
 	}
 */
-	$fdata .= "Include /home/httpd/conf/domains/*.conf\n\n";
+//	$fdata .= "### Include /home/apache/conf/domains/*.conf\n\n";
 
 	//--- delete unlisted domains config - begin
 
+//	rename("/home/apache/conf/webmails/~webmail.conf", "/home/apache/conf/webmails/~webmail.conf.active");
+
 	foreach((array) $vdomlist as $dom) {
-		if (lxfile_exists("/home/httpd/conf/domains/{$dom['nname']}.conf")) {
-		//	lxfile_mv("/home/httpd/conf/domains/{$dom['nname']}.conf", "/home/httpd/conf/domains/{$dom['nname']}.conf.active");
-			rename("/home/httpd/conf/domains/{$dom['nname']}.conf", "/home/httpd/conf/domains/{$dom['nname']}.conf.active");
+		if (lxfile_exists("/home/apache/conf/domains/{$dom['nname']}.conf")) {
+		//	lxfile_mv("/home/apache/conf/domains/{$dom['nname']}.conf", "/home/apache/conf/domains/{$dom['nname']}.conf.active");
+			rename("/home/apache/conf/domains/{$dom['nname']}.conf", "/home/apache/conf/domains/{$dom['nname']}.conf.active");
+			rename("/home/apache/conf/redirects/{$dom['nname']}.conf", "/home/apache/conf/redirects/{$dom['nname']}.conf.active");
 		}
 	}
 
-	lxfile_rm("/home/httpd/conf/domains/*.conf");
-	//--- command 'mv *.conf.active *.conf' so use 'rename'
-	passthru("rename .conf.active .conf /home/httpd/conf/domains/*.conf.active");
+	passthru("rm -rf /home/apache/conf/domains/*.conf");
+	passthru("rm -rf /home/apache/conf/redirects/*.conf");
+
+	passthru("rename .conf.active .conf /home/apache/conf/domains/*.conf.active");
+	passthru("rename .conf.active .conf /home/apache/conf/redirects/*.conf.active");
 
 	//--- delete unlisted domains config - end
-
-	/// Start agiain....
 
 	$fdata .= "Alias /awstatscss \"{$sgbl->__path_home_root}/httpd/awstats/wwwroot/css/\"\n";
 	$fdata .= "Alias /awstatsicons \"{$sgbl->__path_home_root}/httpd/awstats/wwwroot/icon/\"\n\n";
@@ -139,8 +147,8 @@ function updateMainConfFile()
 		lxfile_touch("__path_apache_path/kloxo/forward/forwardhost.conf");
 	}
 
-	if (!lfile_exists("/home/httpd/conf/defaults/forwardhost.conf")) {
-		lxfile_touch("/home/httpd/conf/defaults/forwardhost.conf");
+	if (!lfile_exists("/home/apache/conf/defaults/forwardhost.conf")) {
+		lxfile_touch("/home/apache/conf/defaults/forwardhost.conf");
 	}
 --- */
 
@@ -152,11 +160,11 @@ function updateMainConfFile()
 	lxfile_cp("/usr/local/lxlabs/kloxo/file/centos-5/httpd.conf", "/etc/httpd/conf/httpd.conf");
 	// delete old structure
 	passthru("rm -rf /etc/httpd/conf/kloxo");
+	passthru("rm -rf /httpd/httpd/conf");
 
 	foreach((array) $vdomlist as $dom) {
 		passthru("rm -rf {$sgbl->__path_httpd_root}/{$dom['nname']}/conf");
 	}
-	
 }
 
 function getServerIp()
@@ -190,7 +198,9 @@ function getSslIpList()
 
 function createVirtualHostiplist($port)
 {
-	$string = "\\\n";
+//	$string = "\\\n";
+	$string = "";
+
 	if ($this->getServerIp()) {
 		foreach($this->main->__var_domainipaddress as $ip => $dom) {
 			if ($this->main->nname !== $dom) { continue; }
@@ -209,6 +219,7 @@ function createVirtualHostiplist($port)
 static function staticcreateVirtualHostiplist($port)
 {
 	$string = "";
+
 	$iplist = os_get_allips();
 	foreach($iplist as $ip) {
 		$string .= "\t{$ip}:{$port}\\\n";
@@ -317,6 +328,8 @@ function delDomain()
 		return;
 	}
 
+	$this->createConffile();
+
 	$this->updateMainConfFile();
 	$this->main->deleteDir();
 //	$this->updateIpConfFile();
@@ -334,7 +347,7 @@ function clearDomainIpAddress()
 
 function createConffile()
 {
-	global $gbl, $sgbl, $login, $ghtml; 
+	global $gbl, $sgbl, $login, $ghtml;
 
 	//dprintr($this->main->__old_priv);
 
@@ -344,7 +357,7 @@ function createConffile()
 	$cust_log = $log_path . "/". $this->main->nname . "-" . "custom_log"; 
 	$err_log = $log_path ."/". $this->main->nname . "-" . "error_log";
 //	$v_file = "$sgbl->__path_httpd_root/{$this->main->nname}/conf/kloxo.{$this->main->nname}";
-	$v_file = "/home/httpd/conf/domains/{$this->main->nname}.conf";
+	$v_file = "/home/apache/conf/domains/{$this->main->nname}.conf";
 
 	$string = null;
 
@@ -353,7 +366,7 @@ function createConffile()
 	$this->clearDomainIpAddress();
 
 	$string = null;
-	$string = "<VirtualHost {$this->createVirtualHostiplist("80")}";
+	$string = "<VirtualHost \\\n{$this->createVirtualHostiplist("80")}";
 	$string .= "\t\t>\n\n";
 	$string .= $this->syncToPort("80", $cust_log, $err_log);
 	$string .= $this->middlepart($web_home, $domainname, $dirp); 
@@ -362,67 +375,123 @@ function createConffile()
 
 	lxfile_mkdir($this->main->getFullDocRoot());
 
-	if($this->main->priv->isOn('ssl_flag'))	 {
+	if($this->main->priv->isOn('ssl_flag')) {
 
 		// Do the ssl cert only if the ipaddress exists. Now when we migrate, 
 
-			$string .= "\n\n<IfModule mod_ssl.c>\n";
+		$string .= "\n\n<IfModule mod_ssl.c>\n";
 
-			if ($this->getServerIp()) {
-				$iplist = $this->getSslIpList();
-				foreach($iplist as $ip) {
-					$string .= "#### ssl virtualhost per ip\n";
-					$ssl_cert = $this->sslsysnc($ip);
-					if (!$ssl_cert) { continue; }
-					$string .= "<VirtualHost \\\n";
-					$string .= "\t$ip:443\\\n";
-					$string .= "\t\t>\n\n";
-					$string .= $this->syncToPort("443", $cust_log, $err_log);
-					$string .= $this->sslsysnc($ip);
-					$string .= $this->middlepart($web_home, $domainname, $dirp); 
-					$string .= $this->AddOpenBaseDir();
-					$string .= $this->endtag();
-					$string .= "#### ssl virtualhost per ip $ip end\n\n";
-				}
-			} else {
+		if ($this->getServerIp()) {
+			$iplist = $this->getSslIpList();
+			foreach($iplist as $ip) {
 				$string .= "#### ssl virtualhost per ip\n";
-				$string .= "<VirtualHost {$this->createVirtualHostiplist("443")}";
+				$ssl_cert = $this->sslsysnc($ip);
+				if (!$ssl_cert) { continue; }
+				$string .= "<VirtualHost \\\n";
+			//	$string .= "\t$ip:80\\\n";
+				$string .= "\t$ip:443\\\n";
 				$string .= "\t\t>\n\n";
 				$string .= $this->syncToPort("443", $cust_log, $err_log);
-				$string .= $this->sslsysnc(null);
+			//	if($this->main->priv->isOn('ssl_flag')) {
+			//		$string .= "\t<IfModule mod_ssl.c>\n";
+					$string .= $this->sslsysnc($ip);
+			//		$string .= "\t</IfModule>\n\n";
+			//	}
 				$string .= $this->middlepart($web_home, $domainname, $dirp); 
 				$string .= $this->AddOpenBaseDir();
 				$string .= $this->endtag();
-				$string .= "#### ssl virtualhost per ip end\n";
+				$string .= "#### ssl virtualhost per ip $ip end\n\n";
 			}
+		} else {
+			$string .= "#### ssl virtualhost per ip\n";
+			$string .= "<VirtualHost \\\n";
+		//	$string .= "{$this->createVirtualHostiplist("80")}";
+			$string .= "{$this->createVirtualHostiplist("443")}";
+			$string .= "\t\t>\n\n";
+			$string .= $this->syncToPort("443", $cust_log, $err_log);
+		//	if($this->main->priv->isOn('ssl_flag')) {
+		//		$string .= "\t<IfModule mod_ssl.c>\n";
+				$string .= $this->sslsysnc(null);
+		//		$string .= "\t</IfModule>\n\n";
+		//	}
+			$string .= $this->middlepart($web_home, $domainname, $dirp); 
+			$string .= $this->AddOpenBaseDir();
+			$string .= $this->endtag();
+			$string .= "#### ssl virtualhost per ip end\n";
+		}
 
-			$string .= "</IfModule>\n\n";
+		$string .= "</IfModule>\n\n\n";
 	}
 
-	$string .= $this->getAddon();
+/*
+	// --- using Sqlite not work here, so make __var_mmaillist in weblib.php
+
+	$sq = new Sqlite(null, 'mmail');
+
+
+//	$res = $sq->getRowsWhere("nname = '{$domainname}'");
+
+	$res = $sq->rl_query("SELECT * WHERE nname = '{$domainname}'");
+
+	$string .= web__apache::getCreateWebmail($res);
+*/
+
+	$mmaillist = $this->main->__var_mmaillist;
+
+	foreach($mmaillist as $m) {
+		if ($m['nname'] === $domainname) {
+			$list = $m;
+			break;
+		}
+	}
+
+	// --- for the first time domain create
+	if (!isset($list)) {
+		$list = array('nname' => $domainname, 'parent_clname' => 'domain-'.$domainname, 'webmailprog' => '', 'webmail_url' => '', 'remotelocalflag' => 'local');
+	}
+
+	$string .= web__apache::getCreateWebmail(array($list));
 
 	lfile_put_contents($v_file, $string);
+
+	$this->setAddon();
 }
 
-function getAddon()
+// function getAddon()
+function setAddon()
 {
-	$string = null;
-	foreach((array) $this->main->__var_addonlist as $v) {
-		if ($v->ttype !== 'redirect') {
-			continue;
+
+	global $gbl, $sgbl, $login, $ghtml;
+
+	$string = "";
+
+	$vaddonlist = $this->main->__var_addonlist;
+
+//	foreach((array) $this->main->__var_addonlist as $v) {
+	foreach((array) $vaddonlist as $v) {
+
+		if ($v->ttype === 'redirect') {
+			$string .= "<VirtualHost \\\n{$this->createVirtualHostiplist("80")}";
+			$string .= "{$this->createVirtualHostiplist("443")}";
+			$string .= "\t\t>\n\n";
+			$string .= "\tServername {$v->nname}\n";
+			$string .= "\tServerAlias \\\n\t\twww.{$v->nname}\n\n";
+			$dst = "{$this->main->nname}/{$v->destinationdir}/";
+			$dst = remove_extra_slash($dst);
+			$string .= "\tRedirect / http://$dst\n\n";
+			$string .= "</VirtualHost>\n\n\n";
 		}
-		$string .= "<VirtualHost {$this->createVirtualHostiplist("80")}";
-		$string .= "\t\t>\n\n";
-		$string .= "\tServername {$v->nname}\n";
-		$string .= "\tServerAlias www.{$v->nname}\n\n";
-		$dst = "{$this->main->nname}/{$v->destinationdir}/";
-		$dst = remove_extra_slash($dst);
-		$string .= "\tRedirect / http://$dst\n\n";
-		$string .= "</VirtualHost>\n\n";
+
+		$domto = str_replace("domain-","", $v->parent_clname);
+		$rlflag = ($v->mail_flag === 'on') ? 'remote' : 'local';
+
+		$list = array('nname' => $v->nname, 'parent_clname' => $v->parent_clname, 'webmailprog' => '', 'webmail_url' => 'webmail.'.$domto, 'remotelocalflag' => $rlflag);
+		$string .= web__apache::getCreateWebmail(array($list));
 	}
 
 	if ($this->main->isOn('force_www_redirect')) {
-		$string .= "<VirtualHost {$this->createVirtualHostiplist("80")}";
+		$string .= "<VirtualHost \\\n{$this->createVirtualHostiplist("80")}";
+		$string .= "{$this->createVirtualHostiplist("443")}";
 		$string .= "\t\t>\n\n";
 		$string .= "\tServername {$this->main->nname}\n\n";
 		$string .= "\tRedirect / http://www.{$this->main->nname}/\n\n";
@@ -434,11 +503,18 @@ function getAddon()
 		$string .= "\t\tServername {$this->main->nname}\n\n";
 		$string .= "\t\tRedirect / https://www.{$this->main->nname}\n\n";
 		$string .= "\t</VirtualHost>\n";
-		$string .= "<IfModule mod_ssl.c>\n\n";
-
+		$string .= "<IfModule mod_ssl.c>\n\n\n";
 	}
 
-	return $string;
+//	return $string;
+
+	if ($string === '') {
+		$string = "### No domain(s) redirect to '{$this->main->nname}' ###\n\n\n";
+	}
+
+	$v_file = "/home/apache/conf/redirects/{$this->main->nname}.conf";
+
+	lfile_put_contents($v_file, $string);
 }
 
 function createCpConfig()
@@ -466,16 +542,18 @@ function createCpConfig()
 	$string .= "</VirtualHost>\n\n";
 
 //	$file = "/etc/httpd/conf/kloxo/cp_config.conf";
-	$file = "/home/httpd/conf/defaults/cp_config.conf";
+	$file = "/home/apache/conf/defaults/cp_config.conf";
 
 	lfile_put_contents($file, $string);
+
+	createRestartFile('apache');
 }
 
 static function getVipString()
 {
 	$iplist = os_get_allips();
 	foreach($iplist as $ip) {
-		$vstring[] = "\t{$ip}:80\\\n";
+		$vstring[] = "\t{$ip}:80\\\n\t{$ip}:443\\\n";
 	}
 	$vstring = implode("", $vstring);
 
@@ -484,56 +562,79 @@ static function getVipString()
 
 static function createWebmailRedirect($list)
 {
+	// un-used
+}
+
+static function getCreateWebmail($list)
+{
+
+	global $gbl, $sgbl, $login, $ghtml;
+
 	$vstring = web__apache::getVipString();
 	dprintr($vstring);
-	$string = null;
-	foreach($list as $l) {
+//	$string = null;
+	foreach($list as &$l) {
+		$string = "";
+
+		$rlflag = (!isset($l['remotelocalflag'])) ? 'local' : $l['remotelocalflag'];
+
+	//	$rlflag = $l['remotelocalflag'];
+
+		$prog = (!isset($l['webmailprog']) || ($l['webmailprog'] === '--system-default--')) ? "" : $l['webmailprog'];
+
+		if ((!$prog) && ($rlflag !== 'remote')) {
+			$string .= "### 'webmail.{$l['nname']}' handled by ../webmails/webmail.conf ###\n\n\n";
+			continue;
+		}
+
 		$string .= "<VirtualHost \\\n{$vstring}";
 		$string .= "\t\t>\n\n";
 		$string .= "\tServerName webmail.{$l['nname']}\n\n";
-		if ($l['remotelocalflag'] === 'remote') {
+
+		if ($rlflag === 'remote') {
 			$l['webmail_url'] = add_http_if_not_exist($l['webmail_url']);
 			$string .= "\tRedirect / {$l['webmail_url']}\n\n";
 		} else {
-
-			if (is_disabled($prog)) {
+			if (is_disabled($l['webmailprog'])) {
 				$string .= "\tDocumentRoot /home/kloxo/httpd/webmail/disabled/\n";
 			} else {
-				$string .= "\tDocumentRoot /home/kloxo/httpd/webmail/\n";
+			//	$string .= "\tDocumentRoot /home/kloxo/httpd/webmail/\n";
+
+				$prog = ($l['webmailprog'] === '--chooser--') ? "" : $l['webmailprog'];
+				if ($prog) {
+					$string .= "\tDocumentRoot /home/kloxo/httpd/webmail/$prog/\n";
+				}
+				else {
+					$string .= "\tDocumentRoot /home/kloxo/httpd/webmail/\n";
+				}
 			}
 
-			$prog = ($l['webmailprog'] == '--chooser--')? "": $l['webmailprog'];
+		/*
+			$prog = ($l['webmailprog'] === '--chooser--')? "": $l['webmailprog'];
 			if ($prog) {
-				$string .= "\tDirectoryIndex redirect-to-$prog.php index.php index.html\n\n";
+				$string .= "\n\tDirectoryIndex redirect-to-$prog.php index.php index.html\n";
 			}
-//			$string .= "\t<Ifmodule mod_suphp.c>\n";
-			//$string .= "\t\tSuPhp_UserGroup {$l['systemuser']} {$l['systemuser']}\n";
-//			$string .= "\t\tSuPhp_UserGroup lxlabs lxlabs\n";
+		*/
+
+		//	$string .= "\t<Ifmodule mod_suphp.c>\n";
+		//	$string .= "\t\tSuPhp_UserGroup {$l['systemuser']} {$l['systemuser']}\n";
+		//	$string .= "\t\tSuPhp_UserGroup lxlabs lxlabs\n";
 
 			$string .= web__apache::staticgetSuexecString('lxlabs');
 
-//			$string .= "\t</Ifmodule>\n\n";
-
+		//	$string .= "\t</Ifmodule>\n\n";
 		}
-		$string .= "</VirtualHost>\n\n";
+
+		$string .= "</VirtualHost>\n\n\n";
 	}
 
+	return $string;
+
+
 //	lfile_put_contents("/etc/httpd/conf/kloxo/webmail_redirect.conf", $string);
-	lfile_put_contents("/home/httpd/conf/defaults/webmail_redirect.conf", $string);
+//	lfile_put_contents("/home/apache/conf/webmails/_webmail_redirect.conf", $string);
 
 	createRestartFile('apache');
-}
-
-function syncWebmailRedirect()
-{
-	// --- this is wrong code but work
-	Mmail::fixWebmailRedirect();
-
-/* --- this is right but weird result
-	$mmail = new $this->main->MMail();
-	$mmail->fixWebmailRedirect();
-	$mmail = null;
---- */
 }
 
 function getDav()
@@ -595,7 +696,7 @@ function frontPageEnable()
 		$htaccessstring .= "";
 		$web_path = "$sgbl->__path_httpd_root/";
 //		$for_file ="$sgbl->__path_httpd_root/{$this->main->nname}/conf/kloxo.frontpage.{$this->main->nname}";
-		$for_file ="/home/httpd/conf/frontpage/{$this->main->nname}.conf";
+		$for_file ="/home/apache/conf/frontpage/{$this->main->nname}.conf";
 
 		//$for_file = lx_tmp_file("{$this->main->nname}_frontpage");
 
@@ -622,7 +723,7 @@ function frontPageEnable()
 		
 		$val = lxshell_return("/usr/local/frontpage/version5.0/bin/owsadm.exe", "-o", "fulluninstall", "-p", "80", "-m", $this->main->nname);
 //		$for_file ="$sgbl->__path_httpd_root/{$this->main->nname}/conf/kloxo.frontpage.{$this->main->nname}";
-		$for_file ="/home/httpd/conf/frontpage/{$this->main->nname}.conf";
+		$for_file ="/home/apache/conf/frontpage/{$this->main->nname}.conf";
 		lunlink($for_file);
 
 	}
@@ -666,7 +767,7 @@ static function createSSlConf($iplist, $domainiplist)
 
 	//	$string .= "SSLLogFile /\n";
 //	$sslfile = "/etc/httpd/conf/kloxo/ssl.conf";
-	$sslfile = "/home/httpd/conf/defaults/ssl.conf";
+	$sslfile = "/home/apache/conf/defaults/ssl.conf";
 
 	$string = "<IfModule mod_ssl.c>\n\n{$string}\n</IfModule>\n\n";
 	//$string = null;
@@ -987,7 +1088,7 @@ function syncToPort($port, $cust_log, $err_log, $frontpage = false)
 	$string .= "\tRedirect /kloxo https://cp.{$this->main->nname}:{$this->main->__var_sslport}\n";
 --- */
 
-	$string .= "\tRedirect /webmail https://webmail.{$this->main->nname}\n\n";
+	$string .= "\tRedirect /webmail http://webmail.{$this->main->nname}\n\n";
 	$string .= "\t<Directory /home/httpd/{$domname}/kloxoscript>\n";
 	$string .= "\t\tAllowOverride All\n";
 	$string .= "\t</Directory>\n\n";
@@ -1103,9 +1204,9 @@ function createForwarddir()
 	lxfile_touch("__path_apache_path/kloxo/forward/forwardhost.conf");
 	//lxfile_unix_chmod("__path_apache_path/kloxo/forward/{$this->main->nname}", "0710");
 
-	lxfile_mkdir( "/home/httpd/conf/forward/");
-	lxfile_touch("/home/httpd/conf/forward/{$this->main->nname}.conf");
-	lxfile_touch("/home/httpd/conf/defaults/forwardhost.conf");
+	lxfile_mkdir( "/home/apache/conf/forward/");
+	lxfile_touch("/home/apache/conf/forward/{$this->main->nname}.conf");
+	lxfile_touch("/home/apache/conf/defaults/forwardhost.conf");
 --- */
 }
 
@@ -1152,7 +1253,7 @@ function updateForwardconf()
 /* --- no need forward for new structure
 	return;
 //	$forwardincludefile = "$sgbl->__path_apache_path/kloxo/forward/forwardhost.conf";
-	$forwardincludefile = "/home/httpd/conf/defaults/forwardhost.conf";
+	$forwardincludefile = "/home/apache/conf/defaults/forwardhost.conf";
 
 	$result = $this->main->__var_fdomain_list;
 	$fdata = null;
@@ -1226,11 +1327,22 @@ function hotlink_protection()
 	return $string;
 }
 
-static function createWebmailConfig()
+// static function createWebmailConfig()
+static function createWebDefaultConfig()
 {
 	global $gbl, $sgbl, $login, $ghtml; 
 
 	$fdata = null;
+
+	$webmaildef = $login->getObject('general')->generalmisc_b->webmail_system_default;
+
+	if ($webmaildef) {
+		$webmaildefpath = $webmaildef."/";
+	}
+	else {
+		$webmaildefpath = '';
+	}
+
 
 	$fdata .= "<VirtualHost \\\n";
 	$fdata .= web__apache::staticcreateVirtualHostiplist("80");
@@ -1249,7 +1361,7 @@ static function createWebmailConfig()
 	$defaultdata .= "</VirtualHost>\n\n";
 
 //	$defaultfile = "$sgbl->__path_apache_path/kloxo/default.conf";
-	$defaultfile = "/home/httpd/conf/defaults/_default.conf";
+	$defaultfile = "/home/apache/conf/defaults/_default.conf";
 
 	lfile_put_contents($defaultfile, $defaultdata);
 
@@ -1260,14 +1372,15 @@ static function createWebmailConfig()
 	$webdata .= "\t\t>\n\n";
 	$webdata .= "\tServerName webmail\n";
 	$webdata .= "\tServerAlias webmail.*\n\n";
-	$webdata .= "\tDocumentRoot {$sgbl->__path_kloxo_httpd_root}/webmail/\n";
+	$webdata .= "\tDocumentRoot {$sgbl->__path_kloxo_httpd_root}/webmail/$webmaildefpath\n";
 
 	$webdata .= web__apache::staticgetSuexecString('lxlabs');
 
 	$webdata .= "</VirtualHost>\n\n";
 
 //	$webmailfile = "__path_real_etc_root/httpd/conf/kloxo/webmail.conf";
-	$webmailfile = "/home/httpd/conf/defaults/webmail.conf";
+	$webmailfile = "/home/apache/conf/webmails/webmail.conf";
+
 
 	lfile_put_contents($webmailfile, $webdata);
 
@@ -1285,7 +1398,7 @@ static function createWebmailConfig()
 	$cpdata .= "</VirtualHost>\n\n";
 
 //	$cpfile = "__path_real_etc_root/httpd/conf/kloxo/cp_config.conf";
-	$cpfile = "/home/httpd/conf/defaults/cp_config.conf";
+	$cpfile = "/home/apache/conf/defaults/cp_config.conf";
 
 	lfile_put_contents($cpfile, $cpdata);
 
@@ -1351,7 +1464,8 @@ function fullUpdate()
 	lxfile_unix_chmod("{$this->main->getFullDocRoot()}/", "0755");
 	lxfile_unix_chmod("{$this->main->getFullDocRoot()}", "0755");
 	lxfile_unix_chown("__path_httpd_root/{$this->main->nname}", "{$this->main->username}:apache");
-	self::createWebmailConfig();
+//	self::createWebmailConfig();
+	self::createWebDefaultConfig();
 }
 
 function dbactionUpdate($subaction)
@@ -1369,8 +1483,6 @@ function dbactionUpdate($subaction)
 			$this->fullUpdate();
 			$this->main->doStatsPageProtection();
 			$this->createCpConfig();
-			// --- always update webmail_redirect too
-			$this->syncWebmailRedirect();
 			break;
 
 		case "add_subweb_a":
@@ -1400,6 +1512,9 @@ function dbactionUpdate($subaction)
 
 		case "create_config":
 		case "addondomain":
+			$this->createConffile();
+			break;
+
 		case "add_delete_dirprotect":
 		case "extra_tag" : 
 		case "add_dirprotect" : 
@@ -1419,7 +1534,10 @@ function dbactionUpdate($subaction)
 			$this->createConffile();
 			break;
 
-		case "redirect_domain" : 
+		case "redirect_domain" :
+			$this->createConffile();
+			break;
+
 		case "add_forward_alias_a" : 
 		case "delete_forward_alias_a" : 
 			$this->createForwardconf();
