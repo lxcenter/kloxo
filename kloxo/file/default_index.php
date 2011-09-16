@@ -24,16 +24,16 @@ img {
 
 <table cellpadding="0" cellspacing="0" width="100%" border="0" bgcolor="#66aaddd" height="100">
 	<tr>
-		<td valign="top"><img src="images/logo.png" height="75" vspace="5" hspace="5"></td>
+		<td valign="top"><img src="images/logo.png" height="75" vspace="5" hspace="5" alt="hosting-logo"></td>
 		<td width="130">
 		<table border="0" width="100%" cellspacing="0" cellpadding="0">
 					<tr>
-						<td>
-						<img src="images/lxcenter.png" width="120" height="35" hspace="5" vspace="5"></td>
+						<td><a href="http://lxcenter.org/" title="Go to LxCenter website">
+						<img src="images/lxcenter.png" alt="lxcenter-logo" width="120" height="35" hspace="5" vspace="5"></a></td>
 					</tr>
 					<tr>
-						<td>
-						<img src="images/kloxo.png" width="120" height="27" hspace="5" vspace="5"></td>
+						<td><a href="http://lxcenter.org/software/kloxo/" title="Go to Kloxo website">
+						<img src="images/kloxo.png" alt="kloxo-logo" width="120" height="27" hspace="5" vspace="5"></a></td>
 					</tr>
 					</table></td>
 	</tr><tr><td colspan="2" bgcolor="#000000">&nbsp;</td></tr>
