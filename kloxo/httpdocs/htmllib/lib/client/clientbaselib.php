@@ -964,11 +964,6 @@ static function continueForm($parent, $class, $param, $continueaction)
 		throw new lxexception("{$param['nname']}_use_double_underscore", 'nname');	
 	}
 
-	$reserved = array(
-		'apache', 'lighttpd', 'nginx', 
-		'httpd', 'kloxo', 'lxadmin', 'lxlabs', 'lxcenter', 'nouser', 
-		'tinydns', 'axfrdns', 'dnscache', 'dnslog', 'bind', 'named');
-
 	// also check if /home/<client> exists --> prevent use like 'httpd' as client
 /*
 	if (lxfile_exists("/home/{$param['nname']}")) {
