@@ -75,6 +75,8 @@ else {
 	$conf['mailer']['params']['host'] = 'localhost';
 	$conf['mailer']['params']['port'] = 25;
 	$conf['mailer']['type'] = 'smtp';
+	// read http://forum.parallels.com/showthread.php?t=100576
+	$conf['mailer']['params']['auth'] = true;
 }
 
 $conf['vfs']['params']['vfsroot'] = '/tmp';
