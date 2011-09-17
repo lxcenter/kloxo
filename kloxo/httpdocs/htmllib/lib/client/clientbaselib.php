@@ -964,11 +964,29 @@ static function continueForm($parent, $class, $param, $continueaction)
 		throw new lxexception("{$param['nname']}_use_double_underscore", 'nname');	
 	}
 
+	$reserved = array(
+		'apache', 'lighttpd', 'nginx', 
+		'httpd', 'kloxo', 'lxadmin', 'lxlabs', 'lxcenter', 'nouser', 
+		'tinydns', 'axfrdns', 'dnscache', 'dnslog', 'bind', 'named');
+
 	// also check if /home/<client> exists --> prevent use like 'httpd' as client
+/*
 	if (lxfile_exists("/home/{$param['nname']}")) {
 		throw new lxexception("{$param['nname']}_dir_exists_under_home_dir", 'nname');
 
 	}
+*/
+	$reserved = array(
+		'apache', 'lighttpd', 'nginx', 
+		'httpd', 'kloxo', 'lxadmin', 'lxlabs', 'lxcenter', 'nouser', 
+		'tinydns', 'axfrdns', 'dnscache', 'dnslog', 'bind', 'named');
+
+	foreach($reserved as $r) {
+		if ($param['nname'] === $r) {
+			throw new lxexception("{$param['nname']}_dir_as_reserved_under_home_dir", 'nname');
+		}
+	}
+
 
 	$param['nname'] = trim($param['nname']);
 
@@ -978,8 +996,12 @@ static function continueForm($parent, $class, $param, $continueaction)
 			if (!$param['contactemail']) {
 				throw new lxexception("sending_welcome_needs_contactemail", array('contactemail', 'send_welcome_f'), '');
 			}
-			if (!validate_email($param['contactemail'])) {
-				throw new lxexception("contactemail_is_not_valid_email_address", 'contactemail', '');
+			// accept to more contact mail - http://forum.lxcenter.org/index.php?t=msg&goto=89118
+			$contact = implode(",", str_replace(" ", "", $param['contactemail']));
+			foreach($contact as $c) {
+				if (!validate_email($c)) {
+					throw new lxexception("contactemail_is_not_valid_email_address", 'contactemail', '');
+				}
 			}
 		}
 
