@@ -5527,10 +5527,11 @@ function setInitialApacheConfig()
 		lxfile_mkdir("/home/apache/conf/webmails");
 	}
 
-	if (!lxfile_real("/etc/httpd/conf.d/~lxcenter.conf")) {	
+	// always override to make sure the latest copy
+//	if (!lxfile_real("/etc/httpd/conf.d/~lxcenter.conf")) {	
 		log_cleanup("- Install /etc/httpd/conf.d/~lxcenter.conf");
 		lxfile_cp("../file/apache/~lxcenter.conf", "/etc/httpd/conf.d/~lxcenter.conf");
-	}
+//	}
 
 	if (!lxfile_real("/etc/httpd/conf.d/ssl.conf")) {
 		log_cleanup("- Install /etc/httpd/conf.d/ssl.conf");
@@ -5649,10 +5650,11 @@ function setInitialLighttpdConfig()
 	}
 --- */
 
-	if (!lxfile_real("/etc/lighttpd/conf.d/~lxcenter.conf")) {
+	// always override to make sure the latest copy
+//	if (!lxfile_real("/etc/lighttpd/conf.d/~lxcenter.conf")) {
 		log_cleanup("- Initialize /etc/lighttpd/conf.d/~lxcenter.conf");
 		lxfile_cp("../file/lighttpd/~lxcenter.conf", "/etc/lighttpd/conf.d/~lxcenter.conf");
-	}
+//	}
 
 	if (!lxfile_real("/etc/lighttpd/local.lighttpd.conf")) {
 		log_cleanup("- Initialize /etc/lighttpd/local.lighttpd.conf");
