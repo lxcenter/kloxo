@@ -223,7 +223,7 @@ function updatePortConfig($param)
 }
 
 
-function postUpdate($subaction)
+function postUpdate($subaction = null)
 {
 //	if ($this->subaction === 'generalsetting') {
 	if ($subaction === 'generalsetting') {

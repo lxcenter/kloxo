@@ -5561,6 +5561,10 @@ function setInitialApacheConfig()
 		log_cleanup("- Initialize/home/apache/conf/defaults/mimetype.conf");
 		lxfile_touch("/home/apache/conf/defaults/mimetype.conf");
 	}
+
+	// resolved issue for 'generalsetting' that can not write config files if 'root' as owner
+	passthru("chown -R lxlabs:lxlabs /home/apache");
+
 }
 
 function setInitialLighttpdConfig()
@@ -5682,6 +5686,9 @@ function setInitialLighttpdConfig()
 	}
 	log_cleanup("- Install /etc/init.d/lighttpd service file");
 	lxfile_cp("../file/lighttpd/etc_init.d", "/etc/init.d/lighttpd");
+
+	// resolved issue for 'generalsetting' that can not write config files if 'root' as owner
+	passthru("chown -R lxlabs:lxlabs /home/lighttpd");
 }
 
 function setInitialPureftpConfig()
