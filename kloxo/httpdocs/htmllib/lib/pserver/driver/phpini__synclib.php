@@ -122,7 +122,8 @@ function createIniFile()
 		} else {
 		$extrastring = "";
 		}
-/* --- ToDo #590 - disable appear on .htaccess
+		
+/* --- Issue #590 - disable appear on .htaccess
 		$htfile = "{$this->main->__var_docrootpath}/.htaccess";		
 		$ht1file = "/home/httpd/{$this->main->getParentName()}/kloxoscript/.htaccess";
 		$htcont = "php_value error_log $elogfile\n$htcont";
