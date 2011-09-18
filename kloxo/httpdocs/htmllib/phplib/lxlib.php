@@ -1893,8 +1893,14 @@ function init_language()
 	$g_language_mes->__information = $__information;
 	$g_language_mes->__emessage = $__emessage;
 	$g_language_mes->__keyword = $__keyword;
+/*
 	$g_language_mes->__help = $__help;
 	$g_language_mes->__helpvar = $__helpvar;
+*/
+	// __help and __helpvar since 6.1.6 doesn't exist, so need a trick
+	if (isset($__help)) { $g_language_mes->__help = $__help; }
+	if (isset($__helpvar)) { $g_language_mes->__helpver = $__helpver; }
+
 	$g_language_mes->__commonhelp = $g_commonhelp;
 
 	$g_language_desc = new Remote();
