@@ -25,8 +25,8 @@ include_once "lib/common.inc";
 include_once "lib/programlib.php";
 
 // New Localize system (Kloxo 6.2.x) Issue #397
-include_once "i18n/i18n.php";
-init_language();
+include_once "$dir/l18n/l18n.php";
+
 
 if (lxfile_exists("../etc/classdefine")) {
 	$list = lscandir_without_dot("../etc/classdefine");
