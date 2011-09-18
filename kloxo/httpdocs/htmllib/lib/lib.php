@@ -667,20 +667,22 @@ function PrepareRoundCubeDb()
 	//	system("mysql -u root $pstring roundcubemail < /home/kloxo/httpd/webmail/roundcube/SQL/mysql.update.sql");
 	}
 
-	system("chattr -i /home/kloxo/httpd/webmail/roundcube/config/db.inc.php");
+	$cfgfile = "/home/kloxo/httpd/webmail/roundcube/config/db.inc.php"; 
+
+	lxfile_cp("/usr/local/lxlabs/kloxo/file/webmail-chooser/db.inc.phps", $cfgfile);
+	system("chattr -i {$cfgfile}");
 
 	log_cleanup("- Generating password");
 	$pass = randomString(8);
 //	dprint("Generated Pass " . $pass . "\n");
 	log_cleanup("- Add Password to configfile");
-	$roundcubefileIN = "/usr/local/lxlabs/kloxo/file/webmail-chooser/db.inc.phps";
-	$roundcubefileOUT = "/home/kloxo/httpd/webmail/roundcube/config/db.inc.php";
-	$content = lfile_get_contents($roundcubefileIN);
-	$content = str_replace("mysql://roundcube:pass", "mysql://roundcube:" . $pass, $content);
-	system("chattr -i ".$roundcubefileOUT);
-	lfile_put_contents($roundcubefileOUT, $content);
 
-	$result = mysql_query("GRANT ALL ON roundcubemail.* TO roundcube@localhost IDENTIFIED BY '$pass'", $link);
+	$content = lfile_get_contents($cfgfile);
+	$content = str_replace("mysql://roundcube:pass", "mysql://roundcube:" . $pass, $content);
+
+	lfile_put_contents($cfgfile, $content);
+
+	$result = mysql_query("GRANT ALL ON roundcubemail.* TO roundcube@localhost IDENTIFIED BY '{$pass}'", $link);
 	mysql_query("flush privileges", $link);
 	if (!$result) {
 		print("- Could not grant privileges. Script Abort");
@@ -699,7 +701,7 @@ function PrepareHordeDb()
 {
 	global $gbl, $sgbl, $login, $ghtml;
 
-	log_cleanup("Prepare RoundCube database");
+	log_cleanup("Prepare Horde database");
 
 	$pass = slave_get_db_pass();
 	$user = "root";
@@ -757,21 +759,22 @@ function PrepareHordeDb()
 		system("mysql -u root $pstring < /home/kloxo/httpd/webmail/horde/scripts/sql/groupware.mysql.sql");
 	}
 
-	lxfile_cp("/usr/local/lxlabs/kloxo/file/horde.config.phps", "/home/kloxo/httpd/webmail/horde/config/conf.php");
-	system("chattr -i /home/kloxo/httpd/webmail/horde/config/conf.php");
+	$cfgfile = "/home/kloxo/httpd/webmail/horde/config/conf.php";
+
+	lxfile_cp("/usr/local/lxlabs/kloxo/file/horde.config.phps", $cfgfile);
+	system("chattr -i {$cfgfile}");
 
 	log_cleanup("- Generating password");
 	$pass = randomString(8);
 //	dprint("Generated Pass " . $pass . "\n");
 	log_cleanup("- Add Password to configfile");
-	$content = lfile_get_contents("../file/horde.config.phps");
+
+	$content = lfile_get_contents($cfgfile);
 	$content = str_replace("__lx_horde_pass", $pass, $content);
-	log_cleanup("- Remove system readonly attribute from configfile");
-	system("chattr -i /home/kloxo/httpd/webmail/horde/config/conf.php");
 
-	lfile_put_contents("/home/kloxo/httpd/webmail/horde/config/conf.php", $content);
+	lfile_put_contents($cfgfile, $content);
 
-	$result = mysql_query("GRANT ALL ON horde_groupware.* TO horde_groupware@localhost IDENTIFIED BY '$pass'", $link);
+	$result = mysql_query("GRANT ALL ON horde_groupware.* TO horde_groupware@localhost IDENTIFIED BY '{$pass}'", $link);
 	mysql_query("flush privileges", $link);
 	if (!$result) {
 		log_cleanup("Could not grant privileges. Script Abort");
@@ -6222,8 +6225,8 @@ function installRoundCube()
 		lxfile_generic_chown_rec("$path_roundcube/temp", 'apache:apache');
 		lxfile_rm('/var/cache/kloxo/roundcube.log');
 	}
-	log_cleanup("- Install database config");
-	lxfile_cp("../file/webmail-chooser/db.inc.phps", "/home/kloxo/httpd/webmail/roundcube/config/db.inc.php");
+//	log_cleanup("- Install database config");
+//	lxfile_cp("../file/webmail-chooser/db.inc.phps", "/home/kloxo/httpd/webmail/roundcube/config/db.inc.php");
 
 }
 
@@ -6245,8 +6248,8 @@ function installHorde()
 		lxfile_generic_chown_rec("$path_horde/temp", 'apache:apache');
 		lxfile_rm('/var/cache/kloxo/horde.log');
 	}
-	log_cleanup("- Install database config");
-	lxfile_cp("../file/horde.config.phps", "/home/kloxo/httpd/webmail/horde/config/conf.php");
+//	log_cleanup("- Install database config");
+//	lxfile_cp("../file/horde.config.phps", "/home/kloxo/httpd/webmail/horde/config/conf.php");
 
 }
 

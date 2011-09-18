@@ -213,10 +213,15 @@ function lxins_main()
 	system("chown -R lxlabs:lxlabs /home/kloxo/httpd");
 	system("/etc/init.d/kloxo restart >/dev/null 2>&1 &");
 	chdir("/usr/local/lxlabs/kloxo/httpdocs/");
-	system("/usr/local/lxlabs/ext/php/php /usr/local/lxlabs/kloxo/bin/install/create.php --install-type=$installtype --db-rootuser=$dbroot --db-rootpassword=$dbpass");
-	system("/usr/local/lxlabs/ext/php/php /usr/local/lxlabs/kloxo/bin/misc/secure-webmail-mysql.phps");
-	system("/bin/rm /usr/local/lxlabs/kloxo/bin/misc/secure-webmail-mysql.phps");
-	system("/script/centos5-postpostupgrade");
+
+	// no needed because the same process inside PrepareRoundCubeDb/PrepareHordeDb declare on lib.php
+	// and execute when running cleanup and fixwebmail/fixhorde/fixroundcube
+//	system("/usr/local/lxlabs/ext/php/php /usr/local/lxlabs/kloxo/bin/misc/secure-webmail-mysql.phps");
+//	system("/bin/rm /usr/local/lxlabs/kloxo/bin/misc/secure-webmail-mysql.phps");
+
+	// no needed too because declare on lib.php too
+//	system("/script/centos5-postpostupgrade");
+
 	if ($installappinst) {
 		system("/script/installapp-update"); // First run (gets installappdata)
 		system("/script/installapp-update"); // Second run (gets applications)
