@@ -988,7 +988,7 @@ static function createWebDefaultConfig($iplist = null)
 
 	$webmaildef = $login->getObject('general')->generalmisc_b->webmail_system_default;
 
-	if (($webmaildef === '--chooser--') || ($webmaildef === '')) {
+	if (($webmaildef === '--chooser--') || (!isset($webmaildef))) {
 		$webmaildefpath = '';
 	}
 	else {
