@@ -26,7 +26,7 @@
 
 # change to kloxo-installer.sh since 6.1.7
 
-echo "* Use kloxo-installer.sh and download from with:"
+echo "* Use kloxo-installer.sh and download from:"
 echo "    wget http://download.lxcenter.org/download/kloxo/production/kloxo-installer.sh"
 echo
 echo "* download kloxo-packer.sh for pack local copy and kloxo-patcher.sh for patch"

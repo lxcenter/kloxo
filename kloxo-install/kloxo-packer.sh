@@ -44,7 +44,6 @@ echo "Start pack..."
 request1=$1
 kloxo_path=${request1#--svnpath\=}
 
-mkdir -p ./ready
 mkdir -p ./combo
 
 mkdir -p ./current
@@ -67,11 +66,24 @@ cp -rf ./patch/* ./combo
 rm -rf `find ./combo -type d -name .svn`
 rm -rf `find ./combo -type d -name CVS`
 
+if [ ! -f ./combo/kloxo-install/kloxo-installer.sh ] ; then
+	echo "Download kloxo-installer.sh from http://download.lxcenter.org/download/kloxo/production/"
+	wget http://download.lxcenter.org/download/kloxo/production/kloxo-installer.sh
+	mv -f kloxo-installer.sh ./combo/kloxo-install/kloxo-installer.sh
+fi
+
+if [ ! -f ./combo/kloxo-install/kloxo-installer.php ] ; then
+	echo "Download kloxo-installer.php from http://download.lxcenter.org/download/kloxo/production/"
+	wget http://download.lxcenter.org/download/kloxo/production/kloxo-installer.php
+	mv -f kloxo-installer.php ./combo/kloxo-install/kloxo-installer.php
+fi
+
+
 cd ./combo
 
 zip -r9y kloxo-install.zip ./kloxo-install
 
-mv -f kloxo-install.zip ../ready
+mv -f kloxo-install.zip ../
 
 cd ./kloxo
 
@@ -90,9 +102,8 @@ zip -r9y kloxo-current.zip ./bin ./cexe ./file ./httpdocs ./pscript ./sbin ./REL
 	"*httpdocs/htmllib/fckeditor/*" \
 	"*httpdocs/htmllib/yui-dragdrop/*"
 
-mv -f kloxo-current.zip ../../ready
-
-cd ../../ready
+mv -f kloxo-current.zip ../../
+cd ../../
 
 thirdpartyver=$(curl -L http://download.lxcenter.org/download/thirdparty/kloxo-version.list)
 if [ ! -f kloxo-thirdparty.$thirdpartyver.zip ] ; then
@@ -124,7 +135,52 @@ if [ ! -f lxawstats$lxawstatsver.tar.gz ] ; then
 	wget http://download.lxcenter.org/download/lxawstats$lxawstatsver.tar.gz
 fi
 
-cp ../combo/kloxo-install/kloxo-installer.sh ./
+cp ./combo/kloxo-install/kloxo-installer.sh ./
 
+# Reads yes|no answer from the input 
+# 1 question text
+# 2 default answer, yes = 1 and no = 0
+function get_yes_no {
+    local question=
+    local input=
+    case $2 in 
+        1 ) question="$1 [Y/n]: "
+            ;;
+        0 ) question="$1 [y/N]: "
+            ;;
+        * ) question="$1 [y/n]: "
+    esac
+
+    while :
+    do
+        read -p "$question" input
+        input=$( echo $input | tr -s '[:upper:]' '[:lower:]' )
+        if [ "$input" = "" ] ; then
+            if [ "$2" == "1" ] ; then
+                return 1
+            elif [ "$2" == "0" ] ; then
+                return 0
+            fi
+        else
+            case $input in
+                y|yes) return 1
+                    ;;
+                n|no) return 0
+                    ;;
+            esac
+        fi
+    done
+}
+
+get_yes_no "Do you delete temporal dirs (patch, current and combo)?" 1
+if [ "$?" -eq "1" ] ; then
+	rm -rf ./patch
+	rm -rf ./current
+	rm -rf ./combo
+fi
+
+echo
+echo "Now you can run 'sh ./kloxo-installer.sh' for installing"
+echo
 echo "... the end"
 echo

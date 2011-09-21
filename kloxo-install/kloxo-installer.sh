@@ -157,20 +157,6 @@ else
     fi
 fi
 
-# Check if OS is 32bit and if not allow user to choose to continue or not (for devels).
-# Remove this when RHEL/CENTOS x86_64 is officially supported or add the arch to prevent people from installing in ARM.
-# if [ "$ARCH_CHECK" != "i686" ] ; then
-#     echo -en "\aArchitecture supported ($ARCH_CHECK)" $C_NO "\n"
-#     echo -e "Your OS architecture ($ARCH_CHECK) is NOT officially supported yet and $APP_NAME may not work correctly."
-#     get_yes_no "Continue anyway?" 0
-#     if [ "$?" -eq "0" ] ; then 
-#         echo -e "Aborting ...\n"
-#         exit $E_ARCH
-#     fi
-# else
-#     echo -en "Architecture supported ($ARCH_CHECK)" $C_OK
-# fi
-
 # Check for mysql databases and arguments.
 if  [ -d /var/lib/mysql ] && [ -z "$1" ] ; then
     echo -en "Database and arguments check " $C_NO
@@ -212,15 +198,16 @@ if [ ! -f ./kloxo-install.zip ] ; then
     wget http://download.lxcenter.org/download/kloxo-install.zip
 fi
 
-if [ -d kloxo-install/kloxo-linux ] ; then
-    cd kloxo-install/kloxo-linux
+if [ -d kloxo-install ] ; then
+    cd kloxo-install
 else
     unzip -oq kloxo-install.zip
-    cd kloxo-install/kloxo-linux
+    cd kloxo-install
 fi
 
-php lxins.php --install-type=$APP_TYPE $* | tee kloxo_install.log
+if [ -f /usr/local/lxlabs/ext/php/php ] ; then
+	/usr/local/lxlabs/ext/php/php kloxo-installer.php --install-type=$APP_TYPE $* | tee kloxo_install.log
+else
+	php kloxo-installer.php --install-type=$APP_TYPE $* | tee kloxo_install.log
+fi
 
-###TODO###
-# cd kloxo-install
-# php kloxo-installer.php --install-type=$APP_TYPE $* | tee kloxo_install.log

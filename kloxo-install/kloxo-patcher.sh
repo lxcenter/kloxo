@@ -63,6 +63,12 @@ cp -rf /usr/local/lxlabs/kloxo/httpdocs/htmllib/script /script
 
 
 if [ -f /usr/lib64 ] ; then
+
+	if [ ! -h /usr/lib/kloxophp ] ; then
+		echo "- /usr/lib/kloxophp not as symlink, deleted"
+		rm -rf /usr/lib/kloxophp
+	fi
+	
 	echo "- Set symlink for 64bit version"
 	mkdir -p /usr/lib64/php
 	ln -s /usr/lib64/php /usr/lib/php
