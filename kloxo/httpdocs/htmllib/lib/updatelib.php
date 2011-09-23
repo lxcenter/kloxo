@@ -5,112 +5,77 @@ function update_main()
 	global $argc, $argv;
 	global $gbl, $sgbl, $login, $ghtml; 
 
-	debug_for_backend();
-	$program = $sgbl->__var_program_name;
-	$login = new Client(null, null, 'upgrade');
+	log_cleanup("*** Executing Update upcp - BEGIN ***");
 
+	debug_for_backend();
+	$login = new Client(null, null, 'upgrade');
+	$DoUpdate = false;
 
 	$opt = parse_opt($argv);
 
-	print("Getting Version Info from the Server...\n");
-	if ((isset($opt['till-version']) && $opt['till-version']) || lxfile_exists("__path_slave_db")) {
-		$sgbl->slave = true;
-		$upversion = findNextVersion($opt['till-version']);
-		$type = 'slave';
-	} else {
-		$sgbl->slave = false;
-		$upversion = findNextVersion();
-		$type = 'master';
+	log_cleanup("Kloxo Install/Update");
+	
+	if (lxfile_exists("/var/cache/kloxo/kloxo-install-firsttime.flg")) {
+		log_cleanup("- Install Kloxo packages at the first time");
+		$DoUpdate = true;
+	}
+	else {
+		log_cleanup("- Getting Version Info from the LxCenter download Server");
+		if ((isset($opt['till-version']) && $opt['till-version']) || lxfile_exists("__path_slave_db")) {
+			$sgbl->slave = true;
+			$upversion = findNextVersion($opt['till-version']);
+			$type = 'slave';
+		} else {
+			$sgbl->slave = false;
+			$upversion = findNextVersion();
+			$type = 'master';
+		}
+
+		if ($upversion) {
+			log_cleanup("- Connecting LxCenter download server");
+			do_upgrade($upversion);
+			log_cleanup("- Upgrade Done. Cleanup....");
+			flush();
+		} else {
+			$localversion = $sgbl->__ver_major_minor_release;
+			log_cleanup("- Kloxo is the latest version ($localversion)");
+
+			installThirdparty();
+			installWebmail();
+			installAwstats();
+
+			$DoUpdate = false;
+		}
 	}
 
-	print("Connecting LxCenter download server...\nPlease wait....\n");
+	log_cleanup("*** Executing Update upcp - END ***");
 
-	if ($upversion) {
-		do_upgrade($upversion);
-		print("Upgrade Done.\nCleanup....\n");
-		flush();
-	} else {
-		print("$program is the latest version\n");
+	if ( $DoUpdate == false ) {
+		log_cleanup("Run /script/cleanup if you want to fix/restore/(re)install non working components.");
+			exit;
 	}
-
 
 	if (is_running_secondary()) {
-		print("Not running Update Cleanup, because this is running secondary \n");
+		log_cleanup("Not running Update Cleanup, because this is running secondary \n");
 		exit;
 	}
-
+	
+	//
+	// Executing update/cleanup process
+	//
 	lxfile_cp("htmllib/filecore/php.ini", "/usr/local/lxlabs/ext/php/etc/php.ini");
 	$res = pcntl_exec("/bin/sh", array("../bin/common/updatecleanup.sh", "--type=$type"));
-	print("Ready.\n");
-
-}
-
-
-
-function updatecleanup()
-{
-	global $gbl, $sgbl, $login, $ghtml; 
-	os_create_program_service();
-	os_fix_lxlabs_permission();
-	os_restart_program();
-	updateApplicableToSlaveToo();
-}
-
-function update_all_slave()
-{
-	$db = new Sqlite(null, "pserver");
-
-	$list = $db->getTable(array("nname"));
-
-	foreach($list as $l) {
-		if ($l['nname'] === 'localhost') {
-			continue;
-		}
-		try {
-			print("Upgrading Slave {$l['nname']}...\n");
-			rl_exec_get(null, $l['nname'], 'remotetestfunc', null);
-		} catch (exception $e) {
-			print($e->getMessage());
-			print("\n");
-		}
-	}
-
-}
-
-
-
-
-function findNextVersion($lastversion = null)
-{
-	global $gbl, $sgbl, $login, $ghtml; 
-	$maj = $sgbl->__ver_major;
-	$thisversion = $sgbl->__ver_major_minor_release;
-
-	$upgrade = null;
-	$nlist = getVersionList($lastversion);
-	dprintr($nlist);
-	$k = 0;
-	foreach($nlist as $l) {
-		if (version_cmp($thisversion, $l) === -1) {
-			$upgrade = $l;
-			break;
-		}
-		$k++;
-	}
-	if (!$upgrade) {
-		return 0;
-	}
-
-	print("Upgrading from $thisversion to $upgrade\n");
-	return $upgrade;
-
 }
 
 function do_upgrade($upversion)
 {
 	global $gbl, $sgbl, $login, $ghtml; 
-	$maj = $sgbl->__ver_major;
 	$program = $sgbl->__var_program_name;
+
+	if (file_exists(".svn")) {
+		log_cleanup("BREAK - Development version found");
+		exit;
+	}
 
 	$programfile = "$program-" . $upversion . ".zip";
 
@@ -118,52 +83,146 @@ function do_upgrade($upversion)
 	lxfile_mkdir("help");
 	lxfile_rm_rec("__path_program_htmlbase/htmllib/script");
 	lxfile_rm_rec("__path_program_root/pscript");
-	if (file_exists(".svn")) {
-		print("SVN exists... Development system.. Not upgrading...\n");
-		exit;
-	}
-
 
 	$saveddir = getcwd();
 	lxfile_rm_rec("__path_program_htmlbase/download");
 	lxfile_mkdir("download");
 	chdir("download");
-	print("Downloading $programfile ...\n");
+	log_cleanup("Downloading $programfile");
 	download_source("/$program/$programfile");
-	print("Download Done....\n");
-	$host = `hostname`;
-	$host = trim($host);
-//	lxshell_unzip("__system__", "../..", $programfile);
+	log_cleanup("Download Done!... Start unzip");
 	system("cd ../../ ; unzip -o httpdocs/download/$programfile");
 	chdir($saveddir);
 }
 
-function fixZshEtc()
+// --- move from kloxo/httpdocs/lib/updatelib.php
+// use 6.2.x function since version 6.1.7
+
+// old name is fixExtraDB() without log_cleanup() call
+function fixDataBaseIssues()
 {
-	global $global_dontlogshell;
-	$global_dontlogshell = true;
+	log_cleanup("Fix Database Issues");
 
-	$dir = os_get_home_dir("root");
+	log_cleanup("- Fix admin account database settings");
+	$sq = new Sqlite(null, 'domain');
+	$sq->rawQuery("update domain set priv_q_php_flag = 'on'");
+	$sq->rawQuery("update web set priv_q_php_flag = 'on'");
+	$sq->rawQuery("update client set priv_q_php_flag = 'on'");
+	$sq->rawQuery("update client set priv_q_addondomain_num = 'Unlimited' where nname = 'admin'");
+	$sq->rawQuery("update client set priv_q_rubyrails_num = 'Unlimited' where nname = 'admin'");
+	$sq->rawQuery("update client set priv_q_rubyfcgiprocess_num = 'Unlimited' where nname = 'admin'");
+	$sq->rawQuery("update client set priv_q_mysqldb_usage = 'Unlimited' where nname = 'admin'");
+	$sq->rawQuery("update client set priv_q_phpfcgi_flag = 'on' where nname = 'admin'");
+	$sq->rawQuery("update client set priv_q_phpfcgiprocess_num = 'Unlimited' where nname = 'admin'");
+	$sq->rawQuery("update client set priv_q_subdomain_num = 'Unlimited' where nname = 'admin'");
+	$sq->rawQuery("update client set priv_q_totaldisk_usage = 'Unlimited' where nname = 'admin'");
+	$sq->rawQuery("update client set priv_q_php_manage_flag = 'on' where nname = 'admin'");
+	$sq->rawQuery("update client set priv_q_installapp_flag = 'on' where nname = 'admin'");
+	$sq->rawQuery("update client set priv_q_cron_minute_flag = 'on' where nname = 'admin'");
+	$sq->rawQuery("update client set priv_q_document_root_flag = 'on' where nname = 'admin'");
+	$sq->rawQuery("update client set priv_q_runstats_flag = 'on' where nname = 'admin'");
+	$sq->rawQuery("update client set priv_q_webhosting_flag = 'on' where nname = 'admin'");
+	$sq->rawQuery("update ticket set parent_clname = 'client-admin' where subject = 'Welcome to Kloxo'");
+	$sq->rawQuery("update domain set dtype = 'maindomain' where dtype = 'domain'");
 
-	if (lxfile_exists("$dir/.etc")) {
-		lxfile_cp("htmllib/filecore/lxetc/commands.shell", "$dir/.etc/");
-		return;
-	}
+	log_cleanup("- Set default database settings");
+	db_set_default('mmail', 'remotelocalflag', 'local');
+	db_set_default('mmail', 'syncserver', 'localhost');
+	db_set_default('dns', 'syncserver', 'localhost');
+	db_set_default('pserver', 'coma_psrole_a', ',web,dns,mmail,mysqldb,');
+	db_set_default('web', 'syncserver', 'localhost');
+	db_set_default('uuser', 'syncserver', 'localhost');
+	db_set_default('client', 'syncserver', 'localhost');
+	db_set_default('addondomain', 'mail_flag', 'on');
+	db_set_default('client', 'priv_q_can_change_limit_flag', 'on');
+	db_set_default('web', 'priv_q_installapp_flag', 'on');
+	db_set_default('client', 'priv_q_installapp_flag', 'on');
+	db_set_default('client', 'websyncserver', 'localhost');
+	db_set_default('client', 'mmailsyncserver', 'localhost');
+	db_set_default('client', 'mysqldbsyncserver', 'localhost');
+	db_set_default('client', 'priv_q_can_change_password_flag', 'on');
+	db_set_default('client', 'coma_dnssyncserver_list', ',localhost,');
+	db_set_default('domain', 'priv_q_installapp_flag', 'on');
+	db_set_default('domain', 'dtype', 'domain');
+	db_set_default('domain', 'priv_q_php_manage_flag', 'on');
+	db_set_default('web', 'priv_q_php_manage_flag', 'on');
+	db_set_default('client', 'priv_q_php_manage_flag', 'on');
+	db_set_default('client', 'priv_q_webhosting_flag', 'on');
+	db_set_default_variable_diskusage('client', 'priv_q_totaldisk_usage', 'priv_q_disk_usage');
+	db_set_default_variable_diskusage('domain', 'priv_q_totaldisk_usage', 'priv_q_disk_usage');
+	db_set_default_variable('web', 'docroot', 'nname');
+	db_set_default_variable('client', 'used_q_maindomain_num', 'used_q_domain_num');
+	db_set_default_variable('client', 'priv_q_maindomain_num', 'priv_q_domain_num');
+	db_set_default("servermail", "domainkey_flag", "on");
 
-	$ret = lxshell_return("rpm", "-q", "zsh", "vim-ehhanced");
-	if ($ret) {
-		system("yum -y install zsh vim-enhanced");
-	}
+	log_cleanup("- Fix resourceplan settings in database");
+	migrateResourceplan('domain');
+	$sq->rawQuery("update resourceplan set realname = nname where realname = ''");
+	$sq->rawQuery("update resourceplan set realname = nname where realname is null");
+	lxshell_php("../bin/common/fixresourceplan.php");
 
-	lxfile_cp_rec("htmllib/filecore/lxetc/", "$dir/.etc");
+	log_cleanup("- Alter some database tables");
+	// TODO: Check if this is still longer needed!
+	$sq->rawQuery("alter table sslcert change text_ca_content text_ca_content longtext");
+	$sq->rawQuery("alter table sslcert change text_key_content text_key_content longtext");
+	$sq->rawQuery("alter table sslcert change text_csr_content text_csr_content longtext");
+	$sq->rawQuery("alter table sslcert change text_crt_content text_crt_content longtext");
+	$sq->rawQuery("alter table mailaccount change ser_forward_a ser_forward_a longtext");
+	$sq->rawQuery("alter table dns change ser_dns_record_a ser_dns_record_a longtext");
+	$sq->rawQuery("alter table installsoft change ser_installappmisc_b ser_installappmisc_b longtext");
+	$sq->rawQuery("alter table web change ser_redirect_a ser_redirect_a longtext");
+
+	log_cleanup("- Set default welcome text at Kloxo login page");
+	initDbLoginPre();
+
+	log_cleanup("- Remove default db password if exists");
+	critical_change_db_pass();
 }
 
-function move_clients_to_client()
+// old name is doUpdateExtraStuff() without log_cleanup() call
+function doUpdates()
 {
-	if (lxfile_exists("__path_program_home/client")) {
-		return;
-	}
-	lxfile_mv_rec("__path_program_home/clients", "__path_program_home/client");
+	global $gbl, $sgbl, $login, $ghtml;
+
+	createFlagDir();
+
+	fixIpAddress();
+
+	fixservice();
+
+	add_domain_backup_dir();
+
+	createOSUserAdmin();
+
+	call_with_flag("fix_phpini");
+
+	call_with_flag("fix_awstats");
+
+	call_with_flag("fix_domainkey");
+
+	setWatchdogDefaults();
+
+	fixMySQLRootPassword();
+
+	save_admin_email();
+
+	getKloxoLicenseInfo();
+
+	createDatabaseInterfaceTemplate();
+
+	fix_self_ssl();
+
+	setFreshClam();
+
+	installinstallapp();
+
 }
 
+// Remark - some functions move to lib because os_updateApplicableToSlaveToo() inside linuxproglib.php
+// call the same functions inside updatecleanup()
 
+// - move some functions may grow lib.php but reduce linuxproglib.php
+// - some functions (like install_xcache) may call outside update process
+
+// TODO: modified log_log() or log_cleanup
+// so call function with log must call log_cleanup(setFreshClam()) and without log may only setFreshClam()

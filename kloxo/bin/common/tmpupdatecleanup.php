@@ -1,6 +1,6 @@
 <?php 
 include_once "htmllib/lib/include.php";
-include_once "lib/updatelib.php";
+// include_once "lib/updatelib.php";
 include_once "htmllib/lib/updatelib.php";
 
 exit_if_another_instance_running();
@@ -25,22 +25,22 @@ function updatecleanup_main()
 		$login = new Client(null, null, 'update');
 	}
 
-	print("Executing UpdateCleanup. This can take some time. Please be patient.\n");
-	log_log("update", "Executing Updatecleanup");
+//	print("\n\n***Executing UpdateCleanup. This can take some time. Please be patient.***\n\n");
+	log_cleanup("*** Executing Update cleanup - BEGIN ***");
 //
 // Check for lxlabs yum repo file and if exists
 // Change to lxcenter repo file
 //
 	if (lxfile_exists("/etc/yum.repos.d/lxlabs.repo")) {
-		print("Delete old repo's\n");
+		log_cleanup("- Delete old repo's");
 		lxfile_mv("/etc/yum.repos.d/lxlabs.repo","/etc/yum.repos.d/lxlabs.repo.lxsave");
 		system("rm -f /etc/yum.repos.d/lxlabs.repo");
-		print("Removed lxlabs.repo\n");
-		print("Installing lxcenter.repo\n");
+		log_cleanup("- Removed lxlabs.repo");
+		log_cleanup("- Installing lxcenter.repo");
 		system("wget -O /etc/yum.repos.d/lxcenter.repo http://download.lxcenter.org/lxcenter.repo");
-        print("Installing yum-protectbase plugin\n");
-        system("yum install -y -q yum-protectbase");
-		print("Done.\n");
+		log_cleanup("- Installing yum-protectbase plugin");
+		system("yum install -y -q yum-protectbase");
+	//	print("Done.\n");
 	}
 //
 
@@ -49,31 +49,29 @@ function updatecleanup_main()
 // If the flag isn't found, run the fix
 //
 // Disabled in Kloxo 6.1.4
-//if (!lxfile_exists("/usr/local/lxlabs/kloxo/file/webmailReset")) {
-//	system("/usr/local/lxlabs/ext/php/php /usr/local/lxlabs/kloxo/bin/misc/secure-webmail-mysql.phps");
-//	system("/bin/rm /usr/local/lxlabs/kloxo/bin/misc/secure-webmail-mysql.phps");
-//}
+//	if (!lxfile_exists("/usr/local/lxlabs/kloxo/file/webmailReset")) {
+//		system("/usr/local/lxlabs/ext/php/php /usr/local/lxlabs/kloxo/bin/misc/secure-webmail-mysql.phps");
+//		system("/bin/rm /usr/local/lxlabs/kloxo/bin/misc/secure-webmail-mysql.phps");
+//	}
 
 // Remove Flagfile in Kloxo 6.1.4, thios can be removed in 6.1.4+
-if (lxfile_exists("/usr/local/lxlabs/kloxo/file/webmailReset")) {
-      system("/bin/rm /usr/local/lxlabs/kloxo/file/webmailReset");
-}
-
-
+	if (lxfile_exists("/usr/local/lxlabs/kloxo/file/webmailReset")) {
+		system("/bin/rm /usr/local/lxlabs/kloxo/file/webmailReset");
+	}
 
 // Fix #388 - phpMyAdmin config.inc.php permission
 
-    $correct_perm = "0644";
-    $check_perm = substr(decoct( fileperms("/usr/local/lxlabs/$program/httpdocs/thirdparty/phpMyAdmin/config.inc.php") ), 2);
+	$correct_perm = "0644";
+	$check_perm = substr(decoct( fileperms("/usr/local/lxlabs/$program/httpdocs/thirdparty/phpMyAdmin/config.inc.php") ), 2);
 
-    if ($check_perm != $correct_perm) {
-        lxfile_unix_chmod("/usr/local/lxlabs/$program/httpdocs/thirdparty/phpMyAdmin/config.inc.php","0644");
-    }
+	if ($check_perm != $correct_perm) {
+		lxfile_unix_chmod("/usr/local/lxlabs/$program/httpdocs/thirdparty/phpMyAdmin/config.inc.php","0644");
+	}
 
 //
 
 	if (lxfile_exists(".svn")) {
-		print("SVN Found... Exiting\n\n");
+		log_cleanup("- SVN Found... Exiting");
 		exit;
 	}
 
@@ -81,8 +79,11 @@ if (lxfile_exists("/usr/local/lxlabs/kloxo/file/webmailReset")) {
 		$sgbl->slave = false;
 		if (!is_secondary_master()) {
 			updateDatabaseProperly();
-			fixExtraDB();
-			doUpdateExtraStuff();
+		//	fixExtraDB();
+		//	doUpdateExtraStuff();
+			// call new function (for 6.2.x) since 6.1.7
+			fixDataBaseIssues();
+			doUpdates();
 			lxshell_return("__path_php_path", "../bin/common/driverload.php");
 		}
 		update_all_slave();
@@ -96,6 +97,8 @@ if (lxfile_exists("/usr/local/lxlabs/kloxo/file/webmailReset")) {
 	}
 
 	lxfile_touch("__path_program_start_vps_flag");
+
+	log_cleanup("*** Executing Update cleanup - END ***");
 }
 
 function cp_dbfile()

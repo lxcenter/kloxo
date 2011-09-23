@@ -118,6 +118,7 @@ function postAdd()
 
 function deleteSpecific()
 {
+
 	$parent = $this->getParentO();
 
 	if ($parent->isClient()) {
@@ -132,11 +133,14 @@ function deleteSpecific()
 
 	$web = $domain->getObject('web');
 	$web->setUpdateSubaction('addondomain');
+
 	$mmail = $domain->getObject('mmail');
 	$mmail->__var_aliasdomain = $this->nname;
 	$mmail->setUpdateSubaction('delete_alias');
+
 	$dns = $domain->getObject('dns');
 	$dns->setUpdateSubaction('addondomain');
+
 }
 
 static function defaultParentClass($parent)
@@ -167,6 +171,15 @@ static function addform($parent, $class, $typetd = null)
 
 static function createListSlist($parent)
 {
+	// relate to bug #50 - trick for process add/delete parked/redirect domains
+	// because after add/delete always back to list!
+
+	$web = $parent->getObject('web');
+	// have trouble when use addondomain, so use full_update
+	$web->setUpdateSubaction('full_update');
+
+	// original code...
+
 	//$sq = new Sqlite(null, 'domain');
 	//$s = $sq->getTable(array('nname'));
 	//$s = get_namelist_from_arraylist($s);
@@ -175,6 +188,7 @@ static function createListSlist($parent)
 	//$nlist['parent_clname'] = array('s', $s);
 	$nlist['ttype'] = array('s', array('--any--', 'parked', 'redirect'));
 	$nlist['parent_clname'] = null;
+
 	return $nlist;
 }
 

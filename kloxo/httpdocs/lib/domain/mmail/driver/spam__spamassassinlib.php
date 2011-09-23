@@ -2,8 +2,6 @@
 
 class Spam__Spamassassin extends lxDriverClass
 {
-
-
 	static function installMe()
 	{
 
@@ -33,7 +31,6 @@ class Spam__Spamassassin extends lxDriverClass
 		//
 	}
 
-
 	function syncSpamUserPref()
 	{
 		global $gbl, $sgbl, $ghtml;
@@ -44,6 +41,9 @@ class Spam__Spamassassin extends lxDriverClass
 			$domain = $this->main->nname;
 			$user = null;
 		}
+
+		// --- issue #578 - missing in version 6.1.6
+		$mailpath = "/home/lxadmin/mail/spamassassin";
 
 		if ($user) {
 			$prefpath = "$mailpath/$domain/$user/user_prefs";
@@ -87,9 +87,5 @@ class Spam__Spamassassin extends lxDriverClass
 				break;
 				}
 		}
-
-
 	}
-
-
 }

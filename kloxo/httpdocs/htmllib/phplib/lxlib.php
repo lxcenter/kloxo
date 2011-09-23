@@ -176,6 +176,7 @@ function findOperatingSystem($type = null)
 
 function find_os_pointversion()
 {
+/*
 	if (file_exists("/etc/fedora-release")) {
 		$release = trim(file_get_contents("/etc/fedora-release"));
 		$osv = explode(" ", $release);
@@ -197,6 +198,36 @@ function find_os_pointversion()
 			$osversion = "centos-" . $oss[0];
 		}
 		return $osversion;
+	}
+*/
+	// list os support
+	$ossup = array('redhat' => 'rhel', 'fedora' => 'fedora', 'centos' => 'centos');
+	
+	foreach(array_keys($ossup) as $k) {
+		$osrel = file_get_contents("/etc/{$k}-release");
+		if ($osrel) {
+				$osrel = strtolower(trim($osrel));
+				break;
+		}
+	}
+	
+	// specific for 'red hat'
+	$osrel = str_replace('red hat', 'redhat', $osrel);
+
+	$osver = explode(" ", $osrel);
+
+	$verpos = sizeof($osver) - 2;
+
+	if (array_key_exists($osver[0], $ossup)) {
+		// specific for 'red hat'
+		if ($osrel === 'redhat') {
+			$oss = $osver[$verpos];
+		}
+		else {
+			$mapos = explode(".", $osver[$verpos]);
+			$oss = $mapos[0];
+		}
+		return $ossup[$osver[0]]."-".$oss;
 	}
 }
 
@@ -687,6 +718,22 @@ function log_log($file, $mess, $id = null)
 	$mess = trim($mess);
 	$rf = "__path_program_root/log/$file";
 
+	lfile_put_contents($rf, @ date("H:i M/d/Y") . ": $mess" . PHP_EOL, FILE_APPEND);
+}
+
+function log_cleanup($mess)
+{
+	// Function used in cleanup/upcp process
+	//
+	// logs to the file update and print to screen
+
+	if (!is_string($mess)) {
+		$mess = var_export($mess, true);
+	}
+	$mess = trim($mess);
+	$rf = "__path_program_root/log/update";
+
+	print( $mess . "\n" );
 	lfile_put_contents($rf, @ date("H:i M/d/Y") . ": $mess" . PHP_EOL, FILE_APPEND);
 }
 
@@ -1846,8 +1893,14 @@ function init_language()
 	$g_language_mes->__information = $__information;
 	$g_language_mes->__emessage = $__emessage;
 	$g_language_mes->__keyword = $__keyword;
+/*
 	$g_language_mes->__help = $__help;
 	$g_language_mes->__helpvar = $__helpvar;
+*/
+	// __help and __helpvar until 6.1.6 doesn't exist, so make choice
+	$g_language_mes->__help = (isset($__help)) ? $__help : '';
+	$g_language_mes->__helpvar = (isset($__helpvar)) ? $__helpvar : '';
+
 	$g_language_mes->__commonhelp = $g_commonhelp;
 
 	$g_language_desc = new Remote();
@@ -2002,15 +2055,17 @@ function delete_expired_ssessions()
 
 	$s_l = $login->getList("ssessionlist");
 
-	foreach ($s_l as $s) {
-		if (!is_object($s)) {
-			continue;
-		}
-		$timeout = $s->last_access + $login->getSpecialObject('sp_specialplay')->ssession_timeout;
-		dprint($s->nname);
-		if ($timeout < time()) {
-			$s->delete();
-			Utmp::updateUtmp($s->nname, $login, "Session Expired");
+	if(!empty($s_l)){
+		foreach ($s_l as $s) {
+			if (!is_object($s)) {
+				continue;
+			}
+			$timeout = $s->last_access + $login->getSpecialObject('sp_specialplay')->ssession_timeout;
+			dprint($s->nname);
+			if ($timeout < time()) {
+				$s->delete();
+				Utmp::updateUtmp($s->nname, $login, "Session Expired");
+			}
 		}
 	}
 }
@@ -2145,7 +2200,7 @@ function initProgramlib($ctype = null)
 
 	// This means the session object got created fresh.
 	if (!$sessobj || $sessobj->dbaction === 'add') {
-		dprint("no session id");
+		dprint("Session id is empty. Clearing cookies and redirect to login.");
 		clear_all_cookie();
 		$ghtml->print_redirect_self("/login/");
 	}
@@ -2271,7 +2326,7 @@ function initSession($object, $ssl_param, $consuming_parent)
 	setcookie("$ckstart-classname", $class, $cookietime, '/');
 	setcookie("$ckstart-session-id", $session, $cookietime, '/');
 
-	dprint("Set cookies\n");
+	dprint("Set cookies<br/>");
 
 	$hostname = $_SERVER['REMOTE_ADDR'];
 

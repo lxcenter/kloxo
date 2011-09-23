@@ -81,7 +81,6 @@ $__information['updateform_custom_error_pre'] = "<p> Note: The values you have t
 $__information['domain_updateform_ipaddress_pre'] = "<p> Note: Make sure that you make the requisite changes to nameserver configuration too.  </p>";
 $__information['client_updateform_ipaddress_pre'] = "<p> Note: The available ip pool is selected from the machines in the web server pool. </p>";
 $__information['domaintemplate_addform__pre'] = "<p> Note: The Max Value on the right shows your current quota limit. You can create a Template with values more than your quota, but you won't be able to use them to create Domains/Clients. </p>";
-$__information['vv_dns_blank_message'] = "<p> Enter '__base__', if you want to get the base domain. Use &lt;%domain&gt; if you want the domain name inside a TXT record. For instance, 'v=spf1 include: &lt;%domain &gt;'. [b] FCNAME [/b] stands for full cname and will allow you to point a subdomain to an external domain.";
 $__information['spam_updateform_update_pre'] = "<p> The 'score'--which can be 1-10--is the value at which a mail is marked as SPAM. So if you set it to lower values, more mail will be marked as spam. Too low values might lead to genuine mails getting classified as spam. Too high values will lead to high amount of spam getting through the filter. </p>";
 $__information['web_updateform_enable_frontpage_flag_pre'] = "<p> The frontpage password will be the same as that of the system user (main ftp user).  </p>";
 $__information['ffile_show___lx_error_log_pre'] = "This is the error log for your domain. The contents of this will help you trouble shoot if you are having any problems regarding the domain.";
@@ -92,6 +91,23 @@ $__information['ffile_show___lx_access_log_pre'] = "This is the access log for y
 $__information['updateform_disable_url_pre'] = "All your children will automatically inherit your Disable url parameters. To enforce your Disable Url on them, just disable their 'can Set Disable Url' in the permission settings. This is the url to which a domain will be redirected to when it is disabled. ";
 $__information['updateform_dnstemplatelist_pre'] = "Allocate only a single dns template to your customer. This would mean that kloxo will not show the dns template select box while adding a domain, which will make it less confusing to your customer.";
 $__information['forward_a_addform__pre'] = "The forward addresses are a list of email addresses to which the mail is forwarded to. One copy of the mail gets saved to the actual mailaccount too. You can disable local storage by <url:a=updateform&sa=configuration>clicking here </url>.";
+
+// Added Kloxo version 6.1.6 TODO !! Give proper information.
+$__information['vv_dns_srv_message'] = "Here you can manage the SRV record.";
+$__information['vv_dns_ddns_message'] = "Here you can manage DDNS.";
+$__information['vv_dns_mx_message'] = "Here you can manage the MX record. Enter '__base__', if you want to get the base domain.";
+$__information['vv_dns_ns_message'] = "Here you can manage the NS record.";
+$__information['vv_dns_aaaa_message'] = "Here you can manage the IPv6 record. Enter '__base__', if you want to get the base domain.";
+$__information['vv_dns_txt_message'] = "Use &lt;%domain&gt; if you want the domain name inside a TXT record. For instance, 'v=spf1 include: &lt;%domain &gt;'.";
+$__information['vv_dns_cname_message'] = "Here you can manage the CNAME record.";
+$__information['vv_dns_fcname_message'] = "Here you can manage the FCNAME record. [b]FCNAME[/b] stands for full cname and will allow you to point a subdomain to an external domain.";
+$__information['vv_dns_a_message'] = "Here you can manage the A record. Enter '__base__', if you want to get the base domain.";
+$__information['vv_dns_soa_message'] = "Here you can manage the SOA record.";
+$__information['vv_dns_rebuild_message'] = "Here you can rebuild your domain zone from a DNS Template.";
+
+// Changed Kloxo Version 6.1.6
+$__information['vv_dns_blank_message'] = "<p>DNS Manager</p>";
+
 $__emessage['blocked'] = "Your address is blocked";
 $__emessage['no_server'] = "Could not connect to the Server.";
 $__emessage['set_emailid'] = "Please Set Your EmailId Properly ";
@@ -150,3 +166,18 @@ $__emessage['adding_cron_failed'] = "Adding crontab has failed due to [%s]. Plea
 $__emessage['se_submit_running_background'] = "Search Engine Submission is running in the background. You will be sent a message to your contact email when it is done.";
 $__emessage['err_no_dns_template'] = "There are no Dns Templates in the System. You have to have at least one Dns Template to add a domain/client. Click <url:a=addform&c=dnstemplate> here  to add a dnstemplate. </url></p> ";
 $__emessage['certificate_key_file_empty'] = "The certificate and the Key file you have chosen are empty. You have to first create or upload them before enabling ssl";
+
+// release on Kloxo 6.1.7
+// by mustafa.ramadhan@lxcenter.org
+
+$__information['webserver_config'] = 
+	"* [b]PHP Type[/b]: process-based (httpd-prefork/-itk) or ".
+		"thread-based (httpd-worker/-event) ".
+		"and secure environment (suphp/suexec/ruid2/itk)<br />".
+	"* [b]Apache Memory Optimize[/b] - 'sh /script/apache-optimize': optimize memory usage without swap<br />".
+	"* [b]Mysql Convert[/b] - 'sh /script/mysql-convert': also change '/etc/my.cnf' config; ".
+		"MyISAM - less memory usage (save 100-200 MB); ".
+		"InnoDB - higher performance<br />".
+	"* [b]Fix 'ownership' And 'permissions'[/b] - 'sh /script/fix-chownchmod': prevent '500 Internal server error' on secure environment; ".
+		"fix-ownership - 'chown -R client:client' for directories and files; ".
+		"fix-permissions - 'chmod 775' for directories and 'chmod 644' for .php files";

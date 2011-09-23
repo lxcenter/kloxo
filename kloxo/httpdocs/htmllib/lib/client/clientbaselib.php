@@ -367,25 +367,8 @@ function createShowAlistConfig(&$alist)
 		$alist['__v_dialog_download'] = "o=general&a=updateform&sa=download_config";
 		$alist['__v_dialog_forc'] = "a=updateform&sa=forcedeletepserver";
 
-		if ($sgbl->isHyperVm()) {
-			$alist['__v_dialog_hack'] = "o=general&a=updateform&sa=hackbuttonconfig";
-			$alist['__v_dialog_rev'] = "o=general&a=updateform&sa=reversedns";
-			$alist['__v_dialog_cust'] = "o=general&a=updateform&sa=customaction";
-			$alist['__v_dialog_orph'] = "a=updateform&sa=deleteorphanedvps";
-			$alist['__v_dialog_lxc'] = "o=general&a=updateform&sa=kloxo_config";
-			//$alist[] = "a=show&o=ostemplatelist";
-			$alist[] = "a=list&c=customaction";
-		} else {
-			$alist[] = "o=genlist&c=dirindexlist_a&a=list";
-		}
+		$alist[] = "o=genlist&c=dirindexlist_a&a=list";
 
-
-	}
-
-	if ($sgbl->isHyperVm()) {
-		if (!$this->isAdmin()) {
-			$alist[] = "a=updateform&sa=ostemplatelist";
-		}
 	}
 
 	$alist['__title_asep'] = $login->getKeywordUc('separate');
@@ -970,12 +953,34 @@ static function validate_client_name($name)
 
 static function continueForm($parent, $class, $param, $continueaction)
 {
-	global $gbl, $sgbl, $login, $ghtml; 
+	global $gbl, $sgbl, $login, $ghtml;
 
 	$vlist = null;
 
 	self::validate_client_name($param['nname']);
 
+	// and issue #657 - Client user names with "__" are displayed with missing end
+	if (stristr($param['nname'], '__')) {
+		throw new lxexception("{$param['nname']}_use_double_underscore", 'nname');	
+	}
+
+	// also check if /home/<client> exists --> prevent use like 'httpd' as client
+/*
+	if (lxfile_exists("/home/{$param['nname']}")) {
+		throw new lxexception("{$param['nname']}_dir_exists_under_home_dir", 'nname');
+
+	}
+*/
+	$reserved = array(
+		'apache', 'lighttpd', 'nginx', 
+		'httpd', 'kloxo', 'lxadmin', 'lxlabs', 'lxcenter', 'nouser', 
+		'tinydns', 'axfrdns', 'dnscache', 'dnslog', 'bind', 'named');
+
+	foreach($reserved as $r) {
+		if ($param['nname'] === $r) {
+			throw new lxexception("{$param['nname']}_dir_as_reserved_under_home_dir", 'nname');
+		}
+	}
 
 
 	$param['nname'] = trim($param['nname']);
@@ -986,8 +991,12 @@ static function continueForm($parent, $class, $param, $continueaction)
 			if (!$param['contactemail']) {
 				throw new lxexception("sending_welcome_needs_contactemail", array('contactemail', 'send_welcome_f'), '');
 			}
-			if (!validate_email($param['contactemail'])) {
-				throw new lxexception("contactemail_is_not_valid_email_address", 'contactemail', '');
+			// accept to more contact mail - http://forum.lxcenter.org/index.php?t=msg&goto=89118
+			$contact = implode(",", str_replace(" ", "", $param['contactemail']));
+			foreach($contact as $c) {
+				if (!validate_email($c)) {
+					throw new lxexception("contactemail_is_not_valid_email_address", 'contactemail', '');
+				}
 			}
 		}
 
@@ -1202,13 +1211,6 @@ static function createListAlist($parent, $class)
 	}
 
 	$alist[] = "a=list&c=client";
-
-	if (!$sgbl->isHyperVm()) {
-		if ($parent->isLte('wholesale')) {
-			$alist[] = "a=addform&dta[var]=cttype&dta[val]=wholesale&c=client";
-			$alist[] = "a=addform&dta[var]=cttype&dta[val]=reseller&c=client";
-		}
-	}
 
 	if ($parent->isLte('reseller')) {
 		$alist[] = "a=addform&dta[var]=cttype&dta[val]=customer&c=client";

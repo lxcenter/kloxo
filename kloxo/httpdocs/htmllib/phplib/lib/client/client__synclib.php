@@ -2,7 +2,6 @@
 
 class client__sync extends lxDriverClass {
 
-
 function dbactionDelete()
 {
 	lxfile_rm_rec("__path_client_root/{$this->main->nname}");
@@ -21,9 +20,6 @@ function dbactionAdd()
 	if (lxfile_exists("__path_customer_root/{$this->main->getPathFromName()}")) {
 		throw new lxException ("directory_already_exists", '', '');
 	}
-
-
-
 
 	$ret = $this->createUser();
 	$this->setupDefaultDomain();
@@ -44,7 +40,6 @@ function createUser()
 	if (!$sgbl->isKloxo()) {
 		return;
 	}
-
 
 	$password = $this->main->password;
 	$cmd = "useradd"; 
@@ -75,7 +70,6 @@ function setQuota()
 	} else {
 		os_set_quota($this->main->username, 0);
 	}
-
 }
 
 function changeUserPass()
@@ -122,7 +116,6 @@ function dbactionUpdate($subaction)
 			$this->ToggleStatus();
 			break;
 
-
 		case "password":
 			$this->changeAdminPass();
 			$this->changeUserPass();
@@ -141,7 +134,9 @@ function dbactionUpdate($subaction)
 			break;
 
 		case "skeleton":
-			$file = "__path_client_root/{$this->main->nname}/skeleton.zip";
+			// temporary only for admin - 6.1.7
+		//	$file = "__path_client_root/{$this->main->nname}/skeleton.zip";
+			$file = "../file/user-skeleton.zip";
 			lxfile_mv($this->main->__skeletion_tmp, $file);
 			lxfile_generic_chown($file, "lxlabs");
 			break;
@@ -156,10 +151,8 @@ function dbactionUpdate($subaction)
 	}
 }
 
-
 function setupDefaultDomain()
 {
-
 	global $gbl, $sgbl, $login, $ghtml; 
 	if (!$sgbl->isKloxo()) {
 		return;
@@ -207,7 +200,6 @@ function changeAdminPass()
 	}
 }
 
-
 function do_backup()
 {
 	global $gbl, $sgbl, $login, $ghtml; 
@@ -229,6 +221,5 @@ function do_restore($docd)
 	lxfile_generic_chown($fullpath, "{$this->main->username}:apache");
 	lxfile_generic_chmod($fullpath, "0750");
 }
-
 
 }

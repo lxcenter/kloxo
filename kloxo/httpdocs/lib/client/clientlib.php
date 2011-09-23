@@ -581,36 +581,20 @@ function createShowAlist(&$alist, $subaction = null)
 		$alist['__v_dialog_download'] = "o=general&a=updateform&sa=download_config";
 		$alist['__v_dialog_forc'] = "a=updateform&sa=forcedeletepserver";
 
-		if ($sgbl->isHyperVm()) {
-			$alist['__v_dialog_hack'] = "o=general&a=updateform&sa=hackbuttonconfig";
-			$alist['__v_dialog_rev'] = "o=general&a=updateform&sa=reversedns";
-			$alist['__v_dialog_cust'] = "o=general&a=updateform&sa=customaction";
-			$alist['__v_dialog_orph'] = "a=updateform&sa=deleteorphanedvps";
-			$alist['__v_dialog_lxc'] = "o=general&a=updateform&sa=kloxo_config";
-			//$alist[] = "a=show&o=ostemplatelist";
-			$alist[] = "a=list&c=customaction";
-		} else {
-			$alist[] = "o=genlist&c=dirindexlist_a&a=list";
-		}
-
-
-	}
-
-	if ($sgbl->isHyperVm()) {
-		if (!$this->isAdmin()) {
-			$alist[] = "a=updateform&sa=ostemplatelist";
-		}
+		$alist[] = "o=genlist&c=dirindexlist_a&a=list";
 	}
 
 	$alist['__v_dialog_misc'] = "a=updateform&sa=miscinfo";
-	if ($login->priv->isOn('logo_manage_flag') && $this->isLogin()) {
-		$alist['__v_dialog_uplo'] = "o=sp_specialplay&a=updateForm&sa=upload_logo";
-	}
+	// temporary, only for admin - on 6.1.7
+	if ($this->isAdmin()) {
+		if ($login->priv->isOn('logo_manage_flag') && $this->isLogin()) {
+			$alist['__v_dialog_uplo'] = "o=sp_specialplay&a=updateForm&sa=upload_logo";
+		}
 
-	if ($this->canHaveChild()) {
-		$alist['__v_dialog_ch'] = "o=sp_childspecialplay&a=updateform&sa=skin";
-	}
-
+		if ($this->canHaveChild()) {
+			$alist['__v_dialog_ch'] = "o=sp_childspecialplay&a=updateform&sa=skin";
+		}
+ 	}
 
 	$alist['__v_dialog_misc'] = "a=updateform&sa=miscinfo";
 	if ($this->isAdmin()) {
@@ -621,10 +605,13 @@ function createShowAlist(&$alist, $subaction = null)
 		$alist['__v_dialog_demo'] = "o=sp_specialplay&a=updateform&sa=demo_status";
 	}
 
-
-	if ($login->priv->isOn('can_set_disabled_flag')) {
-		$alist[] = 'a=updateform&sa=disable_skeleton';
+	// temporary, only for admin - on 6.1.7
+	if ($this->isAdmin()) {
+		if ($login->priv->isOn('can_set_disabled_flag')) {
+			$alist[] = 'a=updateform&sa=disable_skeleton';
+		}
 	}
+
 	$alist[] = "a=list&c=blockedip";
 	$alist[] = "a=show&o=notification";
 
@@ -632,10 +619,12 @@ function createShowAlist(&$alist, $subaction = null)
 		$alist['__v_dialog_disa'] = "a=updateform&sa=disable_per";
 	}
 
-	if ($login->priv->isOn('logo_manage_flag') && $this->isLogin()) {
-		$alist['__v_dialog_uplo'] = "o=sp_specialplay&a=updateForm&sa=upload_logo";
+	// temporary, only for admin
+	if ($this->isAdmin()) {
+		if ($login->priv->isOn('logo_manage_flag') && $this->isLogin()) {
+			$alist['__v_dialog_uplo'] = "o=sp_specialplay&a=updateForm&sa=upload_logo";
+		}
 	}
-
 
 	if (!$this->isLogin()) {
 		$alist['__v_dialog_resend'] = "a=updateform&sa=resendwelcome";
