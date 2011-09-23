@@ -1,5 +1,5 @@
 #!/bin/sh
 . /script/directory
-lphp.exe ../bin/misc/lxinstall_hordegroupware_db.php
+lphp.exe ../bin/misc/installHorde.php
 
 

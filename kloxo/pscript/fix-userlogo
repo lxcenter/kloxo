@@ -1,0 +1,21 @@
+#!/bin/sh
+
+# release on Kloxo 6.1.7
+# by mustafa.ramadhan@lxcenter.org
+
+if [ "$#" == 0 ] ; then
+	echo
+	echo " ------------------------------------------------------------"
+	echo "  format: sh $0 --select=defaults/domains/all"
+	echo " ------------------------------------------------------------"
+	echo " --select -"
+	echo "   defaults: only copy to cp/default/disable/webmail pages"
+	echo "   domains: only copy to domains directories"
+	echo
+	echo " * image source - /home/kloxo/httpd/user-logo.png"
+	echo
+	exit;
+fi
+
+. /script/directory
+lphp.exe ../bin/fix/fix-userlogo.php $*

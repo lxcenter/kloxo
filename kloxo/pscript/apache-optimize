@@ -1,0 +1,27 @@
+#!/bin/sh
+
+# release on Kloxo 6.1.7
+# by mustafa.ramadhan@lxcenter.org
+
+if [ "$#" == 0 ] ; then
+	echo
+	echo " ------------------------------------------------------------------------"
+	echo "  format: sh $0 --select=status/optimize" --spare=[]
+	echo " ------------------------------------------------------------------------"
+	echo "   --spare - spare/unused memory in MB; default: 25% total memory"
+	echo
+	echo " * this optimize assume httpd + php use 25 MB per instance"
+	echo
+	exit;
+fi
+
+request1=$1
+SELECT=${request1#--select\=}
+
+if [ ! $SELECT == 'status' ] && [ ! $SELECT == 'optimize' ] ; then
+	echo "Wrong --select= entry..."
+	exit;
+fi
+
+. /script/directory
+lphp.exe ../bin/fix/apache-optimize.php $*
