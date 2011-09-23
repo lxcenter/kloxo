@@ -337,8 +337,13 @@ function get_favorite($class)
 		// If the link is from kloxo, it shouldn't throw up a lot of errors. Needs to fix this properly..
 		$ac_descr = @ $ghtml->getActionDetails($url, null, $iconpath, $path, $post, $_t_file, $_t_name, $_t_image, $__t_identity);
 
-		//$url = $url;
-		$tag = null;
+		if ($sgbl->isHyperVM() && $h->vpsparent_clname) {
+			$url = kloxo::generateKloxoUrl($h->vpsparent_clname, null, $url);
+			$tag = "(l)";
+		} else {
+			//$url = $url;
+			$tag = null;
+		}
 
 		if (isset($h->description)) {
 			$str = $h->description;
@@ -4508,7 +4513,7 @@ function lxguard_save_hitlist($hl)
 
 // --- move from kloxo/httpdocs/htmllib/lib/updatelib.php
 
-function install_xcache()
+function install_xcache($nolog = null)
 {
 	//--- activate xcache control by php.ini. doesn't matter xcache install and xcache.ini exist or not.
 	//--- issue 547 - xcache failed to install
@@ -4521,25 +4526,25 @@ function install_xcache()
 		return;
 	}
 */
-	log_cleanup("Install xcache if enabled");
-
+	if (!$nolog) { log_cleanup("Install xcache if enabled"); }
+ 
 	if (lxfile_exists("../etc/flag/xcache_enabled.flg")) {
-		log_cleanup("- Enabled status");
+		if (!$nolog) { log_cleanup("- Enabled status"); }
 //		$ret = lxshell_return("php -m | grep -i xcache");
 //		$ret = system("rpm -q php-xcache | grep -i 'not installed'");
 		$ret = system("rpm -q php-xcache | grep -i 'not installed'", $retval);
 		if ($ret) {
-			log_cleanup("- Install process");
+			if (!$nolog) { log_cleanup("- Install process"); }
 			lxshell_return("yum", "-y", "install", "php-xcache");
 		}
 		else {
-			log_cleanup("- Already installed");
+			if (!$nolog) { log_cleanup("- Already installed"); }
 		}		
 		// for customize?
 		lxfile_cp("../file/xcache.ini", "/etc/php.d/xcache.ini");
 	}
 	else {
-		log_cleanup("- Disabled status");
+		if (!$nolog) { log_cleanup("- Disabled status"); }
 	}
 /*
 	if (!lxfile_exists("../etc/flag/xcache_enabled.flg")) {
@@ -5376,14 +5381,14 @@ function setDefaultPages()
 --- */
 }
 
-function setFreshClam()
+function setFreshClam($nolog = null)
 {
-	log_cleanup("Checking freshclam (virus scanner)");
+	if (!$nolog) { log_cleanup("Checking freshclam (virus scanner)"); }
 
 	if (!isOn(db_get_value("servermail", "localhost", "virus_scan_flag"))) {
 		passthru("chkconfig freshclam off > /dev/null 2>&1");
 		passthru("/etc/init.d/freshclam stop >/dev/null 2>&1");
-		log_cleanup("- Disabled freshclam service");
+		if (!$nolog) { log_cleanup("- Disabled freshclam service"); }
 		// also clamd not load too
 		passthru("svc -d /var/qmail/supervise/clamd /var/qmail/supervise/clamd/log > /dev/null 2>&1");
 		passthru("mv -f /var/qmail/supervise/clamd/run /var/qmail/supervise/clamd/run.stop > /dev/null 2>&1");
@@ -5394,7 +5399,7 @@ function setFreshClam()
 	else {
 		passthru("chkconfig freshclam on > /dev/null 2>&1");
 		passthru("/etc/init.d/freshclam start >/dev/null 2>&1");
-		log_cleanup("- Enabled freshclam service");
+		if (!$nolog) { log_cleanup("- Enabled freshclam service"); }
 		// also clamd load too
 		passthru("mv -f /var/qmail/supervise/clamd/run.stop /var/qmail/supervise/clamd/run > /dev/null 2>&1");
 		passthru("mv -f /var/qmail/supervise/clamd/log/run.stop /var/qmail/supervise/clamd/log/run > /dev/null 2>&1");
