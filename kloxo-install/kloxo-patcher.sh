@@ -90,7 +90,7 @@ function kloxo_core_portion () {
 }
 
 function kloxo_64bit () {
-	if [ -f /usr/lib64 ] ; then
+	if [ -d /usr/lib64 ] ; then
 		echo "- Set symlink for 3bit from 64bit links"
 
 		if [ ! -h /usr/lib/kloxophp ] ; then
