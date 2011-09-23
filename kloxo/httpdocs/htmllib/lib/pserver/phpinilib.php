@@ -177,8 +177,17 @@ function createShowUpdateform()
 
 function postUpdate()
 {
+	global $gbl, $sgbl, $login, $ghtml; 
 
 	$this->setUpINitialValues();
+
+	// trick to make sure xcache installed!
+	//--- issue 547 - xcache failed to install
+	if ($login->isAdmin()) {
+		// function declare on lib.php
+		install_xcache($nolog = 'yes');
+	}
+
 	// We need to write because the fixphpini reads everything from the database.
 	$this->write();
 	if ($this->getParentO()->is__table('pserver')) {
@@ -215,6 +224,8 @@ function updateform($subaction, $param)
 		}
 	}
 
+	$this->postUpdate();
+
 
 	return $vlist;
 }
@@ -230,8 +241,11 @@ function setUpINitialValues()
 	$this->initialValue('register_global_flag', 'off');
 	$this->initialValue('mysql_allow_persistent_flag', 'off');
 	$this->initialValue('session_save_path_flag', '/var/lib/php/session');
-	$this->initialValue('disable_functions', 'exec,passthru,shell_exec,system,proc_open,popen,curl_exec,curl_multi_exec,parse_ini_file,show_source
-');
+
+	// Issue #630 - parse_ini_file to be enabled by default
+//	$this->initialValue('disable_functions', 'exec,passthru,shell_exec,system,proc_open,popen,curl_exec,curl_multi_exec,parse_ini_file,show_source');
+	$this->initialValue('disable_functions', 'exec,passthru,shell_exec,system,proc_open,popen,curl_exec,curl_multi_exec,show_source');
+
 	$this->initialValue('max_execution_time_flag', '30');
 	$this->initialValue('max_input_time_flag', '60');
 	$this->initialValue('memory_limit_flag', '32M');
@@ -268,4 +282,3 @@ function initialValue($var, $val)
 
 
 }
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     
