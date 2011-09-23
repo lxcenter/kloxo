@@ -27,9 +27,15 @@ static function createListAlist($parent, $class)
 
 	$alist[] = 'a=show';
 	$alist[] = "a=updateform&sa=information";
+
 	if (!$parent->isLocalhost()) {
 		$alist[] = "a=updateform&sa=password";
 	}
+
+	if ($sgbl->isHyperVm()) {
+		$alist[] = "a=graph&sa=vpsbase";
+	}
+
 	$alist[] = "a=list&c=$class";
 
 	return $alist;
@@ -395,6 +401,10 @@ function createShowRlist($subaction)
 	if ($rlist) {
 		return $rlist;
 	}
+	
+	if ($sgbl->isHyperVm()) {
+		$rlist = $this->getVpsRam();
+	}
 
 	$driverapp = $gbl->getSyncClass($this->__masterserver, $this->__readserver, 'pserver');
 	$l = rl_exec_get($this->__masterserver, $this->__readserver,  array("pserver__$driverapp", "pserverInfo"));
@@ -444,6 +454,36 @@ function createShowRlist($subaction)
 
 }
 
+function superPostAdd()
+{
+	global $gbl, $sgbl, $login, $ghtml; 
+
+	if (!$sgbl->isHyperVm()) {
+		return;
+	}
+
+	if ($this->vpstype_f === 'xen') {
+
+		$driver = new Driver(null, $this->nname, $this->nname);
+		$driver->get();
+		$driver->driver_b->pg_vps = 'xen';
+		$driver->setUpdateSubaction();
+		$driver->write();
+		if ($this->xenlocation) {
+			$dirlocation = new Dirlocation(null, $this->nname, $this->nname);
+			$dirlocation->dbaction = 'add';
+			foreach($this->xenlocation as $k) {
+				$name = "lvm:{$k['nname']}";
+				$xenloc[$name] = new xen_location_a(null, $this->nname, $name);
+			}
+			$dirlocation->parent_clname = $this->getClName();
+			$dirlocation->xen_location_a = $xenloc;
+			$this->addToList('dirlocation', $dirlocation);
+		}
+	}
+
+}
+
 function postAdd()
 {
 	global $gbl, $sgbl, $login, $ghtml; 
@@ -456,10 +496,14 @@ function postAdd()
 		$this->username = "root";
 	}
 
-	if ($this->ostype === 'windows') {
-		$rlist = array('web', 'mssqldb');
+	if ($sgbl->isHyperVm()) {
+		$rlist = array('vps');
 	} else {
-		$rlist = array('web', 'mmail', 'dns', 'mysqldb');
+		if ($this->ostype === 'windows') {
+			$rlist = array('web', 'mssqldb');
+		} else {
+			$rlist = array('web', 'mmail', 'dns', 'mysqldb');
+		}
 	}
 
 	foreach($rlist as $l) {
@@ -1103,6 +1147,25 @@ function updateform($subaction, $param)
 
 			$vlist['description'] = null;
 			$vlist['realhostname'] = null;
+
+			if ($sgbl->isHyperVm()) {
+				$list = get_namelist_from_objectlist($login->getList('datacenter'));
+				if (!$list) {
+					$list[] = '--no-dc--';
+					$this->datacenter = '--no-dc--';
+				}
+				$vlist['datacenter'] = array('s', $list);
+				$newclientlist = lx_array_merge(array(array('--unassigned--'), $clientlist));
+				if ($this->nname === 'localhost') {
+					$vlist['clientname'] = array('M', $login->getKeyword('master_cannot_be_assigned'));
+				} else {
+					$vlist['clientname'] = array('s', $newclientlist);
+				}
+			}
+
+			if ($sgbl->isHyperVm()) {
+				$vlist['max_vps_num'] = null;
+			}
 
 			$this->setDefaultValue("load_threshold", "20");
 			$vlist['load_threshold'] = null;
