@@ -1,5 +1,5 @@
 <?php 
-	
+
 function getNumForString($name)
 {
 	$num = 0;
@@ -628,14 +628,32 @@ function PrepareRoundCubeDb()
 		$pstring = "-p\"$pass\"";
 	}
 
-	$result = mysql_select_db('roundcubemail', $link);
-
 	log_cleanup("- Fix database values in sql importfile");
 
 	$roundcubefile = "/home/kloxo/httpd/webmail/roundcube/SQL/mysql.initial.sql";
 	$content = lfile_get_contents($roundcubefile);
 	$content = str_replace("ENGINE=INNODB", "", $content);
+
+	// --- better create table logic --> also see updateDatabaseProperly()
+	
+	$content = str_replace(" IF NOT EXISTS", "", $content);
+
+	$content = str_replace("CREATE TABLE", "CREATE TABLE IF NOT EXISTS", $content);
+	$content = str_replace("CREATE DATABASE roundcubemail;", "CREATE DATABASE IF NOT EXISTS roundcubemail;", $content);
+	// no need 'IF NOT EXISTS' for INDEX
+//	$content = str_replace("CREATE INDEX", "CREATE INDEX IF NOT EXISTS", $content);
 	lfile_put_contents($roundcubefile, $content);
+
+	$result = mysql_query("CREATE DATABASE IF NOT EXISTS roundcubemail", $link);
+	if (!$result) {
+		log_cleanup("- There is REALY something wrong... Go to http://forum.lxcenter.org/ and report");
+		exit;
+	}
+
+	system("mysql -u root $pstring roundcubemail < /home/kloxo/httpd/webmail/roundcube/SQL/mysql.initial.sql");
+
+/*
+	$result = mysql_select_db('roundcubemail', $link);
 
 	if (!$result) {
 		log_cleanup("- Something went wrong, can not select database!. Try to fix database");
@@ -645,10 +663,6 @@ function PrepareRoundCubeDb()
 			log_cleanup("- There is REALY something very very wrong... Go to http://forum.lxcenter.org/ and report");
 			exit;
 		}
-
-		system("mysql -u root $pstring roundcubemail < /home/kloxo/httpd/webmail/roundcube/SQL/mysql.initial.sql");
-		// -- don't use this update, because must be innodb
-	//	system("mysql -u root $pstring roundcubemail < /home/kloxo/httpd/webmail/roundcube/SQL/mysql.update.sql");
 
 		$result = mysql_select_db('roundcubemail', $link);
 		if (!$result) {
@@ -666,7 +680,7 @@ function PrepareRoundCubeDb()
 		// -- don't use this update, because must be innodb
 	//	system("mysql -u root $pstring roundcubemail < /home/kloxo/httpd/webmail/roundcube/SQL/mysql.update.sql");
 	}
-
+*/	
 	$cfgfile = "/home/kloxo/httpd/webmail/roundcube/config/db.inc.php"; 
 
 	lxfile_cp("/usr/local/lxlabs/kloxo/file/webmail-chooser/db.inc.phps", $cfgfile);
@@ -721,18 +735,32 @@ function PrepareHordeDb()
 	log_cleanup("- Fix database values in sql importfile");
 
 	$hordefile = "/home/kloxo/httpd/webmail/horde/scripts/sql/groupware.mysql.sql";
-	$content = lfile_get_contents($hordefile);
-	$content = str_replace("CREATE DATABASE horde;", "CREATE DATABASE IF NOT EXISTS horde_groupware;", $content);
-	lfile_put_contents($hordefile, $content);
 
 	$content = lfile_get_contents($hordefile);
 	$content = str_replace("USE horde;", "USE horde_groupware;", $content);
-	lfile_put_contents($hordefile, $content);
-
-	$content = lfile_get_contents($hordefile);
 	$content = str_replace(") ENGINE = InnoDB;", ");", $content);
+
+	// --- better create table logic --> also see updateDatabaseProperly()
+	
+	$content = str_replace(" IF NOT EXISTS", "", $content);
+
+	$content = str_replace("CREATE TABLE", "CREATE TABLE IF NOT EXISTS", $content);
+	$content = str_replace("CREATE DATABASE horde;", "CREATE DATABASE IF NOT EXISTS horde_groupware;", $content);
+	$content = str_replace("CREATE DATABASE horde_groupware;", "CREATE DATABASE IF NOT EXISTS horde_groupware;", $content);
+	// no need 'IF NOT EXISTS' for INDEX
+//	$content = str_replace("CREATE INDEX", "CREATE INDEX IF NOT EXISTS", $content);
+
 	lfile_put_contents($hordefile, $content);
 
+	$result = mysql_query("CREATE DATABASE IF NOT EXISTS horde_groupware", $link);
+	if (!$result) {
+		log_cleanup("- There is REALY something wrong... Go to http://forum.lxcenter.org/ and report");
+		exit;
+	}
+
+	system("mysql -u root $pstring < /home/kloxo/httpd/webmail/horde/scripts/sql/groupware.mysql.sql");
+
+/*
 	if (!$result) {
 		log_cleanup("- Something went wrong, can not select database!. Try to fix database");
 		$result = mysql_query("DROP DATABASE horde_groupware", $link);
@@ -741,8 +769,6 @@ function PrepareHordeDb()
 			log_cleanup("- There is REALY something very very wrong... Go to http://forum.lxcenter.org/ and report");
 			exit;
 		}
-
-		system("mysql -u root $pstring < /home/kloxo/httpd/webmail/horde/scripts/sql/groupware.mysql.sql");
 
 		$result = mysql_select_db('horde_groupware', $link);
 		if (!$result) {
@@ -758,7 +784,7 @@ function PrepareHordeDb()
 	if (!$tbl[0]) {
 		system("mysql -u root $pstring < /home/kloxo/httpd/webmail/horde/scripts/sql/groupware.mysql.sql");
 	}
-
+*/
 	$cfgfile = "/home/kloxo/httpd/webmail/horde/config/conf.php";
 
 	lxfile_cp("/usr/local/lxlabs/kloxo/file/horde.config.phps", $cfgfile);
@@ -1163,7 +1189,6 @@ function restart_service($service)
 {
 	exec_with_all_closed("service $service restart >/dev/null 2>&1");
 }
-
 
 function remove_old_serve_file()
 {
@@ -4502,7 +4527,7 @@ function install_xcache()
 		log_cleanup("- Enabled status");
 //		$ret = lxshell_return("php -m | grep -i xcache");
 //		$ret = system("rpm -q php-xcache | grep -i 'not installed'");
-		$ret = system("rpm -q php-xcache | grep -i 'not installed'");
+		$ret = system("rpm -q php-xcache | grep -i 'not installed'", $retval);
 		if ($ret) {
 			log_cleanup("- Install process");
 			lxshell_return("yum", "-y", "install", "php-xcache");
@@ -6083,9 +6108,13 @@ function setInitialLogrotate()
 {
 	log_cleanup("Initialize logrotate");
 
-	if (!lxfile_exists("/etc/logrotate.d/kloxo")) {
+	if (lxfile_exists("/etc/logrotate.d/kloxo")) {
 		log_cleanup("- Initialize process");
-		lxfile_cp("../file/kloxo.logrotate", "/etc/logrotate.d/kloxo");
+		if (lxfile_exists("../file/kloxo.logrotate")) {
+			// -- that mean no logratate before 6.2.x
+			lxfile_cp("../file/kloxo.logrotate", "/etc/logrotate.d/kloxo");
+			log_cleanup("- No initialize because no kloxo.logrotate file");
+		}
 	}
 	else {
 		log_cleanup("- No need initialize");

@@ -1897,9 +1897,9 @@ function init_language()
 	$g_language_mes->__help = $__help;
 	$g_language_mes->__helpvar = $__helpvar;
 */
-	// __help and __helpvar since 6.1.6 doesn't exist, so need a trick
-	if (isset($__help)) { $g_language_mes->__help = $__help; }
-	if (isset($__helpvar)) { $g_language_mes->__helpver = $__helpver; }
+	// __help and __helpvar until 6.1.6 doesn't exist, so make choice
+	$g_language_mes->__help = (isset($__help)) ? $__help : '';
+	$g_language_mes->__helpvar = (isset($__helpvar)) ? $__helpvar : '';
 
 	$g_language_mes->__commonhelp = $g_commonhelp;
 

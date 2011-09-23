@@ -181,4 +181,3 @@ $__information['webserver_config'] =
 	"* [b]Fix 'ownership' And 'permissions'[/b] - 'sh /script/fix-chownchmod': prevent '500 Internal server error' on secure environment; ".
 		"fix-ownership - 'chown -R client:client' for directories and files; ".
 		"fix-permissions - 'chmod 775' for directories and 'chmod 644' for .php files";
-

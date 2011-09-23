@@ -24,8 +24,11 @@ include_once "lib/common.inc";
 // This is the program specific common lib. There is no need dump everything htmllib/lib/lib.php which has become too large.
 include_once "lib/programlib.php";
 
-// New Localize system (Kloxo 6.2.x) Issue #397
-include_once "$dir/l18n/l18n.php";
+// that mean no Localize before 6.2.x
+if (file_exists("$dir/l18n/l18n.php")) {
+	// New Localize system (Kloxo 6.2.x) Issue #397
+	include_once "$dir/l18n/l18n.php";
+}
 
 
 if (lxfile_exists("../etc/classdefine")) {
