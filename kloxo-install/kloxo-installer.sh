@@ -20,20 +20,34 @@
 #
 # LxCenter - Kloxo Installer
 #
-# TODO: Add options to reset mysql root pass, check free disk space,
-#		uninstall. Maybe use "dialog" for ncurses-like functions.
+# Version: 1.0 (2011-08-02 - by mustafa.ramadhan@lxcenter.org)
 #
 
-# change to kloxo-installer.sh since 6.1.7
-
-echo "* Use kloxo-installer.sh and download from:"
-echo "    wget http://download.lxcenter.org/download/kloxo/production/kloxo-installer.sh"
-echo
-echo "* download kloxo-packer.sh for pack local copy and kloxo-patcher.sh for patch"
-exit;
+if [ "$#" == 0 ] ; then
+	echo
+	echo " -------------------------------------------------------------------"
+	echo "  format: sh $0 --type=[]"
+	echo " -------------------------------------------------------------------"
+	echo "  --type - master or slave"
+	echo
+	echo " * Run kloxo-packer.sh to make kloxo packs"
+	echo " * This installer only test on 6.1.7+ version."
+	echo
+	exit;
+fi
 
 APP_NAME=Kloxo
-APP_TYPE=Master
+
+request1=$1
+APP_TYPE=${request1#--type\=}
+
+if [ ! $APP_TYPE == 'master' ] && [ ! $APP_TYPE == 'slave' ] ; then
+	echo "Wrong --type= entry..."
+	exit;
+fi
+
+request2=$2
+DB_ROOTPWD=${request2#--db-rootpassword\=}
 
 SELINUX_CHECK=/usr/sbin/selinuxenabled
 SELINUX_CFG=/etc/selinux/config
@@ -109,7 +123,8 @@ fi
 # Check if selinuxenabled exists
 if [ ! -f $SELINUX_CHECK ] ; then
     echo -en "SELinux disabled             " $C_MISS
-    echo -e "\a\nThe installer could not determine SELinux status.\nIf you are sure it is DISABLED, you may proceed."
+    echo -e "\a\nThe installer could not determine SELinux status.\n" \
+		"If you are sure it is DISABLED, you may proceed."
     get_yes_no "Continue?" 0
     if [ "$?" -eq "0" ] ; then 
         echo -e "Aborting ...\n"
@@ -142,26 +157,19 @@ else
     fi
 fi
 
-# Check if OS is 32bit and if not allow user to choose to continue or not (for devels).
-# Remove this when RHEL/CENTOS x86_64 is officially supported or add the arch to prevent people from installing in ARM.
-if [ "$ARCH_CHECK" != "i686" ] ; then
-    echo -en "\aArchitecture supported ($ARCH_CHECK)" $C_NO "\n"
-    echo -e "Your OS architecture ($ARCH_CHECK) is NOT officially supported yet and $APP_NAME may not work correctly."
-    get_yes_no "Continue anyway?" 0
-    if [ "$?" -eq "0" ] ; then 
-        echo -e "Aborting ...\n"
-        exit $E_ARCH
-    fi
-else
-    echo -en "Architecture supported ($ARCH_CHECK)" $C_OK
-fi
-
 # Check for mysql databases and arguments.
 if  [ -d /var/lib/mysql ] && [ -z "$1" ] ; then
     echo -en "Database and arguments check " $C_NO
+    if [ `echo $0 || grep 'kloxo-install.sh' ` ] ; then
+        txtsh=`sh $0 --type=master/slave --db-rootpassword=PASSWORD`
+    else
+        txtsh=`sh $0 --db-rootpassword=PASSWORD`
+    fi
+
     echo -e "\a\nIt seems you already have databases in this system but did not provide the MySQL root pass. " \
 		"If you are reinstalling, remove mysql-server and databases stored at /var/lib/mysql. " \
-		"Otherwise, you must provide the password.\n\nUsage: sh $0 --db-rootpassword=PASSWORD\n\nAborting ...\n"
+		"Otherwise, you must provide the password.\n\nUsage: $txtsh\n\nAborting ...\n"
+
     exit $E_HASDB
 else
     echo -en "Database and arguments check " $C_OK
@@ -184,15 +192,22 @@ echo -e "    When it's finished, you will be presented with a welcome message an
 read -n 1 -p "Press any key to continue ..."
 
 yum -y install php php-mysql wget zip unzip
-
 export PATH=/usr/sbin:/sbin:$PATH
 
-if [! -f ./kloxo-install.zip ] ; then
+if [ ! -f ./kloxo-install.zip ] ; then
     wget http://download.lxcenter.org/download/kloxo-install.zip
 fi
 
-unzip -oq kloxo-install.zip
+if [ -d kloxo-install ] ; then
+    cd kloxo-install
+else
+    unzip -oq kloxo-install.zip
+    cd kloxo-install
+fi
 
-cd kloxo-install/kloxo-linux
+if [ -f /usr/local/lxlabs/ext/php/php ] ; then
+	/usr/local/lxlabs/ext/php/php kloxo-installer.php --install-type=$APP_TYPE $* | tee kloxo_install.log
+else
+	php kloxo-installer.php --install-type=$APP_TYPE $* | tee kloxo_install.log
+fi
 
-php lxins.php --install-type=master $* | tee kloxo_install.log
