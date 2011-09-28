@@ -78,35 +78,46 @@ function kloxo_core_portion () {
 		find ./patch/kloxo/ -type f -name \"*.php*\" -exec chmod 644 {} \;
 		find ./patch/kloxo/ -type d -exec chmod 755 {} \;
 
-		echo "- Copy patch file"
+		echo "- Copy patch files"
 		cp -rf ./patch/kloxo/* /usr/local/lxlabs/kloxo
 		cp -rf /usr/local/lxlabs/kloxo/pscript /script
 		cp -rf /usr/local/lxlabs/kloxo/httpdocs/htmllib/script /script
 
 		kloxo_64bit
 	else
-		kloxo_exit
+		echo " - No Core patches"
 	fi
 }
 
 function kloxo_64bit () {
 	if [ -d /usr/lib64 ] ; then
-		echo "- Set symlink for 3bit from 64bit links"
+		echo "- Set symlink from 64bit links if needed"
 
 		if [ ! -h /usr/lib/kloxophp ] ; then
 			echo "- /usr/lib/kloxophp not as symlink, deleted"
 			rm -rf /usr/lib/kloxophp
 		fi
 	
-		echo "- Set symlink for 64bit version"
-		mkdir -p /usr/lib64/php
-		ln -s /usr/lib64/php /usr/lib/php
-		mkdir -p /usr/lib64/httpd
-		ln -s /usr/lib64/httpd /usr/lib/httpd
-		mkdir -p /usr/lib64/lighttpd
-		ln -s /usr/lib64/lighttpd /usr/lib/lighttpd
-		mkdir -p /usr/lib64/kloxophp
-		ln -s /usr/lib64/kloxophp /usr/lib/kloxophp
+		if [ ! -h /usr/lib/php ] ; then
+			echo "- Set symlink for /usr/lib/php"
+			mkdir -p /usr/lib64/php
+			ln -s /usr/lib64/php /usr/lib/php
+		fi
+		if [ ! -h /usr/lib/httpd ] ; then
+			echo "- Set symlink for /usr/lib/httpd"
+			mkdir -p /usr/lib64/httpd
+			ln -s /usr/lib64/httpd /usr/lib/httpd
+		fi
+		if [ ! -h /usr/lib/lighttpd ] ; then
+			echo "- Set symlink for /usr/lib/kloxophp"
+			mkdir -p /usr/lib64/lighttpd
+			ln -s /usr/lib64/lighttpd /usr/lib/lighttpd
+		fi
+		if [ ! -h /usr/lib/kloxophp ] ; then
+			echo "- Set symlink for /usr/lib/lighttpd"
+			mkdir -p /usr/lib64/kloxophp
+			ln -s /usr/lib64/kloxophp /usr/lib/kloxophp
+		fi
 	else
 		echo "- No extra setting for 32bit"
 	fi
@@ -133,10 +144,10 @@ function kloxo_thirdparty_portion () {
 		find ./patch/thirdparty/ -type f -name \"*.php*\" -exec chmod 644 {} \;
 		find ./patch/thirdparty/ -type d -exec chmod 755 {} \;
 	
-		echo "- Copy patch file"
+		echo "- Copy patch files"
 		cp -rf ./patch/thirdparty/* /usr/local/lxlabs/kloxo/httpdocs/thirdparty
 	else
-		kloxo_exit
+		echo " - No Thirdparty patches"
 	fi
 }
 
@@ -161,10 +172,10 @@ function kloxo_webmail_portion () {
 		find ./patch/webmail/ -type f -name \"*.php*\" -exec chmod 644 {} \;
 		find ./patch/webmail/ -type d -exec chmod 755 {} \;
 	
-		echo "- Copy patch file"
+		echo "- Copy patch files"
 		cp -rf ./patch/webmail/* /home/kloxo/httpd/webmail
 	else
-		kloxo_exit
+		echo " - No Webmail patches"
 	fi
 }
 
@@ -189,25 +200,21 @@ function kloxo_awstats_portion () {
 		find ./patch/awstats/ -type f -name \"*.php*\" -exec chmod 644 {} \;
 		find ./patch/awstats/ -type d -exec chmod 755 {} \;
 	
-		echo "- Copy patch file"
+		echo "- Copy patch files"
 		cp -rf ./patch/awstats/* /home/kloxo/httpd/awstats
 	else
-		kloxo_exit
+		echo " - No Awstats patches"
 	fi
 }
 
 function kloxo_run_script () {
-	echo "Step for run script files for fixed..."
+	echo "Step for cleanup and fixed..."
 
-	get_yes_no "    Do you want fixed?" 1
-	if [ "$?" -eq "1" ] ; then
-		sh /script/upcp
-		sh /script/cleanup
-		sh /script/fixweb
-		sh /script/fixdns
-		sh /script/fixmail
-		sh /script/fixwebmail
-	fi
+	sh /script/cleanup
+	sh /script/fixweb
+	sh /script/fixdns
+	sh /script/fixmail
+	sh /script/fixwebmail
 }
 
 function kloxo_begin () {
@@ -218,20 +225,21 @@ function kloxo_begin () {
 
 function kloxo_end () {
 	echo
+	echo "------------------------------------------"
+	echo " * Better reboot your system"
+	echo " * run 'sh /script/upcp' for Kloxo update"
+	echo "------------------------------------------"
+	echo
 	echo "... the end"
 	echo
 	exit
 }
 
 function kloxo_exit () {
-	get_yes_no "    Do you want to exit?" 1
-	if [ "$?" -eq "1" ] ; then
-		exit
-	fi
+	exit
 }
 
 function kloxo_check_version () {
-
 	if [ "$patchver" ==  "$kloxover" ] ; then
 		echo "- Version '$kloxover' equal to patch version '$patchver', patch processing..."
 		return 1
@@ -239,7 +247,6 @@ function kloxo_check_version () {
 		echo "- Version '$kloxover' but patch version '$patchver', no patch process"
 		return 0
 	fi
-
 }
 
 ### execution ###
