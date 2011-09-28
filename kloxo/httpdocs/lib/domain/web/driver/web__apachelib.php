@@ -1355,7 +1355,9 @@ static function createWebDefaultConfig()
 	$defaultdata .= "\tDocumentRoot {$sgbl->__path_kloxo_httpd_root}/default/\n\n";
 	$defaultdata .= "\t<Ifmodule mod_userdir.c>\n";
 	//-- to make sure http://ip/~client work because maybe 'disabled' on httpd.conf
-	$defaultdata .= "\t\tUserDir enabled *\n";
+	//-- not work with exist * on httpd version 2.2.20/2.2.21
+//	$defaultdata .= "\t\tUserDir enabled *\n";
+	$defaultdata .= "\t\tUserDir enabled\n";
 	$defaultdata .= "\t\tUserDir \"public_html\"\n";
 	$defaultdata .= "\t</Ifmodule>\n\n";
 	$defaultdata .= "</VirtualHost>\n\n";
