@@ -1617,24 +1617,30 @@ function do_zip_to_fileserv($type, $arg)
 
 	// Create the pass file now itself so that it isn't unwittingly created again.
 
+	// Issue #671: Fixed backup-restore issue
+	// how about when rename to existing file? - forum #16245
+
 	if ($type === 'zip') {
 		$vd = $arg[0];
 		$list = $arg[1];
 		dprint("zipping $vd: " . implode(" ", $list) . " \n");
 		$ret = lxshell_zip($vd, "__path_serverfile/tmp/$base.tmp", $list);
-		lrename("__path_serverfile/tmp/$base.tmp", "__path_serverfile/tmp/$base");
+	//	lrename("__path_serverfile/tmp/$base.tmp", "__path_serverfile/tmp/$base");
+		lxfile_mv("__path_serverfile/tmp/$base.tmp", "__path_serverfile/tmp/$base");
 	} else if ($type === 'tgz') {
 		$vd = $arg[0];
 		$list = $arg[1];
 		dprint("tarring $vd: " . implode(" ", $list) . " \n");
 		$ret = lxshell_tgz($vd, "__path_serverfile/tmp/$base.tmp", $list);
-		lrename("__path_serverfile/tmp/$base.tmp", "__path_serverfile/tmp/$base");
+	//	lrename("__path_serverfile/tmp/$base.tmp", "__path_serverfile/tmp/$base");
+		lxfile_mv("__path_serverfile/tmp/$base.tmp", "__path_serverfile/tmp/$base");
 	} else if ($type === 'tar') {
 		$vd = $arg[0];
 		$list = $arg[1];
 		dprint("tarring $vd: " . implode(" ", $list) . " \n");
 		$ret = lxshell_tar($vd, "__path_serverfile/tmp/$base.tmp", $list);
-		lrename("__path_serverfile/tmp/$base.tmp", "__path_serverfile/tmp/$base");
+	//	lrename("__path_serverfile/tmp/$base.tmp", "__path_serverfile/tmp/$base");
+		lxfile_mv("__path_serverfile/tmp/$base.tmp", "__path_serverfile/tmp/$base");
 	}
 
 	if ($ret) {
@@ -6695,7 +6701,7 @@ function updatecleanup()
 //	lxfile_cp("../file/skeleton.zip", "/home/kloxo/httpd/skeleton.zip");
 
 	setDefaultPages();
-	
+
 	changeMailSoftlimit();
 
 	setFreshClam();
