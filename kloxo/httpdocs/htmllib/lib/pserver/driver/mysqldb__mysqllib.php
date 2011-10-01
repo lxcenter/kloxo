@@ -40,6 +40,7 @@ function createDatabase()
 		mysql_query("grant all on {$this->main->dbname}.* to '{$parentname}'@'localhost';");
 		mysql_query("grant all on {$this->main->dbname}.* to '{$parentname}'@'%';");
 	}
+
 	$this->log_error_messages(false);
 	mysql_query("flush privileges;");
 }
@@ -86,19 +87,25 @@ function log_error_messages($throwflag = true)
 
 static function take_dump($dbname, $dbuser, $dbpass, $docf)
 {
+	// Issue #671 - Fixed backup-restore issue
 
-	global $gbl, $sgbl, $login, $ghtml; 
-	$arg[0] = "$sgbl->__path_mysqldump_path";
+	global $gbl, $sgbl, $login, $ghtml;
+
+	$arg[0] = $sgbl->__path_mysqldump_path;
 	$arg[1] = "--add-drop-table";
 	$arg[2] = "-u";
 	$arg[3] = $dbuser;
 	$arg[4] = $dbname;
+
 	if ($dbpass) {
-		$arg[6] = "-p'$dbpass'";
+		$arg[5] = "-p'{$dbpass}'";
+	}
+	else {
+		$arg[5] = "";
 	}
 
 	$cmd = implode(" ", $arg);
-
+/*
 	$output = null;
 	$ret = null;
 	if (!windowsos()) {
@@ -107,6 +114,17 @@ static function take_dump($dbname, $dbuser, $dbpass, $docf)
 		exec("$cmd", $output, $ret);
 		file_put_contents($docf, $output);
 	}
+*/
+	$link = mysql_connect('localhost', $dbadmin, $dbpass);
+	$result = mysql_query("CREATE DATABASE IF NOT EXISTS {$dbname}", $link);
+
+	try {
+		system("{$cmd} > {$docf}");
+	}
+	catch (Exception $e) {
+		throw new lxException('Error: ' . $e->getMessage(), $dbname);
+	}
+
 }
 
 
@@ -126,7 +144,13 @@ static function drop_all_table($dbname, $dbuser, $dbpass)
 
 static function restore_dump($dbname, $dbuser, $dbpass, $docf)
 {
+	// Issue #671 - Fixed backup-restore issue
+
+	global $gbl, $sgbl, $login, $ghtml; 
+
 	self::drop_all_table($dbname, $dbuser, $dbpass);
+/*
+	// Issue #671 - how about for large data?
 	$cont = lfile_get_contents($docf);
 
 	if ($dbpass) {
@@ -134,29 +158,60 @@ static function restore_dump($dbname, $dbuser, $dbpass, $docf)
 	} else {
 		$ret = lxshell_input($cont, "__path_mysqlclient_path", "-u", $dbuser, $dbname);
 	}
+*/
+	$arg[0] = $sgbl->__path_mysqlclient_path;
+	$arg[1] = "-u";
+	$arg[2] = $dbuser;
+
+	if ($dbpass) {
+		$arg[3] = "-p'{$dbpass}'";
+	}
+	else {
+		$arg[3] = "";
+	}
+
+	$arg[4] = $dbname;
+
+	try {
+		system("{$cmd} < {$docf}");
+	}
+	catch (Exception $e) {
+		throw new lxException('Error: ' . $e->getMessage(), $dbname);
+	}
 }
 
 function do_backup()
 {
+	// Issue #671 - Fixed backup-restore issue
+
 	global $gbl, $sgbl, $login, $ghtml; 
+
 	$dbadmin = $this->main->__var_dbadmin;
 	$dbpass = $this->main->__var_dbpassword;
+	$dbname = $this->main->dbname;
+
 	$vd = tempnam("/tmp", "mysqldump");
 	lunlink($vd);
 	mkdir($vd);
-	$docf = "$vd/mysql-{$this->main->dbname}.dump";
 
-	$arg[0] = "$sgbl->__path_mysqldump_path";
+	$docf = "$vd/mysql-{$dbname}.dump";
+
+	$arg[0] = $sgbl->__path_mysqldump_path;
 	$arg[1] = "--add-drop-table";
 	$arg[2] = "-u";
 	$arg[3] = $dbadmin;
-	$arg[4] = $this->main->dbname;
+
 	if ($dbpass) {
-		$arg[6] = "-p'$dbpass'";
+		$arg[4] = "-p'{$dbpass}'";
+	}
+	else {
+		$arg[4] = "";
 	}
 
-	$cmd = implode(" ", $arg);
+	$arg[5] = $this->main->dbname;
 
+	$cmd = implode(" ", $arg);
+/*
 	$output = null;
 	$ret = null;
 	if (!windowsos()) {
@@ -169,6 +224,17 @@ function do_backup()
 	if ($ret) {
 		lxfile_tmp_rm_rec($vd);
 		throw new lxException('could_not_create_mysql_dump', 'nname', $this->main->dbname);
+	}
+*/
+	$link = mysql_connect('localhost', $dbadmin, $dbpass);
+	$result = mysql_query("CREATE DATABASE IF NOT EXISTS {$dbname}", $link);
+
+	try {
+		system("{$cmd} > {$docf}");
+	}
+	catch (Exception $e) {
+		lxfile_tmp_rm_rec($vd);
+		throw new lxException('Error: ' . $e->getMessage(), $dbname);
 	}
 
 	return array($vd, array(basename($docf)));
@@ -190,34 +256,72 @@ function fix_grant_all()
 
 function do_restore($docd)
 {
+	// Issue #671 - Fixed backup-restore issue
+
 	global $gbl, $sgbl, $login, $ghtml; 
+
 	$dbadmin = $this->main->__var_dbadmin;
 	$dbpass = $this->main->__var_dbpassword;
+	$dbname = $this->main->dbname;
+
 	$vd = tempnam("/tmp", "mysqldump");
+
 	lunlink($vd);
 	mkdir($vd);
 
+//	$docf = "$vd/mysql-{$this->main->dbname}.dump";
+	$docf = "$vd/mysql-{$dbname}.dump";
 
-	$docf = "$vd/mysql-{$this->main->dbname}.dump";
 	$ret = lxshell_unzip_with_throw($vd, $docd);
 
 	if (!lxfile_exists($docf)) {
 		throw new lxException('could_not_find_matching_dumpfile_for_db', '', '');
 	}
-
+/*
+	// Issue #671 - how about for large data?
 	$cont = lfile_get_contents($docf);
+
 	if ($this->main->dbpassword) {
 		$ret = lxshell_input($cont, "__path_mysqlclient_path", "-u", $this->main->username, "-p{$this->main->dbpassword}", $this->main->dbname);
 	} else {
 		$ret = lxshell_input($cont, "__path_mysqlclient_path", "-u", $this->main->username, $this->main->dbname);
 	}
+
 	if ($ret) {
 		log_restore("Mysql restore failed.... Copying the mysqldump file $docf to $sgbl->__path_kloxo_httpd_root...");
 		lxfile_cp($docf, "__path_kloxo_httpd_root");
 		throw new lxException('mysql_error_could_not_restore_data', '', '');
 	}
+
 	lunlink($docf);
 	lxfile_tmp_rm_rec($vd);
+*/
+	$arg[0] = $sgbl->__path_mysqlclient_path;
+	$arg[1] = "-u";
+	$arg[2] = $dbadmin;
+
+	if ($dbpass) {
+		$arg[3] = "-p'{$dbpass}'";
+	}
+	else {
+		$arg[3] = "";
+	}
+
+	$arg[4] = $dbname;
+
+	$cmd = implode(" ", $arg);
+
+	$link = mysql_connect('localhost', $dbadmin, $dbpass);
+	$result = mysql_query("CREATE DATABASE IF NOT EXISTS {$dbname}", $link);
+
+	try {
+		system("{$cmd} < {$docf}");
+		lunlink($docf);
+		lxfile_tmp_rm_rec($vd);
+	}
+	catch (Exception $e) {
+		throw new lxException('Error: ' . $e->getMessage(), $dbname);
+	}
 }
 
 

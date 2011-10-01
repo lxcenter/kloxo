@@ -588,7 +588,11 @@ static function verify($var, $val)
 
 function getZiptype()
 {
-	return "tar";
+//	return "tar";
+
+	// Issue #671 - Fixed backup-restore issue
+	// change to tgz that make less space especially temp process
+	return "tgz";
 }
 
 

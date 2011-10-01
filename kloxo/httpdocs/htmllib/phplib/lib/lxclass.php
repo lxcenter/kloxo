@@ -315,7 +315,9 @@ function syncToSystemCommon()
 }
 
 
-// This should work for all normal purposes., If there is some multi server syncing for a single object like that what happens in dns and domainbackup, you can redefine sysnctosyste. Just call the common function at the beginning.
+// This should work for all normal purposes., 
+// If there is some multi server syncing for a single object like that what happens in dns and domainbackup, 
+// you can redefine sysnctosyste. Just call the common function at the beginning.
 function syncToSystem() 
 {
 
@@ -391,17 +393,15 @@ function doCustomAction()
 	$sq = new Sqlite(null, 'customaction');
 
 	if ($this->dbaction === 'add') {
-		$query = 'action = :dbaction AND class = :class';
-		$params = array(':dbaction' => $this->dbaction, ':class' => $this->getClass());
+		$query = "action = '$this->dbaction' AND class = '{$this->getClass()}'";
 	} else {
-		$query = 'action = :dbaction AND subaction = :subaction AND class = :class';
-		$params = array(':dbaction' => $this->dbaction, ':subaction' => $this->subaction, ':class' => $this->getClass());
+		$query = "action = '$this->dbaction' AND subaction = '$this->subaction' AND class = '{$this->getClass()}'";
 	}
 
 	$this->__var_custom_exec = null;
 
 	dprint($query);
-	$list = $sq->getRowsWhere($query, $params);
+	$list = $sq->getRowsWhere($query);
 	if (!$list) { return; }
 	dprintr($list);
 	foreach($list as $k => $l) {
@@ -714,7 +714,11 @@ function syncEntireObject()
 	}
 
 
-	// the children should only be synced AFTER the parent. This is actually self-evident now, especially since when we backup, a domain would be fully formed, and thus adding spam BEFORE the mail is added is absurd.... But when deleting, it is the other way round. First the children should be deleted, and deleting the parent before the children can lead to some issues.
+	// the children should only be synced AFTER the parent. 
+	// This is actually self-evident now, especially since when we backup, a domain would be fully formed,
+	// and thus adding spam BEFORE the mail is added is absurd.... 
+	// But when deleting, it is the other way round. First the children should be deleted, 
+	// and deleting the parent before the children can lead to some issues.
 
 	foreach((array) $this->__object_list as $variable) {
 		$objname = "{$variable}_o";
@@ -773,6 +777,8 @@ function setDefaultValue($var, $val)
 
 function writeEntireObject()
 {
+
+
 	foreach((array) $this->__object_list as $variable) {
 		$objname = $variable . "_o";
 		$obj = $this->$objname;
@@ -785,7 +791,7 @@ function writeEntireObject()
 		dprint("<b> Driver  {$this->dbaction} <br> <br> </b>");
 	}
 	if ($this->isUnclean()) {
-		dprint('Really Writing the table \''.$this->get__table().'\'  for '.$this->nname.' with dbaction \''.$this->dbaction.'\' <br>');
+		dprint("Really Writing  {$this->get__table()} {$this->nname}...dbaction... {$this->dbaction} <br> \n");
 		$this->write();
 	}
 
@@ -1525,7 +1531,7 @@ final protected function initVirtualListIfUndef($class)
 		$query = $this->getDefaultQuery($class, $rule);
 		//dprint(' <br> ' .$query . "<br> \n");
 		$filter = $this->getFilterForThis($class);
-		$string = exec_class_method($rclass, "getdbFilter", $filter, $class);
+		$string = exec_class_method($rclass, "getdbFilter", $filter, $class); 
 
 		if ($string) {
 			if ($query) { 
@@ -2409,7 +2415,9 @@ final function getVirtualList($class, &$count, $sortby = null, $sortdir = null)
 		return $this->$class;
 	}
 
-	//Setting the parent Forcibly.... Php screws up recursion.. This should have only been done in the initlistifundef and only the first time, but there u fucking have it.. Stupid php..
+	// Setting the parent Forcibly.... Php screws up recursion.. 
+	// This should have only been done in the initlistifundef and only the first time, 
+	// but there u fucking have it.. Stupid php..
 	foreach((array) $this->$list as $o) {
 		$o->__parent_o = $this;
 	}
@@ -2437,7 +2445,8 @@ function AddToArrayObjectList($class, $objectlist)
 			$__t_newobjlist = $this->$var;
 		}
 		foreach((array) $objectlist as $o) {
-			// This seems to happen with the old dns records a_rec_a etc, which were removed from the dns. I encountered because I restored a very old backup.
+			// This seems to happen with the old dns records a_rec_a etc, 
+			// which were removed from the dns. I encountered because I restored a very old backup.
 			if (!isset($o->nname)) {
 				continue;
 			}
@@ -2543,7 +2552,7 @@ function changeNnameRewrite()
 		}
 		$this->nname =implode($sgbl->__var_nname_impstr, $nnamelist);
 		$sql = new Sqlite(null, $this->get__table());
-		$res = $sql->getRowsWhere('nname = :nname', array(':nname' => $this->nname));
+		$res = $sql->getRowsWhere("nname = '{$this->nname}'");
 		if ($res) {
 			throw new lxException("{$this->nname}_already_exists");
 		}
@@ -2706,7 +2715,7 @@ function consistencyNotExisting($trulist, $real)
 
 	global $gbl, $sgbl, $login, $ghtml; 
 	$sql = new Sqlite(null, get_table_from_class($this->getParentClass()));
-	$res = $sql->getRowsWhere('nname = :nname', array(':nname' => $this->getParentName()));
+	$res = $sql->getRowsWhere("nname = '{$this->getParentName()}'");
 
 	if ($trulist && $this->__parent_o->dbaction !== 'add' && !$res) {
 		$this->AddMEssageOnlyIfClientDomain("<font color=red> <b> (Parent {$this->getParentName()} Does Not Exist. Will be Not be Restored).</font> </b> ");
@@ -2801,7 +2810,7 @@ function checkForConsistency($tree, $trulist, $real = false)
 
 
 		$sql = new Sqlite(null, $this->get__table());
-		$res = $sql->getRowsWhere('nname = :nname', array(':nname' => $this->nname));
+		$res = $sql->getRowsWhere("nname = '{$this->nname}'");
 		$this->consistencySwitchServer();
 		if ($res) {
 			$return = $this->consistencyAlreadyExisting($res, $trulist, $real);
@@ -3251,7 +3260,7 @@ final protected function writeAChildList($class, $flag = NULL)
 		return;
 	}
 
-	dprintr('Warning: writing class \''.$class.'\' in table \''.$this->get__table().'\' with nname '.$this->nname.'<br/>');
+	dprintr("Warning... Writing {$class} in {$this->get__table()} {$this->nname}...<br> ");
 	if (!$this->$list) {
 		return;
 	}
@@ -3693,7 +3702,9 @@ function getLoginTo()
 	if ($sgbl->isKloxo() && $this->isLte('customer')) {
 		$llist[] = "list-domain";
 	}
-
+	if ($sgbl->ishyperVM() && $this->isLte('customer')) {
+		$llist[] = "list-vps";
+	}
 	$llist[] = "desktop-";
 	$llist[] = "show-home";
 	return $llist;
@@ -3722,7 +3733,9 @@ function getUrlFromLoginTo()
 
 	if (!csa($string, "-")) {
 		if ($this->isClass('client')) {
-			if ($sgbl->isKloxo()) {
+			if ($sgbl->isHyperVm()) {
+				$url = $this->getSingleOrListclass("vps");
+			} else if ($sgbl->isKloxo()) {
 				if ($this->isEq('reseller')) {
 					$url = $this->getSingleOrListclass('client');
 				} else {
@@ -3760,7 +3773,7 @@ function getSingleOrListclass($class)
 {
 	$table = get_table_from_class($class);
 	$sq = new Sqlite(null, $table);
-	$count = $sq->getCountWhere('parent_clname = :clname', array(':clname' => $this->getClName()));
+	$count = $sq->getCountWhere("parent_clname = '{$this->getClName()}'");
 	if ($count == 1 && $this->isGte('customer')) {
 		$dlist = $this->getList($class);
 		$d = getFirstFromList($dlist);
@@ -3808,7 +3821,7 @@ function getSpecialParentClass()
 	return 'client';
 }
 function createShowIlist() { return null; }
-static function AddListForm($parent, $class) { return null; }
+static function AddListForm() { return null; }
 
 function createShowPropertyList(&$alist) { $alist['property'][] = 'a=show';}
 function createShowActionList(&$alist) { }
@@ -3892,7 +3905,7 @@ function getCustomButton(&$alist)
 {
 	$t = $this->get__table();
 	$sq = new Sqlite(null, 'custombutton');
-	$res = $sq->getRowsWhere('class = :table', array(':table' => $this->get__table()));
+	$res = $sq->getRowsWhere("class = '{$this->get__table()}'");
 	if (!$res) { return; }
 
 	$alist['__title_custom'] = "Custom";
@@ -4256,7 +4269,7 @@ function changeUsedFromParentAll($flag = 1)
 	//}
 	//dprint(" <b> Before Mailaccount Num: {$login->used->mailaccount_num} </b> <br> \n");
 	while(($qp = $qp->getParentO())) {
-		dprint('Changing the table \''.$this->get__table().'\' for '.$this->nname.' with table '.$qp->get__table().' '.$qp->nname.' </b><br />');
+		dprint(" Changin {$this->get__table()}: {$this->nname}... {$qp->get__table()} {$qp->nname} </b><br> ");
 		$this->changeUsedFromParent($qp, $flag);
 	}
 	//dprint(" <b> After  Mailaccount Num: {$login->used->mailaccount_num} </b> <br> \n");
@@ -5116,7 +5129,7 @@ function fix_syncserver_nname_problem()
 		$newthis->nname =implode($sgbl->__var_nname_impstr, $nnamelist);
 
 		$sql = new Sqlite($this->__masterserver, $this->get__table());
-		$res = $sql->getRowsWhere('nname = :nname', array(':nname' => $newthis->nname));
+		$res = $sql->getRowsWhere("nname = '{$newthis->nname}'");
 		if ($res) {
 			throw new lxException("changed_name_already_exists", $newthis->nname, "syncserver");
 		}
@@ -5158,6 +5171,11 @@ function AddToThere($newserver)
 		$this->__old_driver = $this->__driverappclass;
 	}
 	$this->createSyncClass();
+
+	if ($sgbl->isHyperVM()) {
+		$driverapp = $gbl->getSyncClass($this->__masterserver, $this->syncserver, 'vps');
+		$this->ttype = $driverapp;
+	}
 
 	$this->doServerSpecific();
 	$this->doDriverSpecific();
@@ -5215,7 +5233,8 @@ function restoreMeUp($bdir, $id)
 	$this->restoreMeUpThere('localhost', $res);
 }
 
-// These are very complex backup/restore functions, and does not really work, because the file size is too high.
+// These are very complex backup/restore functions, and does not really work, 
+// because the file size is too high.
 function updateBackupOLD($param)
 {
 	$bfile = tempnam("/tmp", "backupzip.zip");
@@ -5254,7 +5273,8 @@ function updateRestoreOLD($param)
 	return null;
 }
 
-// These functions are very simple and backups and restores only the internal content doesn't restore the kloxo database structure. Useful only for database.
+// These functions are very simple and backups and restores only the internal content 
+// doesn't restore the kloxo database structure. Useful only for database.
 
 function updateBackup($param)
 {
@@ -5327,7 +5347,12 @@ function doSimpleRestore($bfile, $param)
 
 	$ob = $rem->bobject;
 
-	dprint($ob->getClName()); dprint($this->getClName());
+//	dprint($ob->getClName()); dprint($this->getClName());
+
+	// Issue #671 - Fixed backup-restore issue
+	// forum http://forum.lxcenter.org/index.php?t=msg&th=16875
+	// TODO!
+
 	if ($ob->getClName() !== $this->getClName()) {
 		throw new lxException('objectclassname_doesnt_match', '');
 	}
@@ -5386,7 +5411,12 @@ function doCoreRestore($bfile, $param)
 		$ob = $rem->bobject;
 	}
 
-	dprint($ob->getClName()); dprint($this->getClName());
+//	dprint($ob->getClName()); dprint($this->getClName());
+
+	// Issue #671 - Fixed backup-restore issue
+	// forum http://forum.lxcenter.org/index.php?t=msg&th=16875
+	// TODO!
+
 	if ($ob->getClName() !== $this->getClName()) {
 		throw new lxException('objectclassname_doesnt_match', '');
 	}
@@ -5407,7 +5437,8 @@ function doCoreRestore($bfile, $param)
 		throw $e;
 	}
 
-	// Restore the currenct client's quota. The person who is doing the restoring souldn't able to escape his new quota.
+	// Restore the currenct client's quota. The person who is doing the restoring 
+	// souldn't able to escape his new quota.
 
 	if ($this->isLogin()) {
 		$ob->priv = $this->priv;
@@ -5547,7 +5578,11 @@ function doSimpleBackup($bfile, $param)
 
 function getZiptype()
 {
-	return "tar";
+//	return "tar";
+
+	// Issue #671 - Fixed backup-restore issue
+	// change to tgz that make less space especially temp process
+	return "tgz";
 }
 
 function getBackupFileNameForObject($id)
@@ -5904,15 +5939,6 @@ function __get($var)
 	return '-';
 }
 
-function __isset($var)
-{
-	if ($var == '__parent_o') {
-		return isset($this->__parent_o);
-	}
-
-	return true;
-}
-
 }
 
 class Used extends priv {
@@ -5926,10 +5952,6 @@ function __get($var)
 	return "-";
 }
 
-function __isset($var)
-{
-	return true;
-}
 
 }
 
