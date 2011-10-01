@@ -6593,7 +6593,7 @@ function updatecleanup()
 	call_with_flag("remove_host_deny");
 
 	installInstallApp();
-
+	
 	log_cleanup("Turn off mouse daemon");
 	log_cleanup("- Turn off process");
 	system("chkconfig gpm off");
@@ -6618,6 +6618,7 @@ function updatecleanup()
 	install_xcache();
 
 	log_cleanup("Install Kloxo service");
+	log_cleanup("- Install process");
 	lxfile_unix_chmod("/etc/init.d/kloxo", "0755");
 	system("chkconfig kloxo on");
 
@@ -6694,8 +6695,10 @@ function updatecleanup()
 //	lxfile_cp("../file/skeleton.zip", "/home/kloxo/httpd/skeleton.zip");
 
 	setDefaultPages();
-
+	
 	changeMailSoftlimit();
+
+	setFreshClam();
 }
 
 function setPrepareKloxo()
