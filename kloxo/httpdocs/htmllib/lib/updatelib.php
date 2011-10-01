@@ -212,9 +212,9 @@ function doUpdates()
 
 	fix_self_ssl();
 
-	setFreshClam();
-
-	installinstallapp();
+	// move to updatecleanup()
+//	setFreshClam();
+//	installinstallapp();
 
 }
 
