@@ -16,9 +16,10 @@ function dbactionAdd()
 	lxfile_mkdir("__path_client_root/{$this->main->nname}/__backup");
 	lxfile_generic_chown("__path_client_root/{$this->main->nname}", "lxlabs");
 	lxfile_generic_chown("__path_client_root/{$this->main->nname}/__backup", "lxlabs");
-/*
-	// Issue #671 - Fixed backup-restore issue
 
+	// Issue #671 - Fixed backup-restore issue
+	// disable checking if dir exists
+/*
 	if (lxfile_exists("__path_customer_root/{$this->main->getPathFromName()}")) {
 		throw new lxException ("directory_already_exists", '', '');
 	}
