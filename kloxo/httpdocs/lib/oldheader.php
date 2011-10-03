@@ -48,7 +48,7 @@ function createOldHeaderData()
 	} else {
 		$ticket_url = "/display.php?frm_action=list&frm_o_cname=ticket";
 	}
-	$helpurl = "http://doc.lxlabs.com/kloxo";
+	$helpurl = "http://wiki.lxcenter.org";
 
 
 	$gdata = array(
@@ -63,7 +63,7 @@ function createOldHeaderData()
 		"ticket" => array($ticketdesc, $ticket_url, "ticket_list.gif"),
 		"ssession" => array($ssessiondesc, "/display.php?frm_action=list&frm_o_cname=ssessionlist", "ssession_list.gif"),
 		"about" => array($aboutdesc, "/display.php?frm_action=about", "ssession_list.gif"),
-		"help" => array($helpdesc, "javascript:window.open('$helpurl/$doctype/')", "ssession_list.gif"),
+		"help" => array($helpdesc, "javascript:window.open('$helpurl/')", "ssession_list.gif"),
 		"logout" => array("<font color=red>$logoutdesc<font >", "javascript:top.mainframe.logOut();", "delete.gif")
 	);
 }
