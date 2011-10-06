@@ -24,6 +24,7 @@ function dbactionUpdate($subaction)
 	lxfile_mkdir("/home/apache/conf/domains");
 	lxfile_mkdir("/home/apache/conf/redirects");
 	lxfile_mkdir("/home/apache/conf/webmails");
+	lxfile_mkdir("/home/apache/conf/wildcards");
 
 	//--- some vps include /etc/httpd/conf.d/swtune.conf
 	passthru("rm -f /etc/httpd/conf.d/swtune.conf");
