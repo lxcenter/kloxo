@@ -273,7 +273,7 @@ function updateupload_Logo($param)
 	lxfile_cp($fullpath_logo_image, "/usr/local/lxlabs/kloxo/file/user-logo.png");
 	// must chown to lxlabs for successful display on 'Upload Logo'
 	lxfile_unix_chown($fullpath_logo_image, "lxlabs");
-	passthru("lphp.exe ../bin/fix/fix-userlogo.php --select=all");
+	passthru("lxphp.exe /usr/local/lxlabs/kloxo/bin/fix/fix-userlogo.php --select=all");
 
 /*
 	if ($_FILES['logo_image_loading_f']['tmp_name']) {

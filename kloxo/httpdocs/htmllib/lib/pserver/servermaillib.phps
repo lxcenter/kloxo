@@ -77,7 +77,7 @@ function postUpdate($subaction = null)
 	if ($subaction === 'update') {
 		//--- for to make sure clam status -- function declare in lib.php
 		// function declare on lib.php
-		setFreshClam();
+		setFreshClam($nolog = 'yes');
 	}
 }
 

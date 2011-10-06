@@ -185,7 +185,7 @@ function postUpdate()
 	//--- issue 547 - xcache failed to install
 	if ($login->isAdmin()) {
 		// function declare on lib.php
-		install_xcache();
+		install_xcache($nolog = 'yes');
 	}
 
 	// We need to write because the fixphpini reads everything from the database.
