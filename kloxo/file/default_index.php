@@ -1,3 +1,11 @@
+<?php
+	if (file_exists("./custom-inc.php")) {
+		$incfile = "./custom-inc.php";
+	}
+	else {
+		$incfile = "./inc.php";
+	}
+?>
 <html>
 
 <head>
@@ -41,7 +49,7 @@ img {
 <table width="100%" height="300" cellpadding="0" cellspacing="0">
 	<tr>
 		<td width="50">&nbsp;</td>
-		<td valign="top"><?php include_once "./inc.php"; ?></td>
+		<td valign="top"><?php include_once $incfile; ?></td>
 		<td width="280" valign="center">
 		<img src="images/disableskeletonbg.gif"></td>
 	</tr>
