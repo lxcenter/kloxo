@@ -220,7 +220,7 @@ function lxins_main()
 	}
 
 	// --- remove all temporal flags because the end of install
-	print("Remove Kloxo install flags...\n");
+	print("\nRemove Kloxo install flags...\n");
 	system("rm -rf /var/cache/kloxo/*-version");
 	system("rm -rf /var/cache/kloxo/kloxo-install-*.flg");
 

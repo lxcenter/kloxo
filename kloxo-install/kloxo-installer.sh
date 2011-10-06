@@ -26,9 +26,9 @@
 if [ "$#" == 0 ] ; then
 	echo
 	echo " -------------------------------------------------------------------"
-	echo "  format: sh $0 --type=[]"
+	echo "  format: sh $0 --type=<master/slave>"
 	echo " -------------------------------------------------------------------"
-	echo "  --type - master or slave"
+#	echo "  --type - master or slave"
 	echo
 	echo " * Run kloxo-packer.sh to make kloxo packs"
 	echo " * This installer only test on 6.1.7+ version."

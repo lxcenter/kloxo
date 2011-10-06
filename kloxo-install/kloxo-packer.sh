@@ -25,16 +25,15 @@
 
 if [ "$#" == 0 ] ; then
 	echo
-	echo " -------------------------------------------------------------------"
-	echo "  format: sh $0 --svnpath=[]"
-	echo " -------------------------------------------------------------------"
-	echo "  --svnpath - ex: tags/6.1.7 or branches/6.1.x or trunk"
+	echo " --------------------------------------------------------------------"
+	echo "  format: sh $0 --svnpath=<>"
+	echo " --------------------------------------------------------------------"
+	echo "  --svnpath - example: tags/6.1.7 or branches/6.1.x or trunk"
 	echo
-	echo "  * Browse http://svn.lxcenter.org/svn/kloxo/ to find kloxo version"
-	echo "  * This packer only pack main kloxo package from svn"
+	echo "  * Go to http://svn.lxcenter.org/svn/kloxo/ to find kloxo version"
+	echo "  * Pack main kloxo package from svn"
 	echo "  * Thirdparty packages download directly for latest version"
-	echo "  * Run kloxo-installer.sh for kloxo install and must be the same"
-	echo "       place with local copy"
+	echo "  * Then run kloxo-installer.sh which the same place with local copy"
 	echo
 	exit;
 fi
@@ -73,11 +72,23 @@ if [ ! -f ./combo/kloxo-install/kloxo-installer.sh ] ; then
 fi
 
 if [ ! -f ./combo/kloxo-install/kloxo-installer.php ] ; then
-	echo "Download kloxo-installer.php from http://download.lxcenter.org/download/kloxo/production/"
-	wget http://download.lxcenter.org/download/kloxo/production/kloxo-installer.php
-	mv -f kloxo-installer.php ./combo/kloxo-install/kloxo-installer.php
-fi
 
+	cd ./combo
+	
+	echo "Download kloxo-install.zip from http://download.lxcenter.org/download/"
+	wget http://download.lxcenter.org/download/kloxo-install.zip
+	unzip -oq kloxo-install.zip
+	rm -rf kloxo-install.zip
+	
+	cd ..
+	
+	# check again
+	if [ ! -f ./combo/kloxo-install/kloxo-installer.php ] ; then		
+		echo "Download kloxo-installer.php from http://download.lxcenter.org/download/kloxo/production/"
+		wget http://download.lxcenter.org/download/kloxo/production/kloxo-installer.php
+		mv -f kloxo-installer.php ./combo/kloxo-install/kloxo-installer.php
+	fi
+fi
 
 cd ./combo
 
