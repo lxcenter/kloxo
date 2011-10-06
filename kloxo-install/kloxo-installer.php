@@ -28,8 +28,10 @@ function lxins_main()
 	$opt = parse_opt($argv);
 	$dir_name=dirname(__FILE__);
 	$installtype = $opt['install-type'];
-	$dbroot = isset($opt['db-rootuser'])? $opt['db-rootuser']: "root";
-	$dbpass = isset($opt['db-rootpassword'])? $opt['db-rootpassword']: "";
+//	$dbroot = isset($opt['db-rootuser'])? $opt['db-rootuser']: "root";
+//	$dbpass = isset($opt['db-rootpassword'])? $opt['db-rootpassword']: "";
+	$dbroot = "root";
+	$dbpass = "";
 	$osversion = find_os_version();
 	$arch = `arch`;
 	$arch = trim($arch);
