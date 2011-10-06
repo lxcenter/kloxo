@@ -160,7 +160,7 @@ fi
 # Check for mysql databases and arguments.
 if  [ -d /var/lib/mysql ] && [ -z "$1" ] ; then
     echo -en "Database and arguments check " $C_NO
-    if [ `echo $0 || grep 'kloxo-install.sh' ` ] ; then
+    if [ `echo $0 || grep 'kloxo-installer.sh' ` ] ; then
         txtsh=`sh $0 --type=master/slave --db-rootpassword=PASSWORD`
     else
         txtsh=`sh $0 --db-rootpassword=PASSWORD`
