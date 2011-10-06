@@ -1,18 +1,18 @@
 <?php 
 
 class lxbackupmisc_b extends lxaclass {
-
 }
+
 
 class vpsipaddress extends lxclass {
 
 function get() {}
-
 function write() {}
 
 }
 
 abstract class Lxclass {
+
 
 public $nname;
 
@@ -23,6 +23,7 @@ public $subaction;
 
 public $dbaction = "clean";
 public $metadbaction = "all";
+
 
 static $__desc_parent_name_change = array("", "",  "owner");
 static $__acdesc_update_commandcenter = array("", "",  "command_center");
@@ -57,7 +58,6 @@ static $__desc_filter_view_normal = array("", "",  "normal_view");
 function __construct($masterserver, $readserver, $key)
 {
 	$key = trim($key);
-
 	// FIXME
 	$this->__virtual_list = array();
 
@@ -67,20 +67,17 @@ function __construct($masterserver, $readserver, $key)
 
 	$this->__class = strtolower(get_class($this));
 
-	// Remove the ',' character, since it is used to separate teh delete list in forms.
-	// This is a hack, but there is no other way.. If ',' is left as it is, it becomes impossible to
-	// delete this element..... (later) throw an exception. If a variable is changed silently like this,
-	// it can cause unexpected sideffects.
+
+
+	// Remove the ',' character, since it is used to separate teh delete list in forms. This is a hack, but there is no other way.. If ',' is left as it is, it becomes impossible to delete this element..... (later) throw an exception. If a variable is changed silently like this, it can cause unexpected sideffects.
 
 	if (!csb($this->__class, "ffile") && !csb($this->__class, 'mailcontent')) {
 		if (char_search_a($key, ",")) {
 			throw new lxexception('name_cannot_contain_comma', 'nname');
 		}
-	
 		if (char_search_a($key, "'")) {
 			throw new lxexception('name_cannot_contain_single_quote', 'nname');
 		}
-	
 		if (char_search_a($key, ")")) {
 			throw new lxexception('name_cannot_contain_bracket', 'nname');
 		}
@@ -88,28 +85,27 @@ function __construct($masterserver, $readserver, $key)
 		if (char_search_a($key, "(")) {
 			throw new lxexception('name_cannot_contain_bracket', 'nname');
 		}
-	
 		if (char_search_a($key, "+")) {
 			throw new lxexception('name_cannot_contain_plus', 'nname');
 		}
-	
 		if (char_search_a($key, "&")) {
 			throw new lxexception('name_cannot_contain_lessthan_greaterthan_or_and', 'nname');
 		}
-	
 		if (char_search_a($key, "<")) {
 			throw new lxexception('name_cannot_contain_lessthan_greaterthan_or_and', 'nname');
 		}
-	
 		if (char_search_a($key, ">")) {
 			throw new lxexception('name_cannot_contain_lessthan_greaterthan_or_and', 'nname');
 		}
 	}
 
+
+
+
+
 	if (!$readserver) {
 		$readserver = 'localhost';
 	}
-
 	$this->cttype = strtolower(get_class($this));
 	$this->nname = $key;
 	$this->__masterserver = $masterserver;
@@ -122,6 +118,7 @@ function createDriverAppSpecific()
 {
 	return false;
 }
+
 
 function getSyncServerForChild($class)
 {
@@ -138,8 +135,8 @@ function inheritSyncServer($parent)
 	}
 }
 
-static function isDatabase() { return false; }
 
+static function isDatabase() { return false; }
 function createSyncClass()
 {
 	global $gbl, $sgbl, $login, $ghtml; 
@@ -147,6 +144,7 @@ function createSyncClass()
 	if (!$login) {
 		return;
 	}
+
 
 	if (csa($this->syncserver, ",")) {
 		return;
@@ -170,12 +168,14 @@ function createSyncClass()
 
 	$class = $this->get__table();
 
+
 	$syncclass = $gbl->getSyncClass($this->__masterserver, $this->syncserver, $class);
+
+
 
 	if ($syncclass) {
 		$this->__driverappclass = $syncclass;
 		$syncclass = $class . "__" . $syncclass;
-
 		if (class_exists($syncclass)) {
 			$this->driverApp = new $syncclass(null, null, $this->nname);
 			$this->driverApp->main = $this;
@@ -187,7 +187,9 @@ function createSyncClass()
 		$this->driverApp = new LxaClass(null, null, $this->nname);
 		$this->driverApp->main = $this;
 	}
+	
 }
+
 
 abstract protected function get();
 
@@ -198,9 +200,9 @@ function dosyncToSystem()
 	if (!isset($this->driverApp) || !is_object($this->driverApp)) {
 		return;
 	}
-
 	return $this->driverApp->doSyncToSystem();
 }
+
 
 function setUpdateSubaction($val = null) 
 {
@@ -233,6 +235,7 @@ function setUpdateSubaction($val = null)
 	}
 }
 
+
 function getPathFromName($var = 'nname') 
 {
 	return str_replace(" ", "", $this->$var);
@@ -243,7 +246,6 @@ function getQuotaAddList($k) { return null; }
 function getTitleWithSync($class = null)
 {
 	global $gbl, $sgbl, $login, $ghtml; 
-
 	if ($class) {
 		$obj = $this->getObject($class);
 	} else {
@@ -252,7 +254,6 @@ function getTitleWithSync($class = null)
 	}
 
 	$switch = null;
-
 	if (isset($obj->olddeleteflag) && $obj->olddeleteflag === 'on') {
 		$switch = "(Switching)";
 	}
@@ -262,7 +263,6 @@ function getTitleWithSync($class = null)
 	$img = $ghtml->get_image($path, null, $obj->__driverappclass, '.gif');
 	$descr = null;
 	$str = null;
-
 	if (check_if_many_server()) {
 		$descr = "on {$obj->syncserver}";
 		//$str = ":{$obj->syncserver}";
@@ -297,37 +297,37 @@ function syncToSystemCommon()
 	// Don't sync if there is no subactiion for update..
 	if ($this->dbaction === 'update' && !$this->subaction) {
 		dprint("No subaction for update not syncing anymore {$this->get__table()}\n <br> ");
-
 		return false;
 	}
 
 	if (lfile_exists("__path_program_etc/.writeonly")) {
 		dprintr("Global Writonly Mode... Not syncing... <br> \n");
-
 		return  false;
 	}
 
+
 	if ($this->isDisabled('syncserver')) {
 		dprint("syncserver disabled syncing anymore\n");
-
 		return false;
 	}
 
 	return $this->isSync();
 }
 
+
 // This should work for all normal purposes., 
 // If there is some multi server syncing for a single object like that what happens in dns and domainbackup, 
 // you can redefine sysnctosyste. Just call the common function at the beginning.
 function syncToSystem() 
 {
+
 	global $gbl, $sgbl, $login, $ghtml; 
+
 
 	if ($this->syncToSystemCommon()) {
 		$synclist = explode(",", $this->syncserver);
 		foreach($synclist as $s) {
 			$s = trim($s);
-
 			if ($s) {
 				dprint("doing the real sync this {$this->nname} on server {$s}  <br> \n");
 				$this->__var_syncserver = $s;
@@ -336,6 +336,7 @@ function syncToSystem()
 				$res = rl_exec_set(null, 'localhost',  $this);
 			}
 		}
+
 
 		return $res;
 	}
@@ -369,21 +370,15 @@ function doCustomAction()
 	global $gbl, $sgbl, $login, $ghtml; 
 
 	if ($this->isClass('ssession')) { return; }
-
 	if ($this->isClass('general')) { return; }
-
 	if ($this->isClass('sp_specialplay')) { return; }
-
 	if ($this->isClass('sp_childspecialplay')) { return; }
-
 	if ($this->isClass('notification')) { return; }
-
 	if ($this->isClass('resourceplan')) { return; }
 
 	$acto = $login->getObject('general')->customaction_b;
 
 	$var = "{$this->get__table()}__{$this->dbaction}__{$this->subaction}";
-
 	if (isset($acto->$var) && $acto->$var) {
 		$action = $acto->$var;
 		$action = str_replace('%contactemail%', $this->contactemail, $action);
@@ -407,18 +402,14 @@ function doCustomAction()
 
 	dprint($query);
 	$list = $sq->getRowsWhere($query);
-
 	if (!$list) { return; }
-
 	dprintr($list);
-
 	foreach($list as $k => $l) {
 		$ex = $l['exec'];
 		$ex = str_replace('%contactemail%', $this->contactemail, $ex);
 		$ex = str_replace('%nname%', $this->nname, $ex);
 		$ex = str_replace('%hostname%', $this->hostname, $ex);
 		$ex = str_replace('%vpsid%', $this->vpsid, $ex);
-
 		if ($l['where_to_exec'] === 'master') {
 			lxshell_direct($ex);
 		} else {
@@ -450,7 +441,6 @@ function checkButton($var)
 	if (!isset($this->priv)) {
 		return true;
 	}
-
 	return $this->priv->isOn($var);
 }
 
@@ -459,15 +449,12 @@ function isSync()
 	if ($this->dbaction === 'update' && $this->subaction === 'collectquotaupdate') {
 		return false;
 	}
-
 	return true;
 
 }
-
 function isParentList() { return false; }
 
 static function isHardRefresh() { return false; }
-
 static function isdefaultHardRefresh() { return false; }
 
 static function getDefaultValue($var) 
@@ -484,10 +471,8 @@ function checkIfSomeParent($clname)
 	if ($clname === 'client-admin') {
 		return true;
 	}
-
 	$p = $this->getParentO();
 	$pp = $p;
-
 	while($pp) {
 		if ($pp->getClName() === $clname) {
 			return true;
@@ -498,15 +483,16 @@ function checkIfSomeParent($clname)
 	return false;
 }
 
+
 function isLogin()
 {
 	global $gbl, $sgbl, $login, $ghtml; 
-
 	if ($this === $login) {
 		return true;
 	}
 	return false;
 }
+
 
 final static function calldriverappFunc($class, $func)
 {
@@ -514,7 +500,6 @@ final static function calldriverappFunc($class, $func)
 
 	print("I shouldn't get called\n");
 	debugBacktrace();
-
 	exit;
 
 	$driverapp = $gbl->getSyncClass(null, null, $class);
@@ -529,17 +514,18 @@ final static function calldriverappFunc($class, $func)
 
 	eval($sgbl->arg_getting_string);
 
+
 	return call_user_func_array(array($class, $func), $arglist);
+
 }
+
 
 function createShowTypeList()
 {
 	$list = null;
-
 	if (isset($this->cttype)) {
 		$list['cttype'] = null;
 	}
-
 	return $list;
 }
 
@@ -549,54 +535,52 @@ function getVarDescrList($i = null)
 	$r = new ReflectionClass($class);
 	// First pass to isolate teh _v_ variable
 	$ret = null;
-
 	foreach($r->getProperties() as $s) {
 		if (!csb($s->name, "__desc_"))
 			continue;
-	
 		$descr = get_classvar_description($class, $s->name);
 		$name = substr($s->name, 7);
-	
 		if ($i === null) {
 			$ret[$name]  = $descr;
 		} else {
 			$ret[$name] = $descr[$i];
 		}
+
 	}
 
 	return $ret;
+
 }
+
 
 final function initThisDef()
 {
+
 	$class = lget_class($this);
 	// First pass to isolate teh _v_ variable
 	$list = $this->getVarDescrList();
 	$this->dbaction = 'add';
-
 	foreach((array) $list as $nname => $desc) {
 		if (!csa($nname, "_v_")) {
 			continue;
 		}
-	
 		$name = substr($nname, 0, strpos($nname, "_v_"));
-	
 		if (isset($value[$name]))
 			continue;
 
 		$value[$name] = substr($nname, strpos($nname, "_v_") + 3);
 	}
+		
+
+
 
 	foreach((array) $list as $name => $descr) {
 		if (cse($name, "_o"))
 			continue;
-			
 		if (cse($name, "_l"))
 			continue;
-			
 		if (cse($name, "_f"))
 			continue;
-			
 		if (csa($name, "_v_")) {
 			continue;
 		}
@@ -625,6 +609,7 @@ final function initThisDef()
 				$des = $name;
 				$desc = get_classvar_description($class, $des);
 
+
 				if (csa($desc[0], 'q', 0)) {
 					if (!isset($this->priv)) {
 						$this->priv = new priv(null, null, $this->nname);
@@ -635,7 +620,6 @@ final function initThisDef()
 						$this->used = new Used(null, null, $this->nname);
 						$this->used->__parent_o = $this;
 					}
-					
 					if (cse($name, "_flag")) {
 						$this->used->$name = '-';
 						$this->priv->$name = 'on';
@@ -660,22 +644,21 @@ final function initThisDef()
 			$this->createSyncClass();
 		}
 	}
-
 	//print_time($this->get__table(), $this->get__table() . "jdflk");
+
 }
 
 final function isLocalhost($var = "syncserver")
 {
+
 	global $gbl, $sgbl, $login, $ghtml; 
-
 	$cl = $this->get__table();
-
 	if (isset($this->$var) && $this->$var && $this->$var !== "localhost") {
 		return false;
 	}
-
 	return true;
 }
+
 
 function fixSyncServer()
 {
@@ -687,12 +670,10 @@ function fixSyncServer()
 function getRealPserverList($role = null)
 {
 	global $gbl, $sgbl, $login, $ghtml; 
-
 	$list = $this->getVirtualList('pserver', $count);
 
 	foreach($list as $k => $l) {
 		$pslist = get_namelist_from_objectlist($l->psrole_a);
-	
 		if ($role === 'dns') {
 			if ($role && !array_search_bool('reversedns', $pslist) && !array_search_bool('dns', $pslist)) {
 				unset($list[$k]);
@@ -703,7 +684,6 @@ function getRealPserverList($role = null)
 			}
 		}
 	}
-
 	return $list;
 }
 
@@ -711,8 +691,10 @@ function syncEntireObject()
 {
 	global $gbl, $sgbl, $login, $ghtml; 
 
+
 	$this->preSync();
 	$this->doCustomAction();
+
 
 	if ($this->isUnclean()) {
 
@@ -726,11 +708,11 @@ function syncEntireObject()
 			} catch (Exception $e) {
 				throw $e;
 			}
-
 			// This is used in web to get the iis is which is generated only when you create the domain.
 			$this->AddSyncReturn($res);
 		}
 	}
+
 
 	// the children should only be synced AFTER the parent. 
 	// This is actually self-evident now, especially since when we backup, a domain would be fully formed,
@@ -741,23 +723,22 @@ function syncEntireObject()
 	foreach((array) $this->__object_list as $variable) {
 		$objname = "{$variable}_o";
 		$obj = $this->$objname;
-	
 		//dprint("my parent: {$this->__parent_o->nname}\n");
 		// Big hack. When restoring parent_o is getting lost...
 		if (!isset($obj->__parent_o) || !$obj->__parent_o) {
 			$obj->__parent_o = $this;
 		}
-	
 		if (is_object($obj) && $obj->metadbaction !== 'writeonly') {
 			$obj->syncEntireObject();
 		}
 	}
 
 	$this->postSync();
+
+
 }
 
 function postSync() {}
-
 function preSync() {}
 
 function getAllDrivers()
@@ -786,18 +767,21 @@ function AddSyncReturn($res)
 	}
 }
 
+
 // The "if (!$var)" was removed because it was evaled as true when $var was 0.
 function setDefaultValue($var, $val)
 {
 	if ($this->$var === "" || $this->$var === NULL) { $this->$var = $val; }
 }
 
+
 function writeEntireObject()
 {
+
+
 	foreach((array) $this->__object_list as $variable) {
 		$objname = $variable . "_o";
 		$obj = $this->$objname;
-	
 		if ($obj) {
 			$obj->writeEntireObject();
 		}
@@ -806,11 +790,11 @@ function writeEntireObject()
 	if ($this->get__table() === 'driver') {
 		dprint("<b> Driver  {$this->dbaction} <br> <br> </b>");
 	}
-
 	if ($this->isUnclean()) {
 		dprint("Really Writing  {$this->get__table()} {$this->nname}...dbaction... {$this->dbaction} <br> \n");
 		$this->write();
 	}
+
 
 	$this->writeAndSyncChildren();
 
@@ -827,6 +811,7 @@ function writeEntireObject()
 	} else {
 		$this->dbaction = "delete_done";
 	}
+
 }
 
 /** 
@@ -842,6 +827,7 @@ function doWas()
 	$this->writeEntireObject();
 }
 
+
 function isUnclean()
 {
 	return !($this->dbaction === "clean" || $this->dbaction === "delete_done");
@@ -855,13 +841,14 @@ function checkNotSame($var, $list)
 		}
 	}
 }
-
 final function was()
 {
+
 	global $gbl, $sgbl, $login, $ghtml; 
 
 	if ($this->dbaction === "screwed") 
 		return;
+
 
 	//dprint("Master: {$this->dbaction}: {$this->nname} {$this->getParentO()->nname} {$this->get__table()} <br> ");
 
@@ -871,8 +858,11 @@ final function was()
 		$this->dbaction = "screwed";
 		throw $e;
 	}
-
 	$this->metadbaction = 'all';
+
+
+
+
 }
 
 /** 
@@ -882,10 +872,10 @@ final function was()
 * @desc  stuf fucntion of html parameter verification.
 */ 
 
+
 static function verify($var, $val)
 {
 	dprint("{$var} {$val}");
-
 	return  $val;
 
 }
@@ -895,28 +885,27 @@ static function defaultSortDir() { return "asc"; }
 static function defaultSort() { return "nname"; }
 
 function createExtraVariables() { }
-
 function getSortTop($direction) { return NULL; }
 
 static function perPage()
 {
 	global $gbl, $sgbl, $login;
-
 	return "20";
 }
+
+
 
 function isClient()
 {
 	return (lget_class($this) === 'client');
 }
 
+
 function isGte($type)
 {
 	global $gbl, $sgbl, $login, $ghtml; 
-
 	//dprint($this->cttype.  ' <br> ' . $type);
 	if (!isset($sgbl->__var_cttype[$this->cttype]))  return true; 
-
 	return ($sgbl->__var_cttype[$this->cttype] >= $sgbl->__var_cttype[$type]);
 
 }
@@ -924,9 +913,7 @@ function isGte($type)
 function isGt($type)
 {
 	global $gbl, $sgbl, $login, $ghtml; 
-
 	if (!isset($sgbl->__var_cttype[$this->cttype]))  return true; 
-
 	return ($sgbl->__var_cttype[$this->cttype] > $sgbl->__var_cttype[$type]);
 
 }
@@ -936,35 +923,32 @@ function isGt($type)
 function isLteAdmin()
 {
 	global $gbl, $sgbl, $login, $ghtml; 
-
 	if (!isset($sgbl->__var_cttype[$this->cttype]))  return false; 
-
 	return ($sgbl->__var_cttype[$this->cttype] <= $sgbl->__var_cttype['admin']);
 }
 
 function isLte($type)
 {
 	global $gbl, $sgbl, $login, $ghtml; 
-
 	if (!isset($sgbl->__var_cttype[$this->cttype]))  return false; 
-
 	return ($sgbl->__var_cttype[$this->cttype] <= $sgbl->__var_cttype[$type]);
 
 }
 
+
 function isEq($type)
 {
 	global $gbl, $sgbl, $login, $ghtml; 
-
 	if (!isset($sgbl->__var_cttype[$this->cttype]))  return false; 
-
 	return ($sgbl->__var_cttype[$this->cttype] === $sgbl->__var_cttype[$type]);
 
 }
 
+
 function isWholeSale()
 {
 	return $this->isLte('wholesale');
+
 }
 
 function isSuperClient()
@@ -987,6 +971,7 @@ function isAdminReseller()
 	return ($this->cttype === "wholereseller" || $this->cttype === 'admin');
 }
 
+
 function isNotCustomer()
 {
 	return $this->isLte('reseller');
@@ -996,6 +981,7 @@ function isCustomer()
 {
 	return ($this->cttype === 'customer');
 }
+
 
 static function searchVar()
 {
@@ -1007,7 +993,6 @@ function isButton($name)
 	return true;
 
 }
-
 function isSelect()
 {
 	return true;
@@ -1044,6 +1029,7 @@ final protected function initObjectIfUndef($class)
 		$obj->get();
 	}
 
+
 	// Just forcibly set the syncserver...
 	$obj->inheritSyncServer($this);
 
@@ -1059,14 +1045,14 @@ final protected function initObjectIfUndef($class)
 	if ($obj) {
 		$obj->__parent_o = $this;
 	}
-
 	$this->$objectname = $obj;
+
 }
 
 function getDbOrderLimit($filter, $count)
 {
+		
 	$skiprows = $filter['pagesize'] * ($filter['pagenum'] - 1);
-
 	if ($skiprows >= $count) {
 		$skiprows = 0;
 	}
@@ -1086,6 +1072,8 @@ function getDbOrderLimit($filter, $count)
 	return $ret;
 }
 
+
+
 static function getdbFilter($filter = null, $class)
 {
 	static $oplist = array('gt' => '>', 'lt' => '<', 'eq' => '===', 'ne' => '!=', 'cont' => 'LIKE');
@@ -1095,14 +1083,12 @@ static function getdbFilter($filter = null, $class)
 		if ($key === 'sortby' || $key === 'searchstring' || $key === 'sortdir' || $key === 'pagenum' || $key === 'pagesize') {
 			continue;
 		}
-	
 		if (char_search_a($key, "_o_")) {
 			$var = substr($key, 0, strpos($key, "_o_"));
 			$op = substr($key, strpos($key, "_o_") + 3);
 			//$op = $oplist[$op];
 			$var = str_replace(array("\"", "'", ";"), "",  $var);
 			$val = str_replace(array("\"", "'", ";"), "", $val);
-		
 			if ($val) {
 				if ($val === '--any--') {
 					continue;
@@ -1110,16 +1096,13 @@ static function getdbFilter($filter = null, $class)
 
 				if (cse($var, "_q")) {
 					$var = strtil($var, "_q");
-				
 					if ($val === 'overquota') {
 						$total[] = "(priv_q_$var != 'Unlimited' AND (used_q_$var + 0) > (priv_q_$var + 0))";
 					} else {
 						$total[] = "(priv_q_$var = 'Unlimited' OR (used_q_$var + 0) <= (priv_q_$var + 0))";
 					}
-				
 					continue;
 				}
-			
 				if ($op == 'cont') {
 					if ($val[0] === '^') {
 						$val = substr($val, 1);
@@ -1128,19 +1111,18 @@ static function getdbFilter($filter = null, $class)
 						$val = "%{$val}%";
 					}
 				}
-			
 				$total[] = "{$var} {$oplist[$op]} '{$val}'";
 			}
 
 		} else {
 			$f = "__hpfilter_{$key}_{$val}";
 			$res = get_real_class_variable($class, $f);
-		
 			if (is_array($res)) {
 				$total[] = implode(" ", $res);
 			}
 			
 		}
+	
 	}
 
 	if (isset($filter['searchstring']) && $filter['searchstring']) {
@@ -1149,15 +1131,15 @@ static function getdbFilter($filter = null, $class)
 	}
 
 	$andstr = null;
-
 	if ($total) {
 		$andstr = implode(" AND  ", $total);
 	}
-
 	return $andstr;
+
 }
 
 function backupExtraVar(&$vlist) {}
+
 
 static function hasViews() { return false; }
 
@@ -1167,7 +1149,6 @@ static function filterFunc($op, $oval, $val)
 	
 	if (isset($oplist[$op])) {
 		$string = "('{$oval}' {$oplist[$op]} '{$val}')";
-	
 		return eval("return {$string} ;");
 	}
 
@@ -1176,15 +1157,15 @@ static function filterFunc($op, $oval, $val)
 	}
 }
 
+
 function isDisplay($filter = null) 
 {
 
 	global $gbl, $sgbl, $login;
-
 	return true;
-
 	if (!$filter)
 		return 1;
+
 
 	$class = lget_class($this);
 
@@ -1234,19 +1215,19 @@ function getDefaultQuery($class, $result)
 			$query = "";
 		}
 	}
-
 	return $query;
 }
 
+
 final protected function initListIfUndef($class)
 {
+
 	$list = $class . "_l";
 	$typevar = "__listtype_{$class}"; 
 	$totalvar = "__virtualtotal_{$class}";
 
 	//list($iclass, $mclass, $rclass) = get_composite($class);
 	$rclass = $class;
-
 	//if (isset($this->$list) && $this->$list != NULL) {
 
 	// this is necessary. AFteare was the list is cleared. So if you want to do two wases in the same place
@@ -1255,10 +1236,10 @@ final protected function initListIfUndef($class)
 	if (isset($this->$typevar) && ($this->$typevar === 'fullist')) {
 		return;
 	}
-
 	if (!isset($this->$list)) {
 		$this->$list = null;
 	}
+
 
 	$this->backuplist = $this->$list;
 
@@ -1267,6 +1248,7 @@ final protected function initListIfUndef($class)
 	} else {
 		$rule = exec_class_method($rclass, 'initThisListRule', $this, $class);
 	}
+
 
 	if ($rule) {
 		$query = $this->getDefaultQuery($class, $rule);
@@ -1300,12 +1282,11 @@ final protected function initListIfUndef($class)
 final function getUrlIdentity()
 {
 	global $gbl, $sgbl, $login, $ghtml; 
-
 	$navig = $gbl->__navig;
 	$navigmenu = $gbl->__navigmenu;
 
-	$string = null;
 
+	$string = null;
 	foreach((array) $navigmenu as $k => $o) {
 		if ($o[0] === 'show' && $o[1] === $this) {
 			if (isset($navig[$k]['frm_o_o'])) {
@@ -1313,20 +1294,21 @@ final function getUrlIdentity()
 			} else {
 				$string = 'login';
 			}
-		
 			$string = fix_nname_to_be_variable($string);
-		
 			break;
 		}
 	}
-
 	return $string;
+
 }
+
 
 function inNoBackuplist()
 {
 	global $gbl, $sgbl, $login, $ghtml; 
+
 }
+
 
 function loadBackupAll()
 {
@@ -1335,18 +1317,15 @@ function loadBackupAll()
 	if ($this->inNoBackuplist()) {
 		return;
 	}
-
 	$list = $this->getBackupChildList();
 
 	//print("Loading {$this->get__table()} {$this->nname}\n");
 
 	dprint("I am : {$this->get__table()} {$this->nname}\n");
-
 	if ($this->extraBackup()) {
 		if (!isset($gbl->__var_objectbackuplist)) {
 			$gbl->__var_objectbackuplist = array();
 		}
-	
 		$gbl->__var_objectbackuplist[] = $this;
 	}
 
@@ -1354,22 +1333,18 @@ function loadBackupAll()
 		if (cse($c, "_l")) {
 			$cn = $this->getChildNameFromDes($c);
 			$clist = $this->getList($cn);
-		
 			foreach((array) $clist as $ch) {
 				$ch->__parent_o = $this;
 				print("Setting parent of {$ch->getClName()} to {$this->getClName()}\n");
-			
 				if ($ch->parent_clname && !$ch->isRightParent()) {
 					unset($this->{$c}[$ch->nname]);
 					continue;
 				}
-			
 				$ch->loadBackupAll();
 			}
 		}
 		if (cse($c, "_o")) {
 			$cn = $this->getChildNameFromDes($c);
-			
 			if ($this->isRealChild($cn)) {
 				$ch = $this->getObject($cn);
 
@@ -1383,11 +1358,11 @@ function loadBackupAll()
 					unset($this->$c);
 					continue;
 				}
-			
 				$ch->loadBackupAll();
 			}
 		}
 	}
+
 }
 
 function isRealChild($c)
@@ -1397,7 +1372,6 @@ function isRealChild($c)
 function getFilterVariableForThis($class)
 {
 	$filtervar = "__filtervar_{$class}";
-
 	if (isset($this->$filtervar)) {
 		return $this->$filtervar;
 	}
@@ -1406,8 +1380,8 @@ function getFilterVariableForThis($class)
 
 	$id = "{$this->get__table()}_{$name}__{$class}";
 	$this->$filtervar = $id;
-
 	return $id;
+
 }
 final function getFilterForThis($class)
 {
@@ -1416,7 +1390,6 @@ final function getFilterForThis($class)
 	//list($iclass, $mclass, $rclass) = get_composite($class);
 	$rclass = $class;
 	$filtervar = "__hfilter_{$class}";
-
 	if (isset($this->$filtervar)) {
 		return $this->$filtervar;
 	}
@@ -1424,11 +1397,9 @@ final function getFilterForThis($class)
 	$filter = null;
 
 	$filtername = $this->getFilterVariableForThis($class);
-
 	if ($login->issetHpfilter($filtername)) {
 		$filter = $login->getHPFilter($filtername);
 	}
-
 	//dprint("hello: " . $filtername);
 	if (!isset($filter['sortby'])) {
 		$filter['sortby'] = exec_class_method($rclass, "defaultSort");
@@ -1444,10 +1415,9 @@ final function getFilterForThis($class)
 	if (!isset($filter['sortdir'])) {
 		$filter['sortdir'] = exec_class_method($rclass, "defaultSortDir");
 	}
-
 	$this->$filtervar = $filter;
-
 	return $filter;
+
 }
 
 function canSeePserver()
@@ -1460,10 +1430,8 @@ function canSeePserver()
 		if ($this->__auxiliary_object->isOn('pserver_flag')) {
 			return true;
 		}
-	
 		return false;
 	}
-
 	return true;
 }
 
@@ -1480,17 +1448,14 @@ function doSetHpf($hpfilter)
 {
 	if ($this->isAuxiliary()) {
 		$this->__auxiliary_object->hpfilter = $hpfilter;
-	
 		return;
 	}
-
 	$this->hpfilter = $hpfilter;
 }
 
 function getHPFilter($fil = null, $var = null)
 {
 	$hpfilter = $this->doGetHpf();
-
 	if ($var == null && $fil === null) {
 		return $hpfilter;
 	}
@@ -1505,13 +1470,11 @@ function getHPFilter($fil = null, $var = null)
 function setupHpFilter($filter)
 {
 	$hpfilter = $this->doGetHpf();
-
 	foreach($filter as $k => $v) {
 		foreach($v as $kk => $vv) {
 			$hpfilter[$k][$kk] = $vv;
 		}
 	}
-
 	$this->doSetHpf($hpfilter);
 }
 
@@ -1537,10 +1500,11 @@ function issetHpFilter($fil = null, $var = null)
 	return isset($hpfilter[$fil][$var]);
 }
 
+
+
 final protected function initVirtualListIfUndef($class)
 {
 	global $gbl, $sgbl, $login, $ghtml; 
-
 	$list = "{$class}_l";
 
 	//list($iclass, $mclass, $rclass) = get_composite($class);
@@ -1554,11 +1518,14 @@ final protected function initVirtualListIfUndef($class)
 		$this->$list = null;
 	}
 
+
 	if (isset($this->$typevar) && (($this->$typevar === 'fullist') || ($this->$typevar === 'virtuallist'))) {
 		return $this->$totalvar;
 	}
 	
+
 	$this->backuplist = $this->$list;
+
 
 	if (($rule = exec_class_method($rclass, 'initThisListRule', $this, $class))) {
 		$query = $this->getDefaultQuery($class, $rule);
@@ -1579,10 +1546,10 @@ final protected function initVirtualListIfUndef($class)
 
 		$table = $this->getTheTable($rclass);
 
+
 		print_time('count');
 		//$db->rawquery("begin;");
 		$countres = $db->rawquery("select count(*) from {$table} {$countquery}");
-	
 		if ($sgbl->__var_database_type === 'mysql') {
 			$countres = $countres[0]['count(*)'];
 		} else if ($sgbl->__var_database_type === 'mssql') {
@@ -1590,6 +1557,7 @@ final protected function initVirtualListIfUndef($class)
 		} else {
 			$countres = $countres[0]['count(*)'];
 		}
+
 
 		//print_time('count', "CountResult");
 
@@ -1605,11 +1573,9 @@ final protected function initVirtualListIfUndef($class)
 
 		if ($sgbl->__var_database_type === 'mysql') {
 			$desc = get_classvar_description($class, $sortby);
-		
 			if (csa($desc[0], "q")) {
 				$sortby = "(used_q_{$sortby} + 0)";
 			}
-		
 			$query = "select * from {$table} {$countquery} order by {$sortby} {$sortdir} limit {$skiprows}, {$pagesize}";
 		} else if ($sgbl->__var_database_type === 'mssql') {
 			$tot = $pagesize + $skiprows;
@@ -1617,6 +1583,7 @@ final protected function initVirtualListIfUndef($class)
 		} else {
 			$query = "select * from {$table} {$countquery} order by {$sortby} {$sortdir} limit {$skiprows}, {$pagesize}";
 		}
+
 
 		$res =  $db->rawQuery($query);
 		//$db->rawquery("commit;");
@@ -1631,6 +1598,7 @@ final protected function initVirtualListIfUndef($class)
 
 	$this->setListFromArray($this->__masterserver, $this->__readserver, $class, $res);
 
+
 	foreach((array) $this->backuplist as $v) {
 		$this->{$list}[$v->nname] = $v;
 	}
@@ -1639,22 +1607,22 @@ final protected function initVirtualListIfUndef($class)
 	$this->$totalvar = $countres;
 
 	return $countres;
+
 }
+
 
 function getHardProperty() { }
 
 function getParentClass($var = 'parent_clname')
 {
 	$tvar = "__ptc_{$var}";
-	
 	if (isset($this->$tvar)) {
 		return $this->$tvar;
 	}
-	
 	list($pclass, $pname) = getParentNameAndClass($this->$var);
 	$this->$tvar = $pclass;
-
 	return $pclass;
+
 }
 
 function getParentName($var = 'parent_clname')
@@ -1662,7 +1630,6 @@ function getParentName($var = 'parent_clname')
 	$tvar = "__ptn_{$var}";
 	list($pclass, $pname) = getParentNameAndClass($this->$var);
 	$this->$tvar = $pname;
-
 	return $pname;
 }
 
@@ -1676,6 +1643,7 @@ function getSpecialname()
 	}
 }
 
+
 function getClName()
 {
 	//return "{$this->get__table()}_s_vv_p_{$this->nname}";
@@ -1687,8 +1655,7 @@ function __get($var)
 {
 	global $gbl, $sgbl, $login, $ghtml; 
 
-	// This is absurd. At least set also should trigger it. Otherwise variables will get overwritten
-	// after they are set. What the fuck....
+	 This is absurd. At least set also should trigger it. Otherwise variables will get overwritten after they are set. What the fuck....
 	if (isset($this->__dbvar)) {
 		$this->setFromArray($this->__dbvar);
 		unset($this->__dbvar);
@@ -1697,13 +1664,11 @@ function __get($var)
 	if (isset($this->$var)) {
 		return $this->$var;
 	}
-
 	if ($var === 'cttype') {
 		return lget_class($this);
 	}
 
 	$string = backtrace_once();
-
 	if ($string) {
 		dprint("\n\n<br> <br> <b> Non Existent: </b> {$this->get__table()}:$this->nname $var ");
 		dprintr("Backtrace: $string<br><br>\n \n");
@@ -1715,8 +1680,8 @@ function __get($var)
 	return null;
 }
 */
-
 /*
+
 function __set($var, $val)
 {
 	print("$var $val");
@@ -1728,20 +1693,18 @@ function __get($var)
 	if (preg_match("/_o$/i", $var)) {
 		$class = preg_replace("/_o$/i", "", $var);
 		dprint("Class: $class", 2);
-		$this->initObjectIfUndef($class);
-	
-		return $this->$var;
-	}
-
-	if (preg_match("/_l$/i", $var)) {
-		$class = preg_replace("/_l$/i", "", $var);
-		$this->initListIfUndef($class);
-
-		return $this->$var;
-	}
-
+	$this->initObjectIfUndef($class);
 	return $this->$var;
 }
+if (preg_match("/_l$/i", $var)) {
+	$class = preg_replace("/_l$/i", "", $var);
+	$this->initListIfUndef($class);
+	return $this->$var;
+}
+
+return $this->$var;
+}
+
 */
 
 /** 
@@ -1751,6 +1714,7 @@ function __get($var)
 * @desc creates a whole object_l list for the parent. Mostly called by the parent after reading all teh children from the db.
 */ 
  
+
 final protected function setListFromArray($masterserver, $readserver, $class, $result, $force = false)
 {
 	//list($iclass, $mclass, $rclass) = get_composite($class);
@@ -1760,7 +1724,6 @@ final protected function setListFromArray($masterserver, $readserver, $class, $r
 	if (!isset($this->$list)) {
 		$this->$list = NULL;
 	}
-	
 	if (!$result) {
 		return;
 	}
@@ -1778,6 +1741,7 @@ final protected function setListFromArray($masterserver, $readserver, $class, $r
 		}
 
 	}
+
 
 	$this->$list = $al;
 }
@@ -1800,7 +1764,6 @@ function getLimitOrPermissionUrl(&$alist)
 	if ($this->isLteAdmin()) {
 		return;
 	}
-	
 	if ($this->isLogin()) {
 		//$alist[] = "a=list&c=permission";
 	} else {
@@ -1816,9 +1779,9 @@ function doesHaveTemplate()
 	if (class_exists("{$this->get__table()}template")) {
 		return true;
 	}
-	
 	return false;
 }
+
 
 final function addEobject($obj)
 {
@@ -1839,11 +1802,9 @@ final function delFromList($class, $ll)
 		//Calling this buggers update... the security checks r in there....
 		$this->update("delete", null);
 		$this->setUpdateSubaction("delete_{$class}");
-		
 		if (!isset($this->$dellistvar)) {
 			$this->$dellistvar = null;
 		}
-		
 		foreach($ll as $l) {
 			$this->{$dellistvar}[] = $this->{$class}[$l];
 			// Hack... Temporirily creating parent_o for the quota updation in parent to take place...
@@ -1854,11 +1815,9 @@ final function delFromList($class, $ll)
 	} else {
 		foreach($ll as $l) {
 			$obj = $this->getFromList($class, $l);
-			
 			if (!$obj) {
 				throw new lxexception('object_doesnt_exist', '', $l);
 			}
-			
 			$obj->update("delete", null);
 			$obj->delete();
 		}
@@ -1872,16 +1831,15 @@ final function addObject($class, $obj)
 	$object = "{$class}_o";
 	$this->$object = $obj;
 	$obj->__parent_o = $this;
-	
 	if (!isset($obj->parent_clname)) {
 		$obj->parent_clname = $this->getClName();
 	}
-	
 	$this->__object_list = array_push_unique($this->__object_list, $class);
 }
 
 function findLeastId($listclass)
 {
+
 
 }
 
@@ -1911,7 +1869,6 @@ final function addToList($class, $object)
 	}
 
 	$this->{$list}[$object->nname] = $object;
-
 	return 1;
 }
 
@@ -1922,11 +1879,9 @@ final function getObject($class)
 	$this->checkForDescribed($class, "o");
 
 	$this->initObjectIfUndef($class);
-	
 	if ($this->$object) {
 		$this->$object->__parent_o = $this;
 	}
-
 	return $this->$object;
 }
 
@@ -1940,10 +1895,8 @@ final function getFromVirtualList($class, $name)
 {
 	$list = "{$class}_l";
 	$func = "get{$class}FromVirtualList";
-	
 	if (method_exists($this, $func)) {
 		$obj = $this->$func($name);
-		
 		if (!$obj->isNonExistant()) {
 			$this->__list_list = array_push_unique($this->__list_list, $class);
 			if (!isset($this->$list)) {
@@ -1951,10 +1904,8 @@ final function getFromVirtualList($class, $name)
 			}
 			$this->{$list}[$name] = $obj;
 		}
-		
 		return $obj;
 	}
-	
 	return null;
 }
 
@@ -1977,16 +1928,15 @@ function isContactable()
  
 static function resolve_class_heirarchy($class, $property, &$dclass, &$dproperty)
 {
+
 	$dclass = $class;
 	$dproperty = $property;
-	
 	if (csa($property, "_s_") || csa($property, "-")) {
 		if (csa($property, "_s_")) {
 			$list = explode('_s_', $property);
 		} else {
 			$list = explode("-", $property);
 		}
-		
 		$dproperty = $list[count($list) - 1];
 		unset($list[count($list) -1]);
 		$dclass = implode('_s_', $list);
@@ -1995,9 +1945,9 @@ static function resolve_class_heirarchy($class, $property, &$dclass, &$dproperty
 
 static function resolve_class_differences($class, $property, &$dclass, &$dproperty)
 {
+
 	$dclass = $class;
 	$dproperty = $property;
-	
 	if (csa($property, "_s_") || csa($property, "-")) {
 		if (csa($property, "_s_")) {
 			$list = explode('_s_', $property);
@@ -2016,10 +1966,8 @@ function getClientParentO()
 		if ($pp->isLxclient()) {
 			return $pp;
 		}
-		
 		$pp = $pp->getParentO();
 	}
-
 	return null;
 }
 
@@ -2031,10 +1979,8 @@ function getRealClientParentO()
 		if ($pp->get__table() === 'client') {
 			return $pp;
 		}
-		
 		$pp = $pp->getParentO();
 	}
-
 	return null;
 }
 
@@ -2043,11 +1989,9 @@ function getAllChildrenAndParents($alltag)
 	$list = null;
 	$pp = $this;
 	$i = 0;
-	
 	while($pp) {
 		$i++;
 		$class = $pp->get__table();
-		
 		if (!$pp->isLxclient()) {
 			$pp = $pp->getParentO();
 			continue;
@@ -2056,7 +2000,6 @@ function getAllChildrenAndParents($alltag)
 		if ($pp !== $this) {
 			$list[$pp->getClName()] = "{$pp->nname} ({$class})";
 		}
-		
 		if ($i > 10) {
 			exit;
 		}
@@ -2071,17 +2014,15 @@ function getAllChildrenAndParents($alltag)
 	$list[$alltag['key']] = $alltag['val'];
 
 	$cl = $this->getChildListFilter('L');
-	
 	foreach($cl as &$c) {
 		$c = $this->getChildNameFromDes($c);
 		$child = $this->getVirtualList($c, $count);
-		
 		foreach((array) $child as $q) {
 			$list[$q->getClName()] = "$q->nname ({$q->get__table()})";
 		}
 	}
-	
 	return $list;
+
 }
 
 function getTrueParentO()
@@ -2109,21 +2050,21 @@ function getTrueParentO()
 
 	$parent = new $pclass($this->__masterserver, $this->__readserver, $pname);
 	$parent->get();
-	
 	if ($parent->dbaction === 'add') {
 		$this->__true_parent_o = $this->getParentO();
 		return $this->getParentO();
 	}
 
 	$this->__true_parent_o = $parent;
-
 	return $parent;
+
 }
 
 static function defaultParentClass($parent) { return null; }
 
 function getParentO()
 {
+
 	//dprint("Class: . " . $this->get__table() . "<br> ");
 
 	if (isset($this->__parent_o) && $this->__parent_o) {
@@ -2145,8 +2086,8 @@ function getParentO()
 	$parent = new $pclass($this->__masterserver, $this->__readserver, $pname);
 	$parent->get();
 	$this->__parent_o = $parent;
-
 	return $parent;
+
 }
 
 // Used mainly in gbl to get some global resources like resource plans.
@@ -2155,9 +2096,7 @@ final function getIt($master, $class, $name)
 	if (!$master) {
 		$master = 'localhost';
 	}
-
 	$list = $master . $class . "_lo";
-
 	if (!isset($this->$list)) {
 		$this->$list = null;
 	}
@@ -2170,7 +2109,6 @@ final function getIt($master, $class, $name)
 	$ob->get();
 
 	$this->{$list}[$name] = $ob;
-
 	return $ob;
 }
 
@@ -2178,21 +2116,18 @@ function getTheTable($class)
 {
 	$table = get_class_variable($class, "__table");
 	if (!$table) { $table = $class; }
-
 	return $table;
 }
 
 static function addCommand($parent, $class, $p)
 {
 	if (isset($p['name'])) { $param['nname'] = $p['name']; }
-
 	foreach($p as $k => $v) {
 		if (csb($k, "v-")) {
 			$kk = strfrom($k, "v-");
 			$param[$kk] = $v;
 		}
 	}
-
 	return $param;
 }
 
@@ -2219,13 +2154,15 @@ final function getFromList($class, $name)
 	$ret = $this->getFromVirtualList($class, $name);
 	if ($ret) {
 		$ret->__parent_o = $this;
-		
 		return $ret;
 	}
 
 	$name = str_replace("'", "", $name);
 
+
 	$list = "{$class}_l";
+
+
 
 	if (!isset($this->$list)) {
 		$this->$list = null;
@@ -2235,17 +2172,16 @@ final function getFromList($class, $name)
 	// Very important. If it is already set, then don't ever load it from the database.
 	if (isset($this->{$list}[$name])) {
 		$object = $this->{$list}[$name];
-		
 		return $object;
 	}
 
 	if (exec_class_method($class, 'canGetSingle')) {
+
 		if (isset($this->{$list}[$name])) {
 			return $this->{$list}[$name];
 		}
 
 		$rule = exec_class_method($class, 'initThisListRule', $this, $class);
-	
 		if ($rule) {
 			$query = $this->getDefaultQuery($class, $rule);
 
@@ -2254,7 +2190,6 @@ final function getFromList($class, $name)
 			} else {
 				$query .= "where nname = '{$name}'";
 			}
-			
 			$db = new Sqlite($this->__masterserver, $this->getTheTable($class));
 			$res = $db->getRowsGeneric($query);
 
@@ -2279,27 +2214,30 @@ final function getFromList($class, $name)
 		}
 	}
 
+
 	if (isset($this->{$list}[$name])) {
 		// The virtual objects already has a __parent_o, and so we shouldn't add our own __parent_o
 		if (!$this->isVirtual($class)) {
 			$this->{$list}[$name]->__parent_o = $this;
 		}
 		$this->{$list}[$name]->postRead();
-		
 		return $this->{$list}[$name];
 	} else {
 		throw new lxexception ("The Element {$name} Doesnt Exist in. {$this->getClass()}:{$this->nname} {$list}");
 	}
 }
 
+
 final function hasExceededQuota($var)
 {
+
 	if ($this->priv->$var === "Unlimited" || $this->used->$var < $this->priv->$var) {
 		return false;
 	}
-
 	return true;
+
 }
+
 
 function postRead()
 {
@@ -2325,7 +2263,6 @@ function __sleep()
 	//unset($res[1]);
 	//unset($res[0]);
 	$keys =  array_keys($res);
-
 	return $keys;
 }
 
@@ -2338,9 +2275,9 @@ function getPlanList()
 	}
 
 	$planlist = get_namelist_from_objectlist($planlist);
-
 	return $planlist;
 }
+
 
 static function canGetSingle()
 {
@@ -2359,13 +2296,14 @@ final function getList($class)
 		return $this->$class;
 	}
 
+
 	$this->checkForDescribed($class, "l");
 	$list = "{$class}_l";
 
 	$this->initListIfUndef($class);
 
-	// Setting the parent Forcibly.... Php screws up recursion.. This should have only been done
-	// in the initlistifundef and only the first time, but there u fucking have it.. Stupid php..
+
+	//Setting the parent Forcibly.... Php screws up recursion.. This should have only been done in the initlistifundef and only the first time, but there u fucking have it.. Stupid php..
 	foreach((array) $this->$list as $o) {
 		$o->__parent_o = $this;
 	}
@@ -2373,9 +2311,7 @@ final function getList($class)
 	return $this->$list;
 }
 
-// This functions makes sure that all the objects are defined properly. This is necessary since these
-// definitions are used to determine the actions on the object when the parent gets deleted, toggled added etc.
-// This makes sure that we don't have children whose properties are not properly described.
+// This functions makes sure that all the objects are defined properly. This is necessary since these definitions are used to determine the actions on the object when the parent gets deleted, toggled added etc. This makes sure that we don't have children whose properties are not properly described.
 
 function checkForDescribed($class, $type)
 {
@@ -2387,7 +2323,6 @@ function checkForDescribed($class, $type)
 }
 
 static function getExtraParameters($parent, $list) {}
-
 final function getVirtualList($class, &$count, $sortby = null, $sortdir = null)
 {
 	global $gbl, $sgbl, $login, $ghtml; 
@@ -2400,6 +2335,7 @@ final function getVirtualList($class, &$count, $sortby = null, $sortdir = null)
 	}
 
 	$ifdb = exec_class_method($rclass, "canGetSingle");
+
 
 	$newres = null;
 	if (!$ifdb) {
@@ -2420,6 +2356,7 @@ final function getVirtualList($class, &$count, $sortby = null, $sortdir = null)
 			$sortdir = $filter['sortdir'];
 		}
 
+
 		if ($sortby) {
 			$__tvar = "__sortby_{$class}";
 			if (!isset($this->$__tvar) || $this->__sortby_{$class} != $sortby || $this->__sortdir != $sortdir) {
@@ -2432,18 +2369,16 @@ final function getVirtualList($class, &$count, $sortby = null, $sortdir = null)
 			}
 		}
 
+
 		$var = exec_class_method($rclass, 'searchVar');
-		
 		foreach((array) $res as $k => $r) {
 			if (!$r) {
 				continue;
 			}
-			
 			if (!$r->isDisplay()){
 				unset($res[$k]);
 				continue;
 			}
-			
 			if (isset($filter['searchstring']) && $filter['searchstring']) {
 				if (!csa($r->$var, $filter['searchstring'])) {
 					unset($res[$k]);
@@ -2451,30 +2386,31 @@ final function getVirtualList($class, &$count, $sortby = null, $sortdir = null)
 			}
 		}
 
+
+
+
 		$count = count($res);
 		$n = 0;
-		
 		foreach((array) $res as $row) {
 			if ($n < $filter['pagesize'] * ($filter['pagenum'] - 1)) {
 				$n++;
 				continue;
 			}
-			
 			$n++;
 			$newres[$row->nname] = $row;
-			
 			if ($n === $filter['pagesize'] * $filter['pagenum']) {
 				break;
 			}
 		}
-	
 		return $newres;
 	}
+
 
 	$list = "{$class}_l";
 
 	$count = $this->initVirtualListIfUndef($class);
 
+		
 	if (cse($class, "_a")) {
 		return $this->$class;
 	}
@@ -2494,20 +2430,20 @@ final function getVirtualList($class, &$count, $sortby = null, $sortdir = null)
 function setDbactionForRestoreChild($trulist, $real = false)
 {
 	global $gbl, $sgbl, $login, $ghtml; 
+
+
+
 }
 
 function AddToArrayObjectList($class, $objectlist)
 {
 	$myobjlist = $this->$class;
 	$var = "__t_new_{$class}_list";
-	
 	if ($myobjlist)  {
 		$__t_newobjlist = null;
-		
 		if ($this->$var) {
 			$__t_newobjlist = $this->$var;
 		}
-		
 		foreach((array) $objectlist as $o) {
 			// This seems to happen with the old dns records a_rec_a etc, 
 			// which were removed from the dns. I encountered because I restored a very old backup.
@@ -2519,7 +2455,6 @@ function AddToArrayObjectList($class, $objectlist)
 				$__t_newobjlist[$o->nname] = $o;
 			}
 		}
-		
 		$this->$class = $myobjlist;
 		$this->$var = $__t_newobjlist;
 	} else {
@@ -2530,8 +2465,8 @@ function AddToArrayObjectList($class, $objectlist)
 }
 
 function hasFileResource() { return false; }
-
 function hasFunctions() { return false; }
+
 
 function getAnyErrorMessage()
 {
@@ -2542,7 +2477,6 @@ function getAnyErrorMessage()
 			$ghtml->__http_vars['frm_smessage'] = 'you_have_unread_ticket';
 			$ghtml->__http_vars['frm_m_smessage_data'] = $count;
 		}
-		
 		if (($count = $this->checkMessageUnread())) {
 			$ghtml->__http_vars['frm_smessage'] = 'you_have_unread_message';
 			$ghtml->__http_vars['frm_m_smessage_data'] = $count;
@@ -2558,7 +2492,6 @@ function getAnyErrorMessage()
 
 		if ($sgbl->isLxlabsClient()) {
 			$invoice = $login->getLastInvoice();
-			
 			if ($invoice && $invoice->getTotalPaid() == 0) { 
 				$url = "a=show&k[class]=invoice&k[nname]=$invoice->nname";
 				$url = $ghtml->getFullUrl($url);
@@ -2566,7 +2499,9 @@ function getAnyErrorMessage()
 				$ghtml->__http_vars['frm_m_emessage_data'] = $invoice->nname;
 			}
 		}
+
 	}
+
 }
 
 function object_print()
@@ -2587,7 +2522,6 @@ function object_print()
 		}
 		if (cse($c, "_o")) {
 			$ch = $this->$c;
-			
 			if ($ch) {
 				print("{$tab} Object {$ch->getClName()} \n");
 				$ch->object_print();
@@ -2597,6 +2531,7 @@ function object_print()
 	}
 }
 
+
 function AddMEssageOnlyIfClientDomain($message)
 {
 	$this->__v_message = $message;
@@ -2605,20 +2540,19 @@ function AddMEssageOnlyIfClientDomain($message)
 
 function isCoreBackup() { return false; }
 
+
 // Not needed now. Was used for databases. but now onwards, the entire cluster single database naming.
+
 function changeNnameRewrite()
 {
 	$rewrite = get_class_variable($this->get__table(), "__rewrite_nname_const");
-	
 	if ($rewrite && array_search_bool("syncserver", $rewrite)) {
 		foreach($rewrite as $n) {
 			$nnamelist[] = $this->$n;
 		}
-		
 		$this->nname =implode($sgbl->__var_nname_impstr, $nnamelist);
 		$sql = new Sqlite(null, $this->get__table());
 		$res = $sql->getRowsWhere("nname = '{$this->nname}'");
-		
 		if ($res) {
 			throw new lxException("{$this->nname}_already_exists");
 		}
@@ -2635,6 +2569,7 @@ function fixbackupMysqlProblem()
 
 }
 
+
 function consistencyAlreadyExisting($res, $trulist, $real) 
 {
 	global $gbl, $sgbl, $login, $ghtml; 
@@ -2642,9 +2577,7 @@ function consistencyAlreadyExisting($res, $trulist, $real)
 	$pclname = $res[0]['parent_clname'];
 	if ($pclname != $this->parent_clname) {
 		list($parentclass, $parentname) = getClassAndName($pclname);
-		
 		if ($real) { $this->dbaction = 'already_present_under_different_owner'; }
-		
 		if ($login->isAdmin()) {
 			$parentstring = "{$parentclass}:{$parentname}";
 		} else {
@@ -2652,7 +2585,6 @@ function consistencyAlreadyExisting($res, $trulist, $real)
 		}
 
 		$this->AddMEssageOnlyIfClientDomain("<font color=red><b> (Already Present under {$parentstring}. Will Not be Restored)</font> </b> ");
-
 		if ($this->isCoreBackup()) {
 			log_restore("{$this->get__table()}:{$this->nname} is already present under another user. Won't be restored");
 		}
@@ -2668,43 +2600,37 @@ function consistencyAlreadyExisting($res, $trulist, $real)
 		log_restore($string);
 	}
 
+
 	$class = $this->get__table();
 	$existobj = new $class($this->__masterserver, $this->syncserver, $this->nname);
 	$existobj->get();
 	$cl = $existobj->getChildListFilter(null);
-	
 	foreach((array) $cl as $c) {
 		if (cse($c, "_a")) {
 			$this->AddToArrayObjectList($c, $existobj->$c);
 		}
 	}
-	
 	if ($real) {
 		if ($gbl->__var_list_flag) {
 			if ($this->isCoreBackup()) {
 				print("{$this->getClName()} under {$this->__parent_o->nname} Already exists.....\n");
 			}
-		} else {
+		}  else {
 			$this->setUpdateSubaction('full_update'); 
-			
 			if ($this->isCoreBackup()) {
 				print("{$this->getClName()} under {$this->__parent_o->nname} Already exists... Updating.....\n");
 			}
 		}
 	}
-	
 	$extra = null;
-	
 	if ($trulist) {
 		$extra = " Will be Updated";
 	}
-	
 	$this->AddMEssageOnlyIfClientDomain("<b> (Already Exists.{$extra}). </b>");
 
 	if ($this->extraRestore()) {
 		$sgbl->__var_objectrestorelist[] = $this;
 	}
-	
 	$this->__var_checked = true;
 
 	return true;
@@ -2725,7 +2651,6 @@ function consistencySwitchServer()
 	if (isset($this->syncserver)) {
 		if (csa($this->syncserver, ",")) {
 			$list = explode(",", $this->syncserver);
-			
 			foreach($list as $k) {
 				if (array_search_bool($k, array_keys($gbl->__var_serverlist))) {
 					print("Changing syncserver for {$this->get__table()}:{$this->nname}  from {$k} to {$gbl->__var_serverlist[$k]}\n");
@@ -2734,7 +2659,6 @@ function consistencySwitchServer()
 					$res[] = $k;
 				}
 			}
-			
 			$res = array_unique($res);
 			$this->syncserver = implode(",", $res);
 			$this->createSyncClass();
@@ -2747,6 +2671,7 @@ function consistencySwitchServer()
 			}
 		}
 	}
+
 
 	if (isset($this->websyncserver)) {
 		if (array_search_bool($this->websyncserver, array_keys($gbl->__var_serverlist))) {
@@ -2772,7 +2697,6 @@ function consistencySwitchServer()
 	if (isset($this->dnssyncserver_list)) {
 		$res = null;
 		$slist = $this->dnssyncserver_list;
-		
 		foreach($slist as $k) {
 			if (array_search_bool($k, array_keys($gbl->__var_serverlist))) {
 				print("Changing dnsserver for {$this->get__table()}:{$this->nname}  from {$k} to {$gbl->__var_serverlist[$k]}\n");
@@ -2781,7 +2705,6 @@ function consistencySwitchServer()
 				$res[] = $k;
 			}
 		}
-		
 		$res = array_unique($res);
 		$this->dnssyncserver_list = $res;
 	}
@@ -2796,11 +2719,10 @@ function consistencyNotExisting($trulist, $real)
 
 	if ($trulist && $this->__parent_o->dbaction !== 'add' && !$res) {
 		$this->AddMEssageOnlyIfClientDomain("<font color=red> <b> (Parent {$this->getParentName()} Does Not Exist. Will be Not be Restored).</font> </b> ");
-
 		return false;
 	} else {
+
 		$extra = null;
-		
 		if ($trulist) {
 			$extra = " Will be Restored";
 		}
@@ -2817,13 +2739,13 @@ function consistencyNotExisting($trulist, $real)
 
 	$this->__var_checked = true;
 	$this->dbaction = 'add'; 
-	
 	if ($real) {
 		if ($gbl->__var_list_flag) {
 			if ($this->isCoreBackup()) {
 				print("{$this->get__table()}:{$this->nname} under {$this->__parent_o->nname} Doesn't Exist....\n");
 			}
 		}  else {
+
 			if ($this->isCoreBackup()) {
 				print("{$this->get__table()}:{$this->nname} under {$this->__parent_o->nname} Doesn't exist... Restoring.....\n");
 			}
@@ -2839,16 +2761,15 @@ function consistencyNotExisting($trulist, $real)
 			$this->dbaction = 'add'; 
 		}
 	}
-
 	return true;
 }
+
 
 function hasBackupFtp() { return true; }
 
 function fixIndividualParentName()
 {
 	$plist = array('notification', 'serverweb', 'lxbackup');
-	
 	if (csb($this->getClass(), "sp_") || array_search_bool($this->getClass(), $plist)) {
 		$v = fix_getParentNameAndClass($this->nname);
 		if ($v) {
@@ -2856,21 +2777,17 @@ function fixIndividualParentName()
 			$this->nname = "$pcl-$pcn";
 		}
 	}
-	
 	$v = fix_getParentNameAndClass($this->parent_clname);
-	
 	if ($v) {
 		list($pcl, $pcn) = $v;
 		$this->parent_clname = "$pcl-$pcn";
 	}
 }
-
 function fixClientWebhosting()
 {
 	if (!$this->isClient()) {
 		return;
 	}
-	
 	if (!$this->priv->webhosting_flag) {
 		$this->priv->webhosting_flag = 'on';
 	}
@@ -2895,7 +2812,6 @@ function checkForConsistency($tree, $trulist, $real = false)
 		$sql = new Sqlite(null, $this->get__table());
 		$res = $sql->getRowsWhere("nname = '{$this->nname}'");
 		$this->consistencySwitchServer();
-		
 		if ($res) {
 			$return = $this->consistencyAlreadyExisting($res, $trulist, $real);
 		} else {
@@ -2904,7 +2820,6 @@ function checkForConsistency($tree, $trulist, $real = false)
 	}
 
 	$ctree = null;
-	
 	if ($tree) {
 		$ctree = $this->addToTree($tree);
 	}
@@ -2927,6 +2842,8 @@ function checkForConsistency($tree, $trulist, $real = false)
 		$cl =  $this->getBackupChildList();
 	}
 
+
+
 	foreach((array) $cl as $c) {
 		if (cse($c, "_l")) {
 			if (isset($this->$c) && $this->$c) {
@@ -2934,21 +2851,17 @@ function checkForConsistency($tree, $trulist, $real = false)
 					if ($coreflag && !$ch->isCoreBackup()) {
 						continue;
 					}
-					
 					$ch->__parent_o = $this;
 					//print("Setting list parent of {$ch->getClName()} $c to {$this->getClName()}\n");
 					$ch->fixIndividualParentName();
-					
 					if ($ch->parent_clname !== $this->getClName()) {
 						print("Inconsistency detected... {$ch->get__table()}:{$ch->nname} under {$this->nname}... Parent {$ch->parent_clname} Hack attempt... exiting\n");
 						throw new lxException("inconsistency_in_backup_detected_parent_heirarchy_not_met", '', '');
 					}
-					
 					$ch->checkForConsistency($ctree, $trulist, $real);
 				}
 			}
 		}
-		
 		if (cse($c, "_o")) {
 			if (isset($this->$c) && $this->$c) {
 				$ch = $this->$c;
@@ -2956,21 +2869,16 @@ function checkForConsistency($tree, $trulist, $real = false)
 				if ($coreflag && !$ch->isCoreBackup()) {
 					continue;
 				}
-				
 				$ch->__parent_o = $this;
-				
 				if ($c === 'web_o') {
 					//print("Setting object parent of {$ch->getClName()} to {$this->getClName()}\n");
 				}
-				
 				$ch->fixIndividualParentName();
-				
 				if (($ch->parent_clname !== $this->getClName()) && ($ch->nname !== $this->getClName()) && ($ch->nname !== $this->getClName())) {
 					print("Inconsistency detected... {$ch->nname} {$this->nname} {$ch->get__table()} Hack attempt...\n");
 
 					throw new lxException("Inconsistency detected... {$ch->nname} {$this->nname} {$ch->get__table()} Hack attempt... exiting\n");
 				}
-				
 				$ch->checkForConsistency($ctree, $trulist, $real);
 			}
 		}
@@ -2982,6 +2890,7 @@ function addToTree($tree)
 	global $gbl, $sgbl, $login, $ghtml; 
 
 	$path = get_image_path() . "/button/";
+
 
 	if ($this->cttype !== $this->get__table()) {
 		$type = $this->cttype;
@@ -3006,10 +2915,8 @@ function addToTree($tree)
 	$showdisabledflag = $gbl->__var_tmp_disabled_flag;
 	$disabled = null;
 	$checked = null;
-	
 	if ($showdisabledflag) {
 		$disabled = "disabled";
-		
 		if (isset($this->__var_checked) && $this->__var_checked) {
 			$checked = "checked";
 		} else {
@@ -3035,9 +2942,10 @@ function addToTree($tree)
 
 	$pttr = createTreeObject($name, $img, $imgstr, $url, $open, $help, $alt);
 	$tree->addToList('tree', $pttr);
-
 	return $pttr;
+
 }
+
 
 function _compare($a, $b)
 {
@@ -3068,8 +2976,10 @@ function _compare($a, $b)
 		$compb = $bv;
 	}
 
+
 	$compa = $a->getSortTop($sortdir) . $compa;
 	$compb = $b->getSortTop($sortdir) . $compb;
+
 
 	if ($compa === $compb)
 		return 0;
@@ -3094,6 +3004,7 @@ function getId()
 	return $this->nname;
 }
 
+
 function defaultValue($var)
 {
 	return null;
@@ -3109,36 +3020,35 @@ static function exec_collectQuota()
 	dprint("Execing Collect Quota");
 	lxshell_return("__path_php_path", "../bin/collectquota.php", "--just-db");
 }
-
 function getMultiUpload($var)
 {
 	return $var;
 }
 
+
+
 function display($var)
 {
+
 	if (csb($var, "__v_priv_used_")) {
 		$v = strfrom($var, "__v_priv_used_");
-		
 		return " {$this->used->$v} / {$this->priv->$v}";
 	}
 
 	if (csa($var, "_q_")) {
 		$v = strfrom($var, "_q_");
 		$c = strtil($var, "_q_");
-		
 		return $this->$c->$v;
 	}
 
 	if ($var === "status") {
 		if (!$this->status) {
 			dprint("Status not set for {$this->getClass()}:{$this->nname}");
-			
 			return "on";
 		}
 	}
 
-/*
+	/*
 	 It is very wrong to play with nname. Instead you shoudl just use some other variable.
 	if ($var === "nname") {
 		if (csa($this->nname, "_s_vv_p_")) {
@@ -3151,6 +3061,7 @@ function display($var)
 
 	if ($var === "ddate" || $var === 'date_modified')
 		return " " . lxgettime($this->$var) . "";
+
 
 	if ($var === "validity_time") {
 		if (isset($this->validity_time)) {
@@ -3167,6 +3078,7 @@ function display($var)
 	if ($var === 'parent_name_f') {
 		return $this->getParentName();
 	}
+
 
 	if (cse($var, "_f")) {
 		return null;
@@ -3186,11 +3098,9 @@ static function getClassId($name)
 	if (csa($name, "___")) {
 		return strtilfirst($name, "___");
 	}
-	
 	if (csa($name, "_s_vv_p_")) {
 		return strfrom($name, "_s_vv_p_");
 	}
-	
 	return $name;
 }
 
@@ -3204,19 +3114,20 @@ function isOn($var)
 	if (!isset($this->$var)) {
 		return false;
 	}
-	
 	return (strtolower($this->$var) === 'on');
 }
+
 
 function isOnOff($var)
 {
 	if (!isset($this->$var)) { return false; }
-	
 	return ($this->$var === 'off' || $this->$var === 'on');
 }
 
+
 function getResourcePlanList($class, $withoutplan = true)
 {
+
 	global $gbl, $sgbl, $login, $ghtml; 
 	$list[] = $login->getList($class);
 	$list[] = $this->getList($class);
@@ -3227,11 +3138,9 @@ function getResourcePlanList($class, $withoutplan = true)
 
 	foreach((array) $nclist as $k => $v) {
 		$rn = $k;
-		
 		if (csa($k, "___")) {
 			$rn = strtilfirst($k, "___");
 		}
-		
 		$nclist[$k] = "{$rn} ({$v})";
 	}
 
@@ -3253,7 +3162,6 @@ function generateCMList()
 {
 	$parent = $this->getParentO();
 	$plist[] = $parent;
-	
 	while (!$parent->isAdmin()) {
 		$parent = $parent->getParentO();
 		$plist[] = $parent;
@@ -3289,33 +3197,28 @@ function getTemplateList($class, $withouttemplate = true)
 	return $nclist;
 }
 
+
 final protected function writeAChildObject($class, $flag = NULL)
 {
 	$object = $class . "_o";
 	$obj = $this->$object;
 	// Sometimes the single object may not exist, at all as in uuser object in a forward domain.
-	
 	if (!$obj) {
 		return;
 	}
-	
 	$obj->was();
-	
 	if ($obj->dbaction === "delete_done") {
 		$this->$object = NULL;
 	}
-	
 	$desc = get_classvar_description(get_class($this), $object);
 
 	if ($desc) {
 		if (strpos($desc[0], "v") !== false) {
 			dprint("{$object} in {$this->getClass()} is virtual... Removing <br> ", 2);
 			$this->$object = NULL;
-			
 			return;
 		}
 	}
-	
 	if (!$flag) {
 		$this->__object_list = array_remove($this->__object_list, $class);
 	}
@@ -3330,7 +3233,6 @@ final function isVirtual($class)
 {
 	$list = "{$class}_l";
 	$desc = get_classvar_description(get_class($this), $list);
-	
 	if ($desc && csa($desc[0], "v")) {
 		return true;
 	}
@@ -3344,21 +3246,21 @@ final function isVirtual($class)
 
 final protected function writeAChildList($class, $flag = NULL)
 {
+
 	global $gbl, $sgbl, $login, $ghtml; 
+
 
 	$list = "{$class}_l";
 
 	$desc = "__desc_{$list}";
 	$pclass = $this->get__table();
 	$desc = get_real_class_variable($pclass, $desc);
-	
 	if (csa($desc[0], "r")) {
 		dprint("Readonly {$class} in {$this->get__table()} {$this->nname} <br> ");
 		return;
 	}
 
 	dprintr("Warning... Writing {$class} in {$this->get__table()} {$this->nname}...<br> ");
-	
 	if (!$this->$list) {
 		return;
 	}
@@ -3368,14 +3270,11 @@ final protected function writeAChildList($class, $flag = NULL)
 	foreach((array) $this->$list as $element) {
 		if (!$element)
 			continue;
-			
 		//dprint("Inside: {$element->getClName()} {$element->dbaction} <br> ");
 		if (! isset($element->__parent_o) || !$element->__parent_o) {
 			$element->__parent_o = $this;
 		}
-		
 		$element->was();
-		
 		if ($element->dbaction === "delete_done") {
 			unset($this->{$list}[$element->nname]);
 		}
@@ -3388,9 +3287,10 @@ final protected function writeAChildList($class, $flag = NULL)
 		// Try adding this whole list to the $login... 
 		dprint("{$list} in {$this->getClass()}:{$this->nname} is virtual; present in Virtual List... Removing <br> ", 2);
 		$this->$list = NULL;
-		
 		return;
 	}
+
+
 
 	if (get_real_class_variable($class, "__ttype") === "transient") {
 		$this->$list = NULL;
@@ -3408,9 +3308,11 @@ final protected function writeAChildList($class, $flag = NULL)
 * @param 
 * @desc  Removes all the children and teh __parent objects from an object. This is done before sending the object across to the other machine. An object is supposed to be self consistent and should work without the help of __parent_o or the children.
 */ 
+ 
 
 static function clearChildrenAndParent($object)
 {
+
 	$object->__parent_o = null;
 
 	foreach((array) $object->__object_list as $v) {
@@ -3418,17 +3320,16 @@ static function clearChildrenAndParent($object)
 		$object->$obj = null;
 		//unset($object->$obj);
 	}
-	
 	if (isset($obj->sp_specialplay_o)) {
 		$obj->sp_specialplay_o == null;
 	}
-	
 	if (isset($obj->sp_childSpecialPlay)) {
 		$obj->sp_childSpecialPlay_o = null;
 	}
 
 	$object->__object_list = null;
 
+	
 	//dprint("<b> Clearing ... </b>  {$object->getClName()} {$object}<br> ");
 	foreach((array) $object->__list_list as $v) {
 		$list = $v . "_l";
@@ -3436,9 +3337,9 @@ static function clearChildrenAndParent($object)
 		//unset($object->$list);
 	}
 
-	// Because of the cloning, the main is now pointing to the old this object. That means there will be
-	// unnecssary redundancy, but more importantly, this will result in catastrophe as there are two copies of
-	// the same object. So we set the driverapp->main back to the new $object.
+
+
+	// Because of the cloning, the main is now pointing to the old this object. That means there will be unnecssary redundancy, but more importantly, this will result in catastrophe as there are two copies of the same object. So we set the driverapp->main back to the new $object.
 	if (isset($object->driverApp)) {
 		$driverApp = clone $object->driverApp;
 		$object->driverApp = $driverApp;
@@ -3446,17 +3347,20 @@ static function clearChildrenAndParent($object)
 	}
 
 	$object->__list_list = null;
+
+
 }
 
 function __clone()
 {
 	foreach((array) $this->__object_list as $v) {
 		$obj = $v . "_o";
-		
 		if ($this->$obj) {
 			$this->$obj = clone($this->$obj);
 		} 
 	}
+
+
 }
 
 final protected function writeAndSyncChildren()
@@ -3470,12 +3374,15 @@ final protected function writeAndSyncChildren()
 	flush();
 	*/
 
+
 	foreach((array) $this->__list_list as $variable) {
 		$this->writeAChildList($variable, 1);
 	}
-
 	$this->__list_list = NULL;
+
 }
+
+
 
 final function setFromObject($obj)
 {
@@ -3492,14 +3399,15 @@ final function setFromObject($obj)
 
 final function setFromArray($array)
 {
+
 	foreach($array as $key => $value) {
 		if (is_numeric($key)) {
 			//dprint("The Key is {$key} integer in .  {$this->get__table()}:{$this->nname} <br> ");
 		}
-		
 		if ($key === '__table') {
 			continue;
 		}
+
 
 		if ($key === 'ser_listpriv') {
 			$key = strfrom($key, "ser_");
@@ -3512,42 +3420,33 @@ final function setFromArray($array)
 				dprint(" ");
 				$this->setUpdateSubaction();
 			}
-			
 			if (!is_object($vv)) {
 				$this->$key = new $key(null, null, $this->nname);
 			} else {
 				$this->$key = $vv;
 			}
-			
 			$this->{$key}->__parent_o = $this;
-			
 			continue;
 		}
 		if ($key === 'priv') {
 			print("<b> Setting Priv If it is Ser. in {$this->nname} {$this->get__table()}<br> </b>");
-			
 			if (!is_object($value)) {
 				$this->$key = new $key(null, null, $this->nname);
 			} else {
 				$this->$key = $value;
 			}
-			
 			$this->{$key}->__parent_o = $this;
-			
 			continue;
 		}
 
 		if (csb($key, "ser_")) {
 			$key = strfrom($key, "ser_");
 			$value = unserialize(base64_decode($value));
-			
 			if ($value === false) {
 				dprint("Unserialize failed: {$this->get__table()}: {$key}<br>\n", 3);
-				
 				if (cse($key, "_b") && !is_object($value)) {
 					$value = new $key(null, null, $this->nname);
 					$this->$key = $value;
-					
 					continue;
 				}
 			} else {
@@ -3556,7 +3455,6 @@ final function setFromArray($array)
 					dprint("Unserialize failed: {$this->get__table()}: {$key}<br>\n", 3);
 					$value = new $key(null, null, $this->nname);
 					$this->$key = $value;
-					
 					continue;
 				}
 			}
@@ -3568,20 +3466,17 @@ final function setFromArray($array)
 			}
 
 			$this->$key = $value;
-			
 			continue;
 		}
 
+
 		if (csb($key, "coma_")) {
 			$key = strfrom($key, "coma_");
-			
 			if (!trim($value)) {
 				$this->$key = null;
 				continue;
 			}
-			
 			$value = trim($value, ",");
-			
 			if (!$value) {
 				$this->$key = null;
 				continue;
@@ -3589,21 +3484,16 @@ final function setFromArray($array)
 
 			$value = explode(",", $value);
 			$list = null;
-			
 			foreach($value as $vv) {
 				$vv = trim($vv);
-				
 				if (cse($key, "_list")) {
 					$ob = $vv;
 				} else {
 					$ob = new $key(null, null, $vv);
 				}
-				
 				$list[$vv] = $ob;
 			}
-			
 			$this->$key = $list;
-			
 			continue;
 		}
 		/// Hack for listpriv. It needs the parent, so that it can find the resource details for admin.
@@ -3611,16 +3501,13 @@ final function setFromArray($array)
 
 		if (csb($key, "priv_q_") || csb($key, "used_q")) {
 			$qvar = strtil($key, "_q_");
-			
 			if (!isset($this->$qvar)) {
 				//dprint("Setting Priv in $this->nname {$this->get__table()}");
 				$this->$qvar = new $qvar(null, null, $this->nname);
 				$this->$qvar->__parent_o = $this;
 			}
-			
 			$qv = strfrom($key, "{$qvar}_q_");
 			$this->$qvar->$qv = $value;
-			
 			continue;
 		}
 
@@ -3639,6 +3526,7 @@ final function setFromArray($array)
 	if (!isset($this->dbaction)) {
 		$this->dbaction = "clean";
 	}
+
 }
 
 function hasDriverClass()
@@ -3668,7 +3556,6 @@ final function isDeleted()
 	if ($this->dbaction === "delete" || $this->dbaction === "delete_done" || $this->dbaction === 'syncdelete') {
 		return true;
 	}
-
 	return false;
 }
 
@@ -3689,31 +3576,30 @@ final public function modify($array, $subaction = null)
 	$this->setUpdateSubaction($subaction);
 }
 
+
+
 function updateShow($subaction, $param)
 {
 	return null;
 }
 
-function changeOwnerSpecific() { }
 
+function changeOwnerSpecific() { }
 function updateChangeOwner($param)
 {
 	global $gbl, $sgbl, $login, $ghtml; 
 	$rparent['up'] = $this->getParentO()->getParentO();
-	
 	if ($rparent['up']) {
 		$rparent['top'] = $rparent['up']->getParentO();
 	}
-	
 	$rparent['down'] = $this->getParentO();
-	
 	if ($rparent['down']->isLogin()) {
 		$rparent['up'] = null;
 	}
 
 	$newparent = getFromAny($rparent, 'client', $param['parent_name_change']);
 
-/*
+	/*
 	if (!$this->checkIfEnoughParentQuotaAll($newparent)) {
 		throw new lxexception('not_enough_quota_in_parent', 'quota');
 	}
@@ -3731,43 +3617,39 @@ function updateChangeOwner($param)
 	$gbl->__this_redirect = $ghtml->getFullUrl('a=resource', null);
 	$gbl->__this_function = array("lxclass", "exec_collectQuota");
 	$gbl->__this_functionargs = null;
-
 	return null;
+
 }
 
 function updateform($subaction, $param)
 {
+
 	switch($subaction) {
 
 		case "changeowner":
 				//hacks... islogin should be changed to isabovelogin...
 			$rparent['down'] = $this->getParentO();
 			$rparent['up'] = null;
-			
 			if ($rparent['down']->isGt('admin')) {
 				$rparent['up'] = $rparent['down']->getParentO();
 			}
-			
 			$list['up'] = null;
 			$list['top'] = null;
-			
 			if ($rparent['down']->isLogin()) {
 				$rparent['up'] = null;
 			}
-			
 			if ($rparent['up'] && !$rparent['down']->isLogin())  {
 				dprintr($rparent['down']->nname);
 				$list['up'] = $rparent['up']->getList('client');
 				$rparent['top'] = $rparent['up']->getParentO();
-				
 				if ($rparent['top'] && !$rparent['up']->isLogin()) {
 					$list['top'] = $rparent['top']->getList('client');
 				}
 			}
 
+
 			if ($rparent['down']->isLte('reseller')) {
 				$list['down'] = $rparent['down']->getList('client');
-				
 				foreach(array('up', 'top', 'down') as $v) {
 					foreach((array) $list[$v] as $kk => $vv) {
 						if ($this->isLte($vv->cttype)) {
@@ -3779,6 +3661,7 @@ function updateform($subaction, $param)
 			$nlist['up'] = get_namelist_from_objectlist($list['up']);
 			$nlist['top'] = get_namelist_from_objectlist($list['top']);
 			$nlist['down'] = get_namelist_from_objectlist($list['down']);
+
 
 			foreach($rparent as $k => $v) {
 				if ($rparent[$k]) {
@@ -3792,12 +3675,13 @@ function updateform($subaction, $param)
 			$nnlist = array_unique($nnlist);
 			$this->parent_name_change = $this->getParentName();
 			$vlist['parent_name_change'] = array('s', $nnlist);
-			
+
+
 			return $vlist;
+
 
 		case "changenname":
 			$vlist['nname'] = null;
-			
 			return $vlist;
 	}
 
@@ -3805,6 +3689,7 @@ function updateform($subaction, $param)
 	//debugBacktrace();
 
 }
+
 
 function getLoginTo()
 {
@@ -3817,14 +3702,11 @@ function getLoginTo()
 	if ($sgbl->isKloxo() && $this->isLte('customer')) {
 		$llist[] = "list-domain";
 	}
-	
 	if ($sgbl->ishyperVM() && $this->isLte('customer')) {
 		$llist[] = "list-vps";
 	}
-	
 	$llist[] = "desktop-";
 	$llist[] = "show-home";
-	
 	return $llist;
 }
 
@@ -3870,11 +3752,9 @@ function getUrlFromLoginTo()
 
 	$list = explode("-", $string);
 	$classstring = null;
-	
 	if ($list[1] && $list[1] !== 'home') {
 		$classstring = "&c={$list[1]}";
 	}
-	
 	$url = "a={$list[0]}{$classstring}";
 
 	if (!$login->isClient() && $list[1] === $login->getClass()) {
@@ -3885,6 +3765,7 @@ function getUrlFromLoginTo()
 		$url = $this->getSingleOrListclass($list[1]);
 	}
 
+
 	return $url;
 }
 
@@ -3893,7 +3774,6 @@ function getSingleOrListclass($class)
 	$table = get_table_from_class($class);
 	$sq = new Sqlite(null, $table);
 	$count = $sq->getCountWhere("parent_clname = '{$this->getClName()}'");
-	
 	if ($count == 1 && $this->isGte('customer')) {
 		$dlist = $this->getList($class);
 		$d = getFirstFromList($dlist);
@@ -3901,7 +3781,6 @@ function getSingleOrListclass($class)
 	} else {
 		$url = "a=list&c={$class}";
 	}
-
 	return $url;
 }
 
@@ -3909,11 +3788,9 @@ function getSingleOrListclass($class)
 function updateAccountSel($param, $subaction)
 {
 	$flist = $param['_accountselect'];
-	
 	foreach($flist as $ff){
 		$fpathlist[] =  $ff;
 	}
-	
 	$list = "{$subaction}_list";
 	$this->$list = $fpathlist;
 	$this->setUpdateSubaction($subaction);
@@ -3921,9 +3798,7 @@ function updateAccountSel($param, $subaction)
 }
 
 function postUpdate() { }
-
 function superPostAdd() { }
-
 function postAdd() {  }
 
 // The quota left is actually priv - used. This should work for both hard and soft quotas.
@@ -3945,13 +3820,10 @@ function getSpecialParentClass()
 {
 	return 'client';
 }
-
 function createShowIlist() { return null; }
-
 static function AddListForm() { return null; }
 
 function createShowPropertyList(&$alist) { $alist['property'][] = 'a=show';}
-
 function createShowActionList(&$alist) { }
 
 static function add($parent, $class, $param)
@@ -3972,6 +3844,7 @@ static function addform($parent, $class, $typetd = null)
 	return $ret;
 
 }
+
 
 static function createListBlist($object, $class)
 {
@@ -3998,34 +3871,22 @@ static function createListNlist($parent, $view)
 	return $nlist;
 }
 function fillWelcomeMessage($txt){return $txt;}
-
 function showRawPrint($subaction = null) { }
-
 function createShowPlist($subaction) { return null; }
-
 function createShowRlist($subaction) { return null; }
-
 function createShowInfoList($subaction) { return null; }
-
 static function getSelectList($parent, $var) { return null;}
-
 function createShowAlist(&$alist, $subaction = null) { return null; }
-
 function createShowNote() { return false; }
-
 function createShowAlistConfig(&$alist, $subaction = null) { return null; }
-
 function createShowShowlist() { return null;}
-
 function createShowClist($subaction) { return null; }
 
 static function createParentShowList($parent, $class) { } 
-
 static function createListAddForm($parent, $class) { return null; } 
-
 static function createAddformlist($parent, $class) { return false; } 
-
 static function createListUpdateForm($parent, $class) { return null; } 
+
 
 function isChildList($class)
 {
@@ -4035,16 +3896,16 @@ function isChildList($class)
 	if (isset($list[$listvar])) {
 		return true;
 	}
-	
 	return false;
 }
+
+
 
 function getCustomButton(&$alist)
 {
 	$t = $this->get__table();
 	$sq = new Sqlite(null, 'custombutton');
 	$res = $sq->getRowsWhere("class = '{$this->get__table()}'");
-	
 	if (!$res) { return; }
 
 	$alist['__title_custom'] = "Custom";
@@ -4053,28 +3914,25 @@ function getCustomButton(&$alist)
 		$v = $r['url'];
 		$v = str_replace("%nname%", $this->nname, $v);
 		$v = str_replace("%realpass%", $this->realpass, $v);
-		
 		if (isset($this->default_domain)) {
 			$v = str_replace("%default_domain%", $this->default_domain, $v);
 		}
-		
 		$alist[] = create_simpleObject(array('custom' => true, 'target' => 'target=_blank', 'purl' => $r['url'], 'name' => $r['description'], 'bname' => $r['nname'], 'url' => $v));
 	}
 
 	return $alist;
+
 }
 
 function isExceptionForSelflist()
 {
 	global $gbl, $sgbl, $login, $ghtml; 
 	$exc_list = array("lxbackup", "web",  "mmail", "sp_specialplay", "centralbackupconfig");
-	
 	foreach($exc_list as $l) {
 		if ($this->is__table($l)) {
 			return true;
 		}
 	}
-	
 	if ($this->is__table("dns") && $sgbl->isKloxo()) {
 		return true;
 	}
@@ -4087,7 +3945,6 @@ function canGetSelfList() { return true; }
 function getSelfList()
 {
 	global $gbl, $sgbl, $login, $ghtml; 
-	
 	if ($this->isLogin()) {
 		return null;
 	}
@@ -4104,21 +3961,18 @@ function getSelfList()
 	if ( !isset($gbl->__self_list_parent)) {
 		return;
 	}
-	
 	$parent = $gbl->__self_list_parent;
 	$class = $gbl->__self_list_class;
 
 
-	/// The below method is wrong. It goes back from the child to find the parent,
-	// and get the list of its siblings. The correct way is to get the parent from the url.
-	// The reason is that there are virtual objects, which have a different parent than the one who is holding it now.
-/*
+	/// The below method is wrong. It goes back from the child to find the parent, and get the list of its siblings. The correct way is to get the parent from the url. The reason is that there are virtual objects, which have a different parent than the one who is holding it now.
+	/*
 	$object = $this;
-	
 	while (1) {
 		$class = $object->get__table();
 		$listvar = $class . "_l";
 		$parent =  $object->getParentO();
+
 
 		if (!$parent) {
 			$parent = $object;
@@ -4130,11 +3984,9 @@ function getSelfList()
 		if (isset($list[$listvar])) {
 			break;
 		}
-		
 		if ($parent->isLogin()) {
 			return null;
 		}
-		
 		$object = $parent;
 	}
 */
@@ -4156,26 +4008,21 @@ function getSelfList()
 	while($pp !== $parent) {
 		$child = $pp;
 		$pp = $pp->getParentO();
-		
 		if (!$pp) {
 			break;
 		}
 	}
 
 	$ret = null;
-	
 	foreach($list as $k => $ob) {
-		// Big big hack... this is to prevent the installapp titles from cropping up here.
-		// NEed a better system though.
+		// Big big hack... this is to prevent the installapp titles from cropping up here. NEed a better system though.
 		if (csb($k, "__title_")) {
 			continue;
 		}
-		
 		if ($ghtml->frm_action !== 'show') {
 			if (isset($child->ttype) && $child->ttype !== $ob->ttype) {
 				continue;
 			}
-			
 			if (isset($child->cttype) && $child->cttype !== $ob->cttype) {
 				continue;
 			}
@@ -4197,7 +4044,6 @@ function getSelfList()
 
 		$ret[$k] = $nob;
 	}
-
 	return $ret;
 }
 
@@ -4212,7 +4058,6 @@ static function createListAlist($parent, $class)
 
 	$alist[] = "a=list&c={$class}";
 	$alist[] = "a=addform&c={$class}";
-
 	return $alist;
 }
 
@@ -4224,13 +4069,11 @@ function createShowMainImageList()
 function createShowImageList()
 {
 	$vlist = null;
-	
 	if (!$this->isLogin())
 		$vlist['cpstatus'] = 1;
 
 	//$vlist['status'] = 1;
 	//$vlist['state'] = 1;
-
 	return $vlist;
 
 }
@@ -4243,18 +4086,16 @@ function isAction($var)
 function get__table()
 {
 	$table =  get_class_variable(lget_class($this), "__table");
-	
 	if (!$table) {
 		return lget_class($this);
 	}
-
 	return $table;
 }
+
 
 function getStatic($var)
 {
 	$v =  get_class_variable(lget_class($this), $var);
-	
 	return $v;
 }
 
@@ -4273,6 +4114,8 @@ function getClass()
 
 }
 
+
+
 function update($subaction, $param)
 {
 	return $param;
@@ -4284,6 +4127,8 @@ function execInChildren($key, $func, $arg = null)
 
     $class = lget_class($this);
 
+
+
 	$r = new ReflectionClass($class);
 
 	$childo = null;
@@ -4291,13 +4136,11 @@ function execInChildren($key, $func, $arg = null)
 	foreach($r->getProperties() as $s) {
 		if (cse($s->name, "_o")) {
 			$desc = get_classvar_description($class, $s->name);
-			
 			if (csa($desc[0], $key)) {
 				$childo[] = substr($s->name, 7, (strpos($s->name, "_o") - 7));
 			}
 		} else if (cse($s->name, "_l")) {
 			$desc = get_classvar_description($class, $s->name);
-			
 			if (csa($desc[0], $key)) {
 				$string = strfrom($s->name, "__desc_");
 				$childl[] = strtil($string, "_l");
@@ -4309,14 +4152,11 @@ function execInChildren($key, $func, $arg = null)
 
 	dprint("Execing {$key} {$func} <br> ");
 	dprintr($childo);
-	
 	foreach((array) $childo as $co) {
 		$ob = null;
-		
 		if ($this->isRealChild($co)) {
 			$ob = $this->getObject($co);
 		}
-		
 		if ($ob) {
 			$ob->$func($arg);
 			dprint("{$func} on {$co} ob dbaction {$ob->dbaction} in {$class}:{$this->get__table()}:{$this->nname} <br> ");
@@ -4324,33 +4164,28 @@ function execInChildren($key, $func, $arg = null)
 	}
 
 	dprintr($childl);
-	
 	foreach((array) $childl as $cl) {
 		$obl = $this->getList($cl);
-		
 		foreach((array) $obl as $ob) {
 			dprint("{$func} on {$cl}:{$ob->nname} in {$class }:{$this->nname}...");
 			$ob->$func($arg);
 		}
-		
 		dprint("<br> ");
 	}
+
 }
 
 function checkIfEnoughParentQuotaAll($parent)
 {
 	$qp = $parent;
-	
 	while(1) {
 		dprint(" Parent... " . $qp->nname . '<br> ');
 		$this->checkIfEnoughParentQuota($qp);
 		$qp = $qp->getParentO();
-		
 		if (!$qp) {
 			break;
 		}
 	}
-
 	return true;
 }
 
@@ -4366,18 +4201,16 @@ function checkIfEnoughParentQuota($parent)
 	}
 
 	$qlist = $this->getQuotaVariableList();
-	
 	foreach($qlist as $k => $q) {
 		if (isQuotaGreaterThan($this->priv->$k, $parent->priv->$k)) {
 			throw new lxexception('not_enough_quota_in_parent', $k);
 		}
-		
 		if (isQuotaGreaterThan($parent->used->$k + $this->used->$k, $parent->priv->$k)) {
 			throw new lxexception('not_enough_quota_in_parent', $k);
 		}
 	}
-
 	return true;
+
 }
 
 function getSwitchServerUrl(&$alist)
@@ -4385,7 +4218,6 @@ function getSwitchServerUrl(&$alist)
 	global $gbl, $sgbl, $login, $ghtml; 
 
 	return;
-
 	if ($login->isAdmin()) {
 		if (check_if_many_server()) {
 			$alist[] = "n={$this->getClass()}&a=updateform&sa=switchserver";
@@ -4398,7 +4230,6 @@ static function fixListVariable($v)
 {
 	if (!is_array($v)) {
 		$v = trim($v);
-		
 		if ($v) {
 			return explode(',', $v);
 		} else {
@@ -4409,6 +4240,7 @@ static function fixListVariable($v)
 	}
 }
 
+
 static function consumeUnderParent() { return false; }
 
 static function fixpserver_list(&$param)
@@ -4417,7 +4249,6 @@ static function fixpserver_list(&$param)
 		if (!csb($k, "listpriv_s_")) {
 			continue;
 		}
-		
 		if (cse($k, "_list")) {
 			$param[$k] = self::fixListVariable($v);
 		}
@@ -4429,11 +4260,9 @@ function changeUsedFromParentAll($flag = 1)
 
 	global $gbl, $sgbl, $login, $ghtml; 
 	$qp = $this;
-	
 	if (!$qp->getParentO()) {
 		return;
 	}
-	
 	//$qv = $this->getQuotaVariableList();
 	//if (!$qv) {
 		//return;
@@ -4443,25 +4272,25 @@ function changeUsedFromParentAll($flag = 1)
 		dprint(" Changin {$this->get__table()}: {$this->nname}... {$qp->get__table()} {$qp->nname} </b><br> ");
 		$this->changeUsedFromParent($qp, $flag);
 	}
-	
 	//dprint(" <b> After  Mailaccount Num: {$login->used->mailaccount_num} </b> <br> \n");
 }
 
 function getResourceIdentity() { return $this->getClass() ; }
-
 function changeUsedFromParent($qp, $flag)
 {
+
+
 	$class = $this->getResourceIdentity();
 	$cnum = "{$class}_num";
 	$pclass = lget_class($qp);
 	$doupdate = false;
+
 
 	if (!isset($qp->used)) {
 		return;
 	}
 
 	$val = 1 * $flag;
-	
 	if ($qp->isQuotaVariable($cnum)) {
 		$qp->used->$cnum += $val;
 		$doupdate = true;
@@ -4469,14 +4298,14 @@ function changeUsedFromParent($qp, $flag)
 		//dprintr($qp->used);
 	}
 
-/*
+
+	/*
 	$list = $qp->getQuotaVariableList();
 
 	foreach($list as $l => $v) {
 		if (csb($l, "{$class}_m_")) {
 			$license = strtil(strfrom($l, "_n_"), "_num");
 			$licvar = strtil(strfrom($l, "_m_"), "_n_");
-			
 			if ($this->$licvar === $license) {
 				$qp->used->$l += $val;
 				$doupdate = true;
@@ -4485,16 +4314,14 @@ function changeUsedFromParent($qp, $flag)
 	}
 */
 
-	// This is not needed. When you add or delete something, just remove its number from the parent.
-	// Reducing the usages seem to cause lots of problem.
-/*
+
+	// This is not needed. When you add or delete something, just remove its number from the parent. Reducing the usages seem to cause lots of problem.
+	/*
 	$qv = $this->getQuotaVariableList();
-	
 	foreach((array) $qv as $k => $v) {
 		if (cse($k, "_time") || cse($k, "_flag") || cse($k, "_num")) {
 			continue;
 		}
-		
 		if (isset($this->used)) {
 			$rv = $flag * $this->used->$k;
 			$qp->used->$k += $rv;
@@ -4502,19 +4329,18 @@ function changeUsedFromParent($qp, $flag)
 		}
 	}
 */
+
 	if ($doupdate) {
 		dprint("<b> Warning Change Used From Parent... {$qp->getClname()} {$class} {$this->nname} <br> </b><br>\n ");
 		$qp->setUpdateSubaction();
 	}
-	
 	// Improtant. This function is called in the 'was' of a child. And thus the was of this object is already over. So we need to do a write ourselves. Be careful, WHen adding sometimes a child is 'wased' before the parent, leading to a lot unexpected quandaries. Only if the parent is in updatemode should it be written to. Else it means it was when adding, and then it should be left to the normal 'was';
 	if ($qp->dbaction === 'update') {
 		$qp->write();
 	}
 }
 
-// Any Action to be done before deleting. For instance, in dirprotect, the parent (web) is
-// updated when it is added/deleted.
+// Any Action to be done before deleting. For instance, in dirprotect, the parent (web) is updated when it is added/deleted.
 
 function deleteSpecific()
 {
@@ -4525,7 +4351,6 @@ function convertClCmToNameCm($cmlist)
 {
 	$v = explode(",", $cmlist);
 	$nv = null;
-	
 	foreach($v as $__q) {
 		if ($__q) {
 			//list($pclass, $pname) = explode("_s_vv_p_", $__q);
@@ -4533,12 +4358,13 @@ function convertClCmToNameCm($cmlist)
 			$nv[] = $pname;
 		}
 	}
-
 	return implode(", ", $nv);
 }
 
+
 function delete()
 {
+
 	global $gbl, $sgbl, $login, $ghtml; 
 	// Don't delete unless the parent is the real owner. Or the parent is admin.
 	if (!$this->getParentO()->isAdmin() && !$this->isRightParent()) {
@@ -4556,6 +4382,7 @@ function delete()
 	}
 
 	if ($this->get__table() === 'ticket') {
+
 		dprint(" <b> Ticket <br> <br> ");
 		dprint($this->parent_clname . "<br> ");
 		dprint($this->getParentO()->nname);
@@ -4566,10 +4393,10 @@ function delete()
 	}
 
 	$this->deleteSpecific();
-
 	$this->execInChildren("d", "delete");
 
 }
+
 
 function updateLimit($param)
 {
@@ -4577,13 +4404,12 @@ function updateLimit($param)
 	log_log("ajax", var_export($param, true));
 	global $gbl, $sgbl, $login, $ghtml; 
 	$gbl->__ajax_refresh = true;
-	
 	if ($this->isLogin()) {
 		throw new lxException('cannot_change_own_limit', 'limit');
 	}
 
+
 	$mstr = '(--Mod--)';
-	
 	if (!csa($this->resourceplan_used, $mstr)) {
 		$this->resourceplan_used = "$mstr {$this->resourceplan_used}";
 	}
@@ -4609,29 +4435,26 @@ function updateDisable($param, $reason = null)
 		$this->disable_reason = $reason;
 		$this->setStatus('off');
 	}
-
 	return null;
 }
 
 function updateEnable($param, $reason = null)
 {
 	global $gbl, $sgbl, $login, $ghtml; 
-	
 	// property access.... 
 	if (!isset($this->disable_reason)) {
 		$this->disable_reason = null;
 	}
-	
 	$t = $this->disable_reason;
 
 	if ($t && csb($t, "__type")) {
 		$list = explode(":", $t);
 		$cttype = $list[2];
-		
 		if ($login->isGt($cttype)) {
 			throw new lxexception('locked_by_parent', '');
 		}
 	}
+
 
 	if (isset($this->status) && $this->status === 'off') {
 		if ($reason ) {
@@ -4644,7 +4467,6 @@ function updateEnable($param, $reason = null)
 			$this->setStatus('on');
 		}
 	}
-
 	return null;
 }
 
@@ -4653,7 +4475,6 @@ function updateToggle_Status($param)
 	$function = ($this->status === "on")? "Disable" : "Enable" ;
 	$function = "update$function";
 	$this->$function($param);
-
 	return null;
 }
 
@@ -4666,7 +4487,6 @@ final function setStatus($status)
 	if (isset($this->cpstatus)) {
 		$this->cpstatus = $this->status;
 	}
-	
 	$this->execInChildren('t', "setStatus", $this->status);
 
 	if ($old_status != $this->status) {
@@ -4674,13 +4494,13 @@ final function setStatus($status)
 	}
 }
 
+
 function collectQuota()
 {
 
 	global $gbl, $sgbl, $login, $ghtml; 
 	$vlist = $this->getQuotaVariableList();
 	$vlist = lx_array_merge(array($vlist, $this->getDeadQuotaVariableList()));
-	
 	foreach ($vlist as $k => $v) {
 		if (!cse($k, "_flag")) {
 			$this->used->$k = 0;
@@ -4689,7 +4509,7 @@ function collectQuota()
 
 	$res = $this->collectVariableQuota($vlist);
 
-/*
+	/*
 	foreach($res as $k => $v) {
 		if (!cse($k, "_flag")) {
 			$this->used->$k = $res[$k];
@@ -4701,7 +4521,6 @@ function collectQuota()
 	$this->setUpdateSubaction('collectquotaupdate');
 
 	$name = ucfirst($sgbl->__var_program_name);
-	
 	foreach($gbl->__tmp_var_email_list as $k => $v) {
 		dprint("Sending {$v} to {$k}\n");
 		lx_mail(null, $k, "{$name} Message", $v);
@@ -4711,13 +4530,11 @@ function collectQuota()
 function getCountLType($list, $licvar, $lic)
 {
 	$count = 0;
-	
 	foreach((array) $list as $l) {
 		if (isset($l->$licvar) && $l->$licvar === $lic) {
 			$count++;
 		}
 	}
-
 	return $count;
 }
 
@@ -4726,15 +4543,12 @@ function countRightParent($childlist)
 	if (!$childlist) {
 		return 0;
 	}
-	
 	$count = 0;
-	
 	foreach($childlist as $c) {
 		if ($c->parent_clname === $this->getClName()) {
 			$count++;
 		}
 	}
-
 	return $count;
 }
 
@@ -4747,10 +4561,10 @@ function collectVariableQuota($vlist)
 {
 
 	static $count = 0;
-	
 	global $gbl, $sgbl, $login, $ghtml; 
 
 	$count++;
+
 
 	foreach($vlist as $var => $val) {
 		$fv[$var] = 0;
@@ -4774,7 +4588,9 @@ function collectVariableQuota($vlist)
 
 	$cnlist = $this->getQuotaChildList();
 
+
 	$totalchildlist = $this->getChildList();
+
 
 	//dprintr($cnlist);
 
@@ -4782,11 +4598,9 @@ function collectVariableQuota($vlist)
 		if (!$this->isQuotaVariable($var)) {
 			continue;
 		}
-		
 		if (cse($var, "_a_num")) {
 			$cvar = strtil($var, "_num");
 			$listvar = $cvar;
-			
 			if (array_search_bool($listvar, $totalchildlist)) {
 				$childlist = $this->$cvar;
 				$num = count($childlist);
@@ -4796,10 +4610,8 @@ function collectVariableQuota($vlist)
 			$cvar = strtil($var, "_num");
 			$listvar = $cvar . "_l";
 			//dprint(" before {$this->nname} {$var} \n");
-			
 			if (array_search_bool($listvar, $totalchildlist)) {
 				$childlist = $this->getList($cvar);
-				
 				if (!$this->isVirtual($cvar)) {
 					$num = $this->countRightParent($childlist);
 					//dprint(" {$this->nname}  {$var}  {$num} \n");
@@ -4809,18 +4621,16 @@ function collectVariableQuota($vlist)
 		}
 	}
 
+
 	foreach((array) $cnlist as  $c) {
 		if (cse($c, "_o")) {
 			$name = $this->getChildNameFromDes($c);
 			$ob = null;
-			
 			if ($this->isRealChild($name)) {
 				$ob = $this->getObject($name);
 			}
-			
 			if ($ob) {
 				$res = $ob->collectVariableQuota($vlist);
-				
 				foreach($res as $var => $v) {
 					$fv[$var] += $v;
 				}
@@ -4828,11 +4638,9 @@ function collectVariableQuota($vlist)
 		}  else if (cse($c, "_l")) {
 			$name = $this->getChildNameFromDes($c);
 			$list = $this->getList($name);
-			
 			if (!$this->isVirtual($name)) {
 				foreach((array) $list as $l) {
 					$res = $l->collectVariableQuota($vlist);
-					
 					foreach($res as $var => $v) {
 						if (cse($var, "_flag")) {
 							continue;
@@ -4848,13 +4656,10 @@ function collectVariableQuota($vlist)
 	foreach($vlist as $var => $val) {
 		$list = $this->getQuotaAddList($var);
 		dprintr($list);
-		
 		if (!$list) {
 			continue;
 		}
-		
 		$fv[$var] = 0;
-		
 		foreach($list as $k => $v) {
 			$fv[$var] += $fv[$v];
 		}
@@ -4865,23 +4670,19 @@ function collectVariableQuota($vlist)
 	}
 
 	$rexceeded = false;
-	
 	foreach ($fv as $var => $v) {
 		if ($this->isdeadQuotaVariable($var)) {
 			print("Dead Quota: In {$this->getClName()} {$var} equals {$v}\n");
-			
 			if ($this->used->$var !== $v) {
 				$this->used->$var = $v;
 				$this->setUpdateSubaction('collectquotaupdate');
 			}
-			
 			continue;
 		}
-		
 		if (!$this->isQuotaVariable($var)) {
 			continue;
 		}
-	/* never Happens. Only Priv is no checked for flag...
+		/* never Happens. Only Priv is no checked for flag...
 		if (cse($var, "_flag")) {
 			// Thi is also done in distributeChildQuota.
 			if (!$this->priv->isOn($var) && $this->used->isOn($var)) {
@@ -4889,7 +4690,6 @@ function collectVariableQuota($vlist)
 				$this->used->$var = 'off';
 				$this->setUpdateSubaction("enable_{$var}");
 			}
-			
 			continue;
 		}
 	*/
@@ -4905,19 +4705,15 @@ function collectVariableQuota($vlist)
 
 			if (cse($var, "_num")) { $exce = 100; }
 			else { $exce = 95; }
-			
 			//dprint("In {$this->nname} per is {$per}... {$general->dpercentage}\n");
-			
 			if ($per > $exce) {
 				$this->state = 'exceed';
 				$per = round($per);
-				
 				if (!$sgbl->__var_just_db) {
 					$msg = "Warning: The Account {$this->nname} is using {$per}% of quota for {$var}.\n Limit: {$this->priv->$var}\nUsed: {$this->used->$var}\n";
 					$this->notifyAll($msg, false);
 				}
 			} 
-			
 			if ($this->disable_per && !$this->isOff('disable_per') && $per > $this->disable_per) {
 				dprint("In {$this->nname} {$var} rexceeded... \n");
 				$rexceeded = true;
@@ -4925,33 +4721,31 @@ function collectVariableQuota($vlist)
 		}
 	}
 
+
 	if ($rexceeded) {
 		// Updatedisable will disable only if itsn't already disabled. Thus it will avoid unnecessary synctosystems.
 		$this->updateDisable(null, 'quota');
 		$msg = "The Account {$this->nname} has been disabled due to overquota";
-		
 		if (!$sgbl->__var_just_db) {
 			$this->notifyAll($msg);
 		}
-		
 		print("$msg\n");
 	} else {
 		$this->state = 'ok';
 		$this->updateEnable(null, 'quota');
 	}
-
 	return $fv;
+
+
 }
 
 function getDbServerNum()
 {
 	$db = new Sqlite($this->__masterserver, "pserver");
 	$list = $db->getTable(array('nname'));
-	
 	foreach($list as $k => $l) {
 		$nlist[] = $l['nname'];
 	}
-	
 	sort($nlist);
 
 	foreach($nlist as $k => $l) {
@@ -4963,14 +4757,10 @@ function getDbServerNum()
 
 function notifyAll($msg, $parenttoo = true) 
 {
-	// DO the sending only for objects that contain the contactemail;
-	// For instance, if the mailaccount or ftpuser etc is being disabled,
-	// don't unncessarily bother all the parents about the disabling.
+	//DO the sending only for objects that contain the contactemail; For instance, if the mailaccount or ftpuser etc is being disabled, don't unncessarily bother all the parents about the disabling.
 
 	global $gbl, $sgbl, $login, $ghtml; 
-	
 	$name = ucfirst($sgbl->__var_program_name);
-	
 	if (!isset($this->contactemail) || !$this->contactemail) {
 		return;
 	}
@@ -4983,12 +4773,11 @@ function notifyAll($msg, $parenttoo = true)
 	// Send Only one level up.
 
 	if (!$parenttoo) { return; }
-	
 	$pp = $this->getParentO();
-	
 	if (isset($pp->contactemail) && $pp->contactemail) {
 		$gbl->__tmp_var_email_list[$pp->contactemail] .= "\n {$msg}";
 	}
+
 }
 
 function getChildNameFromDes($k)
@@ -5002,29 +4791,31 @@ function getChildNameFromDes($k)
 	}
 
 	return $k;
+
+
 }
 
 function distributeChildQuota($oldv = null)
 {
+
 	$cl = $this->getQuotaChildList();
 
 	//dprint("hello <br> ");
 	$ql = $this->getQuotaVariableList();
 
+
 	foreach((array) $ql as $k => $v) {
 		$list = $this->getQuotaAddList($k);
-		
 		if (!$list) {
 			continue;
 		}
-		
 		foreach($list as $nk => $nv) {
 			$this->priv->$nv = $this->priv->$k;
 		}
 	}
 
-	// Important: When the priv flags are turned off or on, you need to to do the requeistie updatesubaction.
-	// Also for hardquota variables, the main value also should be impressed upon instantly.
+
+	// Important: When the priv flags are turned off or on, you need to to do the requeistie updatesubaction. Also for hardquota variables, the main value also should be impressed upon instantly.
 	if ($oldv) {
 		foreach((array) $ql as $nk => $nv) {
 			if (cse($nk, "_flag")) {
@@ -5033,7 +4824,6 @@ function distributeChildQuota($oldv = null)
 					if (!isset($this->__old_priv)) {
 						$this->__old_priv = $oldv;
 					}
-					
 					dprint("<br> <b> Warning. In {$this->getClname()} {$nk} is {$this->priv->$nk}: old value is {$oldv->$nk} , Updateing the object.<br> </b>");
 					$this->setUpdateSubaction("enable_{$nk}");
 				}
@@ -5048,11 +4838,13 @@ function distributeChildQuota($oldv = null)
 					if (!isset($this->__old_priv)) {
 						$this->__old_priv = $oldv;
 					}
-					
 					dprint("<br> <b> Warning. In {$this->getClname()} {$nk} is {$this->priv->$nk}: old value is {$oldv->$nk} , Updateing the object.<br> </b>");
 					$this->setUpdateSubaction("change_{$nk}");
 				}
 			}
+
+
+
 		}
 	}
 
@@ -5068,8 +4860,7 @@ function distributeChildQuota($oldv = null)
 
 			$cb = $this->getObject($chn);
 
-			// The child object is not a strict necessary and in some cases it may not exist at all.
-			// For instance in a forwarded domain, the uuser object will not exist, nor will the mail object.
+			// The child object is not a strict necessary and in some cases it may not exist at all. For instance in a forwarded domain, the uuser object will not exist, nor will the mail object.
 			if (!$cb) {
 				continue;
 			}
@@ -5083,15 +4874,12 @@ function distributeChildQuota($oldv = null)
 				$cb->setUpdateSubaction();
 			}
 
+
 			$cb->distributeChildQuota($oldv);
-			
 			continue;
 		}
 
-/*
-		//	I am not sure if the quota should be synced ALL the list children too. The problem here is the load.
-		//	But it is essential that _flag variables be properly synced throughout. But then it will take a long time.
-		//	I think I will add this properly inside the collectquota and leave it here like this.
+		/* I am not sure if the quota should be synced ALL the list children too. The problem here is the load. But it is essential that _flag variables be properly synced throughout. But then it will take a long time. I think I will add this properly inside the collectquota and leave it here like this.
 
 		if (cse($v, "_l")) {
 			$chn = $this->getChildNameFromDes($v);
@@ -5110,15 +4898,16 @@ function distributeChildQuota($oldv = null)
 						//if (!cse($nk, "_flag")) { continue; }
 						$cb->priv->$nk = $this->priv->$nk;
 					}
-					
 					$cb->setUpdateSubaction();
 				}
 
 			}
 			$cb->distributeChildQuota($oldv);
-		}
-*/
+		} */
 	}
+
+
+
 }
 
 
@@ -5126,13 +4915,11 @@ function getQuotaChildList()
 {
 	$cnl = $this->getChildListFilter('q');
 	$ret = null;
-	
 	if ($cnl) foreach ($cnl as $v) {
 		if ($this->isChildVariableSpecific($v)) {
 			$ret[] = $v;
 		}
 	}
-
 	return $ret;
 
 }
@@ -5141,13 +4928,13 @@ function getShowActions(&$alist, $class)
 {
 	global $gbl, $sgbl, $login, $ghtml; 
 
+
 	$object = $this->getObject($class);
 
 	//$ol[] = "a=show&o={$class}";
 	$ol = null;
 	$object->createShowAlist($onl);
-	// Hack hack... Removing the '__title_main' from the alist. This is already present in the parent,
-	// and it will mix everything and screw up.
+	// Hack hack... Removing the '__title_main' from the alist. This is already present in the parent, and it will mix everything and screw up.
 	unset($onl['__title_main']);
 
 	unset($onl['action']);
@@ -5155,33 +4942,26 @@ function getShowActions(&$alist, $class)
 	if (isset($nl['property'])) foreach($onl['property'] as $_tq) {
 		$onl[] =  $_tq;
 	}
-	
 	unset($onl['property']);
-	
 	if ($onl) foreach($onl as $k => &$_to) {
 		if (is_array($_to)) {
 			continue;
 		}
-		
 		if (csb($k, "__title")) {
 			continue;
 		}
-		
 		if ($ghtml->is_special_url($_to)) {
 			$_to->purl = "n={$class}&{$_to->purl}";
-			
 			if (isset($_to->__internal)) {
 				$_to->url = "n={$class}&{$_to->url}";
 			}
-			
 			continue;
 		}
-		
 		$_to = "n={$class}&{$_to}";
 	}
 	$alist = lx_array_merge(array($alist, $ol, $onl));
-
 	return $alist;
+
 }
 
 static function get_child_full_alist(&$alist, $class)
@@ -5190,8 +4970,7 @@ static function get_child_full_alist(&$alist, $class)
 
 
 	$onl = exec_class_method($class, "get_full_alist");
-	// Hack hack... Removing the '__title_main' from the alist. This is already present in the parent,
-	// and it will mix everything and screw up.
+	// Hack hack... Removing the '__title_main' from the alist. This is already present in the parent, and it will mix everything and screw up.
 	unset($onl['__title_main']);
 
 	unset($onl['action']);
@@ -5201,28 +4980,23 @@ static function get_child_full_alist(&$alist, $class)
 		if (is_array($_to)) {
 			continue;
 		}
-		
 		if (csb($k, "__title")) {
 			continue;
 		}
-		
 		if ($ghtml->is_special_url($_to)) {
 			$_to->purl = "n={$class}&{$_to->purl}";
-			
 			if (isset($_to->__internal)) {
 				$_to->url = "n={$class}&{$_to->url}";
 			}
-			
 			continue;
 		}
-		
 		$_to = "n={$class}&$_to";
 	}
-	
 	$alist = lx_array_merge(array($alist, $onl));
-
 	return $alist;
 }
+
+
 
 function getExtraId() { return null; }
 
@@ -5235,12 +5009,13 @@ function  getChildShowActions(&$alist)
 			$alist = lx_array_merge(array($alist, exec_class_method($k, "createParentShowList", $this, $k)));
 		}
 	}
-
 	return $alist;
 }
 
+
 function getListActions(&$alist, $class)
 {
+
 	global $gbl, $sgbl, $login, $ghtml; 
 	$l = exec_class_method($class, 'createListAlist', $this, $class);
 
@@ -5266,7 +5041,6 @@ function updateCommandCenter($param)
 {
 	global $gbl, $sgbl, $login, $ghtml; 
 	$this->commandCenter($param);
-
 	return null;
 }
 
@@ -5293,50 +5067,46 @@ function commandCenter($param)
 	$vlist['ccenter_error'] = null;
 	$vlist['__v_next'] = 'commandcenter';
 	$vlist['__v_button'] = 'Execute';
-
 	return $vlist;
 }
 
+
 function getSpecialObject($class)
 {
+
 	global $gbl, $sgbl, $login, $ghtml; 
-	
 	if (!$this->isLxclient()) {
 		dprint("Special object called in nonclient {$this->get__table()}:{$this->nname}<br> \n");
 		//debugBacktrace();
 	}
-	
 	$objectname = $class . "_o";
 	// Don't ever call get_classvar_description from here. That will create an infinite loop.
 	$name = get_real_class_variable($class, "__special_class");
-	
 	if (!$name) {
 		$name = strfrom($class, "sp_");
 	}
-	
 	$bname = $name . "_b";
 	if (isset($this->$objectname)) {
 		return $this->$objectname->$bname;
 	}
-	
 	$obj = new $class($this->__masterserver, null, $this->getClName());
 	$obj->get();
 	//$this->addObject($class, $obj);
 	$this->$objectname = $obj;
 	$obj->$bname->__parent_o = $this;
-
 	return $obj->$bname;
 }
 
 function getDeleteChildListFilter()
 {
 	$list = $this->getChildListFilter('d');
-
 	return $list;
 }
 
+
 function DeleteFromHere($newserver)
 {
+
 	$this->dbaction = 'syncdelete';
 	$this->subaction = null;
 	$this->syncserver = $newserver;
@@ -5344,8 +5114,8 @@ function DeleteFromHere($newserver)
 	$this->execInChildren('b', 'DeleteFromHere', $newserver);
 }
 
-// This function was used earlier because ddatabase had the syncserver in its nname.
-// From now on, for the sake for transparency across clusters, main resources cannot have it.
+
+// This function was used earlier because ddatabase had the syncserver in its nname. From now on, for the sake for transparency across clusters, main resources cannot have it.
 
 function fix_syncserver_nname_problem()
 {
@@ -5353,16 +5123,13 @@ function fix_syncserver_nname_problem()
 	if ($rewrite && array_search_bool("syncserver", $rewrite)) {
 		$newthis = clone $this;
 		$newthis->syncserver = $newserver;
-		
 		foreach($rewrite as $n) {
 			$nnamelist[] = $newthis->$n;
 		}
-		
 		$newthis->nname =implode($sgbl->__var_nname_impstr, $nnamelist);
 
 		$sql = new Sqlite($this->__masterserver, $this->get__table());
 		$res = $sql->getRowsWhere("nname = '{$newthis->nname}'");
-		
 		if ($res) {
 			throw new lxException("changed_name_already_exists", $newthis->nname, "syncserver");
 		}
@@ -5379,6 +5146,7 @@ function fix_syncserver_nname_problem()
 
 function UpdateHeirarchy()
 {
+
 	global $gbl, $sgbl, $login, $ghtml; 
 
 	$this->dbaction = 'update';
@@ -5389,13 +5157,9 @@ function UpdateHeirarchy()
 }
 
 function changePlanSpecific($plan) {}
-
 function updateHeirarchySpecific() {}
-
 function doDriverSpecific() {}
-
 function doServerSpecific() {}
-
 function AddToThere($newserver)
 {
 
@@ -5403,11 +5167,9 @@ function AddToThere($newserver)
 
 	$this->dbaction = 'syncadd';
 	$this->syncserver = $newserver;
-	
 	if (isset($this->__driverappclass)) {
 		$this->__old_driver = $this->__driverappclass;
 	}
-	
 	$this->createSyncClass();
 
 	if ($sgbl->isHyperVM()) {
@@ -5422,27 +5184,25 @@ function AddToThere($newserver)
 }
 
 function extraBackup() { return false; }
-
 function extraRestore() { return $this->extraBackup(); }
+
 
 function backMeUpThere()
 {
 	$this->setUpdateSubaction('top_level_network_backup');
 	$this->createExtraVariables();
 	$res = rl_exec_set(null, $this->getDataServer(), $this);
-	
 	return $res;
 }
+
 
 function restoreMeUpThere($oldserver, $backupfilepass)
 {
 	$this->setUpdateSubaction('top_level_network_restore');
 	$this->createExtraVariables();
-	
 	if (isLocalhost($oldserver) && !isLocalhost($this->getDataServer())) {
 		$oldserver = getOneIPForLocalhost($this->getDataServer());
 	}
-	
 	$this->__var_machine = $oldserver;
 	$this->__var_backupfilepass = $backupfilepass;
 	$res = rl_exec_set(null, $this->getDataServer(),  $this);
@@ -5458,20 +5218,16 @@ function backMeUp($backupdir, $id)
 	$res = $this->backMeUpThere();
 	$filename = $this->getBackupFileNameForObject($id);
 	getFromFileserv($this->getDataServer(), $res, "{$backupdir}/{$filename}"); 
-
 	return $filename;
 }
 
 function restoreMeUp($bdir, $id)
 {
 	$filename = $this->findBackupFileNameIntheDir($bdir, $id);
-	
 	if (!$filename) {
 		dprint("Failed to get filename for {$this->get__table()}:{$this->nname} {$bdir}, {$id}\n");
-		
 		return;
 	}
-	
 	dprint("Got filename for REstoremeup.... {$filename} \n\n\n");
 	$res = cp_fileserv("{$bdir}/{$filename}");
 	$this->restoreMeUpThere('localhost', $res);
@@ -5496,7 +5252,6 @@ function updateBackupOLD($param)
 	slow_print($bfile);
 	flush();
 	@ lunlink($bfile);
-
 	exit;
 }
 
@@ -5508,7 +5263,6 @@ function updateRestoreOLD($param)
 
 	$param['nothing'] = null;
 	$fname = $_FILES['restore_file_f']['tmp_name'];
-	
 	if (!lxfile_exists($fname)) {
 		throw new lxException('could_not_get_file', 'dbname', '');
 	}
@@ -5516,12 +5270,12 @@ function updateRestoreOLD($param)
 	$param['switchserverlist'] = null;
 	$param['_accountselect'] = array('all');
 	$this->doCoreRestore($fname, $param);
-
 	return null;
 }
 
 // These functions are very simple and backups and restores only the internal content 
 // doesn't restore the kloxo database structure. Useful only for database.
+
 function updateBackup($param)
 {
 	$ret = $this->backMeUpThere();
@@ -5531,7 +5285,6 @@ function updateBackup($param)
 	header("Content-Disposition: attachment; filename={$fname}");
 	printFromFileServ($this->syncserver, $ret);
 	flush();
-	
 	exit;
 }
 
@@ -5539,7 +5292,6 @@ function updateRestore($param)
 {
 	$param['nothing'] = null;
 	$fname = $_FILES['restore_file_f']['tmp_name'];
-	
 	if (!lxfile_exists($fname)) {
 		throw new lxException('could_not_get_file', 'dbname', '');
 	}
@@ -5547,7 +5299,6 @@ function updateRestore($param)
 	$res = cp_fileserv($fname);
 	$this->restoreMeUpThere('localhost', $res);
 	$this->dbaction = 'clean';
-	
 	return null;
 }
 
@@ -5572,15 +5323,14 @@ function getNotExistingList(&$vlist, $var, $childclass, $sourceclassorlist)
 	if (!$list) {
 		$vlist[$var] =  array('M', 'none_free,all_have_been_assigned');
 		$vlist['__v_button'] = array();
-		
 		return false;
 
 	} else {
 		$vlist[$var] = array('s', $list);
-		
 		return true;
 	}
 }
+
 
 function doSimpleRestore($bfile, $param)
 {
@@ -5601,26 +5351,23 @@ function doSimpleRestore($bfile, $param)
 
 	// Issue #671 - Fixed backup-restore issue
 	// forum http://forum.lxcenter.org/index.php?t=msg&th=16875
-	// why compare $ob with $this?
-/*
+	// TODO!
+
 	if ($ob->getClName() !== $this->getClName()) {
 		throw new lxException('objectclassname_doesnt_match', '');
 	}
-*/
+
+
 	if ($gbl->__var_list_flag) {
 		print("Contents of the backfile: Owner: {$ob->nname}.....\n");
 	} else {
 		print("Restoring backup for {$ob->nname}.....\n");
 	}
 
-	try {
-		$ob->checkForConsistency(null, $param['_accountselect'], true);
-	} catch (Exception $e) {
-		throw $e;
-	}
+	$ob->checkForConsistency(null, $param['_accountselect'], true);
 
-	// Restore the currenct client's quota. The person who is doing the restoring 
-	// souldn't able to escape his new quota.
+
+	// Restore the currenct client's quota. The person who is doing the restoring souldn't able to escape his new quota.
 	if ($this->isLogin()) {
 		$ob->priv = $this->priv;
 
@@ -5631,14 +5378,13 @@ function doSimpleRestore($bfile, $param)
 
 	$ob->__var_bc_filename = $bfile;
 
-	try {
-		if (!$gbl->__var_list_flag) {
-			$ob->was();
-			$ob->simpleRestoreMeUpThere();
-		}
-	} catch (Exception $e) {
-		throw $e;
+
+	if (!$gbl->__var_list_flag) {
+		$ob->was();
+		$ob->simpleRestoreMeUpThere();
 	}
+
+
 }
 
 function doCoreRestore($bfile, $param)
@@ -5669,12 +5415,13 @@ function doCoreRestore($bfile, $param)
 
 	// Issue #671 - Fixed backup-restore issue
 	// forum http://forum.lxcenter.org/index.php?t=msg&th=16875
-	// why compare $ob with $this?
-/*
+	// TODO!
+
 	if ($ob->getClName() !== $this->getClName()) {
 		throw new lxException('objectclassname_doesnt_match', '');
 	}
-*/
+
+
 	$gbl->__var_serverlist = $param['switchserverlist'];
 
 	if ($gbl->__var_list_flag) {
@@ -5707,7 +5454,6 @@ function doCoreRestore($bfile, $param)
 	try {
 		if (!$gbl->__var_list_flag) {
 			$ob->was();
-			
 			foreach($sgbl->__var_objectrestorelist as $d) {
 				$d->restoreMeUp($vd, $rem->ddate);
 			}
@@ -5718,6 +5464,7 @@ function doCoreRestore($bfile, $param)
 	}
 
 	lxfile_tmp_rm_rec($vd);
+
 }
 
 
@@ -5734,6 +5481,8 @@ function doCoreBackup($bfile, $param)
 	print("Done\n");
 
 	$vd = createTempDir("/tmp", "backup");
+
+
 
 	$rem = new Remote();
 	$ver = $sgbl->__ver_major_minor;
@@ -5769,7 +5518,6 @@ function doCoreBackup($bfile, $param)
 	lxfile_mkdir(dirname($bfile));
 
 	lxshell_tgz($vd, $bfile, $list);
-	
 	if (!lxfile_exists("/home/lx_debug_backup")) {
 		lxfile_tmp_rm_rec($vd);
 	}
@@ -5788,6 +5536,9 @@ function simpleRestoreMeUpThere()
 	$this->createExtraVariables();
 	$res = rl_exec_set(null, $this->syncserver,  $this);
 }
+
+
+
 
 function doSimpleBackup($bfile, $param)
 {
@@ -5827,11 +5578,15 @@ function doSimpleBackup($bfile, $param)
 
 function getZiptype()
 {
-//	return "tar";
-
 	// Issue #671 - Fixed backup-restore issue
-	// change to tgz that make less space especially temp process
-	return "tgz";
+	// change to tgz for default that make less space especially temp process
+
+	if (file_exists("/usr/local/lxlabs/kloxo/etc/flag/backup_compress_disabled.flg")) {
+		return "tar";
+	}
+	else {
+		return "tgz";
+	}
 }
 
 function getBackupFileNameForObject($id)
@@ -5845,7 +5600,6 @@ function getBackupFileNameForObject($id)
 	$end = $this->getZiptype();
 
 	$filename = "{$name}-{$this->get__table()}-any-{$id}.{$end}";
-
 	return $filename;
 }
 
@@ -5872,6 +5626,7 @@ function findBackupFileNameIntheDir($bdir, $id)
 		}
 	}
 
+
 	dprint("Coudln't Get the filname... Most likely Mysqldb... Trying with __servername\n");
 
 	// Only needed for mysqldb...
@@ -5889,47 +5644,43 @@ function getBackupChildList()
 {
 	$list = $this->getChildListFilter('b');
 	$list1 = $this->getChildListFilter('B');
-	
 	return lx_array_merge(array($list1, $list));
 }
 
 function getDisplayBackupChildList()
 {
 	$list = $this->getChildListFilter('B');
-	
 	return $list;
 }
 function getResourceChildList()
 {
 	$list = $this->getChildListFilter('R');
-	
 	return $list;
 }
 
 function getChildList()
 {
 	$list = $this->getChildListFilter('');
-	
 	return $list;
 }
 
 function getChildListFilter($s)
 {
+
 	$ret = null;
 	$q = $this->getVarDescrList(0);
 	foreach((array) $q as $k => $v) {
 		if (!cse($k, "_o") && !cse($k, "_l") && !cse($k, "_a")) {
 			continue;
 		}
-		
 		if ($s && !csa($v, $s)) {
 			continue;
 		}
-		
 		$ret[$k] =  $k;
 	}
 
 	return $ret;
+
 }
 
 function fixPrivUnset()
@@ -5939,9 +5690,7 @@ function fixPrivUnset()
 		if (!(cse($k, "_num") || cse($k, "_usage") || cse($k, "_flag"))) {
 			continue;
 		}
-		
 		if (isset($this->priv->$k)) continue;
-		
 		if (cse($k, "_flag")) {
 			$this->priv->$k = "Off";
 		} else {
@@ -5951,7 +5700,6 @@ function fixPrivUnset()
 }
 
 function inheritSynserverFromParent() { return true; }
-
 function convertToUnmodifiable(&$vlist)
 {
 	foreach($vlist as $k => $v) {
@@ -5959,16 +5707,16 @@ function convertToUnmodifiable(&$vlist)
 	}
 }
 
+
 function getQuotaVariableList()
 {
+
 	$vl = getDbvariable("quotavar", $this->get__table());
 
 	$vlist = null;
-	
 	foreach((array) $vl as $k => $v) {
 		if ($this->isQuotaVariable($k)) {
-			// Need to put all the flag variables, which are actually checkboxes at the end.
-			// Mixing them up seem to screw up Ie, especially when adding domains.
+			// Need to put all the flag variables, which are actually checkboxes at the end. Mixing them up seem to screw up Ie, especially when adding domains.
 			if (cse($k, "_flag")) {
 				$vlist_flag[$k] = array();
 			} else {
@@ -5976,25 +5724,22 @@ function getQuotaVariableList()
 			}
 		}
 	}
-	
 	//dprintr($vlist);
 	if (isset($vlist_flag)) {
 		$vlist = lx_array_merge(array($vlist, $vlist_flag));
 	}
-
 	return $vlist;
 }
 
 function getDeadQuotaVariableList()
 {
+
 	$vl = $this->getVarDescrList(0);
 	$vlist = null;
-	
 	foreach($vl as $k => $v) {
 		if (cse($k, "_o") || cse($k, "_l") || cse($k, "_a")) {
 			continue;
 		}
-		
 		if ($this->isDeadQuotaVariable($k)) {
 			if (isset($this->priv)) {
 				if (!isset($this->priv->$k)) {
@@ -6004,9 +5749,7 @@ function getDeadQuotaVariableList()
 			}
 		}
 	}
-	
 	//dprintr($vlist);
-	
 	return $vlist;
 }
 
@@ -6019,9 +5762,12 @@ function createShowUpdateform()
 	return null;
 }
 
+
+
 function createShowSclist()
 {
 	return null;
+
 }
 
 static function getTextAreaProperties($var)
@@ -6034,7 +5780,6 @@ function getToggleUrl(&$alist)
 	if ($this->isLogin() || $this->isAdmin()) {
 		return;
 	}
-	
 	if (isOn($this->status)) {
 		$alist[] = "a=update&sa=disable";
 	} else {
@@ -6053,23 +5798,21 @@ function createShowAddform()
 function isDeadQuotaVariable($k)
 {
 	$descr = get_classvar_description(get_class($this),  $k);
-	
 	if (csa($descr[0], 'D')) {
 		return true;
 	}
-
 	return false;
+
 }
 
 function isListQuotaVariable($k)
 {
 	$descr = get_classvar_description(get_class($this),  $k);
-	
 	if (csa($descr[0], 'Q')) {
 		return true;
 	}
-
 	return false;
+
 }
 
 function isForceQuota($k) { return false; }
@@ -6077,25 +5820,22 @@ function isForceQuota($k) { return false; }
 function isHardQuota($k)
 {
 	$descr = get_classvar_description(get_class($this),  $k);
-	
 	if (csa($descr[0], 'h')) {
 		return $this->isQuotaVariableSpecific($k);
 	}
-	
 	return false;
 }
 
-function isRealQuotaVariable($k) { return false; }
 
+function isRealQuotaVariable($k) { return false; }
 function isQuotaVariable($k)
 {
 	$descr = get_classvar_description(get_class($this),  $k);
-	
 	if (csa($descr[0], 'q')) {
 		return $this->isQuotaVariableSpecific($k);
 	}
-
 	return false;
+
 }
 
 static function getquotaclass($class)
@@ -6113,6 +5853,7 @@ function isQuotaVariableSpecific($var)
 	return true;
 }
 
+
 function showPrivInResource()
 {
 	return true;
@@ -6120,12 +5861,10 @@ function showPrivInResource()
 
 }
 
+
 class LxaClass extends Lxclass {
-
 function get() {}
-
 function write() {}
-
 static function createListAlist($parent, $class)
 {
 	return null;
@@ -6133,33 +5872,27 @@ static function createListAlist($parent, $class)
 
 }
 
+
 class misc_b extends lxaclass {
 
 }
 
+
 class listpriv extends lxaclass {
 
-// listpriv is a bit trickier than we first thought. For the admin, the quota is actually dynamic,
-// and is equal to the list of pservers, and their corresponding ip addresses.
-// For other clients, the listquota is static. To get this dynamic list quota for the admin,
-// you need to access the parent (admin) object from inside listpriv, which is actually impossible,
-// since listpriv, being an internal object, is automatically initialiazed when the database is loaded.
-// Anyway, currently I have just added listpriv->__parent_o = $this inside the getThisFromDb->setFromArray()
-// in the lxdb. This is actually not a hack, and should work pretty much fine, since setFromArray is
-// a fundamental function and called by everyone to initialize the objects.
+
+// listpriv is a bit trickier than we first thought. For the admin, the quota is actually dynamic, and is equal to the list of pservers, and their corresponding ip addresses. For other clients, the listquota is static. To get this dynamic list quota for the admin, you need to access the parent (admin) object from inside listpriv, which is actually impossible, since listpriv, being an internal object, is automatically initialiazed when the database is loaded. Anyway, currently I have just added listpriv->__parent_o = $this inside the getThisFromDb->setFromArray() in the lxdb. This is actually not a hack, and should work pretty much fine, since setFromArray is a fundamental function and called by everyone to initialize the objects.
 function __get($var)
 {
 	global $gbl, $sgbl, $login, $ghtml; 
-	
 	if (!isset($this->__parent_o)) {
 		return null;
 	}
-	
 	$parent = $this->__parent_o;
-	
 	if (!$parent || !$parent->isAdmin()) {
 		return null;
 	}
+
 
 	if (cse($var, 'pserver_list')) {
 		$slist = $parent->getRealPserverList(strtil($var, "pserver_list"));
@@ -6175,11 +5908,12 @@ function __get($var)
 	if (cse($var, 'dbtype_list')) {
 		return $sgbl->__var_dblist;
 	}
-
 	return null;
 }
 
 }
+
+
 
 class priv extends Lxaclass {
 
@@ -6188,7 +5922,6 @@ function  display($var)
 	if ($this->$var === null) {
 		return '-';
 	}
-
 	return resource::privdisplay($var, $var, $this->$var);
 }
 
@@ -6204,7 +5937,6 @@ function __get($var)
 		} else {
 			$this->$var = 'on';
 		}
-		
 		return $this->$var;
 	}
 
@@ -6221,11 +5953,12 @@ function __get($var)
 		$this->$var = '0';
 		return $this->$var;
 	}
-	
 	return "-";
 }
 
+
 }
+
 
 class LxMailClass extends Lxaclass {
 
@@ -6234,7 +5967,6 @@ static function createListAlist($parent, $class)
 	global $gbl, $sgbl, $login, $ghtml; 
 
 	$alist[] = "a=list&c={$class}";
-
 	return $alist;
 }
 
@@ -6245,25 +5977,20 @@ static function createListAddForm($parent, $class)
 
 }
 
+
+
 abstract class LxlClass extends Lxclass {
-
 function get() {}
-
 function write() {}
 }
 
 class lxDriverClass extends Lxclass {
-
 function get() {}
-
 function write() {}
 
 function dosyncToSystemPre() {}
-
 function dosyncToSystemPost() {}
-
 static function installMe() {}
-
 static function unInstallMe() {}
 
 function dbactionDelete()
@@ -6283,11 +6010,9 @@ function do_backup_cleanup($list) { return; }
 function top_level_central_back()
 {
 	$bc = $this->do_backup();
-	
 	if (!isset($this->main->__save_variable)) {
 		$this->main->__save_variable = null;
 	}
-	
 	return array('savelist' => $this->main->__save_variable, 'back' => $bc);
 }
 
@@ -6304,7 +6029,6 @@ function top_level_network_backup()
 		$bc[1][] = 'blank_file';
 		lxfile_touch("{$bc[0]}/blank_file");
 	}
-	
 	if ($this->main->getZiptype() === 'zip') {
 		$res = zip_to_fileserv($bc[0], $bc[1]);
 	} else if ($this->main->getZiptype() === 'tar') {
@@ -6314,7 +6038,6 @@ function top_level_network_backup()
 	}
 
 	$this->do_backup_cleanup($bc);
-	
 	return $res;
 }
 
@@ -6351,6 +6074,8 @@ function top_level_simple_backup()
 	$this->do_backup_cleanup($bc);
 }
 
+
+
 function top_level_network_restore()
 {
 	global $gbl, $sgbl, $login, $ghtml; 
@@ -6374,18 +6099,19 @@ function top_level_simple_restore()
 	$this->do_restore($this->main->__var_bc_filename);
 }
 
+
+
 function mydbactionUpdate()
 {
 	$totalres = null;
-	
 	if (is_array($this->main->subaction)) {
 		foreach($this->main->subaction as $sub) {
+
 			if (csb($sub, "top_level_")) {
 				$res = $this->$sub();
 			} else {
 				$res = $this->dbactionUpdate($sub);
 			}
-			
 			$totalres = lx_array_merge(array($totalres, $res));
 		}
 	} else {
@@ -6402,6 +6128,7 @@ function mydbactionUpdate()
 	}
 
 	return $totalres;
+
 }
 
 function dosyncToSystem()

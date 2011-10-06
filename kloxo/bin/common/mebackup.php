@@ -21,13 +21,7 @@ function mebackup_main()
 
 	// Issue #671 - Fixed backup-restore issue
 //	exec("exec mysqldump --add-drop-table -u $progname -p$pass $dbf > $docf");
-
-	try {
-		system("mysqldump --add-drop-table -u $progname -p$pass $dbf > $docf");
-	}
-	catch (Exception $e) {
-		print('Error: ' . $e->getMessage());
-	}
+	system("exec mysqldump --add-drop-table -u $progname -p$pass $dbf > $docf");
 
 	$string = @ date('Y-M-d'). '-' . time(); 
 	$bfile = "$sgbl->__path_program_home/selfbackup/self/__backup/$progname-scheduled-masterselfbackup-$string.zip";
