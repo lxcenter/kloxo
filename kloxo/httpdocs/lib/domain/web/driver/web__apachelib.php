@@ -16,7 +16,9 @@ static function uninstallMe()
 {
 	lxshell_return("service", "httpd", "stop");
 	lxshell_return("rpm", "-e", "--nodeps", "httpd");
-	lunlink("/etc/init.d/httpd");
+	if (file_exists("/etc/init.d/httpd")) {
+		lunlink("/etc/init.d/httpd");
+	}
 }
 
 static function installMe()
@@ -26,7 +28,13 @@ static function installMe()
 	lxshell_return("chkconfig", "httpd", "on");
 
 //	addLineIfNotExistInside("/etc/httpd/conf/httpd.conf", "Include /etc/httpd/conf/kloxo/kloxo.conf", "");
-	lxfile_cp("/usr/local/lxlabs/kloxo/file/apache/~lxcenter.conf", "/etc/httpd/conf.d/~lxcenter.conf");
+
+	$cver = "###version0-4###";
+	$fver = file_get_contents("/etc/httpd/conf.d/~lxcenter.conf");
+	
+	if(stristr($fver, $cver) === FALSE) {
+		lxfile_cp("/usr/local/lxlabs/kloxo/file/apache/~lxcenter.conf", "/etc/httpd/conf.d/~lxcenter.conf");
+	}
 
 	lxfile_cp("/usr/local/lxlabs/kloxo/file/centos-5/httpd.conf", "/etc/httpd/conf/httpd.conf");
 
@@ -40,12 +48,10 @@ static function installMe()
 	lxfile_mkdir("/home/apache/conf/domains");
 	lxfile_mkdir("/home/apache/conf/redirects");
 	lxfile_mkdir("/home/apache/conf/webmails");
+	lxfile_mkdir("/home/apache/conf/wildcards");
 
 	//--- some vps include /etc/httpd/conf.d/swtune.conf
 	passthru("rm -f /etc/httpd/conf.d/swtune.conf");
-
-	copy("/usr/local/lxlabs/kloxo/file/apache/~lxcenter.conf", "/etc/httpd/conf.d/~lxcenter.conf");
-	copy("/usr/local/lxlabs/kloxo/file/centos-5/httpd.conf", "/etc/httpd/conf/httpd.conf");
 
 	// rev 527
 	lxfile_cp("../file/apache/etc_init.d", "/etc/init.d/httpd");
@@ -121,14 +127,17 @@ function updateMainConfFile()
 		//	lxfile_mv("/home/apache/conf/domains/{$dom['nname']}.conf", "/home/apache/conf/domains/{$dom['nname']}.conf.active");
 			rename("/home/apache/conf/domains/{$dom['nname']}.conf", "/home/apache/conf/domains/{$dom['nname']}.conf.active");
 			rename("/home/apache/conf/redirects/{$dom['nname']}.conf", "/home/apache/conf/redirects/{$dom['nname']}.conf.active");
+			rename("/home/apache/conf/wildcards/{$dom['nname']}.conf", "/home/apache/conf/wildcards/{$dom['nname']}.conf.active");
 		}
 	}
 
 	passthru("rm -rf /home/apache/conf/domains/*.conf");
 	passthru("rm -rf /home/apache/conf/redirects/*.conf");
+	passthru("rm -rf /home/apache/conf/wildcards/*.conf");
 
 	passthru("rename .conf.active .conf /home/apache/conf/domains/*.conf.active");
 	passthru("rename .conf.active .conf /home/apache/conf/redirects/*.conf.active");
+	passthru("rename .conf.active .conf /home/apache/conf/wildcards/*.conf.active");
 
 	//--- delete unlisted domains config - end
 
@@ -357,104 +366,174 @@ function createConffile()
 	$cust_log = $log_path . "/". $this->main->nname . "-" . "custom_log"; 
 	$err_log = $log_path ."/". $this->main->nname . "-" . "error_log";
 //	$v_file = "$sgbl->__path_httpd_root/{$this->main->nname}/conf/kloxo.{$this->main->nname}";
-	$v_file = "/home/apache/conf/domains/{$this->main->nname}.conf";
+//	$v_file = "/home/apache/conf/domains/{$domainname}.conf";
 
-	$string = null;
+	$v_file = "/home/apache/conf/wildcards/{$domainname}.conf";
+	$string = "### No * (wildcards) for '{$domainname}' ###\n\n\n";
+	lfile_put_contents($v_file, $string);
 
-	$dirp = $this->main->__var_dirprotect;
+	$wcline = "\tServerAlias \\\n\t\t*.{$domainname}\n\n";
+
+	// must set here to prepend if server_alias_a empty
+	$count = 1;
+
+	foreach($this->main->server_alias_a as $val) {
+		// issue 674 - wildcard and subdomain problem
+		if ($val->nname === '*') { 
+			$count = 2;
+			break;
+		}
+	}
+
+	for ($c = 0 ; $c < $count ; $c++) {
+
+		$string = null;
+
+		$dirp = $this->main->__var_dirprotect;
 	
-	$this->clearDomainIpAddress();
+		$this->clearDomainIpAddress();
 
-	$string = null;
-	$string = "<VirtualHost \\\n{$this->createVirtualHostiplist("80")}";
-	$string .= "\t\t>\n\n";
-	$string .= $this->syncToPort("80", $cust_log, $err_log);
-	$string .= $this->middlepart($web_home, $domainname, $dirp); 
-	$string .= $this->AddOpenBaseDir();
-	$string .= $this->endtag();
+		$string = null;
+		$string = "<VirtualHost \\\n{$this->createVirtualHostiplist("80")}";
+		$string .= "\t\t>\n\n";
+//		$string .= $this->syncToPort("80", $cust_log, $err_log);
 
-	lxfile_mkdir($this->main->getFullDocRoot());
+		$syncto = $this->syncToPort("80", $cust_log, $err_log);
 
-	if($this->main->priv->isOn('ssl_flag')) {
+		if ($c === 1){
+			$syncto = str_replace(" {$domainname}", " wildcards.{$domainname}", $syncto);
+			$line  = $wcline;
+		}
+		else {
+			$line = $this->createServerAliasLine();
+		}
 
-		// Do the ssl cert only if the ipaddress exists. Now when we migrate, 
+		$token = "###serveralias###";
 
-		$string .= "\n\n<IfModule mod_ssl.c>\n";
+		$string .= str_replace($token, $line, $syncto);
 
-		if ($this->getServerIp()) {
-			$iplist = $this->getSslIpList();
-			foreach($iplist as $ip) {
+		$string .= $this->middlepart($web_home, $domainname, $dirp); 
+		$string .= $this->AddOpenBaseDir();
+		$string .= $this->endtag();
+
+		lxfile_mkdir($this->main->getFullDocRoot());
+
+		if($this->main->priv->isOn('ssl_flag')) {
+
+			// Do the ssl cert only if the ipaddress exists. Now when we migrate, 
+
+			$string .= "\n\n<IfModule mod_ssl.c>\n";
+
+			if ($this->getServerIp()) {
+				$iplist = $this->getSslIpList();
+				foreach($iplist as $ip) {
+					$string .= "#### ssl virtualhost per ip\n";
+					$ssl_cert = $this->sslsysnc($ip);
+					if (!$ssl_cert) { continue; }
+					$string .= "<VirtualHost \\\n";
+				//	$string .= "\t$ip:80\\\n";
+					$string .= "\t$ip:443\\\n";
+					$string .= "\t\t>\n\n";
+
+					$syncto = $this->syncToPort("443", $cust_log, $err_log);
+
+					if ($c === 1){
+						$syncto = str_replace(" {$domainname}", " wildcards.{$domainname}", $syncto);
+						$line  = $wcline;
+					}
+					else {
+						$line = $this->createServerAliasLine();
+					}
+
+					$token = "###serveralias###";
+
+					$string .= str_replace($token, $line, $syncto);
+
+				//	if($this->main->priv->isOn('ssl_flag')) {
+				//		$string .= "\t<IfModule mod_ssl.c>\n";
+						$string .= $this->sslsysnc($ip);
+				//		$string .= "\t</IfModule>\n\n";
+				//	}
+					$string .= $this->middlepart($web_home, $domainname, $dirp); 
+					$string .= $this->AddOpenBaseDir();
+					$string .= $this->endtag();
+					$string .= "#### ssl virtualhost per ip $ip end\n\n";
+				}
+			} else {
 				$string .= "#### ssl virtualhost per ip\n";
-				$ssl_cert = $this->sslsysnc($ip);
-				if (!$ssl_cert) { continue; }
 				$string .= "<VirtualHost \\\n";
-			//	$string .= "\t$ip:80\\\n";
-				$string .= "\t$ip:443\\\n";
+			//	$string .= "{$this->createVirtualHostiplist("80")}";
+				$string .= "{$this->createVirtualHostiplist("443")}";
 				$string .= "\t\t>\n\n";
-				$string .= $this->syncToPort("443", $cust_log, $err_log);
+
+				$syncto = $this->syncToPort("443", $cust_log, $err_log);
+
+				if ($c === 1){
+					$syncto = str_replace(" {$domainname}", " wildcards.{$domainname}", $syncto);
+					$line  = $wcline;
+				}
+				else {
+					$line = $this->createServerAliasLine();
+				}
+
+				$token = "###serveralias###";
+
+				$string .= str_replace($token, $line, $syncto);
+
 			//	if($this->main->priv->isOn('ssl_flag')) {
 			//		$string .= "\t<IfModule mod_ssl.c>\n";
-					$string .= $this->sslsysnc($ip);
+					$string .= $this->sslsysnc(null);
 			//		$string .= "\t</IfModule>\n\n";
 			//	}
 				$string .= $this->middlepart($web_home, $domainname, $dirp); 
 				$string .= $this->AddOpenBaseDir();
 				$string .= $this->endtag();
-				$string .= "#### ssl virtualhost per ip $ip end\n\n";
+				$string .= "#### ssl virtualhost per ip end\n";
 			}
-		} else {
-			$string .= "#### ssl virtualhost per ip\n";
-			$string .= "<VirtualHost \\\n";
-		//	$string .= "{$this->createVirtualHostiplist("80")}";
-			$string .= "{$this->createVirtualHostiplist("443")}";
-			$string .= "\t\t>\n\n";
-			$string .= $this->syncToPort("443", $cust_log, $err_log);
-		//	if($this->main->priv->isOn('ssl_flag')) {
-		//		$string .= "\t<IfModule mod_ssl.c>\n";
-				$string .= $this->sslsysnc(null);
-		//		$string .= "\t</IfModule>\n\n";
-		//	}
-			$string .= $this->middlepart($web_home, $domainname, $dirp); 
-			$string .= $this->AddOpenBaseDir();
-			$string .= $this->endtag();
-			$string .= "#### ssl virtualhost per ip end\n";
-		}
 
-		$string .= "</IfModule>\n\n\n";
-	}
+			$string .= "</IfModule>\n\n\n";
+		}
 
 /*
-	// --- using Sqlite not work here, so make __var_mmaillist in weblib.php
+		// --- using Sqlite not work here, so make __var_mmaillist in weblib.php
 
-	$sq = new Sqlite(null, 'mmail');
+		$sq = new Sqlite(null, 'mmail');
 
 
-//	$res = $sq->getRowsWhere("nname = '{$domainname}'");
+//		$res = $sq->getRowsWhere("nname = '{$domainname}'");
 
-	$res = $sq->rl_query("SELECT * WHERE nname = '{$domainname}'");
+		$res = $sq->rl_query("SELECT * WHERE nname = '{$domainname}'");
 
-	$string .= web__apache::getCreateWebmail($res);
+		$string .= web__apache::getCreateWebmail($res);
 */
+		if ($c === 1) {
+			$v_file = "/home/apache/conf/wildcards/{$domainname}.conf";
+			lfile_put_contents($v_file, $string);
+		}
+		else {
+			$v_file = "/home/apache/conf/domains/{$domainname}.conf";
 
-	$mmaillist = $this->main->__var_mmaillist;
+			$mmaillist = $this->main->__var_mmaillist;
 
-	foreach($mmaillist as $m) {
-		if ($m['nname'] === $domainname) {
-			$list = $m;
-			break;
+			foreach($mmaillist as $m) {
+				if ($m['nname'] === $domainname) {
+					$list = $m;
+					break;
+				}
+			}
+
+			// --- for the first time domain create
+			if (!isset($list)) {
+			$list = array('nname' => $domainname, 'parent_clname' => 'domain-'.$domainname, 'webmailprog' => '', 'webmail_url' => '', 'remotelocalflag' => 'local');
+			}
+
+			$string .= web__apache::getCreateWebmail(array($list));
+
+			lfile_put_contents($v_file, $string);
+
+			$this->setAddon();		
 		}
 	}
-
-	// --- for the first time domain create
-	if (!isset($list)) {
-		$list = array('nname' => $domainname, 'parent_clname' => 'domain-'.$domainname, 'webmailprog' => '', 'webmail_url' => '', 'remotelocalflag' => 'local');
-	}
-
-	$string .= web__apache::getCreateWebmail(array($list));
-
-	lfile_put_contents($v_file, $string);
-
-	$this->setAddon();
 }
 
 // function getAddon()
@@ -474,7 +553,7 @@ function setAddon()
 			$string .= "<VirtualHost \\\n{$this->createVirtualHostiplist("80")}";
 			$string .= "{$this->createVirtualHostiplist("443")}";
 			$string .= "\t\t>\n\n";
-			$string .= "\tServername {$v->nname}\n";
+			$string .= "\tServerName {$v->nname}\n";
 			$string .= "\tServerAlias \\\n\t\twww.{$v->nname}\n\n";
 			$dst = "{$this->main->nname}/{$v->destinationdir}/";
 			$dst = remove_extra_slash($dst);
@@ -493,14 +572,14 @@ function setAddon()
 		$string .= "<VirtualHost \\\n{$this->createVirtualHostiplist("80")}";
 		$string .= "{$this->createVirtualHostiplist("443")}";
 		$string .= "\t\t>\n\n";
-		$string .= "\tServername {$this->main->nname}\n\n";
+		$string .= "\tServerName {$this->main->nname}\n\n";
 		$string .= "\tRedirect / http://www.{$this->main->nname}/\n\n";
 		$string .= "</VirtualHost>\n\n";
 
 		$string .= "<IfModule mod_ssl.c>\n";
 		$string .= "\t<VirtualHost {$this->createVirtualHostiplist("443")}";
 		$string .= "\t\t>\n\n";
-		$string .= "\t\tServername {$this->main->nname}\n\n";
+		$string .= "\t\tServerName {$this->main->nname}\n\n";
 		$string .= "\t\tRedirect / https://www.{$this->main->nname}\n\n";
 		$string .= "\t</VirtualHost>\n";
 		$string .= "<IfModule mod_ssl.c>\n\n\n";
@@ -519,32 +598,37 @@ function setAddon()
 
 function createCpConfig()
 {
-
-//	$vstring = web__apache::getVipString();
 	$vstring = web__apache::staticcreateVirtualHostiplist('80');
 	$sstring = web__apache::staticcreateVirtualHostiplist('443');
 
-	$string = null;
-//	$string .= "<VirtualHost \\\n{$vstring}";
-	$string .= "<VirtualHost \\\n{$vstring}{$sstring}"; 
-	$string .= "\t\t>\n\n";
-	$string .= "\tServerName cp\n";
-	$string .= "\tServerAlias cp.*\n\n";
-//	$string .= "\tDocumentRoot /home/kloxo/httpd/script/cp\n\n";
-	$string .= "\tDocumentRoot /home/kloxo/httpd/cp/\n";
-/*
-	$string .= "\t<IfModule mod_suphp.c>\n";
-	$string .= "\t\tSuPhp_UserGroup lxlabs lxlabs\n";
-	$string .= "\t</Ifmodule>\n";
-*/
-	$string .= web__apache::staticgetSuexecString('lxlabs');
+	$list = array("default" => "_default.conf", "cp" => "cp_config.conf", "disable" => "disable.conf");
 
-	$string .= "</VirtualHost>\n\n";
+	foreach($list as $config => $file) {
+		$string = null;
+		$string .= "<VirtualHost \\\n{$vstring}{$sstring}"; 
+		$string .= "\t\t>\n\n";
+		$string .= "\tServerName {$config}\n";
+		$string .= "\tServerAlias {$config}.*\n\n";
+		$string .= "\tDocumentRoot /home/kloxo/httpd/{$config}/\n";
 
-//	$file = "/etc/httpd/conf/kloxo/cp_config.conf";
-	$file = "/home/apache/conf/defaults/cp_config.conf";
+		if ($config === "default") {
+			$string .= "\n\t<Ifmodule mod_userdir.c>\n";
+			//-- to make sure http://ip/~client work because maybe 'disabled' on httpd.conf
+			//-- not work with exist * on httpd version 2.2.20/2.2.21
+		//	$string .= "\t\tUserDir enabled *\n";
+			$string .= "\t\tUserDir enabled\n";
+			$string .= "\t\tUserDir \"public_html\"\n";
+			$string .= "\t</Ifmodule>\n";
+		}
 
-	lfile_put_contents($file, $string);
+		$string .= web__apache::staticgetSuexecString('lxlabs');
+		$string .= "</VirtualHost>\n\n";
+
+		$fullfile = "/home/apache/conf/defaults/{$file}";
+
+		lfile_put_contents($fullfile, $string);
+		system("chown lxlabs:lxlabs {$fullfile}");
+	}
 
 	createRestartFile('apache');
 }
@@ -958,13 +1042,19 @@ static function staticgetSuexecString($username, $nname = null)
 	$string .= "\t\tAssignUserId {$username} {$username}\n";
 	$string .= "\t</IfModule>\n\n";
 	// --- httpd-itk - end
-
+/*
 	// --- mod_fastcgi - begin - issue #567
 	$string .= "\t<IfModule mod_fastcgi.c>\n";
 	$string .= "\t\t## TODO\n";
 	$string .= "\t</IfModule>\n\n";
 	// --- mod_fastcgi - end
 
+	// --- mod_fcgi - begin - issue #567
+	$string .= "\t<IfModule mod_fcgi.c>\n";
+	$string .= "\t\t## TODO\n";
+	$string .= "\t</IfModule>\n\n";
+	// --- mod_fcgi - end
+*/
 	return $string;
 }
 
@@ -1052,7 +1142,9 @@ function syncToPort($port, $cust_log, $err_log, $frontpage = false)
 		$string .= "\tServerName {$this->main->nname}\n" ;
 	}
 
-	$string .= $this->createServerAliasLine();
+//	$string .= $this->createServerAliasLine();
+	$string .= "###serveralias###";
+
 	$domname = $this->main->nname;
 	
 	//$string .= $this->hotlink_protection();
@@ -1083,10 +1175,8 @@ function syncToPort($port, $cust_log, $err_log, $frontpage = false)
 	}
 	$string .= "\tAlias /__kloxo /home/{$this->main->customer_name}/kloxoscript/\n\n";
 
-/* --- change to cp_config.conf
-	$string .= "\tRedirect /kloxononssl http://cp.{$this->main->nname}:{$this->main->__var_nonsslport}\n";
 	$string .= "\tRedirect /kloxo https://cp.{$this->main->nname}:{$this->main->__var_sslport}\n";
---- */
+	$string .= "\tRedirect /kloxononssl http://cp.{$this->main->nname}:{$this->main->__var_nonsslport}\n\n";
 
 	$string .= "\tRedirect /webmail http://webmail.{$this->main->nname}\n\n";
 	$string .= "\t<Directory /home/httpd/{$domname}/kloxoscript>\n";
@@ -1220,6 +1310,9 @@ function createServerAliasLine()
 		$string .= "\tServerAlias \\\n\t\twww.{$this->main->nname}";
 	}
 	foreach($this->main->server_alias_a as $val) {
+		// issue 674 - wildcard and subdomain problem
+		if ($val->nname === '*') { continue; }
+
 //		$string .= " {$val->nname}.{$this->main->nname}";
 //		$string .= "\tServerAlias {$val->nname}.{$this->main->nname}\n";
 		$string .= "\\\n\t\t{$val->nname}.{$this->main->nname}";
@@ -1343,30 +1436,6 @@ static function createWebDefaultConfig()
 		$webmaildefpath = $webmaildef."/";
 	}
 
-
-	$fdata .= "<VirtualHost \\\n";
-	$fdata .= web__apache::staticcreateVirtualHostiplist("80");
-	$fdata .= web__apache::staticcreateVirtualHostiplist("443");
-	$fdata .= "\t\t>\n\n";
-
-	$defaultdata  = $fdata;
-	$defaultdata .= "\tServerName default\n";
-	$defaultdata .= "\tServerAlias default.*\n\n";
-	$defaultdata .= "\tDocumentRoot {$sgbl->__path_kloxo_httpd_root}/default/\n\n";
-	$defaultdata .= "\t<Ifmodule mod_userdir.c>\n";
-	//-- to make sure http://ip/~client work because maybe 'disabled' on httpd.conf
-	//-- not work with exist * on httpd version 2.2.20/2.2.21
-//	$defaultdata .= "\t\tUserDir enabled *\n";
-	$defaultdata .= "\t\tUserDir enabled\n";
-	$defaultdata .= "\t\tUserDir \"public_html\"\n";
-	$defaultdata .= "\t</Ifmodule>\n\n";
-	$defaultdata .= "</VirtualHost>\n\n";
-
-//	$defaultfile = "$sgbl->__path_apache_path/kloxo/default.conf";
-	$defaultfile = "/home/apache/conf/defaults/_default.conf";
-
-	lfile_put_contents($defaultfile, $defaultdata);
-
 	$webdata  = null;
 	$webdata .= "<VirtualHost \\\n";
 	$webdata .= web__apache::staticcreateVirtualHostiplist("80");
@@ -1385,24 +1454,6 @@ static function createWebDefaultConfig()
 
 
 	lfile_put_contents($webmailfile, $webdata);
-
-	$cpdata  = null;
-	$cpdata .= "<VirtualHost \\\n";
-	$cpdata .= web__apache::staticcreateVirtualHostiplist("80");
-	$cpdata .= web__apache::staticcreateVirtualHostiplist("443");
-	$cpdata .= "\t\t>\n\n";
-	$cpdata .= "\tServerName cp\n";
-	$cpdata .= "\tServerAlias cp.*\n\n";
-	$cpdata .= "\tDocumentRoot {$sgbl->__path_kloxo_httpd_root}/cp/\n";
-
-	$cpdata .= web__apache::staticgetSuexecString('lxlabs');
-
-	$cpdata .= "</VirtualHost>\n\n";
-
-//	$cpfile = "__path_real_etc_root/httpd/conf/kloxo/cp_config.conf";
-	$cpfile = "/home/apache/conf/defaults/cp_config.conf";
-
-	lfile_put_contents($cpfile, $cpdata);
 
 	createRestartFile("apache");
 }

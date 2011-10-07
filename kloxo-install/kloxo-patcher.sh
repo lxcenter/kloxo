@@ -254,7 +254,7 @@ function kloxo_check_version () {
 if [ "$#" == 0 ] ; then
 	echo
 	echo " -------------------------------------------------------------------"
-	echo "  format: sh $0 --type=[]"
+	echo "  format: sh $0 --type=<master/slave>"
 	echo " -------------------------------------------------------------------"
 	echo "  --type - master or slave"
 	echo

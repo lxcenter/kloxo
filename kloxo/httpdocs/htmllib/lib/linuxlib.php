@@ -83,7 +83,9 @@ function os_set_quota($username, $disk)
 		$disk = 0;
 	}
 
-	$inode = $disk * 500;
+	// Issue #680 - Too high inode count in Kloxo quota - set 0 that unlimited
+//	$inode = $disk * 500;
+	$inode = 0;
 	lxshell_return("setquota", "-u", $username, $disk, $disk, $inode, $inode, "-a");
 }
 

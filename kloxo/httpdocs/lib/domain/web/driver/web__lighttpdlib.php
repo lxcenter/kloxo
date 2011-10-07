@@ -10,7 +10,9 @@ static function uninstallMe()
 {
 	lxshell_return("service",  "lighttpd", "stop");
 	lxshell_return("rpm", "-e", "--nodeps", "lighttpd");
-	lunlink("/etc/init.d/lighttpd");
+	if (file_exists("/etc/init.d/lighttpd")) {
+		lunlink("/etc/init.d/lighttpd");
+	}
 }
 
 static function installMe()
@@ -32,9 +34,16 @@ static function installMe()
 	lxfile_mkdir("/home/lighttpd/conf/domains");
 	lxfile_mkdir("/home/lighttpd/conf/redirects");
 	lxfile_mkdir("/home/lighttpd/conf/webmails");
+	lxfile_mkdir("/home/lighttpd/conf/wildcards");
 
-	copy("/usr/local/lxlabs/kloxo/file/lighttpd/lighttpd.conf", "/etc/lighttpd/lighttpd.conf");
-	copy("/usr/local/lxlabs/kloxo/file/lighttpd/~lxcenter.conf", "/etc/lighttpd/conf.d/~lxcenter.conf");
+	lxfile_cp("/usr/local/lxlabs/kloxo/file/lighttpd/lighttpd.conf", "/etc/lighttpd/lighttpd.conf");
+
+	$cver = "###version0-4###";
+	$fver = file_get_contents("/etc/lighttpd/conf.d/~lxcenter.conf");
+	
+	if(stristr($fver, $cver) === FALSE) {
+		lxfile_cp("/usr/local/lxlabs/kloxo/file/lighttpd/~lxcenter.conf", "/etc/lighttpd/conf.d/~lxcenter.conf");
+	}
 
 //	lxfile_cp("../file/lighttpd/conf/kloxo/kloxo.conf", "/etc/lighttpd/conf/kloxo/kloxo.conf");
 
@@ -133,7 +142,7 @@ function updateMainConfFile()
 //	$virtual_file = "$sgbl->__path_lighty_path/conf/kloxo/virtualhost.conf";
 //	$init_file = "$sgbl->__path_lighty_path/conf/kloxo/init.conf";
 	$virtual_file = "/home/lighttpd/conf/defaults/stats.conf";
-	$init_file = "/home/lighttpd/conf/defaults/init.conf";
+//	$init_file = "/home/lighttpd/conf/defaults/init.conf";
 
 	$vdomlist = $this->main->__var_vdomain_list; 
 	$iplist = $this->main->__var_ipaddress;
@@ -142,6 +151,8 @@ function updateMainConfFile()
 	$fdata = null;
 
 	$vdomlist = merge_array_object_not_deleted($vdomlist, $this->main);
+
+	lfile_put_contents($virtual_file, $fdata);
 
 /*
 	foreach((array) $vdomlist as $dom) {
@@ -160,18 +171,19 @@ function updateMainConfFile()
 		if (lxfile_exists("/home/lighttpd/conf/domains/{$dom['nname']}.conf")) {
 			rename("/home/lighttpd/conf/domains/{$dom['nname']}.conf", "/home/lighttpd/conf/domains/{$dom['nname']}.conf.active");
 			rename("/home/lighttpd/conf/redirects/{$dom['nname']}.conf", "/home/lighttpd/conf/redirects/{$dom['nname']}.conf.active");
+			rename("/home/lighttpd/conf/wildcards/{$dom['nname']}.conf", "/home/lighttpd/conf/wildcards/{$dom['nname']}.conf.active");
 		}
 	}
 
-	passthru("rm -rf /home/lighttpd/conf/domains/*.conf");
-	passthru("rm -rf /home/lighttpd/conf/redirects/*.conf");
+	system("rm -rf /home/lighttpd/conf/domains/*.conf");
+	system("rm -rf /home/lighttpd/conf/redirects/*.conf");
+	system("rm -rf /home/lighttpd/conf/wildcards/*.conf");
 
-	passthru("rename .conf.active .conf /home/lighttpd/conf/domains/*.conf.active");
-	passthru("rename .conf.active .conf /home/lighttpd/conf/redirects/*.conf.active");
+	system("rename .conf.active .conf /home/lighttpd/conf/domains/*.conf.active");
+	system("rename .conf.active .conf /home/lighttpd/conf/redirects/*.conf.active");
+	system("rename .conf.active .conf /home/lighttpd/conf/wildcards/*.conf.active");
 
 	//--- delete unlisted domains config - end
-
-	lfile_put_contents($virtual_file, $fdata);
 
 //	$this->updateIpConfFile();
 }
@@ -297,102 +309,131 @@ function createConffile()
 	$domainname = $this->main->nname;
 	$log_path   = "$web_home/{$this->main->nname}/stats"; 
 //	$v_file     = "__path_lighty_path/conf/kloxo/lighttpd.{$this->main->nname}" ;
-	$v_file     = "/home/lighttpd/conf/domains/{$this->main->nname}.conf" ;
+//	$v_file     = "/home/lighttpd/conf/domains/{$this->main->nname}.conf" ;
 
-	$string = null;
+//	$aliasstring = $this->createServerAliasLine();
 
-	$dirp = $this->main->__var_dirprotect;
-	
-	$string = null;
-	$aliasstring = $this->createServerAliasLine();
+	$v_file = "/home/lighttpd/conf/wildcards/{$domainname}.conf";
+	$string = "### No * (wildcards) for '{$domainname}' ###\n\n\n";
+	lfile_put_contents($v_file, $string);
 
-/*
-	if (0 && $this->getServerIp()) {
-		foreach($this->main->__var_domainipaddress as $ip => $dom) {
-			if ($this->main->nname !== $dom) { continue ; }
-			$string .= "\$SERVER[\"socket\"] == \"$ip:80\" {\n";
-			$string .= $this->syncToPort("80", "www");
-			$string .= $this->middlepart($domainname, $dirp); 
-			$string .= "}\n";
-		}
-	} else {
-*/
-	$string .= "\$HTTP[\"host\"] =~ \"$aliasstring\" {\n";
-	$string .= $this->syncToPort("80", "www");
-	$string .= $this->middlepart($domainname, $dirp); 
-	$string .= "}\n\n";
+	// must set here to prepend if server_alias_a empty
+	$count = 1;
 
-	lxfile_mkdir($this->main->getFullDocRoot());
-
-	if ($this->getServerIp()) {
-
-		foreach($this->main->__var_domainipaddress as $ip => $dom) {
-			if ($this->main->nname !== $dom) { continue ; }
-
-			foreach($this->main->__var_ipssllist as $iip) {
-				if ($iip['ipaddr'] === $ip) {
-					break;
-				}
-			}
-			$string .= "\$SERVER[\"socket\"] == \"$ip:443\" {\n";
-			$string .= $this->syncToPort("443", "www");
-			$string .= $this->middlepart($domainname, $dirp); 
-			$string .= $this->getSslCert($iip);
-			$string .= "}\n";
-		}
-	}
-
-/*
-	// --- using Sqlite not work here, so make __var_mmaillist in weblib.php
-
-	$sq = new Sqlite(null, 'mmail');
-
-
-//	$res = $sq->getRowsWhere("nname = '{$domainname}'");
-
-	$res = $sq->rl_query("SELECT * WHERE nname = '{$domainname}'");
-
-	$string .= web__lighttpd::getCreateWebmail($res);
-*/
-
-	$mmaillist = $this->main->__var_mmaillist;
-
-	foreach($mmaillist as $m) {
-		if ($m['nname'] === $domainname) {
-			$list = $m;
+	foreach($this->main->server_alias_a as $val) {
+		// issue 674 - wildcard and subdomain problem
+		if ($val->nname === '*') { 
+			$count = 2;
 			break;
 		}
 	}
 
-	// --- for the first time domain create
-	if (!isset($list)) {
-		$list = array('nname' => $domainname, 'parent_clname' => 'domain-'.$domainname, 'webmailprog' => '', 'webmail_url' => '', 'remotelocalflag' => 'local');
-	}
+	for ($c = 0 ; $c < $count ; $c++) {
+		$string = null;
 
-	$string .= web__lighttpd::getCreateWebmail(array($list));
+		$dirp = $this->main->__var_dirprotect;
+/*
+		if (0 && $this->getServerIp()) {
+			foreach($this->main->__var_domainipaddress as $ip => $dom) {
+				if ($this->main->nname !== $dom) { continue ; }
+				$string .= "\$SERVER[\"socket\"] == \"$ip:80\" {\n";
+				$string .= $this->syncToPort("80", "www");
+				$string .= $this->middlepart($domainname, $dirp); 
+				$string .= "}\n";
+			}
+		} else {
+*/
+		if ($c === 1) {
+			// issue 674 - wildcard and subdomain problem
+			// not include content of $this->createServerAliasLine() because make too long
+			// that mean overlapp declare
+		//	$string .= "\$HTTP[\"host\"] =~ \"{$domainname}\" {\n";
+			$string .= "\$HTTP[\"host\"] =~ \"^(?!(cp|webmail|default|disable).{$domainname})\" {\n";
 
-	lfile_put_contents($v_file, $string);
+		}
+		else {
+			$line = $this->createServerAliasLine();
+			$string .= "\$HTTP[\"host\"] =~ \"{$line}\" {\n";
+		}
+
+		$string .= $this->syncToPort("80", "www");
+		$string .= $this->middlepart($domainname, $dirp); 
+		$string .= "}\n\n";
+
+		lxfile_mkdir($this->main->getFullDocRoot());
+
+		if ($this->getServerIp()) {
+			foreach($this->main->__var_domainipaddress as $ip => $dom) {
+				if ($this->main->nname !== $dom) { continue ; }
+
+				foreach($this->main->__var_ipssllist as $iip) {
+					if ($iip['ipaddr'] === $ip) {
+						break;
+					}
+				}
+				$string .= "\$SERVER[\"socket\"] == \"$ip:443\" {\n";
+				$string .= $this->syncToPort("443", "www");
+				$string .= $this->middlepart($domainname, $dirp); 
+				$string .= $this->getSslCert($iip);
+				$string .= "}\n";
+			}
+		}
 
 /*
-	$tmp = lx_tmp_file("light.{$this->main->nname}");
-	lfile_put_contents($tmp, $string);
+		// --- using Sqlite not work here, so make __var_mmaillist in weblib.php
 
-	$res = lxshell_return("lighttpd", "-t", "-f", $tmp);
+		$sq = new Sqlite(null, 'mmail');
 
-	if ($res && $sgbl->isDebug()) {
-		lxfile_cp($tmp, "/home/root/lighttpd_last_error");
-	}
 
-	lunlink($tmp);
+//		$res = $sq->getRowsWhere("nname = '{$domainname}'");
 
-	if ($res) {
-		throw new lxException("lighttpd_configuration_check_failed", '', "{$this->main->nname}: $global_shell_error");
-	}
+		$res = $sq->rl_query("SELECT * WHERE nname = '{$domainname}'");
+
+		$string .= web__lighttpd::getCreateWebmail($res);
 */
+		if ($c === 1) {
+			$v_file = "/home/lighttpd/conf/wildcards/{$this->main->nname}.conf";
+			lfile_put_contents($v_file, $string);
+		}
+		else {
+			$v_file = "/home/lighttpd/conf/domains/{$this->main->nname}.conf";
+			$mmaillist = $this->main->__var_mmaillist;
 
-	lfile_put_contents($v_file, $string);
+			foreach($mmaillist as $m) {
+				if ($m['nname'] === $domainname) {
+					$list = $m;
+					break;
+				}
+			}
 
-	$this->setAddon();
+			// --- for the first time domain create
+			if (!isset($list)) {
+				$list = array('nname' => $domainname, 'parent_clname' => 'domain-'.$domainname, 'webmailprog' => '', 'webmail_url' => '', 'remotelocalflag' => 'local');
+			}
+
+			$string .= web__lighttpd::getCreateWebmail(array($list));
+
+			lfile_put_contents($v_file, $string);
+
+/*
+			$tmp = lx_tmp_file("light.{$this->main->nname}");
+			lfile_put_contents($tmp, $string);
+
+			$res = lxshell_return("lighttpd", "-t", "-f", $tmp);
+
+			if ($res && $sgbl->isDebug()) {
+				lxfile_cp($tmp, "/home/root/lighttpd_last_error");
+			}
+
+			lunlink($tmp);
+
+			if ($res) {
+				throw new lxException("lighttpd_configuration_check_failed", '', "{$this->main->nname}: $global_shell_error");
+			}
+*/
+			$this->setAddon();
+		}
+	}
 }
 
 // function getAddon()
@@ -666,12 +707,10 @@ function getDocumentRoot($subweb)
 	$string .= "\talias.url  = (\"/__kloxo\" => \"/home/{$this->main->customer_name}/kloxoscript\")\n\n";
 	$string .= "\turl.redirect  = (\"/webmail\" => \"http://webmail.$domname\")\n";
 
-/* --- change to cp. (cp_config.conf)
 	if ($this->main->nname !== 'lxlabs.com') {
 		$string .= "\turl.redirect += (\"^kloxo$\" => \"https://cp.$domname:{$this->main->__var_sslport}\")\n";
 		$string .= "\turl.redirect += (\"/kloxononssl\" => \"http://cp.$domname:{$this->main->__var_nonsslport}\")\n";
 	}
---- */
 
 	if ($this->main->__var_statsprog === 'awstats') {
 		$string .= "\turl.redirect += (\"/stats/\" => \"http://$domname/awstats/awstats.pl?config=$domname\")\n";
@@ -871,7 +910,7 @@ function createServerAliasLine()
 			$iplist[] = $ip;
 		}
 	}
-
+/*
 	if (array_search_bool('*', $list)) {
 		if ($iplist) {
 			$ip = implode("|", $iplist);
@@ -880,7 +919,7 @@ function createServerAliasLine()
 			return "{$this->main->nname}";
 		}
 	}
-
+*/
 	if ($list) foreach($list as &$__l) {
 		$__l = "$__l.{$this->main->nname}";
 	}
@@ -902,6 +941,10 @@ function createServerAliasLine()
 	$list = lx_array_merge(array($list, $iplist));
 
 	$string = implode("|", $list);
+
+	// issue 674 - wildcard and subdomain problem
+	// remove for * (wildcards)
+	$string = str_replace("|*.{$this->main->nname}", "", $string);
 
 	return "^($string)";
 }
@@ -1001,26 +1044,9 @@ static function createWebDefaultConfig($iplist = null)
 	$webdata .= "\tserver.document-root = \"$sgbl->__path_kloxo_httpd_root/webmail/$webmaildefpath\"\n";
 	$webdata .= "\tserver.errorlog = \"/home/kloxo/httpd/lighttpd/error.log\"\n";
 	$webdata .= "\tcgi.assign = ( \".php\" => \"/home/httpd/nobody.sh\" )\n\n";
-	$webdata .= "}\n\n";  
+	$webdata .= "}\n\n\n";  
 
-	$webtotal = "$webdata\n";
-
-	lfile_put_contents($webfile, $webtotal);
-
-//	$cpfile = "__path_lighty_path/conf/kloxo/cp_config.conf";
-	$cpfile = "/home/lighttpd/conf/defaults/cp_config.conf";
-
-	$cpdata = null;
-
-	$cpdata .= "\$HTTP[\"host\"] =~ \"^cp.*\" { \n\n";
-	$cpdata .= "\tserver.document-root = \"$sgbl->__path_kloxo_httpd_root/cp/\"\n";
-	$cpdata .= "\tserver.errorlog = \"/home/kloxo/httpd/lighttpd/error.log\"\n";
-	$cpdata .= "\tcgi.assign = ( \".php\" => \"/home/httpd/nobody.sh\" )\n\n";
-	$cpdata .= "}\n\n";  
-
-	$cptotal = "$cpdata\n";
-
-	lfile_put_contents($cpfile, $cptotal);
+	lfile_put_contents($webfile, $webdata);
 
 	createRestartFile("lighttpd");
 }
@@ -1108,22 +1134,24 @@ function fullUpdate()
 
 function createCpConfig()
 {
-	// TODO:
 	global $gbl, $sgbl, $login, $ghtml; 
 
-	$file = "/home/lighttpd/conf/defaults/cp_config.conf";
+	$list = array("default" => "_default.conf", "cp" => "cp_config.conf", "disable" => "disable.conf");
 
-	$webdata = null;
+	foreach($list as $config => $file) {
+		$webdata  = null;
+		$webdata .= "\$HTTP[\"host\"] =~ \"^{$config}.*\" { \n\n";
+		$webdata .= "\tserver.document-root = \"$sgbl->__path_kloxo_httpd_root/{$config}/\"\n";
+		$webdata .= "\tserver.errorlog = \"/home/lighttpd/logs/error.log\"\n";
+		$webdata .= "\tcgi.assign = ( \".php\" => \"/home/httpd/nobody.sh\" )\n\n";
+		$webdata .= "}\n\n\n";
 
-	$webdata .= "\$HTTP[\"host\"] =~ \"^cp.*\" { \n\n";
-	$webdata .= "\tserver.document-root = \"$sgbl->__path_kloxo_httpd_root/cp/\"\n";
-	$webdata .= "\tserver.errorlog = \"/home/lighttpd/logs/error.log\"\n";
-	$webdata .= "\tcgi.assign = ( \".php\" => \"/home/httpd/nobody.sh\" )\n\n";
-	$webdata .= "}\n\n";  
+		$fullfile = "/home/lighttpd/conf/defaults/{$file}";
 
-	$total = "$webdata\n";
+		lfile_put_contents($fullfile, $webdata);
 
-	lfile_put_contents($file, $total);
+		system("chown lxlabs:lxlabs {$fullfile}");
+	}
 
 	createRestartFile("lighttpd");
 }

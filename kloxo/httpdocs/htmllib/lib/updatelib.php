@@ -212,10 +212,11 @@ function doUpdates()
 
 	fix_self_ssl();
 
-	setFreshClam();
-
-	installinstallapp();
-
+	// move to updatecleanup() - don't change the sort!
+	// minimize multilog issue
+//	installInstallApp();
+//	setFreshClam();
+//	changeMailSoftlimit();
 }
 
 // Remark - some functions move to lib because os_updateApplicableToSlaveToo() inside linuxproglib.php

@@ -28,8 +28,10 @@ function lxins_main()
 	$opt = parse_opt($argv);
 	$dir_name=dirname(__FILE__);
 	$installtype = $opt['install-type'];
-	$dbroot = isset($opt['db-rootuser'])? $opt['db-rootuser']: "root";
-	$dbpass = isset($opt['db-rootpassword'])? $opt['db-rootpassword']: "";
+//	$dbroot = isset($opt['db-rootuser'])? $opt['db-rootuser']: "root";
+//	$dbpass = isset($opt['db-rootpassword'])? $opt['db-rootpassword']: "";
+	$dbroot = "root";
+	$dbpass = "";
 	$osversion = find_os_version();
 	$arch = `arch`;
 	$arch = trim($arch);
@@ -220,7 +222,7 @@ function lxins_main()
 	}
 
 	// --- remove all temporal flags because the end of install
-	print("Remove Kloxo install flags...\n");
+	print("\nRemove Kloxo install flags...\n");
 	system("rm -rf /var/cache/kloxo/*-version");
 	system("rm -rf /var/cache/kloxo/kloxo-install-*.flg");
 

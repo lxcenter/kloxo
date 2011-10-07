@@ -588,7 +588,15 @@ static function verify($var, $val)
 
 function getZiptype()
 {
-	return "tar";
+	// Issue #671 - Fixed backup-restore issue
+	// change to tgz for default that make less space especially temp process
+
+	if (file_exists("/usr/local/lxlabs/kloxo/etc/flag/backup_compress_disabled.flg")) {
+		return "tar";
+	}
+	else {
+		return "tgz";
+	}
 }
 
 

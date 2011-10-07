@@ -6,7 +6,7 @@
 if [ "$#" == 0 ] ; then
 	echo
 	echo " ------------------------------------------------------------"
-	echo "  format: sh $0 --select=defaults/domains/all"
+	echo "  format: sh $0 --select=<defaults/domains/all>"
 	echo " ------------------------------------------------------------"
 	echo " --select -"
 	echo "   defaults: only copy to cp/default/disable/webmail pages"

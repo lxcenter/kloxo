@@ -7549,7 +7549,7 @@ class HtmlLib
 		if ($sgbl->isBlackBackground()) {
 			return;
 		}
-		print("<table cellpadding=0  align=center cellspacing=0><tr><td width=$width align=right><img src='$a/tl.gif' align=center></td ><td style='background: url($a/dot.gif) 0 0 repeat-x'></td ><td width=$width align=left><img src='$a/tr.gif' align=center></td > </tr><tr><td height=50px style='background: url($a/dot.gif) 90% 0 repeat-y;'></td><td align=left>");
+		print("<table cellpadding=0  align=center cellspacing=0 width=\"100%\"><tr><td width=$width align=right><img src='$a/tl.gif' align=center></td ><td style='background: url($a/dot.gif) 0 0 repeat-x'></td ><td width=$width align=left><img src='$a/tr.gif' align=center></td > </tr><tr><td height=50px style='background: url($a/dot.gif) 90% 0 repeat-y;'></td><td align=left>");
 	}
 
 	function print_curvy_table_end($width = "100")

@@ -153,6 +153,7 @@ function findOperatingSystem($type = null)
 		}
 		return $ret;
 	}
+
 	if (file_exists("/etc/fedora-release")) {
 		$ret['os'] = 'fedora';
 		$ret['version'] = file_get_contents("/etc/fedora-release");
@@ -163,6 +164,12 @@ function findOperatingSystem($type = null)
 		$ret['pointversion'] = find_os_pointversion();
 	}
 
+/* -- not work because no driver for centos inside /usr/local/lxlabs/kloxo/file/conf
+
+	$ret['os'] = find_os_distro();
+	$ret['version'] = find_os_release();
+	$ret['pointversion'] = find_os_pointversion();
+*/
 	if (lxfile_exists("__path_program_etc/install_xen") || lxfile_exists("/proc/xen")) {
 		$ret['vpstype'] = "xen";
 		$ret['xenlocation'] = vg_complete();
@@ -171,7 +178,18 @@ function findOperatingSystem($type = null)
 	if ($type) {
 		return $ret[$type];
 	}
+
 	return $ret;
+}
+
+function find_os_distro()
+{
+	return find_os_selecttype('distro');
+}
+
+function find_os_release()
+{
+	return find_os_selecttype('release');
 }
 
 function find_os_pointversion()
@@ -200,13 +218,24 @@ function find_os_pointversion()
 		return $osversion;
 	}
 */
+	return find_os_selecttype('pointversion');
+}
+
+function find_os_selecttype($select)
+{
 	// list os support
 	$ossup = array('redhat' => 'rhel', 'fedora' => 'fedora', 'centos' => 'centos');
 	
 	foreach(array_keys($ossup) as $k) {
 		$osrel = file_get_contents("/etc/{$k}-release");
+		
 		if ($osrel) {
+				if ($select === 'release') {
+					return $osrel;
+				}
+				
 				$osrel = strtolower(trim($osrel));
+				
 				break;
 		}
 	}
@@ -227,7 +256,13 @@ function find_os_pointversion()
 			$mapos = explode(".", $osver[$verpos]);
 			$oss = $mapos[0];
 		}
-		return $ossup[$osver[0]]."-".$oss;
+
+		if ($select === 'distro') {
+			return $ossup[$osver[0]];
+		}
+		else if ($select === 'pointversion') {
+			return $ossup[$osver[0]]."-".$oss;
+		}
 	}
 }
 

@@ -13,7 +13,7 @@
 if [ "$#" == 0 ] ; then
 	echo
 	echo " ------------------------------------------------------------------------------"
-	echo "  format: sh $0 --select=repair/optimize --database=[]"
+	echo "  format: sh $0 --select=<repair/optimize> --database=[]"
 	echo " ------------------------------------------------------------------------------"
 	echo "  --database - database name; default: all databases"
 	echo

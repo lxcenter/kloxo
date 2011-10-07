@@ -82,6 +82,10 @@ function setApacheOptimize($select, $spare = null)
 
 		$maxpar_w = (int)($m['avail'] / 35) + 1;
 		$minpar_w = (int)($maxpar_w / 2);
+		
+		// because on apache 2.2.x no appear 'overflow' memory so
+		// no need ServerLimit = MaxClients = $maxpar_p for prefork/itk
+		// no need MaxClients = ThreadsPerChild = $maxpar_p for worker/event
 
 		$s = <<<EOF
 Timeout 150
@@ -93,8 +97,8 @@ KeepAliveTimeout 5
 	StartServers 2
 	MinSpareServers {$minpar_p}
 	MaxSpareServers {$maxpar_p}
-	ServerLimit {$maxpar_p}
-	MaxClients {$maxpar_p}
+	ServerLimit 256
+	MaxClients 256
 	MaxRequestsPerChild 4000
 	MaxMemFree 2
 </IfModule>
@@ -103,18 +107,18 @@ KeepAliveTimeout 5
 	StartServers 2
 	MinSpareServers {$minpar_p}
 	MaxSpareServers {$maxpar_p}
-	ServerLimit {$maxpar_p}
-	MaxClients {$maxpar_p}
+	ServerLimit 256
+	MaxClients 256
 	MaxRequestsPerChild 4000
 	MaxMemFree 2
 </IfModule>
 
 <IfModule worker.c>
 	StartServers 2
-	MaxClients {$maxpar_w}
+	MaxClients 150
 	MinSpareThreads {$minpar_w}
 	MaxSpareThreads {$maxpar_w}
-	ThreadsPerChild {$maxpar_w}
+	ThreadsPerChild 25
 	MaxRequestsPerChild 0
 	ThreadStackSize 8196
 	MaxMemFree 2
@@ -122,10 +126,10 @@ KeepAliveTimeout 5
 
 <IfModule event.c>
 	StartServers 2
-	MaxClients {$maxpar_w}
+	MaxClients 150
 	MinSpareThreads {$minpar_w}
 	MaxSpareThreads {$maxpar_w}
-	ThreadsPerChild {$maxpar_w}
+	ThreadsPerChild 25
 	MaxRequestsPerChild 0
 	ThreadStackSize 8196
 	MaxMemFree 2
@@ -135,7 +139,9 @@ Include /home/apache/conf/defaults/*.conf
 Include /home/apache/conf/domains/*.conf
 Include /home/apache/conf/redirects/*.conf
 Include /home/apache/conf/webmails/*.conf
+Include /home/apache/conf/wildcards/*.conf
 
+###version0-4###
 EOF;
 
 		log_cleanup("- Calculate - threads min/max $minpar_w/$maxpar_w and servers min/max $minpar_p/$maxpar_p");

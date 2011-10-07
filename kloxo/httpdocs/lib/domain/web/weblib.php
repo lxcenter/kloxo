@@ -391,7 +391,7 @@ function createExtraVariables()
 
 //	$this->__var_nonsslport = $port->nonsslport;
 //	if (!$this->__var_nonsslport) $this->__var_nonsslport = "7778";
-	$this->__var_nonsslport = (isset($port->nonsslport)) ? $port->nonsslport : "7777";
+	$this->__var_nonsslport = (isset($port->nonsslport)) ? $port->nonsslport : "7778";
 
 //	if (!$this->docroot) { $this->docroot = $this->nname; }
 //	if (!$this->corelocation) { $this->corelocation = "__path_customer_root"; }
@@ -813,11 +813,19 @@ function createDir()
 	} else {
 		lxfile_generic_chown_rec($user_home, "{$this->username}:{$this->username}");
 	}
-/* --- issue 524 - Domain skeleton files chmodded to 0755
+/*
+	// Issue #565 - Domain skeleton files chmodded to 0755
+	// latest info from William
+
 	if ($new_user_dir) {
 		lxfile_generic_chmod_rec($user_home, "755");
 	}
+
+
+	system("find {$user_home} -type f -exec chmod 644 {} \;");
+	system("find {$user_home} -type d -exec chmod 755 {} \;");
 */
+
 	lxfile_generic_chown($user_home, "{$this->username}:apache");
 	lxfile_generic_chown("__path_customer_root/$this->customer_name", "{$this->username}:apache");
 	lxfile_generic_chmod("__path_customer_root/$this->customer_name", "750");

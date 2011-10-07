@@ -315,7 +315,9 @@ function syncToSystemCommon()
 }
 
 
-// This should work for all normal purposes., If there is some multi server syncing for a single object like that what happens in dns and domainbackup, you can redefine sysnctosyste. Just call the common function at the beginning.
+// This should work for all normal purposes., 
+// If there is some multi server syncing for a single object like that what happens in dns and domainbackup, 
+// you can redefine sysnctosyste. Just call the common function at the beginning.
 function syncToSystem() 
 {
 
@@ -712,7 +714,11 @@ function syncEntireObject()
 	}
 
 
-	// the children should only be synced AFTER the parent. This is actually self-evident now, especially since when we backup, a domain would be fully formed, and thus adding spam BEFORE the mail is added is absurd.... But when deleting, it is the other way round. First the children should be deleted, and deleting the parent before the children can lead to some issues.
+	// the children should only be synced AFTER the parent. 
+	// This is actually self-evident now, especially since when we backup, a domain would be fully formed,
+	// and thus adding spam BEFORE the mail is added is absurd.... 
+	// But when deleting, it is the other way round. First the children should be deleted, 
+	// and deleting the parent before the children can lead to some issues.
 
 	foreach((array) $this->__object_list as $variable) {
 		$objname = "{$variable}_o";
@@ -2409,7 +2415,9 @@ final function getVirtualList($class, &$count, $sortby = null, $sortdir = null)
 		return $this->$class;
 	}
 
-	//Setting the parent Forcibly.... Php screws up recursion.. This should have only been done in the initlistifundef and only the first time, but there u fucking have it.. Stupid php..
+	// Setting the parent Forcibly.... Php screws up recursion.. 
+	// This should have only been done in the initlistifundef and only the first time, 
+	// but there u fucking have it.. Stupid php..
 	foreach((array) $this->$list as $o) {
 		$o->__parent_o = $this;
 	}
@@ -2437,7 +2445,8 @@ function AddToArrayObjectList($class, $objectlist)
 			$__t_newobjlist = $this->$var;
 		}
 		foreach((array) $objectlist as $o) {
-			// This seems to happen with the old dns records a_rec_a etc, which were removed from the dns. I encountered because I restored a very old backup.
+			// This seems to happen with the old dns records a_rec_a etc, 
+			// which were removed from the dns. I encountered because I restored a very old backup.
 			if (!isset($o->nname)) {
 				continue;
 			}
@@ -5224,7 +5233,8 @@ function restoreMeUp($bdir, $id)
 	$this->restoreMeUpThere('localhost', $res);
 }
 
-// These are very complex backup/restore functions, and does not really work, because the file size is too high.
+// These are very complex backup/restore functions, and does not really work, 
+// because the file size is too high.
 function updateBackupOLD($param)
 {
 	$bfile = tempnam("/tmp", "backupzip.zip");
@@ -5263,7 +5273,8 @@ function updateRestoreOLD($param)
 	return null;
 }
 
-// These functions are very simple and backups and restores only the internal content doesn't restore the kloxo database structure. Useful only for database.
+// These functions are very simple and backups and restores only the internal content 
+// doesn't restore the kloxo database structure. Useful only for database.
 
 function updateBackup($param)
 {
@@ -5336,7 +5347,12 @@ function doSimpleRestore($bfile, $param)
 
 	$ob = $rem->bobject;
 
-	dprint($ob->getClName()); dprint($this->getClName());
+//	dprint($ob->getClName()); dprint($this->getClName());
+
+	// Issue #671 - Fixed backup-restore issue
+	// forum http://forum.lxcenter.org/index.php?t=msg&th=16875
+	// TODO!
+
 	if ($ob->getClName() !== $this->getClName()) {
 		throw new lxException('objectclassname_doesnt_match', '');
 	}
@@ -5395,7 +5411,12 @@ function doCoreRestore($bfile, $param)
 		$ob = $rem->bobject;
 	}
 
-	dprint($ob->getClName()); dprint($this->getClName());
+//	dprint($ob->getClName()); dprint($this->getClName());
+
+	// Issue #671 - Fixed backup-restore issue
+	// forum http://forum.lxcenter.org/index.php?t=msg&th=16875
+	// TODO!
+
 	if ($ob->getClName() !== $this->getClName()) {
 		throw new lxException('objectclassname_doesnt_match', '');
 	}
@@ -5416,7 +5437,8 @@ function doCoreRestore($bfile, $param)
 		throw $e;
 	}
 
-	// Restore the currenct client's quota. The person who is doing the restoring souldn't able to escape his new quota.
+	// Restore the currenct client's quota. The person who is doing the restoring 
+	// souldn't able to escape his new quota.
 
 	if ($this->isLogin()) {
 		$ob->priv = $this->priv;
@@ -5556,7 +5578,15 @@ function doSimpleBackup($bfile, $param)
 
 function getZiptype()
 {
-	return "tar";
+	// Issue #671 - Fixed backup-restore issue
+	// change to tgz for default that make less space especially temp process
+
+	if (file_exists("/usr/local/lxlabs/kloxo/etc/flag/backup_compress_disabled.flg")) {
+		return "tar";
+	}
+	else {
+		return "tgz";
+	}
 }
 
 function getBackupFileNameForObject($id)
