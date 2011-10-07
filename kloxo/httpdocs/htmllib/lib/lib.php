@@ -5239,7 +5239,6 @@ function setFreshClam($nolog = null)
 		system("chkconfig freshclam off > /dev/null 2>&1");
 		system("/etc/init.d/freshclam stop >/dev/null 2>&1");
 		if (!$nolog) { log_cleanup("- Disabled freshclam service"); }
-		// also clamd not load too
 		system("svc -d {$path} {$path}/log > /dev/null 2>&1");
 
 		if (file_exists("{$path}/run.stop")) {
@@ -5255,30 +5254,18 @@ function setFreshClam($nolog = null)
 		system("chkconfig freshclam on > /dev/null 2>&1");
 		system("/etc/init.d/freshclam start >/dev/null 2>&1");
 		if (!$nolog) { log_cleanup("- Enabled freshclam service"); }
-		// also clamd load too
 		lxfile_mv("{$path}/down", "{$path}/run");
 		lxfile_mv("{$path}/log/down", "{$path}/log/run");
 		system("svc -u {$path} {$path}/log > /dev/null 2>&1");
 	}
 
-/*
-	// taken servermail__qmaillib.phps or servermail__postfix.phps
-	// from /usr/local/lxlabs/kloxo/httpdocs/htmllib/lib/pserver/driver
-	// not work!
-*/
-
-/*
-	// issue #658 - Two clamav databases, remove one if two databases are found
-	// pending
+	// Issue #658
 	if (lxfile_exists("/usr/share/clamav/main.cld")) {
 		lxfile_rm("/usr/share/clamav/main.cvd");
 	}
-*/
 }
 
 
-// solve imap problem when running webmail on 64bit
-// thanks semir - http://forum.lxcenter.org/index.php?t=msg&th=14394&goto=79404&#msg_79404
 function changeMailSoftlimit()
 {
 	log_cleanup("Change softlimit for incoming/receive mailserver");
@@ -5507,11 +5494,7 @@ function setInitialKloxoPhp()
 {
 	log_cleanup("Initialize kloxophp");
 
-//	if (os_is_php_six_four()) {
-//	if ( is_64bit() ) {
 	if (file_exists("/usr/lib64")) {
-	//	$ver = get_package_version("kloxophpsixfour");
-	//	installWithVersion("/usr/lib64/kloxophp", "kloxophpsixfour", $ver);
 
 		log_cleanup("- Install kloxophp 64bit");
 		
@@ -5532,8 +5515,6 @@ function setInitialKloxoPhp()
 			lxfile_symlink("/usr/lib64/lighttpd", "/usr/lib/lighttpd");
 		}
 	} else {
-	//	$ver = get_package_version("kloxophp");
-	//	installWithVersion("/usr/lib/kloxophp", "kloxophp", $ver);
 
 		log_cleanup("- Install kloxophp 32bit");
 		installWithVersion("/usr/lib/kloxophp", "kloxophp");
@@ -5798,12 +5779,12 @@ function setSomeScript()
 
 function setInitialLogrotate()
 {
+	// Issue #295, 6.2.0 feature
 	log_cleanup("Initialize logrotate");
 
 	if (lxfile_exists("/etc/logrotate.d/kloxo")) {
 		log_cleanup("- Initialize process");
 		if (lxfile_exists("../file/kloxo.logrotate")) {
-			// -- that mean no logratate before 6.2.x
 			lxfile_cp("../file/kloxo.logrotate", "/etc/logrotate.d/kloxo");
 			log_cleanup("- No initialize because no kloxo.logrotate file");
 		}
@@ -5884,13 +5865,7 @@ function setInitialAdminAccount()
 
 function updateApplicableToSlaveToo()
 {
-	// Fixes #303 and #304
-//	download_thirdparty();
-//	installThirdparty();
-
 	os_updateApplicableToSlaveToo();
-	
-//	setDefaultPages();
 }
 
 function fix_secure_log()
@@ -5919,7 +5894,6 @@ function installChooser()
 	$path = "/home/kloxo/httpd/webmail/";
 	lxfile_mkdir("/home/kloxo/httpd/webmail/img");
 	lxfile_cp_rec("../file/webmail-chooser/header/", "/home/kloxo/httpd/webmail/img");
-//	lxfile_cp("../file/webmail-chooser/webmail_chooser.phps", "/home/kloxo/httpd/webmail/index.php");
 	lxfile_cp("../file/webmail-chooser/roundcube-config.phps", "/home/kloxo/httpd/webmail/roundcube/config/main.inc.php");
 	$list = array("horde", "roundcube");
 	foreach($list as $l) {
@@ -5946,8 +5920,6 @@ function installRoundCube()
 		lxfile_generic_chown_rec("$path_roundcube/temp", 'apache:apache');
 		lxfile_rm('/var/cache/kloxo/roundcube.log');
 	}
-//	log_cleanup("- Install database config");
-//	lxfile_cp("../file/webmail-chooser/db.inc.phps", "/home/kloxo/httpd/webmail/roundcube/config/db.inc.php");
 
 }
 
@@ -5969,8 +5941,6 @@ function installHorde()
 		lxfile_generic_chown_rec("$path_horde/temp", 'apache:apache');
 		lxfile_rm('/var/cache/kloxo/horde.log');
 	}
-//	log_cleanup("- Install database config");
-//	lxfile_cp("../file/horde.config.phps", "/home/kloxo/httpd/webmail/horde/config/conf.php");
 
 }
 
@@ -6237,8 +6207,6 @@ function updatecleanup()
 	setPrepareKloxo();
 
     // Fixes #303 and #304
-//	log_cleanup("ThirdParty Checks");
-//	download_thirdparty();
 	installThirdparty();
 
 	install_gd();
@@ -6247,20 +6215,12 @@ function updatecleanup()
 	
 	setInitialPhpMyAdmin();	
 
-//	call_with_flag('installgroupwareagain');
-
 	setInitialAdminAccount();
 	
 	setInitialKloxoPhp();
 	
-//	log_cleanup("Checking WebMail");
-//	$ver = get_package_version("lxwebmail");
-//	installWebmail($ver);
 	installWebmail();
 
-//	log_cleanup("Checking awstats");
-//	$ver = get_package_version("lxawstats");
-//	installAwstats($ver);
 	installAwstats();
 	
 	setRemoveOldDirs();
@@ -6279,8 +6239,6 @@ function updatecleanup()
 	log_cleanup("- Clean process");
 	call_with_flag("remove_host_deny");
 
-//	installInstallApp();
-	
 	log_cleanup("Turn off mouse daemon");
 	log_cleanup("- Turn off process");
 	system("chkconfig gpm off");
@@ -6299,7 +6257,6 @@ function updatecleanup()
 	
 	setCheckPackages();
 
-//	log_cleanup("Initialize /script/ dir");
 	copy_script();
 
 	install_xcache();
@@ -6365,10 +6322,8 @@ function updatecleanup()
 
 	setInitialLogrotate();
 	
-//	log_cleanup("Install RoundCube");
 	installRoundCube();
 	
-//	log_cleanup("Install Horde");
 	installHorde();
 
 	installChooser();
@@ -6379,12 +6334,8 @@ function updatecleanup()
 	
 	setInitialServer();
 	
-//	lxfile_cp("../file/skeleton.zip", "/home/kloxo/httpd/skeleton.zip");
-
 	setDefaultPages();
 	
-	// move from doUpdates() - don't change the sort!
-	// minimize multilog issue
 	installInstallApp();
 	setFreshClam();
 	changeMailSoftlimit();

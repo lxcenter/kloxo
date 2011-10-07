@@ -1,6 +1,5 @@
 <?php 
 include_once "htmllib/lib/include.php";
-// include_once "lib/updatelib.php";
 include_once "htmllib/lib/updatelib.php";
 
 exit_if_another_instance_running();
@@ -25,7 +24,6 @@ function updatecleanup_main()
 		$login = new Client(null, null, 'update');
 	}
 
-//	print("\n\n***Executing UpdateCleanup. This can take some time. Please be patient.***\n\n");
 	log_cleanup("*** Executing Update cleanup - BEGIN ***");
 //
 // Check for lxlabs yum repo file and if exists
@@ -40,23 +38,6 @@ function updatecleanup_main()
 		system("wget -O /etc/yum.repos.d/lxcenter.repo http://download.lxcenter.org/lxcenter.repo");
 		log_cleanup("- Installing yum-protectbase plugin");
 		system("yum install -y -q yum-protectbase");
-	//	print("Done.\n");
-	}
-//
-
-//
-// Fix vulnerability within webmail
-// If the flag isn't found, run the fix
-//
-// Disabled in Kloxo 6.1.4
-//	if (!lxfile_exists("/usr/local/lxlabs/kloxo/file/webmailReset")) {
-//		system("/usr/local/lxlabs/ext/php/php /usr/local/lxlabs/kloxo/bin/misc/secure-webmail-mysql.phps");
-//		system("/bin/rm /usr/local/lxlabs/kloxo/bin/misc/secure-webmail-mysql.phps");
-//	}
-
-// Remove Flagfile in Kloxo 6.1.4, thios can be removed in 6.1.4+
-	if (lxfile_exists("/usr/local/lxlabs/kloxo/file/webmailReset")) {
-		system("/bin/rm /usr/local/lxlabs/kloxo/file/webmailReset");
 	}
 
 // Fix #388 - phpMyAdmin config.inc.php permission
@@ -79,9 +60,6 @@ function updatecleanup_main()
 		$sgbl->slave = false;
 		if (!is_secondary_master()) {
 			updateDatabaseProperly();
-		//	fixExtraDB();
-		//	doUpdateExtraStuff();
-			// call new function (for 6.2.x) since 6.1.7
 			fixDataBaseIssues();
 			doUpdates();
 			lxshell_return("__path_php_path", "../bin/common/driverload.php");

@@ -95,10 +95,6 @@ function do_upgrade($upversion)
 	chdir($saveddir);
 }
 
-// --- move from kloxo/httpdocs/lib/updatelib.php
-// use 6.2.x function since version 6.1.7
-
-// old name is fixExtraDB() without log_cleanup() call
 function fixDataBaseIssues()
 {
 	log_cleanup("Fix Database Issues");
@@ -179,7 +175,6 @@ function fixDataBaseIssues()
 	critical_change_db_pass();
 }
 
-// old name is doUpdateExtraStuff() without log_cleanup() call
 function doUpdates()
 {
 	global $gbl, $sgbl, $login, $ghtml;
@@ -212,18 +207,5 @@ function doUpdates()
 
 	fix_self_ssl();
 
-	// move to updatecleanup() - don't change the sort!
-	// minimize multilog issue
-//	installInstallApp();
-//	setFreshClam();
-//	changeMailSoftlimit();
 }
 
-// Remark - some functions move to lib because os_updateApplicableToSlaveToo() inside linuxproglib.php
-// call the same functions inside updatecleanup()
-
-// - move some functions may grow lib.php but reduce linuxproglib.php
-// - some functions (like install_xcache) may call outside update process
-
-// TODO: modified log_log() or log_cleanup
-// so call function with log must call log_cleanup(setFreshClam()) and without log may only setFreshClam()
