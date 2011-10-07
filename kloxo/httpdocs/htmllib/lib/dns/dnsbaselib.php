@@ -101,7 +101,7 @@ static function add($parent, $class, $param)
 
 	else if ($param['ttype'] === 'a' || $param['ttype'] === 'aaaa') {
 		// Validates subdomain
-		if (!preg_match("/^[^\W][0-9a-zA-Z-.]+[^\W]$/", $param['hostname'])) {
+		if (!preg_match("/^(([a-zA-Z]|[a-zA-Z][a-zA-Z0-9\-]*[a-zA-Z0-9])\.)*([A-Za-z]|[A-Za-z][A-Za-z0-9\-]*[A-Za-z0-9])$/", $param['hostname'])) {
 			throw new lxexception('invalid_subdomain', 'hostname');
 		}
 		// Validates both ipv4 and ipv6
@@ -113,11 +113,11 @@ static function add($parent, $class, $param)
 
 	else if ($param['ttype'] === 'cname') {
 		// Validates hostname subdomain
-		if (!preg_match("/^[^\W][0-9a-zA-Z-.]+[^\W]$/", $param['hostname'])) {
+		if (!preg_match("/^(([a-zA-Z]|[a-zA-Z][a-zA-Z0-9\-]*[a-zA-Z0-9])\.)*([A-Za-z]|[A-Za-z][A-Za-z0-9\-]*[A-Za-z0-9])$/", $param['hostname'])) {
 			throw new lxexception('invalid_subdomain', 'hostname');
 		}
 		// Validates value subdomain
-		if (!preg_match("/^[^\W][0-9a-zA-Z-.]+[^\W]$/", $param['param'])) {
+		if (!preg_match("/^(([a-zA-Z]|[a-zA-Z][a-zA-Z0-9\-]*[a-zA-Z0-9])\.)*([A-Za-z]|[A-Za-z][A-Za-z0-9\-]*[A-Za-z0-9])$/", $param['param']) && $param['param'] != "__base__") {
 			throw new lxexception('invalid_subdomain', 'param');
 		}
 		$param['nname'] = "{$param['ttype']}_{$param['hostname']}";
@@ -125,7 +125,7 @@ static function add($parent, $class, $param)
 
 	else if ($param['ttype'] === 'fcname') {
 		// Validates hostname subdomain
-		if (!preg_match("/^[^\W][0-9a-zA-Z-.]+[^\W]$/", $param['hostname'])) {
+		if (!preg_match("/^(([a-zA-Z]|[a-zA-Z][a-zA-Z0-9\-]*[a-zA-Z0-9])\.)*([A-Za-z]|[A-Za-z][A-Za-z0-9\-]*[A-Za-z0-9])$/", $param['hostname'])) {
 			throw new lxexception('invalid_subdomain', 'hostname');
 		}
 		// Validates value domain
@@ -137,7 +137,7 @@ static function add($parent, $class, $param)
 
 	else if ($param['ttype'] === 'txt') {
 		// Validates hostname subdomain
-		if (!preg_match("/^[^\W][0-9a-zA-Z-.]+[^\W]$/", $param['hostname'])) {
+		if (!preg_match("/[0-9a-zA-Z-._]$/", $param['hostname'])) {
 			throw new lxexception('invalid_subdomain', 'hostname');
 		}
 		$param['nname'] = "{$param['ttype']}_{$param['hostname']}";
