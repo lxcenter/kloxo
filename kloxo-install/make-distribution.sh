@@ -38,7 +38,6 @@ zip -r9 ./kloxo-install/kloxo-install.zip ./kloxo-install -x \
 "*/kloxo-install-slave.sh" \
 "*/kloxo-installer.sh" \
 "*/kloxo-patcher.sh" \
-
 "*/make-distribution.sh"
 
 #
