@@ -141,6 +141,7 @@ Include /home/apache/conf/redirects/*.conf
 Include /home/apache/conf/webmails/*.conf
 Include /home/apache/conf/wildcards/*.conf
 
+###version0-4###
 EOF;
 
 		log_cleanup("- Calculate - threads min/max $minpar_w/$maxpar_w and servers min/max $minpar_p/$maxpar_p");

@@ -36,8 +36,14 @@ static function installMe()
 	lxfile_mkdir("/home/lighttpd/conf/webmails");
 	lxfile_mkdir("/home/lighttpd/conf/wildcards");
 
-	copy("/usr/local/lxlabs/kloxo/file/lighttpd/lighttpd.conf", "/etc/lighttpd/lighttpd.conf");
-	copy("/usr/local/lxlabs/kloxo/file/lighttpd/~lxcenter.conf", "/etc/lighttpd/conf.d/~lxcenter.conf");
+	lxfile_cp("/usr/local/lxlabs/kloxo/file/lighttpd/lighttpd.conf", "/etc/lighttpd/lighttpd.conf");
+
+	$cver = "###version0-4###";
+	$fver = file_get_contents("/etc/lighttpd/conf.d/~lxcenter.conf");
+	
+	if(stristr($fver, $cver) === FALSE) {
+		lxfile_cp("/usr/local/lxlabs/kloxo/file/lighttpd/~lxcenter.conf", "/etc/lighttpd/conf.d/~lxcenter.conf");
+	}
 
 //	lxfile_cp("../file/lighttpd/conf/kloxo/kloxo.conf", "/etc/lighttpd/conf/kloxo/kloxo.conf");
 

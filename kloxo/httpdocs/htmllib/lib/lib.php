@@ -5332,9 +5332,12 @@ function setInitialApacheConfig()
 		}
 	}
 
-	// always override to make sure the latest copy
-	log_cleanup("- Install /etc/httpd/conf.d/~lxcenter.conf");
-	lxfile_cp("../file/apache/~lxcenter.conf", "/etc/httpd/conf.d/~lxcenter.conf");
+	$cver = "###version0-4###";
+	$fver = file_get_contents("/etc/httpd/conf.d/~lxcenter.conf");
+	
+	if (stristr($fver, $cver) === FALSE) {
+		lxfile_cp("../file/apache/~lxcenter.conf", "/etc/httpd/conf.d/~lxcenter.conf");
+	}
 
 	if (!lxfile_real("/etc/httpd/conf.d/ssl.conf")) {
 		log_cleanup("- Install /etc/httpd/conf.d/ssl.conf");
@@ -5399,9 +5402,12 @@ function setInitialLighttpdConfig()
 	log_cleanup("- Install /etc/lighttpd/lighttpd.conf");
 	lxfile_cp("../file/lighttpd/lighttpd.conf", "/etc/lighttpd/lighttpd.conf");
 	
-	// always override to make sure the latest copy
-	log_cleanup("- Install /etc/lighttpd/conf.d/~lxcenter.conf");
-	lxfile_cp("../file/lighttpd/~lxcenter.conf", "/etc/lighttpd/conf.d/~lxcenter.conf");
+	$cver = "###version0-4###";
+	$fver = file_get_contents("/etc/lighttpd/conf.d/~lxcenter.conf");
+	
+	if(stristr($fver, $cver) === FALSE) {
+		lxfile_cp("../file/lighttpd/~lxcenter.conf", "/etc/lighttpd/conf.d/~lxcenter.conf");
+	}
 
 	if (!lxfile_real("/etc/lighttpd/local.lighttpd.conf")) {
 		log_cleanup("- Initialize /etc/lighttpd/local.lighttpd.conf");

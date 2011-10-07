@@ -28,7 +28,13 @@ static function installMe()
 	lxshell_return("chkconfig", "httpd", "on");
 
 //	addLineIfNotExistInside("/etc/httpd/conf/httpd.conf", "Include /etc/httpd/conf/kloxo/kloxo.conf", "");
-	lxfile_cp("/usr/local/lxlabs/kloxo/file/apache/~lxcenter.conf", "/etc/httpd/conf.d/~lxcenter.conf");
+
+	$cver = "###version0-4###";
+	$fver = file_get_contents("/etc/httpd/conf.d/~lxcenter.conf");
+	
+	if(stristr($fver, $cver) === FALSE) {
+		lxfile_cp("/usr/local/lxlabs/kloxo/file/apache/~lxcenter.conf", "/etc/httpd/conf.d/~lxcenter.conf");
+	}
 
 	lxfile_cp("/usr/local/lxlabs/kloxo/file/centos-5/httpd.conf", "/etc/httpd/conf/httpd.conf");
 
