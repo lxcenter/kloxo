@@ -1,5 +1,52 @@
 Changelog
 
+Kloxo 6.1.7 - ??-oct-2011
+##################################
+Bug #50: Parked domains are not removed from Apache's configuration
+Bug #499: Kloxo Installation (InstallApp problem)
+Bug #547: xcache failed to install
+Bug #565: Domain skeleton files chmodded to 0755
+Bug #578: Spamassasin config created in / directory
+Bug #581: Update 6.1.6 DNS Managm. denies TXT entry (invalid_subdomain)
+Bug #582: Wrong permissions for Roundcube and Horde configuration files
+Bug #583: new install not create horde and roundcube database
+Bug #593: Remote Mail Option not working anymore
+Bug #596: WebMail: Not created default folders (IMAP related)
+Bug #599: Broken images in kloxo control panel
+Bug #607: If a client changes advanced PHP settings, then the website gives a blank page
+Bug #609: Not worked add directory to user ftp
+Bug #623: Error in function.sh when running /etc/upcp
+Bug #630: parse_ini_file to be enabled by default
+Bug #637: Webmail sending problem and possibility solution
+Bug #638: Installation fails if 'admin' group already exists
+Bug #650: Kloxo not generating custom php.ini in Apache/suphp mode
+Bug #652: CentOS6: Kloxo does not detect the OS properly
+Bug #656: When adding a subdomain, the Document Root field is not being validated
+Bug #657: Client user names with "__" are displayed with missing end
+Bug #669: Help icon on menu tab is redirecting to non-working link
+Bug #674: wildcard and subdomain problem
+Bug #677: Add Hungarian language (was not defined yet)
+Bug #680: Too high inode count in Kloxo quota
+Feature #570: Lighttpd reloading (no restart after adding domain)
+Feature #625: make some resource related PHP settings admin only
+Updates #577: After every upcp the line "RoundCube Database installed" is showed.
+Security #612: Hide password in reboot / shutdown server
+ToDo #538: Kloxo on Centos 64bit
+ToDo #559: Error warning while installing fresh Kloxo
+ToDo #563: Remove overlap paramaters for SuPHP
+ToDo #566: Mod_ruid2 on Kloxo
+ToDo #567: httpd-itk for kloxo
+ToDo #571: Suphp with httpd-worker and httpd-event
+ToDo #575: More readable httpd config files
+ToDo #589: Change httpd config structure
+ToDo #590: Move module setting from .httaccess to domain config
+ToDo #597: Use cp. to redirect :7778 or :7777
+ToDo #598: Change lighttpd config structure
+ToDo #632: Add some scripts for mysql and apache
+ToDo #645: New installer script (also packer and patcher) for Kloxo 6.1.7
+ToDo #646: New webpage for default/disable/cp/webmail page on Kloxo 6.1.7
+ToDo #658: Two clamav databases, remove one if two databases are found
+
 Kloxo 6.1.6 - 12-june-2011
 ##################################
 Bug #245: NameVirtualHost has no VirtualHosts
