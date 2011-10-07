@@ -5146,30 +5146,40 @@ function setDefaultPages()
 
 	$pages = array("default", "disable", "webmail", "cp");
 
+	$newer = false;
+
 	if (file_exists($sourcezip)) {
 		if (!checkIdenticalFile($sourcezip, $targetzip)) {
-
-			echo shell_exec("cp -rf $sourcezip $targetzip");
-
-			foreach($pages as $k => $p) {
-				log_cleanup("- Initialize skeleton ({$p} web page)");
-				lxfile_mkdir("/home/kloxo/httpd/{$p}");
-				lxshell_unzip("__system__", "{$httpdpath}/{$p}/", $targetzip);
-				$inc = ($p !== "cp") ? $p : "cp_config";
-				lxfile_cp("../file/{$inc}_inc.php", "{$httpdpath}/{$p}/inc.php");
-				lxfile_cp("../file/default_index.php", "{$httpdpath}/{$p}/index.php");
-				system("chown -R lxlabs:lxlabs {$httpdpath}/{$p}/");
-				system("find {$httpdpath}/{$p}/ -type f -name \"*.php*\" -exec chmod 644 {} \;");
-				system("find {$httpdpath}/{$p}/ -type d -exec chmod 755 {} \;");
-			}
-
-		}
-		else {
-			log_cleanup("- No initialize skeleton (already exist)");
+			log_cleanup("- Copy  $sourcezip to $targetzip");
+			system("cp -rf $sourcezip $targetzip");
+			$newer = true;
 		}
 	}
-	else {
-		log_cleanup("- No initialize user-logo (no exist) - MUST exist!");
+
+	foreach($pages as $k => $p) {
+		if (!file_exists("/home/kloxo/httpd/{$p}")) {
+			lxfile_mkdir("/home/kloxo/httpd/{$p}");
+		}
+
+		$inc = ($p !== "cp") ? $p : "cp_config";
+
+		log_cleanup("- Php files for {$p} web page");
+		lxfile_cp("../file/{$inc}_inc.php", "{$httpdpath}/{$p}/inc.php");
+		lxfile_cp("../file/default_index.php", "{$httpdpath}/{$p}/index.php");
+
+
+		if ($newer) {
+			log_cleanup("- Skeleton for {$p} web page");
+			lxshell_unzip("__system__", "{$httpdpath}/{$p}/", $targetzip);
+		}
+		else {
+			log_cleanup("- No skeleton for {$p} web page");
+		}
+
+		system("chown -R lxlabs:lxlabs {$httpdpath}/{$p}/");
+		system("find {$httpdpath}/{$p}/ -type f -name \"*.php*\" -exec chmod 644 {} \;");
+		system("find {$httpdpath}/{$p}/ -type d -exec chmod 755 {} \;");
+
 	}
 
 	$usersourcezip = realpath("../file/user-skeleton.zip");
@@ -5177,15 +5187,15 @@ function setDefaultPages()
 
 	if (lxfile_exists($usersourcezip)) {
 		if (!checkIdenticalFile($usersourcezip, $usertargetzip)) {
-			log_cleanup("- Initialize user-skeleton");
+			log_cleanup("- Copy $usersourcezip to $usertargetzip");
 			system("cp -rf $usersourcezip $usertargetzip");
 		}
 		else {
-			log_cleanup("- No initialize user-skeleton (already exist)");
+			log_cleanup("- No new user-skeleton");
 		}
 	}
 	else {
-		log_cleanup("- No initialize user-skeleton (no exist)");
+		log_cleanup("- No exists user-skeleton");
 	}
 
 	$sourcelogo = realpath("../file/user-logo.png");
@@ -5196,16 +5206,16 @@ function setDefaultPages()
 			lxfile_cp($sourcelogo, $targetlogo);
 
 			foreach($pages as $k => $p) {
-				log_cleanup("- Initialize user-logo for {$p}");
+				log_cleanup("- Copy user-logo for {$p}");
 				lxfile_cp($targetlogo, "{$httpdpath}/{$p}/images/logo.png");
 			}
 		}
 		else {
-			log_cleanup("- No initialize user-logo (already exist)");
+			log_cleanup("- No new user-logo");
 		}
 	}
 	else {
-		log_cleanup("- No initialize user-logo (no exist)");
+		log_cleanup("- No exists user-logo");
 	}
 
 /* 
