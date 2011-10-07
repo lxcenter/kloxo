@@ -2,7 +2,7 @@
 //    Kloxo, Hosting Control Panel
 //
 //    Copyright (C) 2000-2009	LxLabs
-//    Copyright (C) 2009-2010	LxCenter
+//    Copyright (C) 2009-2011	LxCenter
 //
 //    This program is free software: you can redistribute it and/or modify
 //    it under the terms of the GNU Affero General Public License as
@@ -28,15 +28,13 @@ function lxins_main()
 	$opt = parse_opt($argv);
 	$dir_name=dirname(__FILE__);
 	$installtype = $opt['install-type'];
-//	$dbroot = isset($opt['db-rootuser'])? $opt['db-rootuser']: "root";
-//	$dbpass = isset($opt['db-rootpassword'])? $opt['db-rootpassword']: "";
 	$dbroot = "root";
 	$dbpass = "";
 	$osversion = find_os_version();
 	$arch = `arch`;
 	$arch = trim($arch);
 	
-	//--- create temporal flags for install
+	//--- Create temporary flags for install
 	system("mkdir -p /var/cache/kloxo/");
 	system("echo 1 > /var/cache/kloxo/kloxo-install-firsttime.flg");
 
@@ -46,13 +44,13 @@ function lxins_main()
 	}
 
 	if(file_exists("/usr/local/lxlabs/kloxo")) {
-		// Ask Reinstall
+		//--- Ask Reinstall
 		if (get_yes_no("Kloxo seems already installed do you wish to continue?") == 'n') {
 			print("Installation Aborted.\n");
 			exit;
 		}
 	} else {
-		// Ask License
+		//--- Ask License
 		if (get_yes_no("Kloxo is using AGPL-V3.0 License, do you agree with the terms?") == 'n') {
 			print("You did not agree to the AGPL-V3.0 license terms.\n");
 			print("Installation aborted.\n\n");
@@ -61,14 +59,14 @@ function lxins_main()
 			print("Installing Kloxo = YES\n\n");
 		}
 	}
-	// Ask for InstallApp
+	//--- Ask for InstallApp
 	print("InstallApp: PHP Applications like PHPBB, WordPress, Joomla etc\n");
 	print("When you choose Yes, be aware of downloading about 350Mb of data!\n");
 	if(get_yes_no("Do you want to install the InstallAPP sotfware?") == 'n') {
 		print("Installing InstallApp = NO\n");
 		print("You can install it later with /script/installapp-update\n\n");
 		$installappinst = false;
-		//--- temporal flag for no install InstallApp
+		//--- Temporary flag so InstallApp won't be installed
 		system("echo 1 > /var/cache/kloxo/kloxo-install-disableinstallapp.flg");
 	} else {
 		print("Installing InstallApp = YES\n\n");
@@ -104,9 +102,9 @@ function lxins_main()
 			break;
 		}
 		else {
-			print("Yum Gave Error... Trying Again...\n");
+			print("YUM Gave Error... Trying Again...\n");
 			if (get_yes_no("Try again?") == 'n') {
-				print("- EXIT: fix the problem and install again\n");			
+				print("- EXIT: Fix the problem and install Kloxo again.\n");
 				exit;
 			}
 		}
@@ -117,20 +115,20 @@ function lxins_main()
 	system("mkdir -p /usr/local/lxlabs/kloxo");
 
 	if (file_exists("../kloxo-current.zip")) {
-		//--- that mean install with local copy
+		//--- Install from local file if exists
 		@ unlink("/usr/local/lxlabs/kloxo/kloxo-current.zip");
 		print("Local copying Kloxo release\n");
 		passthru("mkdir -p /var/cache/kloxo");
 		passthru("cp -rf ../kloxo-current.zip /usr/local/lxlabs/kloxo");
 
-		// the first step - remove 
+		//--- The first step - Remove packages
 		passthru("rm -f /var/cache/kloxo/kloxo-thirdparty*.zip");
 		passthru("rm -f /var/cache/kloxo/lxawstats*.tar.gz");
 		passthru("rm -f /var/cache/kloxo/lxwebmail*.tar.gz");
 		passthru("rm -f /var/cache/kloxo/kloxophpsixfour*.tar.gz");
 		passthru("rm -f /var/cache/kloxo/kloxophp*.tar.gz");
 		passthru("rm -f /var/cache/kloxo/*-version");
-		// the second step - copy from packer making if exist
+		//--- The second step - copy from packer script if exist
 		passthru("cp -rf ../kloxo-thirdparty*.zip /var/cache/kloxo");
 		passthru("cp -rf ../lxawstats*.tar.gz /var/cache/kloxo");
 		passthru("cp -rf ../lxwebmail*.tar.gz /var/cache/kloxo");
@@ -153,7 +151,7 @@ function lxins_main()
 			passthru("ln -s /usr/lib64/lighttpd /usr/lib/lighttpd");
 		}
 		else {
-			//--- use this trick because lazy to make code for version check
+			//--- Needs version checks in the future
 			passthru("rename ../kloxophpsixfour ../_kloxophpsixfour ../kloxophpsixfour*");
 			passthru("cp -rf ../kloxophp*.tar.gz /var/cache/kloxo");
 			passthru("rename ../_kloxophpsixfour ../kloxophpsixfour ../_kloxophpsixfour*");
@@ -190,7 +188,6 @@ function lxins_main()
 	$mypass = password_gen();
 
 	print("Prepare defaults and configurations...\n");
-//	system("/usr/local/lxlabs/ext/php/php $dir_name/kloxo_all.php");
 	install_main();
 
 	file_put_contents("/etc/sysconfig/spamassassin", "SPAMDOPTIONS=\" -v -d -p 783 -u lxpopuser\"");
@@ -221,12 +218,12 @@ function lxins_main()
 		system("/script/installapp-update"); // Second run (gets applications)
 	}
 
-	// --- remove all temporal flags because the end of install
+	//--- Remove all temporary flags because the end of install
 	print("\nRemove Kloxo install flags...\n");
 	system("rm -rf /var/cache/kloxo/*-version");
 	system("rm -rf /var/cache/kloxo/kloxo-install-*.flg");
 
-	//--- for prevent mysql socket problem (especially on 64bit system)
+	//--- Prevent mysql socket problem (especially on 64bit system)
 	if (!file_exists("/var/lib/mysql/mysql.sock")) {
 		print("Create mysql.sock...\n");
 		system("/etc/init.d/mysqld stop");
@@ -234,9 +231,8 @@ function lxins_main()
 		system("/etc/init.d/mysqld start");
 	}
 
-	// --- fix for old version (before 6.1.7) -- thirdparty
+	//--- Fix for old thirdparty version
 	if (!file_exists("/usr/local/lxlabs/kloxo/httpdocs/thirdparty")) {
-		// cp from ../ not work, so use /var/cache/kloxo
 		system("cp -rf /var/cache/kloxo/kloxo-thirdparty*.zip /usr/local/lxlabs/kloxo");
 		system("cd /usr/local/lxlabs/kloxo; unzip -oq kloxo-thirdparty*.zip");
 		system("chown -R lxlabs:lxlabs /usr/local/lxlabs/kloxo/httpdocs/thirdparty");
@@ -244,7 +240,7 @@ function lxins_main()
 		system("rm -f /usr/local/lxlabs/kloxo/kloxo-thirdparty*.zip");
 	}
 
-	// --- to make sure ownership of httpdocs dir
+	//--- Set ownership for Kloxo httpdocs dir
 	system("chown -R lxlabs:lxlabs /usr/local/lxlabs/kloxo/httpdocs");
 
 	print("\nCongratulations. Kloxo has been installed succesfully on your server as $installtype\n\n");
@@ -269,7 +265,6 @@ function lxins_main()
 	}
 	print("\n");
 	print("---------------------------------------------\n");
-	print("* Note: Better reboot after Kloxo install\n\n");
 }
 
 // ==== kloxo_all portion ===

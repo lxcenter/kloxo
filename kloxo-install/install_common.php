@@ -1,9 +1,8 @@
 <?php
+//    Kloxo, Hosting Control Panel
 //
-//    Kloxo, Hosting Panel
-//
-//    Copyright (C) 2000-2009     LxLabs
-//    Copyright (C) 2009-2010     LxCenter
+//    Copyright (C) 2000-2009	LxLabs
+//    Copyright (C) 2009-2011	LxCenter
 //
 //    This program is free software: you can redistribute it and/or modify
 //    it under the terms of the GNU Affero General Public License as
@@ -17,6 +16,8 @@
 //
 //    You should have received a copy of the GNU Affero General Public License
 //    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+//
+
 
 class remote { }
 $downloadserver = "http://download.lxcenter.org/";
