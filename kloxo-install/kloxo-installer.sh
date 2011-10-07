@@ -2,7 +2,7 @@
 #	Kloxo, Hosting Control Panel
 #
 #	Copyright (C) 2000-2009	LxLabs
-#	Copyright (C) 2009-2010	LxCenter
+#	Copyright (C) 2009-2011	LxCenter
 #
 #	This program is free software: you can redistribute it and/or modify
 #	it under the terms of the GNU Affero General Public License as
@@ -28,10 +28,6 @@ if [ "$#" == 0 ] ; then
 	echo " -------------------------------------------------------------------"
 	echo "  format: sh $0 --type=<master/slave>"
 	echo " -------------------------------------------------------------------"
-#	echo "  --type - master or slave"
-	echo
-	echo " * Run kloxo-packer.sh to make kloxo packs"
-	echo " * This installer only test on 6.1.7+ version."
 	echo
 	exit;
 fi
@@ -114,7 +110,7 @@ fi
 # Check if OS is RHEL/CENTOS/FEDORA.
 if [ ! -f /etc/redhat-release ] ; then
 	echo -en "Operating System supported   " $C_NO
-	echo -e "\a\nSorry, only Red Hat EL and CentOS are supported by $APP_NAME at this time.\n\nAborting ...\n"
+	echo -e "\a\nSorry, only RedHat EL and CentOS are supported by $APP_NAME at this time.\n\nAborting ...\n"
 	exit $E_NOSUPPORT
 else
 	echo -en "Operating System supported   " $C_OK
