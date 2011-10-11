@@ -20,7 +20,7 @@
 
 // ==== kloxo_installer portion ===
 
-lxins_main();
+$downloadserver = "http://download.lxcenter.org/";
 
 function lxins_main()
 {
@@ -544,3 +544,4 @@ function addLineIfNotExist($filename, $pattern, $comment) {
 
 }
 
+lxins_main();
