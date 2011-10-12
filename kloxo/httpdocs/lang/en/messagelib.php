@@ -184,3 +184,7 @@ $__information['webserver_config'] =
 	"[b]Fix 'Ownership' And 'Permissions'[/b]<br />Prevent '500 Internal server error' on secure environment<br />".
 		"Fix-ownership - 'chown -R client:client' for directories and files<br />".
 		"Fix-permissions - 'chmod 775' for directories and 'chmod 644' for .php files";
+
+// Language Content for #656
+// by Andrew Ying
+$__emessage['document_root_may_not_contain_spaces'] = "The document root may not contain any space at the end or before the slash. Please check and submit again.";

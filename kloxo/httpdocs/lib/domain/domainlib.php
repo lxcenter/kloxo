@@ -640,6 +640,18 @@ function postAdd()
 	$web->ipaddress = $dnstemplate->getIpForBaseDomain();
 	$web->docroot = $this->docroot;
 
+    ///#656 When adding a subdomain, the Document Root field is not being validated
+    if (csa($web->docroot, " /")) {
+		throw new lxexception("document_root_may_not_contain_spaces", 'docroot', "");
+	}
+    else {
+        $domain_validation = str_split($web->docroot);
+        $domain_validation_num = strlen($web->docroot) - 1;
+        if ($domain_validation[$domain_validation_num] == " ") {
+            throw new lxexception("document_root_may_not_contain_spaces", 'docroot', "");
+        }
+    }
+    
 	$web->docroot = trim($web->docroot, "/");
 
 	$dns->copyObject($dnstemplate);
