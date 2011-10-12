@@ -24,9 +24,15 @@ function setFixUserlogo($select)
 
 	log_cleanup("Fix userlogo");
 
-	passthru("cp -rf /usr/local/lxlabs/kloxo/file/user-logo.png /home/kloxo/httpd/user-logo.png");
-	log_cleanup("- Source FROM /usr/local/lxlabs/kloxo/file/user-logo.png");
-	log_cleanup("- Target TO /home/kloxo/httpd/user-logo.png");
+	if (file_exists("/usr/local/lxlabs/kloxo/file/user-logo.png")) {
+		passthru("cp -rf /usr/local/lxlabs/kloxo/file/user-logo.png /home/kloxo/httpd/user-logo.png");
+		log_cleanup("- Source FROM /usr/local/lxlabs/kloxo/file/user-logo.png");
+		log_cleanup("- Target TO /home/kloxo/httpd/user-logo.png");
+	}
+	else {
+		log_cleanup("- No source /usr/local/lxlabs/kloxo/file/user-logo.png");
+		exit;
+	}
 
 	if ($select === 'defaults') {
 		setFixUserlogoDefaultPages();
@@ -39,29 +45,26 @@ function setFixUserlogo($select)
 		setFixUserlogoDomainPages();
 	}
 	else {
-		log_cleanup("- Wrong select...");
+		log_cleanup("- Wrong --select= entry");
 	}
 }
 
 function setFixUserlogoDefaultPages()
 {
-	passthru("cp -rf /home/kloxo/httpd/user-logo.png /home/kloxo/httpd/cp/images/logo.png");
-	log_cleanup("- Target TO /home/kloxo/httpd/cp/images/logo.png");
-	passthru("cp -rf /home/kloxo/httpd/user-logo.png /home/kloxo/httpd/default/images/logo.png");
-	log_cleanup("- Target TO /home/kloxo/httpd/default/images/logo.png");
-	passthru("cp -rf /home/kloxo/httpd/user-logo.png /home/kloxo/httpd/disable/images/logo.png");
-	log_cleanup("- Target TO /home/kloxo/httpd/disable/images/logo.png");
-	passthru("cp -rf /home/kloxo/httpd/user-logo.png /home/kloxo/httpd/webmail/images/logo.png");
-	log_cleanup("- Target TO /home/kloxo/httpd/webmail/images/logo.png");
+	$list = array('cp', 'default', 'disable', 'webmail');
+	
+	foreach($list as $k => $l) {
+		system("cp -rf /home/kloxo/httpd/user-logo.png /home/kloxo/httpd/{$l}/images/logo.png");
+		log_cleanup("- Target TO /home/kloxo/httpd/{$l}/images/logo.png");
+	}
 }
 
 function setFixUserlogoDomainPages()
 {
 	global $gbl, $sgbl, $login, $ghtml;
-
+	
 	$login->loadAllObjects('client');
 	$list = $login->getList('client');
-
 	foreach($list as $c) {
 		$clname = $c->getPathFromName('nname');
 		$cdir = "/home/{$clname}";
@@ -69,7 +72,7 @@ function setFixUserlogoDomainPages()
 
 		foreach((array) $dlist as $l) {
 			$web = $l->nname;
-			passthru("cp -rf /home/kloxo/httpd/user-logo.png {$cdir}/{$web}/images/logo.png");
+			system("cp -rf /home/kloxo/httpd/user-logo.png {$cdir}/{$web}/images/logo.png");
 			log_cleanup("- Target TO {$cdir}/{$web}/images/logo.png");
 		}
 	}
