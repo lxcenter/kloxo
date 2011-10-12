@@ -361,8 +361,6 @@ function install_main() {
 
 class remote { }
 
-$downloadserver = "http://download.lxcenter.org/";
-
 function slave_get_db_pass() {
 	$file = "/usr/local/lxlabs/kloxo/etc/slavedb/dbadmin";
 	if (!file_exists($file)) {

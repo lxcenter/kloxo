@@ -84,13 +84,9 @@ function dbactionUpdate($subaction)
 			passthru("yum -y install mod_ruid2");
 			passthru("yum -y update mod_ruid2");
 			lxfile_mv("/etc/httpd/conf.d/ruid2.nonconf", "/etc/httpd/conf.d/ruid2.conf");
+			lxfile_cp("../file/ruid2.conf", "/etc/httpd/conf.d/ruid2.conf");
 		}
 		else if ($t === 'mod_php_itk') {
-			if (!lxfile_exists("/usr/sbin/httpd.itk")) {
-				passthru("yum -y install httpd-itk");
-				passthru("yum -y update httpd-itk");
-				lxfile_rm("/etc/httpd/conf.d/itk.conf");
-			}
 			passthru("echo 'HTTPD=/usr/sbin/httpd.itk' >/etc/sysconfig/httpd");
 		}
 	}
