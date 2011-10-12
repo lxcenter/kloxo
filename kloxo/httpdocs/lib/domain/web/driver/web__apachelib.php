@@ -360,10 +360,10 @@ function createConffile()
 
 	//dprintr($this->main->__old_priv);
 
-	$web_home = "$sgbl->__path_httpd_root";
+	$web_home = $sgbl->__path_httpd_root;
 	$domainname = $this->main->nname;
-	$log_path = $web_home . "/{$this->main->nname}/stats"; 
-	$cust_log = $log_path . "/". $this->main->nname . "-" . "custom_log"; 
+	$log_path = $web_home . "/{$this->main->nname}/stats";
+	$cust_log = $log_path . "/". $this->main->nname . "-" . "custom_log";
 	$err_log = $log_path ."/". $this->main->nname . "-" . "error_log";
 //	$v_file = "$sgbl->__path_httpd_root/{$this->main->nname}/conf/kloxo.{$this->main->nname}";
 //	$v_file = "/home/apache/conf/domains/{$domainname}.conf";
@@ -1080,16 +1080,18 @@ function getDocumentRoot($subweb)
 
 	$path = "{$this->main->getFullDocRoot()}/";
 
+    // #656 When adding a subdomain, the Document Root field is not being validated
+    // Adding quotations so that we can work with directories with spaces
 	$string = null;
 	if($this->main->isOn('status')) {
-		$string .= "DocumentRoot {$path}\n\n";
+		$string .= "DocumentRoot \"{$path}\"\n\n";
 	} else {
 		if ($this->main->__var_disable_url) {
 			$url = add_http_if_not_exist($this->main->__var_disable_url);
 			$string .= "Redirect / {$url}\n\n";
 		} else {
 			$disableurl = "/home/kloxo/httpd/disable/";
-			$string .= "DocumentRoot {$disableurl}\n\n";
+			$string .= "DocumentRoot \"{$disableurl}\"\n\n";
 		}
 	}
 
@@ -1136,6 +1138,8 @@ function syncToPort($port, $cust_log, $err_log, $frontpage = false)
 */
 	$string  = null;
 
+    // #656 When adding a subdomain, the Document Root field is not being validated
+    // Adding quotations so that we can work with directories with spaces
 	if ($this->main->isOn('force_www_redirect')) {
 		$string .= "\tServerName www.{$this->main->nname}\n" ;
 	} else {
@@ -1160,10 +1164,10 @@ function syncToPort($port, $cust_log, $err_log, $frontpage = false)
 	foreach((array) $this->main->redirect_a as $red) {
 		$rednname = remove_extra_slash("/{$red->nname}");
 		if ($red->ttype === 'local') {
-			$string .= "\tAlias {$rednname} {$user_home}/{$red->redirect}\n";
+			$string .= "\tAlias \"{$rednname}\" \"{$user_home}\"/{$red->redirect}\"\n";
 		} else {
 			if (!redirect_a::checkForPort($port, $red->httporssl)) { continue; }
-			$string .= "\tRedirect {$rednname} {$red->redirect}\n";
+			$string .= "\tRedirect \"{$rednname}\" \"{$red->redirect}\"\n";
 		}
 	}
 
@@ -1186,20 +1190,20 @@ function syncToPort($port, $cust_log, $err_log, $frontpage = false)
 	$string .= $this->addSendmail();
 
 	if ($this->main->priv->isOn('cgi_flag')) {
-		$string .= "\tScriptAlias /cgi-bin/ {$user_home}/cgi-bin/\n\n";
+		$string .= "\tScriptAlias /cgi-bin/ \"{$user_home}/cgi-bin/\"\n\n";
 	}
 	if ($port === '80') {
-		$string .= "\tCustomLog {$cust_log} combined  \n";
-		$string .= "\tErrorLog {$err_log}\n\n";
+		$string .= "\tCustomLog \"{$cust_log}\" combined  \n";
+		$string .= "\tErrorLog \"{$err_log}\"\n\n";
 	}
 
 	// hack for frontpage. It needs the proper directory.
 	if ($frontpage) {
-		$string .= "\t<Directory {$this->main->getFullDocRoot()}/>\n";
+		$string .= "\t<Directory \"{$this->main->getFullDocRoot()}\"/>\n";
 		$string .= "\t\tAllowOverride All\n";
 		$string .= "\t</Directory>\n\n";
 	} else {
-		$string .= "\t<Directory {$this->main->getFullDocRoot()}/>\n";
+		$string .= "\t<Directory \"{$this->main->getFullDocRoot()}\"/>\n";
 		$string .= "\t\tAllowOverride All\n";
 		$string .= "\t</Directory>\n\n";
 		$string .= "\t<Location />\n";
