@@ -656,7 +656,7 @@ function PrepareRoundCubeDb()
 		exit;
 	}
 
-	system("mysql -u root $pstring roundcubemail < /home/kloxo/httpd/webmail/roundcube/SQL/mysql.initial.sql >> /dev/null");
+	system("mysql -f -u root $pstring roundcubemail < /home/kloxo/httpd/webmail/roundcube/SQL/mysql.initial.sql >/dev/null 2>&1");
 
 	$cfgfile = "/home/kloxo/httpd/webmail/roundcube/config/db.inc.php"; 
 
@@ -734,7 +734,7 @@ function PrepareHordeDb()
 		exit;
 	}
 
-	system("mysql -u root $pstring < /home/kloxo/httpd/webmail/horde/scripts/sql/groupware.mysql.sql >> /dev/null");
+	system("mysql -f -u root $pstring < /home/kloxo/httpd/webmail/horde/scripts/sql/groupware.mysql.sql >/dev/null 2>&1");
 
 	$cfgfile = "/home/kloxo/httpd/webmail/horde/config/conf.php";
 
