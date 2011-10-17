@@ -305,9 +305,9 @@ function createConffile()
 
 	$this->clearDomainIpAddress();
 
-	$web_home   = '"' . $sgbl->__path_httpd_root . '"';
+	$web_home   = $sgbl->__path_httpd_root ;
 	$domainname = $this->main->nname;
-	$log_path   = '"' . "$web_home/{$this->main->nname}/stats" . '"';
+	$log_path   = "$web_home/{$this->main->nname}/stats";
 //	$v_file     = "__path_lighty_path/conf/kloxo/lighttpd.{$this->main->nname}" ;
 //	$v_file     = "/home/lighttpd/conf/domains/{$this->main->nname}.conf" ;
 
