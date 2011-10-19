@@ -57,6 +57,9 @@ function setFixUserlogoDefaultPages()
 		system("cp -rf /home/kloxo/httpd/user-logo.png /home/kloxo/httpd/{$l}/images/logo.png");
 		log_cleanup("- Target TO /home/kloxo/httpd/{$l}/images/logo.png");
 	}
+	
+	system("cp -rf /home/kloxo/httpd/user-logo.png /usr/local/lxlabs/kloxo/httpdocs/login/images/logo.png");
+	log_cleanup("- Target TO /usr/local/lxlabs/kloxo/httpdocs/login/images/logo.png");
 }
 
 function setFixUserlogoDomainPages()

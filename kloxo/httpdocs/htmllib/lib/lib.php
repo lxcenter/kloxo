@@ -5182,6 +5182,22 @@ function setDefaultPages()
 
 	}
 
+	log_cleanup("- Php files for login web page");
+	lxfile_cp("../file/default_index.php", "/usr/local/lxlabs/kloxo/httpdocs/login/index.php");
+	lxfile_cp("../file/login_inc.php", "/usr/local/lxlabs/kloxo/httpdocs/login/inc.php");
+	lxfile_unix_chown("/usr/local/lxlabs/kloxo/httpdocs/login/index.php", "lxlabs:lxlabs");
+	lxfile_unix_chmod("/usr/local/lxlabs/kloxo/httpdocs/login/index.php", "0644");
+	lxfile_unix_chown("/usr/local/lxlabs/kloxo/httpdocs/login/inc.php", "lxlabs:lxlabs");
+	lxfile_unix_chmod("/usr/local/lxlabs/kloxo/httpdocs/login/inc.php", "0644");
+
+	if ($newer) {
+		log_cleanup("- Skeleton for login web page");
+		lxshell_unzip("__system__", "/usr/local/lxlabs/kloxo/httpdocs/login", "../file/skeleton.zip");
+	}
+	else {
+		log_cleanup("- No skeleton for login web page");
+	}
+
 	$usersourcezip = realpath("../file/user-skeleton.zip");
 	$usertargetzip = "/home/kloxo/user-httpd/user-skeleton.zip";
 
@@ -5218,14 +5234,6 @@ function setDefaultPages()
 		log_cleanup("- No exists user-logo");
 	}
 
-/* 
-	// pending
-	log_cleanup("Initialize skeleton (Login web page)");
-	lxshell_unzip("__system__", "/usr/local/lxlabs/kloxo/httpdocs/login", "../file/skeleton.zip");
-	lxfile_cp("../file/login_index.php", "/usr/local/lxlabs/kloxo/httpdocs/login/index.php");
-	lxfile_unix_chown("/usr/local/lxlabs/kloxo/httpdocs/login/index.php", "lxlabs:lxlabs");
-	lxfile_unix_chmod("/usr/local/lxlabs/kloxo/httpdocs/login/index.php", "0644");
-*/
 }
 
 function setFreshClam($nolog = null)

@@ -17,7 +17,8 @@
 <style>
 body {
 	font-family: Tahoma, Verdana, Arial, Helvertica, sans-serif;
-	font-size: 1em;
+	font-size: 8pt;
+	font-weight: 100;
 	background: #ddeeff;
 	margin: 0;
 }
@@ -27,31 +28,58 @@ a {
 img {
 	border: 0;
 }
+
+img.logo {
+	margin: 5px;
+	padding: 0;
+}
+
+table.header {
+	border-collapse: collapse;
+	border-spacing: 0;
+	background-color: #66aadd;
+	/* height: 110px; */
+	width: 100%;
+	font-family: Tahoma, Verdana, Arial, Helvertica, sans-serif;
+	font-size: 8pt;
+	font-weight: 100;
+}
+
+table.content {
+	border-collapse: collapse;
+	border-spacing: 0;
+	width: 100%;
+	font-family: Tahoma, Verdana, Arial, Helvertica, sans-serif;
+	font-size: 8pt;
+	font-weight: 100;
+}
 </style>
 <body>
 
-<table cellpadding="0" cellspacing="0" width="100%" border="0" bgcolor="#66aaddd" height="100">
+<table class="header">
 	<tr>
-		<td valign="top"><img src="images/logo.png" height="75" vspace="5" hspace="5" alt="hosting-logo"></td>
-		<td width="130">
-		<table border="0" width="100%" cellspacing="0" cellpadding="0">
-					<tr>
-						<td><a href="http://lxcenter.org/" title="Go to LxCenter website">
-						<img src="images/lxcenter.png" alt="lxcenter-logo" width="120" height="35" hspace="5" vspace="5"></a></td>
-					</tr>
-					<tr>
-						<td><a href="http://lxcenter.org/software/kloxo/" title="Go to Kloxo website">
-						<img src="images/kloxo.png" alt="kloxo-logo" width="120" height="27" hspace="5" vspace="5"></a></td>
-					</tr>
-					</table></td>
-	</tr><tr><td colspan="2" bgcolor="#000000">&nbsp;</td></tr>
+		<td valign="top" width="100%"><img class="logo" src="images/logo.png" height="75" alt="hosting-logo"></td>
+		<td>
+			<table class="content">
+				<tr>
+					<td><a href="http://lxcenter.org/" title="Go to LxCenter website"><img class="logo" src="images/lxcenter.png" alt="lxcenter-logo" width="120" height="35"></a></td>
+				</tr>
+				<tr>
+					<td><a href="http://lxcenter.org/software/kloxo/" title="Go to Kloxo website"><img class="logo" src="images/kloxo.png" alt="kloxo-logo" width="120" height="27"></a></td>
+				</tr>
+			</table>
+		</td>
+	</tr>
+	<tr>
+		<td colspan="2" bgcolor="#000000">&nbsp;</td>
+	</tr>
 </table>
-<table width="100%" height="300" cellpadding="0" cellspacing="0">
+<table class="content">
 	<tr>
-		<td width="50">&nbsp;</td>
-		<td valign="top"><?php include_once $incfile; ?></td>
-		<td width="280" valign="center">
-		<img src="images/disableskeletonbg.gif"></td>
+		<td width="50">&nbsp;</td><td valign="top">
+<?php include_once $incfile; ?>
+		</td>
+		<td width="280" valign="center"><img src="images/disableskeletonbg.gif"></td>
 	</tr>
 </table>
 
