@@ -105,9 +105,9 @@ function getRailsConf($app)
 	$string .= "\tserver.document-root = \"$basepath/$appname/public/\"\n";
 
 	if (!$app->isOn('accessible_directly')) {
-		//$string .= "\t\talias.url = ( \"$appurl/\" => \"$basepath/$appname/public/\" )\n";
+		//$string .= "\t\talias.url = (\"$appurl/\" => \"$basepath/$appname/public/\")\n";
 	} else {
-		$string .= "\talias.url += ( \"$appurl/\" => \"$basepath/$appname/public/\" )\n";
+		$string .= "\talias.url += (\"$appurl/\" => \"$basepath/$appname/public/\")\n";
 	}
 
 	$string .= "\tserver.error-handler-404 = \"$appurl/dispatch.fcgi\"\n\n";
@@ -703,20 +703,22 @@ function getDocumentRoot($subweb)
 
 	$domname = $this->main->nname;
 
+	// --- issue #698 - Always redirect to /awstats when access to stats.gif
+	// all redirect change to ^(/x/|/x$) formula for resolve this issue
+
 	$string = null;
 	$string .= "\talias.url  = (\"/__kloxo\" => \"/home/{$this->main->customer_name}/kloxoscript\")\n\n";
-	$string .= "\turl.redirect  = (\"/webmail\" => \"http://webmail.$domname\")\n";
+	$string .= "\turl.redirect  = (\"^(/webmail/|/webmail$)\" => \"http://webmail.$domname\")\n";
 
 	if ($this->main->nname !== 'lxlabs.com') {
-		$string .= "\turl.redirect += (\"^kloxo$\" => \"https://cp.$domname:{$this->main->__var_sslport}\")\n";
-		$string .= "\turl.redirect += (\"/kloxononssl\" => \"http://cp.$domname:{$this->main->__var_nonsslport}\")\n";
+		$string .= "\turl.redirect += (\"^(/kloxo/|/kloxo$)\" => \"https://cp.$domname:{$this->main->__var_sslport}\")\n";
+		$string .= "\turl.redirect += (\"^(/kloxononssl/|/kloxononssl$)\" => \"http://cp.$domname:{$this->main->__var_nonsslport}\")\n";
 	}
 
 	if ($this->main->__var_statsprog === 'awstats') {
-		$string .= "\turl.redirect += (\"/stats/\" => \"http://$domname/awstats/awstats.pl?config=$domname\")\n";
-		$string .= "\turl.redirect += (\"/stats\" => \"http://$domname/awstats/awstats.pl?config=$domname\")\n";
+		$string .= "\turl.redirect += (\"^(/stats/|/stats$)\" => \"http://$domname/awstats/awstats.pl?config=$domname\")\n";
 	} else {
-		$string .= "\talias.url += (\"/stats\" => \"$sgbl->__path_httpd_root/$domname/webstats\")\n";
+		$string .= "\talias.url += (\"^(/stats/|/stats$)\" => \"$sgbl->__path_httpd_root/$domname/webstats\")\n";
 	}
 
 	$string .= "\n";
@@ -810,8 +812,8 @@ function syncToPort($port, $subweb, $frontpage = false)
 
 	// Hack.. This is done so that others can use '+' without any issue.
 
-	$string .= "\talias.url += ( \"/awstatsicons\" => \"/home/kloxo/httpd/awstats/wwwroot/icon/\" )\n";
-	$string .= "\talias.url += ( \"/awstatscss\" => \"/home/kloxo/httpd/awstats/wwwroot/css/\" )\n";
+	$string .= "\talias.url += (\"/awstatsicons\" => \"/home/kloxo/httpd/awstats/wwwroot/icon/\")\n";
+	$string .= "\talias.url += (\"/awstatscss\" => \"/home/kloxo/httpd/awstats/wwwroot/css/\")\n";
 
 	$string .= $this->getAwstatsString();
 
