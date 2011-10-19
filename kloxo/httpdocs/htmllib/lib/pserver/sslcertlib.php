@@ -237,7 +237,7 @@ function isSelect()
 {
 	return true;
 	$db = new Sqlite($this->__masterserver, "sslipaddress");
-	$res = $db->getRowsWhere('sslcert = :certname', array(':certname' => $this->certname), array('nname'));
+	$res = $db->getRowsWhere("sslcert = '$this->certname'", array('nname'));
 
 	return ($res? false: true);
 }
@@ -303,7 +303,9 @@ function createNewcertificate()
 		$ltemp[$key] = $name;
 	}
 
-	$config['private_key_bits'] = 1024;
+	// Issue #648/#479 - add dropdown / ability to generate 2048 SSL keys directly from Kloxo
+//	$config['private_key_bits'] = 1024;
+	$config['private_key_bits'] = 2048;
 	$privkey = openssl_pkey_new($config);
 	openssl_pkey_export($privkey, $text_key_content);
 	$csr = openssl_csr_new($ltemp, $privkey);
