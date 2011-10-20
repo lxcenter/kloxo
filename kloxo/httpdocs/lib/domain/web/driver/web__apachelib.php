@@ -534,6 +534,8 @@ function createConffile()
 			$this->setAddon();		
 		}
 	}
+
+	createRestartFile('apache');
 }
 
 // function getAddon()
@@ -717,8 +719,6 @@ static function getCreateWebmail($list)
 
 //	lfile_put_contents("/etc/httpd/conf/kloxo/webmail_redirect.conf", $string);
 //	lfile_put_contents("/home/apache/conf/webmails/_webmail_redirect.conf", $string);
-
-	createRestartFile('apache');
 }
 
 function getDav()

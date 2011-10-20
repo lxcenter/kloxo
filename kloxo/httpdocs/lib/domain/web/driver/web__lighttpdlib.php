@@ -434,6 +434,8 @@ function createConffile()
 			$this->setAddon();
 		}
 	}
+	
+	createRestartFile("lighttpd");
 }
 
 // function getAddon()
@@ -1024,8 +1026,6 @@ static function getCreateWebmail($list)
 
 //	lfile_put_contents("__path_lighty_path/conf/kloxo/webmail_redirect.conf", $webdata);
 //	lfile_put_contents("/home/lighttpd/conf/defaults/_webmail_redirect.conf", $webdata);
-
-	createRestartFile("lighttpd");
 }
 
 // static function createWebmailConfig($iplist)
