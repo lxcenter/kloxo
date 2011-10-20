@@ -86,7 +86,7 @@ function getRailsConf($app)
 
 	$appurl = null;
 	if (!$app->isOn('accessible_directly')) {
-		$appurl = "/$appname";
+		$appurl = "/{$appname}";
 	}
 
 	if ($app->priv->rubyfcgiprocess_num > 0) {
@@ -100,30 +100,30 @@ function getRailsConf($app)
 
 	$string  = null;
 	if (!$app->isOn('accessible_directly')) {
-		$string .= "\$HTTP[\"url\"] =~ \"^/$appname\" {\n";
+		$string .= "\$HTTP[\"url\"] =~ \"^/{$appname}\" {\n";
 	}
-	$string .= "\tserver.document-root = \"$basepath/$appname/public/\"\n";
+	$string .= "\tserver.document-root = \"{$basepath}/{$appname}/public/\"\n";
 
 	if (!$app->isOn('accessible_directly')) {
-		//$string .= "\t\talias.url = (\"$appurl/\" => \"$basepath/$appname/public/\")\n";
+		//$string .= "\t\talias.url = (\"{$appurl}/\" => \"{$basepath}/{$appname}/public/\")\n";
 	} else {
-		$string .= "\talias.url += (\"$appurl/\" => \"$basepath/$appname/public/\")\n";
+		$string .= "\talias.url += (\"{$appurl}/\" => \"{$basepath}/{$appname}/public/\")\n";
 	}
 
-	$string .= "\tserver.error-handler-404 = \"$appurl/dispatch.fcgi\"\n\n";
-	$string .= "\tfastcgi.server = (\".fcgi\" =>(( \"socket\" => \"/tmp/ror.socket.mick.com.$appname.\" + var.PID,\n";
+	$string .= "\tserver.error-handler-404 = \"{$appurl}/dispatch.fcgi\"\n\n";
+	$string .= "\tfastcgi.server = (\".fcgi\" =>(( \"socket\" => \"/tmp/ror.socket.mick.com.{$appname}.\" + var.PID,\n";
 	$string .= "\t\"bin-path\" => \"/usr/bin/lxsuexec\",\n";
 	$string .= "\t\t\"min-procs\" => 0,\n";
-	$string .= "\t\t\"max-procs\" => $proc,\n";
+	$string .= "\t\t\"max-procs\" => {$proc},\n";
 	$string .= "\t\t\t\"bin-environment\" => (\n";
-	$string .= "\t\t\t\t\"MUID\" => \"$uid\",\n";
-	$string .= "\t\t\t\t\"GID\" => \"$gid\",\n";
-	$string .= "\t\t\t\t\"TARGET\" => \"$basepath/$appname/public/dispatch.fcgi\",\n";
+	$string .= "\t\t\t\t\"MUID\" => \"{$uid}\",\n";
+	$string .= "\t\t\t\t\"GID\" => \"{$gid}\",\n";
+	$string .= "\t\t\t\t\"TARGET\" => \"{$basepath}/{$appname}/public/dispatch.fcgi\",\n";
 	//$string .= "\t\t\t\t\"TARGET\" => \"/usr/bin/ror/public/dispatch.fcgi\",";
 	$string .= "\t\t\t\t\"NON_RESIDENT\" => \"1\"\n";
 	$string .= "\t),\n";
 	$string .= "\t\"idle-timeout\" => 3,\n";
-	$string .= "\t\"strip-request-uri\" => \"$appurl/\"\n";
+	$string .= "\t\"strip-request-uri\" => \"{$appurl}/\"\n";
 	$string .= "\t))\n";
 	$string .= ")\n";
 	if (!$app->isOn('accessible_directly')) {
@@ -212,9 +212,9 @@ function enablePhp()
 
 	if ($this->main->isOn('fcgi_children')) {
 		$maxprocstring = "\t\t\"max-procs\" => 1,\n";
-		$fcgichildstring = "\t\t\t\"PHP_FCGI_CHILDREN\" => \"$fcgi_proc\",\n";
+		$fcgichildstring = "\t\t\t\"PHP_FCGI_CHILDREN\" => \"{$fcgi_proc}\",\n";
 	} else {
-		$maxprocstring = "\t\t\"max-procs\" => $fcgi_proc,\n";
+		$maxprocstring = "\t\t\"max-procs\" => {$fcgi_proc},\n";
 		$fcgichildstring = "\t\t\t\"PHP_FCGI_CHILDREN\" => \"0\",\n";
 	}
 
@@ -241,8 +241,8 @@ function enablePhp()
 		$string .= "\t\t\"min-procs\" => 0,\n";
 		$string .= $maxprocstring;
 		$string .= "\t\t\"bin-environment\" => (\n";
-		$string .= "\t\t\t\"MUID\" => \"$uid\",\n";
-		$string .= "\t\t\t\"GID\" => \"$gid\",\n";
+		$string .= "\t\t\t\"MUID\" => \"{$uid}\",\n";
+		$string .= "\t\t\t\"GID\" => \"{$gid}\",\n";
 		$string .= $phprc;
 		$string .= "\t\t\t\"TARGET\" => \"/usr/bin/php-cgi\",\n";
 		$string .= "\t\t\t\"NON_RESIDENT\" => \"0\",\n";
@@ -307,7 +307,7 @@ function createConffile()
 
 	$web_home   = $sgbl->__path_httpd_root ;
 	$domainname = $this->main->nname;
-	$log_path   = "$web_home/{$this->main->nname}/stats";
+	$log_path   = "{$web_home}/{$this->main->nname}/stats";
 //	$v_file     = "__path_lighty_path/conf/kloxo/lighttpd.{$this->main->nname}" ;
 //	$v_file     = "/home/lighttpd/conf/domains/{$this->main->nname}.conf" ;
 
@@ -446,11 +446,11 @@ function setAddon()
 //	foreach((array) $this->main->__var_addonlist as $v) {
 	foreach((array) $vaddonlist as $v) {
 		if ($v->ttype === 'redirect') {
-			$string .= "\$HTTP[\"host\"] =~ \"^(www.)?$v->nname\" {\n\n";
-			$dst = "{$this->main->nname}/$v->destinationdir";
+			$string .= "\$HTTP[\"host\"] =~ \"^(www.)?{$v->nname}\" {\n\n";
+			$dst = "{$this->main->nname}/{$v->destinationdir}";
 			$dst = remove_extra_slash($dst);
 			//$dst = trim($dst, "/");
-			$string .= "\turl.redirect = ( \"/\" => \"http://$dst\")\n\n";
+			$string .= "\turl.redirect = ( \"/\" => \"http://{$dst}\")\n\n";
 			$string .= "}\n\n";
 		}
 
@@ -486,7 +486,7 @@ function getBlockIP()
 	if (!$t) { return; }
 	$t = str_replace(".*", "", $t);
 	$t = str_replace(" ", "|", $t);
-	$string  = "\$HTTP[\"remoteip\"] =~ \"$t\" {\n";
+	$string  = "\$HTTP[\"remoteip\"] =~ \"{$t}\" {\n";
 	$string .= "url.access-deny = (\"\")\n";
 	$string .= "}\n";
 	return $string;
@@ -505,17 +505,17 @@ static function createSSlConf($iplist, $domainiplist)
 
 		$ssl_cert = null;
 		$ssl_cert = sslcert::getSslCertnameFromIP($ip['nname']);
-		$certificatef = "$sgbl->__path_ssl_root/$ssl_cert.crt";
-		$keyfile = "$sgbl->__path_ssl_root/$ssl_cert.key";
-		$pemfile = "$sgbl->__path_ssl_root/$ssl_cert.pem";
-		$cafile = "$sgbl->__path_ssl_root/$ssl_cert.ca";
+		$certificatef = "{$sgbl->__path_ssl_root}/{$ssl_cert}.crt";
+		$keyfile = "{$sgbl->__path_ssl_root}/{$ssl_cert}.key";
+		$pemfile = "{$sgbl->__path_ssl_root}/{$ssl_cert}.pem";
+		$cafile = "{$sgbl->__path_ssl_root}/{$ssl_cert}.ca";
 
 		sslcert::checkAndThrow(lfile_get_contents($certificatef), lfile_get_contents($keyfile), $ssl_cert);
 
 		if (!lxfile_exists($pemfile)) {
 			$c = lfile_get_contents($certificatef);
 			$k = lfile_get_contents($keyfile);
-			lfile_put_contents($pemfile, "$c\n$k");
+			lfile_put_contents($pemfile, "{$c}\n{$k}");
 		}
 /*
 		$string .= "\$SERVER[\"socket\"] == \"{$ip['ipaddr']}:80\" {\n";
@@ -542,22 +542,22 @@ function getSslCert($ip)
 
 	$ssl_cert = null;
 	$ssl_cert = sslcert::getSslCertnameFromIP($ip['nname']);
-	$certificatef = "$sgbl->__path_ssl_root/$ssl_cert.crt";
-	$keyfile = "$sgbl->__path_ssl_root/$ssl_cert.key";
-	$pemfile = "$sgbl->__path_ssl_root/$ssl_cert.pem";
-	$cafile = "$sgbl->__path_ssl_root/$ssl_cert.ca";
+	$certificatef = "{$sgbl->__path_ssl_root}/{$ssl_cert}.crt";
+	$keyfile = "{$sgbl->__path_ssl_root}/{$ssl_cert}.key";
+	$pemfile = "{$sgbl->__path_ssl_root}/{$ssl_cert}.pem";
+	$cafile = "{$sgbl->__path_ssl_root}/{$ssl_cert}.ca";
 
 	sslcert::checkAndThrow(lfile_get_contents($certificatef), lfile_get_contents($keyfile), $ssl_cert);
 
 	if (!lxfile_exists($pemfile)) {
 		$c = lfile_get_contents($certificatef);
 		$k = lfile_get_contents($keyfile);
-		lfile_put_contents($pemfile, "$c\n$k");
+		lfile_put_contents($pemfile, "{$c}\n{$k}");
 	}
 
 	$string .= "\tssl.engine = \"enable\"\n";
-	$string .= "\tssl.pemfile = \"$pemfile\"\n";
-	$string .= "\tssl.ca-file = \"$cafile\"\n\n";
+	$string .= "\tssl.pemfile = \"{$pemfile}\"\n";
+	$string .= "\tssl.ca-file = \"{$cafile}\"\n\n";
 
 	return $string;
 }
@@ -598,7 +598,7 @@ function middlepart($domain, $dirp) {
 				continue;
 			}
 			if (!$this->isRailsDocroot()) {
-				$string .= "\tserver.error-handler-$num = \"$nv\"\n";
+				$string .= "\tserver.error-handler-{$num} = \"{$nv}\"\n";
 			}
 		}
 	}
@@ -627,8 +627,8 @@ function middlepart($domain, $dirp) {
 function getDirIndexCore($dir)
 {
 	$string = null;
-	$dir = remove_extra_slash("/$dir");
-	$string .= "\t\$HTTP[\"url\"] =~ \"^$dir\" {\n";
+	$dir = remove_extra_slash("/{$dir}");
+	$string .= "\t\$HTTP[\"url\"] =~ \"^{$dir}\" {\n";
 	$string .= "\t\tdir-listing.activate = \"enable\"\n\t}\n\n";
 
 	return $string;
@@ -653,16 +653,16 @@ function getDirprotect()
 function getDirprotectCore($authname, $path, $file)
 {
 	global $gbl, $sgbl, $login, $ghtml; 
-	$path = remove_extra_slash("/$path");
+	$path = remove_extra_slash("/{$path}");
 	$end = null;
 	if ($path !== "/") { $end = "[/$]"; }
 	$string = null;
-	$string .= "\$HTTP[\"url\"] =~ \"^$path$end\" {\n";
+	$string .= "\$HTTP[\"url\"] =~ \"^{$path}{$end}\" {\n";
 	$string .= "auth.backend = \"htpasswd\"\n";
-	$string .= "auth.backend.htpasswd.userfile = \"$sgbl->__path_httpd_root/{$this->main->nname}/__dirprotect/$file\"\n";
-	$string .= "auth.require = ( \"$path\" => (\n";
+	$string .= "auth.backend.htpasswd.userfile = \"{$sgbl->__path_httpd_root}/{$this->main->nname}/__dirprotect/{$file}\"\n";
+	$string .= "auth.require = ( \"{$path}\" => (\n";
 	$string .= "\"method\" => \"basic\",\n";
-	$string .= "\"realm\" => \"$authname\",\n";
+	$string .= "\"realm\" => \"{$authname}\",\n";
 	$string .= "\"require\" => \"valid-user\"\n";
 	$string .= "))\n}\n";
 
@@ -695,8 +695,8 @@ function isRailsDocroot()
 function getDocumentRoot($subweb)
 {
 	global $gbl, $sgbl, $login, $ghtml;
-	$base_root = "$sgbl->__path_httpd_root";
-	$web_home = "$sgbl->__path_httpd_root" ;
+	$base_root = $sgbl->__path_httpd_root;
+	$web_home = $sgbl->__path_httpd_root;
 
 
 	$path = "{$this->main->getFullDocRoot()}/";
@@ -708,32 +708,32 @@ function getDocumentRoot($subweb)
 
 	$string = null;
 	$string .= "\talias.url  = (\"/__kloxo\" => \"/home/{$this->main->customer_name}/kloxoscript\")\n\n";
-	$string .= "\turl.redirect  = (\"^(/webmail/|/webmail$)\" => \"http://webmail.$domname\")\n";
+	$string .= "\turl.redirect  = (\"^(/webmail/|/webmail\$)\" => \"http://webmail.{$domname}\")\n";
 
 	if ($this->main->nname !== 'lxlabs.com') {
-		$string .= "\turl.redirect += (\"^(/kloxo/|/kloxo$)\" => \"https://cp.$domname:{$this->main->__var_sslport}\")\n";
-		$string .= "\turl.redirect += (\"^(/kloxononssl/|/kloxononssl$)\" => \"http://cp.$domname:{$this->main->__var_nonsslport}\")\n";
+		$string .= "\turl.redirect += (\"^(/kloxo/|/kloxo\$)\" => \"https://cp.{$domname}:{$this->main->__var_sslport}\")\n";
+		$string .= "\turl.redirect += (\"^(/kloxononssl/|/kloxononssl\$)\" => \"http://cp.{$domname}:{$this->main->__var_nonsslport}\")\n";
 	}
 
 	if ($this->main->__var_statsprog === 'awstats') {
-		$string .= "\turl.redirect += (\"^(/stats/|/stats$)\" => \"http://$domname/awstats/awstats.pl?config=$domname\")\n";
+		$string .= "\turl.redirect += (\"^(/stats/|/stats\$)\" => \"http://{$domname}/awstats/awstats.pl?config={$domname}\")\n";
 	} else {
-		$string .= "\talias.url += (\"^(/stats/|/stats$)\" => \"$sgbl->__path_httpd_root/$domname/webstats\")\n";
+		$string .= "\talias.url += (\"^(/stats/|/stats\$)\" => \"{$sgbl->__path_httpd_root}/{$domname}/webstats\")\n";
 	}
 
 	$string .= "\n";
 
 	if($this->main->isOn('status')) {
 		if (!$this->isRailsDocroot()) {
-			$string .= "\tserver.document-root =  \"$path\"\n";
+			$string .= "\tserver.document-root =  \"{$path}\"\n";
 		}
 	} else {
 		if ($this->main->__var_disable_url) {
 			$url = add_http_if_not_exist($this->main->__var_disable_url);
-			$string .= "\turl.redirect += ( \"/\" => \"$url\" )\n";
+			$string .= "\turl.redirect += ( \"/\" => \"{$url}\" )\n";
 		} else {
 			$disableurl = "/home/kloxo/httpd/disable/";
-			$string .= "\tserver.document-root = \"$disableurl\"\n";
+			$string .= "\tserver.document-root = \"{$disableurl}\"\n";
 		}
 	}
 	$string .= "\n";
@@ -752,14 +752,17 @@ function hotlink_protection()
 	$allowed_domain_string = trim($allowed_domain_string);
 	$allowed_domain_string = str_replace("\r", "", $allowed_domain_string);
 	$allowed_domain_string = str_replace("\n", "|", $allowed_domain_string);
+	
 	if ($allowed_domain_string) { $allowed_domain_string .= "|{$this->main->nname}";
 	} else { $allowed_domain_string .= "{$this->main->nname}"; }
+
 	$ht = trim($this->main->hotlink_redirect, "/");
-	$ht = "/$ht";
+	$ht = "/{$ht}";
+
 	$string .= "\n\n";
-	$string .= "\$HTTP[\"referer\"] !~ \"^($|https?://(.*\.|)($allowed_domain_string))\" {\n";
-	$string .= "url.rewrite = (\"(?i)(/.*\.(jpe?g|png|gif|jpg|rar|pdf))$\" =>\n";
-	$string .= "\"$ht\" )\n";
+	$string .= "\$HTTP[\"referer\"] !~ \"^($|https?://(.*\.|)({$allowed_domain_string}))\" {\n";
+	$string .= "url.rewrite = (\"(?i)(/.*\.(jpe?g|png|gif|jpg|rar|pdf))\$\" =>\n";
+	$string .= "\"{$ht}\" )\n";
 	$string .= "}\n\n";
 
 	return $string;
@@ -775,7 +778,7 @@ function getIndexFileOrder()
 
 	if (!$list) { return; }
 	$string = implode("\", \"", $list);
-	$string = "\tindex-file.names = (\"$string\")\n\n";
+	$string = "\tindex-file.names = (\"{$string}\")\n\n";
 
 	return $string;
 }
@@ -788,9 +791,9 @@ function syncToPort($port, $subweb, $frontpage = false)
 	$base_root = $sgbl->__path_httpd_root;
 	$domainname = $this->main->nname;
 	$user_home = "{$this->main->getFullDocRoot()}/";
-	$log_path = "$web_home/{$this->main->nname}/stats"; 
-	$cust_log = "$log_path/{$this->main->nname}-custom_log"; 
-	$err_log = "$log_path/{$this->main->nname}-error_log";
+	$log_path = "{$web_home}/{$this->main->nname}/stats"; 
+	$cust_log = "{$log_path}/{$this->main->nname}-custom_log"; 
+	$err_log = "{$log_path}/{$this->main->nname}-error_log";
 /*
 	if (!$this->main->ipaddress) {
 		throw new lxException("no_ipaddress", '');
@@ -826,17 +829,17 @@ function syncToPort($port, $subweb, $frontpage = false)
 	foreach((array) $this->main->redirect_a as $red) {
 		$rednname = remove_extra_slash("/{$red->nname}");
 		if ($red->ttype === 'local') {
-			$string .= "\talias.url += (\"$rednname\" => \"$user_home/$red->redirect\")\n";
+			$string .= "\talias.url += (\"{$rednname}\" => \"{$user_home}/{$red->redirect}\")\n";
 		} else {
 			if (!redirect_a::checkForPort($port, $red->httporssl)) { continue; }
-			$string .= "\turl.redirect += (\".*$rednname\" => \"$red->redirect\")\n";
+			$string .= "\turl.redirect += (\".*{$rednname}\" => \"{$red->redirect}\")\n";
 		}
 	}
 
 //	$string .= "\n";
 
-	$string .= "\taccesslog.filename = \"$cust_log\"\n";
-	$string .= "\tserver.errorlog = \"$err_log\"\n\n";
+	$string .= "\taccesslog.filename = \"{$cust_log}\"\n";
+	$string .= "\tserver.errorlog = \"{$err_log}\"\n\n";
 
 	return $string;
 }
@@ -848,7 +851,7 @@ function getCgiString()
 	$string = null;
 	$string .= "\talias.url += ( \"/cgi-bin\" => \"{$this->main->getFullDocRoot()}/cgi-bin/\")\n\n"; 
 	$string .= "\t\$HTTP[\"url\"] =~ \"^/cgi-bin\" {\n";
-	$string .= "\t\tcgi.assign = ( \"\" => \"/$sgbl->__path_httpd_root/{$this->main->nname}/shsuexec.sh\" )\n\t}\n\n";
+	$string .= "\t\tcgi.assign = ( \"\" => \"/{$sgbl->__path_httpd_root}/{$this->main->nname}/shsuexec.sh\" )\n\t}\n\n";
 
 	return $string;
 }
@@ -859,9 +862,9 @@ function getAwstatsString()
 
 	$web_home = $sgbl->__path_httpd_root ;
 	$string = null;
-	$string .= "\talias.url += (\"/awstats/\" => \"$sgbl->__path_kloxo_httpd_root/awstats/wwwroot/cgi-bin/\")\n\n";
+	$string .= "\talias.url += (\"/awstats/\" => \"{$sgbl->__path_kloxo_httpd_root}/awstats/wwwroot/cgi-bin/\")\n\n";
 	$string .= "\t\$HTTP[\"url\"] =~ \"^/awstats\" {\n";
-	$string .= "\t\tcgi.assign = ( \".pl\" => \"/$sgbl->__path_httpd_root/{$this->main->nname}/perlsuexec.sh\" )\n\t}\n\n";
+	$string .= "\t\tcgi.assign = ( \".pl\" => \"/{$sgbl->__path_httpd_root}/{$this->main->nname}/perlsuexec.sh\" )\n\t}\n\n";
 
 	if ($this->main->stats_password) {
 		$string .= $this->getDirprotectCore("Awstats", "/awstats", "__stats");
@@ -875,6 +878,8 @@ function getAwstatsString()
 
 function createSuexec()
 {
+	global $gbl, $sgbl, $login, $ghtml; 
+
 	$string = null;
 	$uid = os_get_uid_from_user($this->main->username);
 	$gid = os_get_gid_from_user($this->main->username);
@@ -883,23 +888,23 @@ function createSuexec()
 	$phprc .= "export PHPRC=/home/httpd/{$this->main->nname}\n";
 	$string .= "#!/bin/sh\n";
 	$string .= "### Username: {$this->main->username}\n";
-	$string .= "export MUID=$uid\n";
-	$string .= "export GID=$gid\n";
+	$string .= "export MUID={$uid}\n";
+	$string .= "export GID={$gid}\n";
 	$string .= $phprc;
 	$string .= "export TARGET=<%program%>\n";
 	$string .= "export NON_RESIDENT=1\n";
-	$string .= "exec lxsuexec $*\n";
+	$string .= "exec lxsuexec \$*\n";
 	$st = str_replace("<%program%>", "/usr/bin/php-cgi", $string);
-	lfile_put_contents("__path_httpd_root/{$this->main->nname}/phpsuexec.sh", $st);
+	lfile_put_contents("{$sgbl->__path_httpd_root}/{$this->main->nname}/phpsuexec.sh", $st);
 	$st = str_replace("<%program%>", "/usr/bin/lxexec", $string);
-	lfile_put_contents("__path_httpd_root/{$this->main->nname}/shsuexec.sh", $st);
+	lfile_put_contents("{$sgbl->__path_httpd_root}/{$this->main->nname}/shsuexec.sh", $st);
 
 	$st = str_replace("<%program%>", "/usr/bin/perl", $string);
-	lfile_put_contents("__path_httpd_root/{$this->main->nname}/perlsuexec.sh", $st);
+	lfile_put_contents("{$sgbl->__path_httpd_root}/{$this->main->nname}/perlsuexec.sh", $st);
 
-	lxfile_unix_chmod("__path_httpd_root/{$this->main->nname}/shsuexec.sh", "0755");
-	lxfile_unix_chmod("__path_httpd_root/{$this->main->nname}/phpsuexec.sh", "0755");
-	lxfile_unix_chmod("__path_httpd_root/{$this->main->nname}/perlsuexec.sh", "0755");
+	lxfile_unix_chmod("{$sgbl->__path_httpd_root}/{$this->main->nname}/shsuexec.sh", "0755");
+	lxfile_unix_chmod("{$sgbl->__path_httpd_root}/{$this->main->nname}/phpsuexec.sh", "0755");
+	lxfile_unix_chmod("{$sgbl->__path_httpd_root}/{$this->main->nname}/perlsuexec.sh", "0755");
 }
 
 function createServerAliasLine()
@@ -937,7 +942,7 @@ function createServerAliasLine()
 			continue;
 		}
 		$list[] = $d->nname;
-		$list[] = "www.$d->nname";
+		$list[] = "www.{$d->nname}";
 	}
 
 	$list = lx_array_merge(array($list, $iplist));
@@ -991,15 +996,15 @@ static function getCreateWebmail($list)
 			$webdata .= "\turl.redirect = ( \"/\" =>  \"{$l['webmail_url']}\")\n\n";
 		} else {
 			if (is_disabled($l['webmailprog'])) {
-				$webdata .= "\tserver.document-root = \"$sgbl->__path_kloxo_httpd_root/webmail/disabled/\"\n\n";
+				$webdata .= "\tserver.document-root = \"{$sgbl->__path_kloxo_httpd_root}/webmail/disabled/\"\n\n";
 			} else {
-			//	$webdata .= "\tserver.document-root = \"$sgbl->__path_kloxo_httpd_root/webmail/\"\n\n";
+			//	$webdata .= "\tserver.document-root = \"{$sgbl->__path_kloxo_httpd_root}/webmail/\"\n\n";
 				$prog = ($l['webmailprog'] === '--chooser--') ? "" : $l['webmailprog'];
 				if ($prog) {
-					$webdata .= "\tserver.document-root = \"$sgbl->__path_kloxo_httpd_root/webmail/{$prog}/\"\n\n";
+					$webdata .= "\tserver.document-root = \"{$sgbl->__path_kloxo_httpd_root}/webmail/{$prog}/\"\n\n";
 				}
 				else {
-					$webdata .= "\tserver.document-root = \"$sgbl->__path_kloxo_httpd_root/webmail/\"\n\n";
+					$webdata .= "\tserver.document-root = \"{$sgbl->__path_kloxo_httpd_root}/webmail/\"\n\n";
 				}
 			}
 		/*
@@ -1037,13 +1042,13 @@ static function createWebDefaultConfig($iplist = null)
 		$webmaildefpath = '';
 	}
 	else {
-		$webmaildefpath = $webmaildef."/";
+		$webmaildefpath = "{$webmaildef}/";
 	}
 
 	$webdata = null;
 
 	$webdata .= "\$HTTP[\"host\"] =~ \"^webmail.*\" { \n\n";
-	$webdata .= "\tserver.document-root = \"$sgbl->__path_kloxo_httpd_root/webmail/$webmaildefpath\"\n";
+	$webdata .= "\tserver.document-root = \"{$sgbl->__path_kloxo_httpd_root}/webmail/{$webmaildefpath}\"\n";
 	$webdata .= "\tserver.errorlog = \"/home/kloxo/httpd/lighttpd/error.log\"\n";
 	$webdata .= "\tcgi.assign = ( \".php\" => \"/home/httpd/nobody.sh\" )\n\n";
 	$webdata .= "}\n\n\n";  
@@ -1056,7 +1061,7 @@ static function createWebDefaultConfig($iplist = null)
 static function fixErrorLog($name)
 {
 	$file = "/home/kloxo/httpd/lighttpd/error.log";
-	$cmd = "grep -i $name $file > /home/httpd/$name/stats/$name-error_log";
+	$cmd = "grep -i {$name} {$file} > /home/httpd/{$name}/stats/{$name}-error_log";
 	log_shell($cmd);
 	system($cmd);
 
@@ -1087,7 +1092,7 @@ static function fixErrorLogbad($list)
 	}
 
 	foreach($out as $k => $v) {
-		lfile_put_contents("/home/httpd/$k/stats/$k-error_log", $v, FILE_APPEND);
+		lfile_put_contents("/home/httpd/{$k}/stats/{$k}-error_log", $v, FILE_APPEND);
 	}
 
 	fclose($fp);
@@ -1143,7 +1148,7 @@ function createCpConfig()
 	foreach($list as $config => $file) {
 		$webdata  = null;
 		$webdata .= "\$HTTP[\"host\"] =~ \"^{$config}.*\" { \n\n";
-		$webdata .= "\tserver.document-root = \"$sgbl->__path_kloxo_httpd_root/{$config}/\"\n";
+		$webdata .= "\tserver.document-root = \"{$sgbl->__path_kloxo_httpd_root}/{$config}/\"\n";
 		$webdata .= "\tserver.errorlog = \"/home/lighttpd/logs/error.log\"\n";
 		$webdata .= "\tcgi.assign = ( \".php\" => \"/home/httpd/nobody.sh\" )\n\n";
 		$webdata .= "}\n\n\n";
@@ -1266,15 +1271,15 @@ function getDav()
 	lxfile_mkdir($bdir);
 	foreach($this->main->__var_davuser as $k => $v) {
 		$file = get_file_from_path($k);
-		$dbf = "/tmp/$file.db";
-		$file = "$bdir/$file";
+		$dbf = "/tmp/{$file}.db";
+		$file = "$bdir/{$file}";
 		lxfile_touch($file);
-		$string .= "\$HTTP[\"url\"] =~ \"^$k($|/)\" {\n";
+		$string .= "\$HTTP[\"url\"] =~ \"^{$k}(\$|/)\" {\n";
 		$string .= "webdav.activate = \"enable\"\n";
 		$string .= "webdav.is-readonly = \"disable\"\n";
 		$string .= "auth.backend = \"htpasswd\"\n";
-		$string .= "auth.backend.htpasswd.userfile = \"$file\"\n";
-		$string .= "webdav.sqlite-db-name = \"$dbf\"\n";
+		$string .= "auth.backend.htpasswd.userfile = \"{$file}\"\n";
+		$string .= "webdav.sqlite-db-name = \"{$dbf}\"\n";
 		$string .= "auth.require = ( \"\" => ( \"method\" => \"basic\",\n";
 		$string .= "\"realm\" => \"webdav\",\n";
 		$string .= "\"require\" => \"valid-user\" ) )\n";

@@ -51,7 +51,7 @@ static function installMe()
 	lxfile_mkdir("/home/apache/conf/wildcards");
 
 	//--- some vps include /etc/httpd/conf.d/swtune.conf
-	passthru("rm -f /etc/httpd/conf.d/swtune.conf");
+	system("rm -f /etc/httpd/conf.d/swtune.conf");
 
 	// rev 527
 	lxfile_cp("../file/apache/etc_init.d", "/etc/init.d/httpd");
@@ -131,13 +131,13 @@ function updateMainConfFile()
 		}
 	}
 
-	passthru("rm -rf /home/apache/conf/domains/*.conf");
-	passthru("rm -rf /home/apache/conf/redirects/*.conf");
-	passthru("rm -rf /home/apache/conf/wildcards/*.conf");
+	system("rm -rf /home/apache/conf/domains/*.conf");
+	system("rm -rf /home/apache/conf/redirects/*.conf");
+	system("rm -rf /home/apache/conf/wildcards/*.conf");
 
-	passthru("rename .conf.active .conf /home/apache/conf/domains/*.conf.active");
-	passthru("rename .conf.active .conf /home/apache/conf/redirects/*.conf.active");
-	passthru("rename .conf.active .conf /home/apache/conf/wildcards/*.conf.active");
+	system("rename .conf.active .conf /home/apache/conf/domains/*.conf.active");
+	system("rename .conf.active .conf /home/apache/conf/redirects/*.conf.active");
+	system("rename .conf.active .conf /home/apache/conf/wildcards/*.conf.active");
 
 	//--- delete unlisted domains config - end
 
@@ -168,11 +168,11 @@ function updateMainConfFile()
 	// override httpd.conf
 	lxfile_cp("/usr/local/lxlabs/kloxo/file/centos-5/httpd.conf", "/etc/httpd/conf/httpd.conf");
 	// delete old structure
-	passthru("rm -rf /etc/httpd/conf/kloxo");
-	passthru("rm -rf /httpd/httpd/conf");
+	system("rm -rf /etc/httpd/conf/kloxo");
+	system("rm -rf /httpd/httpd/conf");
 
 	foreach((array) $vdomlist as $dom) {
-		passthru("rm -rf {$sgbl->__path_httpd_root}/{$dom['nname']}/conf");
+		system("rm -rf {$sgbl->__path_httpd_root}/{$dom['nname']}/conf");
 	}
 }
 
@@ -268,7 +268,7 @@ function AddOpenBaseDir()
 	if ($adminbasedir) {
 		$adminbasedir .= ":";
 	}
-	$corepath = "$sgbl->__path_customer_root/{$this->main->customer_name}/";
+	$corepath = "{$sgbl->__path_customer_root}/{$this->main->customer_name}/";
 
 	$path = "{$sgbl->__path_httpd_root}/{$this->main->nname}/httpdocs:{$sgbl->__path_httpd_root}/{$this->main->nname}/{$this->main->nname}:$corepath";
 
@@ -362,9 +362,9 @@ function createConffile()
 
 	$web_home = $sgbl->__path_httpd_root;
 	$domainname = $this->main->nname;
-	$log_path = $web_home . "/{$this->main->nname}/stats";
-	$cust_log = $log_path . "/". $this->main->nname . "-" . "custom_log";
-	$err_log = $log_path ."/". $this->main->nname . "-" . "error_log";
+	$log_path = "{$web_home}/{$this->main->nname}/stats";
+	$cust_log = "{$log_path}/{$this->main->nname}-custom_log";
+	$err_log = "{$log_path}/{$this->main->nname}-error_log";
 //	$v_file = "$sgbl->__path_httpd_root/{$this->main->nname}/conf/kloxo.{$this->main->nname}";
 //	$v_file = "/home/apache/conf/domains/{$domainname}.conf";
 
@@ -764,13 +764,13 @@ function frontPageEnable()
 	$string = null;
 	$web_path = $sgbl->__path_httpd_root;
 	$base_root = $sgbl->__path_httpd_root;
-	$v_dir = $web_path . "/{$this->main->nname}/conf";
-	$log_path = $web_path . "/{$this->main->nname}/stats";
-	$log_path1 = $log_path . "/logs";
-	$cust_log = $log_path1 . "/{$this->main->nname}-custom_log"; 
-	$err_log = $log_path1 ."/{$this->main->nname}-error_log";
-	$awstat_conf = "$sgbl->__path_real_etc_root/awstats/";
-	$awstat_dirdata = "$sgbl->__path_kloxo_httpd_root/awstats/";
+	$v_dir = "{$web_path}/{$this->main->nname}/conf";
+	$log_path = "{$web_path}/{$this->main->nname}/stats";
+	$log_path1 = "{$log_path}/logs";
+	$cust_log = "{$log_path1}/{$this->main->nname}-custom_log"; 
+	$err_log = "{$log_path1}/{$this->main->nname}-error_log";
+	$awstat_conf = "{$sgbl->__path_real_etc_root}/awstats/";
+	$awstat_dirdata = "{$sgbl->__path_kloxo_httpd_root}/awstats/";
 	$user_home = "{$this->main->getFullDocRoot()}/";
 	return;
 
@@ -778,18 +778,18 @@ function frontPageEnable()
 
 		$htaccessstring = null;
 		$htaccessstring .= "";
-		$web_path = "$sgbl->__path_httpd_root/";
+		$web_path = "{$sgbl->__path_httpd_root}/";
 //		$for_file ="$sgbl->__path_httpd_root/{$this->main->nname}/conf/kloxo.frontpage.{$this->main->nname}";
 		$for_file ="/home/apache/conf/frontpage/{$this->main->nname}.conf";
 
 		//$for_file = lx_tmp_file("{$this->main->nname}_frontpage");
 
-		$extra  = "ServerRoot  \"/etc/httpd/\"";
+		$extra  = "ServerRoot \"/etc/httpd/\"";
 		$extra .= "\n";
 		$extra .= $this->syncToPort("80", "ttt", "ttt", true);
 		$extra .= "</VirtualHost>";
 		lfile_put_contents($for_file, $extra);
-		$password = $this->main->__var_sysuserpassword['realpass']? $this->main->__var_sysuserpassword['realpass']: 'something';
+		$password = $this->main->__var_sysuserpassword['realpass'] ? $this->main->__var_sysuserpassword['realpass'] : 'something';
 
 		//lxfile_unix_chown($for_file, "root:root");
 		//lxfile_mkdir( "$webpath/www/"
@@ -1075,8 +1075,8 @@ function getAwstatsString()
 function getDocumentRoot($subweb)
 {
 	global $gbl, $sgbl, $login, $ghtml; 
-	$base_root = "$sgbl->__path_httpd_root";
-	$web_home = "$sgbl->__path_httpd_root";
+	$base_root = $sgbl->__path_httpd_root;
+	$web_home = $sgbl->__path_httpd_root;
 
 	$path = "{$this->main->getFullDocRoot()}/";
 
@@ -1183,7 +1183,7 @@ function syncToPort($port, $cust_log, $err_log, $frontpage = false)
 	$string .= "\tRedirect /kloxononssl http://cp.{$this->main->nname}:{$this->main->__var_nonsslport}\n\n";
 
 	$string .= "\tRedirect /webmail http://webmail.{$this->main->nname}\n\n";
-	$string .= "\t<Directory /home/httpd/{$domname}/kloxoscript>\n";
+	$string .= "\t<Directory /home/httpd/{$domname}/kloxoscript/>\n";
 	$string .= "\t\tAllowOverride All\n";
 	$string .= "\t</Directory>\n\n";
 
@@ -1199,11 +1199,11 @@ function syncToPort($port, $cust_log, $err_log, $frontpage = false)
 
 	// hack for frontpage. It needs the proper directory.
 	if ($frontpage) {
-		$string .= "\t<Directory \"{$this->main->getFullDocRoot()}\"/>\n";
+		$string .= "\t<Directory {$this->main->getFullDocRoot()}/>\n";
 		$string .= "\t\tAllowOverride All\n";
 		$string .= "\t</Directory>\n\n";
 	} else {
-		$string .= "\t<Directory \"{$this->main->getFullDocRoot()}\"/>\n";
+		$string .= "\t<Directory {$this->main->getFullDocRoot()}/>\n";
 		$string .= "\t\tAllowOverride All\n";
 		$string .= "\t</Directory>\n\n";
 		$string .= "\t<Location />\n";
@@ -1655,7 +1655,7 @@ function do_restore($docd)
 	global $gbl, $sgbl, $login, $ghtml; 
 
 	$name = $this->main->nname;
-	$fullpath = "$sgbl->__path_customer_root/{$this->main->customer_name}/";
+	$fullpath = "{$sgbl->__path_customer_root}/{$this->main->customer_name}/";
 
 	$this->main->do_restore($docd);
 
