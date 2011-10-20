@@ -242,6 +242,9 @@ function lxins_main()
 
 	//--- Set ownership for Kloxo httpdocs dir
 	system("chown -R lxlabs:lxlabs /usr/local/lxlabs/kloxo/httpdocs");
+	
+	//--- fixed defaults config of webserver (blank content)
+	system("sh /script/cleanup");
 
 	print("\nCongratulations. Kloxo has been installed succesfully on your server as $installtype\n\n");
 	if ($installtype === 'master') {
