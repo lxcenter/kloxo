@@ -1,12 +1,12 @@
 <?php 
 
-	// issue #571 - add httpd-worker and httpd-event for suphp
-	// issue #566 - Mod_ruid2 on Kloxo
-	// issue #567 - httpd-itk for kloxo
-	// issue #575 - More readable httpd config files
-	// issue #597 - Use cp. to redirect :7778 or :7777
-	// issue #563 - Remove overlap paramaters for SuPHP
-	// issue #589 - Change httpd config structure
+// issue #571 - add httpd-worker and httpd-event for suphp
+// issue #566 - Mod_ruid2 on Kloxo
+// issue #567 - httpd-itk for kloxo
+// issue #575 - More readable httpd config files
+// issue #597 - Use cp. to redirect :7778 or :7777
+// issue #563 - Remove overlap paramaters for SuPHP
+// issue #589 - Change httpd config structure
 	
 class web__apache extends lxDriverClass {
 
@@ -1022,8 +1022,8 @@ static function staticgetSuexecString($username, $nname = null)
 
 	$string .= "\t\tSuPhp_UserGroup {$username} {$username}\n";
 	if ($username !== 'lxlabs') {
-//		$string .= "\t\tsuPHP_Configpath /home/httpd/{$this->main->nname}\n";
-		$string .= "\t\tsuPHP_Configpath /home/httpd/{$nname}\n";
+//		$string .= "\t\tsuPHP_Configpath \"/home/httpd/{$this->main->nname}\"\n";
+		$string .= "\t\tsuPHP_Configpath \"/home/httpd/{$nname}\"\n";
 	}
 	$string .= "\t</IfModule>\n\n";
 	// --- mod_suphp - end
@@ -1063,7 +1063,7 @@ function getAwstatsString()
 	global $gbl, $sgbl, $login, $ghtml; 
 
 	$string  = null;
-	$string .= "ScriptAlias /awstats/ {$sgbl->__path_kloxo_httpd_root}/awstats/wwwroot/cgi-bin/\n";
+	$string .= "ScriptAlias /awstats/ \"{$sgbl->__path_kloxo_httpd_root}/awstats/wwwroot/cgi-bin/\"\n";
 	if ($this->main->stats_password) {
 		$string .= "\t".$this->getDirprotectCore("Awstats", "/awstats", "__stats");
 	}
@@ -1177,13 +1177,13 @@ function syncToPort($port, $cust_log, $err_log, $frontpage = false)
 	} else {
 		$string .= "\tAlias /stats {$sgbl->__path_httpd_root}/{$domname}/webstats/\n\n";
 	}
-	$string .= "\tAlias /__kloxo /home/{$this->main->customer_name}/kloxoscript/\n\n";
+	$string .= "\tAlias /__kloxo \"/home/{$this->main->customer_name}/kloxoscript/\"\n\n";
 
 	$string .= "\tRedirect /kloxo https://cp.{$this->main->nname}:{$this->main->__var_sslport}\n";
 	$string .= "\tRedirect /kloxononssl http://cp.{$this->main->nname}:{$this->main->__var_nonsslport}\n\n";
 
 	$string .= "\tRedirect /webmail http://webmail.{$this->main->nname}\n\n";
-	$string .= "\t<Directory /home/httpd/{$domname}/kloxoscript/>\n";
+	$string .= "\t<Directory \"/home/httpd/{$domname}/kloxoscript/\">\n";
 	$string .= "\t\tAllowOverride All\n";
 	$string .= "\t</Directory>\n\n";
 
@@ -1199,11 +1199,11 @@ function syncToPort($port, $cust_log, $err_log, $frontpage = false)
 
 	// hack for frontpage. It needs the proper directory.
 	if ($frontpage) {
-		$string .= "\t<Directory {$this->main->getFullDocRoot()}/>\n";
+		$string .= "\t<Directory \"{$this->main->getFullDocRoot()}/\">\n";
 		$string .= "\t\tAllowOverride All\n";
 		$string .= "\t</Directory>\n\n";
 	} else {
-		$string .= "\t<Directory {$this->main->getFullDocRoot()}/>\n";
+		$string .= "\t<Directory \"{$this->main->getFullDocRoot()}/\">\n";
 		$string .= "\t\tAllowOverride All\n";
 		$string .= "\t</Directory>\n\n";
 		$string .= "\t<Location />\n";
@@ -1224,7 +1224,7 @@ function syncToPort($port, $cust_log, $err_log, $frontpage = false)
 		}
 
 		$string .= "\t</Location>\n\n";
-		$string .= "\t<Directory {$sgbl->__path_httpd_root}/{$this->main->nname}/webstats/>\n";
+		$string .= "\t<Directory \"{$sgbl->__path_httpd_root}/{$this->main->nname}/webstats/\">\n";
 		$string .= "\t\tAllowOverride All\n";
 		$string .= "\t</Directory>\n\n";
 	}
