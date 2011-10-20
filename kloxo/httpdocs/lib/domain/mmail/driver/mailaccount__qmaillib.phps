@@ -36,9 +36,10 @@ function syncUseradd()
 	$res = lxuser_return(mmail__qmail::getUserGroup($domain), "__path_mail_root/bin/vadduser", $this->main->nname, '-e', $password);
 
 	if ($res) {
-		if (!csb($this->main->nname, "postmaster")) {
+		// --- Issue #702 - Error 'mailaccount_add_failed' when add email account
+	//	if (!csb($this->main->nname, "postmaster")) {
 			throw new lxException("mailaccount_add_failed", "nname", $global_shell_error);
-		}
+	//	}
 	}
 
 	$this->syncQmail();
