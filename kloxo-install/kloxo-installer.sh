@@ -169,24 +169,6 @@ echo -e "	When it's finished, you will be presented with a welcome message and f
 
 read -n 1 -p "Press any key to continue ..."
 
-: <<'--NOEXECUTE--'
-# Remove mirror for beta testing
-	file=/etc/hosts
-	content=$(<$file)
-	echo "$content" | {
-		while read line; do
-			if [[ $line != *download.lxcenter.org* ]] ; then
-				echo $line
-			else
-				get_yes_no "Remove download.lxcenter.org inside '/etc/hosts'?" 0
-				if [ "$?" -eq "0" ] ; then
-					echo $line
-				fi
-			fi
-		done
-	} > $file
---NOEXECUTE--
-
 # Start install
 yum -y install php php-mysql wget zip unzip
 export PATH=/usr/sbin:/sbin:$PATH
