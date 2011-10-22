@@ -480,9 +480,10 @@ function createConffile()
 
 				$string .= str_replace($token, $line, $syncto);
 
+				//--- consistence like lighttpd disable this for no 'exclusive domain/client'
 			//	if($this->main->priv->isOn('ssl_flag')) {
 			//		$string .= "\t<IfModule mod_ssl.c>\n";
-					$string .= $this->sslsysnc(null);
+			//		$string .= $this->sslsysnc(null);
 			//		$string .= "\t</IfModule>\n\n";
 			//	}
 				$string .= $this->middlepart($web_home, $domainname, $dirp); 
@@ -504,7 +505,7 @@ function createConffile()
 
 		$res = $sq->rl_query("SELECT * WHERE nname = '{$domainname}'");
 
-		$string .= web__apache::getCreateWebmail($res);
+		$string .= self::getCreateWebmail($res);
 */
 		if ($c === 1) {
 			$v_file = "/home/apache/conf/wildcards/{$domainname}.conf";
@@ -527,7 +528,7 @@ function createConffile()
 			$list = array('nname' => $domainname, 'parent_clname' => 'domain-'.$domainname, 'webmailprog' => '', 'webmail_url' => '', 'remotelocalflag' => 'local');
 			}
 
-			$string .= web__apache::getCreateWebmail(array($list));
+			$string .= self::getCreateWebmail(array($list));
 
 			lfile_put_contents($v_file, $string);
 
@@ -567,7 +568,7 @@ function setAddon()
 		$rlflag = ($v->mail_flag === 'on') ? 'remote' : 'local';
 
 		$list = array('nname' => $v->nname, 'parent_clname' => $v->parent_clname, 'webmailprog' => '', 'webmail_url' => 'webmail.'.$domto, 'remotelocalflag' => $rlflag);
-		$string .= web__apache::getCreateWebmail(array($list));
+		$string .= self::getCreateWebmail(array($list));
 	}
 
 	if ($this->main->isOn('force_www_redirect')) {
@@ -598,10 +599,12 @@ function setAddon()
 	lfile_put_contents($v_file, $string);
 }
 
-function createCpConfig()
+static function createCpConfig()
 {
-	$vstring = web__apache::staticcreateVirtualHostiplist('80');
-	$sstring = web__apache::staticcreateVirtualHostiplist('443');
+	global $gbl, $sgbl, $login, $ghtml; 
+
+	$vstring = self::staticcreateVirtualHostiplist('80');
+	$sstring = self::staticcreateVirtualHostiplist('443');
 
 	$list = array("default" => "_default.conf", "cp" => "cp_config.conf", "disable" => "disable.conf");
 
@@ -623,7 +626,7 @@ function createCpConfig()
 			$string .= "\t</Ifmodule>\n";
 		}
 
-		$string .= web__apache::staticgetSuexecString('lxlabs');
+		$string .= self::staticgetSuexecString('lxlabs');
 		$string .= "</VirtualHost>\n\n";
 
 		$fullfile = "/home/apache/conf/defaults/{$file}";
@@ -631,8 +634,6 @@ function createCpConfig()
 		lfile_put_contents($fullfile, $string);
 		system("chown lxlabs:lxlabs {$fullfile}");
 	}
-
-	createRestartFile('apache');
 }
 
 static function getVipString()
@@ -656,8 +657,8 @@ static function getCreateWebmail($list)
 
 	global $gbl, $sgbl, $login, $ghtml;
 
-	$vstring = web__apache::getVipString();
-	dprintr($vstring);
+	$vstring = self::getVipString();
+//	dprintr($vstring);
 //	$string = null;
 	foreach($list as &$l) {
 		$string = "";
@@ -706,7 +707,7 @@ static function getCreateWebmail($list)
 		//	$string .= "\t\tSuPhp_UserGroup {$l['systemuser']} {$l['systemuser']}\n";
 		//	$string .= "\t\tSuPhp_UserGroup lxlabs lxlabs\n";
 
-			$string .= web__apache::staticgetSuexecString('lxlabs');
+			$string .= self::staticgetSuexecString('lxlabs');
 
 		//	$string .= "\t</Ifmodule>\n\n";
 		}
@@ -820,7 +821,7 @@ static function createSSlConf($iplist, $domainiplist)
 
 	$string = null;
 	$alliplist = os_get_allips();
-	dprintr($domainiplist);
+//	dprintr($domainiplist);
 	foreach((array) $iplist as $ip) {
 		if (!array_search_bool($ip['ipaddr'], $alliplist)) {
 			continue;
@@ -907,7 +908,6 @@ function sslsysnc($ipad)
 	$string .= "\tSSLEngine On \n";
 	$string .= "\tSSLCertificateFile {$certificatef}\n";
 	$string .= "\tSSLCertificateKeyFile {$keyfile}\n";
-
 	$string .= "\tSSLCACertificatefile {$cafile}\n\n";
 
 	//	$string .= "SSLLogFile /\n";
@@ -992,7 +992,7 @@ function getSuexecString($username)
 {
 	$nname = $this->main->nname;
 
-	return web__apache::staticgetSuexecString($username, $nname);
+	return self::staticgetSuexecString($username, $nname);
 }
 
 // change to staticgetSuexecString() for accept call by static function
@@ -1388,7 +1388,7 @@ function addDomain()
 		$this->frontPageEnable();
 	}
 
-	dprint(getcwd());
+//	dprint(getcwd());
 	$this->main->createPhpInfo();
 	self::createSSlConf($this->main->__var_ipssllist, $this->main->__var_domainipaddress);
 }
@@ -1424,8 +1424,17 @@ function hotlink_protection()
 	return $string;
 }
 
-// static function createWebmailConfig()
 static function createWebDefaultConfig()
+{
+	global $gbl, $sgbl, $login, $ghtml; 
+
+	self::createCpConfig();
+	self::createWebmailConfig();
+	
+	createRestartFile("apache");
+}
+
+static function createWebmailConfig()
 {
 	global $gbl, $sgbl, $login, $ghtml; 
 
@@ -1442,24 +1451,21 @@ static function createWebDefaultConfig()
 
 	$webdata  = null;
 	$webdata .= "<VirtualHost \\\n";
-	$webdata .= web__apache::staticcreateVirtualHostiplist("80");
-	$webdata .= web__apache::staticcreateVirtualHostiplist("443");
+	$webdata .= self::staticcreateVirtualHostiplist("80");
+	$webdata .= self::staticcreateVirtualHostiplist("443");
 	$webdata .= "\t\t>\n\n";
 	$webdata .= "\tServerName webmail\n";
 	$webdata .= "\tServerAlias webmail.*\n\n";
 	$webdata .= "\tDocumentRoot {$sgbl->__path_kloxo_httpd_root}/webmail/$webmaildefpath\n";
 
-	$webdata .= web__apache::staticgetSuexecString('lxlabs');
+	$webdata .= self::staticgetSuexecString('lxlabs');
 
 	$webdata .= "</VirtualHost>\n\n";
 
 //	$webmailfile = "__path_real_etc_root/httpd/conf/kloxo/webmail.conf";
 	$webmailfile = "/home/apache/conf/webmails/webmail.conf";
 
-
 	lfile_put_contents($webmailfile, $webdata);
-
-	createRestartFile("apache");
 }
 
 function dbactionAdd()
@@ -1510,19 +1516,23 @@ function fullUpdate()
 	web::createstatsConf($this->main->nname, $this->main->stats_username, $this->main->stats_password);
 
 	self::createSSlConf($this->main->__var_ipssllist, $this->main->__var_domainipaddress);
+/*
 	if ($this->main->ttype === 'forward') {
 		$this->createForwardconf();
 	} else {
+*/
 		$this->createConffile();
 		$this->frontPageEnable();
 		$this->updateMainConfFile();
-	}
+//	}
+
+	self::createWebDefaultConfig();
+
 	lxfile_unix_chown_rec("{$this->main->getFullDocRoot()}/", "{$this->main->username}:{$this->main->username}");
 	lxfile_unix_chmod("{$this->main->getFullDocRoot()}/", "0755");
 	lxfile_unix_chmod("{$this->main->getFullDocRoot()}", "0755");
 	lxfile_unix_chown("__path_httpd_root/{$this->main->nname}", "{$this->main->username}:apache");
-//	self::createWebmailConfig();
-	self::createWebDefaultConfig();
+
 }
 
 function dbactionUpdate($subaction)
@@ -1539,7 +1549,6 @@ function dbactionUpdate($subaction)
 		case "full_update":
 			$this->fullUpdate();
 			$this->main->doStatsPageProtection();
-			$this->createCpConfig();
 			break;
 
 		case "add_subweb_a":

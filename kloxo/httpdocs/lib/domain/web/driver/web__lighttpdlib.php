@@ -375,7 +375,7 @@ function createConffile()
 				$string .= $this->syncToPort("443", "www");
 				$string .= $this->middlepart($domainname, $dirp); 
 				$string .= $this->getSslCert($iip);
-				$string .= "}\n";
+				$string .= "}\n\n";
 			}
 		}
 
@@ -389,7 +389,7 @@ function createConffile()
 
 		$res = $sq->rl_query("SELECT * WHERE nname = '{$domainname}'");
 
-		$string .= web__lighttpd::getCreateWebmail($res);
+		$string .= self::getCreateWebmail($res);
 */
 		if ($c === 1) {
 			$v_file = "/home/lighttpd/conf/wildcards/{$this->main->nname}.conf";
@@ -411,7 +411,7 @@ function createConffile()
 				$list = array('nname' => $domainname, 'parent_clname' => 'domain-'.$domainname, 'webmailprog' => '', 'webmail_url' => '', 'remotelocalflag' => 'local');
 			}
 
-			$string .= web__lighttpd::getCreateWebmail(array($list));
+			$string .= self::getCreateWebmail(array($list));
 
 			lfile_put_contents($v_file, $string);
 
@@ -460,7 +460,7 @@ function setAddon()
 		$rlflag = ($v->mail_flag === 'on') ? 'remote' : 'local';
 
 		$list = array('nname' => $v->nname, 'parent_clname' => $v->parent_clname, 'webmailprog' => '', 'webmail_url' => 'webmail.'.$domto, 'remotelocalflag' => $rlflag);
-		$string .= web__lighttpd::getCreateWebmail(array($list));
+		$string .= self::getCreateWebmail(array($list));
 	}
 
 	if ($this->main->isOn('force_www_redirect')) {
@@ -960,7 +960,6 @@ function createServerAliasLine()
 
 function addDomain()
 {
-//	self::createWebDefaultConfig(null);
 	$this->main->createDir();
 	$this->createConffile();
 	$this->updateMainConfFile();
@@ -1028,8 +1027,17 @@ static function getCreateWebmail($list)
 //	lfile_put_contents("/home/lighttpd/conf/defaults/_webmail_redirect.conf", $webdata);
 }
 
-// static function createWebmailConfig($iplist)
-static function createWebDefaultConfig($iplist = null)
+static function createWebDefaultConfig()
+{
+	global $gbl, $sgbl, $login, $ghtml; 
+
+	self::createCpConfig();
+	self::createWebmailConfig();
+	
+	createRestartFile("lighttpd");
+}
+
+static function createWebmailConfig($iplist = null)
 {
 	global $gbl, $sgbl, $login, $ghtml; 
 
@@ -1054,8 +1062,6 @@ static function createWebDefaultConfig($iplist = null)
 	$webdata .= "}\n\n\n";  
 
 	lfile_put_contents($webfile, $webdata);
-
-	createRestartFile("lighttpd");
 }
 
 static function fixErrorLog($name)
@@ -1068,7 +1074,7 @@ static function fixErrorLog($name)
 	$size = lxfile_size($file);
 
 	if ($size > 50 * 1024 * 1024) {
-		dprint("File size larger than 1MB\n");
+	//	dprint("File size larger than 1MB\n");
 		$nfile = getNotexistingFile(dirname($file), $file);
 		lxfile_mv($file, $nfile);
 		createRestartFile("lighttpd");
@@ -1127,8 +1133,11 @@ function fullUpdate()
 	$this->createSuexec();
 	$this->updateMainConfFile();
 	self::createSSlConf($this->main->__var_ipssllist, $this->main->__var_domainipaddress);
-	self::createWebDefaultConfig(null);
+
+	self::createWebDefaultConfig();
+
 	web::createstatsConf($this->main->nname, $this->main->stats_username, $this->main->stats_password);
+
 	$log_path = "/home/httpd/{$this->main->nname}/stats";
 	lxfile_unix_chown_rec($log_path, "{$this->main->username}:apache");
 	lxfile_unix_chmod_rec($log_path, "770");
@@ -1139,7 +1148,7 @@ function fullUpdate()
 	//lxfile_unix_chown_rec("{$this->main->getFullDocRoot()}", $this->main->customer_name);
 }
 
-function createCpConfig()
+static function createCpConfig()
 {
 	global $gbl, $sgbl, $login, $ghtml; 
 
@@ -1159,8 +1168,6 @@ function createCpConfig()
 
 		system("chown lxlabs:lxlabs {$fullfile}");
 	}
-
-	createRestartFile("lighttpd");
 }
 
 function dbactionUpdate($subaction)
@@ -1177,7 +1184,6 @@ function dbactionUpdate($subaction)
 		case "full_update":
 			$this->fullUpdate();
 			$this->main->doStatsPageProtection();
-			$this->createCpConfig();
 			break;
 
 		case "changeowner":
