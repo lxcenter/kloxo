@@ -628,7 +628,11 @@ static function createCpConfig()
 
 		$string .= self::staticgetSuexecString('lxlabs');
 		$string .= "</VirtualHost>\n\n";
-
+	/*
+		if ($file === '_default.conf') {
+			$string = '';
+		}
+	*/
 		$fullfile = "/home/apache/conf/defaults/{$file}";
 
 		lfile_put_contents($fullfile, $string);
@@ -1000,6 +1004,12 @@ static function staticgetSuexecString($username, $nname = null)
 {
 	// issue #567 -- change '$this->main->username' to '$username' for consistence
 	$string  = "\n";
+/*
+	$string .= "\t<Ifmodule mod_userdir.c>\n";
+	$string .= "\t\tUserDir enabled\n";
+	$string .= "\t\tUserDir \"public_html\"\n";
+	$string .= "\t</Ifmodule>\n\n";
+*/
 	// --- mod_suexec - begin
 	$string .= "\t<IfModule suexec.c>\n";
 	$string .= "\t\tSuexecUserGroup {$username} {$username}\n";
@@ -1007,6 +1017,7 @@ static function staticgetSuexecString($username, $nname = null)
 	// --- mod_suexec - end
 
 	// --- mod_suphp - begin
+	// still error for http://ip/~client for other then admin
 	$string .= "\t<IfModule mod_suphp.c>\n";
 
 /* --- issue #563
@@ -1032,12 +1043,14 @@ static function staticgetSuexecString($username, $nname = null)
 	$string .= "\t<IfModule mod_ruid2.c>\n";
 	$string .= "\t\tRMode config\n";
 	$string .= "\t\tRUidGid {$username} {$username}\n";
-	$string .= "\t\tRMinUidGid {$username} {$username}\n";
-	$string .= "\t\tRGroups {$username}\n";
+	// --- disable prevent http://ip/~client error
+//	$string .= "\t\tRMinUidGid {$username} {$username}\n";
+//	$string .= "\t\tRGroups {$username}\n";
 	$string .= "\t</IfModule>\n\n";
 	// --- mod_ruid2 - end
 
 	// --- httpd-itk - begin - issue #567
+	// still error for http://ip/~client
 	$string .= "\t<IfModule itk.c>\n";
 	$string .= "\t\tAssignUserId {$username} {$username}\n";
 	$string .= "\t</IfModule>\n\n";
