@@ -344,12 +344,24 @@ function createConffile()
 		} else {
 */
 		if ($c === 1) {
+		/*
 			// issue 674 - wildcard and subdomain problem
 			// not include content of $this->createServerAliasLine() because make too long
 			// that mean overlapp declare
 		//	$string .= "\$HTTP[\"host\"] =~ \"{$domainname}\" {\n";
-			$string .= "\$HTTP[\"host\"] =~ \"^(?!(cp|webmail|default|disable).{$domainname})\" {\n";
+			$string .= "\$HTTP[\"host\"] =~ \"^(?!(cp|webmail|default|disable).{$domainname})\" {\n";	
+		*/
+			// also include $this->createServerAliasLine() - thanks amit kumar mishra
 
+			$deflist = array('cp', 'webmail', 'default', 'disable');
+			$defstring = '';
+
+			foreach($deflist as $k => $front) {
+				$defstring .= "{$front}.{$domainname}|";
+			}
+
+			$domlist = str_replace("(", "({$defstring}", $this->createServerAliasLine());
+			$string .= "\$HTTP[\"host\"] =~ \"{$domlist}\" {\n";
 		}
 		else {
 			$line = $this->createServerAliasLine();
