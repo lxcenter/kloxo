@@ -105,13 +105,13 @@ function getRailsConf($app)
 	$string .= "\tserver.document-root = \"{$basepath}/{$appname}/public/\"\n";
 
 	if (!$app->isOn('accessible_directly')) {
-		//$string .= "\t\talias.url = (\"{$appurl}/\" => \"{$basepath}/{$appname}/public/\")\n";
+		//$string .= "\t\talias.url = ( \"{$appurl}/\" => \"{$basepath}/{$appname}/public/\" )\n";
 	} else {
-		$string .= "\talias.url += (\"{$appurl}/\" => \"{$basepath}/{$appname}/public/\")\n";
+		$string .= "\talias.url += ( \"{$appurl}/\" => \"{$basepath}/{$appname}/public/\" )\n";
 	}
 
 	$string .= "\tserver.error-handler-404 = \"{$appurl}/dispatch.fcgi\"\n\n";
-	$string .= "\tfastcgi.server = (\".fcgi\" =>(( \"socket\" => \"/tmp/ror.socket.mick.com.{$appname}.\" + var.PID,\n";
+	$string .= "\tfastcgi.server = ( \".fcgi\" => (( \"socket\" => \"/tmp/ror.socket.mick.com.{$appname}.\" + var.PID,\n";
 	$string .= "\t\"bin-path\" => \"/usr/bin/lxsuexec\",\n";
 	$string .= "\t\t\"min-procs\" => 0,\n";
 	$string .= "\t\t\"max-procs\" => {$proc},\n";
@@ -235,7 +235,7 @@ function enablePhp()
 	if ($this->main->priv->isOn('phpfcgi_flag')) {
 		$uid = os_get_uid_from_user($this->main->username);
 		$gid = os_get_gid_from_user($this->main->username);
-		$string .= "\tfastcgi.server = (\".php\" =>";
+		$string .= "\tfastcgi.server = ( \".php\" => ";
 		$string .= "(( \"socket\" => \"/var/tmp/lighttpd/php.socket.{$this->main->nname}.\" + var.PID,\n";
 		$string .= "\t\t\"bin-path\" => \"/usr/bin/lxsuexec\",\n";
 		$string .= "\t\t\"min-procs\" => 0,\n";
@@ -464,7 +464,7 @@ function setAddon()
 			$dst = "{$this->main->nname}/{$v->destinationdir}";
 			$dst = remove_extra_slash($dst);
 			//$dst = trim($dst, "/");
-			$string .= "\turl.redirect = ( \"/\" => \"http://{$dst}\")\n\n";
+			$string .= "\turl.redirect = ( \"/\" => \"http://{$dst}\" )\n\n";
 			$string .= "}\n\n";
 		}
 
@@ -477,7 +477,7 @@ function setAddon()
 
 	if ($this->main->isOn('force_www_redirect')) {
 		$string .= "\$HTTP[\"host\"] =~ \"^{$this->main->nname}$\" {\n\n";
-		$string .= "\turl.redirect = ( \"^/(.*)\" => \"http://www.{$this->main->nname}/\$1\")\n\n";
+		$string .= "\turl.redirect = ( \"^/(.*)\" => \"http://www.{$this->main->nname}/\$1\" )\n\n";
 		$string .= "}\n\n";
 	}
 
@@ -501,7 +501,7 @@ function getBlockIP()
 	$t = str_replace(".*", "", $t);
 	$t = str_replace(" ", "|", $t);
 	$string  = "\$HTTP[\"remoteip\"] =~ \"{$t}\" {\n";
-	$string .= "url.access-deny = (\"\")\n";
+	$string .= "url.access-deny = ( \"\" )\n";
 	$string .= "}\n";
 	return $string;
 }
@@ -721,25 +721,25 @@ function getDocumentRoot($subweb)
 	// all redirect change to ^(/x/|/x$) formula for resolve this issue
 
 	$string = null;
-	$string .= "\talias.url  = (\"/__kloxo\" => \"/home/{$this->main->customer_name}/kloxoscript\")\n\n";
-	$string .= "\turl.redirect  = (\"^(/webmail/|/webmail\$)\" => \"http://webmail.{$domname}\")\n";
+	$string .= "\talias.url  = ( \"/__kloxo\" => \"/home/{$this->main->customer_name}/kloxoscript\" )\n\n";
+	$string .= "\turl.redirect  = ( \"^(/webmail/|/webmail\$)\" => \"http://webmail.{$domname}\" )\n";
 
 	if ($this->main->nname !== 'lxlabs.com') {
-		$string .= "\turl.redirect += (\"^(/kloxo/|/kloxo\$)\" => \"https://cp.{$domname}:{$this->main->__var_sslport}\")\n";
-		$string .= "\turl.redirect += (\"^(/kloxononssl/|/kloxononssl\$)\" => \"http://cp.{$domname}:{$this->main->__var_nonsslport}\")\n";
+		$string .= "\turl.redirect += ( \"^(/kloxo/|/kloxo\$)\" => \"https://cp.{$domname}:{$this->main->__var_sslport}\" )\n";
+		$string .= "\turl.redirect += ( \"^(/kloxononssl/|/kloxononssl\$)\" => \"http://cp.{$domname}:{$this->main->__var_nonsslport}\" )\n";
 	}
 
 	if ($this->main->__var_statsprog === 'awstats') {
-		$string .= "\turl.redirect += (\"^(/stats/|/stats\$)\" => \"http://{$domname}/awstats/awstats.pl?config={$domname}\")\n";
+		$string .= "\turl.redirect += ( \"^(/stats/|/stats\$)\" => \"http://{$domname}/awstats/awstats.pl?config={$domname}\" )\n";
 	} else {
-		$string .= "\talias.url += (\"^(/stats/|/stats\$)\" => \"{$sgbl->__path_httpd_root}/{$domname}/webstats\")\n";
+		$string .= "\talias.url += ( \"^(/stats/|/stats\$)\" => \"{$sgbl->__path_httpd_root}/{$domname}/webstats\" )\n";
 	}
 
 	$string .= "\n";
 
 	if($this->main->isOn('status')) {
 		if (!$this->isRailsDocroot()) {
-			$string .= "\tserver.document-root =  \"{$path}\"\n";
+			$string .= "\tserver.document-root = \"{$path}\"\n";
 		}
 	} else {
 		if ($this->main->__var_disable_url) {
@@ -775,7 +775,7 @@ function hotlink_protection()
 
 	$string .= "\n\n";
 	$string .= "\$HTTP[\"referer\"] !~ \"^($|https?://(.*\.|)({$allowed_domain_string}))\" {\n";
-	$string .= "url.rewrite = (\"(?i)(/.*\.(jpe?g|png|gif|jpg|rar|pdf))\$\" =>\n";
+	$string .= "url.rewrite = ( \"(?i)(/.*\.(jpe?g|png|gif|jpg|rar|pdf))\$\" =>\n";
 	$string .= "\"{$ht}\" )\n";
 	$string .= "}\n\n";
 
@@ -792,7 +792,7 @@ function getIndexFileOrder()
 
 	if (!$list) { return; }
 	$string = implode("\", \"", $list);
-	$string = "\tindex-file.names = (\"{$string}\")\n\n";
+	$string = "\tindex-file.names = ( \"{$string}\" )\n\n";
 
 	return $string;
 }
@@ -829,8 +829,8 @@ function syncToPort($port, $subweb, $frontpage = false)
 
 	// Hack.. This is done so that others can use '+' without any issue.
 
-	$string .= "\talias.url += (\"/awstatsicons\" => \"/home/kloxo/httpd/awstats/wwwroot/icon/\")\n";
-	$string .= "\talias.url += (\"/awstatscss\" => \"/home/kloxo/httpd/awstats/wwwroot/css/\")\n";
+	$string .= "\talias.url += ( \"/awstatsicons\" => \"/home/kloxo/httpd/awstats/wwwroot/icon/\" )\n";
+	$string .= "\talias.url += ( \"/awstatscss\" => \"/home/kloxo/httpd/awstats/wwwroot/css/\" )\n";
 
 	$string .= $this->getAwstatsString();
 
@@ -843,10 +843,10 @@ function syncToPort($port, $subweb, $frontpage = false)
 	foreach((array) $this->main->redirect_a as $red) {
 		$rednname = remove_extra_slash("/{$red->nname}");
 		if ($red->ttype === 'local') {
-			$string .= "\talias.url += (\"{$rednname}\" => \"{$user_home}/{$red->redirect}\")\n";
+			$string .= "\talias.url += ( \"{$rednname}\" => \"{$user_home}/{$red->redirect}\" )\n";
 		} else {
 			if (!redirect_a::checkForPort($port, $red->httporssl)) { continue; }
-			$string .= "\turl.redirect += (\".*{$rednname}\" => \"{$red->redirect}\")\n";
+			$string .= "\turl.redirect += ( \".*{$rednname}\" => \"{$red->redirect}\" )\n";
 		}
 	}
 
@@ -863,7 +863,7 @@ function getCgiString()
 	global $gbl, $sgbl, $login, $ghtml; 
 	$web_home = $sgbl->__path_httpd_root ;
 	$string = null;
-	$string .= "\talias.url += ( \"/cgi-bin\" => \"{$this->main->getFullDocRoot()}/cgi-bin/\")\n\n"; 
+	$string .= "\talias.url += ( \"/cgi-bin\" => \"{$this->main->getFullDocRoot()}/cgi-bin/\" )\n\n"; 
 	$string .= "\t\$HTTP[\"url\"] =~ \"^/cgi-bin\" {\n";
 	$string .= "\t\tcgi.assign = ( \"\" => \"/{$sgbl->__path_httpd_root}/{$this->main->nname}/shsuexec.sh\" )\n\t}\n\n";
 
@@ -876,7 +876,7 @@ function getAwstatsString()
 
 	$web_home = $sgbl->__path_httpd_root ;
 	$string = null;
-	$string .= "\talias.url += (\"/awstats/\" => \"{$sgbl->__path_kloxo_httpd_root}/awstats/wwwroot/cgi-bin/\")\n\n";
+	$string .= "\talias.url += ( \"/awstats/\" => \"{$sgbl->__path_kloxo_httpd_root}/awstats/wwwroot/cgi-bin/\" )\n\n";
 	$string .= "\t\$HTTP[\"url\"] =~ \"^/awstats\" {\n";
 	$string .= "\t\tcgi.assign = ( \".pl\" => \"/{$sgbl->__path_httpd_root}/{$this->main->nname}/perlsuexec.sh\" )\n\t}\n\n";
 

@@ -623,10 +623,12 @@ static function createCpConfig()
 		//	$string .= "\t\tUserDir enabled *\n";
 			$string .= "\t\tUserDir enabled\n";
 			$string .= "\t\tUserDir \"public_html\"\n";
-			$string .= "\t</Ifmodule>\n";
+			$string .= "\t</Ifmodule>\n\n";
 		}
 
-		$string .= self::staticgetSuexecString('lxlabs');
+		//--- issue #705 - don't include for handling error http://ip/~client
+	//	$string .= self::staticgetSuexecString('lxlabs');
+
 		$string .= "</VirtualHost>\n\n";
 	/*
 		if ($file === '_default.conf') {
