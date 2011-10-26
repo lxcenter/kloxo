@@ -7,9 +7,6 @@ include_once "htmllib/lib/include.php";
 
 initProgram('admin');
 
-if (isset($list['server'])) { $server = $list['server']; }
-else { $server = 'localhost'; }
-
 $list = parse_opt($argv);
 
 $select = strtolower($list['select']);
@@ -24,12 +21,7 @@ function setApacheOptimize($select, $spare = null)
 {
 
 	global $gbl, $sgbl, $login, $ghtml;
-/*
-	initProgram('admin');
 
-	if (isset($list['server'])) { $server = $list['server']; }
-	else { $server = 'localhost'; }
-*/
 	log_cleanup("Apache optimize");
 
 	$status = shell_exec("/etc/init.d/httpd status");

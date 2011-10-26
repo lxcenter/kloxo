@@ -7,9 +7,6 @@ include_once "htmllib/lib/include.php";
 
 initProgram('admin');
 
-if (isset($list['server'])) { $server = $list['server']; }
-else { $server = 'localhost'; }
-
 $list = parse_opt($argv);
 
 $select = strtolower($list['select']);
@@ -25,7 +22,7 @@ function setFixUserlogo($select)
 	log_cleanup("Fix userlogo");
 
 	if (file_exists("/usr/local/lxlabs/kloxo/file/user-logo.png")) {
-		passthru("cp -rf /usr/local/lxlabs/kloxo/file/user-logo.png /home/kloxo/httpd/user-logo.png");
+		system("cp -rf /usr/local/lxlabs/kloxo/file/user-logo.png /home/kloxo/httpd/user-logo.png");
 		log_cleanup("- Source FROM /usr/local/lxlabs/kloxo/file/user-logo.png");
 		log_cleanup("- Target TO /home/kloxo/httpd/user-logo.png");
 	}
@@ -68,6 +65,7 @@ function setFixUserlogoDomainPages()
 	
 	$login->loadAllObjects('client');
 	$list = $login->getList('client');
+	
 	foreach($list as $c) {
 		$clname = $c->getPathFromName('nname');
 		$cdir = "/home/{$clname}";
