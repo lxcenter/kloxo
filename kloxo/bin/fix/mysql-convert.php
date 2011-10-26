@@ -7,9 +7,6 @@ include_once "htmllib/lib/include.php";
 
 initProgram('admin');
 
-if (isset($list['server'])) { $server = $list['server']; }
-else { $server = 'localhost'; }
-
 $list = parse_opt($argv);
 
 $engine = ($list['engine']) ? $list['engine'] : 'MyISAM';
@@ -26,12 +23,7 @@ setMysqlConvert($engine, $database, $table, $config);
 function setMysqlConvert($engine, $database, $table, $config)
 {
 	global $gbl, $sgbl, $login, $ghtml;
-/*
-	initProgram('admin');
 
-	if (isset($list['server'])) { $server = $list['server']; }
-	else { $server = 'localhost'; }
-*/
 	log_cleanup("Mysql engine convert");
 
 	$engine = strtolower($engine);
@@ -43,7 +35,7 @@ function setMysqlConvert($engine, $database, $table, $config)
 	$pass = slave_get_db_pass();
 
 	//--- the first - to 'disable' skip- and restart mysql
-	passthru("sed -i 's/skip/\;###123###skip/g' /etc/my.cnf");
+	system("sed -i 's/skip/\;###123###skip/g' /etc/my.cnf");
 	$ret = lxshell_return("service", "mysqld", "restart");
 	if ($ret) { throw new lxexception('mysqld_restart_failed', 'parent'); }
 
@@ -99,7 +91,7 @@ function setMysqlConvert($engine, $database, $table, $config)
 	}
 
 	//--- the second - back to 'original' config and restart mysql
-	passthru("sed -i 's/\;###123###skip/skip/g' /etc/my.cnf");
+	system("sed -i 's/\;###123###skip/skip/g' /etc/my.cnf");
 	$ret = lxshell_return("service", "mysqld", "restart");
 	if ($ret) { throw new lxexception('mysqld_restart_failed', 'parent'); }
 

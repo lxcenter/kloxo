@@ -136,9 +136,7 @@ function dbactionUpdate($subaction)
 			break;
 
 		case "skeleton":
-			// temporary only for admin - 6.1.7
-		//	$file = "__path_client_root/{$this->main->nname}/skeleton.zip";
-			$file = "../file/user-skeleton.zip";
+			$file = "__path_client_root/{$this->main->nname}/skeleton.zip";
 			lxfile_mv($this->main->__skeletion_tmp, $file);
 			lxfile_generic_chown($file, "lxlabs");
 			break;
