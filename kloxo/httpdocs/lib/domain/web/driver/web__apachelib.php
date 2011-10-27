@@ -1045,9 +1045,8 @@ static function staticgetSuexecString($username, $nname = null)
 	$string .= "\t<IfModule mod_ruid2.c>\n";
 	$string .= "\t\tRMode config\n";
 	$string .= "\t\tRUidGid {$username} {$username}\n";
-	// --- disable prevent http://ip/~client error
-//	$string .= "\t\tRMinUidGid {$username} {$username}\n";
-//	$string .= "\t\tRGroups {$username}\n";
+	$string .= "\t\tRMinUidGid {$username} {$username}\n";
+	$string .= "\t\tRGroups {$username}\n";
 	$string .= "\t</IfModule>\n\n";
 	// --- mod_ruid2 - end
 

@@ -123,7 +123,8 @@ function dbactionUpdate($subaction)
 //	lxfile_cp("../file/mpm.conf", "/etc/httpd/conf.d/mpm.conf");
 
 	// Fixed issue #515 - returned due to accidentally deleted
-	lxfile_generic_chmod("/home/admin", "0770");
+	// enough handle by fix-chownchmod
+//	lxfile_generic_chmod("/home/admin", "0770");
 
 //	change to 'stop-start' instead 'restart' because problem when change prefork/worker/event/itk to other
 //	createRestartFile("httpd");
