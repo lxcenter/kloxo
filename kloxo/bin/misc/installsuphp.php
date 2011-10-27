@@ -2,7 +2,9 @@
 include_once "htmllib/lib/include.php";
 
 //fixes issue #515
-lxfile_generic_chmod("/home/admin", "0770");
+// lxfile_generic_chmod("/home/admin", "0770");
+//fixes issue #709
+// lxfile_generic_chmod("/home/admin", "0750");
 
 if (lxfile_exists("/etc/httpd/conf.d/php.conf")) {
 	lunlink("/etc/httpd/conf.d/suphp.conf");
