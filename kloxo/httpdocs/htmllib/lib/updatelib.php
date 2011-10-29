@@ -92,6 +92,8 @@ function do_upgrade($upversion)
 	download_source("/$program/$programfile");
 	log_cleanup("Download Done!... Start unzip");
 	system("cd ../../ ; unzip -o httpdocs/download/$programfile");
+	// issue #710 - [beta] upcp updated files are now owned by root
+	system("chown -R lxlabs:lxlabs /usr/local/lxlabs/");
 	chdir($saveddir);
 }
 
