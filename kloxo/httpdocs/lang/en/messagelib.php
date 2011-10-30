@@ -174,16 +174,14 @@ $__emessage['certificate_key_file_empty'] = "The certificate and the Key file yo
 // by mustafa.ramadhan@lxcenter.org
 
 $__information['webserver_config'] = 
-	"[b]PHP Type[/b]<br />Process-based (httpd-prefork/-itk)<br />".
-		"Thread-based (httpd-worker/-event)<br />".
-		"Secure environment (suphp/suexec/ruid2/itk)<br />".
-	"[b]Apache Memory Optimize[/b]<br />Optimize memory usage<br />".
-	"[b]MySQL Convert[/b]<br />".
-		"MyISAM - Less memory usage (save 100-200 MB)<br />".
-		"InnoDB - Higher performance<br />".
-	"[b]Fix 'Ownership' And 'Permissions'[/b]<br />Prevent '500 Internal server error' on secure environment<br />".
-		"Fix-ownership - 'chown -R client:client' for directories and files<br />".
-		"Fix-permissions - 'chmod 775' for directories and 'chmod 644' for .php files";
+	"[b]PHP Type[/b] - Process-based (httpd-prefork/-itk), thread-based (httpd-worker/-event) and ".
+		"secure environment (suphp/suexec/ruid2/itk)<br />".
+	"[b]Apache Memory Optimize[/b] - Optimize memory usage<br />".
+	"[b]MySQL Convert[/b] - MyISAM (less memory usage (save 100-200 MB) and ".
+		"InnoDB (higher performance)<br />".
+	"[b]Fix 'Ownership' And 'Permissions'[/b] - Prevent '500 Internal server error' on secure environment<br />".
+		"&nbsp;&nbsp;&nbsp;&nbsp;- Fix-ownership ('chown -R client:client' for directories and files) and ".
+		"Fix-permissions ('chmod 755' for directories and 'chmod 644' for .php files)";
 
 // Language Content for #656
 // by Andrew Ying

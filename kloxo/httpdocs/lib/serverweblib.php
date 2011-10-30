@@ -29,8 +29,14 @@ function updateform($subaction, $param)
 	$driverapp = $gbl->getSyncClass(null, 'localhost', 'serverweb');
 	if ($driverapp === 'lighttpd') {
 		$vlist['php_type'] = array('M', "Cgi-fastcgi");
-		$vlist['__v_button'] = array();
+//		$vlist['__v_button'] = array();
 //		return $vlist;
+		$vlist['mysql_convert'] = array('s', array('--- none ---', 'to-myisam', 'to-innodb'));
+		$this->setDefaultValue('mysql_convert', '--- none ---');
+		$vlist['fix_chownchmod'] = array('s', array('--- none ---', 'fix-ownership', 'fix-permissions', 'fix-ALL'));
+		$this->setDefaultValue('fix_chownchmod', '--- none ---');
+	
+		$vlist['__m_message_pre'] = 'webserver_config';
 	}
 	else if ($driverapp === 'apache') {
 //		$vlist['php_type'] = array('s', array('suphp', 'suphp_worker', 'suphp_event', 'suexec', 'suexec_worker', 'suexec_event', 'mod_php', 'mod_php_ruid2', 'mod_php_itk'));
