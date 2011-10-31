@@ -234,6 +234,13 @@ function postUpdate($subaction = null)
 		// update /webmails/webmail.conf
 		web__apache::createWebDefaultConfig();
 		web__lighttpd::createWebDefaultConfig();
+
+		if ($this->generalmisc_b->disableinstallapp === 'on') {
+			system("echo > /usr/local/lxlabs/kloxo/etc/flag/disableinstallapp.flg");
+		}
+		else {
+			system("rm -rf /usr/local/lxlabs/kloxo/etc/flag/disableinstallapp.flg");
+		}
 	}
 }
 
@@ -330,6 +337,12 @@ function updateform($subaction, $param)
 			//	$this->generalmisc_b->setDefaultValue('webstatisticsprogram', 'awstats');
 				$vlist['generalmisc_b-webstatisticsprogram'] = array('s', $list);
 			//	$vlist['generalmisc_b-webstatisticsprogram'] = array('s', $list);
+				if (file_exists("/usr/local/lxlabs/kloxo/etc/flag/disableinstallapp.flg")) {
+					$this->generalmisc_b->disableinstallapp = 'on';
+				}
+				else {
+					$this->generalmisc_b->disableinstallapp = 'off';
+				}
 				$vlist['generalmisc_b-disableinstallapp'] = null;
 			//	$vlist['generalmisc_b-disableinstallapp'] = null;
 				$list = lx_merge_good('--chooser--', mmail::getWebmailProgList());
