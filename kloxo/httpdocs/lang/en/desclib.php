@@ -329,9 +329,14 @@ $__description["depth_of_resource_in_the_tree_menu"] = array("Depth Of Resource 
 $__description["lines_per_page"] = array("Lines Per Page");
 $__description["display"] = array("Display");
 $__description["account"] = array("Account");
+
 $__description["upload_logo_image_(gif)"] = array("Upload Logo Image (gif)");
 $__description["upload_logo_image_shown_while_loading_(gif)"] = array("Upload Logo Image Shown While Loading (gif)");
 $__description["upload_logo"] = array("Upload Logo");
+
+// release on Kloxo 6.1.7
+$__description["upload_logo_image_(png)"] = array("Upload Logo Image (png)");
+
 $__description["child_appearance"] = array("Child Appearance");
 $__description["helpdesk_category"] = array("Helpdesk Category");
 $__description["enable_browse_backup"] = array("Enable Browse Backup");
