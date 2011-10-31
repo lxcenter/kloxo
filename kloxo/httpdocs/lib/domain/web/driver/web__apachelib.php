@@ -342,6 +342,8 @@ function delDomain()
 	$this->updateMainConfFile();
 	$this->main->deleteDir();
 //	$this->updateIpConfFile();
+
+	self::createSSlConf($this->main->__var_ipssllist, $this->main->__var_domainipaddress);
 }
 
 function clearDomainIpAddress()
@@ -827,17 +829,24 @@ static function createSSlConf($iplist, $domainiplist)
 
 	$string = null;
 	$alliplist = os_get_allips();
+
+//	dprintr($alliplist);
+//	dprintr($iplist);
 //	dprintr($domainiplist);
+
 	foreach((array) $iplist as $ip) {
-		if (!array_search_bool($ip['ipaddr'], $alliplist)) {
-			continue;
+
+		if (!array_search_bool($ip['ipaddr'], $alliplist)) { continue; }
+
+		// issue related to delete 'exclusive ip/domain'
+//		if (isset($domainiplist[$ip['ipaddr']]) && trim($domainiplist[$ip['ipaddr']])) { continue; }
+		if (isset($domainiplist[$ip['ipaddr']])) {
+			$v = $domainiplist[$ip['ipaddr']];
+			if (($v !== '') && ($v !== '--Disabled--')) {
+				continue;
+			}
 		}
 
-		// Skip if it is in the domain ip list. We need to create it only for the ipaddresses that do not have domains set for them.
-		// Don't skip. The ssl is loaded first. The only issue is that https://ip will show default apache page.
-		if (isset($domainiplist[$ip['ipaddr']]) && $domainiplist[$ip['ipaddr']]) {
-			continue;
-		}
 		$string .= "<Virtualhost \\\n";
 		$string .= "\t{$ip['ipaddr']}:443\\\n";
 		$string .= "\t\t>\n\n";
@@ -1404,6 +1413,7 @@ function addDomain()
 
 //	dprint(getcwd());
 	$this->main->createPhpInfo();
+
 	self::createSSlConf($this->main->__var_ipssllist, $this->main->__var_domainipaddress);
 }
 

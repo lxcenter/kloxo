@@ -273,6 +273,7 @@ function delDomain()
 	$this->updateMainConfFile();
 	$this->main->deleteDir();
 
+	self::createSSlConf($this->main->__var_ipssllist, $this->main->__var_domainipaddress);
 }
 
 function getServerIp()
@@ -510,12 +511,25 @@ static function createSSlConf($iplist, $domainiplist)
 {
 	global $gbl, $sgbl, $login, $ghtml; 
 
-	$alliplist = os_get_allips();
 	$string = null;
+	$alliplist = os_get_allips();
+
+//	dprintr($alliplist);
+//	dprintr($iplist);
+//	dprintr($domainiplist);
+
 	foreach($iplist as $ip) {
 
 		if (!array_search_bool($ip['ipaddr'], $alliplist)) { continue; }
-		if (isset($domainiplist[$ip['ipaddr']]) && trim($domainiplist[$ip['ipaddr']])) { continue; }
+
+		// issue related to delete 'exclusive ip/domain'
+//		if (isset($domainiplist[$ip['ipaddr']]) && trim($domainiplist[$ip['ipaddr']])) { continue; }
+		if (isset($domainiplist[$ip['ipaddr']])) {
+			$v = $domainiplist[$ip['ipaddr']];
+			if (($v !== '') && ($v !== '--Disabled--')) {
+				continue;
+			}
+		}
 
 		$ssl_cert = null;
 		$ssl_cert = sslcert::getSslCertnameFromIP($ip['nname']);
@@ -977,6 +991,8 @@ function addDomain()
 	$this->updateMainConfFile();
 	$this->createSuexec();
 	$this->main->createPhpInfo();
+	
+	self::createSSlConf($this->main->__var_ipssllist, $this->main->__var_domainipaddress);
 }
 
 static function createWebmailRedirect($list)
@@ -1122,7 +1138,6 @@ function dbactionAdd()
 {
 	$this->addDomain();
 	$this->main->doStatsPageProtection();
-	self::createSSlConf($this->main->__var_ipssllist, $this->main->__var_domainipaddress);
 }
 
 function dbactionDelete()
@@ -1144,6 +1159,7 @@ function fullUpdate()
 	$this->createConffile();
 	$this->createSuexec();
 	$this->updateMainConfFile();
+
 	self::createSSlConf($this->main->__var_ipssllist, $this->main->__var_domainipaddress);
 
 	self::createWebDefaultConfig();
