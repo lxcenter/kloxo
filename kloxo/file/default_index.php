@@ -1,8 +1,15 @@
 <?php
+	// use default index.php
+	if (!file_exists("./custom-index.php")) {
+?>
+
+<?php
 	if (file_exists("./custom-inc.php")) {
+		// use user-define inc.php -- no override when kloxo update
 		$incfile = "./custom-inc.php";
 	}
 	else {
+		// use default inc.php
 		$incfile = "./inc.php";
 	}
 ?>
@@ -76,9 +83,7 @@ table.content {
 </table>
 <table class="content">
 	<tr>
-		<td width="50">&nbsp;</td><td valign="top">
-<?php include_once $incfile; ?>
-		</td>
+		<td width="50">&nbsp;</td><td valign="top"><?php include_once $incfile; ?></td>
 		<td width="280" valign="center"><img src="images/disableskeletonbg.gif"></td>
 	</tr>
 </table>
@@ -86,3 +91,12 @@ table.content {
 </body>
 
 </html>
+
+<?php
+	}
+	else {
+		// use user-define index.php -- no override when kloxo update
+		$incfile = "./custom-index.php";
+	}
+?>
+
