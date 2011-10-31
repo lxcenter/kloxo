@@ -319,22 +319,23 @@ function updateform($subaction, $param)
 			}
 
 			if ($sgbl->isKloxo()) {
+				// MR --- On original, why double declare?. Modified!
 				$vlist['generalmisc_b-extrabasedir'] = null;
-				$vlist['generalmisc_b-extrabasedir'] = null;
+			//	$vlist['generalmisc_b-extrabasedir'] = null;
 				$list = array("awstats", "webalizer");
-				$list = array("awstats", "webalizer");
+			//	$list = array("awstats", "webalizer");
 				$list = add_disabled($list);
-				$list = add_disabled($list);
+			//	$list = add_disabled($list);
 				$this->generalmisc_b->setDefaultValue('webstatisticsprogram', 'awstats');
-				$this->generalmisc_b->setDefaultValue('webstatisticsprogram', 'awstats');
+			//	$this->generalmisc_b->setDefaultValue('webstatisticsprogram', 'awstats');
 				$vlist['generalmisc_b-webstatisticsprogram'] = array('s', $list);
-				$vlist['generalmisc_b-webstatisticsprogram'] = array('s', $list);
+			//	$vlist['generalmisc_b-webstatisticsprogram'] = array('s', $list);
 				$vlist['generalmisc_b-disableinstallapp'] = null;
-				$vlist['generalmisc_b-disableinstallapp'] = null;
+			//	$vlist['generalmisc_b-disableinstallapp'] = null;
 				$list = lx_merge_good('--chooser--', mmail::getWebmailProgList());
-				$list = lx_merge_good('--chooser--', mmail::getWebmailProgList());
+			//	$list = lx_merge_good('--chooser--', mmail::getWebmailProgList());
 				$vlist['generalmisc_b-webmail_system_default'] = array('s', $list);
-				$vlist['generalmisc_b-webmail_system_default'] = array('s', $list);
+			//	$vlist['generalmisc_b-webmail_system_default'] = array('s', $list);
 			}
 
 			$vlist['generalmisc_b-htmltitle'] = null;
