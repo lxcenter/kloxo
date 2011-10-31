@@ -4846,7 +4846,7 @@ function installinstallapp()
 		system("echo 1 > /usr/local/lxlabs/kloxo/etc/flag/disableinstallapp.flg");
 		return;
 	}
-
+/*
 	if ($sgbl->is_this_master()) {
 		$gen = $login->getObject('general')->generalmisc_b;
 		$diflag = $gen->isOn('disableinstallapp');
@@ -4857,7 +4857,7 @@ function installinstallapp()
 		log_cleanup("- Disable InstallApp flag is OFF");
 		lxfile_rm("/usr/local/lxlabs/kloxo/etc/flag/disableinstallapp.flg");
 	}
-
+*/
 	if (lxfile_exists("/usr/local/lxlabs/kloxo/etc/flag/disableinstallapp.flg")) {
 		log_cleanup("- InstallApp is turned off, remove InstallApp");
 		lxfile_rm_rec("/home/kloxo/httpd/installapp/");
