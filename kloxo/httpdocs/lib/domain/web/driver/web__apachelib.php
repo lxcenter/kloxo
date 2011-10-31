@@ -29,7 +29,7 @@ static function installMe()
 
 //	addLineIfNotExistInside("/etc/httpd/conf/httpd.conf", "Include /etc/httpd/conf/kloxo/kloxo.conf", "");
 
-	$cver = "###version0-4###";
+	$cver = "###version0-5###";
 	$fver = file_get_contents("/etc/httpd/conf.d/~lxcenter.conf");
 	
 	if(stristr($fver, $cver) === FALSE) {
@@ -44,11 +44,11 @@ static function installMe()
 	
 	//-- new structure	
 	lxfile_mkdir("/home/apache/conf");
-	lxfile_mkdir("/home/apache/conf/defaults");
 	lxfile_mkdir("/home/apache/conf/domains");
 	lxfile_mkdir("/home/apache/conf/redirects");
 	lxfile_mkdir("/home/apache/conf/webmails");
 	lxfile_mkdir("/home/apache/conf/wildcards");
+	lxfile_mkdir("/home/apache/conf/defaults");
 
 	//--- some vps include /etc/httpd/conf.d/swtune.conf
 	system("rm -f /etc/httpd/conf.d/swtune.conf");

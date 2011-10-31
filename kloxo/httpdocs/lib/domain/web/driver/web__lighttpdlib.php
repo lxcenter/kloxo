@@ -30,15 +30,15 @@ static function installMe()
 
 	//-- new structure	
 	lxfile_mkdir("/home/lighttpd/conf");
+	lxfile_mkdir("/home/lighttpd/conf/webmails");
 	lxfile_mkdir("/home/lighttpd/conf/defaults");
 	lxfile_mkdir("/home/lighttpd/conf/domains");
 	lxfile_mkdir("/home/lighttpd/conf/redirects");
-	lxfile_mkdir("/home/lighttpd/conf/webmails");
 	lxfile_mkdir("/home/lighttpd/conf/wildcards");
 
 	lxfile_cp("/usr/local/lxlabs/kloxo/file/lighttpd/lighttpd.conf", "/etc/lighttpd/lighttpd.conf");
 
-	$cver = "###version0-4###";
+	$cver = "###version0-5###";
 	$fver = file_get_contents("/etc/lighttpd/conf.d/~lxcenter.conf");
 	
 	if(stristr($fver, $cver) === FALSE) {

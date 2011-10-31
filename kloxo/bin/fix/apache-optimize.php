@@ -7,9 +7,6 @@ include_once "htmllib/lib/include.php";
 
 initProgram('admin');
 
-if (isset($list['server'])) { $server = $list['server']; }
-else { $server = 'localhost'; }
-
 $list = parse_opt($argv);
 
 $select = strtolower($list['select']);
@@ -24,12 +21,7 @@ function setApacheOptimize($select, $spare = null)
 {
 
 	global $gbl, $sgbl, $login, $ghtml;
-/*
-	initProgram('admin');
 
-	if (isset($list['server'])) { $server = $list['server']; }
-	else { $server = 'localhost'; }
-*/
 	log_cleanup("Apache optimize");
 
 	$status = shell_exec("/etc/init.d/httpd status");
@@ -135,13 +127,13 @@ KeepAliveTimeout 5
 	MaxMemFree 2
 </IfModule>
 
-Include /home/apache/conf/defaults/*.conf
 Include /home/apache/conf/domains/*.conf
 Include /home/apache/conf/redirects/*.conf
 Include /home/apache/conf/webmails/*.conf
 Include /home/apache/conf/wildcards/*.conf
+Include /home/apache/conf/defaults/*.conf
 
-###version0-4###
+###version0-5###
 EOF;
 
 		log_cleanup("- Calculate - threads min/max $minpar_w/$maxpar_w and servers min/max $minpar_p/$maxpar_p");
