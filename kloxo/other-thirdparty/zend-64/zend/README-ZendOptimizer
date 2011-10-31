@@ -1,0 +1,19 @@
+Zend Optimizer installation instructions
+----------------------------------------
+Important: if you are installing this product because you received a message from a web site telling you to install Zend Optimizer and you are *not* the administrator of that web site STOP!.  You do not need to install this software. Instead, contact the website's system administrator and tell them that their website is displaying an error relating to Zend Optimizer and that they need to install Zend Optimizer in order to resolve this problem.
+
+Release Information: This update is only relevant for PHP 5.2.X although this is a complete packagethat supports all other PHP versions.
+
+1. Extract the Zend Optimizer package.
+
+2. Locate the ZendOptimizer.so (Unix) or ZendOptimizer.dll (Windows) file in the directory which
+   corresponds to your version of PHP (4.3.x, 4.4.x, 5.0.x, 5.1.x, 5.2.x).
+
+2. Add the following line to your php.ini file:
+   Linux and Mac OS X:     zend_extension=<full_path_to_ZendOptimizer.so>
+   Windows:                zend_extension_ts=<full_path_to_ZendOptimizer.dll>
+   Windows non-thread safe: zend_extension=<full_path_to_ZendOptimizer.dll>
+   (*) The Windows non-thread safe binary is only used with Zend Core 2.0.
+ 
+3. Restart your Web server.
+
