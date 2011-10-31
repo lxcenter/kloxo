@@ -30,10 +30,10 @@ static function installMe()
 
 	//-- new structure	
 	lxfile_mkdir("/home/lighttpd/conf");
+	lxfile_mkdir("/home/lighttpd/conf/webmails");
 	lxfile_mkdir("/home/lighttpd/conf/defaults");
 	lxfile_mkdir("/home/lighttpd/conf/domains");
 	lxfile_mkdir("/home/lighttpd/conf/redirects");
-	lxfile_mkdir("/home/lighttpd/conf/webmails");
 	lxfile_mkdir("/home/lighttpd/conf/wildcards");
 
 	lxfile_cp("/usr/local/lxlabs/kloxo/file/lighttpd/lighttpd.conf", "/etc/lighttpd/lighttpd.conf");

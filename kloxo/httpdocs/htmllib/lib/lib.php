@@ -5337,7 +5337,7 @@ function setInitialApacheConfig()
 		}
 	}
 
-	$cver = "###version0-4###";
+	$cver = "###version0-5###";
 	$fver = file_get_contents("/etc/httpd/conf.d/~lxcenter.conf");
 	
 	if (stristr($fver, $cver) === FALSE) {
@@ -5407,7 +5407,7 @@ function setInitialLighttpdConfig()
 	log_cleanup("- Install /etc/lighttpd/lighttpd.conf");
 	lxfile_cp("../file/lighttpd/lighttpd.conf", "/etc/lighttpd/lighttpd.conf");
 	
-	$cver = "###version0-4###";
+	$cver = "###version0-5###";
 	$fver = file_get_contents("/etc/lighttpd/conf.d/~lxcenter.conf");
 	
 	if(stristr($fver, $cver) === FALSE) {
