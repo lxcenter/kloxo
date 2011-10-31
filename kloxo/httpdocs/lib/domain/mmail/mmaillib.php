@@ -356,6 +356,7 @@ static function getWebmailProgList()
 	$plist = lscandir_without_dot_or_underscore("__path_kloxo_httpd_root/webmail");
 	foreach($plist as $k => $v) { 
 		if ($v === 'img') { unset($plist[$k]); }
+		if ($v === 'images') { unset($plist[$k]); }
 		if ($v === 'disabled') { unset($plist[$k]); }
 		if (!lis_dir("__path_kloxo_httpd_root/webmail/$v")) { unset($plist[$k]); }
 	}
