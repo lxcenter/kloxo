@@ -13,23 +13,29 @@ function installapp_update_main()
 		application_update();
 	}
 
-        // check/install/update installapp data
-        installapp_data_update();
-
+	// check/install/update installapp data
+	installapp_data_update();
 }
 
 
 function application_update()
 {
-        global $gbl;
+	global $gbl;
 
-        $checkflag = $gbl->getObject('general')->generalmisc_b;
-        $installappflag = $checkflag->isOn('disableinstallapp');
-        if ($installappflag)
-        {
-        print("InstallApp is disabled.\n");
-        exit;
-        }
+/*
+	$checkflag = $gbl->getObject('general')->generalmisc_b;
+	$installappflag = $checkflag->isOn('disableinstallapp');
+
+	if ($installappflag)	{
+		print("InstallApp is disabled.\n");
+		exit;
+	}
+*/
+
+	if (lxfile_exists("/usr/local/lxlabs/kloxo/etc/flag/disableinstallapp.flg")) {
+		print("InstallApp is disabled.\n");
+		exit;
+	}
 
 	print(fill_string("Fetch current InstallApp version", 50));
 	$string = file_get_contents("http://download.lxcenter.org/download/installapp/version.list");
@@ -38,9 +44,11 @@ function application_update()
 	if (!$rmt) { 
 		throw new lxexception(" could_not_get_application_version_list", '', "");
 	}
+
 	print(" OK ");
- 	$remver = $rmt->applist['installapp'];
-        print("version is $remver\n");
+
+	$remver = $rmt->applist['installapp'];
+	print("version is $remver\n");
 
 	print(fill_string("Fetch local InstallApp version", 50));
 	$loc = get_local_application_version_list();
@@ -49,6 +57,7 @@ function application_update()
 
 	$updatelist = null;
 	$notexisting = null;
+
 	foreach($rmt->applist as $k => $v) {
 		if ($k === 'installapp') { continue; }
 
@@ -63,15 +72,16 @@ function application_update()
 				continue;
 			}
 		}
+
 		if (app_version_cmp($loc->applist[$k], $v) === -1) {
 			$updatelist[$k] = $v;
 			continue;
-
 		}
 
 		$string = "Checking application $k";
 		$string = fill_string($string, 50);
 		$string .= " ";
+
 		print($string);
 		print("Is latest version $v\n");
 
@@ -90,7 +100,6 @@ function application_update()
 		print("$string "); 
 		update_application($k);
 	}
-
 }
 
 
@@ -108,34 +117,47 @@ function update_application($appname)
 function do_update_application($appname)
 {
 	if (!$appname) { return; }
+
 	if (lxfile_exists("/tmp/".$appname.".zip")) {
-	lxfile_rm("/tmp/".$appname.".zip");
+		lxfile_rm("/tmp/".$appname.".zip");
 	}
+
 	system("cd /tmp ;  wget -q http://download.lxcenter.org/download/installapp/".$appname.".zip");
+
 	if (!lxfile_real("/tmp/".$appname.".zip")) { 
 		print("Could not download $appname\n");
 		return; 
 	}
+
 	lxfile_rm_rec("/home/kloxo/httpd/installapp/$appname");
+
 	system("cd /home/kloxo/httpd/installapp ; unzip -qq /tmp/".$appname.".zip");
+
 	lxfile_rm("/tmp/".$appname.".zip");
+
 	print("Download Done\n");
 }
 
 function update_remote_application($appname)
 {
 	if (!$appname) { return; }
-        if (lxfile_exists("/tmp/".$appname.".zip")) {
-        lxfile_rm("/tmp/".$appname.".zip");
-        }
+
+	if (lxfile_exists("/tmp/".$appname.".zip")) {
+		lxfile_rm("/tmp/".$appname.".zip");
+	}
+
 	system("cd /tmp ; wget -q http://download.lxcenter.org/download/installapp/$appname.zip");
+
 	if (!lxfile_real("/tmp/$appname.zip")) { 
 		print("Could not download $appname\n");
 		return; 
 	}
+
 	$app = "/home/kloxo/httpd/remote-installapp/$appname.zip";
+
 	lxfile_rm($app);
 	lxfile_mv("/tmp/$appname.zip", $app);
+
 	print("Download Done\n");
 }
 
