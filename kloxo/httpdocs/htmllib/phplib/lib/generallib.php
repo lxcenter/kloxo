@@ -231,16 +231,20 @@ function postUpdate($subaction = null)
 {
 //	if ($this->subaction === 'generalsetting') {
 	if ($subaction === 'generalsetting') {
-		// update /webmails/webmail.conf
+		// MR --- update for /webmails/webmail.conf
 		web__apache::createWebDefaultConfig();
 		web__lighttpd::createWebDefaultConfig();
+	}
+}
 
-		if ($this->generalmisc_b->disableinstallapp === 'on') {
-			system("echo > /usr/local/lxlabs/kloxo/etc/flag/disableinstallapp.flg");
-		}
-		else {
-			system("rm -rf /usr/local/lxlabs/kloxo/etc/flag/disableinstallapp.flg");
-		}
+function postUpdateGeneralsetting()
+{
+	// MR --- new function handle installapp issue because built-in postUpdate no immediately process
+	if ($this->generalmisc_b->isOn('disableinstallapp')) {
+		system("echo 1 > /usr/local/lxlabs/kloxo/etc/flag/disableinstallapp.flg");
+	}
+	else {
+		system("rm -rf /usr/local/lxlabs/kloxo/etc/flag/disableinstallapp.flg");
 	}
 }
 
@@ -276,12 +280,14 @@ function updateform($subaction, $param)
 		
 		case "ssh_config":
 			$vlist['generalmisc_b-sshport'] = null;
-			return $vlist;
+		//	return $vlist;
+			break;
 
 		case "kloxo_config":
 			$vlist['kloxoconfig_b-remoteinstall_flag'] = null;
 			$vlist['kloxoconfig_b-installapp_url'] = null;
-			return $vlist;
+		//	return $vlist;
+			break;
 
 
 		case "portconfig":
@@ -291,11 +297,13 @@ function updateform($subaction, $param)
 			$vlist['portconfig_b-nonsslport'] = null;
 			//$vlist['portconfig_b-nonsslportdisable_flag'] = null;
 			$vlist['portconfig_b-redirectnonssl_flag'] = null;
-			return $vlist;
+		//	return $vlist;
+			break;
 
 		case "download_config":
 			$vlist['generalmisc_b-masterdownload'] = null;
-			return $vlist;
+		//	return $vlist;
+			break;
 
 		case "attempts" :
 			$vlist['generalmisc_b-attempts'] = null;
@@ -304,7 +312,8 @@ function updateform($subaction, $param)
 		case "maintenance":
 			$vlist['generalmisc_b-maintenance_flag'] = null;
 			$vlist['text_maintenance_message'] = array('t', null);
-			return $vlist;
+		//	return $vlist;
+			break;
 
 		case "generalsetting":
 
@@ -324,6 +333,7 @@ function updateform($subaction, $param)
 			}
 
 			if ($sgbl->isKloxo()) {
+						
 				// MR --- On original, why double declare?. Modified!
 				$vlist['generalmisc_b-extrabasedir'] = null;
 			//	$vlist['generalmisc_b-extrabasedir'] = null;
@@ -346,6 +356,10 @@ function updateform($subaction, $param)
 			$vlist['generalmisc_b-htmltitle'] = null;
 			$vlist['generalmisc_b-ticket_url'] = null;
 			$vlist['login_pre'] = null;
+			
+			// MR --- immediately process before goback
+			$this->postUpdateGeneralsetting();
+
 			break;
 
 		case "hostdiscovery":
@@ -402,8 +416,6 @@ function updateform($subaction, $param)
 
 
 	}
-	
-	$this->postUpdate($subaction);
 
 	return $vlist;
 }
@@ -416,6 +428,14 @@ function updateReversedns($param)
 
 function createShowAlist(&$alist, $subaction = null)
 {
+	// MR --- process sync before enter to page -- related to installapp issue
+	if (lxfile_exists("/usr/local/lxlabs/kloxo/etc/flag/disableinstallapp.flg")) {
+		$this->generalmisc_b->disableinstallapp = 'on';
+	}
+	else {
+		$this->generalmisc_b->disableinstallapp = 'off';
+	}
+
 }
 
 static function initThisObjectRule($parent, $class, $name = null)
