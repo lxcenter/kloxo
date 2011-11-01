@@ -308,8 +308,6 @@ function updateform($subaction, $param)
 
 		case "generalsetting":
 
-			$this->postUpdate($subaction);
-
 			$vlist['generalmisc_b-autoupdate'] = null;
 
 			if ($sgbl->isHyperVM()) {
@@ -337,12 +335,6 @@ function updateform($subaction, $param)
 			//	$this->generalmisc_b->setDefaultValue('webstatisticsprogram', 'awstats');
 				$vlist['generalmisc_b-webstatisticsprogram'] = array('s', $list);
 			//	$vlist['generalmisc_b-webstatisticsprogram'] = array('s', $list);
-				if (file_exists("/usr/local/lxlabs/kloxo/etc/flag/disableinstallapp.flg")) {
-					$this->generalmisc_b->disableinstallapp = 'on';
-				}
-				else {
-					$this->generalmisc_b->disableinstallapp = 'off';
-				}
 				$vlist['generalmisc_b-disableinstallapp'] = null;
 			//	$vlist['generalmisc_b-disableinstallapp'] = null;
 				$list = lx_merge_good('--chooser--', mmail::getWebmailProgList());
@@ -410,6 +402,9 @@ function updateform($subaction, $param)
 
 
 	}
+	
+	$this->postUpdate($subaction);
+
 	return $vlist;
 }
 
