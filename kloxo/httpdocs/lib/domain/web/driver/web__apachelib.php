@@ -482,10 +482,11 @@ function createConffile()
 
 				$string .= str_replace($token, $line, $syncto);
 
-				//--- consistence like lighttpd disable this for no 'exclusive domain/client'
+				// MR --- still need first public cert especially for non 'exclusive ip'
+				// ref - http://forum.lxcenter.org/index.php?t=msg&th=17211&goto=90589
 			//	if($this->main->priv->isOn('ssl_flag')) {
 			//		$string .= "\t<IfModule mod_ssl.c>\n";
-			//		$string .= $this->sslsysnc(null);
+					$string .= $this->sslsysnc(null);
 			//		$string .= "\t</IfModule>\n\n";
 			//	}
 				$string .= $this->middlepart($web_home, $domainname, $dirp); 
@@ -874,6 +875,10 @@ static function createSSlConf($iplist, $domainiplist)
 	$string .= "DirectoryIndex index.php index.htm default.htm default.html\n\n";
 
 	lfile_put_contents($sslfile, $string);
+
+	// MR --- no need ssl.conf at all but need review after 6.1.7
+//	system("rm -rf /home/apache/conf/defaults/ssl.conf");
+
 }
 
 function sslsysnc($ipad)
