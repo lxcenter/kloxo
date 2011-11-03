@@ -617,10 +617,10 @@ static function createCpConfig()
 		$string .= "\t\t>\n\n";
 		$string .= "\tServerName {$config}\n";
 		$string .= "\tServerAlias {$config}.*\n\n";
-		$string .= "\tDocumentRoot /home/kloxo/httpd/{$config}/\n";
+		$string .= "\tDocumentRoot /home/kloxo/httpd/{$config}/\n\n";
 
 		if ($config === "default") {
-			$string .= "\n\t<Ifmodule mod_userdir.c>\n";
+			$string .= "\t<Ifmodule mod_userdir.c>\n";
 			//-- to make sure http://ip/~client work because maybe 'disabled' on httpd.conf
 			//-- not work with exist * on httpd version 2.2.20/2.2.21
 		//	$string .= "\t\tUserDir enabled *\n";
