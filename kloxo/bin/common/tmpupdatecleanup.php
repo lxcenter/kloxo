@@ -94,6 +94,17 @@ function updatecleanup_main()
 	}
 
 	system($fixstr);
+	
+	// --- also remove httpd-itk rpm (from webtatic.repo or others) because may conflict with
+	// httpd 2.2.21 that include mpm itk beside mpm worker and event
+	
+	$ret = lxshell_return("rpm -q httpd-itk | grep -i 'not installed'");
+
+	if (!$ret) {
+		log_cleanup("Remove httpd-itk rpm package");
+		log_cleanup("- Remove process");
+		system("yum remove httpd-itk -y");
+	}
 
 	log_cleanup("*** Executing Update cleanup - END ***");
 }
