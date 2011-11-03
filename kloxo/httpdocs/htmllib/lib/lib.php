@@ -4494,8 +4494,10 @@ function install_xcache($nolog = null)
 		if (!$nolog) { log_cleanup("- Enabled status"); }
 //		$ret = lxshell_return("php -m | grep -i xcache");
 //		$ret = system("rpm -q php-xcache | grep -i 'not installed'");
-		$ret = system("rpm -q php-xcache | grep -i 'not installed'", $retval);
-		if ($ret) {
+		// --- can not use lxshell_return because always return 127
+		// --- return 0 (= false) mean not found 'not installed'
+		system("rpm -q php-xcache | grep -i 'not installed' >/dev/null 2>&1", $ret);
+		if (!$ret) {
 			if (!$nolog) { log_cleanup("- Install process"); }
 			lxshell_return("yum", "-y", "install", "php-xcache");
 		}
