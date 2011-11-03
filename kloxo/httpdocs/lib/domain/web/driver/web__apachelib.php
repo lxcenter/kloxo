@@ -418,18 +418,22 @@ function createConffile()
 		$string .= $this->AddOpenBaseDir();
 		$string .= $this->endtag();
 
+		$string1 = $string;
+		
+		$string = null;
+
 		lxfile_mkdir($this->main->getFullDocRoot());
 
 		if($this->main->priv->isOn('ssl_flag')) {
 
 			// Do the ssl cert only if the ipaddress exists. Now when we migrate, 
 
-			$string .= "\n\n<IfModule mod_ssl.c>\n";
+		//	$string .= "\n\n<IfModule mod_ssl.c>\n";
 
 			if ($this->getServerIp()) {
 				$iplist = $this->getSslIpList();
 				foreach($iplist as $ip) {
-					$string .= "#### ssl virtualhost per ip\n";
+					$string .= "\n#### ssl virtualhost per ip {$ip} start\n";
 					$ssl_cert = $this->sslsysnc($ip);
 					if (!$ssl_cert) { continue; }
 					$string .= "<VirtualHost \\\n";
@@ -459,10 +463,10 @@ function createConffile()
 					$string .= $this->middlepart($web_home, $domainname, $dirp); 
 					$string .= $this->AddOpenBaseDir();
 					$string .= $this->endtag();
-					$string .= "#### ssl virtualhost per ip $ip end\n\n";
+					$string .= "#### ssl virtualhost per ip {$ip} end\n\n";
 				}
 			} else {
-				$string .= "#### ssl virtualhost per ip\n";
+				$string .= "\n#### ssl virtualhost start\n";
 				$string .= "<VirtualHost \\\n";
 			//	$string .= "{$this->createVirtualHostiplist("80")}";
 				$string .= "{$this->createVirtualHostiplist("443")}";
@@ -492,11 +496,21 @@ function createConffile()
 				$string .= $this->middlepart($web_home, $domainname, $dirp); 
 				$string .= $this->AddOpenBaseDir();
 				$string .= $this->endtag();
-				$string .= "#### ssl virtualhost per ip end\n";
+				$string .= "#### ssl virtualhost end\n";
+				
 			}
 
-			$string .= "</IfModule>\n\n\n";
+			// --- for better appear
+			$string = str_replace("\t", "||||", $string);
+			$string = str_replace("\n", "\n\t", $string);
+			$string = str_replace("||||", "\t", $string);
+
+		//	$string .= "</IfModule>\n\n\n";
 		}
+
+		$string2 = "\n\n<IfModule mod_ssl.c>\n{$string}\n</IfModule>\n\n\n";
+
+		$string = $string1.$string2;
 
 /*
 		// --- using Sqlite not work here, so make __var_mmaillist in weblib.php
