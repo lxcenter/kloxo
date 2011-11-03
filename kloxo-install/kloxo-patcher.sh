@@ -211,10 +211,9 @@ function kloxo_run_script () {
 	echo "Step for cleanup and fixed..."
 
 	sh /script/cleanup
-	sh /script/fixweb
 	sh /script/fixdns
-	sh /script/fixmail
-	sh /script/fixwebmail
+	sh /script/fixweb
+	sh /script/fixphp
 }
 
 function kloxo_begin () {
