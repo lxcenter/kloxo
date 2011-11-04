@@ -78,15 +78,21 @@ function updatecleanup_main()
 
 	// issue #716 -- [beta] Unresolved dependency on Apache version
 	
-	// --- also remove httpd-itk rpm (from webtatic.repo or others) because may conflict with
+	// --- remove httpd-itk rpm (from webtatic.repo or others) because may conflict with
 	// httpd 2.2.21 that include mpm itk beside mpm worker and event
 	
-	system("rpm -q httpd-itk | grep -i 'not installed'", $ret);
+	system("rpm -q httpd-itk | grep -i 'not installed' >/dev/null 2>&1", $ret);
 
-	if (!$ret) {
+	// --- not work with !$ret
+	if ($ret !== 0) {
 		log_cleanup("Remove httpd-itk rpm package");
-		log_cleanup("- Remove process");
-		system("yum remove httpd-itk -y");
+		log_cleanup("- Remove httpd-itk");
+		system("rpm -e httpd-itk --nodeps >/dev/null 2>&1");
+		system("rpm -q httpd | grep -i 'not installed' >/dev/null 2>&1", $ret2);
+		if ($ret2 === 0) {
+			log_cleanup("- Reinstall httpd");
+			system("yum reinstall httpd -y >/dev/null 2>&1");
+		}
 	}
 	
 	// --- to make sure latest packages from lxcenter
