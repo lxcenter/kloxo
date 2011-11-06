@@ -19,15 +19,15 @@ function setFixUserlogo($select)
 {
 	global $gbl, $sgbl, $login, $ghtml;
 
-	log_cleanup("Fix userlogo");
+	log_cleanup("Fix user logo");
 
 	if (file_exists("/usr/local/lxlabs/kloxo/file/user-logo.png")) {
 		system("cp -rf /usr/local/lxlabs/kloxo/file/user-logo.png /home/kloxo/httpd/user-logo.png");
-		log_cleanup("- Source FROM /usr/local/lxlabs/kloxo/file/user-logo.png");
-		log_cleanup("- Target TO /home/kloxo/httpd/user-logo.png");
+		log_cleanup("- User logo moved from -> /usr/local/lxlabs/kloxo/file/user-logo.png");
+		log_cleanup("- User logo moved to -> /home/kloxo/httpd/user-logo.png");
 	}
 	else {
-		log_cleanup("- No source /usr/local/lxlabs/kloxo/file/user-logo.png");
+		log_cleanup("- Cleaned user logo source at /usr/local/lxlabs/kloxo/file/user-logo.png");
 		exit;
 	}
 
@@ -52,13 +52,13 @@ function setFixUserlogoDefaultPages()
 	
 	foreach($list as $k => $l) {
 		system("cp -rf /home/kloxo/httpd/user-logo.png /home/kloxo/httpd/{$l}/images/logo.png");
-		log_cleanup("- Target TO /home/kloxo/httpd/{$l}/images/logo.png");
+		log_cleanup("- User logo for default pages moved to -> /home/kloxo/httpd/{$l}/images/logo.png");
 	}
 	
 /*
 	// --- pending to next version
 	system("cp -rf /home/kloxo/httpd/user-logo.png /usr/local/lxlabs/kloxo/httpdocs/login/images/logo.png");
-	log_cleanup("- Target TO /usr/local/lxlabs/kloxo/httpdocs/login/images/logo.png");
+	log_cleanup("- User logo moved to -> /usr/local/lxlabs/kloxo/httpdocs/login/images/logo.png");
 */
 }
 
@@ -77,7 +77,7 @@ function setFixUserlogoDomainPages()
 		foreach((array) $dlist as $l) {
 			$web = $l->nname;
 			system("cp -rf /home/kloxo/httpd/user-logo.png {$cdir}/{$web}/images/logo.png");
-			log_cleanup("- Target TO {$cdir}/{$web}/images/logo.png");
+			log_cleanup("- User logo for domain pages moved to -> {$cdir}/{$web}/images/logo.png");
 		}
 	}
 }

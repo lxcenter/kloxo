@@ -9,7 +9,7 @@ if (isset($list['new_dnstemplate'])) {
 	$dnst = new Dnstemplate(null, null, $list['new_dnstemplate']);
 	$dnst->get();
 	if ($dnst->dbaction === 'add') {
-		print("Dns template doesn't exist\n");
+		print("DNS template doesn't exist\n");
 		exit;
 	}
 }

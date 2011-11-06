@@ -22,7 +22,7 @@ function setFixChownChmod($select)
 	$login->loadAllObjects('client');
 	$list = $login->getList('client');
 
-	log_cleanup("Fix chown and chmod for domains");
+	log_cleanup("Fix file permission problems for domains (chown/chmod files)");
 	
 	$userdirchmod = '750';
 	$phpfilechmod = '644';

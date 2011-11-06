@@ -136,7 +136,7 @@ Include /home/apache/conf/defaults/*.conf
 ###version0-5###
 EOF;
 
-		log_cleanup("- Calculate - threads min/max $minpar_w/$maxpar_w and servers min/max $minpar_p/$maxpar_p");
+		log_cleanup("- Calculate Apache threads limit (max/min -> $minpar_w/$maxpar_w) and server limits (max/min -> $minpar_p/$maxpar_p");
 
 		log_cleanup("- Write to /etc/httpd/conf.d/~lxcenter.conf");
 

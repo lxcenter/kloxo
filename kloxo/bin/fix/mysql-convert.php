@@ -24,7 +24,7 @@ function setMysqlConvert($engine, $database, $table, $config)
 {
 	global $gbl, $sgbl, $login, $ghtml;
 
-	log_cleanup("Mysql engine convert");
+	log_cleanup("Convert of MySQL engine");
 
 	$engine = strtolower($engine);
 
@@ -41,13 +41,13 @@ function setMysqlConvert($engine, $database, $table, $config)
 
 	mysql_connect('localhost', 'root', $pass);
 
-	log_cleanup("- Convert to ".$engine." engine start");
+	log_cleanup("- Converting to ".$engine." engine");
 
 	if ($database === '_all_') {
 		$dbs = mysql_query('SHOW databases');
 
 		while ($db = mysql_fetch_array($dbs)) {
-			log_cleanup("-- ".$db[0]." database");
+			log_cleanup("-- ".$db[0]." database converted");
 
 			if ($db[0] === 'mysql') {
 			}
@@ -60,13 +60,13 @@ function setMysqlConvert($engine, $database, $table, $config)
 					$tbls = mysql_query('SHOW tables');
 
 					while ($tbl = mysql_fetch_array($tbls)) {
-						log_cleanup("--- ".$tbl[0]." table");
+						log_cleanup("--- ".$tbl[0]." table converted");
 						mysql_query("ALTER TABLE {$tbl[0]} ENGINE={$engine}");
 					}
 				}
 				else {
 					mysql_query("ALTER TABLE {$table} ENGINE={$engine}");
-					log_cleanup("--- ".$table." table");
+					log_cleanup("--- ".$table." table converted");
 				}
 			}
 		}
@@ -74,13 +74,13 @@ function setMysqlConvert($engine, $database, $table, $config)
 	else {
 		mysql_select_db($database);
 
-		log_cleanup("-- ".$database." database");
+		log_cleanup("-- ".$database." database converted");
 
 		if ($table === '_all_') {
 			$tbls = mysql_query('SHOW tables');
 
 			while ($tbl = mysql_fetch_array($tbls)) {
-				log_cleanup("--- ".$tbl[0]." table");
+				log_cleanup("--- ".$tbl[0]." table converted");
 				mysql_query("ALTER TABLE {$tbl[0]} ENGINE={$engine}");
 			}
 		}
@@ -119,12 +119,12 @@ function setMysqlConvert($engine, $database, $table, $config)
 			if ($engine === 'myisam') {
 				$string_source = "[mysqld]\n";
 				$string_replace = "[mysqld]\nskip-innodb\ndefault-storage-engine=myisam\n";
-				log_cleanup("- Add skip-innodb and default-storage-engine=".$engine." in /etc/my.cnf");
+				log_cleanup("- Added \"skip-innodb and default-storage-engine=".$engine."\" in /etc/my.cnf");
 			}
 			else {
 				$string_source = "[mysqld]\n";
 				$string_replace = "[mysqld]\ndefault-storage-engine={$engine}\n";
-				log_cleanup("- Add default-storage-engine=".$engine." in /etc/my.cnf");
+				log_cleanup("- Added \"default-storage-engine=".$engine."\" in /etc/my.cnf");
 			}
 
 			$string_collect = str_replace($string_source, $string_replace, $string_collect);
@@ -133,9 +133,9 @@ function setMysqlConvert($engine, $database, $table, $config)
 		}
 	}
 
-	log_cleanup("- Convert to ".$engine." engine finish");
+	log_cleanup("- Convert of MySQL to ".$engine." engine finished");
 
-	log_cleanup("- Service restart");
+	log_cleanup("- MySQL Service restarted");
 	$ret = lxshell_return("service", "mysqld", "restart");
 	if ($ret) { throw new lxexception('mysqld_restart_failed', 'parent'); }
 }

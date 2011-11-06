@@ -21,14 +21,14 @@ function setMysqlOptimize($select, $database = null)
 {
 	global $gbl, $sgbl, $login, $ghtml;
 
-	log_cleanup("Mysql Optimize");
+	log_cleanup("Mysql Optimization");
 
 	$database = ($database) ? $database : "_all_";
 
 	$pass = slave_get_db_pass();
 
 	if ($select === 'repair') {
-		log_cleanup("- Database repairing");
+		log_cleanup("- Repairing database");
 
 		if ($database === '_all_') {
 			system("mysqlcheck --user=root --password=\"{$pass}\" --repair --all-databases");
@@ -38,7 +38,7 @@ function setMysqlOptimize($select, $database = null)
 		}
 	}
 	else if ($select === 'optimize') {
-		log_cleanup("- Database compacting");
+		log_cleanup("- Compacting database");
 
 		if ($database === '_all_') {
 			system("mysqlcheck --user=root --password=\"{$pass}\" --optimize --all-databases");
@@ -48,7 +48,7 @@ function setMysqlOptimize($select, $database = null)
 		}
 	}
 
-	log_cleanup("- Service restart");
+	log_cleanup("- MySQL Service restart");
 	$ret = lxshell_return("service", "mysqld", "restart");
 	if ($ret) { throw new lxexception('mysqld_restart_failed', 'parent'); }
 }
