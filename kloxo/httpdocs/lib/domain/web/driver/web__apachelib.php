@@ -419,6 +419,8 @@ function createConffile()
 		$string .= $this->endtag();
 
 		$string1 = $string;
+
+		$string2 = "\n\n";
 		
 		$string = null;
 
@@ -465,7 +467,11 @@ function createConffile()
 					$string .= $this->endtag();
 					$string .= "#### ssl virtualhost per ip {$ip} end\n\n";
 				}
-			} else {
+
+				$string2 = "\n\n<IfModule mod_ssl.c>\n{$string}\n</IfModule>\n\n\n";
+			} 
+		/*
+			else {
 				$string .= "\n#### ssl virtualhost start\n";
 				$string .= "<VirtualHost \\\n";
 			//	$string .= "{$this->createVirtualHostiplist("80")}";
@@ -499,7 +505,7 @@ function createConffile()
 				$string .= "#### ssl virtualhost end\n";
 				
 			}
-
+		*/
 			// --- for better appear
 			$string = str_replace("\t", "||||", $string);
 			$string = str_replace("\n", "\n\t", $string);
@@ -508,7 +514,7 @@ function createConffile()
 		//	$string .= "</IfModule>\n\n\n";
 		}
 
-		$string2 = "\n\n<IfModule mod_ssl.c>\n{$string}\n</IfModule>\n\n\n";
+//		$string2 = "\n\n<IfModule mod_ssl.c>\n{$string}\n</IfModule>\n\n\n";
 
 		$string = $string1.$string2;
 
@@ -571,7 +577,8 @@ function setAddon()
 
 		if ($v->ttype === 'redirect') {
 			$string .= "<VirtualHost \\\n{$this->createVirtualHostiplist("80")}";
-			$string .= "{$this->createVirtualHostiplist("443")}";
+			// minimize dilemma between 'exclusive ip' and ip/~client
+		//	$string .= "{$this->createVirtualHostiplist("443")}";
 			$string .= "\t\t>\n\n";
 			$string .= "\tServerName {$v->nname}\n";
 			$string .= "\tServerAlias \\\n\t\twww.{$v->nname}\n\n";
@@ -590,12 +597,11 @@ function setAddon()
 
 	if ($this->main->isOn('force_www_redirect')) {
 		$string .= "<VirtualHost \\\n{$this->createVirtualHostiplist("80")}";
-		$string .= "{$this->createVirtualHostiplist("443")}";
 		$string .= "\t\t>\n\n";
 		$string .= "\tServerName {$this->main->nname}\n\n";
 		$string .= "\tRedirect / http://www.{$this->main->nname}/\n\n";
 		$string .= "</VirtualHost>\n\n";
-
+/*
 		$string .= "<IfModule mod_ssl.c>\n";
 		$string .= "\t<VirtualHost {$this->createVirtualHostiplist("443")}";
 		$string .= "\t\t>\n\n";
@@ -603,6 +609,7 @@ function setAddon()
 		$string .= "\t\tRedirect / https://www.{$this->main->nname}\n\n";
 		$string .= "\t</VirtualHost>\n";
 		$string .= "<IfModule mod_ssl.c>\n\n\n";
+*/
 	}
 
 //	return $string;
@@ -627,7 +634,10 @@ static function createCpConfig()
 
 	foreach($list as $config => $file) {
 		$string = null;
-		$string .= "<VirtualHost \\\n{$vstring}{$sstring}"; 
+		$string .= "<VirtualHost \\\n";
+		$string .= $vstring;
+		// minimize dilemma between 'exclusive ip' and ip/~client
+	//	$string .= $sstring; 
 		$string .= "\t\t>\n\n";
 		$string .= "\tServerName {$config}\n";
 		$string .= "\tServerAlias {$config}.*\n\n";
@@ -680,7 +690,10 @@ static function getCreateWebmail($list)
 
 	global $gbl, $sgbl, $login, $ghtml;
 
-	$vstring = self::getVipString();
+//	$vstring = self::getVipString();
+	// minimize dilemma between 'exclusive ip' and ip/~client
+	$vstring = self::staticcreateVirtualHostiplist('80');
+
 //	dprintr($vstring);
 //	$string = null;
 	foreach($list as &$l) {
@@ -730,12 +743,13 @@ static function getCreateWebmail($list)
 		//	$string .= "\t\tSuPhp_UserGroup {$l['systemuser']} {$l['systemuser']}\n";
 		//	$string .= "\t\tSuPhp_UserGroup lxlabs lxlabs\n";
 
-			$string .= self::staticgetSuexecString('lxlabs');
+			// --- also without this string like defaults pages
+		//	$string .= self::staticgetSuexecString('lxlabs');
 
 		//	$string .= "\t</Ifmodule>\n\n";
 		}
 
-		$string .= "</VirtualHost>\n\n\n";
+		$string .= "\n</VirtualHost>\n\n\n";
 	}
 
 	return $string;
@@ -862,9 +876,9 @@ static function createSSlConf($iplist, $domainiplist)
 			}
 		}
 
-		$string .= "<Virtualhost \\\n";
-		$string .= "\t{$ip['ipaddr']}:443\\\n";
-		$string .= "\t\t>\n\n";
+		$string .= "\n\t<Virtualhost \\\n";
+		$string .= "\t\t{$ip['ipaddr']}:443\\\n";
+		$string .= "\t\t\t>\n\n";
 		$ssl_cert = sslcert::getSslCertnameFromIP($ip['nname']);
 
 		$certificatef = "{$sgbl->__path_ssl_root}/{$ssl_cert}.crt";
@@ -873,18 +887,18 @@ static function createSSlConf($iplist, $domainiplist)
 
 		sslcert::checkAndThrow(lfile_get_contents($certificatef), lfile_get_contents($keyfile), $ssl_cert);
 
-		$string .= "\tSSLEngine On \n";
-		$string .= "\tSSLCertificateFile {$certificatef}\n";
-		$string .= "\tSSLCertificateKeyFile {$keyfile}\n";
-		$string .= "\tSSLCACertificatefile {$cafile}\n\n";
-		$string .= "</Virtualhost>\n\n";
+		$string .= "\t\tSSLEngine On \n";
+		$string .= "\t\tSSLCertificateFile {$certificatef}\n";
+		$string .= "\t\tSSLCertificateKeyFile {$keyfile}\n";
+		$string .= "\t\tSSLCACertificatefile {$cafile}\n\n";
+		$string .= "\t</Virtualhost>\n";
 	}
 
 	//	$string .= "SSLLogFile /\n";
 //	$sslfile = "/etc/httpd/conf/kloxo/ssl.conf";
 	$sslfile = "/home/apache/conf/defaults/ssl.conf";
 
-	$string = "<IfModule mod_ssl.c>\n\n{$string}\n</IfModule>\n\n";
+	$string = "<IfModule mod_ssl.c>\n{$string}\n</IfModule>\n\n";
 	//$string = null;
 	$string .= "DirectoryIndex index.php index.htm default.htm default.html\n\n";
 
@@ -1495,13 +1509,15 @@ static function createWebmailConfig()
 	$webdata  = null;
 	$webdata .= "<VirtualHost \\\n";
 	$webdata .= self::staticcreateVirtualHostiplist("80");
-	$webdata .= self::staticcreateVirtualHostiplist("443");
+	// minimize dilemma between 'exclusive ip' and ip/~client
+//	$webdata .= self::staticcreateVirtualHostiplist("443");
 	$webdata .= "\t\t>\n\n";
 	$webdata .= "\tServerName webmail\n";
 	$webdata .= "\tServerAlias webmail.*\n\n";
-	$webdata .= "\tDocumentRoot {$sgbl->__path_kloxo_httpd_root}/webmail/$webmaildefpath\n";
+	$webdata .= "\tDocumentRoot {$sgbl->__path_kloxo_httpd_root}/webmail/$webmaildefpath\n\n";
 
-	$webdata .= self::staticgetSuexecString('lxlabs');
+	// --- also without this string like defaults pages
+//	$webdata .= self::staticgetSuexecString('lxlabs');
 
 	$webdata .= "</VirtualHost>\n\n";
 
