@@ -96,7 +96,7 @@ table.content {
 	}
 	else {
 		// use user-define index.php -- no override when kloxo update
-		$incfile = "./custom-index.php";
+		include_once "./custom-index.php";
 	}
 ?>
 
