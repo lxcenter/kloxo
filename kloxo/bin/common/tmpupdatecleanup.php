@@ -76,7 +76,47 @@ function updatecleanup_main()
 
 	lxfile_touch("__path_program_start_vps_flag");
 
-	log_cleanup("*** Executing Update (cleanup) - END ***");
+	// issue #716 -- [beta] Unresolved dependency on Apache version
+
+	// --- remove httpd-itk rpm (from webtatic.repo or others) because may conflict with
+	// httpd 2.2.21 that include mpm itk beside mpm worker and event
+
+	system("rpm -q httpd-itk | grep -i 'not installed' >/dev/null 2>&1", $ret);
+
+	// --- not work with !$ret
+	if ($ret !== 0) {
+		log_cleanup("Remove httpd-itk rpm package");
+		log_cleanup("- Remove httpd-itk");
+		system("rpm -e httpd-itk --nodeps >/dev/null 2>&1");
+		system("rpm -q httpd | grep -i 'not installed' >/dev/null 2>&1", $ret2);
+		if ($ret2 === 0) {
+			log_cleanup("- Reinstall httpd");
+			system("yum reinstall httpd -y >/dev/null 2>&1");
+		}
+	}
+
+	// --- to make sure latest packages from lxcenter
+	system("yum update --disablerepo=* --enablerepo=lxcenter-updates -y >/dev/null 2>&1");
+
+	// --- importance for update from 6.1.6 or previous where change apache/lighttpd structure
+	// or others for next version
+
+	$fixpath = "sh /usr/local/lxlabs/kloxo/pscript/fix";
+
+	$fixapps = array("dns", "web", "php");
+
+	$fixstr = "";
+
+	log_cleanup("Fix dns/web/php settings");
+
+	foreach($fixapps as $key => $fa) {
+		log_cleanup("- Run fix{$fa}");
+		$fixstr .= "{$fixpath}{$fa} ; ";
+	}
+
+	system($fixstr);
+
+	log_cleanup("*** Executing Update cleanup - END ***");
 }
 
 function cp_dbfile()
