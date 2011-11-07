@@ -465,10 +465,8 @@ function createConffile()
 					$string .= $this->middlepart($web_home, $domainname, $dirp); 
 					$string .= $this->AddOpenBaseDir();
 					$string .= $this->endtag();
-					$string .= "#### ssl virtualhost per ip {$ip} end\n\n";
+					$string .= "#### ssl virtualhost per ip {$ip} end\n";
 				}
-
-				$string2 = "\n\n<IfModule mod_ssl.c>\n{$string}\n</IfModule>\n\n\n";
 			} 
 		/*
 			else {
@@ -510,6 +508,8 @@ function createConffile()
 			$string = str_replace("\t", "||||", $string);
 			$string = str_replace("\n", "\n\t", $string);
 			$string = str_replace("||||", "\t", $string);
+
+			$string2 = "\n\n<IfModule mod_ssl.c>\n{$string}\n</IfModule>\n\n\n";
 
 		//	$string .= "</IfModule>\n\n\n";
 		}
