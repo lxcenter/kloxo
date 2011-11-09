@@ -133,7 +133,7 @@ Include /home/apache/conf/redirects/*.conf
 Include /home/apache/conf/webmails/*.conf
 Include /home/apache/conf/wildcards/*.conf
 
-###version0-5###
+###version0-6###
 EOF;
 
 		log_cleanup("- Calculate Apache threads limit (max/min -> $minpar_w/$maxpar_w) and server limits (max/min -> $minpar_p/$maxpar_p");

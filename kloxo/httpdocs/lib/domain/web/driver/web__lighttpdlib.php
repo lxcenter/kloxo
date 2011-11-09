@@ -38,7 +38,7 @@ static function installMe()
 
 	lxfile_cp("/usr/local/lxlabs/kloxo/file/lighttpd/lighttpd.conf", "/etc/lighttpd/lighttpd.conf");
 
-	$cver = "###version0-5###";
+	$cver = "###version0-6###";
 	$fver = file_get_contents("/etc/lighttpd/conf.d/~lxcenter.conf");
 	
 	if(stristr($fver, $cver) === FALSE) {
@@ -352,6 +352,7 @@ function createConffile()
 		//	$string .= "\$HTTP[\"host\"] =~ \"{$domainname}\" {\n";
 			$string .= "\$HTTP[\"host\"] =~ \"^(?!(cp|webmail|default|disable).{$domainname})\" {\n";	
 		*/
+		/*
 			// also include $this->createServerAliasLine() - thanks amit kumar mishra
 
 			$deflist = array('cp', 'webmail', 'default', 'disable');
@@ -363,6 +364,8 @@ function createConffile()
 
 			$domlist = str_replace("(", "({$defstring}", $this->createServerAliasLine());
 			$string .= "\$HTTP[\"host\"] =~ \"{$domlist}\" {\n";
+		*/
+			$string .= "\$HTTP[\"host\"] =~ \"{$domainname}\" {\n";
 		}
 		else {
 			$line = $this->createServerAliasLine();
@@ -384,11 +387,13 @@ function createConffile()
 						break;
 					}
 				}
-				$string .= "\$SERVER[\"socket\"] == \"$ip:443\" {\n";
-				$string .= $this->syncToPort("443", "www");
-				$string .= $this->middlepart($domainname, $dirp); 
-				$string .= $this->getSslCert($iip);
-				$string .= "}\n\n";
+				if ($c === 0) {
+					$string .= "\$SERVER[\"socket\"] == \"$ip:443\" {\n";
+					$string .= $this->syncToPort("443", "www");
+					$string .= $this->middlepart($domainname, $dirp); 
+					$string .= $this->getSslCert($iip);
+					$string .= "}\n\n";
+				}
 			}
 		}
 
