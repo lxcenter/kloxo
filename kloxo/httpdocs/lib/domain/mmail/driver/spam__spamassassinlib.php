@@ -42,13 +42,13 @@ class Spam__Spamassassin extends lxDriverClass
 			$user = null;
 		}
 
-		// --- issue #578 - missing in version 6.1.6
-		$mailpath = "/home/lxadmin/mail/spamassassin";
+		// --- issue #578/#721 - missing in version 6.1.6
+		$mailpath = "/home/lxadmin/mail";
 
 		if ($user) {
 			$prefpath = "$mailpath/$domain/$user/user_prefs";
 		} else {
-			$prefpath = "$mailpath/$domain/user_prefs";
+			return;
 		}
 
 		if (!lxfile_exists(dirname($prefpath))) {
