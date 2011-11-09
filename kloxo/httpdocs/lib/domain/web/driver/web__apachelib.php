@@ -29,7 +29,7 @@ static function installMe()
 
 //	addLineIfNotExistInside("/etc/httpd/conf/httpd.conf", "Include /etc/httpd/conf/kloxo/kloxo.conf", "");
 
-	$cver = "###version0-5###";
+	$cver = "###version0-6###";
 	$fver = file_get_contents("/etc/httpd/conf.d/~lxcenter.conf");
 	
 	if(stristr($fver, $cver) === FALSE) {
@@ -641,7 +641,7 @@ static function createCpConfig()
 		$string .= "\t\t>\n\n";
 		$string .= "\tServerName {$config}\n";
 		$string .= "\tServerAlias {$config}.*\n\n";
-		$string .= "\tDocumentRoot /home/kloxo/httpd/{$config}/\n\n";
+		$string .= "\tDocumentRoot \"/home/kloxo/httpd/{$config}/\"\n\n";
 
 		if ($config === "default") {
 			$string .= "\t<Ifmodule mod_userdir.c>\n";
@@ -1514,7 +1514,7 @@ static function createWebmailConfig()
 	$webdata .= "\t\t>\n\n";
 	$webdata .= "\tServerName webmail\n";
 	$webdata .= "\tServerAlias webmail.*\n\n";
-	$webdata .= "\tDocumentRoot {$sgbl->__path_kloxo_httpd_root}/webmail/$webmaildefpath\n\n";
+	$webdata .= "\tDocumentRoot \"{$sgbl->__path_kloxo_httpd_root}/webmail/$webmaildefpath\"\n\n";
 
 	// --- also without this string like defaults pages
 //	$webdata .= self::staticgetSuexecString('lxlabs');

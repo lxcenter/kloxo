@@ -4503,8 +4503,8 @@ function install_xcache($nolog = null)
 //		$ret = system("rpm -q php-xcache | grep -i 'not installed'");
 		// --- can not use lxshell_return because always return 127
 		// --- return 0 (= false) mean not found 'not installed'
-		system("rpm -q php-xcache | grep -i 'not installed' >/dev/null 2>&1", $ret);
-		if (!$ret) {
+		exec("rpm -q php-xcache | grep -i 'not installed'", $out, $ret);
+		if ($ret !== false) {
 			if (!$nolog) { log_cleanup("- Install process"); }
 			lxshell_return("yum", "-y", "install", "php-xcache");
 		}
@@ -4515,7 +4515,8 @@ function install_xcache($nolog = null)
 		lxfile_cp("../file/xcache.ini", "/etc/php.d/xcache.ini");
 	}
 	else {
-		if (!$nolog) { log_cleanup("- Disabled status"); }
+		lxshell_return("yum", "-y", "remove", "php-xcache");
+		if (!$nolog) { log_cleanup("- Disabled status and uninstalled"); }
 	}
 
 }
@@ -5339,7 +5340,7 @@ function setInitialApacheConfig()
 		}
 	}
 
-	$cver = "###version0-5###";
+	$cver = "###version0-6###";
 	$fver = file_get_contents("/etc/httpd/conf.d/~lxcenter.conf");
 	
 	if (stristr($fver, $cver) === FALSE) {
@@ -5409,7 +5410,7 @@ function setInitialLighttpdConfig()
 	log_cleanup("- Install /etc/lighttpd/lighttpd.conf");
 	lxfile_cp("../file/lighttpd/lighttpd.conf", "/etc/lighttpd/lighttpd.conf");
 	
-	$cver = "###version0-5###";
+	$cver = "###version0-6###";
 	$fver = file_get_contents("/etc/lighttpd/conf.d/~lxcenter.conf");
 	
 	if(stristr($fver, $cver) === FALSE) {
