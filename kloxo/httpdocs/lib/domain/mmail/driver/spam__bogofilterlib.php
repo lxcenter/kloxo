@@ -42,15 +42,13 @@ function syncSpamUserPref()
 
 	$sysuser =  mmail__qmail::getUserGroup($domain);
 
-	/// Hakchackl... Checking for windows here itself. Very wrong. Instead shoudl use the mmail's driver object to get the proper value.
-	if (!WindowsOs()) {
-		$mailpath = mmail__qmail::getDir($domain);
-	}
+	// --- issue #578/#721 - missing in version 6.1.6
+	$mailpath = "/home/lxadmin/mail";
+
 	if ($user) {
-		$prefpath = "$mailpath/$user/.bogopref.cf";
+		$prefpath = "$mailpath/$domain/$user/.bogopref.cf";
 	} else {
 		return;
-		$prefpath = "$mailpath/.bogopref.cf";
 	}
 
 	$prefdir = dirname($prefpath);
