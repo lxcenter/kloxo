@@ -242,13 +242,16 @@ function addSendmail()
 	// enabled (rev 461)
 //	return null;
 
+	// ToDo --- remove this call because double declare with php.ini
+	// need more investigate after 6.1.7
+
 	$sendmailstring = "php_admin_value sendmail_path \"/usr/sbin/sendmail -t -i -f emailcop@{$this->main->nname}\"\n";
 
 	$string  = "\t<IfModule sapi_apache2.c>\n";
 	$string .= "\t\t".$sendmailstring;
 	$string .= "\t</IfModule>\n\n";
 
-	$string  = "\t<IfModule mod_php5.c>\n";
+	$string .= "\t<IfModule mod_php5.c>\n";
 	$string .= "\t\t".$sendmailstring;
 	$string .= "\t</IfModule>\n\n";
 
@@ -258,6 +261,9 @@ function addSendmail()
 function AddOpenBaseDir()
 {
 	global $gbl, $sgbl, $login, $ghtml; 
+	
+	// ToDo --- remove this call because double declare with php.ini
+	// need more investigate after 6.1.7
 
 	if (isset($this->main->webmisc_b) && $this->main->webmisc_b->isOn('disable_openbasedir')) {
 		return null;

@@ -30,7 +30,7 @@ function updatecleanup_main()
 // Change to lxcenter repo file
 //
 	if (lxfile_exists("/etc/yum.repos.d/lxlabs.repo")) {
-		log_cleanup("- Delete old repo's");
+		log_cleanup("- Deleting old lxlabs yum repo");
 		lxfile_mv("/etc/yum.repos.d/lxlabs.repo","/etc/yum.repos.d/lxlabs.repo.lxsave");
 		system("rm -f /etc/yum.repos.d/lxlabs.repo");
 		log_cleanup("- Removed lxlabs.repo");
