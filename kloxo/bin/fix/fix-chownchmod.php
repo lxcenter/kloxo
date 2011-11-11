@@ -22,11 +22,38 @@ function setFixChownChmod($select)
 	$login->loadAllObjects('client');
 	$list = $login->getList('client');
 
-	log_cleanup("Fix chown and chmod for domains");
 	
+
+	// --- still problem when switch to suphp use chmod 750 for userdir and then back to 770
+	// so, for compromise set /home/kloxo/httpd to 770 because less importance than /home/<client>
+	$httpddirchmod = '770';
 	$userdirchmod = '750';
 	$phpfilechmod = '644';
 	$domdirchmod = '755';
+
+	// --- change because escape form suphp error
+
+	// --- for /home/kloxo/httpd dirs (defaults pages)
+
+	log_cleanup("Fix file permission problems for defaults pages (chown/chmod files)");
+
+	system("chown -R lxlabs:lxlabs /home/kloxo/httpd/");
+	log_cleanup("- chown lxlabs:lxlabs FOR INSIDE /home/kloxo/httpd/");
+
+	system("chown lxlabs:apache /home/kloxo/httpd/");
+	log_cleanup("- chown lxlabs:apache FOR /home/kloxo/httpd/");
+
+	system("find /home/kloxo/httpd/ -type f -name \"*.php*\" -exec chmod {$phpfilechmod} \{\} \\;");
+	log_cleanup("- chmod {$phpfilechmod} FOR *.php* INSIDE /home/kloxo/httpd/");
+				
+	system("find /home/kloxo/httpd/ -type d -exec chmod {$domdirchmod} \{\} \\;");
+	log_cleanup("- chmod {$domdirchmod} FOR /home/kloxo/httpd/ AND INSIDE");
+
+	system("chmod {$httpddirchmod} /home/kloxo/httpd/");
+	log_cleanup("- chmod {$httpddirchmod} FOR /home/kloxo/httpd/");
+
+	// --- for domain dirs
+	log_cleanup("Fix file permission problems for domains (chown/chmod files)");
 
 	foreach($list as $c) {
 		$clname = $c->getPathFromName('nname');

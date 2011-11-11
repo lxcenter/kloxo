@@ -131,12 +131,30 @@ function createIniFile()
 		file_put_between_comments($stlist, $endlist, $startstring, $endstring, $ht1file, $htcont);
 		lxfile_unix_chown($htfile, "{$this->main->__var_web_user}:apache");
 --- */
+
+		// MR --- set the same like AddOpenBaseDir() on web__apachelib.php
+		$clname = $this->main->__var_customer_name;
+
 		$adminbasedir = trim($this->main->__var_extrabasedir);
 
-		if (!$this->main->isOn('__var_disable_openbasedir')) {
-			$cont = "open_basedir = /home/{$this->main->__var_customer_name}:$adminbasedir:/tmp:/usr/share/pear:/home/httpd/$dname:/var/lib/php/session:/home/kloxo/httpd/script:/home/httpd/$dname/kloxoscript/\n$cont";
+		if ($adminbasedir) {
+			$adminbasedir .= ":";
 		}
-		$cont = "error_log = $elogfile\n$cont";
+
+		if (!$this->main->isOn('__var_disable_openbasedir')) {
+			$path  = "{$adminbasedir}";
+			$path .= "/home/{$clname}:";
+			$path .= "/home/{$clname}/httpdocs:";
+			$path .= "/home/httpd/{$dname}:";
+			$path .= "/home/httpd/{$dname}/kloxoscript:";
+			$path .= "/tmp:";
+			$path .= "/usr/share/pear:";
+			$path .= "/var/lib/php/session:";
+			$path .= "/home/kloxo/httpd/script";
+
+			$cont  = "open_basedir = \"{$path}\"\n\n{$cont}";
+		}
+		$cont = "error_log = \"{$elogfile}\"\n{$cont}";
 		$cont = "$extrastring\n$cont";
 	}
 	
