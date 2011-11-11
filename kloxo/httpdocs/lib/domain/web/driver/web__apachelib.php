@@ -240,10 +240,8 @@ static function staticcreateVirtualHostiplist($port)
 function addSendmail()
 {
 	// enabled (rev 461)
+	// --- needed because mod_php (also it's variants) always use 'generic' php.ini (inside /etc)
 //	return null;
-
-	// ToDo --- remove this call because double declare with php.ini
-	// need more investigate after 6.1.7
 
 	$sendmailstring = "php_admin_value sendmail_path \"/usr/sbin/sendmail -t -i -f emailcop@{$this->main->nname}\"\n";
 
@@ -251,7 +249,7 @@ function addSendmail()
 	$string .= "\t\t".$sendmailstring;
 	$string .= "\t</IfModule>\n\n";
 
-	$string .= "\t<IfModule mod_php5.c>\n";
+	$string  = "\t<IfModule mod_php5.c>\n";
 	$string .= "\t\t".$sendmailstring;
 	$string .= "\t</IfModule>\n\n";
 
@@ -260,11 +258,10 @@ function addSendmail()
 
 function AddOpenBaseDir()
 {
+	// --- needed because mod_php (also it's variants) always use 'generic' php.ini (inside /etc)
+
 	global $gbl, $sgbl, $login, $ghtml; 
 	
-	// ToDo --- remove this call because double declare with php.ini
-	// need more investigate after 6.1.7
-
 	if (isset($this->main->webmisc_b) && $this->main->webmisc_b->isOn('disable_openbasedir')) {
 		return null;
 	}
@@ -274,11 +271,22 @@ function AddOpenBaseDir()
 	if ($adminbasedir) {
 		$adminbasedir .= ":";
 	}
-	$corepath = "{$sgbl->__path_customer_root}/{$this->main->customer_name}/";
 
-	$path = "{$sgbl->__path_httpd_root}/{$this->main->nname}/httpdocs:{$sgbl->__path_httpd_root}/{$this->main->nname}/{$this->main->nname}:$corepath";
+	$corepath = "{$sgbl->__path_customer_root}/{$this->main->customer_name}";
 
-	$openbasdstring = "php_admin_value open_basedir \"{$path}:{$adminbasedir}/tmp:/usr/share/pear:/var/lib/php/session/:/home/kloxo/httpd/script\"\n";
+	$httpdpath = "{$sgbl->__path_httpd_root}/{$this->main->nname}";
+
+	$path  = "{$adminbasedir}";
+	$path .= "{$corepath}:";
+	$path .= "{$corepath}/kloxoscript:";
+	$path .= "{$httpdpath}:";
+	$path .= "{$httpdpath}/httpdocs:";
+	$path .= "/tmp:";
+	$path .= "/usr/share/pear:";
+	$path .= "/var/lib/php/session/:";
+	$path .= "/home/kloxo/httpd/script";
+
+	$openbasdstring  = "php_admin_value open_basedir \"{$path}\"\n";
 
 	$string = "\t<Location />\n";
 	$string .= "\t\t<IfModule sapi_apache2.c>\n";
@@ -662,6 +670,11 @@ static function createCpConfig()
 		//--- issue #705 - don't include for handling error http://ip/~client
 	//	$string .= self::staticgetSuexecString('lxlabs');
 
+		$string .= "\t<IfModule mod_suphp.c>\n";
+		$string .= "\t\tSuPhp_UserGroup lxlabs lxlabs\n";
+	//	$string .= "\t\tsuPHP_Configpath \"/etc\"\n";
+		$string .= "\t</IfModule>\n\n";
+
 		$string .= "</VirtualHost>\n\n";
 	/*
 		if ($file === '_default.conf') {
@@ -725,16 +738,16 @@ static function getCreateWebmail($list)
 			$string .= "\tRedirect / {$l['webmail_url']}\n\n";
 		} else {
 			if (is_disabled($l['webmailprog'])) {
-				$string .= "\tDocumentRoot /home/kloxo/httpd/webmail/disabled/\n";
+				$string .= "\tDocumentRoot /home/kloxo/httpd/webmail/disabled/\n\n";
 			} else {
 			//	$string .= "\tDocumentRoot /home/kloxo/httpd/webmail/\n";
 
 				$prog = ($l['webmailprog'] === '--chooser--') ? "" : $l['webmailprog'];
 				if ($prog) {
-					$string .= "\tDocumentRoot /home/kloxo/httpd/webmail/$prog/\n";
+					$string .= "\tDocumentRoot /home/kloxo/httpd/webmail/$prog/\n\n";
 				}
 				else {
-					$string .= "\tDocumentRoot /home/kloxo/httpd/webmail/\n";
+					$string .= "\tDocumentRoot /home/kloxo/httpd/webmail/\n\n";
 				}
 			}
 
@@ -748,6 +761,11 @@ static function getCreateWebmail($list)
 		//	$string .= "\t<Ifmodule mod_suphp.c>\n";
 		//	$string .= "\t\tSuPhp_UserGroup {$l['systemuser']} {$l['systemuser']}\n";
 		//	$string .= "\t\tSuPhp_UserGroup lxlabs lxlabs\n";
+
+			$string .= "\t<IfModule mod_suphp.c>\n";
+			$string .= "\t\tSuPhp_UserGroup lxlabs lxlabs\n";
+		//	$string .= "\t\tsuPHP_Configpath \"/etc\"\n";
+			$string .= "\t</IfModule>\n";
 
 			// --- also without this string like defaults pages
 		//	$string .= self::staticgetSuexecString('lxlabs');
@@ -1524,6 +1542,11 @@ static function createWebmailConfig()
 
 	// --- also without this string like defaults pages
 //	$webdata .= self::staticgetSuexecString('lxlabs');
+
+	$webdata .= "\t<IfModule mod_suphp.c>\n";
+	$webdata .= "\t\tSuPhp_UserGroup lxlabs lxlabs\n";
+//	$webdata .= "\t\tsuPHP_Configpath \"/etc\"\n";
+	$webdata .= "\t</IfModule>\n\n";
 
 	$webdata .= "</VirtualHost>\n\n";
 
