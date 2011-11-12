@@ -243,14 +243,18 @@ function addSendmail()
 	// --- needed because mod_php (also it's variants) always use 'generic' php.ini (inside /etc)
 //	return null;
 
-	$sendmailstring = "php_admin_value sendmail_path \"/usr/sbin/sendmail -t -i -f emailcop@{$this->main->nname}\"\n";
+//	$sendmailstring = "php_admin_value sendmail_path \"/usr/sbin/sendmail -t -i -f emailcop@{$this->main->nname}\"\n";
+
+	$sendmailstring  = "\t\tphp_admin_value sendmail_path \"/usr/sbin/sendmail -t -i\"\n";
+	$sendmailstring .= "\t\tphp_admin_value sendmail_from \"{$this->main->nname}\"\n";
+	
 
 	$string  = "\t<IfModule sapi_apache2.c>\n";
-	$string .= "\t\t".$sendmailstring;
+	$string .= $sendmailstring;
 	$string .= "\t</IfModule>\n\n";
 
 	$string  = "\t<IfModule mod_php5.c>\n";
-	$string .= "\t\t".$sendmailstring;
+	$string .= $sendmailstring;
 	$string .= "\t</IfModule>\n\n";
 
 	return $string;
