@@ -144,9 +144,9 @@ function createIniFile()
 		if (!$this->main->isOn('__var_disable_openbasedir')) {
 			$path  = "{$adminbasedir}";
 			$path .= "/home/{$clname}:";
-			$path .= "/home/{$clname}/httpdocs:";
+			$path .= "/home/{$clname}/kloxoscript:";
 			$path .= "/home/httpd/{$dname}:";
-			$path .= "/home/httpd/{$dname}/kloxoscript:";
+			$path .= "/home/httpd/{$dname}/httpdocs:";
 			$path .= "/tmp:";
 			$path .= "/usr/share/pear:";
 			$path .= "/var/lib/php/session:";
