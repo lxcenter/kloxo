@@ -4936,7 +4936,7 @@ function installWithVersion($path, $file, $ver = null)
 			$DoUpdate = true;
 		}
 		else {
-			log_cleanup("- No update and stay $file at version $ver");
+			log_cleanup("- No update found. $file is at version $ver");
 			$DoUpdate = false;
 		}
 	}
@@ -4999,7 +4999,7 @@ function installThirdparty($ver = null)
 			$DoUpdate = true;
 		}
 		else {
-			log_cleanup("- No update and stay at version $ver");
+			log_cleanup("- No update found.");
 			$DoUpdate = false;
 		}
 	}
@@ -5054,7 +5054,7 @@ function installWebmail($ver = null)
 			$DoUpdate = true;
 		}
 		else {
-			log_cleanup("- No update and stay at version $ver");
+			log_cleanup("- No update found.");
 			$DoUpdate = false;
 		}
 	}
@@ -5121,7 +5121,7 @@ function installAwstats($ver = null)
 			$DoUpdate = true;
 		}
 		else {
-			log_cleanup("- No update and stay at version $ver");
+			log_cleanup("- No update found.");
 			$DoUpdate = false;
 		}
 	}
