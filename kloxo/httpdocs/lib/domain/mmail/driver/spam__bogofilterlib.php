@@ -46,7 +46,7 @@ function syncSpamUserPref()
 	$mailpath = "/home/lxadmin/mail";
 
 	if ($user) {
-		$prefpath = "$mailpath/$domain/$user/.bogopref.cf";
+		$prefpath = "$mailpath/domains/{$domain}/{$user}/.bogopref.cf";
 	} else {
 		return;
 	}
