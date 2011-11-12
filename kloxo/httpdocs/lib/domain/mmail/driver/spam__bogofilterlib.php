@@ -43,10 +43,12 @@ function syncSpamUserPref()
 	$sysuser =  mmail__qmail::getUserGroup($domain);
 
 	// --- issue #578/#721 - missing in version 6.1.6
-	$mailpath = "/home/lxadmin/mail";
+//	$mailpath = "/home/lxadmin/mail";
+	$mailpath = mmail__qmail::getDir($domain);
 
 	if ($user) {
-		$prefpath = "$mailpath/domains/{$domain}/{$user}/.bogopref.cf";
+	//	$prefpath = "$mailpath/domains/{$domain}/{$user}/.bogopref.cf";
+		$prefpath = "{$mailpath}/{$user}/.bogopref.cf";
 	} else {
 		return;
 	}

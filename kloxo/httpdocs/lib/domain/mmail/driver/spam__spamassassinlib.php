@@ -43,10 +43,12 @@ class Spam__Spamassassin extends lxDriverClass
 		}
 
 		// --- issue #578/#721 - missing in version 6.1.6
-		$mailpath = "/home/lxadmin/mail";
+	//	$mailpath = "/home/lxadmin/mail";
+		$mailpath = mmail__qmail::getDir($domain);
 
 		if ($user) {
-			$prefpath = "$mailpath/domains/{$domain}/{$user}/user_prefs";
+		//	$prefpath = "$mailpath/domains/{$domain}/{$user}/user_prefs";
+			$prefpath = "{$mailpath}/{$user}/user_prefs";
 		} else {
 			return;
 		}
