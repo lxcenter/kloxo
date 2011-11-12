@@ -253,7 +253,7 @@ function addSendmail()
 	$string .= $sendmailstring;
 	$string .= "\t</IfModule>\n\n";
 
-	$string  = "\t<IfModule mod_php5.c>\n";
+	$string .= "\t<IfModule mod_php5.c>\n";
 	$string .= $sendmailstring;
 	$string .= "\t</IfModule>\n\n";
 
@@ -485,6 +485,13 @@ function createConffile()
 					$string .= $this->endtag();
 					$string .= "#### ssl virtualhost per ip {$ip} end\n";
 				}
+				// --- for better appear
+				$string = str_replace("\t", "||||", $string);
+				$string = str_replace("\n", "\n\t", $string);
+				$string = str_replace("||||", "\t", $string);
+
+				$string2 = "\n\n<IfModule mod_ssl.c>\n{$string}\n</IfModule>\n\n\n";
+
 			} 
 		/*
 			else {
@@ -522,12 +529,6 @@ function createConffile()
 				
 			}
 		*/
-			// --- for better appear
-			$string = str_replace("\t", "||||", $string);
-			$string = str_replace("\n", "\n\t", $string);
-			$string = str_replace("||||", "\t", $string);
-
-			$string2 = "\n\n<IfModule mod_ssl.c>\n{$string}\n</IfModule>\n\n\n";
 
 		//	$string .= "</IfModule>\n\n\n";
 		}
@@ -602,7 +603,7 @@ function setAddon()
 			$string .= "\tServerAlias \\\n\t\twww.{$v->nname}\n\n";
 			$dst = "{$this->main->nname}/{$v->destinationdir}/";
 			$dst = remove_extra_slash($dst);
-			$string .= "\tRedirect / http://$dst\n\n";
+			$string .= "\tRedirect / \"http://{$dst}\"\n\n";
 			$string .= "</VirtualHost>\n\n\n";
 		}
 
@@ -617,14 +618,14 @@ function setAddon()
 		$string .= "<VirtualHost \\\n{$this->createVirtualHostiplist("80")}";
 		$string .= "\t\t>\n\n";
 		$string .= "\tServerName {$this->main->nname}\n\n";
-		$string .= "\tRedirect / http://www.{$this->main->nname}/\n\n";
+		$string .= "\tRedirect / \"http://www.{$this->main->nname}/\"\n\n";
 		$string .= "</VirtualHost>\n\n";
 /*
 		$string .= "<IfModule mod_ssl.c>\n";
 		$string .= "\t<VirtualHost {$this->createVirtualHostiplist("443")}";
 		$string .= "\t\t>\n\n";
 		$string .= "\t\tServerName {$this->main->nname}\n\n";
-		$string .= "\t\tRedirect / https://www.{$this->main->nname}\n\n";
+		$string .= "\t\tRedirect / \"https://www.{$this->main->nname}\"\n\n";
 		$string .= "\t</VirtualHost>\n";
 		$string .= "<IfModule mod_ssl.c>\n\n\n";
 */
@@ -739,26 +740,26 @@ static function getCreateWebmail($list)
 
 		if ($rlflag === 'remote') {
 			$l['webmail_url'] = add_http_if_not_exist($l['webmail_url']);
-			$string .= "\tRedirect / {$l['webmail_url']}\n\n";
+			$string .= "\tRedirect / \"{$l['webmail_url']}\"\n\n";
 		} else {
 			if (is_disabled($l['webmailprog'])) {
-				$string .= "\tDocumentRoot /home/kloxo/httpd/webmail/disabled/\n\n";
+				$string .= "\tDocumentRoot \"/home/kloxo/httpd/webmail/disabled/\"\n\n";
 			} else {
-			//	$string .= "\tDocumentRoot /home/kloxo/httpd/webmail/\n";
+			//	$string .= "\tDocumentRoot \"/home/kloxo/httpd/webmail/\"\n";
 
 				$prog = ($l['webmailprog'] === '--chooser--') ? "" : $l['webmailprog'];
 				if ($prog) {
-					$string .= "\tDocumentRoot /home/kloxo/httpd/webmail/$prog/\n\n";
+					$string .= "\tDocumentRoot \"/home/kloxo/httpd/webmail/{$prog}/\"\n\n";
 				}
 				else {
-					$string .= "\tDocumentRoot /home/kloxo/httpd/webmail/\n\n";
+					$string .= "\tDocumentRoot \"/home/kloxo/httpd/webmail/\"\n\n";
 				}
 			}
 
 		/*
 			$prog = ($l['webmailprog'] === '--chooser--')? "": $l['webmailprog'];
 			if ($prog) {
-				$string .= "\n\tDirectoryIndex redirect-to-$prog.php index.php index.html\n";
+				$string .= "\n\tDirectoryIndex redirect-to-{$prog}.php index.php index.html\n";
 			}
 		*/
 
@@ -1116,7 +1117,8 @@ static function staticgetSuexecString($username, $nname = null)
 	$string .= "\t\tRMode config\n";
 	$string .= "\t\tRUidGid {$username} {$username}\n";
 	$string .= "\t\tRMinUidGid {$username} {$username}\n";
-	$string .= "\t\tRGroups {$username}\n";
+	// disable because problem with awstats
+//	$string .= "\t\tRGroups {$username}\n";
 	$string .= "\t</IfModule>\n\n";
 	// --- mod_ruid2 - end
 
@@ -1172,7 +1174,7 @@ function getDocumentRoot($subweb)
 	} else {
 		if ($this->main->__var_disable_url) {
 			$url = add_http_if_not_exist($this->main->__var_disable_url);
-			$string .= "Redirect / {$url}\n\n";
+			$string .= "Redirect / \"{$url}\"\n\n";
 		} else {
 			$disableurl = "/home/kloxo/httpd/disable/";
 			$string .= "DocumentRoot \"{$disableurl}\"\n\n";
@@ -1256,17 +1258,17 @@ function syncToPort($port, $cust_log, $err_log, $frontpage = false)
 	}
 
 	if ($this->main->__var_statsprog === 'awstats') {
-		$string .= "\tRedirect /stats http://$domname/awstats/awstats.pl?config=$domname\n";
-		$string .= "\tRedirect /stats/ http://$domname/awstats/awstats.pl?config=$domname\n\n";
+		$string .= "\tRedirect /stats \"http://{$domname}/awstats/awstats.pl?config={$domname}\"\n";
+		$string .= "\tRedirect /stats/ \"http://{$domname}/awstats/awstats.pl?config={$domname}\"\n\n";
 	} else {
 		$string .= "\tAlias /stats {$sgbl->__path_httpd_root}/{$domname}/webstats/\n\n";
 	}
 	$string .= "\tAlias /__kloxo \"/home/{$this->main->customer_name}/kloxoscript/\"\n\n";
 
-	$string .= "\tRedirect /kloxo https://cp.{$this->main->nname}:{$this->main->__var_sslport}\n";
-	$string .= "\tRedirect /kloxononssl http://cp.{$this->main->nname}:{$this->main->__var_nonsslport}\n\n";
+	$string .= "\tRedirect /kloxo \"https://cp.{$this->main->nname}:{$this->main->__var_sslport}\"\n";
+	$string .= "\tRedirect /kloxononssl \"http://cp.{$this->main->nname}:{$this->main->__var_nonsslport}\"\n\n";
 
-	$string .= "\tRedirect /webmail http://webmail.{$this->main->nname}\n\n";
+	$string .= "\tRedirect /webmail \"http://webmail.{$this->main->nname}\"\n\n";
 	$string .= "\t<Directory \"/home/httpd/{$domname}/kloxoscript/\">\n";
 	$string .= "\t\tAllowOverride All\n";
 	$string .= "\t</Directory>\n\n";
