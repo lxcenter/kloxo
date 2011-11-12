@@ -1,15 +1,16 @@
 Changelog
 
-Kloxo 6.1.7 - ??-oct-2011
+Kloxo 6.1.7 - 12-nov-2011
 ##################################
 Bug #50: Parked domains are not removed from Apache's configuration
 Bug #499: Kloxo Installation (InstallApp problem)
+Bug #516: Using suphp gives 500 internal server error (Apache)
 Bug #547: xcache failed to install
 Bug #565: Domain skeleton files chmodded to 0755
 Bug #578: Spamassasin config created in / directory
 Bug #581: Update 6.1.6 DNS Managm. denies TXT entry (invalid_subdomain)
 Bug #582: Wrong permissions for Roundcube and Horde configuration files
-Bug #583: new install not create horde and roundcube database
+Bug #583: New install not create horde and roundcube database
 Bug #593: Remote Mail Option not working anymore
 Bug #596: WebMail: Not created default folders (IMAP related)
 Bug #599: Broken images in kloxo control panel
@@ -24,11 +25,24 @@ Bug #652: CentOS6: Kloxo does not detect the OS properly
 Bug #656: When adding a subdomain, the Document Root field is not being validated
 Bug #657: Client user names with "__" are displayed with missing end
 Bug #669: Help icon on menu tab is redirecting to non-working link
-Bug #674: wildcard and subdomain problem
+Bug #674: Wildcard and subdomain problem (specific for lighttpd)
 Bug #677: Add Hungarian language (was not defined yet)
 Bug #680: Too high inode count in Kloxo quota
+Bug #698: Always redirect to /awstats when access to stats.gif
+Bug #703: Alert: httpd_start_failed
+Bug #705: The initiall installed/updated kloxo 6.1.7 gives 403 error at the ip with no damain
+Bug #707: Kloxo slave server shows apache default page instead of kloxo default page
+Bug #708: User's SSH Authorized key setting
+Bug #709: Fix 'ownership' And 'permissions' breaks SSH access
+Bug #710: upcp updated files are now owned by root
+Bug #711: Port 22 at the slave server shows suspicious network activity
+Bug #712: Kloxo default page even after doing domain to ip mapping
+Bug #721: [QMAIL] All emails tripplicates ---> 3 times the same message
+Bug #724: Webmail 500 error with suphp
+Bug #725: Webmail lost its SSL
 Feature #570: Lighttpd reloading (no restart after adding domain)
-Feature #625: make some resource related PHP settings admin only
+Feature #625: Make some resource related PHP settings admin only
+Feature #716: Unresolved dependency on Apache version
 Updates #577: After every upcp the line "RoundCube Database installed" is showed.
 Security #612: Hide password in reboot / shutdown server
 ToDo #538: Kloxo on Centos 64bit
@@ -46,6 +60,7 @@ ToDo #632: Add some scripts for mysql and apache
 ToDo #645: New installer script (also packer and patcher) for Kloxo 6.1.7
 ToDo #646: New webpage for default/disable/cp/webmail page on Kloxo 6.1.7
 ToDo #658: Two clamav databases, remove one if two databases are found
+ToDo #671: Fixed backup-restore issue (and improve)
 
 Kloxo 6.1.6 - 12-june-2011
 ##################################
