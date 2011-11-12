@@ -129,13 +129,15 @@ function createIniFile()
 
 		$htfile = "{$this->main->__var_docrootpath}/.htaccess";		
 		$ht1file = "/home/{$this->main->__var_customer_name}/kloxoscript/.htaccess";
+
 		$htcont = "php_value error_log \"{$elogfile}\"\n{$htcont}";
 		$htcont = str_replace("\n", "\n\t", $htcont);
 		$htcont = str_replace($htcont, "\t".$htcont, $htcont);
 		$htcont = "\n<Ifmodule mod_php4.c>\n{$htcont}\n</Ifmodule>\n\n<Ifmodule mod_php5.c>\n{$htcont}\n</Ifmodule>\n";
 		file_put_between_comments("{$this->main->__var_web_user}:apache", $stlist, $endlist, $startstring, $endstring, $htfile, $htcont);
-		file_put_between_comments($stlist, $endlist, $startstring, $endstring, $ht1file, $htcont);
+		file_put_between_comments("{$this->main->__var_web_user}:apache", $stlist, $endlist, $startstring, $endstring, $ht1file, $htcont);
 		lxfile_unix_chown($htfile, "{$this->main->__var_web_user}:apache");
+
 
 		// MR --- set the same like AddOpenBaseDir() on web__apachelib.php
 		$clname = $this->main->__var_customer_name;

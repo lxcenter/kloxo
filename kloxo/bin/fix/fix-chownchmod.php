@@ -59,12 +59,25 @@ function setFixChownChmod($select)
 		$clname = $c->getPathFromName('nname');
 		$cdir = "/home/{$clname}";
 		$dlist = $c->getList('domaina');
+		$ks = "kloxoscript";
 	
 		system("chown {$clname}:apache {$cdir}/");
 		log_cleanup("- chown {$clname}:apache FOR {$cdir}/");
 		
 		system("chmod {$userdirchmod} {$cdir}/");
 		log_cleanup("- chmod {$userdirchmod} FOR {$cdir}/");
+
+		system("chown {$clname}:apache {$cdir}/{$ks}/");
+		log_cleanup("- chown {$clname}:apache FOR {$cdir}/{$ks}/");
+
+		system("chown -R {$clname}:{$clname} {$cdir}/{$ks}/");
+		log_cleanup("- chown {$clname}:{$clname} FOR {$cdir}/{$ks}/ AND INSIDE");
+
+		system("find {$cdir}/{$ks}/ -type f -name \"*.php*\" -exec chmod {$phpfilechmod} \{\} \\;");
+		log_cleanup("- chmod {$phpfilechmod} FOR *.php* INSIDE {$cdir}/{$ks}/");
+				
+		system("find {$cdir}/{$ks}/ -type d -exec chmod {$domdirchmod} \{\} \\;");
+		log_cleanup("- chmod {$domdirchmod} FOR {$cdir}/{$ks}/ AND INSIDE");
 
 		foreach((array) $dlist as $l) {
 			$web = $l->nname;
