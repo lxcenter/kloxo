@@ -46,7 +46,7 @@ class Spam__Spamassassin extends lxDriverClass
 		$mailpath = "/home/lxadmin/mail";
 
 		if ($user) {
-			$prefpath = "$mailpath/$domain/$user/user_prefs";
+			$prefpath = "$mailpath/domains/{$domain}/{$user}/user_prefs";
 		} else {
 			return;
 		}
