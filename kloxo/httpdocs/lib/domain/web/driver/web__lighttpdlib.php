@@ -38,7 +38,7 @@ static function installMe()
 
 	lxfile_cp("/usr/local/lxlabs/kloxo/file/lighttpd/lighttpd.conf", "/etc/lighttpd/lighttpd.conf");
 
-	$cver = "###version0-6###";
+	$cver = "###version0-7###";
 	$fver = file_get_contents("/etc/lighttpd/conf.d/~lxcenter.conf");
 	
 	if(stristr($fver, $cver) === FALSE) {
