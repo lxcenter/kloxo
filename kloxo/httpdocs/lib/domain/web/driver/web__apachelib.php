@@ -49,6 +49,7 @@ static function installMe()
 	lxfile_mkdir("/home/apache/conf/webmails");
 	lxfile_mkdir("/home/apache/conf/wildcards");
 	lxfile_mkdir("/home/apache/conf/defaults");
+	lxfile_mkdir("/home/apache/conf/exclusive");
 
 	//--- some vps include /etc/httpd/conf.d/swtune.conf
 	system("rm -f /etc/httpd/conf.d/swtune.conf");
@@ -128,16 +129,19 @@ function updateMainConfFile()
 			rename("/home/apache/conf/domains/{$dom['nname']}.conf", "/home/apache/conf/domains/{$dom['nname']}.conf.active");
 			rename("/home/apache/conf/redirects/{$dom['nname']}.conf", "/home/apache/conf/redirects/{$dom['nname']}.conf.active");
 			rename("/home/apache/conf/wildcards/{$dom['nname']}.conf", "/home/apache/conf/wildcards/{$dom['nname']}.conf.active");
+			rename("/home/apache/conf/exclusive/{$dom['nname']}.conf", "/home/apache/conf/exclusive/{$dom['nname']}.conf.active");
 		}
 	}
 
 	system("rm -rf /home/apache/conf/domains/*.conf");
 	system("rm -rf /home/apache/conf/redirects/*.conf");
 	system("rm -rf /home/apache/conf/wildcards/*.conf");
+	system("rm -rf /home/apache/conf/exclusive/*.conf");
 
 	system("rename .conf.active .conf /home/apache/conf/domains/*.conf.active");
 	system("rename .conf.active .conf /home/apache/conf/redirects/*.conf.active");
 	system("rename .conf.active .conf /home/apache/conf/wildcards/*.conf.active");
+	system("rename .conf.active .conf /home/apache/conf/exclusive/*.conf.active");
 
 	//--- delete unlisted domains config - end
 
@@ -444,6 +448,8 @@ function createConffile()
 
 		lxfile_mkdir($this->main->getFullDocRoot());
 
+		$exclusiveip = false;
+
 		if($this->main->priv->isOn('ssl_flag')) {
 
 			// Do the ssl cert only if the ipaddress exists. Now when we migrate, 
@@ -451,6 +457,7 @@ function createConffile()
 		//	$string .= "\n\n<IfModule mod_ssl.c>\n";
 
 			if ($this->getServerIp()) {
+
 				$iplist = $this->getSslIpList();
 				foreach($iplist as $ip) {
 					$string .= "\n#### ssl virtualhost per ip {$ip} start\n";
@@ -485,15 +492,9 @@ function createConffile()
 					$string .= $this->endtag();
 					$string .= "#### ssl virtualhost per ip {$ip} end\n";
 				}
-				// --- for better appear
-				$string = str_replace("\t", "||||", $string);
-				$string = str_replace("\n", "\n\t", $string);
-				$string = str_replace("||||", "\t", $string);
 
-				$string2 = "\n\n<IfModule mod_ssl.c>\n{$string}\n</IfModule>\n\n\n";
-
+				$exclusiveip = true;
 			} 
-		/*
 			else {
 				$string .= "\n#### ssl virtualhost start\n";
 				$string .= "<VirtualHost \\\n";
@@ -526,14 +527,17 @@ function createConffile()
 				$string .= $this->AddOpenBaseDir();
 				$string .= $this->endtag();
 				$string .= "#### ssl virtualhost end\n";
-				
 			}
-		*/
 
 		//	$string .= "</IfModule>\n\n\n";
+
+			// --- for better appear
+			$string = str_replace("\t", "||||", $string);
+			$string = str_replace("\n", "\n\t", $string);
+			$string = str_replace("||||", "\t", $string);				
 		}
 
-//		$string2 = "\n\n<IfModule mod_ssl.c>\n{$string}\n</IfModule>\n\n\n";
+		$string2 = "\n\n<IfModule mod_ssl.c>\n{$string}\n</IfModule>\n\n\n";
 
 		$string = $string1.$string2;
 
@@ -554,7 +558,19 @@ function createConffile()
 			lfile_put_contents($v_file, $string);
 		}
 		else {
-			$v_file = "/home/apache/conf/domains/{$domainname}.conf";
+
+			if ($exclusiveip) {
+				$v_file = "/home/apache/conf/exclusive/{$domainname}.conf";
+
+				$v2_file = "/home/apache/conf/domains/{$domainname}.conf";
+				lfile_put_contents($v2_file, "### Have exclusive ip for '{$domainname}' ###\n\n\n");
+			}
+			else {
+				$v_file = "/home/apache/conf/domains/{$domainname}.conf";
+
+				$v2_file = "/home/apache/conf/exclusive/{$domainname}.conf";
+				lfile_put_contents($v2_file, "### No exclusive ip for '{$domainname}' ###\n\n\n");
+			}
 
 			$mmaillist = $this->main->__var_mmaillist;
 
@@ -596,8 +612,7 @@ function setAddon()
 
 		if ($v->ttype === 'redirect') {
 			$string .= "<VirtualHost \\\n{$this->createVirtualHostiplist("80")}";
-			// minimize dilemma between 'exclusive ip' and ip/~client
-		//	$string .= "{$this->createVirtualHostiplist("443")}";
+			$string .= "{$this->createVirtualHostiplist("443")}";
 			$string .= "\t\t>\n\n";
 			$string .= "\tServerName {$v->nname}\n";
 			$string .= "\tServerAlias \\\n\t\twww.{$v->nname}\n\n";
@@ -655,8 +670,7 @@ static function createCpConfig()
 		$string = null;
 		$string .= "<VirtualHost \\\n";
 		$string .= $vstring;
-		// minimize dilemma between 'exclusive ip' and ip/~client
-	//	$string .= $sstring; 
+		$string .= $sstring; 
 		$string .= "\t\t>\n\n";
 		$string .= "\tServerName {$config}\n";
 		$string .= "\tServerAlias {$config}.*\n\n";
@@ -714,9 +728,7 @@ static function getCreateWebmail($list)
 
 	global $gbl, $sgbl, $login, $ghtml;
 
-//	$vstring = self::getVipString();
-	// minimize dilemma between 'exclusive ip' and ip/~client
-	$vstring = self::staticcreateVirtualHostiplist('80');
+	$vstring = self::getVipString();
 
 //	dprintr($vstring);
 //	$string = null;
@@ -1539,8 +1551,7 @@ static function createWebmailConfig()
 	$webdata  = null;
 	$webdata .= "<VirtualHost \\\n";
 	$webdata .= self::staticcreateVirtualHostiplist("80");
-	// minimize dilemma between 'exclusive ip' and ip/~client
-//	$webdata .= self::staticcreateVirtualHostiplist("443");
+	$webdata .= self::staticcreateVirtualHostiplist("443");
 	$webdata .= "\t\t>\n\n";
 	$webdata .= "\tServerName webmail\n";
 	$webdata .= "\tServerAlias webmail.*\n\n";

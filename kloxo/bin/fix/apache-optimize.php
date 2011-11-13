@@ -127,13 +127,14 @@ KeepAliveTimeout 5
 	MaxMemFree 2
 </IfModule>
 
+Include /home/apache/conf/exclusive/*.conf
 Include /home/apache/conf/defaults/*.conf
 Include /home/apache/conf/domains/*.conf
 Include /home/apache/conf/redirects/*.conf
 Include /home/apache/conf/webmails/*.conf
 Include /home/apache/conf/wildcards/*.conf
 
-###version0-6###
+###version0-7###
 EOF;
 
 		log_cleanup("- Calculate Apache threads limit (max/min -> $minpar_w/$maxpar_w) and server limits (max/min -> $minpar_p/$maxpar_p");
