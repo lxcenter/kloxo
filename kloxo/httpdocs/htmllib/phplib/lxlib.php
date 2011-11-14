@@ -2135,13 +2135,14 @@ function initProgramlib($ctype = null)
 {
 	global $gbl, $sgbl, $login, $ghtml;
 
-/*
+// /*
 	// --- solution for some scripts running well in slave
+	// REVERT - back to original
 	if ($sgbl->is_this_slave()) {
 		print("This is a Slave Server. Operate it at the Master server.\n");
 		exit;
 	}
-*/
+// */
 	static $var = 0;
 	$var++;
 

@@ -618,14 +618,14 @@ function PrepareRoundCubeDb()
 
 	global $gbl, $sgbl, $login, $ghtml;
 
-	log_cleanup("Prepare RoundCube database");
+	log_cleanup("Preparing RoundCube database");
 
 	$pass = slave_get_db_pass();
 	$user = "root";
 	$host = "localhost";
 	$link = mysql_connect($host, $user, $pass);
 		if (!$link) {
-		log_cleanup("- Mysql root password error");
+		log_cleanup("- Mysql root password incorrect");
 		exit;
 	}
 	$pstring = null;
@@ -633,7 +633,7 @@ function PrepareRoundCubeDb()
 		$pstring = "-p\"$pass\"";
 	}
 
-	log_cleanup("- Fix database values in sql importfile");
+	log_cleanup("- Fixing MySQL commands in import files");
 
 	$roundcubefile = "/home/kloxo/httpd/webmail/roundcube/SQL/mysql.initial.sql";
 	$content = lfile_get_contents($roundcubefile);
@@ -652,7 +652,7 @@ function PrepareRoundCubeDb()
 
 	$result = mysql_query("CREATE DATABASE IF NOT EXISTS roundcubemail", $link);
 	if (!$result) {
-		log_cleanup("- There is REALY something wrong... Go to http://forum.lxcenter.org/ and report");
+		log_cleanup("- ***** There is something REALLY wrong... Go to http://forum.lxcenter.org and report to the team *****");
 		exit;
 	}
 
@@ -665,7 +665,7 @@ function PrepareRoundCubeDb()
 
 	log_cleanup("- Generating password");
 	$pass = randomString(8);
-	log_cleanup("- Add Password to configfile");
+	log_cleanup("- Add Password to configuration file");
 
 	$content = lfile_get_contents($cfgfile);
 	$content = str_replace("mysql://roundcube:pass", "mysql://roundcube:" . $pass, $content);
@@ -691,14 +691,14 @@ function PrepareHordeDb()
 {
 	global $gbl, $sgbl, $login, $ghtml;
 
-	log_cleanup("Prepare Horde database");
+	log_cleanup("Preparing Horde database");
 
 	$pass = slave_get_db_pass();
 	$user = "root";
 	$host = "localhost";
 	$link = mysql_connect($host, $user, $pass);
 	if (!$link) {
-		log_cleanup("- Mysql root password error");
+		log_cleanup("- Mysql root password incorrect");
 		exit;
 	}
 	$pstring = null;
@@ -708,7 +708,7 @@ function PrepareHordeDb()
 
 	$result = mysql_select_db('horde_groupware', $link);
 
-	log_cleanup("- Fix database values in sql importfile");
+	log_cleanup("- Fix MySQL commands in import files of Horde");
 
 	$hordefile = "/home/kloxo/httpd/webmail/horde/scripts/sql/groupware.mysql.sql";
 
@@ -730,7 +730,7 @@ function PrepareHordeDb()
 
 	$result = mysql_query("CREATE DATABASE IF NOT EXISTS horde_groupware", $link);
 	if (!$result) {
-		log_cleanup("- There is REALY something wrong... Go to http://forum.lxcenter.org/ and report");
+		log_cleanup("- ***** There is something REALLY wrong... Go to http://forum.lxcenter.org and report to the team *****");
 		exit;
 	}
 
@@ -743,7 +743,7 @@ function PrepareHordeDb()
 
 	log_cleanup("- Generating password");
 	$pass = randomString(8);
-	log_cleanup("- Add Password to configfile");
+	log_cleanup("- Add password to configuration file");
 
 	$content = lfile_get_contents($cfgfile);
 	$content = str_replace("__lx_horde_pass", $pass, $content);
@@ -753,7 +753,7 @@ function PrepareHordeDb()
 	$result = mysql_query("GRANT ALL ON horde_groupware.* TO horde_groupware@localhost IDENTIFIED BY '{$pass}'", $link);
 	mysql_query("flush privileges", $link);
 	if (!$result) {
-		log_cleanup("Could not grant privileges. Script Abort");
+		log_cleanup("Could not grant privileges. Script Aborted");
 		exit;
 	}
 	log_cleanup("- Database installed");
@@ -2046,8 +2046,8 @@ function parse_opt($argv)
 function fix_rhn_sources_file()
 {
 
-	log_cleanup("Fix RedHat NetWork Source");
-	log_cleanup("- Fix process");
+	log_cleanup("Fixing RedHat NetWork Source");
+	log_cleanup("- Fix processes");
 
 	$os = findOperatingSystem('pointversion');
 	$list = lfile("/etc/sysconfig/rhn/sources");
@@ -2849,7 +2849,7 @@ function getKloxoLicenseInfo()
 
 function createDatabaseInterfaceTemplate()
 {
-	log_cleanup("- Create database interface_template (Forced)");
+	log_cleanup("- Create database interface template (Forced)");
 	system("mysql -u kloxo -p`cat ../etc/conf/kloxo.pass` kloxo < ../file/interface/interface_template.dump");
 }
 
@@ -2917,7 +2917,7 @@ function copy_script()
 	global $gbl, $sgbl, $login, $ghtml; 
 
 	log_cleanup("Initialize /script/ dir");
-	log_cleanup("- Initialize process");
+	log_cleanup("- Initialize processes");
 
 	lxfile_tmp_rm_rec("/script");
 	lxfile_mkdir("/script");
@@ -3800,13 +3800,6 @@ function get_class_for_table($table)
 
 function is_centosfive()
 {
-/*
-	$cont = lfile_get_contents("/etc/redhat-release");
-	if (csa($cont, " 5 ") || csa($cont, " 5.")) {
-		return true;
-	} 
-	return false;
-*/
 	$find = find_os_pointversion();
 	$check = strpos($find, 'centos-5');
 	
@@ -4495,7 +4488,7 @@ function install_xcache($nolog = null)
 		lunlink("/etc/php.d/xcache.ini");
 	}
 */
-	if (!$nolog) { log_cleanup("Install xcache if enabled"); }
+	if (!$nolog) { log_cleanup("Install xcache if is not enabled"); }
  
 	if (lxfile_exists("../etc/flag/xcache_enabled.flg")) {
 		if (!$nolog) { log_cleanup("- Enabled status"); }
@@ -4505,7 +4498,7 @@ function install_xcache($nolog = null)
 		// --- return 0 (= false) mean not found 'not installed'
 		exec("rpm -q php-xcache | grep -i 'not installed'", $out, $ret);
 		if ($ret !== false) {
-			if (!$nolog) { log_cleanup("- Install process"); }
+			if (!$nolog) { log_cleanup("- Installing"); }
 			lxshell_return("yum", "-y", "install", "php-xcache");
 		}
 		else {
@@ -4516,7 +4509,7 @@ function install_xcache($nolog = null)
 	}
 	else {
 		lxshell_return("yum", "-y", "remove", "php-xcache");
-		if (!$nolog) { log_cleanup("- Disabled status and uninstalled"); }
+		if (!$nolog) { log_cleanup("- Disabled status"); }
 	}
 
 }
@@ -4643,7 +4636,7 @@ function install_gd()
 		system("yum -y install php-gd");
 	}
 	else {
-		log_cleanup("- No need to install");
+		log_cleanup("- Already installed. No need to install");
 	}
 	
 	$global_dontlogshell = false;
@@ -4675,10 +4668,10 @@ function createOSUserAdmin()
 	log_cleanup("- Create OS system user admin");
 
 	if (!posix_getpwnam('admin')) {
-	 	log_cleanup("- Account admin created");
+	 	log_cleanup("- User admin created");
 		os_create_system_user('admin', randomString(7), 'admin', '/sbin/nologin', "/home/admin");
 	} else {
-		log_cleanup("- Admin account exists");
+		log_cleanup("- User admin exists");
 	}
 }
 
@@ -4852,7 +4845,7 @@ function installinstallapp()
 
 	//--- trick for no install on kloxo install process
 	if (lxfile_exists("/var/cache/kloxo/kloxo-install-disableinstallapp.flg")) {
-		log_cleanup("- Disable InstallApp flag is ON");
+		log_cleanup("- InstallApp is disabled by InstallApp Flag");
 		system("echo 1 > /usr/local/lxlabs/kloxo/etc/flag/disableinstallapp.flg");
 		return;
 	}
@@ -4860,28 +4853,28 @@ function installinstallapp()
 	if ($sgbl->is_this_master()) {
 		$gen = $login->getObject('general')->generalmisc_b;
 		$diflag = $gen->isOn('disableinstallapp');
-		log_cleanup("- Disable InstallApp flag is ON");
+		log_cleanup("- InstallApp is disabled by InstallApp Flag");
 		system("echo 1 > /usr/local/lxlabs/kloxo/etc/flag/disableinstallapp.flg");
 	} else {
 		$diflag = false;
-		log_cleanup("- Disable InstallApp flag is OFF");
+		log_cleanup("- InstallApp is not disabled by InstallApp Flag");
 		lxfile_rm("/usr/local/lxlabs/kloxo/etc/flag/disableinstallapp.flg");
 	}
 */
 	if (lxfile_exists("/usr/local/lxlabs/kloxo/etc/flag/disableinstallapp.flg")) {
-		log_cleanup("- InstallApp is turned off, remove InstallApp");
+		log_cleanup("- InstallApp is disabled, removing InstallApp");
 		lxfile_rm_rec("/home/kloxo/httpd/installapp/");
 		lxfile_rm_rec("/home/kloxo/httpd/installappdata/");
 		system("cd /var/cache/kloxo/ ; rm -f installapp*.tar.gz;");
 		return;
 	} else {
 		if (!lxfile_exists("__path_kloxo_httpd_root/installappdata")) {
-			log_cleanup("- Running InstallApp data update");
+			log_cleanup("- Updating InstallApp data");
 			installapp_data_update();
 		}
 
 		if (lfile_exists("../etc/remote_installapp")) {
-			log_cleanup("- Hosting Remote InstallApp detected, remove InstallApp");
+			log_cleanup("- Remote InstallApp detected, removing InstallApp");
 			lxfile_rm_rec("/home/kloxo/httpd/installapp/");
 			system("cd /var/cache/kloxo/ ; rm -f installapp*.tar.gz;");
 			return;
@@ -5241,6 +5234,11 @@ function setDefaultPages()
 
 function setFreshClam($nolog = null)
 {
+	global $gbl, $sgbl, $login, $ghtml; 
+
+	// need this code until have kloxo database sync between master and slave
+	if ($sgbl->is_this_slave()) { continue; }
+
 	if (!$nolog) { log_cleanup("Checking freshclam (virus scanner)"); }
 
 	$path = "/var/qmail/supervise/clamd";
@@ -5279,7 +5277,7 @@ function setFreshClam($nolog = null)
 
 function changeMailSoftlimit()
 {
-	log_cleanup("Change softlimit for incoming/receive mailserver");
+	log_cleanup("Changing softlimit for incoming/receive mailserver");
 	
 	$list = array("imap4", "imap4-ssl", "pop3", "pop3-ssl");
 
@@ -5718,7 +5716,7 @@ function setInitialBind()
 		lxfile_touch("/var/named/chroot/etc/global.options.named.conf");
 	}
 	else {
-		log_cleanup("- No need initialize");
+		log_cleanup("- No need to initialize");
 	}
 }
 
@@ -5734,7 +5732,7 @@ function setExecuteCentos5Script()
 		lxfile_rm("/etc/yum.repos.d/epel.repo");
 	}
 	else {
-		log_cleanup("- No need executing and remove");
+		log_cleanup("- Not needed to execute");
 	}
 }
 
@@ -5747,9 +5745,6 @@ function setJailshellSystem()
 		addLineIfNotExistInside("/etc/shells", "/usr/bin/lxjailshell", "");
 		lxfile_cp("htmllib/filecore/execzsh.sh", "/usr/bin/execzsh.sh");
 		lxfile_unix_chmod("/usr/bin/execzsh.sh", "0755");
-	}
-	else {
-		log_cleanup("- No need installing");
 	}
 }
 
@@ -5790,18 +5785,15 @@ function setSomeScript()
 
 function setInitialLogrotate()
 {
-	// Issue #295, 6.2.0 feature
+ 	// return; // Kloxo 6.2.0 (#295)
 	log_cleanup("Initialize logrotate");
 
 	if (lxfile_exists("/etc/logrotate.d/kloxo")) {
 		log_cleanup("- Initialize process");
+
 		if (lxfile_exists("../file/kloxo.logrotate")) {
 			lxfile_cp("../file/kloxo.logrotate", "/etc/logrotate.d/kloxo");
-			log_cleanup("- No initialize because no kloxo.logrotate file");
 		}
-	}
-	else {
-		log_cleanup("- No need initialize");
 	}
 }
 
@@ -5827,7 +5819,6 @@ function install_bogofilter()
 	$kloxo_wordlist = "$dir/kloxo.wordlist.db";
 
 	if (lxfile_exists($kloxo_wordlist)) {
-		log_cleanup("- No need to download wordlist.db");
 		return;
 	}
 
