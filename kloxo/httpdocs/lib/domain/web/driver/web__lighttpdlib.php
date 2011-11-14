@@ -38,7 +38,7 @@ static function installMe()
 
 	lxfile_cp("/usr/local/lxlabs/kloxo/file/lighttpd/lighttpd.conf", "/etc/lighttpd/lighttpd.conf");
 
-	$cver = "###version0-7###";
+	$cver = "###version0-6###";
 	$fver = file_get_contents("/etc/lighttpd/conf.d/~lxcenter.conf");
 	
 	if(stristr($fver, $cver) === FALSE) {
@@ -232,6 +232,13 @@ function enablePhp()
 		lxfile_unix_chmod("/var/tmp/lighttpd", "0770");
 	}
 
+	// --- for 'disable' client
+	if(!$this->main->isOn('status')) {
+		$string .= "\tcgi.assign = ( \".php\" => \"/home/httpd/nobody.sh\" )\n\n";
+		return $string;
+	}
+
+
 	if ($this->main->priv->isOn('phpfcgi_flag')) {
 		$uid = os_get_uid_from_user($this->main->username);
 		$gid = os_get_gid_from_user($this->main->username);
@@ -349,7 +356,7 @@ function createConffile()
 			// not include content of $this->createServerAliasLine() because make too long
 			// that mean overlapp declare
 		//	$string .= "\$HTTP[\"host\"] =~ \"{$domainname}\" {\n";
-			$string .= "\$HTTP[\"host\"] =~ \"^(?!(cp|webmail|default|disable).{$domainname})\" {\n";	
+		//	$string .= "\$HTTP[\"host\"] =~ \"^(?!(cp|webmail|default|disable).{$domainname})\" {\n";	
 		/*
 			// also include $this->createServerAliasLine() - thanks amit kumar mishra
 
@@ -363,7 +370,9 @@ function createConffile()
 			$domlist = str_replace("(", "({$defstring}", $this->createServerAliasLine());
 			$string .= "\$HTTP[\"host\"] =~ \"{$domlist}\" {\n";
 		*/
-		//	$string .= "\$HTTP[\"host\"] =~ \"{$domainname}\" {\n";
+			// REMARK -- near impossible for wildcards but still access to defaults page
+			// (cp/defaults/disable). So make a simple way.
+			$string .= "\$HTTP[\"host\"] =~ \"{$domainname}\" {\n";
 		}
 		else {
 			$line = $this->createServerAliasLine();
@@ -427,7 +436,14 @@ function createConffile()
 				$list = array('nname' => $domainname, 'parent_clname' => 'domain-'.$domainname, 'webmailprog' => '', 'webmail_url' => '', 'remotelocalflag' => 'local');
 			}
 
-			$string .= self::getCreateWebmail(array($list));
+		//	$string .= self::getCreateWebmail(array($list));
+
+			if($this->main->isOn('status')) {
+				$string .= self::getCreateWebmail(array($list));
+			}
+			else {
+				$string .= self::getCreateWebmail(array($list), $isdisabled = true);
+			}
 
 			lfile_put_contents($v_file, $string);
 
@@ -476,7 +492,15 @@ function setAddon()
 		$rlflag = ($v->mail_flag === 'on') ? 'remote' : 'local';
 
 		$list = array('nname' => $v->nname, 'parent_clname' => $v->parent_clname, 'webmailprog' => '', 'webmail_url' => 'webmail.'.$domto, 'remotelocalflag' => $rlflag);
-		$string .= self::getCreateWebmail(array($list));
+
+//		$string .= self::getCreateWebmail(array($list));
+
+		if($this->main->isOn('status')) {
+			$string .= self::getCreateWebmail(array($list));
+		}
+		else {
+			$string .= self::getCreateWebmail(array($list), $isdisabled = true);
+		}
 	}
 
 	if ($this->main->isOn('force_www_redirect')) {
@@ -882,7 +906,7 @@ function getCgiString()
 	$string = null;
 	$string .= "\talias.url += ( \"/cgi-bin\" => \"{$this->main->getFullDocRoot()}/cgi-bin/\" )\n\n"; 
 	$string .= "\t\$HTTP[\"url\"] =~ \"^/cgi-bin\" {\n";
-	$string .= "\t\tcgi.assign = ( \"\" => \"/{$sgbl->__path_httpd_root}/{$this->main->nname}/shsuexec.sh\" )\n\t}\n\n";
+	$string .= "\t\tcgi.assign = ( \"\" => \"{$sgbl->__path_httpd_root}/{$this->main->nname}/shsuexec.sh\" )\n\t}\n\n";
 
 	return $string;
 }
@@ -895,7 +919,7 @@ function getAwstatsString()
 	$string = null;
 	$string .= "\talias.url += ( \"/awstats/\" => \"{$sgbl->__path_kloxo_httpd_root}/awstats/wwwroot/cgi-bin/\" )\n\n";
 	$string .= "\t\$HTTP[\"url\"] =~ \"^/awstats\" {\n";
-	$string .= "\t\tcgi.assign = ( \".pl\" => \"/{$sgbl->__path_httpd_root}/{$this->main->nname}/perlsuexec.sh\" )\n\t}\n\n";
+	$string .= "\t\tcgi.assign = ( \".pl\" => \"{$sgbl->__path_httpd_root}/{$this->main->nname}/perlsuexec.sh\" )\n\t}\n\n";
 
 	if ($this->main->stats_password) {
 		$string .= $this->getDirprotectCore("Awstats", "/awstats", "__stats");
@@ -1003,7 +1027,7 @@ static function createWebmailRedirect($list)
 	// un-used
 }
 
-static function getCreateWebmail($list)
+static function getCreateWebmail($list, $isdisabled = null)
 {
 	global $gbl, $sgbl, $login, $ghtml; 
 
@@ -1017,7 +1041,8 @@ static function getCreateWebmail($list)
 
 		$prog = (!isset($l['webmailprog']) || ($l['webmailprog'] === '--system-default--')) ? "" : $l['webmailprog'];
 
-		if ((!$prog) && ($rlflag !== 'remote')) {
+//		if ((!$prog) && ($rlflag !== 'remote') && (!is_disabled($l['webmailprog']))) {
+		if ((!$prog) && ($rlflag !== 'remote') && (!$isdisabled)) {
 			$webdata .= "### 'webmail.{$l['nname']}' handled by ../webmails/webmail.conf ###\n\n";
 			continue;
 		}
@@ -1027,8 +1052,10 @@ static function getCreateWebmail($list)
 			$l['webmail_url'] = add_http_if_not_exist($l['webmail_url']);
 			$webdata .= "\turl.redirect = ( \"/\" =>  \"{$l['webmail_url']}\")\n\n";
 		} else {
-			if (is_disabled($l['webmailprog'])) {
-				$webdata .= "\tserver.document-root = \"{$sgbl->__path_kloxo_httpd_root}/webmail/disabled/\"\n\n";
+		//	if (is_disabled($l['webmailprog'])) {
+			if ($isdisabled) {
+			//	$webdata .= "\tserver.document-root = \"{$sgbl->__path_kloxo_httpd_root}/webmail/disabled/\"\n\n";
+				$webdata .= "\tserver.document-root = \"{$sgbl->__path_kloxo_httpd_root}/disable/\"\n";
 			} else {
 			//	$webdata .= "\tserver.document-root = \"{$sgbl->__path_kloxo_httpd_root}/webmail/\"\n\n";
 				$prog = ($l['webmailprog'] === '--chooser--') ? "" : $l['webmailprog'];
@@ -1045,6 +1072,7 @@ static function getCreateWebmail($list)
 			}
 		*/
 			//$webdata .= "cgi.assign = ( \".php\" => \"/home/httpd/{$l['nname']}/phpsuexec.sh\" )\n";
+			$webdata .= "\tserver.errorlog = \"/home/kloxo/httpd/lighttpd/error.log\"\n";
 			$webdata .= "\tcgi.assign = ( \".php\" => \"/home/httpd/nobody.sh\" )\n\n";
 		}
 		$webdata .= "}\n\n";
