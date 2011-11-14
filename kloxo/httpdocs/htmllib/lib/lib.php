@@ -5307,7 +5307,7 @@ function setInitialApacheConfig()
 
 	$path = "/home/apache/conf";
 
-	$list = array("defaults", "domains", "redirects", "webmails", "wildcards");
+	$list = array("defaults", "domains", "redirects", "webmails", "wildcards", "exclusive");
 
 	foreach($list as $k => $l) {
 		if (!lxfile_exists("{$path}/{$l}")) {
@@ -5374,7 +5374,7 @@ function setInitialLighttpdConfig()
 
 	$path = "/home/lighttpd/conf";
 
-	$list = array("defaults", "domains", "redirects", "webmails", "wildcards");
+	$list = array("defaults", "domains", "redirects", "webmails", "wildcards", "exclusive");
 
 	foreach($list as $k => $l) {
 		if (!lxfile_exists("{$path}/{$l}")) {
