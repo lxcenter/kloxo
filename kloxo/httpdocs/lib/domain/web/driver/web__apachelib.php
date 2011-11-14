@@ -274,6 +274,11 @@ function AddOpenBaseDir()
 		return null;
 	}
 
+	// fixed for 'disable' client
+	if(!$this->main->isOn('status')) {
+		return null;
+	}
+
 	$adminbasedir = trim($this->main->__var_extrabasedir);
 
 	if ($adminbasedir) {
@@ -438,6 +443,7 @@ function createConffile()
 
 		$string .= $this->middlepart($web_home, $domainname, $dirp); 
 		$string .= $this->AddOpenBaseDir();
+
 		$string .= $this->endtag();
 
 		$string1 = $string;
@@ -488,7 +494,9 @@ function createConffile()
 				//		$string .= "\t</IfModule>\n\n";
 				//	}
 					$string .= $this->middlepart($web_home, $domainname, $dirp); 
+
 					$string .= $this->AddOpenBaseDir();
+
 					$string .= $this->endtag();
 					$string .= "#### ssl virtualhost per ip {$ip} end\n";
 				}
@@ -586,7 +594,12 @@ function createConffile()
 			$list = array('nname' => $domainname, 'parent_clname' => 'domain-'.$domainname, 'webmailprog' => '', 'webmail_url' => '', 'remotelocalflag' => 'local');
 			}
 
-			$string .= self::getCreateWebmail(array($list));
+			if($this->main->isOn('status')) {
+				$string .= self::getCreateWebmail(array($list));
+			}
+			else {
+				$string .= self::getCreateWebmail(array($list), $isdisabled = true);
+			}
 
 			lfile_put_contents($v_file, $string);
 
@@ -626,7 +639,14 @@ function setAddon()
 		$rlflag = ($v->mail_flag === 'on') ? 'remote' : 'local';
 
 		$list = array('nname' => $v->nname, 'parent_clname' => $v->parent_clname, 'webmailprog' => '', 'webmail_url' => 'webmail.'.$domto, 'remotelocalflag' => $rlflag);
-		$string .= self::getCreateWebmail(array($list));
+//		$string .= self::getCreateWebmail(array($list));
+
+		if($this->main->isOn('status')) {
+			$string .= self::getCreateWebmail(array($list));
+		}
+		else {
+			$string .= self::getCreateWebmail(array($list), $isdisabled = true);
+		}
 	}
 
 	if ($this->main->isOn('force_www_redirect')) {
@@ -723,7 +743,7 @@ static function createWebmailRedirect($list)
 	// un-used
 }
 
-static function getCreateWebmail($list)
+static function getCreateWebmail($list, $isdisabled = null)
 {
 
 	global $gbl, $sgbl, $login, $ghtml;
@@ -741,7 +761,8 @@ static function getCreateWebmail($list)
 
 		$prog = (!isset($l['webmailprog']) || ($l['webmailprog'] === '--system-default--')) ? "" : $l['webmailprog'];
 
-		if ((!$prog) && ($rlflag !== 'remote')) {
+//		if ((!$prog) && ($rlflag !== 'remote') && (!is_disabled($l['webmailprog']))) {
+		if ((!$prog) && ($rlflag !== 'remote') && (!$isdisabled)) {
 			$string .= "### 'webmail.{$l['nname']}' handled by ../webmails/webmail.conf ###\n\n\n";
 			continue;
 		}
@@ -754,8 +775,10 @@ static function getCreateWebmail($list)
 			$l['webmail_url'] = add_http_if_not_exist($l['webmail_url']);
 			$string .= "\tRedirect / \"{$l['webmail_url']}\"\n\n";
 		} else {
-			if (is_disabled($l['webmailprog'])) {
-				$string .= "\tDocumentRoot \"/home/kloxo/httpd/webmail/disabled/\"\n\n";
+		//	if (is_disabled($l['webmailprog'])) {
+			if ($isdisabled) {
+			//	$string .= "\tDocumentRoot \"/home/kloxo/httpd/webmail/disabled/\"\n\n";
+				$string .= "\tDocumentRoot \"/home/kloxo/httpd/disable/\"\n\n";
 			} else {
 			//	$string .= "\tDocumentRoot \"/home/kloxo/httpd/webmail/\"\n";
 
@@ -1079,9 +1102,19 @@ function getDirprotectCore($authname, $path, $file)
 
 function getSuexecString($username)
 {
-	$nname = $this->main->nname;
 
-	return self::staticgetSuexecString($username, $nname);
+	if($this->main->isOn('status')) {
+		$nname = $this->main->nname;
+
+		return self::staticgetSuexecString($username, $nname);
+	}
+	else {
+		// handling for 'disable' client
+		$string  = "\n\t<IfModule mod_suphp.c>\n";
+		$string .= "\t\tSuPhp_UserGroup lxlabs lxlabs\n";
+		$string .= "\t</IfModule>\n\n";
+		return $string;
+	}
 }
 
 // change to staticgetSuexecString() for accept call by static function
