@@ -43,13 +43,15 @@ static function installMe()
 	lxfile_rm("/home/httpd/conf");
 	
 	//-- new structure	
-	lxfile_mkdir("/home/apache/conf");
-	lxfile_mkdir("/home/apache/conf/domains");
-	lxfile_mkdir("/home/apache/conf/redirects");
-	lxfile_mkdir("/home/apache/conf/webmails");
-	lxfile_mkdir("/home/apache/conf/wildcards");
-	lxfile_mkdir("/home/apache/conf/defaults");
-	lxfile_mkdir("/home/apache/conf/exclusive");
+	$path = "/home/apache/conf";
+
+	$list = array("defaults", "domains", "redirects", "webmails", "wildcards", "exclusive");
+
+	foreach($list as $k => $l) {
+		if (!lxfile_exists("{$path}/{$l}")) {
+			lxfile_mkdir("{$path}/{$l}");
+		}
+	}
 
 	//--- some vps include /etc/httpd/conf.d/swtune.conf
 	system("rm -f /etc/httpd/conf.d/swtune.conf");

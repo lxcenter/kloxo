@@ -29,16 +29,19 @@ static function installMe()
 	lxfile_rm("/etc/lighttpd/conf/kloxo");
 
 	//-- new structure	
-	lxfile_mkdir("/home/lighttpd/conf");
-	lxfile_mkdir("/home/lighttpd/conf/webmails");
-	lxfile_mkdir("/home/lighttpd/conf/defaults");
-	lxfile_mkdir("/home/lighttpd/conf/domains");
-	lxfile_mkdir("/home/lighttpd/conf/redirects");
-	lxfile_mkdir("/home/lighttpd/conf/wildcards");
+	$path = "/home/lighttpd/conf";
+
+	$list = array("defaults", "domains", "redirects", "webmails", "wildcards", "exclusive");
+
+	foreach($list as $k => $l) {
+		if (!lxfile_exists("{$path}/{$l}")) {
+			lxfile_mkdir("{$path}/{$l}");
+		}
+	}
 
 	lxfile_cp("/usr/local/lxlabs/kloxo/file/lighttpd/lighttpd.conf", "/etc/lighttpd/lighttpd.conf");
 
-	$cver = "###version0-6###";
+	$cver = "###version0-7###";
 	$fver = file_get_contents("/etc/lighttpd/conf.d/~lxcenter.conf");
 	
 	if(stristr($fver, $cver) === FALSE) {
@@ -446,6 +449,12 @@ function createConffile()
 			}
 
 			lfile_put_contents($v_file, $string);
+
+			// --- info for exclusive ip
+			$string = "### No declare 'exclusive ip' config for '{$domainname}' ###\n\n\n";
+			$v_file = "/home/lighttpd/conf/exclusive/{$domainname}.conf";
+
+			lfile_put_contents($v_file, $string);		
 
 /*
 			$tmp = lx_tmp_file("light.{$this->main->nname}");
