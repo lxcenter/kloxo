@@ -37,9 +37,10 @@ function syncUseradd()
 
 	if ($res) {
 		// --- Issue #702 - Error 'mailaccount_add_failed' when add email account
-	//	if (!csb($this->main->nname, "postmaster")) {
+		// REVERT -- back to previous
+		if (!csb($this->main->nname, "postmaster")) {
 			throw new lxException("mailaccount_add_failed", "nname", $global_shell_error);
-	//	}
+		}
 	}
 
 	$this->syncQmail();
