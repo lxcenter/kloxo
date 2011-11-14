@@ -5146,7 +5146,7 @@ function setDefaultPages()
 
 	if (file_exists($sourcezip)) {
 		if (!checkIdenticalFile($sourcezip, $targetzip)) {
-			log_cleanup("- Copy $sourcezip to $targetzip");
+			log_cleanup("- Copy  $sourcezip to $targetzip");
 			system("cp -rf $sourcezip $targetzip");
 			$newer = true;
 		}
@@ -5159,7 +5159,7 @@ function setDefaultPages()
 
 		$inc = ($p !== "cp") ? $p : "cp_config";
 
-		log_cleanup("- Copying PHP files for {$p} web page");
+		log_cleanup("- Php files for {$p} web page");
 		lxfile_cp("../file/{$inc}_inc.php", "{$httpdpath}/{$p}/inc.php");
 		lxfile_cp("../file/default_index.php", "{$httpdpath}/{$p}/index.php");
 
@@ -5168,6 +5168,9 @@ function setDefaultPages()
 			log_cleanup("- Skeleton for {$p} web page");
 			lxshell_unzip("__system__", "{$httpdpath}/{$p}/", $targetzip);
 		}
+		else {
+			log_cleanup("- No skeleton for {$p} web page");
+		}
 
 		system("chown -R lxlabs:lxlabs {$httpdpath}/{$p}/");
 		system("find {$httpdpath}/{$p}/ -type f -name \"*.php*\" -exec chmod 644 {} \;");
@@ -5175,17 +5178,36 @@ function setDefaultPages()
 
 	}
 
+	log_cleanup("- Php files for login web page");
+	lxfile_cp("../file/default_index.php", "/usr/local/lxlabs/kloxo/httpdocs/login/index.php");
+	lxfile_cp("../file/login_inc.php", "/usr/local/lxlabs/kloxo/httpdocs/login/inc.php");
+	lxfile_unix_chown("/usr/local/lxlabs/kloxo/httpdocs/login/index.php", "lxlabs:lxlabs");
+	lxfile_unix_chmod("/usr/local/lxlabs/kloxo/httpdocs/login/index.php", "0644");
+	lxfile_unix_chown("/usr/local/lxlabs/kloxo/httpdocs/login/inc.php", "lxlabs:lxlabs");
+	lxfile_unix_chmod("/usr/local/lxlabs/kloxo/httpdocs/login/inc.php", "0644");
+
+	if ($newer) {
+		log_cleanup("- Skeleton for login web page");
+		lxshell_unzip("__system__", "/usr/local/lxlabs/kloxo/httpdocs/login", "../file/skeleton.zip");
+	}
+	else {
+		log_cleanup("- No skeleton for login web page");
+	}
+
 	$usersourcezip = realpath("../file/user-skeleton.zip");
 	$usertargetzip = "/home/kloxo/user-httpd/user-skeleton.zip";
 
 	if (lxfile_exists($usersourcezip)) {
 		if (!checkIdenticalFile($usersourcezip, $usertargetzip)) {
-			log_cleanup("- Copying $usersourcezip to $usertargetzip");
+			log_cleanup("- Copy $usersourcezip to $usertargetzip");
 			system("cp -rf $usersourcezip $usertargetzip");
 		}
 		else {
 			log_cleanup("- No new user-skeleton");
 		}
+	}
+	else {
+		log_cleanup("- No exists user-skeleton");
 	}
 
 	$sourcelogo = realpath("../file/user-logo.png");
@@ -5204,19 +5226,19 @@ function setDefaultPages()
 			log_cleanup("- No new user-logo");
 		}
 	}
+	else {
+		log_cleanup("- No exists user-logo");
+	}
 
-/* 
-	// pending
-	log_cleanup("Initialize skeleton (Login web page)");
-	lxshell_unzip("__system__", "/usr/local/lxlabs/kloxo/httpdocs/login", "../file/skeleton.zip");
-	lxfile_cp("../file/login_index.php", "/usr/local/lxlabs/kloxo/httpdocs/login/index.php");
-	lxfile_unix_chown("/usr/local/lxlabs/kloxo/httpdocs/login/index.php", "lxlabs:lxlabs");
-	lxfile_unix_chmod("/usr/local/lxlabs/kloxo/httpdocs/login/index.php", "0644");
-*/
 }
 
 function setFreshClam($nolog = null)
 {
+	global $gbl, $sgbl, $login, $ghtml; 
+
+	// need this code until have kloxo database sync between master and slave
+	if ($sgbl->is_this_slave()) { continue; }
+
 	if (!$nolog) { log_cleanup("Checking freshclam (virus scanner)"); }
 
 	$path = "/var/qmail/supervise/clamd";
@@ -5763,7 +5785,7 @@ function setSomeScript()
 
 function setInitialLogrotate()
 {
- return; // Kloxo 6.2.0 (#295)
+	return; // Kloxo 6.2.0 (#295)
 	log_cleanup("Initialize logrotate");
 
 	if (lxfile_exists("/etc/logrotate.d/kloxo")) {
