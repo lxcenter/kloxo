@@ -1,5 +1,12 @@
 Changelog
 
+Kloxo 6.1.8 - 14-nov-2011
+##################################
+Bug #702: Error 'mailaccount_add_failed' when add email account
+ToDo #728: Modified Apache conf structure for handling 'exclusive ip' and ip/~client
+ToDo #729: Modified Lighttpd conf structure for handling 'exclusive ip' and ip/~client
+And some other small fixes.
+
 Kloxo 6.1.7 - 12-nov-2011
 ##################################
 Bug #50: Parked domains are not removed from Apache's configuration
