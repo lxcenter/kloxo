@@ -1,5 +1,9 @@
 Changelog
 
+Kloxo 6.1.9 - 15-nov-2011
+##################################
+Bug #000 Run cleanup after new versions
+
 Kloxo 6.1.8 - 14-nov-2011
 ##################################
 Bug #702: Error 'mailaccount_add_failed' when add email account
