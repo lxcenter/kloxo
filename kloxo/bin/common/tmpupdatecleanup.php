@@ -107,7 +107,7 @@ function updatecleanup_main()
 
 	$fixstr = "";
 
-	log_cleanup("Fix dns/web/php settings");	
+	log_cleanup("Fix dns/web/php/mail settings");	
 
 	foreach($fixapps as $key => $fa) {
 		log_cleanup("- Run fix{$fa}");
