@@ -39,14 +39,32 @@ function update_main()
 		} else {
 			$localversion = $sgbl->__ver_major_minor_release;
 			log_cleanup("- Kloxo is the latest version ($localversion)");
+		}
 
-			installThirdparty();
-			installWebmail();
-			installAwstats();
 
+	// Thirdparty/Webmail/AWstats checks
+
+	$verWM = getVersionNumber(get_package_version("lxwebmail"));
+	$verAW = getVersionNumber(get_package_version("lxawstats"));
+	$ver = file_get_contents("http://download.lxcenter.org/download/thirdparty/kloxo-version.list");
+	$verTP = getVersionNumber($ver);
+
+	if ( !lxfile_exists("/var/cache/kloxo/lxwebmail$verWM.tar.gz" ) ) { $retWM = true; } else { $retWM = false; }
+	if ( !lxfile_exists("/var/cache/kloxo/lxawstats$verAW.tar.gz" ) ) { $retAW = true; } else { $retAW = false; }
+	if ( !lxfile_exists("/var/cache/kloxo/kloxo-thirdparty.$verTP.zip" ) ) { $retTP = true; } else { $retTP = false; }
+
+	installThirdparty();
+	installWebmail();
+	installAwstats();
+
+		// Run cleanups or not
+		if ($retTP || $retWM || $retAW || $upversion) {
+			$DoUpdate = true;
+		} else {
 			$DoUpdate = false;
 		}
-	}
+
+}
 
 	log_cleanup("*** Executing Update upcp - END ***");
 
