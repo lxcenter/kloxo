@@ -55,11 +55,8 @@ function setFixUserlogoDefaultPages()
 		log_cleanup("- User logo for default pages moved to -> /home/kloxo/httpd/{$l}/images/logo.png");
 	}
 	
-/*
-	// --- pending to next version
 	system("cp -rf /home/kloxo/httpd/user-logo.png /usr/local/lxlabs/kloxo/httpdocs/login/images/logo.png");
 	log_cleanup("- User logo moved to -> /usr/local/lxlabs/kloxo/httpdocs/login/images/logo.png");
-*/
 }
 
 function setFixUserlogoDomainPages()
