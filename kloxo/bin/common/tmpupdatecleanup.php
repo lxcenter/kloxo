@@ -24,13 +24,13 @@ function updatecleanup_main()
 		$login = new Client(null, null, 'update');
 	}
 
-	log_cleanup("*** Executing Update cleanup - BEGIN ***");
+	log_cleanup("*** Executing Update (cleanup) - BEGIN ***");
 //
 // Check for lxlabs yum repo file and if exists
 // Change to lxcenter repo file
 //
 	if (lxfile_exists("/etc/yum.repos.d/lxlabs.repo")) {
-		log_cleanup("- Delete old repo's");
+		log_cleanup("- Deleting old lxlabs yum repo");
 		lxfile_mv("/etc/yum.repos.d/lxlabs.repo","/etc/yum.repos.d/lxlabs.repo.lxsave");
 		system("rm -f /etc/yum.repos.d/lxlabs.repo");
 		log_cleanup("- Removed lxlabs.repo");
@@ -103,11 +103,11 @@ function updatecleanup_main()
 
 	$fixpath = "sh /usr/local/lxlabs/kloxo/pscript/fix";
 
-	$fixapps = array("dns", "web", "php");
+	$fixapps = array("dns", "web", "php", "mail");
 
 	$fixstr = "";
 
-	log_cleanup("Fix dns/web/php settings");	
+	log_cleanup("Fix dns/web/php/mail settings");	
 
 	foreach($fixapps as $key => $fa) {
 		log_cleanup("- Run fix{$fa}");
@@ -116,7 +116,7 @@ function updatecleanup_main()
 
 	system($fixstr);
 
-	log_cleanup("*** Executing Update cleanup - END ***");
+	log_cleanup("*** Executing Update (cleanup) - END ***");
 }
 
 function cp_dbfile()

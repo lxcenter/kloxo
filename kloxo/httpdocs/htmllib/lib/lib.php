@@ -5163,7 +5163,8 @@ function setDefaultPages()
 		lxfile_cp("../file/{$inc}_inc.php", "{$httpdpath}/{$p}/inc.php");
 		lxfile_cp("../file/default_index.php", "{$httpdpath}/{$p}/index.php");
 
-
+		// by-pass this code because few update files
+	/*
 		if ($newer) {
 			log_cleanup("- Skeleton for {$p} web page");
 			lxshell_unzip("__system__", "{$httpdpath}/{$p}/", $targetzip);
@@ -5171,12 +5172,16 @@ function setDefaultPages()
 		else {
 			log_cleanup("- No skeleton for {$p} web page");
 		}
+	*/
+		log_cleanup("- Skeleton for {$p} web page");
+		lxshell_unzip("__system__", "{$httpdpath}/{$p}/", $targetzip);
 
 		system("chown -R lxlabs:lxlabs {$httpdpath}/{$p}/");
 		system("find {$httpdpath}/{$p}/ -type f -name \"*.php*\" -exec chmod 644 {} \;");
 		system("find {$httpdpath}/{$p}/ -type d -exec chmod 755 {} \;");
 
 	}
+
 
 	log_cleanup("- Php files for login web page");
 	lxfile_cp("../file/default_index.php", "/usr/local/lxlabs/kloxo/httpdocs/login/index.php");
@@ -5186,6 +5191,8 @@ function setDefaultPages()
 	lxfile_unix_chown("/usr/local/lxlabs/kloxo/httpdocs/login/inc.php", "lxlabs:lxlabs");
 	lxfile_unix_chmod("/usr/local/lxlabs/kloxo/httpdocs/login/inc.php", "0644");
 
+	// by-pass this code because few update files
+/*
 	if ($newer) {
 		log_cleanup("- Skeleton for login web page");
 		lxshell_unzip("__system__", "/usr/local/lxlabs/kloxo/httpdocs/login", "../file/skeleton.zip");
@@ -5193,6 +5200,10 @@ function setDefaultPages()
 	else {
 		log_cleanup("- No skeleton for login web page");
 	}
+*/
+
+	log_cleanup("- Skeleton for login web page");
+	lxshell_unzip("__system__", "/usr/local/lxlabs/kloxo/httpdocs/login", "../file/skeleton.zip");
 
 	$usersourcezip = realpath("../file/user-skeleton.zip");
 	$usertargetzip = "/home/kloxo/user-httpd/user-skeleton.zip";
@@ -5785,7 +5796,7 @@ function setSomeScript()
 
 function setInitialLogrotate()
 {
- 	// return; // Kloxo 6.2.0 (#295)
+//	return; // Kloxo 6.2.0 (#295)
 	log_cleanup("Initialize logrotate");
 
 	if (lxfile_exists("/etc/logrotate.d/kloxo")) {
