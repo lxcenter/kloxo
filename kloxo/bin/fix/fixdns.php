@@ -5,15 +5,16 @@ initProgram('admin');
 
 $list = parse_opt($argv);
 
+log_cleanup("Fix DNS server config");
+
 if (isset($list['new_dnstemplate'])) {
 	$dnst = new Dnstemplate(null, null, $list['new_dnstemplate']);
 	$dnst->get();
 	if ($dnst->dbaction === 'add') {
-		print("DNS template doesn't exist\n");
+		log_cleanup("- DNS template doesn't exist");
 		exit;
 	}
 }
-
 
 $login->loadAllObjects('client');
 $list = $login->getList('client');
@@ -30,6 +31,8 @@ foreach($list as $c) {
 
 		$dns->setUpdateSubaction('full_update');
 		$dns->was();
+
+		log_cleanup("- '{$dns->nname}' owned by '{$c->nname}' in '{$dns->syncserver}'");
 	}
 }
 
