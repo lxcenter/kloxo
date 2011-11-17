@@ -103,14 +103,14 @@ function updatecleanup_main()
 
 	$fixpath = "sh /usr/local/lxlabs/kloxo/pscript/fix";
 
-	$fixapps = array("dns", "web", "php", "mail");
+	$fixapps = array("dns", "web", "php", "mail", "ftpuser");
 
 	$fixstr = "";
 
 	log_cleanup("Fix dns/web/php/mail settings");	
 
 	foreach($fixapps as $key => $fa) {
-		log_cleanup("- Run fix{$fa}");
+	//	log_cleanup("- Run fix{$fa}");
 		$fixstr .= "{$fixpath}{$fa} ; ";
 	}
 
