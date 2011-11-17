@@ -11,7 +11,7 @@ else { $server = 'localhost'; }
 $login->loadAllObjects('client');
 $list = $login->getList('client');
 
-log_cleanup("Fix Web server config");
+log_cleanup("Fixing Web server config");
 
 foreach($list as $c) {
 	$dlist = $c->getList('domaina');
@@ -19,12 +19,12 @@ foreach($list as $c) {
 	foreach((array) $dlist as $l) {
 		$web = $l->getObject('web');
 
-	//	if ($web->syncserver !== $server) { continue; }
+	//	if (($web->syncserver !== $server) || ($server !== 'all')) { continue; }
 
 		$web->setUpdateSubaction('full_update');
 		$web->was();
 
-		log_cleanup("- '{$web->nname}' owned by '{$c->nname}' in '{$web->syncserver}'");
+		log_cleanup("- '{$web->nname}' ('{$c->nname}') at '{$web->syncserver}'");
 	}
 }
 

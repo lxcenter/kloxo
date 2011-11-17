@@ -16,10 +16,10 @@ else { $server = 'localhost'; }
 $login->loadAllObjects('client');
 $list = $login->getList('client');
 
-log_cleanup("Fix FTP User config");
+log_cleanup("Fixing FTP User");
 
 foreach($list as $c) {
-//	if ($c->syncserver !== $server) { continue; }
+//	if (($c->syncserver !== $server) || ($server !== 'all')) { continue; }
 
 	$flist = $c->getList('ftpuser');
 
@@ -27,7 +27,7 @@ foreach($list as $c) {
 		$fl->dbaction = 'syncadd';
 		$fl->was();
 
-		log_cleanup("- '{$fl->nname}' owned by '{$c->nname}' in '{$fl->syncserver}'");
+		log_cleanup("- '{$fl->nname}' ('{$c->nname}') at '{$fl->syncserver}'");
 	}
 }
 

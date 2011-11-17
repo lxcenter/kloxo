@@ -8,17 +8,29 @@ $list = parse_opt($argv);
 if (isset($list['server'])) { $server = $list['server']; }
 else { $server = 'localhost'; }
 
+/*
 $s = new Pserver(null, $server, $server);
 
 $s->get();
 $pi = $s->getObject('phpini');
 $pi->setUpdateSubaction('full_update');
 $pi->was();
+*/
 
 $login->loadAllObjects('client');
 $list = $login->getList('client');
 
-log_cleanup("Fix php.ini config");
+$plist = $login->getList('pserver');
+
+log_cleanup("Fixing php.ini");
+
+foreach($plist as $s) {
+	$pi = $s->getObject('phpini');
+	$pi->setUpdateSubaction('full_update');
+	$pi->was();
+
+	log_cleanup("- in '/etc' at '{$pi->syncserver}'");
+}
 
 foreach($list as $c) {
 	$dlist = $c->getList('domaina');
@@ -32,8 +44,7 @@ foreach($list as $c) {
 		$php->setUpdateSubaction('full_update');
 		$php->was();
 
-		log_cleanup("- '" . $web->nname . "' domain in '". $web->syncserver . "' server");
-
+		log_cleanup("- in '/home/httpd/{$web->nname}' ('{$c->nname}') at '{$web->syncserver}'");
 	}
 }
 

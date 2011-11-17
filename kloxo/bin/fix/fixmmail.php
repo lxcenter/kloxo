@@ -5,7 +5,7 @@ initProgram('admin');
 
 $list = parse_opt($argv);
 
-log_cleanup("Fix Mail account config");
+log_cleanup("Fixing Mail account");
 
 if (isset($list['server'])) { $server = $list['server']; }
 else { $server = 'localhost'; }
@@ -18,7 +18,7 @@ foreach($list as $c) {
 	foreach((array)$dlist as $l) {
 		$mmail = $l->getObject('mmail');
 
-	//	if ($mmail->syncserver !== $server) { continue; }
+	//	if (($mmail->syncserver !== $server) || ($mmail->syncserver !== 'all')) { continue; }
 
 		$mmail->setUpdateSubaction('full_update');
 		$mmail->was();
@@ -26,7 +26,7 @@ foreach($list as $c) {
 		$mlist = $mmail->getList('mailaccount');
 		foreach($mlist as $ml) {
 			$spam = $ml->getObject('spam');
-			log_cleanup("- '{$ml->nname}' owned by '{$c->nname}' in '{$mmail->syncserver}'");
+			log_cleanup("- '{$ml->nname}' ('{$c->nname}') at '{$mmail->syncserver}'");
 			$spam->setUpdateSubaction('full_update');
 			$spam->was();
 			$ml->setUpdateSubaction('full_update');
