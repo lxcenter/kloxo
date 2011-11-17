@@ -5,7 +5,7 @@ initProgram('admin');
 
 $list = parse_opt($argv);
 
-log_cleanup("Fix DNS server config");
+log_cleanup("Fixing DNS server config");
 
 if (isset($list['new_dnstemplate'])) {
 	$dnst = new Dnstemplate(null, null, $list['new_dnstemplate']);
@@ -32,7 +32,7 @@ foreach($list as $c) {
 		$dns->setUpdateSubaction('full_update');
 		$dns->was();
 
-		log_cleanup("- '{$dns->nname}' owned by '{$c->nname}' in '{$dns->syncserver}'");
+		log_cleanup("- '{$dns->nname}'('{$c->nname}') at '{$dns->syncserver}'");
 	}
 }
 
