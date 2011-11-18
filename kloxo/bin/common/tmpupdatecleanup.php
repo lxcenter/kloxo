@@ -115,6 +115,16 @@ function updatecleanup_main()
 	}
 
 	system($fixstr);
+	
+	// --- mysql not start after kloxo slave install
+	log_cleanup("Preparing MySQL service");
+
+	log_cleanup("- MySQL activated");
+	system("chkconfig mysqld on");
+	
+	log_cleanup("- MySQL restarted");
+	system("service mysqld restart");
+
 
 	log_cleanup("*** Executing Update (cleanup) - END ***");
 }

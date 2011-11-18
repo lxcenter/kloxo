@@ -5,7 +5,7 @@
 
 include_once "htmllib/lib/include.php"; 
 
-initProgram('admin');
+// initProgram('admin');
 
 $list = parse_opt($argv);
 

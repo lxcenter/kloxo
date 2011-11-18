@@ -1,0 +1,11 @@
+#!/bin/sh
+
+chkconfig freshclam on
+
+/etc/init.d/freshclam start
+
+mv /var/qmail/supervise/clamd/down /var/qmail/supervise/clamd/run
+
+mv /var/qmail/supervise/clamd/log/down /var/qmail/supervise/clamd/log/run
+
+svc -u /var/qmail/supervise/clamd /var/qmail/supervise/clamd/log
