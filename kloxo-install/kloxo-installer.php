@@ -230,6 +230,11 @@ function lxins_main()
 		system("mksock /var/lib/mysql/mysql.sock");	
 		system("/etc/init.d/mysqld start");
 	}
+	
+	//--- Prevent for Mysql not start after reboot for fresh kloxo slave install
+	print("Setting Mysql for always running after reboot and restart now...\n");
+	system("chkconfig mysqld on");
+	system("service mysqld restart");	
 
 	//--- Fix for old thirdparty version
 	if (!file_exists("/usr/local/lxlabs/kloxo/httpdocs/thirdparty")) {
