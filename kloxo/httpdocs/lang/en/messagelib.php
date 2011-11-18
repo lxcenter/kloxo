@@ -50,10 +50,10 @@ $__information['web_updateform_dirindex_pre'] = "Enabling [b] directory index [/
 $__information['updateform_editmx_pre'] = " If you want to configure remote mail server, <url:a=updateform&sa=remotelocalmail> Click here </url>. You can tell kloxo that the mail server is configured remotely, so that all local generated mails will be sent to that server. If you don't configure remote mail, then all mails to this domain will delivered locally itself, without doing any DNS lookup. ";
 $__information['web_updateform_run_stats_pre'] = "This will allow you to forcibly run the stats program, so that you can see your latest statistics in the web statistics page. Use [b] update all [/b] to run it on all the domains visible in the top pull down menu.";
 
-$__information['server_alias_a_addform__pre'] = "- You can add [b] * [/b] as an alias so that all the subdomains are automatically directed to this domain. ".
+$__information['server_alias_a_addform__pre'] = "- You can add wildcards (*) as an alias so that all the subdomains are automatically directed to this domain. ".
 	"Kloxo will also automatically add a DNS entry for the alias.<br />".
-	"- Once you configure the catchall subdomain with '*', you can add the proper logic in your script to detect the correct subdomain and do accordingly.<br />".
-	"- Lighttpd may confuse for select [b]*[/b]. All defaults (default, cp, disable and 'customize') pages will be the same with domain page";
+	"- Once you configure the catchall subdomain with wildcards (*), you can add the proper logic in your script to detect the correct subdomain and do accordingly.<br />".
+	"- Lighttpd may be confused with selected wildcards (*). Access to defaults (default, cp, disable and 'customize') pages will be lead to the domain page";
 
 $__information['updateform_sesubmit_pre'] = "Your domain will be submitted to all the searchengines listed below. The email should be an address that's not used often, since you are very highly likely to get Spammed on the email you enter here";
 $__information['mmail_updateform_authentication_pre'] = "Your primary mx server is automatically included in the SPF, and you need not add it separately. You can use [b] update all [/b] to impress these values on all the domains visible on the top pull down list.";
