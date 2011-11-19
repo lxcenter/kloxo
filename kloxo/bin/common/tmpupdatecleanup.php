@@ -74,7 +74,9 @@ function updatecleanup_main()
 		updatecleanup();
 	}
 
-	lxfile_touch("__path_program_start_vps_flag");
+	if ($opt['type'] === 'master') {
+		lxfile_touch("__path_program_start_vps_flag");
+	}
 
 	// issue #716 -- [beta] Unresolved dependency on Apache version
 	
@@ -107,14 +109,20 @@ function updatecleanup_main()
 
 	$fixstr = "";
 
-//	log_cleanup("Fix dns/web/php/mail settings");	
+	log_cleanup("Fix dns/web/php/mail settings");	
 
 	foreach($fixapps as $key => $fa) {
-	//	log_cleanup("- Run fix{$fa}");
-		$fixstr .= "{$fixpath}{$fa} ; ";
+	//	$fixstr .= "{$fixpath}{$fa} ; ";
+		$fixstr = "{$fixpath}{$fa} ";
+
+		if ($opt['type'] === 'master') {
+			system($fixstr); 
+		}
+
+		log_cleanup("- Run fix{$fa}");
 	}
 
-	system($fixstr);
+
 	
 	// --- mysql not start after kloxo slave install
 	log_cleanup("Preparing MySQL service");

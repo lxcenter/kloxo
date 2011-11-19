@@ -1015,8 +1015,18 @@ function call_with_flag($func)
 	if (lxfile_exists($file)) {
 		return;
 	}
+
+	// MR --- the problem is no /usr/local/lxlabs/kloxo/etc/flag dir in slave
+	// need more investigate about it that no flag dir in slave
+	// meanwhile use this logic
+
+	$path = "__path_program_etc/flag";
+
 	call_user_func($func);
-	lxfile_touch($file);
+
+	if (lxfile_exists($path)) {
+		lxfile_touch($file);
+	}
 }
 
 
@@ -5248,7 +5258,7 @@ function setFreshClam($nolog = null)
 	global $gbl, $sgbl, $login, $ghtml; 
 
 	// need this code until have kloxo database sync between master and slave
-	if ($sgbl->is_this_slave()) { continue; }
+	if ($sgbl->is_this_slave()) { return; }
 
 	if (!$nolog) { log_cleanup("Checking freshclam (virus scanner)"); }
 
@@ -5491,6 +5501,9 @@ function setInitialPureftpConfig()
 
 function setInitialPhpMyAdmin()
 {
+	// MR -- because no kloxo.pass no exist in slave so return
+	if (!lxfile_exists("/usr/local/lxlabs/kloxo/etc/conf/kloxo.pass")) { return; }
+
 	log_cleanup("Initialize phpMyAdmin configfile");
 	lxfile_cp("../file/phpmyadmin_config.inc.phps", "thirdparty/phpMyAdmin/config.inc.php");
 
