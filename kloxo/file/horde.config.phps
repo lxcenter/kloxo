@@ -18,7 +18,7 @@ $conf['session']['name'] = 'mm';
 $conf['session']['use_only_cookies'] = true;
 $conf['session']['cache_limiter'] = 'nocache';
 $conf['session']['timeout'] = 0;
-$conf['cookie']['path'] = '/horde';
+$conf['cookie']['path'] = '/';
 
 /* fix bug 529 */
 $conf['cookie']['domain'] = '';
