@@ -22,8 +22,6 @@ function setFixChownChmod($select)
 	$login->loadAllObjects('client');
 	$list = $login->getList('client');
 
-	
-
 	// --- still problem when switch to suphp use chmod 750 for userdir and then back to 770
 	// so, for compromise set /home/kloxo/httpd to 770 because less importance than /home/<client>
 	$httpddirchmod = '770';
