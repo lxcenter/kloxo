@@ -5,7 +5,7 @@
 
 include_once "htmllib/lib/include.php"; 
 
-// initProgram('admin');
+initProgram('admin');
 
 $list = parse_opt($argv);
 
@@ -21,8 +21,6 @@ function setFixChownChmod($select)
 
 	$login->loadAllObjects('client');
 	$list = $login->getList('client');
-
-	
 
 	// --- still problem when switch to suphp use chmod 750 for userdir and then back to 770
 	// so, for compromise set /home/kloxo/httpd to 770 because less importance than /home/<client>
