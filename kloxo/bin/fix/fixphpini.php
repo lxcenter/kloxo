@@ -37,7 +37,9 @@ foreach($list as $c) {
 	foreach((array) $dlist as $l) {
 		$web = $l->getObject('web');
 
-	//	if ($web->syncserver !== $server) { continue; }
+		if ($server !== 'all') {
+			if ($web->syncserver !== $server) { continue; }
+		}
 
 		$php = $web->getObject('phpini');
 		$php->initPhpIni();

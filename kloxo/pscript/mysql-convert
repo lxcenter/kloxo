@@ -24,6 +24,7 @@ if [ "$#" == 0 ] ; then
 	echo "         'default-storage-engine=[engine]', and"
 	echo "         'skip-innodb' (for myisam)"
 	echo
+	echo "  Must be run separately on each server (master and slave)"
 	exit;
 fi
 

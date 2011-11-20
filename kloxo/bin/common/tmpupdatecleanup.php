@@ -103,7 +103,8 @@ function updatecleanup_main()
 	// --- importance for update from 6.1.6 or previous where change apache/lighttpd structure 
 	// or others for next version
 
-	$fixpath = "sh /usr/local/lxlabs/kloxo/pscript/fix";
+//	$fixpath = "sh /usr/local/lxlabs/kloxo/pscript";
+	$fixpath = "sh /script";
 
 	$fixapps = array("dns", "web", "php", "mail", "ftpuser");
 
@@ -113,16 +114,12 @@ function updatecleanup_main()
 
 	foreach($fixapps as $key => $fa) {
 	//	$fixstr .= "{$fixpath}{$fa} ; ";
-		$fixstr = "{$fixpath}{$fa} ";
+		$fixstr = "{$fixpath}/fix{$fa} --server=all";
 
 		if ($opt['type'] === 'master') {
 			system($fixstr); 
 		}
-
-		log_cleanup("- Run fix{$fa}");
 	}
-
-
 	
 	// --- mysql not start after kloxo slave install
 	log_cleanup("Preparing MySQL service");
