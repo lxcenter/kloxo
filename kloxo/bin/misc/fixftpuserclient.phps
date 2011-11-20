@@ -19,7 +19,9 @@ $list = $login->getList('client');
 log_cleanup("Fixing FTP User");
 
 foreach($list as $c) {
-//	if (($c->syncserver !== $server) || ($server !== 'all')) { continue; }
+	if ($server !== 'all') {
+		if ($c->syncserver !== $server) { continue; }
+	}
 
 	$flist = $c->getList('ftpuser');
 

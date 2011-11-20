@@ -18,7 +18,9 @@ foreach($list as $c) {
 	foreach((array)$dlist as $l) {
 		$mmail = $l->getObject('mmail');
 
-	//	if (($mmail->syncserver !== $server) || ($mmail->syncserver !== 'all')) { continue; }
+		if ($server !== 'all') {
+			if ($mmail->syncserver !== $server) { continue; }
+		}
 
 		$mmail->setUpdateSubaction('full_update');
 		$mmail->was();

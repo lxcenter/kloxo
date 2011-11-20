@@ -19,7 +19,9 @@ foreach($list as $c) {
 	foreach((array) $dlist as $l) {
 		$web = $l->getObject('web');
 
-	//	if (($web->syncserver !== $server) || ($server !== 'all')) { continue; }
+		if ($server !== 'all') {
+			if ($web->syncserver !== $server) { continue; }
+		}
 
 		$web->setUpdateSubaction('full_update');
 		$web->was();

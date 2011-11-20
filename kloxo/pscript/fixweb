@@ -1,3 +1,16 @@
 #!/bin/sh
+
+# if [ "$#" == 0 ] ; then
+	echo
+	echo " ------------------------------------------------------------------------"
+	echo "  format: sh $0 --server=<localhost/slaveid/all>"
+	echo " ------------------------------------------------------------------------"
+	echo "   localhost = master (default)"
+	echo "   slaveid = slave id (ip or hostname)"
+	echo "   all = all servers (master and slave)"
+	echo
+#	exit;
+# fi
+
 . /script/directory
 lphp.exe ../bin/fix/fixweb.php $*
