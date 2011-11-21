@@ -1,6 +1,6 @@
 #!/bin/sh
 
-# if [ "$#" == 0 ] ; then
+if [ "$1" == "--help" ] ; then
 	echo
 	echo " ------------------------------------------------------------------------"
 	echo "  format: sh $0 --server=<localhost/slaveid/all>"
@@ -9,8 +9,13 @@
 	echo "   slaveid = slave id (ip or hostname)"
 	echo "   all = all servers (master and slave)"
 	echo
-#	exit;
-# fi
+	exit;
+fi
+
+echo
+echo "- For help, type '$0 --help'"
+echo "- No argument supplied. Defaulting to localhost (master) servers"
+echo
 
 . /script/directory
 lphp.exe ../bin/fix/fixweb.php $*

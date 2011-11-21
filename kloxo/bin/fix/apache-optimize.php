@@ -9,7 +9,7 @@ include_once "htmllib/lib/include.php";
 
 $list = parse_opt($argv);
 
-$select = strtolower($list['select']);
+$select = (isset($list['select'])) ? (int)$list['select'] : 'optimize';
 
 $spare = (isset($list['spare'])) ? (int)$list['spare'] : null;
 
@@ -137,7 +137,8 @@ Include /home/apache/conf/wildcards/*.conf
 ###version0-7###
 EOF;
 
-		log_cleanup("- Calculate Apache threads limit (max/min -> $minpar_w/$maxpar_w) and server limits (max/min -> $minpar_p/$maxpar_p");
+		log_cleanup("- Calculate Apache:");
+		log_cleanup("-- threads limit (min/max -> $minpar_w/$maxpar_w) and servers limit (min/max -> $minpar_p/$maxpar_p)");
 
 		log_cleanup("- Write to /etc/httpd/conf.d/~lxcenter.conf");
 

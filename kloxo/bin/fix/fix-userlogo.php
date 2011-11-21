@@ -9,7 +9,7 @@ include_once "htmllib/lib/include.php";
 
 $list = parse_opt($argv);
 
-$select = strtolower($list['select']);
+$select = (isset($list['select'])) ? (int)$list['select'] : 'all';
 
 setFixUserlogo($select);
 
