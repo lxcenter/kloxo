@@ -3,7 +3,7 @@
 # release on Kloxo 6.1.7
 # by mustafa.ramadhan@lxcenter.org
 
-if [ "$#" == 0 ] ; then
+if [ "$1" == "--help" ] ; then
 	echo
 	echo " ------------------------------------------------------------"
 	echo "  format: sh $0 --select=<defaults/domains/all>"
@@ -16,6 +16,11 @@ if [ "$#" == 0 ] ; then
 	echo
 	exit;
 fi
+
+echo
+echo "- For help, type '$0 --help'"
+echo "- No argument supplied. Defaulting to all"
+echo
 
 . /script/directory
 lphp.exe ../bin/fix/fix-userlogo.php $*

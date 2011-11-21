@@ -3,7 +3,7 @@
 # release on Kloxo 6.1.7
 # by mustafa.ramadhan@lxcenter.org
 
-if [ "$#" == 0 ] ; then
+if [ "$1" == "--help" ] ; then
 	echo
 	echo " ------------------------------------------------------------"
 	echo "  format: sh $0 --select=<chown/chmod/all>"
@@ -17,14 +17,10 @@ if [ "$#" == 0 ] ; then
 	exit;
 fi
 
-request1=$1
-SELECT=${request1#--select\=}
-
-if [ ! $SELECT == 'chown' ] && [ ! $SELECT == 'chmod' ] && [ ! $SELECT == 'all' ] ; then
-	echo "Wrong --select= entry..."
-	exit;
-fi
-
+echo
+echo "- For help, type '$0 --help'"
+echo "- No argument supplied. Defaulting to all"
+echo
 
 . /script/directory
 lphp.exe ../bin/fix/fix-chownchmod.php $*

@@ -9,7 +9,7 @@ initProgram('admin');
 
 $list = parse_opt($argv);
 
-$select = strtolower($list['select']);
+$select = (isset($list['select'])) ? (int)$list['select'] : 'all';
 
 setFixChownChmod($select);
 
