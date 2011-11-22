@@ -110,7 +110,7 @@ function updatecleanup_main()
 
 	$fixstr = "";
 
-	log_cleanup("Fix dns/web/php/mail settings");	
+	log_cleanup("Fix dns/web/php/mail/ftpuser settings");	
 
 	foreach($fixapps as $key => $fa) {
 	//	$fixstr .= "{$fixpath}{$fa} ; ";

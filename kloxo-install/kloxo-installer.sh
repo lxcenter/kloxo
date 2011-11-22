@@ -25,9 +25,22 @@
 
 if [ "$#" == 0 ] ; then
 	echo
-	echo " -------------------------------------------------------------------"
-	echo "  format: sh $0 --type=<master/slave>"
-	echo " -------------------------------------------------------------------"
+	echo " -------------------------------------------------------------------------"
+	echo "  format: sh $0 --type=<master/slave> [--version=version]"
+	echo " -------------------------------------------------------------------------"
+	echo
+	echo " --type - must be choose master or slave"
+	echo " --version - optional; default: 'current'"
+	echo "   go to 'http://download.lxcenter.org/download/archive/' for archive"
+	echo
+	echo " Need additional files for installing 6.0.x version:"
+	echo "   1. all additional files must be the same place with 'kloxo-installer.sh'"
+	echo "   2. download kloxo from archive and then change 'version' to 'current'"
+	echo "   3. check thirdparty <version> from:";
+	echo "      'http://download.lxcenter.org/download/thirdparty/kloxo-version.list'"
+	echo "   4. download thirdparty from:"
+	echo "      'http://download.lxlabs.com/download/kloxo-thirdparty.<version>.zip'"
+	echo "   5. rename kloxo-thirdparty.<version>.zip to kloxo-thirdparty.2012.zip"
 	echo
 	exit;
 fi
@@ -100,25 +113,25 @@ clear
 
 # Check if user is root.
 if [ "$UID" -ne "0" ] ; then
-	echo -en "Installing as \"root\"		 " $C_NO
+	echo -en "Installing as \"root\"        " $C_NO
 	echo -e "\a\nYou must be \"root\" to install $APP_NAME.\n\nAborting ...\n"
 	exit $E_NOTROOT
 else
-	echo -en "Installing as \"root\"		 " $C_OK
+	echo -en "Installing as \"root\"        " $C_OK
 fi
 
 # Check if OS is RHEL/CENTOS/FEDORA.
 if [ ! -f /etc/redhat-release ] ; then
-	echo -en "Operating System supported   " $C_NO
+	echo -en "Operating System supported  " $C_NO
 	echo -e "\a\nSorry, only RedHat EL and CentOS are supported by $APP_NAME at this time.\n\nAborting ...\n"
 	exit $E_NOSUPPORT
 else
-	echo -en "Operating System supported   " $C_OK
+	echo -en "Operating System supported  " $C_OK
 fi
 
 # Check if selinuxenabled exists
 if [ ! -f $SELINUX_CHECK ] ; then
-	echo -en "SELinux disabled			 " $C_MISS
+	echo -en "SELinux disabled            " $C_MISS
 	echo -e "\a\nThe installer could not determine SELinux status.\n" \
 		"If you are sure it is DISABLED, you may proceed."
 	get_yes_no "Continue?" 0
@@ -131,7 +144,7 @@ else
 	eval $SELINUX_CHECK
 	OUT=$?
 	if [ $OUT -eq "0" ] ; then
-		echo -en "SELinux disabled			 " $C_NO
+		echo -en echo -en "SELinux disabled            " $C_NO
 		echo -e "\a\n$APP_NAME cannot be installed or executed with SELinux enabled. " \
 			"The installer can disable it, but a reboot will be required.\n"
 		echo -e "You will have to restart the installer again after reboot.\n"
@@ -149,17 +162,17 @@ else
 			exit $E_SELINUX
 		fi
 	elif [ $OUT -eq "1" ] ; then
-		echo -en "SELinux disabled			 " $C_OK
+		echo -en "SELinux disabled            " $C_OK
 	fi
 fi
 
 # Check if yum is installed.
 if ! [ -f /usr/sbin/yum ] && ! [ -f /usr/bin/yum ] ; then
-	echo -en "Yum installed				" $C_NO
+	echo -en "Yum installed               " $C_NO
 	echo -e "\a\nThe installer requires YUM to continue. Please install it and try again.\nAborting ...\n"
 	exit $E_NOYUM
 else
-	echo -en "Yum installed				" $C_OK
+	echo -en "Yum installed               " $C_OK
 fi
 
 echo
