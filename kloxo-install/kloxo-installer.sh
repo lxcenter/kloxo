@@ -29,12 +29,14 @@ if [ "$#" == 0 ] ; then
 	echo "  format: sh $0 --type=<master/slave> [--version=version]"
 	echo " -------------------------------------------------------------------------"
 	echo
-	echo " --type - must be choose master or slave"
-	echo " --version - optional; default: 'current'"
-	echo "   go to 'http://download.lxcenter.org/download/archive/' for archive"
+	echo " --type - compulsory, please choose between master or slave "
+    echo "   depending which you want to install"
+	echo " --version - optional; default: 'current', or any version number as "
+    echo "   listed in the archive (between 'kloxo-' and '. zip')"
+	echo "   An archive is available at 'http://download.lxcenter.org/download/archive/'"
 	echo
-	echo " Need additional files for installing 6.0.x version:"
-	echo "   1. all additional files must be the same place with 'kloxo-installer.sh'"
+	echo " We need additional files when installing 6.0.x version:"
+	echo "   1. all additional files must be in the same place of 'kloxo-installer.sh'"
 	echo "   2. download kloxo from archive and then change 'version' to 'current'"
 	echo "   3. check thirdparty <version> from:";
 	echo "      'http://download.lxcenter.org/download/thirdparty/kloxo-version.list'"
