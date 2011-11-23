@@ -14,7 +14,11 @@ fi
 
 echo
 echo "- For help, type '$0 --help'"
-echo "- No argument supplied. Defaulting to localhost (master) servers"
+
+if [ "$#" == 0 ] ; then
+	echo "- No argument supplied. Defaulting to localhost (master) servers"
+fi
+
 echo
 
 . /script/directory
