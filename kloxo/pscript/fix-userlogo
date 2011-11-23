@@ -19,7 +19,11 @@ fi
 
 echo
 echo "- For help, type '$0 --help'"
-echo "- No argument supplied. Defaulting to all"
+
+if [ "$#" == 0 ] ; then
+	echo "- No argument supplied. Defaulting to all"
+fi
+
 echo
 
 . /script/directory

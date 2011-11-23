@@ -17,7 +17,11 @@ fi
 
 echo
 echo "- For help, type '$0 --help'"
-echo "- No argument supplied. Defaulting to optimize and 25% spare"
+
+if [ "$#" == 0 ] ; then
+	echo "- No argument supplied. Defaulting to optimize and 25% spare"
+fi
+
 echo
 
 . /script/directory
