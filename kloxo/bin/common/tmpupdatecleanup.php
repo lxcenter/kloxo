@@ -120,7 +120,11 @@ function updatecleanup_main()
 			system($fixstr); 
 		}
 	}
-	
+
+	log_cleanup("Fixing 'lxpopuser' MySQL password");
+	system("sh /script/fixvpop");
+
+
 	// --- mysql not start after kloxo slave install
 	log_cleanup("Preparing MySQL service");
 
