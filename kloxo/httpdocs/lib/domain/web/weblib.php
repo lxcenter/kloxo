@@ -826,15 +826,16 @@ function createDir()
 	system("find {$user_home} -type d -exec chmod 755 {} \;");
 */
 
-	// MR --- consistence with fix-chownchmod script --> ownership client:client
+	// MR --- consistence with fix-chownchmod script
 	// fixed 64bit slave (skeleton.zip always zero)
+	// back to original because problem with suphp
 
-	lxfile_generic_chown($user_home, "{$this->username}:{$this->username}");
-	lxfile_generic_chown("__path_customer_root/$this->customer_name", "{$this->username}:{$this->username}");
+	lxfile_generic_chown($user_home, "{$this->username}:apache");
+	lxfile_generic_chown("__path_customer_root/$this->customer_name", "{$this->username}:apache");
 	lxfile_generic_chmod("__path_customer_root/$this->customer_name", "750");
 	lxfile_generic_chown($log_path1, "apache:apache");
 	lxfile_generic_chmod($log_path1, "770");
-	lxfile_generic_chown("$web_home/{$this->nname}", "{$this->username}:{$this->username}");
+	lxfile_generic_chown("$web_home/{$this->nname}", "{$this->username}:apache");
 
 	if (!lxfile_exists("$web_home/{$this->nname}/httpdocs")) {
 		//lxfile_mkdir("$sgbl->__path_customer_root/$this->customer_name/domain/$this->nname");
