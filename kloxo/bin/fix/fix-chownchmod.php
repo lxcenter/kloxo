@@ -65,11 +65,11 @@ function setFixChownChmod($select)
 		system("chmod {$userdirchmod} {$cdir}/");
 		log_cleanup("- chmod {$userdirchmod} FOR {$cdir}/");
 
+		system("chown -R {$clname}:{$clname} {$cdir}/{$ks}/");
+		log_cleanup("- chown {$clname}:{$clname} FOR INSIDE {$cdir}/{$ks}/");
+
 		system("chown {$clname}:apache {$cdir}/{$ks}/");
 		log_cleanup("- chown {$clname}:apache FOR {$cdir}/{$ks}/");
-
-		system("chown -R {$clname}:{$clname} {$cdir}/{$ks}/");
-		log_cleanup("- chown {$clname}:{$clname} FOR {$cdir}/{$ks}/ AND INSIDE");
 
 		system("find {$cdir}/{$ks}/ -type f -name \"*.php*\" -exec chmod {$phpfilechmod} \{\} \\;");
 		log_cleanup("- chmod {$phpfilechmod} FOR *.php* INSIDE {$cdir}/{$ks}/");
@@ -82,7 +82,7 @@ function setFixChownChmod($select)
 
 			if (($select === "all") || ($select === 'chown')) {
 				system("chown -R {$clname}:{$clname} {$cdir}/{$web}/");
-				log_cleanup("- chown {$clname}:{$clname} FOR {$cdir}/{$web}/ AND INSIDE");
+				log_cleanup("- chown {$clname}:{$clname} FOR INSIDE {$cdir}/{$web}/");
 			}
 			
 			if (($select === "all") || ($select === 'chmod')) {
@@ -92,6 +92,10 @@ function setFixChownChmod($select)
 				system("find {$cdir}/{$web}/ -type d -exec chmod {$domdirchmod} \{\} \\;");
 				log_cleanup("- chmod {$domdirchmod} FOR {$cdir}/{$web}/ AND INSIDE");
 			}
+
+			system("chown {$clname}:apache {$cdir}/{$web}/");
+			log_cleanup("- chown {$clname}:apache FOR {$cdir}/{$web}/");
+
 		}
 	}
 }
