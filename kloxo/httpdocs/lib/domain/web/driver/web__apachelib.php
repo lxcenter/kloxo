@@ -93,11 +93,22 @@ function updateMainConfFile()
 	$init_file = "/home/apache/conf/defaults/init.conf";
 
 	$vdomlist = $this->main->__var_vdomain_list; 
+/*
 	$iplist = $this->main->__var_ipaddress;
 
 	$fdata = null;
 	foreach($iplist as $ipaddr){
 		$ip = trim($ipaddr['ipaddr']);
+		if ($ip) {
+			$fdata .= "NameVirtualHost {$ip}:80\n";
+			$fdata .= "NameVirtualHost {$ip}:443\n\n";
+		}
+	}
+*/
+	$iplist = os_get_allips();
+
+	$fdata = null;
+	foreach($iplist as $key => $ip){
 		if ($ip) {
 			$fdata .= "NameVirtualHost {$ip}:80\n";
 			$fdata .= "NameVirtualHost {$ip}:443\n\n";
@@ -424,9 +435,16 @@ function createConffile()
 	
 		$this->clearDomainIpAddress();
 
-		$string = null;
-		$string = "<VirtualHost \\\n{$this->createVirtualHostiplist("80")}";
+		$string  = null;
+		$string .= "<VirtualHost \\\n";
+		$string .= $this->createVirtualHostiplist("80");
+
+		if (!$this->getServerIp()) {
+			$string .= $this->createVirtualHostiplist("443");
+		}
+
 		$string .= "\t\t>\n\n";
+		
 //		$string .= $this->syncToPort("80", $cust_log, $err_log);
 
 		$syncto = $this->syncToPort("80", $cust_log, $err_log);
@@ -504,7 +522,8 @@ function createConffile()
 				}
 
 				$exclusiveip = true;
-			} 
+			}
+/*
 			else {
 				$string .= "\n#### ssl virtualhost start\n";
 				$string .= "<VirtualHost \\\n";
@@ -538,7 +557,7 @@ function createConffile()
 				$string .= $this->endtag();
 				$string .= "#### ssl virtualhost end\n";
 			}
-
+*/
 		//	$string .= "</IfModule>\n\n\n";
 
 			// --- for better appear
@@ -546,8 +565,13 @@ function createConffile()
 			$string = str_replace("\n", "\n\t", $string);
 			$string = str_replace("||||", "\t", $string);				
 		}
-
-		$string2 = "\n\n<IfModule mod_ssl.c>\n{$string}\n</IfModule>\n\n\n";
+		
+		if ($exclusiveip) {
+			$string2 = "\n\n<IfModule mod_ssl.c>\n{$string}\n</IfModule>\n\n\n";
+		}
+		else {
+			$string2 = "\n\n";
+		}
 
 		$string = $string1.$string2;
 
@@ -684,8 +708,7 @@ static function createCpConfig()
 	global $gbl, $sgbl, $login, $ghtml; 
 
 	$vstring = self::staticcreateVirtualHostiplist('80');
-	// issue #725, #760 - disable for port 443
-//	$sstring = self::staticcreateVirtualHostiplist('443');
+	$sstring = self::staticcreateVirtualHostiplist('443');
 
 	$list = array("default" => "_default.conf", "cp" => "cp_config.conf", "disable" => "disable.conf");
 
@@ -776,7 +799,7 @@ static function getCreateWebmail($list, $isdisabled = null)
 
 		if ($rlflag === 'remote') {
 			$l['webmail_url'] = add_http_if_not_exist($l['webmail_url']);
-			$string .= "\tRedirect / \"{$l['webmail_url']}\"\n\n";
+			$string .= "\tRedirect / \"{$l['webmail_url']}\"\n";
 		} else {
 		//	if (is_disabled($l['webmailprog'])) {
 			if ($isdisabled) {
@@ -961,18 +984,20 @@ static function createSSlConf($iplist, $domainiplist)
 		$string .= "\t</Virtualhost>\n";
 	}
 
+	// issue #725, #760 - ssl.conf must be the first file in listing
+	// so change name from ssl.conf to __ssl.conf
+	
 	//	$string .= "SSLLogFile /\n";
 //	$sslfile = "/etc/httpd/conf/kloxo/ssl.conf";
-	$sslfile = "/home/apache/conf/defaults/ssl.conf";
+
+	system("rm -rf /home/apache/conf/defaults/ssl.conf");
+	$sslfile = "/home/apache/conf/defaults/__ssl.conf";
 
 	$string = "<IfModule mod_ssl.c>\n{$string}\n</IfModule>\n\n";
 	//$string = null;
 	$string .= "DirectoryIndex index.php index.htm default.htm default.html\n\n";
 
 	lfile_put_contents($sslfile, $string);
-
-	// MR --- no need ssl.conf at all but need review after 6.1.7
-//	system("rm -rf /home/apache/conf/defaults/ssl.conf");
 
 }
 
@@ -1587,8 +1612,7 @@ static function createWebmailConfig()
 	$webdata  = null;
 	$webdata .= "<VirtualHost \\\n";
 	$webdata .= self::staticcreateVirtualHostiplist("80");
-	// issue #725, #760 - disable for port 443
-//	$webdata .= self::staticcreateVirtualHostiplist("443");
+	$webdata .= self::staticcreateVirtualHostiplist("443");
 	$webdata .= "\t\t>\n\n";
 	$webdata .= "\tServerName webmail\n";
 	$webdata .= "\tServerAlias webmail.*\n\n";
