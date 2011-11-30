@@ -92,12 +92,23 @@ function updateMainConfFile()
 	$virtual_file = "/home/apache/conf/defaults/stats.conf";
 	$init_file = "/home/apache/conf/defaults/init.conf";
 
-	$vdomlist = $this->main->__var_vdomain_list; 
+	$vdomlist = $this->main->__var_vdomain_list;
+/*
 	$iplist = $this->main->__var_ipaddress;
 
 	$fdata = null;
 	foreach($iplist as $ipaddr){
 		$ip = trim($ipaddr['ipaddr']);
+		if ($ip) {
+			$fdata .= "NameVirtualHost {$ip}:80\n";
+			$fdata .= "NameVirtualHost {$ip}:443\n\n";
+		}
+	}
+*/
+	$iplist = os_get_allips();
+
+	$fdata = null;
+	foreach($iplist as $key => $ip){
 		if ($ip) {
 			$fdata .= "NameVirtualHost {$ip}:80\n";
 			$fdata .= "NameVirtualHost {$ip}:443\n\n";
@@ -684,7 +695,8 @@ static function createCpConfig()
 	global $gbl, $sgbl, $login, $ghtml; 
 
 	$vstring = self::staticcreateVirtualHostiplist('80');
-	$sstring = self::staticcreateVirtualHostiplist('443');
+	// issue #725, #760 - disable for port 443
+//	$sstring = self::staticcreateVirtualHostiplist('443');
 
 	$list = array("default" => "_default.conf", "cp" => "cp_config.conf", "disable" => "disable.conf");
 
@@ -1586,7 +1598,8 @@ static function createWebmailConfig()
 	$webdata  = null;
 	$webdata .= "<VirtualHost \\\n";
 	$webdata .= self::staticcreateVirtualHostiplist("80");
-	$webdata .= self::staticcreateVirtualHostiplist("443");
+	// issue #725, #760 - disable for port 443
+//	$webdata .= self::staticcreateVirtualHostiplist("443");
 	$webdata .= "\t\t>\n\n";
 	$webdata .= "\tServerName webmail\n";
 	$webdata .= "\tServerAlias webmail.*\n\n";
