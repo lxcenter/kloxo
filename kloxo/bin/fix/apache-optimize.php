@@ -9,7 +9,7 @@ include_once "htmllib/lib/include.php";
 
 $list = parse_opt($argv);
 
-$select = (isset($list['select'])) ? (int)$list['select'] : 'optimize';
+$select = (isset($list['select'])) ? $list['select'] : 'optimize';
 
 $spare = (isset($list['spare'])) ? (int)$list['spare'] : null;
 

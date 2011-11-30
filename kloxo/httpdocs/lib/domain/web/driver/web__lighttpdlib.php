@@ -592,8 +592,13 @@ static function createSSlConf($iplist, $domainiplist)
 		$string .= "}\n\n";
 	}
 
+	// issue #725, #760 - ssl.conf must be the first file in listing
+	// so change name from ssl.conf to __ssl.conf
+
 //	$sslfile = "__path_lighty_path/conf/kloxo/ssl.conf";
-	$sslfile = "/home/lighttpd/conf/defaults/ssl.conf";
+
+	system("rm -rf /home/lighttpd/conf/defaults/ssl.conf");
+	$sslfile = "/home/lighttpd/conf/defaults/__ssl.conf";
 
 	lfile_put_contents($sslfile, $string);
 }
