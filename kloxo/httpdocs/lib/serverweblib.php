@@ -34,7 +34,7 @@ function updateform($subaction, $param)
 //		return $vlist;
 		$vlist['mysql_convert'] = array('s', array('--- none ---', 'to-myisam', 'to-innodb'));
 		$this->setDefaultValue('mysql_convert', '--- none ---');
-		if ($sgbl->is_this_master()) {
+		if ($gbl->is_master) {
 			$vlist['fix_chownchmod'] = array('s', array('--- none ---', 'fix-ownership', 'fix-permissions', 'fix-ALL'));
 			$this->setDefaultValue('fix_chownchmod', '--- none ---');
 		}	
@@ -49,7 +49,7 @@ function updateform($subaction, $param)
 		$this->setDefaultValue('apache_optimize', '--- none ---');
 		$vlist['mysql_convert'] = array('s', array('--- none ---', 'to-myisam', 'to-innodb'));
 		$this->setDefaultValue('mysql_convert', '--- none ---');
-		if ($sgbl->is_this_master()) {
+		if ($gbl->is_master) {
 			$vlist['fix_chownchmod'] = array('s', array('--- none ---', 'fix-ownership', 'fix-permissions', 'fix-ALL'));
 			$this->setDefaultValue('fix_chownchmod', '--- none ---');
 		}
