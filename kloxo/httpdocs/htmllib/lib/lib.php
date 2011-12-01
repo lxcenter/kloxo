@@ -2648,7 +2648,10 @@ function download_source($file)
 
 function download_from_ftp($ftp_server, $ftp_user, $ftp_pass, $file, $localfile)
 {
-	$fn = ftp_connect($ftp_server);
+	// issue #39 - call new function inside linuxfslib.php
+//	$fn = ftp_connect(ftp_server);
+	$fn = lxftp_connect(ftp_server);
+	
 	$login = ftp_login($fn, $ftp_user, $ftp_pass);
 	if (!$login) {
 		throw new lxException('could_not_connect_to_ftp_server', 'download_ftp_f', $ftp_server);
@@ -5300,7 +5303,7 @@ function changeMailSoftlimit()
 {
 	log_cleanup("Changing softlimit for incoming/receive mailserver");
 	
-	$list = array("imap4", "imap4-ssl", "pop3", "pop3-ssl");
+	$list = array("imap4", "imap4-ssl", "pop3", "pop3-ssl", "smtp");
 
 	$path = "/var/qmail/supervise";
 	
@@ -5310,7 +5313,13 @@ function changeMailSoftlimit()
 		if (file_exists($file)) {
 			system("svc -d {$path}/{$l} {$path}/{$l}/log > /dev/null 2>&1");
 			$content = file_get_contents($file);
+			// for value before 6.1.7
 			$content = str_replace("9000000", "18000000", $content);
+			// for value 6.1.7-6.1.9
+			$content = str_replace("18000000", "40000000", $content);			
+			// Also for smtp -- http://forum.lxcenter.org/index.php?t=msg&th=17382
+			$content = str_replace("12000000", "40000000", $content);
+			$content = str_replace("20000000", "80000000", $content);
 			lfile_put_contents($file, $content);
 			system("svc -u {$path}/{$l} {$path}/{$l}/log > /dev/null 2>&1");
 		}
@@ -5373,7 +5382,7 @@ function setInitialApacheConfig()
 
 	$path = "/home/apache/conf/defaults";
 
-	$list = array("ssl.conf", "_default.conf", "disable.conf", "cp_config.conf", "mimetype.conf", "stats.conf");
+	$list = array("__ssl.conf", "_default.conf", "disable.conf", "cp_config.conf", "mimetype.conf", "stats.conf");
 
 	foreach($list as $k => $l) {
 		if (!lxfile_real("{$path}/{$l}")) {
@@ -5443,7 +5452,7 @@ function setInitialLighttpdConfig()
 
 	$path = "/home/lighttpd/conf/defaults";
 
-	$list = array("ssl.conf", "_default.conf", "disable.conf", "cp_config.conf", "mimetype.conf", "stats.conf");
+	$list = array("__ssl.conf", "_default.conf", "disable.conf", "cp_config.conf", "mimetype.conf", "stats.conf");
 
 	foreach($list as $k => $l) {
 		if (!lxfile_real("{$path}/{$l}")) {
