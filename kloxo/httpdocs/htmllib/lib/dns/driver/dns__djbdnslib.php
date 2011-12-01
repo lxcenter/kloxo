@@ -38,12 +38,14 @@ function createConfFile()
 
 function syncAddFile($domainname)
 {
-	global $gbl, $sgbl, $login, $ghtml; 
+	global $gbl, $sgbl, $login, $ghtml;
 
 
 	$nameduser = "tinydns";
 	$fdata = null;
 
+	// #772 - Add TTL Support
+	$ttl=$this->main->ttl;
 
 	$dnsrec = $this->main->dns_record_a;
 	$arec = null;
@@ -67,8 +69,8 @@ function syncAddFile($domainname)
 		$nameserver = $this->main->soanameserver;
 	}
 
-	$dnsdata .= "Z{$domainname}:$nameserver:{$this->main->__var_email}:{$this->main->__var_ddate}\n";
-	$dnsdata .= ".{$domainname}::$nameserver\n";
+	$dnsdata .= "Z{$domainname}:$nameserver:{$this->main->__var_email}:{$this->main->__var_ddate}:::::$ttl\n";
+	$dnsdata .= ".{$domainname}::$nameserver:$ttl\n";
 
 
 	$starvalue = null;
@@ -82,13 +84,13 @@ function syncAddFile($domainname)
 
 			case "ns":
 				if ($o->param !== $nameserver) {
-					$fdata .= "&{$domainname}::$o->param\n";
+					$fdata .= "&{$domainname}::$o->param:$ttl\n";
 				}
 				break;
 
 			case "mx":
 				$v = $o->priority;
-				$tmp= "@$domainname::{$o->param}:$v\n";
+				$tmp= "@$domainname::{$o->param}:$v:$ttl\n";
 				$fdata .= $tmp;
 				break;
 
@@ -98,7 +100,7 @@ function syncAddFile($domainname)
 				$key = $o->hostname;
 				$value = $o->param;
 				if ($key === '*') {
-					$starvalue = "+*.$domainname:$value";
+					$starvalue = "+*.$domainname:$value:$ttl";
 					break;
 				}
 
@@ -122,11 +124,11 @@ function syncAddFile($domainname)
 					$rvalue = $arecord[$value];
 
 					if ($key === '*') {
-						$starvalue = "+*.$domainname:$rvalue\n";
+						$starvalue = "+*.$domainname:$rvalue:$ttl\n";
 						break;
 					}
 					$key .= ".$domainname";
-					$fdata .= "+$key:$rvalue\n" ;
+					$fdata .= "+$key:$rvalue:$ttl\n" ;
 					break;
 				}
 
@@ -138,12 +140,12 @@ function syncAddFile($domainname)
 
 
 				if ($key === '*') {
-					$starvalue = "C*.$domainname:$value\n";
+					$starvalue = "C*.$domainname:$value:$ttl\n";
 					break;
 				}
 
 				$key .= ".{$domainname}";
-				$fdata .= "C$key:$value\n" ;
+				$fdata .= "C$key:$value:$ttl\n" ;
 				break;
 
 			case "fcname":
@@ -158,13 +160,13 @@ function syncAddFile($domainname)
 				}
 
 				$key .= ".{$domainname}";
-				$fdata .= "C$key:$value\n" ;
+				$fdata .= "C$key:$value:$ttl\n" ;
 				break;
 
 			case "txt":
 				$key = $o->hostname;
 				$value = $o->param;
-				if($o->param === null) continue;	
+				if($o->param === null) continue;
 
 				if ($key !== "__base__") {
 					$key = "$key.$domainname";
@@ -175,7 +177,7 @@ function syncAddFile($domainname)
 				$value = str_replace("<%domain>", $domainname, $value);
 				$value = str_replace(":", "\\072", $value);
 
-				$tmp= "'$key:$value\n" ;
+				$tmp= "'$key:$value:$ttl\n" ;
 				$fdata .= $tmp;
 				break;
 		}
@@ -191,9 +193,9 @@ function syncAddFile($domainname)
 function syncCreateConf()
 {
 
-	global $gbl, $sgbl, $login, $ghtml; 
+	global $gbl, $sgbl, $login, $ghtml;
 
-	
+
 //	$host = `hostname`;
 	$dlistv = "__var_domainlist_{$this->main->__var_syncserver}";
 	$result = $this->main->$dlistv;
@@ -269,7 +271,7 @@ function dbactionUpdate($subaction)
 
 function dbactionDelete()
 {
-	global $gbl, $sgbl, $login, $ghtml; 
+	global $gbl, $sgbl, $login, $ghtml;
 
 	$dnsfile = "/var/dnscache/root/servers/{$this->main->nname}" ;
 	$tinyfile = "/var/tinydns/root/kloxo/{$this->main->nname}.data";
