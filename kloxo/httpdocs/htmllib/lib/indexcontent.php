@@ -77,7 +77,7 @@ elseif ($cgi_forgotpwd == 1) {
 	<div class="login">
 		<div class="login-form">
 			<div align="center"><font name=Verdana size=5 color=red ><b> Forgot Password </b></font></div>
-			<br>
+			<br />
 			<form name="sendmail" action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
 				<div class="form-block">
 					<div class="inputlabel">Username</div>
@@ -87,16 +87,21 @@ elseif ($cgi_forgotpwd == 1) {
 					<br />	  	
 					<div align="left"><input type="submit" class="button" name="forgot" value="Send" /></div>
 				</div>	
-				<div class="login-text">
-					<div class="ctr"><img src="/img/login/icon1.gif" width="64" height="64" alt="security" /></div>
-					<p>Welcome to <?php echo  $sgbl->__var_program_name; ?></p>
-					<p>Use a valid username and email-id to get password.</p>
-					<br />
-					<a class=forgotpwd href="javascript:history.go(-1);"><font color="black"><u>Back to login</u></a> 
-					<input type="hidden" name="frm_forgotpwd" value="2" />  
 			</form>
-			<script> document.sendmail.frm_clientname.focus(); </script>
 		</div>
+		<div class="login-text">
+			<div class="ctr"><img src="/img/login/icon1.gif" width="64" height="64" alt="security" /></div>
+			<p>Welcome to <?php echo  $sgbl->__var_program_name; ?></p>
+			<p>Use a valid username and email-id to get password.</p>
+			<br />
+			<a class=forgotpwd href="javascript:history.go(-1);"><font color="black"><u>Back to login</u></a>
+			<form name="forgotpassword" method="post" action="/login/">
+				<input type="hidden" name="frm_forgotpwd" value="2" />
+			</form>
+		</div>
+
+		<script> document.sendmail.frm_clientname.focus(); </script>
+
 		<div class="clr"></div>
 	</div>
 </div>
