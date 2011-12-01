@@ -5373,7 +5373,7 @@ function setInitialApacheConfig()
 
 	$path = "/home/apache/conf/defaults";
 
-	$list = array("ssl.conf", "_default.conf", "disable.conf", "cp_config.conf", "mimetype.conf", "stats.conf");
+	$list = array("__ssl.conf", "_default.conf", "disable.conf", "cp_config.conf", "mimetype.conf", "stats.conf");
 
 	foreach($list as $k => $l) {
 		if (!lxfile_real("{$path}/{$l}")) {
@@ -5443,7 +5443,7 @@ function setInitialLighttpdConfig()
 
 	$path = "/home/lighttpd/conf/defaults";
 
-	$list = array("ssl.conf", "_default.conf", "disable.conf", "cp_config.conf", "mimetype.conf", "stats.conf");
+	$list = array("__ssl.conf", "_default.conf", "disable.conf", "cp_config.conf", "mimetype.conf", "stats.conf");
 
 	foreach($list as $k => $l) {
 		if (!lxfile_real("{$path}/{$l}")) {

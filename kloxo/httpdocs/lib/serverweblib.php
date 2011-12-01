@@ -34,10 +34,12 @@ function updateform($subaction, $param)
 //		return $vlist;
 		$vlist['mysql_convert'] = array('s', array('--- none ---', 'to-myisam', 'to-innodb'));
 		$this->setDefaultValue('mysql_convert', '--- none ---');
-		if ($gbl->is_master) {
+		// MR -- avoid this because isLocalhost, sgbl->is_this_master() and gbl->is_master not work!
+		// ToDo for next version
+	//	if (isLocalhost()) {
 			$vlist['fix_chownchmod'] = array('s', array('--- none ---', 'fix-ownership', 'fix-permissions', 'fix-ALL'));
 			$this->setDefaultValue('fix_chownchmod', '--- none ---');
-		}	
+	//	}	
 		$vlist['__m_message_pre'] = 'webserver_config';
 	}
 	else if ($driverapp === 'apache') {
@@ -49,10 +51,12 @@ function updateform($subaction, $param)
 		$this->setDefaultValue('apache_optimize', '--- none ---');
 		$vlist['mysql_convert'] = array('s', array('--- none ---', 'to-myisam', 'to-innodb'));
 		$this->setDefaultValue('mysql_convert', '--- none ---');
-		if ($gbl->is_master) {
+		// MR -- avoid this because isLocalhost, sgbl->is_this_master() and gbl->is_master not work!
+		// ToDo for next version
+	//	if (isLocalhost()) {
 			$vlist['fix_chownchmod'] = array('s', array('--- none ---', 'fix-ownership', 'fix-permissions', 'fix-ALL'));
 			$this->setDefaultValue('fix_chownchmod', '--- none ---');
-		}
+	//	}
 		$vlist['__m_message_pre'] = 'webserver_config';
 	}
 	return $vlist;

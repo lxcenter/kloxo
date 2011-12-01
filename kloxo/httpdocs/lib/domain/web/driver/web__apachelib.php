@@ -438,11 +438,12 @@ function createConffile()
 		$string  = null;
 		$string .= "<VirtualHost \\\n";
 		$string .= $this->createVirtualHostiplist("80");
-
-		if (!$this->getServerIp()) {
+/*
+	//	if (!$this->getServerIp()) {
+		if (!$this->getSslIpList()) {
 			$string .= $this->createVirtualHostiplist("443");
 		}
-
+*/
 		$string .= "\t\t>\n\n";
 		
 //		$string .= $this->syncToPort("80", $cust_log, $err_log);
@@ -523,7 +524,7 @@ function createConffile()
 
 				$exclusiveip = true;
 			}
-/*
+
 			else {
 				$string .= "\n#### ssl virtualhost start\n";
 				$string .= "<VirtualHost \\\n";
@@ -557,7 +558,7 @@ function createConffile()
 				$string .= $this->endtag();
 				$string .= "#### ssl virtualhost end\n";
 			}
-*/
+
 		//	$string .= "</IfModule>\n\n\n";
 
 			// --- for better appear
@@ -566,12 +567,12 @@ function createConffile()
 			$string = str_replace("||||", "\t", $string);				
 		}
 		
-		if ($exclusiveip) {
+	//	if ($exclusiveip) {
 			$string2 = "\n\n<IfModule mod_ssl.c>\n{$string}\n</IfModule>\n\n\n";
-		}
-		else {
-			$string2 = "\n\n";
-		}
+	//	}
+	//	else {
+	//		$string2 = "\n\n";
+	//	}
 
 		$string = $string1.$string2;
 
