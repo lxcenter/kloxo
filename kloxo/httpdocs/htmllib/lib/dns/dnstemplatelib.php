@@ -79,6 +79,18 @@ function isSelect()
 
 static function add($parent, $class, $param)
 {
+	// issue #755 - creation of secondary mx entry at the dns template gives error
+	// only alphanumeric, dot and minus accepted --> like domain name
+
+//	if (!preg_match("/^[^\W][0-9a-zA-Z-._]+[^\W]$/", $param['nname'])) {
+	if (!preg_match("/^[^\W][0-9a-zA-Z-.]+[^\W]$/", $param['nname'])) {
+			throw new lxexception('invalid_char_in_template_name', 'nname');
+	}
+
+	if (strlen($param['nname']) > 60) {
+		throw new lxException('template_name_over_char_limit', 'nname');
+	}
+
 	$param['nname'] = "{$param['nname']}.dnst";
 	$param['shared'] = 'on';
 	return $param;
