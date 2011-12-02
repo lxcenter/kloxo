@@ -79,7 +79,11 @@ function isSelect()
 
 static function add($parent, $class, $param)
 {
-	if (!preg_match("/^[^\W][0-9a-zA-Z-._]+[^\W]$/", $param['nname'])) {
+	// issue #755 - creation of secondary mx entry at the dns template gives error
+	// only alphanumeric, dot and minus accepted --> like domain name
+
+//	if (!preg_match("/^[^\W][0-9a-zA-Z-._]+[^\W]$/", $param['nname'])) {
+	if (!preg_match("/^[^\W][0-9a-zA-Z-.]+[^\W]$/", $param['nname'])) {
 			throw new lxexception('invalid_char_in_template_name', 'nname');
 	}
 
