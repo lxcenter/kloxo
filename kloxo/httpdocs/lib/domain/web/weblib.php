@@ -775,14 +775,16 @@ function createDir()
 */
 	// Protection for webstats.
 
+/*
 	$new_user_dir = false;
 	lxfile_mkdir($user_home);
+
 	if ((count(lscandir_without_dot($user_home)) == 0) && isset($this->__var_skelfile) && $this->__var_skelfile) {
 		$this->getAndUnzipSkeleton($this->__var_skelmachine, $this->__var_skelfile, "$user_home/");
 		$new_user_dir = true;
 	}
 	lxfile_mkdir("$web_home/$domname/webstats");
-
+*/
 	$wsstring = "Stats not yet generated\n";
 
 	lfile_put_contents("$web_home/$domname/webstats/index.html", $wsstring);
@@ -864,6 +866,9 @@ function createDir()
 	print("chown  :{$this->username} , $web_home/{$this->nname}\n");
 	exit;
 */
+	// MR -- make guarantee the last process!
+	// mod_php still possible not work (ftp issue) for tranfer skeleton.zip from master to slave
+	$this->getAndUnzipSkeleton($this->__var_skelmachine, $this->__var_skelfile, "$user_home/");
 
 	dprint("end\n");
 }
