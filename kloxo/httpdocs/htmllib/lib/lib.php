@@ -5470,9 +5470,9 @@ function setInitialPureftpConfig()
 	log_cleanup("Initialize PureFtp service");
 	log_cleanup("- Initialize process");
 
-	if (lxfile_exists("/etc/init.d/pure-ftpd")) {
-		log_cleanup("- Remove /etc/init.d/pure-ftpd service file");
-		@lxfile_rm("/etc/init.d/pure-ftpd");
+	if (lxfile_exists("/etc/xinetd.d/pure-ftpd")) {
+		log_cleanup("- Remove /etc/xinetd.d/pure-ftpd service file");
+		@lxfile_rm("/etc/xinetd.d/pure-ftpd");
 	}
 
 	if (!lxfile_exists("/etc/xinetd.d/pureftp")) {
