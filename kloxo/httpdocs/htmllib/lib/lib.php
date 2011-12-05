@@ -5644,26 +5644,28 @@ function setCheckPackages()
 function setInstallMailserver()
 {
 	
-	if (!lxfile_exists("/etc/xinetd.d/smtp_lxa")) {
+	// MR -- disable checking for existing files to make guarantee to use setting from kloxo
+	
+//	if (!lxfile_exists("/etc/xinetd.d/smtp_lxa")) {
 		log_cleanup("- Install xinetd smtp_lxa SMTP TCP Wrapper");
 		lxfile_cp("../file/xinetd.smtp_lxa", "/etc/xinetd.d/smtp_lxa");
-	}
+//	}
 
-	if (!lxfile_exists("/etc/init.d/qmail")) {
+//	if (!lxfile_exists("/etc/init.d/qmail")) {
 		log_cleanup("- Install qmail service");
 		lxfile_cp("../file/qmail.init", "/etc/init.d/qmail");
 		lxfile_unix_chmod("/etc/init.d/qmail", "0755");
-	}
+//	}
 
-	if (!lxfile_exists("/etc/lxrestricted")) {
+//	if (!lxfile_exists("/etc/lxrestricted")) {
 		log_cleanup("- Install /etc/lxrestricted file (lxjailshell commands restrictions)");
 		lxfile_cp("../file/lxrestricted", "/etc/lxrestricted");
-	}
+//	}
 
-	if (!lxfile_exists("/etc/sysconfig/spamassassin")) {
+//	if (!lxfile_exists("/etc/sysconfig/spamassassin")) {
 		log_cleanup("- Install /etc/sysconfig/spamassassin");
 		lxfile_cp("../file/sysconfig_spamassassin", "/etc/sysconfig/spamassassin");
-	}
+//	}
 
 	$name = trim(lfile_get_contents("/var/qmail/control/me"));
 	log_cleanup("- Install qmail defaultdomain and defaulthost ($name)");
@@ -5672,14 +5674,15 @@ function setInstallMailserver()
 	log_cleanup("- Install qmail SMTP Greeting ($name - Welcome to Qmail)");
 	lfile_put_contents("/var/qmail/control/smtpgreeting", "$name - Welcome to Qmail");
 
-	if (!lxfile_exists("/usr/bin/rblsmtpd")) {
+//	if (!lxfile_exists("/usr/bin/rblsmtpd")) {
 		log_cleanup("- Initialize rblsmtpd binary");
 		lxshell_return("ln", "-s", "/usr/local/bin/rblsmtpd", "/usr/bin/");
-	}
-	if (!lxfile_exists("/usr/bin/tcpserver")) {
+//	}
+
+//	if (!lxfile_exists("/usr/bin/tcpserver")) {
 		log_cleanup("- Initialize tcpserver binary");
 		lxshell_return("ln", "-s", "/usr/local/bin/tcpserver", "/usr/bin/");
-	}
+//	}
 }
 
 function setInitialServer()
