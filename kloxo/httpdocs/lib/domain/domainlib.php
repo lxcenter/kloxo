@@ -698,7 +698,8 @@ function postAdd()
 
 	//--- for new user-skeleton (since 6.1.7)
 	if (!lxfile_exists($skelf)) {
-		$skelf = "__path_kloxo_httpd_root/" . "user-skeleton.zip";
+		// MR -- must using \- for zip name
+		$skelf = "__path_kloxo_httpd_root/" . "user\-skeleton.zip";
 	}
 
 	if (!lxfile_exists($skelf)) {

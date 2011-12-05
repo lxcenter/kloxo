@@ -5491,10 +5491,14 @@ function setInitialPureftpConfig()
 		lxfile_touch("/etc/pure-ftpd/pureftpd.passwd");
 		lxshell_return("pure-pw", "mkdb");
 	}
-	
-	log_cleanup("- Turn off pure-ftpd service");
-	system("chmod 666 /dev/null");
-	@ exec("chkconfig pure-ftpd off 2>/dev/null");
+
+	if (lxfile_exists("/etc/rc.d/init.d/pure-ftpd")) {
+		log_cleanup("- Turn off and remove pure-ftpd service");
+		system("chmod 666 /dev/null");
+		@ exec("chkconfig pure-ftpd off 2>/dev/null");
+		// MR --- chkconfig off not enough because can restart with 'service pure-ftpd start'
+		@lxfile_rm("/etc/rc.d/init.d/pure-ftpd");
+	}
 	
 	if (!lxfile_exists("/etc/pure-ftpd/pureftpd.passwd")) {
 		log_cleanup("- Initialize /etc/pure-ftpd/pureftpd.passwd password database");
