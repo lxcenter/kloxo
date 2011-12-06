@@ -5485,7 +5485,6 @@ function setInitialPureftpConfig()
 	
 	if (lxfile_exists("/etc/rc.d/init.d/pure-ftpd")) {
 		log_cleanup("- Turn off and remove pure-ftpd service");
-		system("chmod 666 /dev/null");
 		@ exec("chkconfig pure-ftpd off 2>/dev/null");
 		// MR --- chkconfig off not enough because can restart with 'service pure-ftpd start'
 		@lxfile_rm("/etc/rc.d/init.d/pure-ftpd");
@@ -5505,7 +5504,7 @@ function setInitialPureftpConfig()
 
 function setInitialPhpMyAdmin()
 {
-	// MR -- because no kloxo.pass no exist in slave so return
+	// MR -- kloxo.pass does not exist in slave
 	if (!lxfile_exists("/usr/local/lxlabs/kloxo/etc/conf/kloxo.pass")) { return; }
 
 	log_cleanup("Initialize phpMyAdmin configfile");
