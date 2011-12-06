@@ -1,10 +1,34 @@
 Changelog
 
-Kloxo 6.1.9 - 15-nov-2011
+Kloxo 6.1.10 - 07-dec-2011
+##################################
+Bug #330: Blocking user shouldn't block access to panel by default
+Bug #470: Disabling web hosting does not disable page
+Bug #684: email at the kloxo slave servers give database error
+Bug #725: webmail lost its SSL
+Bug #730: Slave auto upgraded / apache config broken
+Bug #731: Upgrading Kloxo caused /etc/lighttpd/conf directory to be removed !
+Bug #732: New lighttpd directory structure not working for more than 964 domains
+Bug #746: [WEBMAIL] No login with horde webmail!
+Bug #747: Slave at version 6.1.9?
+Bug #755: creation of secondary mx entry at the dns template gives error
+Bug #758: Master fails to connect to Slave after upgrade
+Bug #760: Exclusive IP leads to 403 Forbidden
+Bug #762: apache web domain on slave gives forbidden
+Bug #772: [TinyDNS] DNS TTL not added to zone files
+Bug #773: Horde failing to send mail in kloxo 6.1.7
+Bug #774: [beta] Forgot password page is corrupted
+Bug #775: Files listing on Pure-ftp
+Bug #779: Links from webmail landing page change to non-ssl
+Feature #750: kloxo default page even after doing domain to ip mapping
+Feature #753: install old kloxo version?
+Security #000: Don't use "rand" password on lxpopuser and generate a real random salt password
+
+Kloxo 6.1.9 - 15-nov-2011 - No Public Release
 ##################################
 Bug #000 Run cleanup after new versions
 
-Kloxo 6.1.8 - 14-nov-2011
+Kloxo 6.1.8 - 14-nov-2011 - No Public Release
 ##################################
 Bug #702: Error 'mailaccount_add_failed' when add email account
 ToDo #728: Modified Apache conf structure for handling 'exclusive ip' and ip/~client
