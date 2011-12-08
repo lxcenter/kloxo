@@ -1,7 +1,7 @@
 #!/bin/sh
-VERSION=6.1.5
+VERSION=6.2.0
 cd ../../
-find . -iname "*.php*" | egrep -v "other-thirdparty|.svn" | xargs xgettext --output ./httpdocs/l18n/new.pot --language=PHP
+find . -iname "*.php*" | egrep -v "other-thirdparty|.svn|thirdparty" | xargs xgettext --output ./httpdocs/l18n/new.pot --language=PHP
 
 cd httpdocs/l18n
 
@@ -20,8 +20,11 @@ cp new.pot kloxo.pot
 msgmerge -U ./en_US/LC_MESSAGES/kloxo.po kloxo.pot
 msgmerge -U ./es_ES/LC_MESSAGES/kloxo.po kloxo.pot
 msgmerge -U ./nl_NL/LC_MESSAGES/kloxo.po kloxo.pot
+msgmerge -U ./fr_FR/LC_MESSAGES/kloxo.po kloxo.pot
+
 
 msgfmt ./en_US/LC_MESSAGES/kloxo.po -o ./en_US/LC_MESSAGES/kloxo.mo
 msgfmt ./es_ES/LC_MESSAGES/kloxo.po -o ./es_ES/LC_MESSAGES/kloxo.mo
 msgfmt ./nl_NL/LC_MESSAGES/kloxo.po -o ./nl_NL/LC_MESSAGES/kloxo.mo
+msgfmt ./fr_FR/LC_MESSAGES/kloxo.po -o ./fr_FR/LC_MESSAGES/kloxo.mo
 

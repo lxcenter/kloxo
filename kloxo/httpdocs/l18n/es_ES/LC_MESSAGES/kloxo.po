@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Kloxo\n"
 "Report-Msgid-Bugs-To: LxCenter <contact@lxcenter.org>\n"
-"POT-Creation-Date: 2011-05-11 05:09+0200\n"
+"POT-Creation-Date: 2011-12-09 00:00+0100\n"
 "PO-Revision-Date: \n"
 "Last-Translator: Ángel Guzmán Maeso <shakaran@gmail.com>\n"
 "Language-Team: LxCenter <angel.guzman@lxcenter.org>\n"
@@ -16,87 +16,115 @@ msgstr ""
 "X-Poedit-Basepath: /home/shakaran/Escritorio/l18n\n"
 "X-Poedit-SearchPath-0: .\n"
 
-#: httpdocs/htmllib/lib/indexcontent.php:14
+#: httpdocs/lib/programlib.php:71 httpdocs/lib/programlib.php:74
+msgid " OK\n"
+msgstr ""
+
+#: httpdocs/lib/programlib.php:72
+msgid "Remove downloaded InstallApp data zip file"
+msgstr ""
+
+#: httpdocs/htmllib/coredisplaylib.php:1765
+msgid "The system is locked by u"
+msgstr ""
+
+#: httpdocs/htmllib/coredisplaylib.php:1778
+msgid "This is a Slave server and is controlled by the Master server.\n"
+msgstr ""
+
+#: httpdocs/htmllib/coredisplaylib.php:1831
+msgid "Action not set.\n"
+msgstr ""
+
+#: httpdocs/htmllib/coredisplaylib.php:1838
+msgid "Action not supported.\n"
+msgstr ""
+
+#: httpdocs/htmllib/coredisplaylib.php:1958
+msgid "The resource you requested could not be retrieved..."
+msgstr ""
+
+#: httpdocs/htmllib/lib/indexcontent.php:38
 msgid "Slave Server"
 msgstr ""
 
-#: httpdocs/htmllib/lib/indexcontent.php:33
-#: httpdocs/htmllib/lib/indexcontent.php:52
+#: httpdocs/htmllib/lib/indexcontent.php:58
+#: httpdocs/htmllib/lib/indexcontent.php:73
 msgid "Login"
 msgstr "Acceso"
 
-#: httpdocs/htmllib/lib/indexcontent.php:40
-#: httpdocs/htmllib/lib/indexcontent.php:94
+#: httpdocs/htmllib/lib/indexcontent.php:64
+#: httpdocs/htmllib/lib/indexcontent.php:117
 msgid "Username"
 msgstr "Nombre de usuario"
 
-#: httpdocs/htmllib/lib/indexcontent.php:44
+#: httpdocs/htmllib/lib/indexcontent.php:67
 msgid "Password"
 msgstr "Contraseña"
 
-#: httpdocs/htmllib/lib/indexcontent.php:61
-#: httpdocs/htmllib/lib/indexcontent.php:103
-msgid "<p>Welcome to "
+#: httpdocs/htmllib/lib/indexcontent.php:79
+#: httpdocs/htmllib/lib/indexcontent.php:131
+#, fuzzy
+msgid "Welcome to"
 msgstr "<p>Bienvenido a "
 
-#: httpdocs/htmllib/lib/indexcontent.php:61
-msgid ""
-"</p><p>Use a valid username and password to gain access to the console.</p>"
+#: httpdocs/htmllib/lib/indexcontent.php:81
+#, fuzzy
+msgid "Use a valid username and password to gain access to the Control Panel."
 msgstr ""
 "</p><p>Usa un nombre válido de nombre de usuario y contraseña para conseguir "
 "acceso a la consola.</p>"
 
-#: httpdocs/htmllib/lib/indexcontent.php:64
+#: httpdocs/htmllib/lib/indexcontent.php:84
 msgid "Forgot Password?"
 msgstr "¿Contraseña olvidada?"
 
-#: httpdocs/htmllib/lib/indexcontent.php:88
+#: httpdocs/htmllib/lib/indexcontent.php:112
 #, fuzzy
 msgid "Forgot Password"
 msgstr "¿Contraseña olvidada?"
 
-#: httpdocs/htmllib/lib/indexcontent.php:96
-msgid "Email ID"
+#: httpdocs/htmllib/lib/indexcontent.php:120
+msgid "Email"
 msgstr ""
 
-#: httpdocs/htmllib/lib/indexcontent.php:98
+#: httpdocs/htmllib/lib/indexcontent.php:125
 msgid "Send"
 msgstr ""
 
-#: httpdocs/htmllib/lib/indexcontent.php:103
+#: httpdocs/htmllib/lib/indexcontent.php:133
 #, fuzzy
-msgid "</p><p>Use a valid username and email-id to get password.</p><br>"
+msgid "Use a valid username and email address to get a password."
 msgstr ""
 "</p><p>Usa un nombre válido de nombre de usuario y contraseña para conseguir "
 "acceso a la consola.</p>"
 
-#: httpdocs/htmllib/lib/indexcontent.php:105
-msgid "Back to login"
+#: httpdocs/htmllib/lib/indexcontent.php:136
+msgid "Back to Login"
 msgstr ""
 
-#: httpdocs/htmllib/lib/indexcontent.php:152
+#: httpdocs/htmllib/lib/indexcontent.php:187
 msgid "Password Reset Request"
 msgstr ""
 
-#: httpdocs/htmllib/lib/indexcontent.php:153
-msgid "\\n\\n\\nYour password has been reset to the one below for your"
+#: httpdocs/htmllib/lib/indexcontent.php:188
+msgid "Your password has been reset to the one below for your"
 msgstr ""
 
-#: httpdocs/htmllib/lib/indexcontent.php:153
-#, fuzzy
-msgid "login"
-msgstr "Acceso"
-
-#: httpdocs/htmllib/lib/indexcontent.php:154
-msgid "The Client IP address which requested the Reset:"
+#: httpdocs/htmllib/lib/indexcontent.php:188
+msgid "Control Panel login."
 msgstr ""
 
-#: httpdocs/htmllib/lib/indexcontent.php:155
+#: httpdocs/htmllib/lib/indexcontent.php:189
+msgid "The Client IP address which requested the reset:"
+msgstr ""
+
+#: httpdocs/htmllib/lib/indexcontent.php:190
 #, fuzzy
 msgid "Username:"
 msgstr "Nombre de usuario"
 
-#: httpdocs/htmllib/lib/indexcontent.php:156
+#: httpdocs/htmllib/lib/indexcontent.php:191
 #, fuzzy
 msgid "New Password:"
 msgstr "Contraseña"
@@ -108,6 +136,10 @@ msgstr ""
 #: httpdocs/htmllib/phplib/index.php:143
 msgid " from "
 msgstr ""
+
+#, fuzzy
+#~ msgid "login"
+#~ msgstr "Acceso"
 
 #~ msgid "This page"
 #~ msgstr "Esta página"
