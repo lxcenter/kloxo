@@ -337,7 +337,7 @@ static function createListNlist($parent, $view)
 	return $nlist;
 }
 
-function   createShowIlist ()
+function createShowIlist ()
 {
 	return array("nname");
 
@@ -431,6 +431,9 @@ function createShowRlist($subaction)
 	}
 	/// Rlist takes an array... 
 	$rlist[] = array('memory_usage', "Memory:Memory Usage (MB)",  $l['used_s_memory'], $l['priv_s_memory']);
+
+	$rlist[] = array('membuffers_usage', "Buffers:Memory Buffers Usage (MB)",  $l['used_s_membuffers'].' MB', '-');
+	$rlist[] = array('memcached_usage', "Cached:Memory Cached Usage (MB)",  $l['used_s_memcached'].' MB', '-');
 
 	if (isset($l['used_s_swap'])) {
 		$rlist[] = array('swap_usage', "Swap:Swap Usage (MB)",  $l['used_s_swap'], $l['priv_s_swap']);
