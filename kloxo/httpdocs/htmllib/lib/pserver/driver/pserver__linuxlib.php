@@ -159,13 +159,14 @@ static function pserverInfo()
 	
 	$unit = 1024;
 
+	$ret['priv_s_memory'] = $res['memtotal'] / $unit;
+	$ret['used_s_memory'] = ($res['memtotal'] - $res['memfree']) / $unit;
+	$ret['priv_s_swap'] = $res['swaptotal'] / $unit;
+	$ret['used_s_swap'] = ($res['swaptotal'] - $res['swapfree']) / $unit;
 
+	$ret['used_s_membuffers'] = $res['buffers'] / $unit;
 
-	$ret['priv_s_memory'] = $res['memtotal']/$unit;
-	$ret['used_s_memory'] = ($res['memtotal'] - $res['memfree'])/$unit;
-	$ret['priv_s_swap'] = $res['swaptotal']/$unit;
-	$ret['used_s_swap'] = ($res['swaptotal'] - $res['swapfree']) /$unit;
-
+	$ret['used_s_memcached'] = $res['cached'] / $unit;
 
 	// This is a hack to show the actual non-kloxo memory on openvz.
 	if ($sgbl->isKloxo()) {
