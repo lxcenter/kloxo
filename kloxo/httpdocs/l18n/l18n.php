@@ -1,4 +1,24 @@
 <?php
+/*
+ *  Kloxo, Hosting Control Panel
+ *
+ *  Copyright (C) 2000-2009	LxLabs
+ *  Copyright (C) 2009-2011	LxCenter
+ *
+ *  This program is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU Affero General Public License as
+ *  published by the Free Software Foundation, either version 3 of the
+ *  License, or (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU Affero General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Affero General Public License
+ *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 
 if (isset($_REQUEST['locale'])) {
 	switch ($_REQUEST['locale']) {
@@ -19,6 +39,12 @@ if (isset($_REQUEST['locale'])) {
 			break;
 		case 'nl_NL':
 			$locale = 'nl_NL';
+			break;
+		case 'fr':
+			$locale = 'fr_FR';
+			break;
+		case 'fr_FR':
+			$locale = 'fr_FR';
 			break;
 		default:
 			$locale = '';
@@ -55,6 +81,12 @@ elseif (empty($_SESSION['locale'])) {
 				break;
 			case 'nl-nl':
 				$_SESSION['locale'] = 'nl_NL';
+				break;
+			case 'fr':
+				$_SESSION['locale'] = 'fr_FR';
+				break;
+			case 'fr-fr':
+				$_SESSION['locale'] = 'fr_FR';
 				break;
 			default:
 				$_SESSION['locale'] = 'en_US';
