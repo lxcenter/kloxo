@@ -6424,20 +6424,26 @@ function findNextVersion($lastversion = null)
 
 	$upgrade = null;
 	$nlist = getVersionList($lastversion);
-	dprintr($nlist);
-	$k = 0;
+
 	print("Found version(s):");
 	foreach($nlist as $l) {
 		print(" $l");
-		if (version_cmp($thisversion, $l) === -1) {
-			$upgrade = $l;
-			break;
-		}
-		$k++;
 	}
 	print("\n");
+
+	if (version_cmp($thisversion, $l) === -1) {
+		$upgrade = $l;
+	}
+
+	if (version_cmp($thisversion, $l) === 1) {
+    	unset($upgrade);
+		print("Your version $thisversion is higher then $l\n\n");
+		print("Script aborted.\n\n");
+		exit;
+	}
+
 	if (!$upgrade) {
-		return 0;
+    	return 0;
 	}
 
 	print("Upgrading from $thisversion to $upgrade\n");
