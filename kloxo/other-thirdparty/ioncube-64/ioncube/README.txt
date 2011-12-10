@@ -47,4 +47,18 @@ the Loaders and the wizard script to on your server.
      http://yourdomain/loader-wizard.php
 
 
-Copyright (c) 2002-2010 ionCube Ltd.                  Last revised 12-Apr-2010
+XCACHE and XDEBUG
+-----------------
+
+If you wish to enable *both* XCache and Xdebug whilst running the Loader, please
+use XCache as an ordinary extension rather than a Zend engine extension. That
+is, install XCache using the following line in the ini file and with xcache.so
+in the extensions directory:  
+
+extension = xcache.so
+
+If you are only running XCache then it can be installed as a Zend engine 
+extension when the Loader is also installed.
+
+
+Copyright (c) 2002-2011 ionCube Ltd.                  Last revised 21-Jan-2011
