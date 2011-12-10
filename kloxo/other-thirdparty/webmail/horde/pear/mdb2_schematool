@@ -1,0 +1,5 @@
+#!/usr/bin/php
+<?php
+require_once 'MDB2/Schema/Tool.php';
+MDB2_Schema_Tool::run();
+?>

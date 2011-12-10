@@ -1,0 +1,1 @@
+$this->applications['ingo']['provides'][] = 'filter';

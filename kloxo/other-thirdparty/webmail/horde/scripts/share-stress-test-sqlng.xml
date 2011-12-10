@@ -1,0 +1,544 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<database>
+
+ <name><variable>name</variable></name>
+ <create>false</create>
+ <overwrite>false</overwrite>
+
+ <charset></charset>
+
+ <table>
+
+  <name>test_shares</name>
+
+  <declaration>
+
+   <field>
+    <name>share_id</name>
+    <type>integer</type>
+    <default>0</default>
+    <notnull>true</notnull>
+    <autoincrement>1</autoincrement>
+    <unsigned>true</unsigned>
+    <length>4</length>
+   </field>
+
+   <field>
+    <name>share_name</name>
+    <type>text</type>
+    <default></default>
+    <notnull>true</notnull>
+    <length>255</length>
+   </field>
+
+   <field>
+    <name>share_owner</name>
+    <type>text</type>
+    <default></default>
+    <notnull>false</notnull>
+    <length>255</length>
+   </field>
+
+   <field>
+    <name>share_parents</name>
+    <type>text</type>
+    <default></default>
+    <notnull>false</notnull>
+   </field>
+
+   <field>
+    <name>share_flags</name>
+    <type>integer</type>
+    <default>0</default>
+    <notnull>true</notnull>
+    <length>4</length>
+   </field>
+
+   <field>
+    <name>perm_creator_2</name>
+    <type>integer</type>
+    <default>0</default>
+    <notnull>true</notnull>
+    <length>1</length>
+   </field>
+
+   <field>
+    <name>perm_creator_4</name>
+    <type>integer</type>
+    <default>0</default>
+    <notnull>true</notnull>
+    <length>1</length>
+   </field>
+
+   <field>
+    <name>perm_creator_8</name>
+    <type>integer</type>
+    <default>0</default>
+    <notnull>true</notnull>
+    <length>1</length>
+   </field>
+
+   <field>
+    <name>perm_creator_16</name>
+    <type>integer</type>
+    <default>0</default>
+    <notnull>true</notnull>
+    <length>1</length>
+   </field>
+
+   <field>
+    <name>perm_default_2</name>
+    <type>integer</type>
+    <default>0</default>
+    <notnull>true</notnull>
+    <length>1</length>
+   </field>
+
+   <field>
+    <name>perm_default_4</name>
+    <type>integer</type>
+    <default>0</default>
+    <notnull>true</notnull>
+    <length>1</length>
+   </field>
+
+   <field>
+    <name>perm_default_8</name>
+    <type>integer</type>
+    <default>0</default>
+    <notnull>true</notnull>
+    <length>1</length>
+   </field>
+
+   <field>
+    <name>perm_default_16</name>
+    <type>integer</type>
+    <default>0</default>
+    <notnull>true</notnull>
+    <length>1</length>
+   </field>
+
+   <field>
+    <name>perm_guest_2</name>
+    <type>integer</type>
+    <default>0</default>
+    <notnull>true</notnull>
+    <length>1</length>
+   </field>
+
+   <field>
+    <name>perm_guest_4</name>
+    <type>integer</type>
+    <default>0</default>
+    <notnull>true</notnull>
+    <length>1</length>
+   </field>
+
+   <field>
+    <name>perm_guest_8</name>
+    <type>integer</type>
+    <default>0</default>
+    <notnull>true</notnull>
+    <length>1</length>
+   </field>
+
+   <field>
+    <name>perm_guest_16</name>
+    <type>integer</type>
+    <default>0</default>
+    <notnull>true</notnull>
+    <length>1</length>
+   </field>
+
+   <field>
+    <name>attribute_name</name>
+    <type>text</type>
+    <default></default>
+    <notnull>false</notnull>
+    <length>255</length>
+   </field>
+
+   <field>
+    <name>attribute_desc</name>
+    <type>text</type>
+    <default></default>
+    <notnull>false</notnull>
+    <length>255</length>
+   </field>
+
+   <index>
+    <name>index_test_shares_on_share_name</name>
+    <field>
+     <name>share_name</name>
+     <sorting>ascending</sorting>
+    </field>
+   </index>
+
+   <index>
+    <name>index_test_shares_on_share_owner</name>
+    <field>
+     <name>share_owner</name>
+     <sorting>ascending</sorting>
+    </field>
+   </index>
+
+   <index>
+    <name>index_test_shares_on_perm_creator_2</name>
+    <field>
+     <name>perm_creator_2</name>
+     <sorting>ascending</sorting>
+    </field>
+   </index>
+
+   <index>
+    <name>index_test_shares_on_perm_creator_4</name>
+    <field>
+     <name>perm_creator_4</name>
+     <sorting>ascending</sorting>
+    </field>
+   </index>
+
+   <index>
+    <name>index_test_shares_on_perm_creator_8</name>
+    <field>
+     <name>perm_creator_8</name>
+     <sorting>ascending</sorting>
+    </field>
+   </index>
+
+   <index>
+    <name>index_test_shares_on_perm_creator_16</name>
+    <field>
+     <name>perm_creator_16</name>
+     <sorting>ascending</sorting>
+    </field>
+   </index>
+
+   <index>
+    <name>index_test_shares_on_perm_default_2</name>
+    <field>
+     <name>perm_default_2</name>
+     <sorting>ascending</sorting>
+    </field>
+   </index>
+
+   <index>
+    <name>index_test_shares_on_perm_default_4</name>
+    <field>
+     <name>perm_default_4</name>
+     <sorting>ascending</sorting>
+    </field>
+   </index>
+
+   <index>
+    <name>index_test_shares_on_perm_default_8</name>
+    <field>
+     <name>perm_default_8</name>
+     <sorting>ascending</sorting>
+    </field>
+   </index>
+
+   <index>
+    <name>index_test_shares_on_perm_default_16</name>
+    <field>
+     <name>perm_default_16</name>
+     <sorting>ascending</sorting>
+    </field>
+   </index>
+
+   <index>
+    <name>index_test_shares_on_perm_guest_2</name>
+    <field>
+     <name>perm_guest_2</name>
+     <sorting>ascending</sorting>
+    </field>
+   </index>
+
+   <index>
+    <name>index_test_shares_on_perm_guest_4</name>
+    <field>
+     <name>perm_guest_4</name>
+     <sorting>ascending</sorting>
+    </field>
+   </index>
+
+   <index>
+    <name>index_test_shares_on_perm_guest_8</name>
+    <field>
+     <name>perm_guest_8</name>
+     <sorting>ascending</sorting>
+    </field>
+   </index>
+
+   <index>
+    <name>index_test_shares_on_perm_guest_16</name>
+    <field>
+     <name>perm_guest_16</name>
+     <sorting>ascending</sorting>
+    </field>
+   </index>
+
+   <index>
+    <name>test_shares_pKey</name>
+    <primary>true</primary>
+    <field>
+     <name>share_id</name>
+     <sorting>ascending</sorting>
+    </field>
+   </index>
+
+  </declaration>
+
+ </table>
+
+ <table>
+
+  <name>test_shares_groups</name>
+
+  <declaration>
+
+   <field>
+    <name>id</name>
+    <type>integer</type>
+    <default>0</default>
+    <notnull>true</notnull>
+    <autoincrement>1</autoincrement>
+    <unsigned>true</unsigned>
+    <length>4</length>
+   </field>
+
+   <field>
+    <name>share_id</name>
+    <type>integer</type>
+    <default></default>
+    <notnull>true</notnull>
+    <length>4</length>
+   </field>
+
+   <field>
+    <name>group_uid</name>
+    <type>text</type>
+    <default></default>
+    <notnull>true</notnull>
+    <length>255</length>
+   </field>
+
+   <field>
+    <name>perm_2</name>
+    <type>integer</type>
+    <default>0</default>
+    <notnull>true</notnull>
+    <length>1</length>
+   </field>
+
+   <field>
+    <name>perm_4</name>
+    <type>integer</type>
+    <default>0</default>
+    <notnull>true</notnull>
+    <length>1</length>
+   </field>
+
+   <field>
+    <name>perm_8</name>
+    <type>integer</type>
+    <default>0</default>
+    <notnull>true</notnull>
+    <length>1</length>
+   </field>
+
+   <field>
+    <name>perm_16</name>
+    <type>integer</type>
+    <default>0</default>
+    <notnull>true</notnull>
+    <length>1</length>
+   </field>
+
+   <index>
+    <name>index_test_shares_groups_on_share_id</name>
+    <field>
+     <name>share_id</name>
+     <sorting>ascending</sorting>
+    </field>
+   </index>
+
+   <index>
+    <name>index_test_shares_groups_on_group_uid</name>
+    <field>
+     <name>group_uid</name>
+     <sorting>ascending</sorting>
+    </field>
+   </index>
+
+   <index>
+    <name>index_test_shares_groups_on_perm_2</name>
+    <field>
+     <name>perm_2</name>
+     <sorting>ascending</sorting>
+    </field>
+   </index>
+
+   <index>
+    <name>index_test_shares_groups_on_perm_4</name>
+    <field>
+     <name>perm_4</name>
+     <sorting>ascending</sorting>
+    </field>
+   </index>
+
+   <index>
+    <name>index_test_shares_groups_on_perm_8</name>
+    <field>
+     <name>perm_8</name>
+     <sorting>ascending</sorting>
+    </field>
+   </index>
+
+   <index>
+    <name>index_test_shares_groups_on_perm_16</name>
+    <field>
+     <name>perm_16</name>
+     <sorting>ascending</sorting>
+    </field>
+   </index>
+
+   <index>
+    <name>test_shares_groups_pKey</name>
+    <primary>true</primary>
+    <field>
+     <name>id</name>
+     <sorting>ascending</sorting>
+    </field>
+   </index>
+
+  </declaration>
+
+ </table>
+
+ <table>
+
+  <name>test_shares_users</name>
+
+  <declaration>
+
+   <field>
+    <name>id</name>
+    <type>integer</type>
+    <default>0</default>
+    <notnull>true</notnull>
+    <autoincrement>1</autoincrement>
+    <unsigned>true</unsigned>
+    <length>4</length>
+   </field>
+
+   <field>
+    <name>share_id</name>
+    <type>integer</type>
+    <default></default>
+    <notnull>true</notnull>
+    <length>4</length>
+   </field>
+
+   <field>
+    <name>user_uid</name>
+    <type>text</type>
+    <default></default>
+    <notnull>false</notnull>
+    <length>255</length>
+   </field>
+
+   <field>
+    <name>perm_2</name>
+    <type>integer</type>
+    <default>0</default>
+    <notnull>true</notnull>
+    <length>1</length>
+   </field>
+
+   <field>
+    <name>perm_4</name>
+    <type>integer</type>
+    <default>0</default>
+    <notnull>true</notnull>
+    <length>1</length>
+   </field>
+
+   <field>
+    <name>perm_8</name>
+    <type>integer</type>
+    <default>0</default>
+    <notnull>true</notnull>
+    <length>1</length>
+   </field>
+
+   <field>
+    <name>perm_16</name>
+    <type>integer</type>
+    <default>0</default>
+    <notnull>true</notnull>
+    <length>1</length>
+   </field>
+
+   <index>
+    <name>index_test_shares_users_on_share_id</name>
+    <field>
+     <name>share_id</name>
+     <sorting>ascending</sorting>
+    </field>
+   </index>
+
+   <index>
+    <name>index_test_shares_users_on_user_uid</name>
+    <field>
+     <name>user_uid</name>
+     <sorting>ascending</sorting>
+    </field>
+   </index>
+
+   <index>
+    <name>index_test_shares_users_on_perm_2</name>
+    <field>
+     <name>perm_2</name>
+     <sorting>ascending</sorting>
+    </field>
+   </index>
+
+   <index>
+    <name>index_test_shares_users_on_perm_4</name>
+    <field>
+     <name>perm_4</name>
+     <sorting>ascending</sorting>
+    </field>
+   </index>
+
+   <index>
+    <name>index_test_shares_users_on_perm_8</name>
+    <field>
+     <name>perm_8</name>
+     <sorting>ascending</sorting>
+    </field>
+   </index>
+
+   <index>
+    <name>index_test_shares_users_on_perm_16</name>
+    <field>
+     <name>perm_16</name>
+     <sorting>ascending</sorting>
+    </field>
+   </index>
+
+   <index>
+    <name>test_shares_users_pKey</name>
+    <primary>true</primary>
+    <field>
+     <name>id</name>
+     <sorting>ascending</sorting>
+    </field>
+   </index>
+
+  </declaration>
+
+ </table>
+
+</database>
