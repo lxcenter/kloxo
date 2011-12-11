@@ -146,7 +146,7 @@ else
 	eval $SELINUX_CHECK
 	OUT=$?
 	if [ $OUT -eq "0" ] ; then
-		echo -en echo -en "SELinux disabled            " $C_NO
+		echo -en "SELinux disabled            " $C_NO
 		echo -e "\a\n$APP_NAME cannot be installed or executed with SELinux enabled. " \
 			"The installer can disable it, but a reboot will be required.\n"
 		echo -e "You will have to restart the installer again after reboot.\n"
