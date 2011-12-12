@@ -165,7 +165,8 @@ function updateform($subaction, $param)
 
 
 				$vlist['specialplay_b-skin_color'] = array('s', lscandir_without_dot(getreal("/img/skin/$progname/". $this->specialplay_b->skin_name)));
-				$vlist['specialplay_b-icon_name'] = array('s', array('collage'));
+				// DT #799 - Scan also the dir for new iconsets.
+				$vlist['specialplay_b-icon_name'] = array('s', lscandir_without_dot(getreal("/img/image")));
 				$vlist['specialplay_b-language'] =array('A', $this->getLanguage());
 				//$vlist['specialplay_b-login_page'] =array('s', $this->getParentO()->getLoginTo());
 				//$vlist['specialplay_b-split_frame'] = null;
