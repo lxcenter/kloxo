@@ -6380,6 +6380,18 @@ function updatecleanup()
 	installInstallApp();
 	setFreshClam();
 	changeMailSoftlimit();
+
+	// DT #574 - Remove FCKEditor if CKEditor is present
+	removeOldFCKEditor();
+}
+
+function removeOldFCKEditor()
+{
+	if (lxfile_exists("/usr/local/lxlabs/kloxo/httpdocs/htmllib/fckeditor/fckeditor.php")) {
+		log_cleanup("Removing old FCKEditor version");
+		lxfile_rm_rec("/usr/local/lxlabs/kloxo/httpdocs/htmllib/fckeditor");
+	}
+
 }
 
 function setPrepareKloxo()
