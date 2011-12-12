@@ -70,9 +70,6 @@ function os_fix_fstab()
 
 }
 
-
-
-
 function os_set_quota($username, $disk)
 {
 	if (!$username) {
@@ -104,21 +101,92 @@ function os_get_home_dir($user)
 
 function os_get_allips()
 {
-	$out = lxshell_output("ifconfig");
-	$list = explode("\n", $out);
-	foreach($list as $l) {
-		$l = trim($l);
-		if (!csa($l, "inet addr:")) {
-			continue;
+	// the trick for apache when behind adsl/modem
+
+	if (lxfile_exists("/home/ipalloc/webiplist")) {
+		// get ip from file
+		// format: ipv4, ipv6, device, port1, sslport1, port2, sslport2, webserver
+		// blank if no value
+		// minimum data ipv4
+		$out = file_get_contents("/home/ipalloc/webiplist");
+		$list = explode("\n", $out);
+		foreach($list as $l) {
+			$l = trim($l);
+			$l = str_replace("\"", "", $l);
+			$l = str_replace("'", "", $l);
+			$u = explode(",", $l);
+			$t =  trim($u[0]);
+			if (!$t) { continue; }
+			$iplist[] = $t;		
 		}
-		$ip = strfrom($l, "inet addr:");
-		$ip = strtilfirst($ip, " ");
-		if (csb($ip, "127.0")) {
-			continue;
-		}
-		$iplist[] = $ip;
 	}
+	else {
+	/*
+		// get ip from ifconfig
+		$out = lxshell_output("ifconfig");
+		$list = explode("\n", $out);
+		foreach($list as $l) {
+			$l = trim($l);
+			if (!csa($l, "inet addr:")) {
+				continue;
+			}
+			$ip = strfrom($l, "inet addr:");
+			$ip = strtilfirst($ip, " ");
+			if (csb($ip, "127.0")) {
+				continue;
+			}
+			$iplist[] = $ip;
+		}
+	*/
+	//	$iplist = getIPs_from_ifconfig(false);
+
+		$iplist = getIPs_from_ifcfg();
+	}
+
 	return $iplist;
+}
+
+// Bug #797 - Failed identify ip on apache
+// MR - taken from http://stackoverflow.com/questions/1814611/how-do-i-find-my-servers-ip-address-in-phpcli
+// and modified for except 127.0.0.1
+function getIPs_from_ifconfig($withV6 = true)
+{
+	preg_match_all('/inet'.($withV6 ? '6?' : '').' addr: ?([^ ]+)/', `ifconfig`, $ips);
+
+	$a = $ips[1];
+
+	foreach($a as $k => $v) {
+		if ($v == '127.0.0.1') {
+			unset($a[$k]);
+		}
+	}
+
+	return array_values($a);
+}
+
+// Bug #797 - Failed identify ip on apache
+// MR - mimic from getCurrentIps() on ipaddress__redhatlib.php
+function getIPs_from_ifcfg()
+{
+	$p = '/etc/sysconfig/network-scripts/';
+	$l = lscandir($p);
+
+	foreach($l as $t => $f) {
+		if (stristr($f, "ifcfg-")) {
+			if ($f === 'ifcfg-lo') { continue; }
+			$c = file_get_contents($p.$f);
+			$a = explode("\n", $c);
+			foreach($a as $k => $v) {
+				if (stristr($v, "IPADDR=")) {
+					$i = explode("=", $v);
+					$r[] = trim($i[1]);
+				}
+			}
+		}
+	}
+	
+	return $r;
+
 }
 
 function os_disable_user($username)
