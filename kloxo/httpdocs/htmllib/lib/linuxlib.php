@@ -168,6 +168,7 @@ function getIPs_from_ifconfig($withV6 = true)
 // MR - mimic from getCurrentIps() on ipaddress__redhatlib.php
 function getIPs_from_ifcfg()
 {
+/*
 	$p = '/etc/sysconfig/network-scripts/';
 	$l = lscandir($p);
 
@@ -186,7 +187,25 @@ function getIPs_from_ifcfg()
 	}
 	
 	return $r;
+*/
+	// instead mimic function, call function directly
 
+	global $gbl, $sgbl, $login, $ghtml;
+
+	$driverapp = $gbl->getSyncClass(null, null, 'ipaddress');
+//	print($driverapp);
+
+	if ($driverapp === 'redhat') {
+		$list = Ipaddress__Redhat::getCurrentIps();
+	}
+
+	foreach($list as $k => $v) {
+		if ($v['ipaddr'] === '127.0.0.1') { continue; };
+
+		$iplist[] = $v['ipaddr'];
+	}
+
+	return $iplist;
 }
 
 function os_disable_user($username)
