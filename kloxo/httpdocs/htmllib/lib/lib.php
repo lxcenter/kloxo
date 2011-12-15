@@ -1561,6 +1561,7 @@ function cp_fileserv($file)
 	return $res;
 }
 
+
 function do_zip_to_fileserv($type, $arg)
 {
 	lxfile_mkdir("__path_serverfile/tmp");
@@ -1569,7 +1570,7 @@ function do_zip_to_fileserv($type, $arg)
 	$basebase = basename($arg[0]);
 
 	$base = basename(ltempnam("__path_serverfile/tmp", $basebase));
-
+/*
 	// Create the pass file now itself so that it isn't unwittingly created again.
 
 	if ($type === 'zip') {
@@ -1595,10 +1596,29 @@ function do_zip_to_fileserv($type, $arg)
 	if ($ret) {
 		throw new lxException("could_not_zip_dir", '', $vd);
 	}
+*/
+
+	$vd = $arg[0];
+	$list = $arg[1];
+
+	if ($type === 'zip') {
+		dprint("zipping $vd: " . implode(" ", $list) . " \n");
+	} else if ($type === 'tgz') {
+		dprint("tarring $vd: " . implode(" ", $list) . " \n");
+	} else if ($type === 'tar') {
+		dprint("tarring $vd: " . implode(" ", $list) . " \n");
+	}
+
+	$ret = lxshell_zip_core($type, $vd, "__path_serverfile/tmp/$base.tmp", $list);
+
+	if ($ret) {
+		throw new lxException("could_not_zip_dir", '', $vd);
+	}
+
+	lrename("__path_serverfile/tmp/$base.tmp", "__path_serverfile/tmp/$base");
 
 	return "__path_serverfile/tmp/$base";
 }
-
 
 function fileserv_unlink_if_tmp($file)
 {
@@ -6241,10 +6261,61 @@ function checkIdenticalFile($file1, $file2)
 	return $ret;
 }
 
+// Issue #798 - Check for Core packages (rpm) when running upcp
+// MR - execute inside tmpupdatecleanup.php for upcp
+function setUpdateServices($list)
+{
+	if (!is_array($list)) {
+		$l = array($list);
+	}
+	else {
+		$l = $list;
+	}
+
+	log_cleanup('Updating Core packages');
+
+	foreach($l as $k => $v) {
+		//-- fortunely, when package no install use 'yum update' no effect
+		exec("yum update {$v} -y | grep -i 'no packages'", $out, $ret);
+
+		// --- not work with !$ret
+		if ($ret !== 0) {
+			log_cleanup("- New {$v} version installed");
+		}
+		else {
+			log_cleanup("- No {$v} update found");
+		}
+	}
+}
+
+// Issue #769 - Fixing services when updating Kloxo
+// MR -- TODO: automatic update found different version of config
+
+function setUpdateConfigWithVersionCheck($list, $servertype = null)
+{
+
+//	$fixpath = "sh /usr/local/lxlabs/kloxo/pscript";
+	$fixpath = "sh /script";
+
+	$el = implode("/", $list);
+
+	log_cleanup("Fix {$el} configs");	
+
+	$fixstr = "";
+
+	foreach($list as $key => $fa) {
+		$fixstr = "{$fixpath}/fix{$fa} --server=all";
+
+		if ($servertype !== 'slave') {
+			log_cleanup("- Fix {$fa} configs");
+			// use system instead exec becuase want appear on screen	
+			system($fixstr); 
+		}
+	}
+}
+
 function updatecleanup()
 {
-	global $gbl, $sgbl, $login, $ghtml;
-
 	setPrepareKloxo();
 
     // Fixes #303 and #304

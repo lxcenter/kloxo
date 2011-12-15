@@ -32,12 +32,12 @@ function updatecleanup_main()
 	if (lxfile_exists("/etc/yum.repos.d/lxlabs.repo")) {
 		log_cleanup("- Deleting old lxlabs yum repo");
 		lxfile_mv("/etc/yum.repos.d/lxlabs.repo","/etc/yum.repos.d/lxlabs.repo.lxsave");
-		system("rm -f /etc/yum.repos.d/lxlabs.repo");
+		exec("rm -f /etc/yum.repos.d/lxlabs.repo");
 		log_cleanup("- Removed lxlabs.repo");
 		log_cleanup("- Installing lxcenter.repo");
-		system("wget -O /etc/yum.repos.d/lxcenter.repo http://download.lxcenter.org/lxcenter.repo");
+		exec("wget -O /etc/yum.repos.d/lxcenter.repo http://download.lxcenter.org/lxcenter.repo");
 		log_cleanup("- Installing yum-protectbase plugin");
-		system("yum install -y -q yum-protectbase");
+		exec("yum install -y -q yum-protectbase");
 	}
 
 // Fix #388 - phpMyAdmin config.inc.php permission
@@ -89,49 +89,49 @@ function updatecleanup_main()
 	if ($ret !== 0) {
 		log_cleanup("Remove httpd-itk rpm package");
 		log_cleanup("- Remove httpd-itk");
-		system("rpm -e httpd-itk --nodeps >/dev/null 2>&1");
-		system("rpm -q httpd | grep -i 'not installed' >/dev/null 2>&1", $ret2);
+		exec("rpm -e httpd-itk --nodeps");
+		exec("rpm -q httpd | grep -i 'not installed'", $out2, $ret2);
 		if ($ret2 === 0) {
 			log_cleanup("- Reinstall httpd");
-			system("yum reinstall httpd -y >/dev/null 2>&1");
+			exec("yum reinstall httpd -y");
 		}
 	}
-	
-	// --- to make sure latest packages from lxcenter
-	system("yum update --disablerepo=* --enablerepo=lxcenter-updates -y >/dev/null 2>&1");
 
-	// --- importance for update from 6.1.6 or previous where change apache/lighttpd structure 
-	// or others for next version
-
-//	$fixpath = "sh /usr/local/lxlabs/kloxo/pscript";
-	$fixpath = "sh /script";
-
-	$fixapps = array("dns", "web", "php", "mail", "ftpuser");
-
-	$fixstr = "";
-
-	log_cleanup("Fix dns/web/php/mail/ftuser settings");	
-
-	foreach($fixapps as $key => $fa) {
-	//	$fixstr .= "{$fixpath}{$fa} ; ";
-		$fixstr = "{$fixpath}/fix{$fa} --server=all";
-
-		if ($opt['type'] === 'master') {
-			system($fixstr); 
-		}
-	}
-	
-	// --- mysql not start after kloxo slave install
+	// MR -- mysql not start after kloxo slave install
 	log_cleanup("Preparing MySQL service");
 
 	log_cleanup("- MySQL activated");
-	system("chkconfig mysqld on");
+	exec("chkconfig mysqld on");
 	
 	log_cleanup("- MySQL restarted");
-	system("service mysqld restart");
+	exec("service mysqld restart");
 
+	// MR -- importance for update from 6.1.6 or previous where change apache/lighttpd structure 
+	// or others for next version
 
-	log_cleanup("*** Executing Update (cleanup) - END ***");
+	$slist = array(
+		"httpd*", "lighttpd*", "bind*", "djbdns*", "pure-ftpd*", "php*",
+		"vpopmail", "courier-imap-toaster", "courier-authlib-toaster", 
+		"qmail", "safecat", "spamassassin", "bogofilter", "ezmlm-toaster", 
+		"autorespond-toaster", "clamav-toaster");
+	setUpdateServices($slist);
+	
+	// MR -- use this trick for qmail non-daemontools based
+	log_cleanup("Preparing some services again");
+	
+	log_cleanup("- courier-imap enabled and restart queue");
+	exec("chkconfig courier-imap on");
+	createRestartFile("courier-imap");
+	
+	log_cleanup("- qmail enabled and restart queue");
+	exec("chkconfig qmail on");
+	createRestartFile("qmail");
+
+	$fixapps = array("dns", "web", "php", "mail", "ftpuser", "vpop");
+	setUpdateConfigWithVersionCheck($fixapps, $opt['type']);
+
+	// --- for anticipate change xinetd listing
+	exec("service xinetd restart");
 }
 
 function cp_dbfile()
