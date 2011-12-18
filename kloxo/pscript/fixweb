@@ -3,12 +3,14 @@
 if [ "$1" == "--help" ] ; then
 	echo
 	echo " ------------------------------------------------------------------------"
-	echo "  format: sh $0 --server=<localhost/slaveid/all>"
+	echo "  format: sh $0 --server=<localhost/slaveid/all> [--client=]"
 	echo " ------------------------------------------------------------------------"
-	echo "   localhost = master (default)"
-	echo "   slaveid = slave id (ip or hostname)"
-	echo "   all = all servers (master and slave)"
-	echo
+	echo " --server="
+	echo "     localhost: master (default)"
+	echo "     slaveid: slave id (ip or hostname)"
+	echo "     all: all servers (master and slave)"
+	echo " --client="
+	echo "     optional and 'all' for default value"
 	exit;
 fi
 
