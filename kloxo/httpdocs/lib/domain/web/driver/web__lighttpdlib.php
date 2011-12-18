@@ -8,6 +8,8 @@ class web__lighttpd extends lxDriverClass {
 
 static function uninstallMe()
 {
+	global $gbl, $sgbl, $login, $ghtml; 
+
 	lxshell_return("service",  "lighttpd", "stop");
 	lxshell_return("rpm", "-e", "--nodeps", "lighttpd");
 	if (file_exists("/etc/init.d/lighttpd")) {
@@ -17,13 +19,13 @@ static function uninstallMe()
 
 static function installMe()
 {
+	global $gbl, $sgbl, $login, $ghtml; 
+
 	$ret = lxshell_return("yum", "-y", "install", "lighttpd", "lighttpd-fastcgi");
 	if ($ret) { throw new lxexception('install_lighttpd_failed', 'parent'); }
 	lxshell_return("chkconfig", "lighttpd", "on");
 
 	lxfile_mkdir("/etc/lighttpd/");
-
-//	lxfile_mkdir("/etc/lighttpd/conf/kloxo");
 
 	//-- old structure
 	lxfile_rm("/etc/lighttpd/conf/kloxo");
@@ -48,11 +50,6 @@ static function installMe()
 		lxfile_cp("/usr/local/lxlabs/kloxo/file/lighttpd/~lxcenter.conf", "/etc/lighttpd/conf.d/~lxcenter.conf");
 	}
 
-//	lxfile_cp("../file/lighttpd/conf/kloxo/kloxo.conf", "/etc/lighttpd/conf/kloxo/kloxo.conf");
-
-//	lxfile_cp("../file/lighttpd/conf/kloxo/webmail.conf", "/etc/lighttpd/conf/kloxo/webmail.conf");
-//	lxfile_cp("../file/lighttpd/conf/kloxo/webmail.conf", "/home/lighttpd/conf/defaults/webmail.conf");
-
 	lxfile_cp("../file/lighttpd/etc_init.d", "/etc/init.d/lighttpd");
 	lxfile_unix_chmod("/etc/init.d/lighttpd", "0755");
 	lxfile_unix_chmod("/etc/init.d/lighttpd", "0755");
@@ -63,31 +60,18 @@ static function installMe()
 	createRestartFile("lighttpd");
 }
 
-function updateIpConfFile()
-{
-/* --- no needed
-	$fdata = "\n";
-	$donelist = array();
-	foreach((array) $this->main->__var_domainipaddress as $ip => $dom) {
-		if (!lxfile_exists("/etc/lighttpd/conf/kloxo/lighttpd.$dom")) { continue; }
-		if ($dom === $this->main->nname && $this->main->isDeleted()) { continue; }
-		if (array_search_bool($dom, $donelist)) { continue; }
-		$donelist[] = $dom;
-		$fdata .= "include \"conf/kloxo/lighttpd.$dom\"\n\n";
-	}
-	lfile_put_contents("/etc/lighttpd/conf/kloxo/domainip.conf", $fdata);
---- */
-}
-
 function getRailsConf($app)
 {
+	global $gbl, $sgbl, $login, $ghtml;
 
 	if ($this->isRailsDocroot() && !$app->isOn('accessible_directly')) {
 		return '';
 	}
+
 	$appname = $app->appname;
 
 	$appurl = null;
+
 	if (!$app->isOn('accessible_directly')) {
 		$appurl = "/{$appname}";
 	}
@@ -97,14 +81,17 @@ function getRailsConf($app)
 	} else {
 		$proc = 1;
 	}
+
 	$basepath = "/home/{$this->main->customer_name}/ror/{$this->main->nname}/";
 	$uid = os_get_uid_from_user($this->main->username);
 	$gid = os_get_gid_from_user($this->main->username);
 
 	$string  = null;
+
 	if (!$app->isOn('accessible_directly')) {
 		$string .= "\$HTTP[\"url\"] =~ \"^/{$appname}\" {\n";
 	}
+
 	$string .= "\tserver.document-root = \"{$basepath}/{$appname}/public/\"\n";
 
 	if (!$app->isOn('accessible_directly')) {
@@ -122,13 +109,13 @@ function getRailsConf($app)
 	$string .= "\t\t\t\t\"MUID\" => \"{$uid}\",\n";
 	$string .= "\t\t\t\t\"GID\" => \"{$gid}\",\n";
 	$string .= "\t\t\t\t\"TARGET\" => \"{$basepath}/{$appname}/public/dispatch.fcgi\",\n";
-	//$string .= "\t\t\t\t\"TARGET\" => \"/usr/bin/ror/public/dispatch.fcgi\",";
 	$string .= "\t\t\t\t\"NON_RESIDENT\" => \"1\"\n";
 	$string .= "\t),\n";
 	$string .= "\t\"idle-timeout\" => 3,\n";
 	$string .= "\t\"strip-request-uri\" => \"{$appurl}/\"\n";
 	$string .= "\t))\n";
 	$string .= ")\n";
+
 	if (!$app->isOn('accessible_directly')) {
 		$string .= "}\n\n";
 	}
@@ -140,61 +127,26 @@ function updateMainConfFile()
 {
 	global $gbl, $sgbl, $login, $ghtml; 
 
-//	lxfile_mkdir("__path_lighty_path/conf/kloxo");
+	$init_file = "/home/lighttpd/conf/defaults/init.conf";
 
-//	$virtual_file = "$sgbl->__path_lighty_path/conf/kloxo/virtualhost.conf";
-//	$init_file = "$sgbl->__path_lighty_path/conf/kloxo/init.conf";
-	$virtual_file = "/home/lighttpd/conf/defaults/stats.conf";
-//	$init_file = "/home/lighttpd/conf/defaults/init.conf";
+	lfile_put_contents($init_file, '');
 
-	$vdomlist = $this->main->__var_vdomain_list; 
-	$iplist = $this->main->__var_ipaddress;
+	$stats_file = "/home/lighttpd/conf/defaults/stats.conf";
 
-	/// Start again....
-	$fdata = null;
+	lfile_put_contents($stats_file, '');
 
-	$vdomlist = merge_array_object_not_deleted($vdomlist, $this->main);
-
-	lfile_put_contents($virtual_file, $fdata);
-
-/*
-	foreach((array) $vdomlist as $dom) {
-		if (array_search_bool($dom['nname'], $this->main->__var_domainipaddress)) { continue; }
-//		$fdata .= "include \"conf/kloxo/lighttpd.{$dom['nname']}\"\n\n";
-		$fdata .= "include \"/home/lighttpd/conf/domains/{$dom['nname']}.conf\"\n\n";
+	if (file_exists("/etc/lighttpd/conf/kloxo")) {
+		// MR -- delete old structure
+		exec("rm -rf /etc/lighttpd/conf/kloxo");
 	}
-*/
-//	$fdata .= "### include_shell \"cat /home/lighttpd/conf/domains/*.conf\"\n\n";
-
-	//--- delete unlisted domains config - begin
-
-//	rename("/home/lighttpd/conf/webmails/~webmail.conf", "/home/lighttpd/conf/webmails/~webmail.conf.active");
-
-	foreach((array) $vdomlist as $dom) {
-		if (lxfile_exists("/home/lighttpd/conf/domains/{$dom['nname']}.conf")) {
-			rename("/home/lighttpd/conf/domains/{$dom['nname']}.conf", "/home/lighttpd/conf/domains/{$dom['nname']}.conf.active");
-			rename("/home/lighttpd/conf/redirects/{$dom['nname']}.conf", "/home/lighttpd/conf/redirects/{$dom['nname']}.conf.active");
-			rename("/home/lighttpd/conf/wildcards/{$dom['nname']}.conf", "/home/lighttpd/conf/wildcards/{$dom['nname']}.conf.active");
-		}
-	}
-
-	system("rm -rf /home/lighttpd/conf/domains/*.conf");
-	system("rm -rf /home/lighttpd/conf/redirects/*.conf");
-	system("rm -rf /home/lighttpd/conf/wildcards/*.conf");
-
-	system("rename .conf.active .conf /home/lighttpd/conf/domains/*.conf.active");
-	system("rename .conf.active .conf /home/lighttpd/conf/redirects/*.conf.active");
-	system("rename .conf.active .conf /home/lighttpd/conf/wildcards/*.conf.active");
-
-	//--- delete unlisted domains config - end
-
-//	$this->updateIpConfFile();
 }
 
 function enablePhp()
 {
 	global $gbl, $sgbl, $login, $ghtml; 
+
 	$string = null;
+
 	if (!$this->main->priv->isOn('php_flag'))  {
 		return null;
 	}
@@ -222,8 +174,10 @@ function enablePhp()
 	}
 
 	$phprc = null;
+
 	lxfile_unix_chown("/home/httpd/{$this->main->nname}", "{$this->main->username}:apache");
 	lxfile_unix_chmod("/home/httpd/{$this->main->nname}", "0775");
+
 	if (!lxfile_exists("/home/httpd/{$this->main->nname}/php.ini")) {
 		lxfile_cp("/etc/php.ini", "/home/httpd/{$this->main->nname}/php.ini");
 	}
@@ -240,7 +194,6 @@ function enablePhp()
 		$string .= "\tcgi.assign = ( \".php\" => \"/home/httpd/nobody.sh\" )\n\n";
 		return $string;
 	}
-
 
 	if ($this->main->priv->isOn('phpfcgi_flag')) {
 		$uid = os_get_uid_from_user($this->main->username);
@@ -280,7 +233,16 @@ function delDomain()
 		return;
 	}
 
-	$this->updateMainConfFile();
+	// MR -- don't need updateMainConfFile() for new structure but directly delete domain config file
+//	$this->updateMainConfFile();
+
+	$plist = array('domains', 'redirects', 'wildcards', 'exclusive');
+	$bpath = "/home/lighttpd/conf";
+
+	foreach($plist as $k => $v) {
+		lxfile_rm("{$bpath}/{$v}/{$this->main->nname}.conf");
+	}
+
 	$this->main->deleteDir();
 
 	self::createSSlConf($this->main->__var_ipssllist, $this->main->__var_domainipaddress);
@@ -288,17 +250,21 @@ function delDomain()
 
 function getServerIp()
 {
+	global $gbl, $sgbl, $login, $ghtml; 
+
 	foreach($this->main->__var_domainipaddress as $ip => $dom) {
 		if ($dom === $this->main->nname) {
 			return true;
 		}
 	}
+
 	return false;
 }
 
 function clearDomainIpAddress()
 {
 	$iplist = os_get_allips();
+
 	foreach($this->main->__var_domainipaddress as $ip => $dom) {
 		if (!array_search_bool($ip, $iplist)) {
 			unset($this->main->__var_domainipaddress[$ip]);
@@ -319,10 +285,6 @@ function createConffile()
 	$web_home   = $sgbl->__path_httpd_root ;
 	$domainname = $this->main->nname;
 	$log_path   = "{$web_home}/{$this->main->nname}/stats";
-//	$v_file     = "__path_lighty_path/conf/kloxo/lighttpd.{$this->main->nname}" ;
-//	$v_file     = "/home/lighttpd/conf/domains/{$this->main->nname}.conf" ;
-
-//	$aliasstring = $this->createServerAliasLine();
 
 	$v_file = "/home/lighttpd/conf/wildcards/{$domainname}.conf";
 	$string = "### No * (wildcards) for '{$domainname}' ###\n\n\n";
@@ -343,36 +305,11 @@ function createConffile()
 		$string = null;
 
 		$dirp = $this->main->__var_dirprotect;
-/*
-		if (0 && $this->getServerIp()) {
-			foreach($this->main->__var_domainipaddress as $ip => $dom) {
-				if ($this->main->nname !== $dom) { continue ; }
-				$string .= "\$SERVER[\"socket\"] == \"$ip:80\" {\n";
-				$string .= $this->syncToPort("80", "www");
-				$string .= $this->middlepart($domainname, $dirp); 
-				$string .= "}\n";
-			}
-		} else {
-*/
+
 		if ($c === 1) {
 			// issue 674 - wildcard and subdomain problem
 			// not include content of $this->createServerAliasLine() because make too long
 			// that mean overlapp declare
-		//	$string .= "\$HTTP[\"host\"] =~ \"{$domainname}\" {\n";
-		//	$string .= "\$HTTP[\"host\"] =~ \"^(?!(cp|webmail|default|disable).{$domainname})\" {\n";	
-		/*
-			// also include $this->createServerAliasLine() - thanks amit kumar mishra
-
-			$deflist = array('cp', 'webmail', 'default', 'disable');
-			$defstring = '';
-
-			foreach($deflist as $k => $front) {
-				$defstring .= "{$front}.{$domainname}|";
-			}
-
-			$domlist = str_replace("(", "({$defstring}", $this->createServerAliasLine());
-			$string .= "\$HTTP[\"host\"] =~ \"{$domlist}\" {\n";
-		*/
 			// REMARK -- near impossible for wildcards but still access to defaults page
 			// (cp/defaults/disable). So make a simple way.
 			$string .= "\$HTTP[\"host\"] =~ \"{$domainname}\" {\n";
@@ -405,26 +342,31 @@ function createConffile()
 					$string .= "}\n\n";
 				}
 			}
+
+			$exclusiveip = true;
+
 		}
 
-/*
-		// --- using Sqlite not work here, so make __var_mmaillist in weblib.php
-
-		$sq = new Sqlite(null, 'mmail');
-
-
-//		$res = $sq->getRowsWhere("nname = '{$domainname}'");
-
-		$res = $sq->rl_query("SELECT * WHERE nname = '{$domainname}'");
-
-		$string .= self::getCreateWebmail($res);
-*/
 		if ($c === 1) {
 			$v_file = "/home/lighttpd/conf/wildcards/{$this->main->nname}.conf";
 			lfile_put_contents($v_file, $string);
 		}
 		else {
-			$v_file = "/home/lighttpd/conf/domains/{$this->main->nname}.conf";
+//			$v_file = "/home/lighttpd/conf/domains/{$this->main->nname}.conf";
+
+			if ($exclusiveip) {
+				$v_file = "/home/lighttpd/conf/exclusive/{$domainname}.conf";
+
+				$v2_file = "/home/lighttpd/conf/domains/{$domainname}.conf";
+				lfile_put_contents($v2_file, "### Have exclusive ip for '{$domainname}' ###\n\n\n");
+			}
+			else {
+				$v_file = "/home/lighttpd/conf/domains/{$domainname}.conf";
+
+				$v2_file = "/home/lighttpd/conf/exclusive/{$domainname}.conf";
+				lfile_put_contents($v2_file, "### No exclusive ip for '{$domainname}' ###\n\n\n");
+			}
+
 			$mmaillist = $this->main->__var_mmaillist;
 
 			foreach($mmaillist as $m) {
@@ -439,8 +381,6 @@ function createConffile()
 				$list = array('nname' => $domainname, 'parent_clname' => 'domain-'.$domainname, 'webmailprog' => '', 'webmail_url' => '', 'remotelocalflag' => 'local');
 			}
 
-		//	$string .= self::getCreateWebmail(array($list));
-
 			if($this->main->isOn('status')) {
 				$string .= self::getCreateWebmail(array($list));
 			}
@@ -451,27 +391,11 @@ function createConffile()
 			lfile_put_contents($v_file, $string);
 
 			// --- info for exclusive ip
-			$string = "### No declare 'exclusive ip' config for '{$domainname}' ###\n\n\n";
-			$v_file = "/home/lighttpd/conf/exclusive/{$domainname}.conf";
+//			$string = "### No declare 'exclusive ip' config for '{$domainname}' ###\n\n\n";
+//			$v_file = "/home/lighttpd/conf/exclusive/{$domainname}.conf";
 
-			lfile_put_contents($v_file, $string);		
+//			lfile_put_contents($v_file, $string);		
 
-/*
-			$tmp = lx_tmp_file("light.{$this->main->nname}");
-			lfile_put_contents($tmp, $string);
-
-			$res = lxshell_return("lighttpd", "-t", "-f", $tmp);
-
-			if ($res && $sgbl->isDebug()) {
-				lxfile_cp($tmp, "/home/root/lighttpd_last_error");
-			}
-
-			lunlink($tmp);
-
-			if ($res) {
-				throw new lxException("lighttpd_configuration_check_failed", '', "{$this->main->nname}: $global_shell_error");
-			}
-*/
 			$this->setAddon();
 		}
 	}
@@ -479,14 +403,14 @@ function createConffile()
 	createRestartFile("lighttpd");
 }
 
-// function getAddon()
 function setAddon()
 {
+	global $gbl, $sgbl, $login, $ghtml; 
+
 	$string = null;
 
 	$vaddonlist = $this->main->__var_addonlist;
 
-//	foreach((array) $this->main->__var_addonlist as $v) {
 	foreach((array) $vaddonlist as $v) {
 		if ($v->ttype === 'redirect') {
 			$string .= "\$HTTP[\"host\"] =~ \"^(www.)?{$v->nname}\" {\n\n";
@@ -502,8 +426,6 @@ function setAddon()
 
 		$list = array('nname' => $v->nname, 'parent_clname' => $v->parent_clname, 'webmailprog' => '', 'webmail_url' => 'webmail.'.$domto, 'remotelocalflag' => $rlflag);
 
-//		$string .= self::getCreateWebmail(array($list));
-
 		if($this->main->isOn('status')) {
 			$string .= self::getCreateWebmail(array($list));
 		}
@@ -518,8 +440,6 @@ function setAddon()
 		$string .= "}\n\n";
 	}
 
-//	return $string;
-
 	if (!$string) {
 		$string = "### No domain(s) redirect to '{$this->main->nname}' ###\n\n";
 	}
@@ -532,14 +452,20 @@ function setAddon()
 
 function getBlockIP()
 {
+	global $gbl, $sgbl, $login, $ghtml; 
+
 	$t = trimSpaces($this->main->text_blockip);
 	$t = trim($t);
+
 	if (!$t) { return; }
+
 	$t = str_replace(".*", "", $t);
 	$t = str_replace(" ", "|", $t);
+
 	$string  = "\$HTTP[\"remoteip\"] =~ \"{$t}\" {\n";
 	$string .= "url.access-deny = ( \"\" )\n";
 	$string .= "}\n";
+
 	return $string;
 }
 
@@ -550,16 +476,11 @@ static function createSSlConf($iplist, $domainiplist)
 	$string = null;
 	$alliplist = os_get_allips();
 
-//	dprintr($alliplist);
-//	dprintr($iplist);
-//	dprintr($domainiplist);
-
 	foreach($iplist as $ip) {
 
 		if (!array_search_bool($ip['ipaddr'], $alliplist)) { continue; }
 
 		// issue related to delete 'exclusive ip/domain'
-//		if (isset($domainiplist[$ip['ipaddr']]) && trim($domainiplist[$ip['ipaddr']])) { continue; }
 		if (isset($domainiplist[$ip['ipaddr']])) {
 			$v = $domainiplist[$ip['ipaddr']];
 			if (($v !== '') && ($v !== '--Disabled--')) {
@@ -581,10 +502,7 @@ static function createSSlConf($iplist, $domainiplist)
 			$k = lfile_get_contents($keyfile);
 			lfile_put_contents($pemfile, "{$c}\n{$k}");
 		}
-/*
-		$string .= "\$SERVER[\"socket\"] == \"{$ip['ipaddr']}:80\" {\n";
-		$string .= "	}\n";
-*/
+
 		$string .= "\$SERVER[\"socket\"] == \"{$ip['ipaddr']}:443\" {\n\n";
 		$string .= "\tssl.engine = \"enable\"\n";
 		$string .= "\tssl.pemfile = \"$pemfile\"\n";
@@ -594,8 +512,6 @@ static function createSSlConf($iplist, $domainiplist)
 
 	// issue #725, #760 - ssl.conf must be the first file in listing
 	// so change name from ssl.conf to __ssl.conf
-
-//	$sslfile = "__path_lighty_path/conf/kloxo/ssl.conf";
 
 	system("rm -rf /home/lighttpd/conf/defaults/ssl.conf");
 	$sslfile = "/home/lighttpd/conf/defaults/__ssl.conf";
@@ -636,7 +552,6 @@ function createShowAlist(&$alist, $subaction = null)
 	global $gbl, $sgbl, $login, $ghtml; 
 
 	$gen = $login->getObject('general')->generalmisc_b;
-	//$alist[] = "a=show&k[class]=allinstallapp&k[nname]=installapp";
 
 	return $alist;
 }
@@ -673,11 +588,7 @@ function middlepart($domain, $dirp) {
 	}
 
 	$string .= $this->enablePhp();
-/*
-	if (isset($this->main->webmisc_b) && $this->main->webmisc_b->isOn('execcgi')) {
-		$string .= "\tcgi.assign = ( \".cgi\" => \"/home/httpd/{$this->main->nname}/shsuexec.sh\" )\n";
-	}
-*/
+
 	if (isset($this->main->webmisc_b)) {
 		if ($this->main->webmisc_b->isOn('dirindex')) {
 			$string .= "\tdir-listing.activate = \"enable\"\n";
@@ -687,6 +598,7 @@ function middlepart($domain, $dirp) {
 	if ($this->main->stats_password) {
 		$string .= $this->getDirprotectCore("stats", "/stats", "__stats");
 	}
+
 	$string .= $this->getDirIndexCore("/stats");
 	$string .= $this->getDirprotect();
 
@@ -695,7 +607,10 @@ function middlepart($domain, $dirp) {
 
 function getDirIndexCore($dir)
 {
+	global $gbl, $sgbl, $login, $ghtml; 
+
 	$string = null;
+
 	$dir = remove_extra_slash("/{$dir}");
 	$string .= "\t\$HTTP[\"url\"] =~ \"^{$dir}\" {\n";
 	$string .= "\t\tdir-listing.activate = \"enable\"\n\t}\n\n";
@@ -722,10 +637,14 @@ function getDirprotect()
 function getDirprotectCore($authname, $path, $file)
 {
 	global $gbl, $sgbl, $login, $ghtml; 
+
 	$path = remove_extra_slash("/{$path}");
 	$end = null;
+
 	if ($path !== "/") { $end = "[/$]"; }
+
 	$string = null;
+
 	$string .= "\$HTTP[\"url\"] =~ \"^{$path}{$end}\" {\n";
 	$string .= "auth.backend = \"htpasswd\"\n";
 	$string .= "auth.backend.htpasswd.userfile = \"{$sgbl->__path_httpd_root}/{$this->main->nname}/__dirprotect/{$file}\"\n";
@@ -738,20 +657,12 @@ function getDirprotectCore($authname, $path, $file)
 	return $string;
 }
 
-// This is work for lighttpd?. Something like for Apache!
-function getSuexecString($username)
-{
-	$string = null;
-	$string .= "<IfModule suexec.c>\n";
-	$string .= "SuexecUserGroup {$this->main->username} {$this->main->username}\n";
-	$string .= "</IfModule>\n";
-
-	return $string;
-}
-
 function isRailsDocroot()
 {
+	global $gbl, $sgbl, $login, $ghtml;
+
 	$app = $this->main->__var_railspp;
+
 	foreach((array)$app as $k) {
 		if ($k->isOn('accessible_directly')) {
 			return true;
@@ -764,9 +675,9 @@ function isRailsDocroot()
 function getDocumentRoot($subweb)
 {
 	global $gbl, $sgbl, $login, $ghtml;
+
 	$base_root = $sgbl->__path_httpd_root;
 	$web_home = $sgbl->__path_httpd_root;
-
 
 	$path = "{$this->main->getFullDocRoot()}/";
 
@@ -805,6 +716,7 @@ function getDocumentRoot($subweb)
 			$string .= "\tserver.document-root = \"{$disableurl}\"\n";
 		}
 	}
+
 	$string .= "\n";
 
 	return $string;
@@ -812,18 +724,24 @@ function getDocumentRoot($subweb)
 
 function hotlink_protection()
 {
+	global $gbl, $sgbl, $login, $ghtml;
+
 	if (!$this->main->isOn('hotlink_flag')) {
 		return null;
 	}
 
 	$string = null;
+
 	$allowed_domain_string = $this->main->text_hotlink_allowed;
 	$allowed_domain_string = trim($allowed_domain_string);
 	$allowed_domain_string = str_replace("\r", "", $allowed_domain_string);
 	$allowed_domain_string = str_replace("\n", "|", $allowed_domain_string);
 	
-	if ($allowed_domain_string) { $allowed_domain_string .= "|{$this->main->nname}";
-	} else { $allowed_domain_string .= "{$this->main->nname}"; }
+	if ($allowed_domain_string) { 
+		$allowed_domain_string .= "|{$this->main->nname}";
+	} else { 
+		$allowed_domain_string .= "{$this->main->nname}"; 
+	}
 
 	$ht = trim($this->main->hotlink_redirect, "/");
 	$ht = "/{$ht}";
@@ -839,6 +757,8 @@ function hotlink_protection()
 
 function getIndexFileOrder()
 {
+	global $gbl, $sgbl, $login, $ghtml;
+
 	if ($this->main->indexfile_list) {
 		$list = $this->main->indexfile_list;
 	} else {
@@ -846,13 +766,14 @@ function getIndexFileOrder()
 	}
 
 	if (!$list) { return; }
+
 	$string = implode("\", \"", $list);
 	$string = "\tindex-file.names = ( \"{$string}\" )\n\n";
 
 	return $string;
 }
 
-function syncToPort($port, $subweb, $frontpage = false)
+function syncToPort($port, $subweb)
 {
 	global $gbl, $sgbl, $login, $ghtml; 
 
@@ -863,11 +784,7 @@ function syncToPort($port, $subweb, $frontpage = false)
 	$log_path = "{$web_home}/{$this->main->nname}/stats"; 
 	$cust_log = "{$log_path}/{$this->main->nname}-custom_log"; 
 	$err_log = "{$log_path}/{$this->main->nname}-error_log";
-/*
-	if (!$this->main->ipaddress) {
-		throw new lxException("no_ipaddress", '');
-	}
-*/
+
 	$string = null;
 
 	$string .= $this->hotlink_protection();
@@ -889,23 +806,21 @@ function syncToPort($port, $subweb, $frontpage = false)
 
 	$string .= $this->getAwstatsString();
 
-	//$string .= $this->getSuexecString($this->main->username);
-
 	if ($this->main->priv->isOn('cgi_flag')) {
 		$string .= $this->getCgiString();
 	}
 
 	foreach((array) $this->main->redirect_a as $red) {
 		$rednname = remove_extra_slash("/{$red->nname}");
+
 		if ($red->ttype === 'local') {
 			$string .= "\talias.url += ( \"{$rednname}\" => \"{$user_home}/{$red->redirect}\" )\n";
 		} else {
 			if (!redirect_a::checkForPort($port, $red->httporssl)) { continue; }
+
 			$string .= "\turl.redirect += ( \".*{$rednname}\" => \"{$red->redirect}\" )\n";
 		}
 	}
-
-//	$string .= "\n";
 
 	$string .= "\taccesslog.filename = \"{$cust_log}\"\n";
 	$string .= "\tserver.errorlog = \"{$err_log}\"\n\n";
@@ -938,23 +853,24 @@ function getAwstatsString()
 	if ($this->main->stats_password) {
 		$string .= $this->getDirprotectCore("Awstats", "/awstats", "__stats");
 	}
+
 	web::createstatsConf($this->main->nname, $this->main->stats_username, $this->main->stats_password);
 
 	return $string;
 }
-
-// The rest
 
 function createSuexec()
 {
 	global $gbl, $sgbl, $login, $ghtml; 
 
 	$string = null;
+
 	$uid = os_get_uid_from_user($this->main->username);
 	$gid = os_get_gid_from_user($this->main->username);
 
 	$phprc = null;
 	$phprc .= "export PHPRC=/home/httpd/{$this->main->nname}\n";
+
 	$string .= "#!/bin/sh\n";
 	$string .= "### Username: {$this->main->username}\n";
 	$string .= "export MUID={$uid}\n";
@@ -963,6 +879,7 @@ function createSuexec()
 	$string .= "export TARGET=<%program%>\n";
 	$string .= "export NON_RESIDENT=1\n";
 	$string .= "exec lxsuexec \$*\n";
+
 	$st = str_replace("<%program%>", "/usr/bin/php-cgi", $string);
 	lfile_put_contents("{$sgbl->__path_httpd_root}/{$this->main->nname}/phpsuexec.sh", $st);
 	$st = str_replace("<%program%>", "/usr/bin/lxexec", $string);
@@ -978,6 +895,8 @@ function createSuexec()
 
 function createServerAliasLine()
 {
+	global $gbl, $sgbl, $login, $ghtml; 
+
 	$list = get_namelist_from_objectlist($this->main->server_alias_a);
 
 	$iplist = null;
@@ -986,19 +905,11 @@ function createServerAliasLine()
 			$iplist[] = $ip;
 		}
 	}
-/*
-	if (array_search_bool('*', $list)) {
-		if ($iplist) {
-			$ip = implode("|", $iplist);
-			return "{$this->main->nname}|$ip";
-		} else {
-			return "{$this->main->nname}";
-		}
-	}
-*/
+
 	if ($list) foreach($list as &$__l) {
 		$__l = "$__l.{$this->main->nname}";
 	}
+
 	if ($this->main->isOn('force_www_redirect')) {
 		$list = lx_merge_good(array("www.{$this->main->nname}"), $list);
 	} else {
@@ -1010,6 +921,7 @@ function createServerAliasLine()
 		if ($d->ttype === 'redirect') {
 			continue;
 		}
+
 		$list[] = $d->nname;
 		$list[] = "www.{$d->nname}";
 	}
@@ -1027,35 +939,29 @@ function createServerAliasLine()
 
 function addDomain()
 {
+	global $gbl, $sgbl, $login, $ghtml; 
+
 	$this->main->createDir();
 	$this->createConffile();
-	$this->updateMainConfFile();
+//	$this->updateMainConfFile();
 	$this->createSuexec();
 	$this->main->createPhpInfo();
 	
 	self::createSSlConf($this->main->__var_ipssllist, $this->main->__var_domainipaddress);
 }
 
-static function createWebmailRedirect($list)
-{
-	// un-used
-}
-
 static function getCreateWebmail($list, $isdisabled = null)
 {
 	global $gbl, $sgbl, $login, $ghtml; 
 
-//	$webdata = null;
 	foreach($list as $l) {
 		$webdata = null;
 
 		$rlflag = (!isset($l['remotelocalflag'])) ? 'local' : $l['remotelocalflag'];
 
-	//	$rlflag = $l['remotelocalflag'];
 
 		$prog = (!isset($l['webmailprog']) || ($l['webmailprog'] === '--system-default--')) ? "" : $l['webmailprog'];
 
-//		if ((!$prog) && ($rlflag !== 'remote') && (!is_disabled($l['webmailprog']))) {
 		if ((!$prog) && ($rlflag !== 'remote') && (!$isdisabled)) {
 			$webdata .= "### 'webmail.{$l['nname']}' handled by ../webmails/webmail.conf ###\n\n";
 			continue;
@@ -1066,12 +972,9 @@ static function getCreateWebmail($list, $isdisabled = null)
 			$l['webmail_url'] = add_http_if_not_exist($l['webmail_url']);
 			$webdata .= "\turl.redirect = ( \"/\" =>  \"{$l['webmail_url']}\")\n\n";
 		} else {
-		//	if (is_disabled($l['webmailprog'])) {
 			if ($isdisabled) {
-			//	$webdata .= "\tserver.document-root = \"{$sgbl->__path_kloxo_httpd_root}/webmail/disabled/\"\n\n";
 				$webdata .= "\tserver.document-root = \"{$sgbl->__path_kloxo_httpd_root}/disable/\"\n";
 			} else {
-			//	$webdata .= "\tserver.document-root = \"{$sgbl->__path_kloxo_httpd_root}/webmail/\"\n\n";
 				$prog = ($l['webmailprog'] === '--chooser--') ? "" : $l['webmailprog'];
 				if ($prog) {
 					$webdata .= "\tserver.document-root = \"{$sgbl->__path_kloxo_httpd_root}/webmail/{$prog}/\"\n\n";
@@ -1080,24 +983,15 @@ static function getCreateWebmail($list, $isdisabled = null)
 					$webdata .= "\tserver.document-root = \"{$sgbl->__path_kloxo_httpd_root}/webmail/\"\n\n";
 				}
 			}
-		/*
-			if ($prog) {
-				$webdata .= "\tindex-file.names = ( \"redirect-to-$prog.php\", \"index.php\")\n\n";
-			}
-		*/
-			//$webdata .= "cgi.assign = ( \".php\" => \"/home/httpd/{$l['nname']}/phpsuexec.sh\" )\n";
+
 			$webdata .= "\tserver.errorlog = \"/home/kloxo/httpd/lighttpd/error.log\"\n";
 			$webdata .= "\tcgi.assign = ( \".php\" => \"/home/httpd/nobody.sh\" )\n\n";
 		}
 		$webdata .= "}\n\n";
 
-	//	lfile_put_contents("/home/lighttpd/conf/webmails/{$l['nname']}.conf", $webdata);
 	}
 
 	return $webdata;
-
-//	lfile_put_contents("__path_lighty_path/conf/kloxo/webmail_redirect.conf", $webdata);
-//	lfile_put_contents("/home/lighttpd/conf/defaults/_webmail_redirect.conf", $webdata);
 }
 
 static function createWebDefaultConfig()
@@ -1114,7 +1008,6 @@ static function createWebmailConfig($iplist = null)
 {
 	global $gbl, $sgbl, $login, $ghtml; 
 
-//	$webfile = "__path_lighty_path/conf/kloxo/webmail.conf";
 	$webfile = "/home/lighttpd/conf/webmails/webmail.conf";
 
 	$webmaildef = $login->getObject('general')->generalmisc_b->webmail_system_default;
@@ -1139,6 +1032,8 @@ static function createWebmailConfig($iplist = null)
 
 static function fixErrorLog($name)
 {
+	global $gbl, $sgbl, $login, $ghtml; 
+
 	$file = "/home/kloxo/httpd/lighttpd/error.log";
 	$cmd = "grep -i {$name} {$file} > /home/httpd/{$name}/stats/{$name}-error_log";
 	log_shell($cmd);
@@ -1147,7 +1042,6 @@ static function fixErrorLog($name)
 	$size = lxfile_size($file);
 
 	if ($size > 50 * 1024 * 1024) {
-	//	dprint("File size larger than 1MB\n");
 		$nfile = getNotexistingFile(dirname($file), $file);
 		lxfile_mv($file, $nfile);
 		createRestartFile("lighttpd");
@@ -1156,11 +1050,15 @@ static function fixErrorLog($name)
 
 static function fixErrorLogbad($list)
 {
+	global $gbl, $sgbl, $login, $ghtml; 
+
 	$file = "/home/kloxo/httpd/lighttpd/error.log";
 	$fp = lfopen($file);
+
 	if (!$fp) {
 		return;
 	}
+
 	while (!feof($fp)) {
 		$s = fgets($fp);
 		foreach($list as $l) {
@@ -1175,19 +1073,24 @@ static function fixErrorLogbad($list)
 	}
 
 	fclose($fp);
+
 	$fp = getNotexistingFile(dirname($file), $file);
+
 	lxfile_mv($file, $nfile);
 }
 
 function dbactionAdd()
 {
+	global $gbl, $sgbl, $login, $ghtml; 
+
 	$this->addDomain();
 	$this->main->doStatsPageProtection();
 }
 
 function dbactionDelete()
 {
-//	lunlink("/etc/lighttpd/conf/kloxo/lighttpd.{$this->main->nname}");
+	global $gbl, $sgbl, $login, $ghtml; 
+
 	lunlink("/home/lighttpd/conf/domains/{$this->main->nname}.conf");
 
 	$this->delDomain();
@@ -1196,29 +1099,33 @@ function dbactionDelete()
 function dosyncToSystemPost()
 {
 	global $gbl, $sgbl, $login, $ghtml; 
+
 	createRestartFile("lighttpd");
 }
 
 function fullUpdate()
 {
+	global $gbl, $sgbl, $login, $ghtml; 
+
 	$this->createConffile();
 	$this->createSuexec();
-	$this->updateMainConfFile();
+//	$this->updateMainConfFile();
 
 	self::createSSlConf($this->main->__var_ipssllist, $this->main->__var_domainipaddress);
 
-	self::createWebDefaultConfig();
+//	self::createWebDefaultConfig();
 
 	web::createstatsConf($this->main->nname, $this->main->stats_username, $this->main->stats_password);
 
 	$log_path = "/home/httpd/{$this->main->nname}/stats";
 	lxfile_unix_chown_rec($log_path, "{$this->main->username}:apache");
 	lxfile_unix_chmod_rec($log_path, "770");
+
 	$this->main->createPhpInfo();
+
 	lxfile_unix_chown("__path_httpd_root/{$this->main->nname}", "{$this->main->username}:apache");
 	lxfile_unix_chmod("__path_httpd_root/{$this->main->nname}", "0755");
 	lxfile_unix_chmod("{$this->main->getFullDocRoot()}", "0755");
-	//lxfile_unix_chown_rec("{$this->main->getFullDocRoot()}", $this->main->customer_name);
 }
 
 static function createCpConfig()
@@ -1263,11 +1170,6 @@ function dbactionUpdate($subaction)
 			$this->main->webChangeOwner();
 			$this->createConffile();
 			$this->createSuexec();
-			break;
-
-		case "enable_frontpage_flag":
-			$this->frontPageEnable();
-			//$this->createConffile();
 			break;
 
 		case "fixipdomain":
@@ -1315,7 +1217,7 @@ function dbactionUpdate($subaction)
 		case "enable_inc_flag":
 		case "enable_ssl_flag" : 
 			$this->createConffile();
-			//$this->updateMainConfFile();
+			$this->updateMainConfFile();
 			break;
 
 		case "enable_php_manage_flag":
@@ -1340,14 +1242,24 @@ function dbactionUpdate($subaction)
 		case "run_stats":
 			$this->main->runStats();
 			break;
+
+		case "static_config_update":
+			self::createCpConfig();
+			self::createWebDefaultConfig();
+			$this->updateMainConfFile();
+			break;
 	}
 }
 
 function getDav()
 {
+	global $gbl, $sgbl, $login, $ghtml; 
+
 	$string = null;
+
 	$bdir = "/home/httpd/{$this->main->nname}/__webdav";
 	lxfile_mkdir($bdir);
+
 	foreach($this->main->__var_davuser as $k => $v) {
 		$file = get_file_from_path($k);
 		$dbf = "/tmp/{$file}.db";
@@ -1370,6 +1282,8 @@ function getDav()
 
 function do_backup()
 {
+	global $gbl, $sgbl, $login, $ghtml; 
+
 	return $this->main->do_backup();
 }
 
