@@ -5,8 +5,8 @@ initProgram('admin');
 
 $list = parse_opt($argv);
 
-if (isset($list['server'])) { $server = $list['server']; }
-else { $server = 'localhost'; }
+$server = (isset($list['server'])) ? $list['server'] : 'localhost';
+$client = (isset($list['client'])) ? $list['client'] : null;
 
 log_cleanup("Fixing DNS server config");
 
@@ -23,14 +23,23 @@ $login->loadAllObjects('client');
 $list = $login->getList('client');
 
 foreach($list as $c) {
+	if ($client) {
+	//	if ($client !== $c->nname) { continue; }
+		$ca = explode(",", $client);
+		if (!in_array($c->nname, $ca)) { continue; }
+		$server = 'all';
+	}
+
+	if ($server !== 'all') {
+	//	if ($c->syncserver !== $server) { continue; }
+		$sa = explode(",", $server);
+		if (!in_array($c->syncserver, $sa)) { continue; }
+	}
+
 	$dlist = $c->getList('domaina');
 	
 	foreach($dlist as $l) {
 		$dns = $l->getObject('dns');
-
-		if ($server !== 'all') {
-			if ($dns->syncserver !== $server) { continue; }
-		}
 
 		if ($dnst) {
 			$dns->dns_record_a = null;
