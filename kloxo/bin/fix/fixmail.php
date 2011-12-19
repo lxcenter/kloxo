@@ -3,13 +3,30 @@
 include_once "htmllib/lib/include.php"; 
 initProgram('admin');
 
-
+$server = (isset($list['server'])) ? $list['server'] : 'localhost';
+$client = (isset($list['client'])) ? $list['client'] : null;
 
 $login->loadAllObjects('client');
 $list = $login->getList('client');
 
+log_cleanup("Fixing Mail accounts");
+
 foreach($list as $c) {
+	if ($client) {
+	//	if ($client !== $c->nname) { continue; }
+		$ca = explode(",", $client);
+		if (!in_array($c->nname, $ca)) { continue; }
+		$server = 'all';
+	}
+
+	if ($server !== 'all') {
+	//	if ($c->syncserver !== $server) { continue; }
+		$sa = explode(",", $server);
+		if (!in_array($c->syncserver, $sa)) { continue; }
+	}
+
 	$dlist = $c->getList('domaina');
+
 	foreach($dlist as $l) {
 		$mmail = $l->getObject('mmail');
 		$mclist = $mmail->getList('mailaccount');
@@ -20,6 +37,7 @@ foreach($list as $c) {
 			$mc->was();
 			$spam->was();
 		}
+		log_cleanup("- '{$mmail->nname}' ('{$c->nname}') at '{$mmail->syncserver}'");
 	}
 }
 
