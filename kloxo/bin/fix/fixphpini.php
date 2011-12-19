@@ -8,15 +8,6 @@ $list = parse_opt($argv);
 $server = (isset($list['server'])) ? $list['server'] : 'localhost';
 $client = (isset($list['client'])) ? $list['client'] : null;
 
-/*
-$s = new Pserver(null, $server, $server);
-
-$s->get();
-$pi = $s->getObject('phpini');
-$pi->setUpdateSubaction('full_update');
-$pi->was();
-*/
-
 $login->loadAllObjects('client');
 $list = $login->getList('client');
 
@@ -26,16 +17,13 @@ log_cleanup("Fixing php.ini");
 
 foreach($plist as $s) {
 	if ($client) {
-	//	if ($client !== $c->nname) { continue; }
-		$ca = explode(",", $client);
-		if (!in_array($c->nname, $ca)) { continue; }
 		$server = 'all';
 	}
 
 	if ($server !== 'all') {
-	//	if ($c->syncserver !== $server) { continue; }
+	//	if ($s->syncserver !== $server) { continue; }
 		$sa = explode(",", $server);
-		if (!in_array($c->syncserver, $sa)) { continue; }
+		if (!in_array($s->syncserver, $sa)) { continue; }
 	}
 
 	$pi = $s->getObject('phpini');
@@ -47,12 +35,16 @@ foreach($plist as $s) {
 
 foreach($list as $c) {
 	if ($client) {
+	//	if ($client !== $c->nname) { continue; }
+		$ca = explode(",", $client);
+		if (!in_array($c->nname, $ca)) { continue; }
 		$server = 'all';
-		if ($client !== $c->nname) { continue; }
 	}
 
 	if ($server !== 'all') {
-		if ($c->syncserver !== $server) { continue; }
+	//	if ($c->syncserver !== $server) { continue; }
+		$sa = explode(",", $server);
+		if (!in_array($c->syncserver, $sa)) { continue; }
 	}
 
 	$dlist = $c->getList('domaina');
