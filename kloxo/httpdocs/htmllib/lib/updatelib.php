@@ -90,8 +90,8 @@ function do_upgrade($upversion)
 	global $gbl, $sgbl, $login, $ghtml; 
 	$program = $sgbl->__var_program_name;
 
-	if (file_exists(".svn") || file_exists(".git")) {
-		log_cleanup("BREAK -> Development version found");
+	if (file_exists('.svn') || file_exists('.git')) {
+		log_cleanup('BREAK -> Development version found');
 		exit;
 	}
 
