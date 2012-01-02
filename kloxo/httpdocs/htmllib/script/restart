@@ -1,0 +1,3 @@
+#!/bin/sh
+/etc/init.d/`cat /script/programname` restart
+

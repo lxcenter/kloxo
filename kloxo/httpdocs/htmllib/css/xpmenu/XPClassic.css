@@ -1,0 +1,77 @@
+body
+{
+	FONT-Family: Arial, Verdana, Tahoma ;
+	font-size: 8pt;
+	font-weight: normal;
+	
+}
+
+#panelBar
+{
+	height: 100%;
+	width: 100%;
+	vertical-align: top;
+}
+
+.menuHeaderExpanded
+{
+	font-family: Verdana, Tahoma, Arial;
+	font-size: 8pt;
+	font-weight: bold;
+	color: #ffffff;
+	height: 23px;
+	cursor: hand;
+}
+
+.xptable
+{
+	border-width: 1;
+	border-color: black;
+}
+
+/* ie screws up the the class after the one that makes the cursor hand..*/
+.iiedebug1 {
+
+}
+
+.menuHeaderExpanded td
+{	
+	padding: 4 5 10 10 ;
+	font-weight: bold;
+}
+
+.menuHeaderCollapsed
+{
+	font-family: Verdana, Tahoma, Arial;
+	font-size: 8pt;
+	font-weight: bold;
+	color: #000000;
+	height: 23px;
+	cursor: hand;
+}
+
+/* ie screws up the the class after the one that makes the cursor hand..*/
+.iiedebug2 {
+
+}
+
+.menuHeaderCollapsed td
+{
+	padding: 4 5 10 10 ;
+	font-weight: bold;
+}
+
+.menuItems
+{
+	font-family: Verdana, Tahoma, Arial;
+	font-size: 8pt;
+	background-color:#ffffff;
+	color: #000000;
+	position: relative;
+}
+
+.menuItems  td
+{
+	padding: 2 2 5 10 ;
+}
+

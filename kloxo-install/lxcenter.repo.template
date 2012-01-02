@@ -1,0 +1,23 @@
+#
+#LxCenter RPM Repository
+#
+[lxcenter-updates]
+name=%distro%-$releasever - LxCenter Updates
+baseurl=http://download.lxcenter.org/download/update/%distro%/$basearch/
+gpgcheck=0
+enabled=1
+protect=1
+#
+##################################################
+# Do not use/enable this on production servers!
+# You are be warned.
+#
+[lxcenter-testing]
+name=%distro%-$releasever - LxCenter Testing
+baseurl=http://download.lxcenter.org/download/test/%distro%/$basearch/
+gpgcheck=0
+enabled=0
+protect=0
+#
+#
+##################################################

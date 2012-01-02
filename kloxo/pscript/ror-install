@@ -1,0 +1,4 @@
+#!/bin/sh
+yum -y install fcgi-devel
+gem install -y rails
+gem install -y fcgi

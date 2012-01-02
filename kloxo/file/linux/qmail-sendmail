@@ -1,0 +1,7 @@
+#!/bin/sh
+logger -p mail.crit lx-sending mail for `id -un 2>/dev/null` > /dev/null 2>&1
+export DKSIGN=/var/qmail/control/domainkeys/%/private
+export RELAYCLIENT=
+exec /var/qmail/bin/sendmail "$@"
+
+

@@ -1,0 +1,39 @@
+<?php
+
+$gl_sql_string_common = <<<SQL
+
+license ser_licensecom_b text_license_content
+loginattempt  count client_name
+blockedip  ipaddress
+allowedip  ipaddress
+ssession cttype ip_address timeout last_access logintime ser_http_vars ser_ssession_vars tsessionid auxiliary_id ser_ssl_param consuming_parent
+utmp ssession_name cttype logintime timeout logouttime ip_address logoutreason auxiliary_id consuming_parent
+lxupdate schedule
+version major minor release extra
+
+//////////// Domain Setup
+// Common
+notification ser_notflag_b text_newsubject text_newaccountmessage fromaddress coma_class_list
+ticketconfig ticketid ser_category_list_a mail_account mail_server mail_password mail_period mail_enable mail_ssl_flag
+ticket password escalate realpass status cpstatus state priority responsible made_by sent_to date_modified unread_flag history_num subject category ddate mail_messageid
+smessage made_by text_readby_cmlist text_sent_to_cmlist subject text_description category ddate
+tickethistory  made_by state_from state text_reason ddate from_ad
+interface_template ser_domain_show_list ser_client_show_list ser_vps_show_list
+general ser_generalmisc_b ser_helpdeskcategory_a ser_reversedns_b ser_selfbackupparam_b ser_hackbuttonconfig_b ser_customaction_b text_maintenance_message ser_portconfig_b ser_kloxoconfig_b ser_browsebackup_b login_pre ser_lxadminconfig_b disable_admin
+
+sslcert upload_status certname syncserver ser_ssl_data_b text_crt_content text_key_content text_csr_content text_ca_content
+ndsktoolbar ddate ttype description external vpsparent_clname url
+ndskshortcut ddate ttype sortid separatorid description external vpsparent_clname url
+sshconfig ssh_port without_password_flag disable_password_flag config_flag
+rdnsrange firstip lastip
+lxguard configure_flag disablehit syncserver
+lxguardhit access service ddate ipaddress user syncserver
+lxguardwhitelist ipaddress syncserver
+customaction class action subaction exec where_to_exec
+custombutton status class title url description
+skipbackup clname
+actionlog login loginclname auxiliary_id ipaddress class objectname action subaction ddate 
+
+
+SQL;
+

@@ -1,0 +1,30 @@
+		.expanded:hover {
+			cursor:pointer;
+			background-image:url(/htmllib/domcollapse/orange.gif);
+		}
+		.trigger {
+			cursor:pointer;
+			background-image:url(/htmllib/domcollapse/gray.gif);
+			width:450px;
+		}		
+		.trigger:hover {
+			cursor:pointer;
+			background:url(/htmllib/domcollapse/orange.gif);
+
+		}		
+		.expanded {
+			background:lightgray;
+			cursor:pointer;
+			width:450px;
+		}
+		.show {
+    		position:static;
+     		display: table;
+		}
+		.hide {
+			position:absolute;
+			left:-999em;
+			height:1px;
+			width:100px;
+			overflow:hidden;
+		}

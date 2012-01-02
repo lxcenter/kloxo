@@ -1,0 +1,28 @@
+#!/bin/sh
+
+# release on Kloxo 6.1.7
+# by mustafa.ramadhan@lxcenter.org
+
+if [ "$1" == "--help" ] ; then
+	echo
+	echo " ---------------------------------------------------------------------------"
+	echo "  format: sh $0 --select=<status/optimize> --spare=[]"
+	echo " ---------------------------------------------------------------------------"
+	echo "   --spare - spare/unused memory in MB; default: 25% total memory"
+	echo
+	echo " * this optimize assume httpd + php use 25 MB per instance"
+	echo
+	exit;
+fi
+
+echo
+echo "- For help, type '$0 --help'"
+
+if [ "$#" == 0 ] ; then
+	echo "- No argument supplied. Defaulting to optimize and 25% spare"
+fi
+
+echo
+
+. /script/directory
+lphp.exe ../bin/fix/apache-optimize.php $*

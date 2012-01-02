@@ -1,0 +1,5 @@
+#!/bin/sh
+rm -f installatron_setup.sh
+wget http://data1.liquenox.com/installatron/installatron_setup.sh
+chmod 755 installatron_setup.sh
+./installatron_setup.sh -f

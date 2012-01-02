@@ -1,0 +1,22 @@
+<head>
+<meta http-equiv="Content-Language" content="en-gb">
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+<title>SSHTerm Applet</title>
+<style>
+</style>
+</head>
+
+<body>
+
+<p align="center"> 
+  <applet width="640" height="480" archive="SSHTermApplet-signed.jar,SSHTermApplet-jdkbug-workaround-signed.jar,SSHTermApplet-jdk1.3.1-dependencies-signed.jar" code="com.sshtools.sshterm.SshTermApplet" codebase="/thirdparty/sshterm-applet/" style="border-style: solid; border-width: 1; padding-left: 4; padding-right: 4; padding-top: 1; padding-bottom: 1">
+
+  <param name=sshapps.connection.host value=%host%>
+  <param name=sshapps.connection.port value=%port%>
+  <param name=sshapps.connection.userName value=%username%>
+  <param name=sshapps.connection.authenticationMethod value=password>
+  <param name=sshapps.connection.connectImmediately value=%connectimmediately%>
+  </applet>
+</p>
+
+</body>

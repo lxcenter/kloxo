@@ -1,0 +1,10 @@
+<?php
+
+$gl_sql_string = <<<SQL
+
+superclient %lxclient
+node %lxclient realpass
+
+SQL;
+
+

@@ -1,0 +1,101 @@
+<!--
+    PHPSubmit - A search engine submission script
+    Copyright (C) 2000 Matt Wilson
+
+    This program is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation; either version 2 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program; if not, write to the Free Software
+    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+-->
+
+<html>
+
+<head>
+
+<title>PHPSubmit by Matt Wilson</title>
+
+</head>
+
+<body bgcolor=#ffffff text=#000000>
+
+<div align=center>
+
+<table width=500 cellspacing=2>
+<tr><td width=500 align=center><a href="http://www.mattsscripts.co.uk/phpsubmit/"><img border=0 src=logo2.gif></a></td></tr>
+
+<tr><td></td></tr>
+
+<tr>
+<td width=500>
+<font face=Verdana size=2><p>Welcome to PHPSubmit, the Open Source web page submission script written in PHP by <a href="mailto:matt@mattsscripts.co.uk">Matt Wilson</a>.</p>
+<p>This script can be used to submit your web site to many different search engines in one easy motion, in order to do this we need to know a little information, please fill in the following information and then click "OK"</p>
+<br>
+<p><div align=center>
+<form method=post action="phpsubmit.php">
+<table cellpadding=0 cellspacing=0 border=1>
+<tr><td align=right><font face=Verdana size=2>Domain name to submit</td><td><font face=Verdana size=2><input type=text name=domain value="www.mattsscripts.co.uk" size=45</td></tr>
+<tr><td align=right><font face=Verdana size=2>&sup1;Number of pages to submit</td><td><font face=Verdana size=2><select name=max_results>
+<option value=1><font face=Verdana size=2>1
+<option value=2><font face=Verdana size=2>2
+<option value=3><font face=Verdana size=2>3
+<option value=4><font face=Verdana size=2>4
+<option value=5><font face=Verdana size=2>5
+<option value=6 selected><font face=Verdana size=2>6
+<option value=7><font face=Verdana size=2>7
+<option value=8><font face=Verdana size=2>8
+<option value=9><font face=Verdana size=2>9
+<option value=10><font face=Verdana size=2>10
+<option value=11><font face=Verdana size=2>11
+<option value=12><font face=Verdana size=2>12
+<option value=13><font face=Verdana size=2>13
+<option value=14><font face=Verdana size=2>14
+<option value=15><font face=Verdana size=2>15
+<option value=16><font face=Verdana size=2>16
+<option value=17><font face=Verdana size=2>17
+<option value=18><font face=Verdana size=2>18
+<option value=19><font face=Verdana size=2>19
+<option value=20><font face=Verdana size=2>20
+<option value=21><font face=Verdana size=2>21
+<option value=22><font face=Verdana size=2>22
+<option value=23><font face=Verdana size=2>23
+<option value=24><font face=Verdana size=2>24
+<option value=25><font face=Verdana size=2>25
+<option value=0><font face=Verdana size=2>Unlimited
+</select>
+ - See below!
+</td></tr>
+<tr><td align=right><font face=Verdana size=2>Pages to look for</td><td><font face=Verdana size=2><input type=text name=getext size=45 value="(html)|(htm)|(php3)|(php)|(dhtml)|(shtml)"></td></tr>
+<tr><td align=right><font face=Verdana size=2>Skip directories</td><td><font face=Verdana size=2><input type=text name=ignoredir size=45 value="(wusage)|(cgi-bin)|(vbpro)|(forums)">
+<tr><td align=center valign=center colspan=2><font face=Verdana size=2><input type=checkbox name=remember value=yes> - &sup2;Remember my search for next time</font></td></tr>
+</table>
+<br>
+<div align=center><input type=image src=ok.gif border=0></div>
+<br>
+<a href="phpsubmit.php?continue=1"><img src=cont.gif border=0></a>
+</form>
+</div></p>
+<br>
+
+<p><b>&sup1;Please note</b> that search engines will not index your pages if you submit too many at any one time and you will most likely recieve complaints from search engines.</p>
+<p><b>&sup2;Also note</b> that the script will only remember your search for one week, after which time the script discards the search information. If within a week you go to the next step of the search then the week limit is reset.</p>
+<p><b>For help</b> in any of the above options/selections please refer to the <a href=help.html>help page</a>, which hopefully will be able to answer any questions regarding the above.</p>
+
+</td>
+
+</tr>
+</table>
+
+</div>
+
+</body>
+
+</title>

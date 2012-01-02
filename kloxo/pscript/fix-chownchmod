@@ -1,0 +1,30 @@
+#!/bin/sh
+
+# release on Kloxo 6.1.7
+# by mustafa.ramadhan@lxcenter.org
+
+if [ "$1" == "--help" ] ; then
+	echo
+	echo " ------------------------------------------------------------"
+	echo "  format: sh $0 --select=<chown/chmod/all>"
+	echo " ------------------------------------------------------------"
+	echo " --select -"
+	echo "   chown: ownership only"
+	echo "   chmod: permissions only (for php*)"
+	echo
+	echo " * important for secure environment like suphp on Apache"
+	echo
+	exit;
+fi
+
+echo
+echo "- For help, type '$0 --help'"
+
+if [ "$#" == 0 ] ; then
+	echo "- No argument supplied. Defaulting to all"
+fi
+
+echo
+
+. /script/directory
+lphp.exe ../bin/fix/fix-chownchmod.php $*

@@ -1,0 +1,207 @@
+Changelog
+
+Kloxo 6.1.10 - 07-dec-2011
+##################################
+Bug #330: Blocking user shouldn't block access to panel by default
+Bug #470: Disabling web hosting does not disable page
+Bug #684: email at the kloxo slave servers give database error
+Bug #725: webmail lost its SSL
+Bug #730: Slave auto upgraded / apache config broken
+Bug #731: Upgrading Kloxo caused /etc/lighttpd/conf directory to be removed !
+Bug #732: New lighttpd directory structure not working for more than 964 domains
+Bug #746: [WEBMAIL] No login with horde webmail!
+Bug #747: Slave at version 6.1.9?
+Bug #755: creation of secondary mx entry at the dns template gives error
+Bug #758: Master fails to connect to Slave after upgrade
+Bug #760: Exclusive IP leads to 403 Forbidden
+Bug #762: apache web domain on slave gives forbidden
+Bug #772: [TinyDNS] DNS TTL not added to zone files
+Bug #773: Horde failing to send mail in kloxo 6.1.7
+Bug #774: [beta] Forgot password page is corrupted
+Bug #775: Files listing on Pure-ftp
+Bug #779: Links from webmail landing page change to non-ssl
+Feature #750: kloxo default page even after doing domain to ip mapping
+Feature #753: install old kloxo version?
+Security #000: Don't use "rand" password on lxpopuser and generate a real random salt password
+
+Kloxo 6.1.9 - 15-nov-2011 - No Public Release
+##################################
+Bug #000 Run cleanup after new versions
+
+Kloxo 6.1.8 - 14-nov-2011 - No Public Release
+##################################
+Bug #702: Error 'mailaccount_add_failed' when add email account
+ToDo #728: Modified Apache conf structure for handling 'exclusive ip' and ip/~client
+ToDo #729: Modified Lighttpd conf structure for handling 'exclusive ip' and ip/~client
+And some other small fixes.
+
+Kloxo 6.1.7 - 12-nov-2011
+##################################
+Bug #50: Parked domains are not removed from Apache's configuration
+Bug #499: Kloxo Installation (InstallApp problem)
+Bug #516: Using suphp gives 500 internal server error (Apache)
+Bug #547: xcache failed to install
+Bug #565: Domain skeleton files chmodded to 0755
+Bug #578: Spamassasin config created in / directory
+Bug #581: Update 6.1.6 DNS Managm. denies TXT entry (invalid_subdomain)
+Bug #582: Wrong permissions for Roundcube and Horde configuration files
+Bug #583: New install not create horde and roundcube database
+Bug #593: Remote Mail Option not working anymore
+Bug #596: WebMail: Not created default folders (IMAP related)
+Bug #599: Broken images in kloxo control panel
+Bug #607: If a client changes advanced PHP settings, then the website gives a blank page
+Bug #609: Not worked add directory to user ftp
+Bug #623: Error in function.sh when running /etc/upcp
+Bug #630: parse_ini_file to be enabled by default
+Bug #637: Webmail sending problem and possibility solution
+Bug #638: Installation fails if 'admin' group already exists
+Bug #650: Kloxo not generating custom php.ini in Apache/suphp mode
+Bug #652: CentOS6: Kloxo does not detect the OS properly
+Bug #656: When adding a subdomain, the Document Root field is not being validated
+Bug #657: Client user names with "__" are displayed with missing end
+Bug #669: Help icon on menu tab is redirecting to non-working link
+Bug #674: Wildcard and subdomain problem (specific for lighttpd)
+Bug #677: Add Hungarian language (was not defined yet)
+Bug #680: Too high inode count in Kloxo quota
+Bug #698: Always redirect to /awstats when access to stats.gif
+Bug #703: Alert: httpd_start_failed
+Bug #705: The initiall installed/updated kloxo 6.1.7 gives 403 error at the ip with no damain
+Bug #707: Kloxo slave server shows apache default page instead of kloxo default page
+Bug #708: User's SSH Authorized key setting
+Bug #709: Fix 'ownership' And 'permissions' breaks SSH access
+Bug #710: upcp updated files are now owned by root
+Bug #711: Port 22 at the slave server shows suspicious network activity
+Bug #712: Kloxo default page even after doing domain to ip mapping
+Bug #721: [QMAIL] All emails tripplicates ---> 3 times the same message
+Bug #724: Webmail 500 error with suphp
+Bug #725: Webmail lost its SSL
+Feature #570: Lighttpd reloading (no restart after adding domain)
+Feature #625: Make some resource related PHP settings admin only
+Feature #716: Unresolved dependency on Apache version
+Updates #577: After every upcp the line "RoundCube Database installed" is showed.
+Security #612: Hide password in reboot / shutdown server
+ToDo #538: Kloxo on Centos 64bit
+ToDo #559: Error warning while installing fresh Kloxo
+ToDo #563: Remove overlap paramaters for SuPHP
+ToDo #566: Mod_ruid2 on Kloxo
+ToDo #567: httpd-itk for kloxo
+ToDo #571: Suphp with httpd-worker and httpd-event
+ToDo #575: More readable httpd config files
+ToDo #589: Change httpd config structure
+ToDo #590: Move module setting from .httaccess to domain config
+ToDo #597: Use cp. to redirect :7778 or :7777
+ToDo #598: Change lighttpd config structure
+ToDo #632: Add some scripts for mysql and apache
+ToDo #645: New installer script (also packer and patcher) for Kloxo 6.1.7
+ToDo #646: New webpage for default/disable/cp/webmail page on Kloxo 6.1.7
+ToDo #658: Two clamav databases, remove one if two databases are found
+ToDo #671: Fixed backup-restore issue (and improve)
+
+Kloxo 6.1.6 - 12-june-2011
+##################################
+Bug #245: NameVirtualHost has no VirtualHosts
+Bug #497: Users can do too much in DNS config
+Bug #512: Ezmlm stilll active when choose Remote Mail
+Bug #516: Using suphp gives 500 internal server error (Apache)
+Bug #518: EN language shows english messages not from lang dir
+Bug #519: Spamdyke On Additional Smtp Port affects also primary port
+Bug #529: Horde does not log-out
+Bug #554: Spamassassin - wrong user_prefs
+Feature #5: Change php sendmail to indicate source domain
+Security #15: Passwords in plain text in shell_exec
+Security #435: Critical PHP security bug (disable_functions configuration in php.ini)
+Security #541: Update Roundcube to 0.5.2
+ToDo #483: Add help/help-base etc. to translations
+
+Kloxo 6.1.5 - 10-may-2011
+##################################
+Bug #37: Call domain.tld/stats
+Bug #245: NameVirtualHost has no VirtualHosts
+Feature #378: Webmail SSL support
+Feature #446: Stats page not password protected by default.
+
+Kloxo 6.1.4 - 03-mar-2011
+##################################
+Bug #258: Kloxo install on a Citrix Xenserver Centos VM causes console to lock up with error
+Bug #443: InstallApp download/install packages when InstallApp is disabled in GUI.
+Bug #447: Switch Program fails (CGI died)
+Bug #448: Error in /script/cleanup in version 6.1.3
+Bug #450: Re-enable UDEV on Xen VPS (Was disabled in year 2008 by Lxlabs for a bug)
+Bug #452: Add FTP User button results in a blank page
+Security #435: Critical PHP security bug (disable_functions configuration in php.ini)
+
+Moved to 6.1.5 (Not in time finished)
+ToDo #421
+
+Kloxo 6.1.3 - 14-feb-2011
+##################################
+Bug #367: Add support for IDN Domain
+Bug #400: Cannot restore account in GUI or via Commandline API (Restore Failed. Reason: could_not_unzip_file)
+Bug #413: Kloxo GUI php.ini: post_max_size should be the same as upload_max_filesize
+Bug #416: Cannot delete domain with specific name
+Bug #418: Kloxo Tree menu depth now limited
+Bug #426: Spamdyke whitelist only valid for graylist
+Bug #431: Roundcube config/db.inc.php with wrong password and fixwebmail not fixing it.
+Feature #424: Extending Spamdyke features
+Feature #436: Alternative smtp port with alternative or without SPAM control
+Updates #437: New file creation fails after r297
+
+Moved to 6.1.4 (Not in time finished)
+ToDo #421
+
+
+Kloxo 6.1.2 - 19-jan-2011
+##################################
+Bug #372: Traffic history: sorting of the month field does not work properly
+Bug #379: Roundcube can't write logs
+Bug #383: Adding client on plan with 0 database creates 1 database
+Bug #390: suphp configuration and problems with the startup of httpd daemon
+Bug #407: Traffic history: The delete button should be removed
+ToDo #408: Remove: Add Lxlabs Authorized Key button
+
+Kloxo 6.1.1 - 05-jan-2011
+##################################
+Bug #388: phpMyAdmin Configfile wrong persmission (thirdparty 2013)
+Bug #391: Forbidden: You don't have permission to access /index.html on this server.
+Bug #396: InstallApp icon in kloxo 6.1.0 not working
+
+Kloxo 6.1.0 - 31-dec-2010
+##################################
+dterweij - Changed installer
+dterweij - Removed License server contact
+dterweij - Moved all C sources into one place
+dterweij - Fixed broken images
+dterweij - InstallApp new version 5.0.5000 (Mainly lxadmin to kloxo dir changes)
+various  - InstallApp software updates
+Bug #8: 500 domain limit
+Bug #21: Password protected directory feature does not work
+Bug #31: AWBS Module Lxadmin with Kloxo has no connection
+Bug #43: Error while saving a file edited using the inbuilt text editor
+Bug #74: Apache not restarted after changing / adding protected directories
+Bug #242: Typo in lxins.php
+Bug #246: Switching back from suphp to mod_php does not work
+Bug #273: MySQL disk usage = 0 MB
+Bug #277: Bug in validate_domain_name
+Bug #313: document root created with wrong ownership
+Bug #317: lxguard hits PHP Fatal error: Out of Memory
+Bug #364: error while adding a mail account to a .travel domain
+Bug #366: kloxo scheduled backups by FTP are not deleted automatically
+Feature #6: InstallApp outdated
+Feature #270: Add delete option to mail catchall
+Updates #54: Removing Licence server contact
+Updates #283: phpMyAdmin 3.3.4
+Updates #342: Speed improvements
+Security #88: Kloxo Single Server 6.0.2083 Stable multiple vulnerabilities
+Security #244: Remote CPU and memory usage DoS
+Security #268: Local users can obtain the password hashes from the stats page protection files or from directory protection files
+Security #341: Remotely block any or every IP addresses in hosts.deny
+ToDo #303: Fix thirdparty hardcoded version numbers
+ToDo #353: Command line in cron jobs should be longer
+And many more small things.
+
+#############################################
+6.0.2083 - A fix for ?
+6.0.2084 - Fix Horde/Roundcube security issue
+6.0.2085 - Fix for fix 2084
+6.0.2086 - Fix for fix 2085
+

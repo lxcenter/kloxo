@@ -1,0 +1,111 @@
+<?php
+
+$gl_sql_string = <<<SQL
+
+#mysqldb mysqldb_usage
+#mssqldb mssqldb_usage
+#lxclient logo_manage_flag
+#rubyrails rubyfcgiprocess_num
+#ftpuser #lxclient
+#pserver #lxclient
+#mailaccount #lxclient maildisk_usage autoresponder_num
+#mmail #mailaccount mailaccount_num mailinglist_num
+#uuser disk_usage #lxclient
+#web  totaldisk_usage ssl_flag #rubyrails #uuser ftpuser_num frontpage_flag php_manage_flag inc_flag awstats_flag installapp_flag modperl_flag cgi_flag php_flag phpunsafe_flag subweb_a_num  dotnet_flag cron_num cron_minute_flag cron_manage_flag phpfcgi_flag rubyrails_num phpfcgiprocess_num 
+#lxbackup backupschedule_flag
+#domain  traffic_usage #web  #mmail #mysqldb #mssqldb #lxbackup traffic_last_usage backup_flag  dns_manage_flag mysqldb_num mssqldb_num ftpuser_num addondomain_num
+#client pserver_num client_num maindomain_num domain_num subdomain_num clientdisk_usage domain_add_flag can_change_limit_flag can_set_disabled_flag can_change_password_flag document_root_flag runstats_flag #domain webhosting_flag
+#node #client
+#superclient node_num #node
+
+
+
+
+%lxcontact realname add_address add_city add_country add_telephone add_fax
+%lxquota ser_used ser_priv
+%lxclient __q_var %lxcontact password cpstatus demo_status contactemail text_comment disable_per ser_hpfilter ddate ser_dskhistory ser_dskshortcut_a interface_template ser_boxpos dialogsize
+version major minor releasen extra
+module status
+// Both child and normal share the same internal class
+sp_specialplay ser_specialplay_b
+sp_childspecialplay ser_specialplay_b
+sp_lstclass ser_lst_client_list ser_lst_vps_list
+
+
+%disableable state status disable_reason
+%dnsbase ser_mx_rec_a ser_ns_rec_a ser_a_rec_a ser_cn_rec_a ser_txt_rec_a ttl soanameserver zone_type ser_dns_record_a
+%template ser_priv share_status  disable_per skin_name description ddate ser_listpriv ttype ser_dnstemplate_list
+clienttemplate %template
+resourceplan realname ser_priv description ddate ser_listpriv ser_dnstemplate_list status disable_per
+domaintemplate %template dnstemplate ipaddress redirect_domain catchall
+dnstemplate %dnsbase webipaddress mmailipaddress
+serverweb php_type
+watchdog servicename syncserver port action status added_by_system
+
+client %lxclient cttype ddate ser_listpriv skeletonarchive ser_dnstemplate_list %disableable disable_url template_used username realpass shell default_domain resourceplan_used websyncserver coma_dnssyncserver_list mmailsyncserver mysqldbsyncserver syncserver cron_mailto dnstemplate_name corerootdir  disable_system_flag
+auxiliary %lxclient status realpass delete_flag pserver_flag
+
+//////////// Domain Setup
+domaintraffic ddate oldtimestamp timestamp webtraffic_usage mailtraffic_usage ftptraffic_usage traffic_usage
+addondomain ttype destinationdir mail_flag
+dirprotect syncserver authname subweb path status ser_diruser_a 
+dns %dnsbase syncserver serial
+domain %lxclient %disableable ser_listpriv mmailpserver webpserver dnspserver secdnspserver ttype ddate username nameserver redirect_domain template_used realpass dtype subdomain_parent resourceplan_used previewdomain
+domaindefault remove_processed_stats
+web __q_var status iisid ser_server_alias_a ser_subweb_a ser_redirect_a stats_username stats_password  ttype  username password ipaddress  ser_webmisc_b redirect_domain text_extra_tag  ser_customerror_b frontpage_flag syncserver cron_mailto ser_aspnetconf_b ser_webindexdir_a webmail_url text_lighty_rewrite ftpusername hotlink_flag text_hotlink_allowed hotlink_redirect remove_processed_stats ser_indexfile_list fcgi_children customer_name text_blockip docroot force_www_redirect
+webmimetype syncserver mimehandler extension 
+webhandler syncserver mimehandler extension 
+rubyrails __q_var appname port syncserver accessible_directly
+mmail __q_var webmailprog catchall remotelocalflag catchall_status username status redirect_address syncserver ttype redirect_domain remotelocalflag webmail_url systemuser enable_spf_flag exclude_all text_spf_domain text_spf_ip
+mailforward accountname forwardaddress syncserver
+mailaccount %lxclient %disableable realpass syncserver forward_status ser_forward_a autorespond_status autores_name filter_spam_status no_local_copy
+mailfilter rule action
+reversedns reversename
+aspnet version syncserver session_timeout ser_globalization_b ser_aspnetmisc_b
+autoresponder status send_rule reply_subject text_message autores_name
+//mailinglist syncserver listname password adminemail post_members_only_flag
+mailinglist syncserver listname adminemail lang post_members_only_flag post_moderated_flag post_moderator_only_flag archived_flag archive_blocked_flag archive_guarded_flag digest_flag jumpoff_flag subscriberlist_flag remote_admin_flag subscription_mod_flag edit_text_flag coma_mailinglist_mod_a text_trailer text_prefix max_msg_size min_msg_size text_mimeremove 
+spam status  spam_hit subject_tag ser_wlist_a ser_blist_a syncserver 
+lxbackup __q_var ftp_server ssh_server rm_username rm_password rm_directory upload_type send_email upload_to_ftp backupstage backuptype backupschedule_type rm_last_number ser_lxbackupmisc_b restorestage no_local_copy_flag
+installsoft appname ddate dbprefix dbname installdir version dbhost realhost ser_installsoftmisc_b syncserver
+mimetype domainname type extension
+///////// ENd Multi Server
+
+/// Semi Domain Setup
+uuser %lxclient realpass shellflag shell syncserver status
+ftpuser %lxclient %disableable realpass username directory syncserver ftp_disk_usage
+davuser %lxclient %disableable realpass username directory syncserver
+mysqldb __q_var primarydb username dbname dbtype dbpassword installsoft_flag installsoft_app syncserver password no_backup_flag
+
+mysqldbuser username dbname dbpassword ser_dbpermission_b syncserver ser_dbhostlist_a password
+mssqldb __q_var username dbname dbtype dbpassword installsoft_flag installsoft_app syncserver password
+mssqldbuser username dbname dbpassword ser_dbpermission_b syncserver ser_dbhostlist_a password
+ipaddress devname bproto ipaddr client_num shared netmask status userctl peerdns gateway itype ipv6init syncserver clientname
+domainipaddress domain ipaddr syncserver
+sslipaddress devname ipaddr sslclient ssldomain sslcert syncserver
+anonftpipaddress status syncserver ipaddr message anondomain ser_anonftpmisc_b disk_limit connection_limit download_limit
+serverftp maxclient highport lowport enable_anon_ftp
+odbc odbcname description driver ser_odbcdetails_b syncserver
+
+// System Setup
+service servicename description grepstring  syncserver
+llog syncserver email period
+// pserver can't be moved to common.
+pserver %lxclient ostype osversion dbadmin dbpassword realpass username ser_rolelist cron_mailto syncserver ser_pserverconf_b hostname description realhostname timezone coma_psrole_a load_threshold
+phpini php_manage_flag enable_zend_flag enable_ioncube_flag register_global_flag syncserver  display_error_flag  ser_phpini_flag_b
+driver ser_driver_b
+component componentname syncserver
+servermail smtp_instance enable_maps domainkey_flag additional_smtp_port queuelifetime concurrencyremote  spamdyke_flag syncserver myname virus_scan_flag max_size greet_delay graylist_flag graylist_max_secs graylist_min_secs coma_mail_graylist_wlist_a max_rcpnts reject_unresolvable_rdns_flag reject_missing_sender_mx_flag reject_ip_in_cc_rdns_flag reject_empty_rdns_flag dns_blacklists alt_smtp_sdyke_flag
+serverspam status  spam_hit subject_tag ser_wlist_a ser_blist_a syncserver 
+
+cron syncserver email ser_minute ser_hour ser_ddate ser_month ser_weekday  jobid username command argument ttype simple_cron cron_day_hour
+hostdeny  syncserver hostname
+dbadmin dbtype dbadmin_name dbpassword syncserver
+firewall status id syncserver from_address from_port to_address to_port action
+proxy 
+proxyacl syncserver status ttype classid description password http ftp 
+genlist ser_dirindexlist_a
+
+
+
+SQL;

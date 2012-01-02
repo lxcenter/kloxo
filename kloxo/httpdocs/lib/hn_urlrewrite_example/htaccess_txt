@@ -1,0 +1,7 @@
+#########################################
+# register PHP-RewriteScript
+#
+<Files goto>
+	ForceType application/x-httpd-php
+</Files>
+
