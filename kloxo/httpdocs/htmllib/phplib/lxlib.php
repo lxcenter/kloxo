@@ -275,7 +275,7 @@ function lscandir_without_dot($arg, $dotflag = false)
 	}
 
 	foreach ($list as $k => $v) {
-		if ($v === ".." || $v === "." || $v === '.svn') {
+		if ($v === ".." || $v === "." || $v === '.git') {
 			unset($list[$k]);
 		}
 		if ($dotflag && csb($v, '.')) {
@@ -294,7 +294,7 @@ function lscandir_without_dot_or_underscore($arg, $dotflag = false)
 	}
 
 	foreach ($list as $k => $v) {
-		if ($v === ".." || $v === "." || $v === '.svn') {
+		if ($v === ".." || $v === "." || $v === '.git') {
 			unset($list[$k]);
 		}
 		if ($dotflag && csb($v, '.')) {
