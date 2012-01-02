@@ -4,21 +4,20 @@ Kloxo is a fully scriptable, distributed and a 100% object oriented hosting plat
 
 # Features
 
-CentOS 5 Support
-Integrates with billing software such as AWBS, WHMCS and HostBill
-Kloxo HostinABox: Feature Complete web hosting platform that uses 10MB RSS.
-Kloxo Enterprise: distributed hosting platform.
-View, Search and Manage your entire hosting, and every domain from a single page.
-Lxguard, advanced intrusion detection management interface.
-Supports apache/lighttpd, djbdns/bind and pure-ftpd
-On the fly Switch between applications
-Scale to million hits per day, using fastcgi
-Advanced Backup/Restore
-Upgrade from HostInABox to Enterprise without re-installing
-Parked/Redirected Domains
-Integrated RoR
-
-And many more!
+* CentOS 5 Support
+* Integrates with billing software such as AWBS, WHMCS and HostBill
+* Kloxo HostinABox: Feature Complete web hosting platform that uses 10MB RSS.
+* Kloxo Enterprise: distributed hosting platform.
+* View, Search and Manage your entire hosting, and every domain from a single page.
+* Lxguard, advanced intrusion detection management interface.
+* Supports apache/lighttpd, djbdns/bind and pure-ftpd
+* On the fly Switch between applications
+* Scale to million hits per day, using fastcgi
+* Advanced Backup/Restore
+* Upgrade from HostInABox to Enterprise without re-installing
+* Parked/Redirected Domains
+* Integrated RoR
+* And many more!
 
 # Contributing
 
