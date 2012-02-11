@@ -2839,8 +2839,8 @@ function get_title()
 	} else {
 		$enterprise = "Single Server";
 	}
-	if (file_exists(".svn")) {
-		$enterprise .= " Development";
+	if (file_exists('.git')) {
+		$enterprise .= ' Development';
 	}
 	$title = "$host $progname $enterprise $title" ;
 	return $title;
