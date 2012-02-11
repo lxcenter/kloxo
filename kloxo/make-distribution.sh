@@ -2,11 +2,7 @@
 #    Kloxo, Hosting Control Panel
 #
 #    Copyright (C) 2000-2009	LxLabs
-<<<<<<< HEAD
 #    Copyright (C) 2009-2012	LxCenter
-=======
-#    Copyright (C) 2009-2011	LxCenter
->>>>>>> upstream/dev
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU Affero General Public License as
@@ -21,26 +17,13 @@
 #    You should have received a copy of the GNU Affero General Public License
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
-<<<<<<< HEAD
-#
-# This file creates kloxo-[version].zip for distribution from SVN.
-=======
 # This file creates kloxo-[version].zip for distribution from SVN.
 # This file creates kloxo-[version].tar.gz for distribution from SVN.
->>>>>>> upstream/dev
 # 
 #
 # - read version
 # - compile c files
 # - create zip package
-<<<<<<< HEAD
-######
-echo "################################"
-echo "### Start packaging"
-echo "### read version..."
-# Read version
-# Please note, this must be a running machine with SVN version!
-=======
 # - create tar.gz package
 #
 # Changelog
@@ -55,7 +38,6 @@ echo "### read version..."
 # Read version
 # Please note, this must be a running machine with SVN version!
 
->>>>>>> upstream/dev
 if ! [ -f /script/version ] ; then
         echo "## Packaging failed. No /script/version found."
 	echo "## Are you sure you are running a development version?"
@@ -65,29 +47,6 @@ if ! [ -f /script/version ] ; then
 fi
 version=`/script/version`
 rm -f kloxo-$version.zip
-<<<<<<< HEAD
-#
-echo "### Compile c files..."
-/bin/sh ./development-create-binaries.sh
-#
-echo "### Create zip package..."
-# Package part
-zip -r9y kloxo-$version.zip ./bin ./cexe ./file ./httpdocs ./pscript ./sbin ./RELEASEINFO ./src -x \
-"*httpdocs/commands.php" \
-"*httpdocs/newpass" \
-"*httpdocs/.php.err" \
-"*/CVS/*" \
-"*/.svn/*" \
-"*/.git/*" \
-"*httpdocs/thirdparty/*" \
-"*httpdocs/htmllib/extjs/*" \
-"*httpdocs/htmllib/fckeditor/*" \
-"*httpdocs/htmllib/yui-dragdrop/*"
-#
-echo "### Finished"
-echo "################################"
-ls -lh kloxo-*.zip
-=======
 
 echo "### Compile c files..."
 
@@ -101,6 +60,7 @@ echo "### Create zip package..."
 	"*httpdocs/.php.err" \
 	"*/CVS/*" \
 	"*/.svn/*" \
+	"*/.git/*" \
 	"*httpdocs/thirdparty/*" \
 	"*httpdocs/htmllib/extjs/*" \
 	"*httpdocs/htmllib/ckeditor/*" \
@@ -126,6 +86,3 @@ echo "### Created TAR.GZ package"
 echo "### Finished"
 echo "################################"
 ls -lh kloxo-*
->>>>>>> upstream/dev
-#
-
