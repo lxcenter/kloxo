@@ -1,0 +1,2558 @@
+# Kronolith Hungarian translation file.
+# This file is distributed under the same license as the Kronolith package.
+# Latest versions: ftp://xenia.sote.hu/pub/linux/horde/
+#
+# Laszlo L. Tornoci <torlasz@xenia.sote.hu>, 2008.
+# Andras Galos <galosa@netinform.hu>, 2010.
+msgid ""
+msgstr ""
+"Project-Id-Version: Kronolith-h3-2.2\n"
+"Report-Msgid-Bugs-To: dev@lists.horde.org\n"
+"POT-Creation-Date: 2010-12-11 18:34+0100\n"
+"PO-Revision-Date: 2008-01-27 14:57+0100\n"
+"Last-Translator: Andras Galos <galosa@netinform.hu>\n"
+"Language-Team: Hungarian <i18n@lists.horde.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=ISO-8859-2\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: KBabel 1.11.4\n"
+"Plural-Forms:  nplurals=2; plural=(n != 1);\n"
+
+#: feed/index.php:128
+msgid " to "
+msgstr ""
+
+#: templates/edit/edit.inc:211
+msgid " until %s"
+msgstr " %s-ig"
+
+#: templates/edit/edit.inc:211
+msgid " without end"
+msgstr " vég nélkül"
+
+#: templates/search/header.inc:4
+msgid "%d events"
+msgstr "%d esemény"
+
+#: templates/view/view.inc:126
+msgid "%d times"
+msgstr "%d alkalommal"
+
+#: templates/edit/edit_timespan.inc:120
+msgid "%s Day(s) %s Hour(s) %s Minutes"
+msgstr "%s nap %s óra %s perc"
+
+#: lib/Driver.php:2318
+msgid "%s attendees"
+msgstr "%s résztvevõ"
+
+#: data.php:311
+msgid "%s file successfully imported"
+msgstr "A %s fájl importálása sikeresen megtörtént"
+
+#: lib/Forms/DeleteCalendar.php:85 lib/Kronolith.php:373
+msgid "%s's Calendar"
+msgstr "%s naptára"
+
+#: templates/contacts/contacts.inc:178
+msgid "* Add these by clicking Add *"
+msgstr "Kiválasztott résztvevõk:"
+
+#: templates/contacts/contacts.inc:163
+msgid "* Please select address(es) *"
+msgstr "Rendelkezésre álló résztvevõk:"
+
+#: templates/edit/edit.inc:211
+msgid ", %d times"
+msgstr ", %d alkalommal"
+
+#: lib/Driver.php:2317
+msgid "1 attendee"
+msgstr "1 résztvevõ"
+
+#: templates/search/header.inc:4
+msgid "1 event"
+msgstr "1 esemény"
+
+#: config/prefs.php:160
+msgid "1 hour"
+msgstr "1 óra"
+
+#: config/prefs.php:157
+msgid "15 minutes"
+msgstr "15 perc"
+
+#: config/prefs.php:158
+msgid "20 minutes"
+msgstr "20 perc"
+
+#: config/prefs.php:159
+msgid "30 minutes"
+msgstr "30 perc"
+
+#: templates/data/export.inc:118 templates/data/export.inc:203
+msgid "AM"
+msgstr "de."
+
+#: lib/Kronolith.php:1222
+msgid "Accepted"
+msgstr "Elfogadva"
+
+#: templates/search/search.inc:9
+msgid "Ad_vanced Search"
+msgstr "_Részletes keresés"
+
+#: templates/contacts/contacts.inc:172
+msgid "Add"
+msgstr "Hozzáadás"
+
+#: templates/edit/edit.inc:23
+msgid "Add Event"
+msgstr "Új esemény"
+
+#: new.php:71
+msgid "Add a new event"
+msgstr "Új esemény felvétele"
+
+#: templates/attendees/attendees.inc:85
+msgid "Add attendees"
+msgstr "Résztvevõk hozzáadása"
+
+#: templates/prefs/sourceselect.inc:298
+msgid "Add source"
+msgstr "adjuk hozzá"
+
+#: templates/contacts/contacts.inc:198
+msgid "Add to attendees"
+msgstr "A kiválasztott résztvevõk hozzáadása"
+
+#: contacts.php:76 templates/attendees/attendees.inc:92
+#: templates/contacts/contacts.inc:139
+msgid "Address Book"
+msgstr "Címjegyzék"
+
+#: config/prefs.php:75
+msgid "Address Books"
+msgstr "Címjegyzékek"
+
+#: templates/search/search.inc:9 templates/search/search_advanced.inc:12
+msgid "Advanced Search"
+msgstr "Részletes keresés"
+
+#: templates/view/view.inc:49
+msgid "Alarm"
+msgstr "Emlékeztetõ"
+
+#: lib/Driver.php:2281
+msgid "Alarm %d days before"
+msgstr "Emlékeztetõ %d nappal elõtte"
+
+#: lib/Driver.php:2286
+msgid "Alarm %d hours before"
+msgstr "Emlékeztetõ %d órával elõtte"
+
+#: lib/Driver.php:2291
+msgid "Alarm %d minutes before"
+msgstr "Emlékeztetõ %d perccel elõtte"
+
+#: lib/Driver.php:2276
+msgid "Alarm %d weeks before"
+msgstr "Emlékeztetõ %d héttel elõtte"
+
+#: lib/Driver.php:2280
+msgid "Alarm 1 day before"
+msgstr "Emlékeztetõ 1 nappal elõtte"
+
+#: lib/Driver.php:2285
+msgid "Alarm 1 hour before"
+msgstr "Emlékeztetõ 1 órával elõtte"
+
+#: lib/Driver.php:2290
+msgid "Alarm 1 minute before"
+msgstr "Emlékeztetõ 1 perccel elõtte"
+
+#: lib/Driver.php:2275
+msgid "Alarm 1 week before"
+msgstr "Emlékeztetõ 1 héttel elõtte"
+
+#: data.php:61
+msgid "Alarm Date"
+msgstr "Az emlékeztetés dátuma"
+
+#: data.php:60
+msgid "Alarm Span (minutes)"
+msgstr "A emlékeztetés idõtartama (perc)"
+
+#: data.php:62
+msgid "Alarm Time"
+msgstr "A emlékeztetés ideje"
+
+#: templates/edit/edit.inc:166 templates/prefs/default_alarm_management.inc:24
+msgid "Alarm Unit"
+msgstr "A emlékeztetés idõegysége"
+
+#: templates/edit/edit.inc:164 templates/prefs/default_alarm_management.inc:22
+msgid "Alarm Value"
+msgstr "Az emlékeztetés legyen"
+
+#: templates/edit/edit.inc:159
+msgid "Alarm enabled"
+msgstr "Emlékeztetõ aktiválva"
+
+#: templates/delete/delete.inc:27 templates/edit/edit.inc:39
+msgid "All"
+msgstr "az összeset"
+
+#: lib/FBView.php:129 lib/FBView.php:132 lib/FBView.php:135
+msgid "All Attendees"
+msgstr "Az összes résztvevõ"
+
+#: templates/perms/perms.inc:49
+msgid "All Authenticated Users"
+msgstr "Minden nem vendég felhasználó"
+
+#: lib/Block/month.php:43
+msgid "All Calendars"
+msgstr "Az összes naptár"
+
+#: templates/search/search.inc:57
+msgid "All Future"
+msgstr "A jövõ"
+
+#: templates/search/search.inc:51
+msgid "All Past"
+msgstr "A múlt"
+
+#: lib/Block/month.php:25 lib/Block/monthlist.php:30
+#: lib/Block/prevmonthlist.php:27 lib/Block/summary.php:28
+msgid "All Visible"
+msgstr "Az összes látható"
+
+#: lib/Block/month.php:187 lib/Driver.php:2386 lib/Scheduler/kronolith.php:445
+#: lib/Scheduler/kronolith.php:458 lib/Views/Day.php:102 lib/Views/Day.php:105
+#: lib/Views/Week.php:149 lib/Views/Week.php:156 lib/Views/Year.php:158
+#: templates/edit/edit_timespan.inc:119
+msgid "All day"
+msgstr "Egész nap"
+
+#: lib/Block/summary.php:170 templates/view/view.inc:36
+msgid "All day event"
+msgstr "Egész napos esemény"
+
+#: templates/data/export.inc:33
+msgid "All events"
+msgstr "Az összes esemény"
+
+#: lib/Maintenance/Task/purge_events.php:73
+msgid "All of your events older than %d days will be permanently deleted."
+msgstr ""
+"Az Ön \"%s\" mappájában az összes %s napnál régebbi levél végérvényesen "
+"törlõdni fog."
+
+#: lib/api.php:790 lib/api.php:802
+msgid "Already Exists"
+msgstr "Már létezik"
+
+#: lib/Kronolith.php:1315 templates/search/search_advanced.inc:44
+#: templates/search/search_advanced.inc:65
+msgid "Any"
+msgstr "Bármelyik"
+
+#: templates/javascript/goto.js:71
+msgid "April"
+msgstr "április"
+
+#: templates/data/export.inc:85 templates/data/export.inc:176
+#: templates/edit/edit_timespan.inc:36 templates/edit/edit_timespan.inc:90
+msgid "At"
+msgstr " "
+
+#: lib/Kronolith.php:1542
+msgid ""
+"Attached is an iCalendar file with more information about the event. If your "
+"mail client supports iTip requests you can use this file to easily update "
+"your local copy of the event."
+msgstr ""
+"Mellékelten található egy iCalendar állomány, mely további információval "
+"szolgál az eseményrõl. Amennyiben az Ön levelezõprogramja támogatja az iTip "
+"kéréseket, akkor a melléklet segítségével könnyen frissítheti a esemény "
+"saját naptárában levõ példányának adatait."
+
+#: perms.php:45
+msgid "Attempt to edit a non-existent share."
+msgstr "Nemlétezõ közös tárterületet kísérelt meg módosítani."
+
+#: templates/attendees/attendees.inc:48 templates/attendees/attendees.inc:60
+#: templates/view/view.inc:174
+msgid "Attendance"
+msgstr "Megjelenés"
+
+#: templates/attendees/attendees.inc:47 templates/view/view.inc:173
+msgid "Attendee"
+msgstr "Résztvevõ"
+
+#: templates/edit/edit.inc:193 templates/view/view.inc:170
+msgid "Attendees"
+msgstr "Résztvevõk"
+
+#: lib/Kronolith.php:1536
+msgid "Attendees: %s"
+msgstr "Résztvevõk"
+
+#: templates/javascript/goto.js:75
+msgid "August"
+msgstr "augusztus"
+
+#: templates/prefs/sourceselect.inc:291 templates/prefs/sourceselect.inc:293
+msgid "Available Address books:"
+msgstr "Rendelkezésre álló címjegyzékek:"
+
+#: templates/search/search.inc:11 templates/search/search_advanced.inc:10
+msgid "Basic Search"
+msgstr "Keresés"
+
+#: config/keywords.php:17
+msgid "Birthday"
+msgstr "Születésnap"
+
+#: lib/FBView.php:90 lib/FBView.php:112 templates/fbview/legend.html:9
+msgid "Busy"
+msgstr "Elfoglalt"
+
+#: templates/search/search_advanced.inc:37
+msgid "C_alendar"
+msgstr "Naptár"
+
+#: templates/edit/edit.inc:67
+msgid "Cal_endar"
+msgstr "_Naptár"
+
+#: lib/Block/month.php:22 lib/Block/monthlist.php:21
+#: lib/Block/prevmonthlist.php:21 lib/Block/summary.php:22
+#: templates/calendar_list.php:24
+msgid "Calendar"
+msgstr "_Naptár"
+
+#: templates/panel.inc:6
+msgid "Calendar Information"
+msgstr "Naptár információ"
+
+#: templates/calendar_list.php:21
+msgid "Calendar List"
+msgstr "Naptárak"
+
+#: lib/Block/summary.php:3
+msgid "Calendar Summary"
+msgstr "Naptár összefoglaló"
+
+#: data.php:255
+msgid "Calendar successfully purged."
+msgstr "A naptárat sikeresen töröltük."
+
+#: templates/panel.inc:23 templates/panel.inc:24 config/prefs.php:27
+#: config/prefs.php:35 config/prefs.php:66
+msgid "Calendars"
+msgstr "Naptárak"
+
+#: templates/calendar_titles.inc:8
+msgid "Calendars Printed: "
+msgstr "Kinyomtatott naptárak: "
+
+#: data.php:271
+msgid "Can't create a new event."
+msgstr "Nem lehetséges új esemény felvétele."
+
+#: lib/Forms/DeleteCalendar.php:45 lib/Forms/DeleteCalendar.php:51
+#: lib/Forms/UnsubscribeRemoteCalendar.php:39
+#: lib/Forms/UnsubscribeRemoteCalendar.php:45 templates/delete/delete.inc:28
+#: templates/delete/one.inc:25 templates/edit/edit.inc:51
+#: templates/edit/edit.inc:384
+msgid "Cancel"
+msgstr "Mégse"
+
+#: lib/Kronolith.php:1198
+msgid "Cancelled"
+msgstr "Elmarad"
+
+#: lib/Kronolith.php:1504
+msgid "Cancelled: %s"
+msgstr "Elmarad: %s"
+
+#: lib/Driver/kolab.php:1413
+msgid "Cannot delete event: %s"
+msgstr "A következõ esemény nem törölhetõ: %s"
+
+#: templates/edit/edit.inc:94 templates/search/search_advanced.inc:58
+msgid "Categor_y"
+msgstr "Kategória"
+
+#: data.php:64 templates/search/event_headers.inc:4 templates/view/view.inc:6
+msgid "Category"
+msgstr "Kategória"
+
+#: calendars/index.php:69 templates/calendar_list.php:52
+msgid "Change Permissions"
+msgstr "Jogosultságok módosítása"
+
+#: config/prefs.php:58
+msgid ""
+"Choose how you want to be notified about event changes, event alarms and "
+"upcoming events."
+msgstr ""
+"Email összefoglalók beállításai a módosuló illetve közelgõ eseményekrõl."
+
+#: config/prefs.php:388
+msgid "Choose how you want to receive reminders for events with alarms:"
+msgstr "Email emlékeztetõ az emlékeztetésre megjelölt eseményekrõl:"
+
+#: config/prefs.php:345
+msgid ""
+"Choose if you want to be notified of new, edited, and deleted events by "
+"email:"
+msgstr "Email értesítés az új, módosult vagy törölt eseményekrõl:"
+
+#: config/prefs.php:358
+msgid "Choose if you want to receive daily agenda email reminders:"
+msgstr "Napi email összefoglaló a módosuló illetve közelgõ eseményekrõl:"
+
+#: config/prefs.php:379
+msgid "Choose if you want to receive reminders for events with alarms:"
+msgstr "Email emlékeztetõ az emlékeztetésre megjelölt eseményekrõl:"
+
+#: templates/prefs/fb_cals_select.inc:28
+msgid "Choose the calendars to include in the above Free/Busy URL:"
+msgstr "Az elõbbi idõbeosztási cím naptárai:"
+
+#: config/prefs.php:445
+msgid "Choose the calendars to include when generating Free/Busy URLs:"
+msgstr "Melyik naptárakat használjuk az idõbeosztási URL-ek létrehozásakor:"
+
+#: templates/prefs/sourceselect.inc:287
+msgid "Choose the order of address books to search when expanding addresses."
+msgstr ""
+"A címrészlet teljes címmé alakításakor milyen sorrendben keressen a gép a "
+"címjegyzékekben."
+
+#: config/prefs.php:194
+msgid "Choose the views to show event locations in:"
+msgstr "Az események helye a következõ nézetekben jelenjen meg:"
+
+#: config/prefs.php:182
+msgid "Choose the views to show event start and end times in:"
+msgstr "Az események kezdete és vége a következõ nézetekben jelenjen meg:"
+
+#: config/prefs.php:37
+msgid "Choose which holidays to display"
+msgstr "A megjelenített ünnepek beállítása."
+
+#: config/prefs.php:29
+msgid "Choose your default calendar."
+msgstr "Az Ön alapértelmezés szerinti naptárának beállítása."
+
+#: templates/attendees/attendees.inc:102
+msgid "Clear all attendees"
+msgstr "Töröljük az összes résztvevõt"
+
+#: templates/prefs/sourceselect.inc:317
+msgid ""
+"Click on one of your selected address books and then select all fields to "
+"search."
+msgstr ""
+"Kattintson az egyik kiválasztott címjegyzékre, majd válassza ki, hogy melyik "
+"mezõkben történjen keresés."
+
+#: templates/calendar_list.php:38 templates/calendar_list.php:39
+#: templates/calendar_list.php:48 templates/calendar_list.php:49
+msgid "Click or copy this URL to display this calendar"
+msgstr "Kattinson rá, vagy másolja át ezt az URL-t a naptár megjelenítéséhez"
+
+#: templates/javascript_defs.php:17
+msgid "Close"
+msgstr "Bezárás"
+
+#: templates/perms/perms.inc:9
+msgid "Close Window"
+msgstr "Bezárás"
+
+#: templates/contacts/contacts.inc:199
+msgid "Close window"
+msgstr "Az ablak bezárása"
+
+#: data.php:30 templates/data/import.inc:13
+msgid "Comma separated values"
+msgstr "Vesszõvel elválasztott értékek"
+
+#: config/prefs.php:87
+msgid "Confirm deletion of events?"
+msgstr "Megerõsítés az események törlésekor"
+
+#: lib/Kronolith.php:1195
+msgid "Confirmed"
+msgstr "Biztos"
+
+#: templates/prefs/fb_cals_select.inc:6
+msgid "Copy this URL for use wherever you need your Free/Busy URL:"
+msgstr ""
+"Ezt az URL-t használja, ha más alkalmazásból kívánja elérni az idõbeosztási "
+"információit:"
+
+#: lib/base.php:103 lib/base.php:114
+msgid "Could not execute maintenance operations."
+msgstr "Nem sikerült elvégezni a karbantartási feladatokat."
+
+#: lib/Kronolith.php:486
+msgid "Could not open %s."
+msgstr "%s nem nyitható meg."
+
+#: lib/Forms/CreateCalendar.php:39
+msgid "Create"
+msgstr "Létrehozás"
+
+#: lib/Forms/CreateCalendar.php:34
+msgid "Create Calendar"
+msgstr "Naptár létrehozása"
+
+#: lib/Views/Day.php:102 lib/Views/Day.php:264 lib/Views/Month.php:174
+#: templates/week/head.inc:29
+msgid "Create a New Event"
+msgstr "Új esemény létrehozása"
+
+#: templates/calendar_list.php:11
+msgid "Create a new Local Calendar"
+msgstr "Új helyi naptár létrehozása"
+
+#: templates/view/view.inc:76
+msgid "Created"
+msgstr "Létrehozva"
+
+#: templates/delete/delete.inc:25 templates/edit/edit.inc:37
+msgid "Current"
+msgstr "Jelenlegi"
+
+#: lib/Recurrence.php:199
+msgid "Daily"
+msgstr "naponta"
+
+#: templates/edit/edit.inc:226 templates/view/view.inc:98
+msgid "Daily: Recurs every"
+msgstr "Naponta: minden"
+
+#: attendees.php:203 lib/Block/tree_menu.php:21 lib/Kronolith.php:1852
+#: config/prefs.php:96
+msgid "Day"
+msgstr "Nap"
+
+#: templates/edit/edit.inc:170 templates/prefs/default_alarm_management.inc:28
+#: templates/view/view.inc:58
+msgid "Day(s)"
+msgstr "nap"
+
+#: lib/Kronolith.php:1902
+msgid "De_lete"
+msgstr "_Törlés"
+
+#: templates/javascript/goto.js:79
+msgid "December"
+msgstr "december"
+
+#: lib/Kronolith.php:1225
+msgid "Declined"
+msgstr "Elutasítva"
+
+#: templates/prefs/default_alarm_management.inc:21
+msgid "Default Alarm Setting:"
+msgstr "Emlékeztetõk alapértelmezett beállítása:"
+
+#: config/prefs.php:28
+msgid "Default Calendar"
+msgstr "Alapértelmezett naptár"
+
+#: templates/perms/perms.inc:55 templates/perms/perms.inc:79
+#: templates/perms/perms.inc:96 templates/perms/perms.inc:120
+#: templates/perms/perms.inc:137 templates/perms/perms.inc:161
+#: templates/perms/perms.inc:178 templates/perms/perms.inc:206
+#: templates/perms/perms.inc:246 templates/perms/perms.inc:277
+#: templates/perms/perms.inc:295 templates/perms/perms.inc:319
+#: templates/perms/perms.inc:353
+msgid "Delegate"
+msgstr "Átadás másnak"
+
+#: calendars/index.php:70 lib/Driver.php:1348 lib/Driver.php:2345
+#: lib/Forms/DeleteCalendar.php:45 templates/calendar_list.php:54
+#: templates/delete/one.inc:24 templates/perms/perms.inc:54
+#: templates/perms/perms.inc:75 templates/perms/perms.inc:95
+#: templates/perms/perms.inc:116 templates/perms/perms.inc:136
+#: templates/perms/perms.inc:157 templates/perms/perms.inc:177
+#: templates/perms/perms.inc:202 templates/perms/perms.inc:242
+#: templates/perms/perms.inc:273 templates/perms/perms.inc:294
+#: templates/perms/perms.inc:315 templates/perms/perms.inc:349
+msgid "Delete"
+msgstr "Törlés"
+
+#: lib/Driver.php:2344 lib/Forms/DeleteCalendar.php:40
+#: lib/Views/DeleteEvent.php:29
+msgid "Delete %s"
+msgstr "%s törlése"
+
+#: lib/Driver.php:1347
+msgid "Delete exception on %s"
+msgstr "A %s kivétel törlése"
+
+#: lib/Maintenance/Task/purge_events.php:60
+msgid "Deleted %d event older than %d days."
+msgid_plural "Deleted %d events older than %d days."
+msgstr[0] "%d esemény törölve, mely %d napnál idõsebb"
+msgstr[1] "%d esemény törölve, melyek %d napnál idõsebbek"
+
+#: templates/edit/edit.inc:180 templates/search/search.inc:26
+#: templates/search/search_advanced.inc:101
+msgid "Descri_ption"
+msgstr "_Leírás"
+
+#: data.php:63 lib/Forms/CreateCalendar.php:37 lib/Forms/EditCalendar.php:44
+#: templates/view/view.inc:157
+msgid "Description"
+msgstr "Leírás"
+
+#: templates/contacts/contacts.inc:187
+msgid "Display"
+msgstr "Megjelenítés"
+
+#: config/prefs.php:9 config/prefs.php:20
+msgid "Display Options"
+msgstr "Megjelenítési beállítások"
+
+#: templates/calendar_list.php:26
+msgid "Display URL"
+msgstr "Megjelenítési URL"
+
+#: lib/Kronolith.php:1163
+msgid "Does not recur"
+msgstr "nem ismétlõdik"
+
+#: config/prefs.php:366
+msgid ""
+"Don't send me a notification if I've added, changed or deleted the event?"
+msgstr ""
+"Email tájékoztatás elhagyása az események módosítása ill. törlése esetén"
+
+#: lib/Kronolith.php:724
+msgid "Due: %s"
+msgstr "Határidõ: %s"
+
+#: templates/edit/edit_timespan.inc:112
+msgid "Duration"
+msgstr "Hossza"
+
+#: lib/Driver.php:2052
+msgid "Duration Day"
+msgstr "Hossza (nap)"
+
+#: lib/Driver.php:2064
+msgid "Duration Hour"
+msgstr "Hossza (óra)"
+
+#: lib/Driver.php:2075
+msgid "Duration Minute"
+msgstr "Hossza (perc)"
+
+#: calendars/index.php:68 lib/Driver.php:2339 templates/calendar_list.php:40
+#: templates/calendar_list.php:50 templates/perms/perms.inc:53
+#: templates/perms/perms.inc:71 templates/perms/perms.inc:94
+#: templates/perms/perms.inc:112 templates/perms/perms.inc:135
+#: templates/perms/perms.inc:153 templates/perms/perms.inc:176
+#: templates/perms/perms.inc:198 templates/perms/perms.inc:238
+#: templates/perms/perms.inc:269 templates/perms/perms.inc:293
+#: templates/perms/perms.inc:311 templates/perms/perms.inc:345
+msgid "Edit"
+msgstr "Szerkesztés"
+
+#: lib/Driver.php:2338 lib/Forms/EditCalendar.php:40
+#: lib/Forms/EditRemoteCalendar.php:34 lib/Views/EditEvent.php:29
+#: templates/attendees/attendees.inc:57
+msgid "Edit %s"
+msgstr "%s szerkesztése"
+
+#: templates/edit/edit.inc:202
+msgid "Edit Attendees"
+msgstr "Résztvevõk szerkesztése"
+
+#: perms.php:256
+msgid "Edit Permissions"
+msgstr "Jogosultság szerkesztése"
+
+#: perms.php:258
+msgid "Edit Permissions for %s"
+msgstr "\"%s\" jogosultságainak módosítása"
+
+#: templates/attendees/attendees.inc:85
+msgid "Edit attendee"
+msgstr "Résztvevõ módosítása"
+
+#: attendees.php:274
+msgid "Edit attendees"
+msgstr "Résztvevõk szerkesztése"
+
+#: templates/category_legend.inc:20
+msgid "Edit categories and colors"
+msgstr "Kategóriák és színeik szerkesztése"
+
+#: templates/perms/perms.inc:11
+msgid "Edit permissions for %s"
+msgstr "\"%s\" jogosultságainak szerkesztése"
+
+#: templates/contacts/contacts.inc:190
+msgid "Email Address"
+msgstr "Email cím"
+
+#: templates/edit/edit_timespan.inc:57
+msgid "En_d"
+msgstr "Vége"
+
+#: data.php:58
+msgid "End Date"
+msgstr "A befejezés dátuma"
+
+#: lib/Driver.php:2023 templates/data/export.inc:161
+msgid "End Day"
+msgstr "A befejezés napja"
+
+#: lib/Driver.php:2036 templates/data/export.inc:178
+msgid "End Hour"
+msgstr "A befejezés órája"
+
+#: lib/Driver.php:2047 templates/data/export.inc:190
+msgid "End Minute"
+msgstr "A befejezés perce"
+
+#: lib/Driver.php:2014 templates/data/export.inc:148
+msgid "End Month"
+msgstr "A befejezés hónapja"
+
+#: templates/data/export.inc:125 templates/search/event_headers.inc:8
+#: templates/view/view.inc:42
+msgid "End On"
+msgstr "Vége"
+
+#: data.php:59
+msgid "End Time"
+msgstr "A befejezés ideje"
+
+#: lib/Driver.php:2003 templates/data/export.inc:134
+msgid "End Year"
+msgstr "A befejezés éve"
+
+#: attendees.php:253
+msgid "Error retrieving free/busy information for %s: %s"
+msgstr "Nem sikerült megtudni %s idõbeosztását: %s"
+
+#: attendees.php:230
+msgid "Error retrieving your free/busy information: %s"
+msgstr "Nem sikerült megtudni az Ön idõbeosztását: %s"
+
+#: config/prefs.php:44
+msgid "Event Defaults"
+msgstr "Emlékeztetõk alapértelmezett értékei"
+
+#: feed/index.php:145
+msgid "Event Status:"
+msgstr "Az esemény állapota"
+
+#: lib/Kronolith.php:1699
+msgid "Event added:"
+msgstr "Új esemény felvéve:"
+
+#: lib/Kronolith.php:1709
+msgid "Event deleted:"
+msgstr "Törölt esemény: "
+
+#: lib/Kronolith.php:1704
+msgid "Event edited:"
+msgstr "Módosított esemény:"
+
+#: lib/Driver.php:1487
+msgid "Event from %s to %s"
+msgstr "%s és %s közötti események"
+
+#: lib/Driver/sql.php:405
+msgid "Event not found"
+msgstr "Az esemény nem található"
+
+#: lib/Driver/kolab.php:453 lib/Driver/kolab.php:1198
+#: lib/Driver/kolab.php:1237 lib/Driver/kolab.php:1389
+msgid "Event not found: %s"
+msgstr "Az esemény nem található: %s"
+
+#: config/prefs.php:43 config/prefs.php:49 config/prefs.php:56
+msgid "Events"
+msgstr "Események"
+
+#: lib/api.php:294
+msgid "Events from %s"
+msgstr "%s és %s közötti események"
+
+#: lib/Driver.php:1079
+msgid "Events must have a start date."
+msgstr "Az eseményeknek kell, hogy legyen egy kezdõ idõpontja."
+
+#: lib/Driver.php:1038
+msgid "Events must have a title."
+msgstr "Az eseményeknek kell, hogy legyen egy neve."
+
+#: templates/edit/edit.inc:323 templates/view/view.inc:132
+msgid "Exceptions"
+msgstr "Kivételek"
+
+#: lib/Kronolith.php:1909 templates/data/export.inc:209
+msgid "Export"
+msgstr "Exportálás"
+
+#: templates/data/export.inc:8
+msgid "Export Calendar"
+msgstr "Naptár exportálás"
+
+#: templates/panel.inc:59
+msgid "External Events:"
+msgstr "Külsõ események:"
+
+#: templates/javascript/goto.js:69
+msgid "February"
+msgstr "február"
+
+#: templates/prefs/sourceselect.inc:327
+msgid "Fields to search"
+msgstr "A keresendõ mezõk"
+
+#: templates/contacts/contacts.inc:144
+msgid "Find"
+msgstr "Keressük"
+
+#: lib/Block/month.php:124 lib/Views/Year.php:81 templates/edit/edit.inc:239
+#: templates/javascript/goto.js:63
+msgid "Fr"
+msgstr "P"
+
+#: lib/Kronolith.php:1201
+msgid "Free"
+msgstr "Szabad"
+
+#: config/prefs.php:67
+msgid "Free/Busy Information"
+msgstr "Idõbeosztási információk"
+
+#: templates/edit/javascript.inc:71 templates/month/head.inc:21
+#: templates/view/view.inc:105
+msgid "Friday"
+msgstr "péntek"
+
+#: templates/delete/delete.inc:26 templates/edit/edit.inc:38
+msgid "Future"
+msgstr "Jövõ"
+
+#: config/keywords.php:17
+msgid "Game"
+msgstr "Játék"
+
+#: templates/search/search_advanced.inc:19
+msgid "General"
+msgstr "Általános adatok"
+
+#: lib/Block/summary.php:157
+msgid "Goto %s"
+msgstr "Ugrás ide: %s"
+
+#: templates/perms/perms.inc:289
+msgid "Groups"
+msgstr "Csoportok"
+
+#: templates/perms/perms.inc:90
+msgid "Guest Permissions"
+msgstr "Vendég jogosultságok"
+
+#: templates/edit/javascript.inc:260
+msgid "Hide"
+msgstr "Elrejtés"
+
+#: config/prefs.php:36
+msgid "Holidays"
+msgstr "Ünnepek"
+
+#: templates/edit/edit.inc:169 templates/prefs/default_alarm_management.inc:27
+#: templates/view/view.inc:61
+msgid "Hour(s)"
+msgstr "óra"
+
+#: config/prefs.php:156
+msgid "How long should the time slots on the day and week views be?"
+msgstr "Idõsávok napi és heti nézetben"
+
+#: config/prefs.php:397
+msgid "How many days of Free/Busy information should be generated?"
+msgstr "napra elõre készüljön el az Ön idõbeosztása"
+
+#: lib/Kronolith.php:1546
+msgid ""
+"If your email client doesn't support iTip requests you can use one of the "
+"following links to accept or decline the event.\n"
+"\n"
+"To accept the event:\n"
+"%s\n"
+"\n"
+"To accept the event tentatively:\n"
+"%s\n"
+"\n"
+"To decline the event:\n"
+"%s\n"
+msgstr ""
+"Ha az Ön levelezõprogramja nem támogatja az iTip kéréseket, akkor az alábbi "
+"linkeket használhatja egy eseményre való meghívás elfogadására vagy "
+"elutasítására.\n"
+"\n"
+"A meghívás elfogadása:\n"
+"%s\n"
+"\n"
+"A meghívás feltételes elfogadása:\n"
+"%s\n"
+"\n"
+"A meghívás elutasítása:\n"
+"%s\n"
+
+#: templates/data/import.inc:7
+msgid "Import Calendar, Step %d"
+msgstr "Naptár importálás, %d. lépés"
+
+#: data.php:317
+msgid "Import/Export Calendar"
+msgstr "Naptár importálása/exportálása"
+
+#: templates/perms/perms.inc:172
+msgid "Individual Users"
+msgstr "Egyes felhasználók"
+
+#: templates/javascript/goto.js:68
+msgid "January"
+msgstr "január"
+
+#: templates/javascript/goto.js:74
+msgid "July"
+msgstr "július"
+
+#: templates/javascript/goto.js:73
+msgid "June"
+msgstr "június"
+
+#: data.php:66 templates/edit/edit.inc:338 templates/view/view.inc:140
+msgid "Keywords"
+msgstr "Kulcsszavak"
+
+#: templates/calendar_list.php:25
+msgid "Kind"
+msgstr "Fajta"
+
+#: templates/search/search.inc:53
+msgid "Last 24 hours"
+msgstr "Az elmúlt 24 óra"
+
+#: templates/view/view.inc:83
+msgid "Last Modified"
+msgstr "Utolsó módosítás"
+
+#: templates/month/head.inc:5 templates/month/head_side_by_side.inc:5
+msgid "Last Month"
+msgstr "Elõzõ hónap"
+
+#: templates/year/head.inc:3
+msgid "Last Year"
+msgstr "Elõzõ év"
+
+#: templates/search/search.inc:52 templates/week/head.inc:6
+msgid "Last week"
+msgstr "Elõzõ hét"
+
+#: templates/calendar_info.php:38
+msgid "Learn how to embed other calendar views."
+msgstr "Segítség naptárak beágyazásáról."
+
+#: templates/data/export.inc:29
+msgid "Limit the time span to export:"
+msgstr "Az exportálandó események idõintervalluma:"
+
+#: config/prefs.php:408
+msgid ""
+"List all contacts when loading the contacts screen? (if disabled, you will "
+"only see contacts that you search for explicitly)"
+msgstr ""
+"Az összes partner listázása a címjegyzék megjelenítésekor? (ha nem, akkor "
+"csak azok a partnerek jelennek meg, melyekre rákeres)"
+
+#: templates/edit/edit.inc:101 templates/search/search_advanced.inc:81
+msgid "Lo_cation"
+msgstr "_Hely"
+
+#: templates/javascript_defs.php:16
+msgid "Loading ..."
+msgstr "Betöltés..."
+
+#: templates/attendees/attendees.inc:88
+msgid "Loading..."
+msgstr "Betöltés..."
+
+#: templates/calendar_list.php:47
+msgid "Local"
+msgstr "Helyi"
+
+#: templates/calendar_info.php:18
+msgid "Local calendar owned by %s."
+msgstr "A helyi naptár tulajdonosa %s."
+
+#: data.php:65 lib/Driver.php:2368 templates/search/event_headers.inc:5
+#: templates/view/view.inc:14
+msgid "Location"
+msgstr "Hely"
+
+#: lib/Kronolith.php:1527
+msgid "Location: %s"
+msgstr "Hely: %s"
+
+#: feed/index.php:64
+msgid "Login required for the requested feed (%s)."
+msgstr ""
+
+#: config/prefs.php:50
+msgid "Maintenance"
+msgstr "Karbantartás"
+
+#: calendars/index.php:74 templates/calendar_list.php:4
+msgid "Manage Calendars"
+msgstr "Naptárak kezelése"
+
+#: templates/javascript/goto.js:70
+msgid "March"
+msgstr "március"
+
+#: lib/api.php:143
+msgid "Maximum Number of Events"
+msgstr "Az események maximális száma"
+
+#: lib/Block/monthlist.php:27 lib/Block/summary.php:25
+msgid "Maximum number of events to display (0 = no limit)"
+msgstr "Megjelenített események maximális száma (0 = mindet)"
+
+#: templates/javascript/goto.js:72
+msgid "May"
+msgstr "május"
+
+#: lib/Driver.php:2364
+msgid "Me"
+msgstr "Én"
+
+#: config/keywords.php:17
+msgid "Meeting"
+msgstr "Találkozó"
+
+#: lib/Block/tree_alarms.php:3
+msgid "Menu Alarms"
+msgstr "Emlékeztetések menü"
+
+#: lib/Block/tree_menu.php:3
+msgid "Menu List"
+msgstr "Menülista"
+
+#: templates/edit/edit.inc:168 templates/prefs/default_alarm_management.inc:26
+#: templates/view/view.inc:64
+msgid "Minute(s)"
+msgstr "perc"
+
+#: lib/Block/month.php:124 lib/Views/Year.php:77 templates/edit/edit.inc:235
+#: templates/javascript/goto.js:59
+msgid "Mo"
+msgstr "H"
+
+#: templates/edit/javascript.inc:67 templates/month/head.inc:17
+#: templates/view/view.inc:101 config/prefs.php:120
+msgid "Monday"
+msgstr "hétfõ"
+
+#: attendees.php:206 lib/Block/tree_menu.php:24 lib/Kronolith.php:1858
+#: config/prefs.php:99
+msgid "Month"
+msgstr "Hónap"
+
+#: config/prefs.php:179 config/prefs.php:191
+msgid "Month, Week, and Day Views"
+msgstr "Havi, heti és napi megjelenítés"
+
+#: lib/Recurrence.php:202
+msgid "Monthly"
+msgstr "Havonta"
+
+#: templates/edit/edit.inc:246 templates/edit/edit.inc:252
+#: templates/view/view.inc:110 templates/view/view.inc:112
+msgid "Monthly: Recurs every"
+msgstr "Havonta: ismétlõdik minden"
+
+#: lib/Block/monthlist.php:24
+msgid "Months Ahead"
+msgstr "hónappal elõre"
+
+#: lib/Block/prevmonthlist.php:24
+msgid "Months Before"
+msgstr "hónappal korábban"
+
+#: templates/prefs/sourceselect.inc:312
+msgid "Move down"
+msgstr "Mozgatás lejjebb"
+
+#: templates/prefs/sourceselect.inc:310
+msgid "Move up"
+msgstr "Mozgatás följebb"
+
+#: lib/api.php:1048
+msgid "Multiple iCalendar components found; only one vEvent is supported."
+msgstr ""
+"Több iCalendar komponens van jelen; csak egy vEvent használata támogatott."
+
+#: templates/panel.inc:41
+msgid "My Calendars:"
+msgstr "Saját naptáraim:"
+
+#: templates/prefs/fb_cals_select.inc:2
+msgid "My Free/Busy URL"
+msgstr "Idõbeosztási címem"
+
+#: lib/Forms/CreateCalendar.php:36 lib/Forms/EditCalendar.php:43
+#: lib/Forms/EditRemoteCalendar.php:37
+#: lib/Forms/SubscribeRemoteCalendar.php:36
+#: templates/contacts/contacts.inc:189
+msgid "Name"
+msgstr "Név"
+
+#: lib/Block/tree_menu.php:20
+msgid "New Event"
+msgstr "Új esemény"
+
+#: lib/Kronolith.php:407
+msgid ""
+"New calendar created and automatically shared with the following group(s): "
+"%s."
+msgstr ""
+"Új naptár létrehozva, és automatikusan megosztva a következõ csoportokkal: %s"
+
+#: templates/data/import.inc:33
+msgid "Next"
+msgstr "Következõ"
+
+#: templates/search/search.inc:55
+msgid "Next 24 hours"
+msgstr "A következõ 24 óra"
+
+#: lib/FBView/day.php:28
+msgid "Next Day"
+msgstr "Következõ nap"
+
+#: lib/FBView/month.php:31 templates/month/head.inc:7
+#: templates/month/head_side_by_side.inc:7
+msgid "Next Month"
+msgstr "Következõ hónap"
+
+#: lib/FBView/week.php:31
+msgid "Next Week"
+msgstr "Következõ hét"
+
+#: templates/year/head.inc:5
+msgid "Next Year"
+msgstr "Következõ év"
+
+#: templates/day/head.inc:5
+msgid "Next day"
+msgstr "Következõ nap"
+
+#: templates/search/search.inc:56 templates/week/head.inc:8
+msgid "Next week"
+msgstr "Következõ hét"
+
+#: config/prefs.php:341 config/prefs.php:354 config/prefs.php:375
+msgid "No"
+msgstr "Nem"
+
+#: templates/fbview/legend.html:13
+msgid "No Information"
+msgstr "Nincs információ"
+
+#: templates/edit/edit.inc:163 templates/view/view.inc:69
+msgid "No alarm"
+msgstr "Nincs"
+
+#: templates/attendees/attendees.inc:54
+msgid "No attendees"
+msgstr "Nincsenek résztvevõk"
+
+#: lib/api.php:1186
+msgid ""
+"No attendees have been updated because none of the provided email addresses "
+"have been found in the event's attendees list."
+msgstr ""
+"Egy meghívott sem kapott értesítést, mert a megadott email címek közül egy "
+"sem szerepelt a meghívottak listájában."
+
+#: lib/Kronolith.php:2101
+msgid "No calendars are available to guests."
+msgstr "Vendég felhasználók részére nem áll rendelkezésre naptár."
+
+#: lib/Driver/sql.php:433
+msgid "No calendars to search"
+msgstr "A keresendõ mezõk"
+
+#: templates/edit/edit.inc:284 templates/view/view.inc:126
+msgid "No end date"
+msgstr "Vég nélkül"
+
+#: lib/Block/monthlist.php:177 lib/Block/prevmonthlist.php:170
+#: lib/Block/summary.php:209
+msgid "No events to display"
+msgstr "Nincs megjeleníthetõ esemény"
+
+#: lib/FreeBusy.php:237
+msgid "No free/busy information found at the free/busy url of %s."
+msgstr "%s idõbeosztási adatai nem érhetõk el."
+
+#: lib/Storage/kolab.php:74
+msgid "No free/busy information is available for %s"
+msgstr "%s idõbeosztási adatai nem érhetõk el"
+
+#: lib/FreeBusy.php:238
+msgid "No free/busy url found for %s."
+msgstr "%s-hoz nincs idõbeosztási cím."
+
+#: lib/api.php:775 lib/api.php:815 lib/api.php:1055
+msgid "No iCalendar data was found."
+msgstr "Nem található iCalendar adat."
+
+#: lib/Driver.php:1332 lib/Recurrence.php:198 templates/edit/edit.inc:221
+msgid "No recurrence"
+msgstr "Nincs ismétlõdés"
+
+#: lib/FreeBusy.php:169
+msgid "No valid email address found"
+msgstr "Nem található érvényes email cím"
+
+#: lib/Kronolith.php:1232 lib/Kronolith.php:1253
+#: templates/prefs/sourceselect.inc:35
+msgid "None"
+msgstr "Nincs"
+
+#: lib/Views/DeleteEvent.php:27 lib/Views/EditEvent.php:27
+#: lib/Views/Event.php:26
+msgid "Not Found"
+msgstr "Nem található"
+
+#: lib/Storage/sql.php:157
+msgid "Not found"
+msgstr "Nem található"
+
+#: config/prefs.php:57
+msgid "Notifications"
+msgstr "Emailben történõ értesítés"
+
+#: templates/javascript/goto.js:78
+msgid "November"
+msgstr "november"
+
+#: templates/search/search.inc:54
+msgid "Now"
+msgstr "Most"
+
+#: templates/perms/perms.inc:131
+msgid "Object Creator"
+msgstr "Az objektum létrehozója"
+
+#: templates/javascript/goto.js:77
+msgid "October"
+msgstr "október"
+
+#: templates/edit/edit_timespan.inc:13 templates/edit/edit_timespan.inc:62
+msgid "On"
+msgstr "dátum"
+
+#: config/prefs.php:344 config/prefs.php:357 config/prefs.php:378
+msgid "On all calendars I have read access to"
+msgstr "Az összes naptárban, amihez hozzáférek"
+
+#: config/prefs.php:343 config/prefs.php:356 config/prefs.php:377
+msgid "On all shown calendars"
+msgstr "Minden megjelenített naptárban"
+
+#: config/prefs.php:342 config/prefs.php:355 config/prefs.php:376
+msgid "On my calendars only"
+msgstr "Csak a saját naptáraimban"
+
+#: perms.php:58
+msgid ""
+"Only the owner or system administrator may change ownership or owner "
+"permissions for a share"
+msgstr ""
+"Csak a tulajdonos vagy a rendszergazda változtathatja meg egy megosztás "
+"tulajdonosát vagy jogosultságait"
+
+#: lib/Kronolith.php:1250
+msgid "Optional"
+msgstr "Választható"
+
+#: lib/FBView.php:120
+msgid "Optional Attendees"
+msgstr "Opcionális résztvevõk"
+
+#: templates/perms/perms.inc:254
+msgid "Or enter a user name:"
+msgstr "Vagy adja meg az új nevet:"
+
+#: config/prefs.php:74
+msgid "Other Options"
+msgstr "Egyéb beállítások"
+
+#: lib/FBView.php:155
+msgid "Overview"
+msgstr "Áttekintés"
+
+#: templates/perms/perms.inc:22 templates/view/view.inc:28
+msgid "Owner"
+msgstr "Tulajdonos"
+
+#: templates/perms/perms.inc:28 templates/perms/perms.inc:37
+msgid "Owner:"
+msgstr "Gazdája:"
+
+#: lib/Driver.php:2363
+msgid "Owner: %s"
+msgstr "Tulajdonos: %s"
+
+#: templates/data/export.inc:119 templates/data/export.inc:204
+msgid "PM"
+msgstr "du."
+
+#: lib/Forms/EditRemoteCalendar.php:41
+#: lib/Forms/SubscribeRemoteCalendar.php:39
+msgid "Password"
+msgstr "Jelszó"
+
+#: templates/edit/edit.inc:216 templates/view/view.inc:95
+msgid "Pattern"
+msgstr "Ismétlõdés típusa"
+
+#: templates/delete/one.inc:22
+msgid "Permanently delete this event?"
+msgstr "Az esemény végleges törlése?"
+
+#: lib/Block/month.php:76 lib/Block/monthlist.php:79
+#: lib/Block/prevmonthlist.php:75 lib/Block/summary.php:79
+#: lib/Driver/sql.php:835 lib/Kronolith.php:2003 lib/Kronolith.php:2022
+#: lib/Kronolith.php:2035 lib/Kronolith.php:2056 lib/api.php:657
+#: lib/api.php:693 lib/api.php:725 lib/api.php:756 lib/api.php:850
+#: lib/api.php:897 lib/api.php:995 lib/api.php:1027 lib/api.php:1116
+#: lib/api.php:1176 lib/api.php:1242 lib/api.php:1264
+msgid "Permission Denied"
+msgstr "Hozzáférés megtagadva"
+
+#: lib/Forms/DeleteCalendar.php:56
+msgid "Permission denied"
+msgstr "Hozzáférés megtagadva"
+
+#: feed/index.php:45
+msgid "Permission denied for the requested feed (%s)."
+msgstr "Hozzáférés megtagadva: %s"
+
+#: lib/Imple/ContactAutoCompleter.php:227
+msgid "Please resolve ambiguous or invalid addresses."
+msgstr "Kérem javítsa ki a hibás vagy nem egyértelmû címeket."
+
+#: config/prefs.php:21
+msgid "Portal Options"
+msgstr "Személyes kezdõoldal"
+
+#: templates/fbview/legend.html:11
+msgid "Possible Meeting Time"
+msgstr "A találkozó lehetséges idõpontja"
+
+#: lib/FBView/day.php:24
+msgid "Previous Day"
+msgstr "Elõzõ nap"
+
+#: lib/FBView/month.php:25
+msgid "Previous Month"
+msgstr "Elõzõ hónap"
+
+#: lib/FBView/week.php:25
+msgid "Previous Week"
+msgstr "Elõzõ hét"
+
+#: templates/day/head.inc:3
+msgid "Previous day"
+msgstr "Elõzõ nap"
+
+#: config/prefs.php:180 config/prefs.php:192
+msgid "Print Views"
+msgstr "Nyomatón való megjelenítés"
+
+#: lib/Block/prevmonthlist.php:3 lib/Block/prevmonthlist.php:47
+msgid "Prior Events"
+msgstr "Korábbi események"
+
+#: lib/Driver.php:1483
+msgid "Private Event from %s to %s"
+msgstr "Privát esemény %s és %s között"
+
+#: lib/Driver.php:2308
+msgid "Private event"
+msgstr "Privát esemény"
+
+#: templates/edit/edit.inc:120
+msgid "Private?"
+msgstr "Privát"
+
+#: config/prefs.php:471
+msgid "Purge old events from your calender?"
+msgstr "Régi események törlése a naptáramból"
+
+#: config/prefs.php:480
+msgid "Purge old events how often:"
+msgstr "Régi események törlésének gyakorisága:"
+
+#: config/prefs.php:488
+msgid "Purge old events older than this amount of days."
+msgstr "napnál régebbi események törlése."
+
+#: templates/perms/perms.inc:52 templates/perms/perms.inc:67
+#: templates/perms/perms.inc:93 templates/perms/perms.inc:108
+#: templates/perms/perms.inc:134 templates/perms/perms.inc:149
+#: templates/perms/perms.inc:175 templates/perms/perms.inc:194
+#: templates/perms/perms.inc:234 templates/perms/perms.inc:265
+#: templates/perms/perms.inc:292 templates/perms/perms.inc:307
+#: templates/perms/perms.inc:341
+msgid "Read"
+msgstr "Olvasás"
+
+#: lib/Forms/DeleteCalendar.php:43
+msgid ""
+"Really delete the calendar \"%s\"? This cannot be undone and all data on "
+"this calendar will be permanently removed."
+msgstr ""
+"Valóban törölni kívánja a(z) \"%s\" naptárat? Ez nem visszafordítható lépés, "
+"és a naptárban levõ összes adatot végérvényesen törli."
+
+#: lib/Forms/UnsubscribeRemoteCalendar.php:37
+msgid "Really unsubscribe from the calendar \"%s\" (%s)?"
+msgstr "Valóban le kíván iratkozni a(z) \"%s\" naptárról (%s)?"
+
+#: templates/edit/edit.inc:281 templates/view/view.inc:125
+msgid "Recur Until"
+msgstr "Ismétlõdés hossza"
+
+#: templates/edit/edit.inc:210 templates/view/view.inc:92
+msgid "Recurrence"
+msgstr "Ismétlõdés"
+
+#: data.php:70
+msgid "Recurrence Data"
+msgstr "Ismétlõdési adatok"
+
+#: data.php:68
+msgid "Recurrence End Date"
+msgstr "Ismétlõdés vége"
+
+#: lib/Driver.php:2118
+msgid "Recurrence End Day"
+msgstr "Az ismétlõdés vége: nap"
+
+#: lib/Driver.php:2103
+msgid "Recurrence End Month"
+msgstr "Az ismétlõdés vége: hónap"
+
+#: lib/Driver.php:2086
+msgid "Recurrence End Year"
+msgstr "Az ismétlõdés vége: év"
+
+#: data.php:69
+msgid "Recurrence Interval"
+msgstr "Az ismétlõdési idõ"
+
+#: data.php:67
+msgid "Recurrence Type"
+msgstr "Az ismétlõdés fajtája"
+
+#: lib/Kronolith.php:1166
+msgid "Recurs daily"
+msgstr "Naponta ismétlõdik"
+
+#: lib/Kronolith.php:1173
+msgid "Recurs monthly"
+msgstr "Havonta ismétlõdik"
+
+#: lib/Kronolith.php:1169
+msgid "Recurs weekly"
+msgstr "Hetente ismétlõdik"
+
+#: lib/Kronolith.php:1178
+msgid "Recurs yearly"
+msgstr "Évente ismétlõdik"
+
+#: lib/Scheduler/kronolith.php:285
+msgid "Reminder: %s"
+msgstr "Emlékeztetõ: %s"
+
+#: templates/calendar_list.php:37
+msgid "Remote"
+msgstr "Külsõ"
+
+#: templates/calendar_info.php:5
+msgid "Remote Calendar from: "
+msgstr "Külsõ naptár:"
+
+#: templates/panel.inc:73
+msgid "Remote Calendars:"
+msgstr "Külsõ naptárak:"
+
+#: templates/contacts/contacts.inc:173
+msgid "Remove"
+msgstr "Eltávolítás"
+
+#: templates/attendees/attendees.inc:57
+msgid "Remove %s"
+msgstr "%s törlése"
+
+#: attendees.php:196
+msgid "Remove Attendee"
+msgstr "A meghívott eltávolítása"
+
+#: templates/prefs/sourceselect.inc:300
+msgid "Remove source"
+msgstr "Távolítsuk el"
+
+#: lib/Driver.php:259
+msgid ""
+"Removing user data is not supported with the current calendar storage "
+"backend."
+msgstr ""
+"Felhasználói adatok törlését nem támogatja a jelenlegi naptáralrendszer "
+"meghajtója."
+
+#: templates/data/import.inc:31
+msgid ""
+"Replace existing calendar with the imported one? <strong>Warning: This "
+"deletes all entries in your current calendar.</strong>"
+msgstr ""
+"Írjuk felül a jelenlegi naptárat az importálttal? <strong>Figyelmeztetés: ez "
+"kitörli az összes adatot a jelenlegi naptárból!</strong>"
+
+#: lib/Kronolith.php:1257
+msgid "Required"
+msgstr "Szükséges"
+
+#: lib/FBView.php:98 lib/FBView.php:140 lib/FBView.php:143 lib/FBView.php:146
+msgid "Required Attendees"
+msgstr "Szükséges résztvevõk"
+
+#: templates/edit/edit.inc:52 templates/edit/edit.inc:385
+msgid "Reset to Defaults"
+msgstr "Kitöltés újrakezdése"
+
+#: templates/attendees/attendees.inc:49 templates/view/view.inc:175
+msgid "Response"
+msgstr "Válasz"
+
+#: config/prefs.php:147
+msgid ""
+"Restrict day and week views to these time slots, even if there <strong>are</"
+"strong> earlier or later events?"
+msgstr ""
+"A napi és heti megjelenítés erre az idõtartamra korlátozása akkor is, ha "
+"<strong>van</strong> korábbi vagy késõbbi esemény"
+
+#: lib/Block/month.php:124 lib/Views/Year.php:82 templates/edit/edit.inc:240
+#: templates/javascript/goto.js:64
+msgid "Sa"
+msgstr "Sz"
+
+#: templates/edit/javascript.inc:72 templates/month/head.inc:22
+#: templates/view/view.inc:106
+msgid "Saturday"
+msgstr "szombat"
+
+#: lib/Forms/EditCalendar.php:46 lib/Forms/EditRemoteCalendar.php:43
+#: templates/panel.inc:83
+msgid "Save"
+msgstr "Mentés"
+
+#: templates/perms/perms.inc:364
+msgid "Save %s"
+msgstr "%s mentése"
+
+#: lib/Kronolith.php:1894 lib/Views/EditEvent.php:79
+#: lib/Views/EditEvent.php:89 templates/edit/edit.inc:40
+msgid "Save As New"
+msgstr "Mentés újként"
+
+#: templates/attendees/attendees.inc:100
+msgid "Save Attendees"
+msgstr "Résztvevõk mentése"
+
+#: lib/Views/EditEvent.php:82 new.php:62
+msgid "Save Event"
+msgstr "Az esemény mentése"
+
+#: templates/attendees/attendees.inc:101 templates/perms/perms.inc:365
+msgid "Save and Finish"
+msgstr "Mentés és befejezés"
+
+#: lib/Block/tree_menu.php:26 search.php:91
+#: templates/contacts/contacts.inc:156 templates/search/search.inc:65
+#: templates/search/search_advanced.inc:113
+msgid "Search"
+msgstr "Keresés"
+
+#: templates/search/header.inc:6
+msgid "Search Results"
+msgstr "A keresés eredménye"
+
+#: templates/panel.inc:29
+msgid "Search for Calendars:"
+msgstr "Naptárak keresése:"
+
+#: templates/contacts/contacts.inc:161
+msgid "Search results"
+msgstr "A keresés eredménye"
+
+#: lib/Storage.php:131
+msgid "Searching free/busy is not available."
+msgstr "Az idõbeosztási információk nem kereshetõek."
+
+#: templates/edit/edit.inc:302 templates/edit/edit_timespan.inc:29
+#: templates/edit/edit_timespan.inc:79
+msgid "Select a date"
+msgstr "Válasszon ki egy dátumot"
+
+#: templates/perms/perms.inc:329
+msgid "Select a group to add"
+msgstr "A hozzáadandó csoport"
+
+#: templates/perms/perms.inc:327
+msgid "Select a group to add:"
+msgstr "A hozzáadandó csoport:"
+
+#: templates/perms/perms.inc:30
+msgid "Select a new owner:"
+msgstr "Az új tulajdonos:"
+
+#: templates/perms/perms.inc:216 templates/perms/perms.inc:218
+msgid "Select a user to add:"
+msgstr "Felhasználót hozzáadása:"
+
+#: config/prefs.php:76
+msgid "Select address book sources for adding and searching for addresses."
+msgstr "Címjegyzékeinek beállításai."
+
+#: templates/prefs/sourceselect.inc:319
+msgid "Select all fields to search when expanding addresses."
+msgstr ""
+"A címrészlet teljes címmé alakításakor a címjegyzékek minden mezõjében "
+"történjen keresés."
+
+#: config/prefs.php:11
+msgid ""
+"Select confirmation options, how to display the different views and choose "
+"default view."
+msgstr ""
+"Megerõsítési opciók, különbözõ nézetek megjelenítési formái, illetve az "
+"alapértelmezett nézet."
+
+#: templates/data/import.inc:18
+msgid "Select the calendar to import to:"
+msgstr "Importálás ebbe a naptárba:"
+
+#: templates/data/export.inc:19
+msgid "Select the calendar(s) to export from"
+msgstr "Exportálás ebbõl a naptárból"
+
+#: templates/data/export.inc:12
+msgid "Select the export format:"
+msgstr "Az exportálás formátuma:"
+
+#: templates/data/import.inc:27
+msgid "Select the file to import:"
+msgstr "Az importálandó fájlt:"
+
+#: config/prefs.php:118
+msgid "Select the first weekday:"
+msgstr "A hét elsõ napja:"
+
+#: templates/data/import.inc:11
+msgid "Select the format of the source file:"
+msgstr "Az importálandó fájl formátuma:"
+
+#: config/prefs.php:241
+msgid "Select the time span to show:"
+msgstr "Idõintervallum megjelenítése a személyes kezdõoldalon:"
+
+#: config/prefs.php:100
+msgid "Select the view to display on startup:"
+msgstr "Alapértelmezett nézet:"
+
+#: config/prefs.php:22
+msgid "Select which events to show in the portal."
+msgstr "Megjelenítendõ események a kezdõlapon."
+
+#: templates/prefs/sourceselect.inc:303 templates/prefs/sourceselect.inc:305
+msgid "Selected Address books:"
+msgstr "Kiválasztott címjegyzékek:"
+
+#: templates/contacts/contacts.inc:176
+msgid "Selected addresses"
+msgstr "Kiválasztott címek"
+
+#: templates/delete/delete.inc:21 templates/delete/one.inc:19
+msgid "Send a cancel notification to all attendees when deleting this event?"
+msgstr "Az összes résztvevõ értesítése az esemény törlésekor?"
+
+#: templates/view/view.inc:179
+msgid "Send an email to %s"
+msgstr "Email küldése %s-nek"
+
+#: templates/edit/edit.inc:377
+msgid "Send invitations to all attendees?"
+msgstr "Meghívó küldése az összes résztvevõnek"
+
+#: templates/edit/edit.inc:377
+msgid "Send updates to all attendees?"
+msgstr "Frissítés küldése az összes résztvevõnek"
+
+#: templates/javascript/goto.js:76
+msgid "September"
+msgstr "szeptember"
+
+#: config/prefs.php:45
+msgid "Set default values for new events."
+msgstr "Új események alapértelmezett értékeinek beállítása."
+
+#: templates/edit/edit_timespan.inc:79
+msgid "Set end date"
+msgstr "A befejezés dátuma"
+
+#: config/prefs.php:51
+msgid "Set options for deleting old events."
+msgstr "Régi események törlésének beállításai."
+
+#: templates/edit/edit.inc:302
+msgid "Set recurrence end date"
+msgstr "Az ismétlõdés vége"
+
+#: templates/edit/edit_timespan.inc:29
+msgid "Set start date"
+msgstr "A kezdés dátuma"
+
+#: config/prefs.php:68
+msgid ""
+"Set your Free/Busy calendars and your own and other users' Free/Busy options."
+msgstr "Az idõbeosztási információk beállításai."
+
+#: templates/panel.inc:50
+msgid "Shared Calendars:"
+msgstr "Megosztott naptárak:"
+
+#: templates/edit/javascript.inc:266 templates/perms/perms.inc:51
+#: templates/perms/perms.inc:63 templates/perms/perms.inc:92
+#: templates/perms/perms.inc:104 templates/perms/perms.inc:133
+#: templates/perms/perms.inc:145 templates/perms/perms.inc:174
+#: templates/perms/perms.inc:190 templates/perms/perms.inc:230
+#: templates/perms/perms.inc:261 templates/perms/perms.inc:291
+#: templates/perms/perms.inc:303 templates/perms/perms.inc:337
+msgid "Show"
+msgstr "Megjelenítés"
+
+#: config/prefs.php:223
+msgid "Show Free/Busy legend?"
+msgstr "A szabad/elfoglalt idõszakok megjelenítése"
+
+#: config/prefs.php:204
+msgid "Show category legend?"
+msgstr "Események kategóriáinak megjelenítése"
+
+#: config/prefs.php:170
+msgid "Show delete, alarm, and recurrence icons in calendar views?"
+msgstr ""
+"Ikonok megjelenítése törléshez, és a emlékeztetési, ismétlõdési "
+"beállításokhoz"
+
+#: config/prefs.php:270
+msgid "Show external events using category colors?"
+msgstr "Külsõ eseményekhez is használjuk a beállított kategóriaszíneket"
+
+#: config/prefs.php:261
+msgid "Show only events that have an alarm set?"
+msgstr ""
+"Csak azokat az eseményeket mutassuk, melyekhez emlékeztetés van rendelve"
+
+#: config/prefs.php:232
+msgid "Show shared calendars side-by-side?"
+msgstr "A megosztott naptárak egymás mellett jelenjenek meg"
+
+#: config/prefs.php:109
+msgid "Show time of day between each day in week views?"
+msgstr "Órák megjelenítése a napok oszlopai között heti nézetben"
+
+#: templates/edit/edit_timespan.inc:11
+msgid "Sta_rt"
+msgstr "_Kezdete"
+
+#: data.php:56
+msgid "Start Date"
+msgstr "Kezdõ dátum"
+
+#: lib/Driver.php:1978 templates/data/export.inc:68
+msgid "Start Day"
+msgstr "Kezdõ nap"
+
+#: lib/Driver.php:1989 templates/data/export.inc:87
+msgid "Start Hour"
+msgstr "Kezdõ óra"
+
+#: lib/Driver.php:1999 templates/data/export.inc:102
+msgid "Start Minute"
+msgstr "Kezdõ perc"
+
+#: lib/Driver.php:1969 templates/data/export.inc:54
+msgid "Start Month"
+msgstr "Kezdõ hónap"
+
+#: templates/data/export.inc:37 templates/search/event_headers.inc:7
+#: templates/view/view.inc:35
+msgid "Start On"
+msgstr "Kezdete"
+
+#: data.php:57
+msgid "Start Time"
+msgstr "Kezdõ idõ"
+
+#: lib/Driver.php:1958 templates/data/export.inc:39
+msgid "Start Year"
+msgstr "Kezdõ év"
+
+#: templates/edit/edit.inc:110 templates/search/search_advanced.inc:91
+msgid "Stat_us"
+msgstr "Á_llapot"
+
+#: templates/search/event_headers.inc:6 templates/view/view.inc:21
+msgid "Status"
+msgstr "Állapot"
+
+#: lib/Storage.php:139
+msgid "Storing free/busy is not available."
+msgstr "Az elfoglaltsági információk nem menthetõk el."
+
+#: lib/Block/month.php:126 lib/Block/month.php:128 lib/Views/Year.php:75
+#: lib/Views/Year.php:84 templates/edit/edit.inc:241
+#: templates/javascript/goto.js:65
+msgid "Su"
+msgstr "V"
+
+#: lib/Forms/SubscribeRemoteCalendar.php:41
+msgid "Subscribe"
+msgstr "Feliratkozás"
+
+#: lib/Forms/SubscribeRemoteCalendar.php:34 templates/calendar_list.php:17
+msgid "Subscribe to a Remote Calendar"
+msgstr "Feliratkozás külsõ naptárra"
+
+#: templates/calendar_list.php:27
+msgid "Subscription URL"
+msgstr "Feliratkozási cím"
+
+#: templates/edit/javascript.inc:66 templates/month/head.inc:15
+#: templates/month/head.inc:24 templates/view/view.inc:107
+#: config/prefs.php:119
+msgid "Sunday"
+msgstr "vasárnap"
+
+#: lib/Kronolith.php:1205 lib/Kronolith.php:1228
+msgid "Tentative"
+msgstr "Tervezett"
+
+#: lib/Block/month.php:124 lib/Views/Year.php:80 templates/edit/edit.inc:238
+#: templates/javascript/goto.js:62
+msgid "Th"
+msgstr "Cs"
+
+#: data.php:245
+msgid "The %s file didn't contain any events."
+msgstr "A(z) %s állományban nem voltak események."
+
+#: lib/Driver.php:48
+msgid "The Calendar backend is not currently available."
+msgstr "A naptár alrendszer jelenleg nem áll rendelkezésre."
+
+#: lib/Driver.php:204
+msgid "The Calendar backend is not currently available: %s"
+msgstr "A naptár alrendszer jelenleg nem áll rendelkezésre: %s"
+
+#: templates/contacts/contacts.inc:72
+msgid "The Edit Attendees screen is no longer present. Exiting."
+msgstr "A \"Résztvevõk módosítása\" képernyõ már zárva van. Kilépés."
+
+#: lib/api.php:1196
+msgid ""
+"The attendee hasn't been updated because the update was not sent from the "
+"attendee."
+msgstr ""
+"Egy meghívott sem kapott értesítést, mert a megadott email címek közül egy "
+"sem szerepelt a meghívottak listájában."
+
+#: calendars/create.php:33
+msgid "The calendar \"%s\" has been created."
+msgstr "A(z) \"%s\" naptár létrehozva."
+
+#: calendars/delete.php:50
+msgid "The calendar \"%s\" has been deleted."
+msgstr "A(z) \"%s\" naptár törölve."
+
+#: calendars/edit.php:44
+msgid "The calendar \"%s\" has been renamed to \"%s\"."
+msgstr "A(z) \"%s\" naptár átnevezve \"%s\"-re."
+
+#: calendars/edit.php:46 calendars/remote_edit.php:49
+msgid "The calendar \"%s\" has been saved."
+msgstr "A \"%s\" naptár elmentve."
+
+#: data.php:253
+msgid "The calendar could not be purged: %s"
+msgstr "A naptár nem törölhetõ: %s"
+
+#: templates/edit/javascript.inc:156
+msgid "The end date must be later than the start date."
+msgstr "A befejezés dátuma késõbb kel legyen, mint a kezdeté."
+
+#: lib/Kronolith.php:1700
+msgid ""
+"The event \"%s\" has been added to \"%s\" calendar, which is on %s at %s."
+msgstr "A(z) \"%s\" esemény megjelent az Ön \"%s\" naptárában. Ideje: %s %s."
+
+#: lib/Kronolith.php:1710
+msgid ""
+"The event \"%s\" has been deleted from \"%s\" calendar, which was on %s at "
+"%s."
+msgstr "A(z) \"%s\" esemény törlõdött a \"%s\" naptárból. Ideje: %s %s."
+
+#: lib/Kronolith.php:1705
+msgid ""
+"The event \"%s\" has been edited on \"%s\" calendar, which is on %s at %s."
+msgstr ""
+"A(z) \"%s\" esemény módosult a \"%s\" naptárban. Dátum: %s, idõpont: %s."
+
+#: lib/Kronolith.php:1590
+msgid "The event notification to %s was successfully sent."
+msgstr "Az eseményrõl %s értesítést kapott."
+
+#: lib/Kronolith.php:1540
+msgid "The following is a more detailed description of the event:"
+msgstr "Az esemény részletes leírása:"
+
+#: lib/FreeBusy.php:194
+msgid "The free/busy url for %s cannot be retrieved."
+msgstr "%s idõbeosztása nem tölthetõ le."
+
+#: calendars/remote_edit.php:36 calendars/remote_unsubscribe.php:36
+msgid "The remote calendar was not found."
+msgstr "A külsõ naptár nem létezik."
+
+#: attend.php:45
+msgid ""
+"The request was incomplete. Some parameters that are necessary to accept or "
+"decline an event are missing."
+msgstr ""
+"A kérés nem volt teljes. Valamilyen paraméter hiányzik ahhoz, hogy az "
+"eseményre történõ meghívást elfogadjuk vagy elutasítsuk."
+
+#: lib/Views/DeleteEvent.php:40 lib/Views/EditEvent.php:43
+#: lib/Views/Event.php:41
+msgid "The requested event was not found."
+msgstr "A kívánt esemény nem található."
+
+#: feed/index.php:39
+msgid "The requested feed (%s) was not found on this server."
+msgstr "A kívánt forrás (%s) nem található."
+
+#: perms.php:60 perms.php:165
+msgid "The user \"%s\" does not exist."
+msgstr "A(z) \"%s\" felhasználó nem létezik."
+
+#: templates/search/empty.inc:3
+msgid "There are no events matching the current criteria."
+msgstr "Nincs a kritériumoknak megfelelõ esemény."
+
+#: add.php:24 edit.php:46 edit.php:68
+msgid "There was an error accessing the calendar: %s"
+msgstr "Hiba történt a naptár elérésekor: %s"
+
+#: add.php:44
+msgid "There was an error adding the event: %s"
+msgstr "Az esemény hozzáadása során hiba történt: %s"
+
+#: edit.php:17
+msgid "There was an error editing the event: %s"
+msgstr "Az esemény módosítása során hiba lépett fel: %s"
+
+#: lib/api.php:495 lib/api.php:767 lib/api.php:1040
+msgid "There was an error importing the iCalendar data."
+msgstr "Az iCalendar adatok importálása során hiba lépett fel."
+
+#: edit.php:145
+msgid "There was an error moving the event: %s"
+msgstr "Az esemény áthelyezése során hiba lépett fel: %s"
+
+#: lib/Kronolith.php:1595
+msgid "There was an error sending an event notification to %s: %s"
+msgstr ""
+"Hiba lépett fel, amikor az eseményrõl tájékoztatást akartunk küldeni %s "
+"részére: %s"
+
+#: data.php:109
+msgid "There were no events to export."
+msgstr "Nem voltak exportálható események."
+
+#: lib/Block/month.php:3
+msgid "This Month"
+msgstr "Jelen hónap"
+
+#: calendars/delete.php:26
+msgid "This calendar cannot be deleted."
+msgstr "Ez a naptár nem törölhetõ."
+
+#: data.php:201
+msgid "This file format is not supported."
+msgstr "Ismeretlen fájlformátum."
+
+#: templates/delete/delete.inc:18
+msgid ""
+"This is a recurring event. Delete the current event only, this<br /"
+">occurrence and all future occurences, or all occurences?"
+msgstr ""
+"Ez egy ismétlõdõ esemény. Csak ezt az eseményt töröljük, vagy ezt és az "
+"összes jövõbelit, vagy pedig az összeset?"
+
+#: templates/edit/edit.inc:36
+msgid ""
+"This is a recurring event. Edit the current event only, this occurrence<br /"
+">and all future occurences, all occurences, or save this event as new?"
+msgstr ""
+"Ez egy ismétlõdõ esemény. Csak ezt az eseményt módosítsuk, vagy ezt és az "
+"összes jövõbelit, vagy az összeset, vagy inkább mentsük el egy új "
+"eseményként?"
+
+#: data.php:273
+msgid "This is what the server said: %s"
+msgstr "A szerver üzenete: %s"
+
+#: templates/edit/javascript.inc:70 templates/month/head.inc:20
+#: templates/view/view.inc:104
+msgid "Thursday"
+msgstr "csütörtök"
+
+#: templates/search/search.inc:35
+msgid "Time Sp_an"
+msgstr "Idõtartam:"
+
+#: templates/edit/edit_timespan.inc:4
+msgid "Time span"
+msgstr "Idõtartam"
+
+#: templates/edit/edit.inc:58 templates/search/search_advanced.inc:28
+msgid "Tit_le"
+msgstr "El_nevezés"
+
+#: data.php:55 templates/search/event_headers.inc:3
+#: templates/search/search.inc:18
+msgid "Title"
+msgstr "Elnevezés"
+
+#: templates/calendar_info.php:32
+msgid "To embed this calendar in another website, use this code: "
+msgstr "Ha ezt a naptárat egy weboldalba illesztené be, ezt a kódot adja meg:"
+
+#: templates/prefs/sourceselect.inc:322
+msgid ""
+"To select multiple fields, hold down the Control (PC) or Command (Mac) while "
+"clicking."
+msgstr ""
+"Ha több mezõt kíván kijelölni, akkor tartsa nyomva a Control (PC-n) ill. "
+"Command (Mac-en) billentyût, és úgy kattintson az egérrel a további mezõkre."
+
+#: templates/calendar_info.php:25
+msgid "To subscribe to this calendar from a feed reader, use this URL: "
+msgstr ""
+"Ha ezt a naptárat egy hírolvasóban is használni szeretné, ezt a címet adja "
+"meg:"
+
+#: templates/calendar_info.php:19
+msgid ""
+"To subscribe to this calendar from another calendar program, use this URL: "
+msgstr ""
+"Ha ezt a naptárat egy másik naptárprogramból is használni szeretné, ezt a "
+"címet adja meg:"
+
+#: lib/Block/monthlist.php:134 lib/Block/prevmonthlist.php:129
+#: lib/Block/summary.php:141
+msgid "Today"
+msgstr "Ma"
+
+#: lib/Block/monthlist.php:136 lib/Block/prevmonthlist.php:131
+#: lib/Block/summary.php:143
+msgid "Tomorrow"
+msgstr "Holnap"
+
+#: lib/Block/month.php:124 lib/Views/Year.php:78 templates/edit/edit.inc:236
+#: templates/javascript/goto.js:60
+msgid "Tu"
+msgstr "K"
+
+#: templates/edit/javascript.inc:68 templates/month/head.inc:18
+#: templates/view/view.inc:102
+msgid "Tuesday"
+msgstr "kedd"
+
+#: config/keywords.php:17
+msgid "Type"
+msgstr "Típus"
+
+#: lib/Forms/EditRemoteCalendar.php:38
+#: lib/Forms/SubscribeRemoteCalendar.php:37
+msgid "URL"
+msgstr "URL"
+
+#: lib/Storage/sql.php:76
+msgid "Unable to connect to SQL server."
+msgstr "Az SQL szerver nem érhetõ el."
+
+#: lib/Forms/DeleteCalendar.php:62
+msgid "Unable to delete \"%s\": %s"
+msgstr "\"%s\" törlése nem sikerült: %s"
+
+#: lib/api.php:608
+msgid "Unable to delete calendar \"%s\": %s"
+msgstr "A(z) \"%s\" naptár mentése nem sikerült: %s"
+
+#: lib/Driver.php:207 lib/Storage.php:58
+msgid "Unable to load the definition of %s."
+msgstr "Nem sikerült beolvasni %s definícióját."
+
+#: attendees.php:66
+msgid "Unable to recognize \"%s\" as an email address."
+msgstr "\"%s\" nem érvényes email cím."
+
+#: lib/Forms/EditCalendar.php:59
+msgid "Unable to rename \"%s\": %s"
+msgstr "\"%s\" átnevezése nem sikerült: %s"
+
+#: lib/Storage/kolab.php:64
+msgid "Unable to retrieve free/busy information for %s"
+msgstr "Nem sikerült elérni %s idõbeosztási adatait."
+
+#: lib/Forms/EditCalendar.php:65
+msgid "Unable to save calendar \"%s\": %s"
+msgstr "\"%s\" naptár mentése nem sikerült: %s"
+
+#: templates/view/view.inc:8
+msgid "Unfiled"
+msgstr "Besorolatlan"
+
+#: lib/api.php:1336 lib/api.php:1372
+msgid "Unknown calendar protocol"
+msgstr "Ismeretlen naptár protokoll"
+
+#: lib/Forms/UnsubscribeRemoteCalendar.php:39 templates/calendar_list.php:44
+msgid "Unsubscribe"
+msgstr "Leiratkozás"
+
+#: lib/Forms/UnsubscribeRemoteCalendar.php:34
+msgid "Unsubscribe from %s"
+msgstr "Leiratkozás a(z) %s maptárról"
+
+#: lib/api.php:559 lib/api.php:822 lib/api.php:872 lib/api.php:932
+#: lib/api.php:1060
+msgid "Unsupported Content-Type: %s"
+msgstr "Nem támogatott tartalomtípus: %s"
+
+#: lib/Block/monthlist.php:3 lib/Block/monthlist.php:51
+msgid "Upcoming Events"
+msgstr "Közeli események"
+
+#: perms.php:248
+msgid "Updated \"%s\"."
+msgstr "\"%s\" frissítve."
+
+#: lib/Kronolith.php:1517
+msgid "Updated: %s."
+msgstr "%s frissítve."
+
+#: config/prefs.php:10
+msgid "User Interface"
+msgstr "A program használata"
+
+#: templates/perms/perms.inc:256
+msgid "User to add:"
+msgstr "Felhasználó hozzáadása:"
+
+#: lib/Forms/EditRemoteCalendar.php:40
+#: lib/Forms/SubscribeRemoteCalendar.php:38
+msgid "Username"
+msgstr "Felhasználói név"
+
+#: lib/Block/month.php:195 lib/Block/month.php:198 lib/Views/Year.php:167
+#: lib/Views/Year.php:170
+msgid "View Day"
+msgstr "Napi megjelenítés"
+
+#: lib/Block/month.php:124 lib/Views/Year.php:79 templates/edit/edit.inc:237
+#: templates/javascript/goto.js:61
+msgid "We"
+msgstr "Sz"
+
+#: lib/Driver.php:1205 lib/Scheduler/kronolith.php:287
+msgid ""
+"We would like to remind you of this upcoming event.\n"
+"\n"
+"%s\n"
+"\n"
+"Location: %s\n"
+"\n"
+"Date: %s\n"
+"Time: %s\n"
+"\n"
+"%s"
+msgstr ""
+"Emlékeztetni szeretnénk a következõ eseményre.\n"
+"\n"
+"%s\n"
+"\n"
+"Hely: %s\n"
+"\n"
+"Dátum: %s\n"
+"Idõpont: %s\n"
+"\n"
+"%s"
+
+#: templates/edit/javascript.inc:69 templates/month/head.inc:19
+#: templates/view/view.inc:103
+msgid "Wednesday"
+msgstr "szerda"
+
+#: attendees.php:205 lib/Block/tree_menu.php:23 lib/Kronolith.php:1856
+#: config/prefs.php:97
+msgid "Week"
+msgstr "Hét"
+
+#: lib/Views/Month.php:187 week.php:16 workweek.php:16
+msgid "Week %d"
+msgstr "%d. hét"
+
+#: templates/edit/edit.inc:171 templates/prefs/default_alarm_management.inc:29
+#: templates/view/view.inc:55
+msgid "Week(s)"
+msgstr "hét"
+
+#: lib/Recurrence.php:200
+msgid "Weekly"
+msgstr "Hetente"
+
+#: templates/edit/edit.inc:232 templates/view/view.inc:108
+msgid "Weekly: Recurs every"
+msgstr "Hetente: ismétlõdik minden"
+
+#: config/prefs.php:138
+msgid ""
+"What time should day and week views end, when there are no later events?"
+msgstr "Utolsó óra napi ill. heti nézetben, ha nincs késõbbi esemény"
+
+#: config/prefs.php:129
+msgid ""
+"What time should day and week views start, when there are no earlier events?"
+msgstr "Kezdõ óra napi ill. heti nézetben, ha nincs korábbi esemény"
+
+#: feed/index.php:128
+msgid "When:"
+msgstr "Amikor:"
+
+#: feed/index.php:143
+msgid "Where:"
+msgstr "Hely:"
+
+#: config/prefs.php:291
+msgid "Which kind of holidays do you want to get displayed?"
+msgstr "Megjelenített ünnepek:"
+
+#: feed/index.php:140
+msgid "Who:"
+msgstr ""
+
+#: attendees.php:204 lib/Block/tree_menu.php:22 lib/Kronolith.php:1854
+#: config/prefs.php:98
+msgid "Work Week"
+msgstr "Munkahét"
+
+#: lib/Block/tree_menu.php:25 lib/Kronolith.php:1860
+msgid "Year"
+msgstr "Év"
+
+#: lib/Recurrence.php:205
+msgid "Yearly"
+msgstr "Évente"
+
+#: templates/edit/edit.inc:258 templates/edit/edit.inc:264
+#: templates/edit/edit.inc:270 templates/view/view.inc:114
+#: templates/view/view.inc:116 templates/view/view.inc:118
+msgid "Yearly: Recurs every"
+msgstr "Évente: ismétlõdik minden"
+
+#: calendars/edit.php:30
+msgid "You are not allowed to change this calendar."
+msgstr "Ön nem jogosult ezt a naptárat módosítani."
+
+#: data.php:41 data.php:262 edit.php:27 new.php:19
+msgid "You are not allowed to create more than %d events."
+msgstr "Ön legfeljebb %d eseményt hozhat létre."
+
+#: calendars/delete.php:37
+msgid "You are not allowed to delete this calendar."
+msgstr "Ön nem jogosult törölni ezt a naptárat."
+
+#: lib/api.php:159
+msgid "You are not allowed to remove user data."
+msgstr "Ön nem jogosult felhasználói adatokat törölni."
+
+#: attend.php:58
+msgid "You are not an attendee of the specified event."
+msgstr "Ön nem résztvevõje a megadott eseménynek."
+
+#: templates/contacts/contacts.inc:78
+msgid "You can only use this form from the Edit Attendees screen."
+msgstr "Ez az ablak csak a \"Résztvevõk módosítása\" képernyõrõl hívható meg."
+
+#: lib/Kronolith.php:1467
+msgid ""
+"You do not have an email address configured in your Personal Information "
+"Options. You must set one %shere%s before event notifications can be sent."
+msgstr ""
+"Nincs megadva az email címe az Ön személyes adatainak beállításai között. "
+"Ezt be kell állítania %sitt%s ahhoz, hogy eseményekre szóló meghívókat "
+"küldhessen a rendszer."
+
+#: add.php:30
+msgid "You do not have permission to add events to %s."
+msgstr "Önnek nincs jogosultsága eseményeket felvenni a(z) %s nevû naptárva."
+
+#: data.php:210
+msgid "You do not have permission to add events to the selected calendar."
+msgstr "Önnek nincs jogosultsága eseményeket felvenni a kiválasztott naptárba."
+
+#: add.php:27 edit.php:162
+msgid "You do not have permission to delegate events to %s."
+msgstr ""
+"Önnek nincs jogosultsága ahhoz, hogy eseményeket adjon át a(z) %s "
+"felhasználónak."
+
+#: delete.php:28
+msgid "You do not have permission to delete this event."
+msgstr "Önnek nincs jogosultsága törölni ezt az eseményt."
+
+#: edit.php:165
+msgid "You do not have permission to edit this event."
+msgstr "Önnek nincs jogosultsága módosítani ezt az eseményt."
+
+#: edit.php:159
+msgid "You do not have permission to move this event."
+msgstr "Önnek nincs jogosultsága módosítani ennek az eseménynek az idõpontját."
+
+#: calendars/remote_subscribe.php:33
+msgid "You have been subscribed to \"%s\" (%s)."
+msgstr "Feliratkozott a(z) \"%s\"-ra (%s)."
+
+#: calendars/remote_unsubscribe.php:49
+msgid "You have been unsubscribed from \"%s\" (%s)."
+msgstr "Leiratkozott a(z) \"%s\"-ról (%s)."
+
+#: data.php:207
+msgid "You have specified an invalid calendar."
+msgstr "Érvénytelen a megadott naptár."
+
+#: attend.php:25
+msgid "You have successfully accepted attendence to this event."
+msgstr "Ön elfogadta a meghívást erre az eseményre."
+
+#: attend.php:30
+msgid "You have successfully declined attendence to this event."
+msgstr "Ön visszautasította a meghívást erre az eseményre."
+
+#: attend.php:35
+msgid "You have tentatively accepted attendence to this event."
+msgstr "Ön feltételesen elfogadta a meghívást erre az eseményre."
+
+#: templates/contacts/contacts.inc:54
+msgid "You must select an address first."
+msgstr "Elõször ki kell választania egy címet."
+
+#: lib/Kronolith.php:1700
+msgid "You requested to be notified when events are added to your calendars."
+msgstr "Ön értesítést kért arról, ha új események kerülnek bele a naptáraiba."
+
+#: lib/Kronolith.php:1710
+msgid ""
+"You requested to be notified when events are deleted from your calendars."
+msgstr "Ön értesítést kért arról, ha események törlõdnek a naptáraiból."
+
+#: lib/Kronolith.php:1705
+msgid "You requested to be notified when events are edited in your calendars."
+msgstr "Ön értesítést kért arról, ha események módosulnak a naptáraiban."
+
+#: lib/Scheduler/kronolith.php:450 lib/Scheduler/kronolith.php:453
+msgid "Your daily agenda for %s"
+msgstr "Az Ön napirendje: %s"
+
+#: templates/prefs/shareselect.inc:10
+msgid "Your default calendar"
+msgstr "Az Ön alapértelmezés szerinti naptára:"
+
+#: templates/panel.inc:36
+msgid "[Manage Calendars]"
+msgstr "[Naptárak kezelése]"
+
+#: lib/Driver.php:1465 lib/Driver.php:1485
+msgid "[Unnamed event]"
+msgstr "[Elnevezés nélküli esemény]"
+
+#: templates/edit/edit.inc:132
+msgid "_Alarm"
+msgstr "Emlékeztetõ"
+
+#: templates/search/search_advanced.inc:10
+msgid "_Basic Search"
+msgstr "Keresés"
+
+#: lib/Kronolith.php:1894
+msgid "_Edit"
+msgstr "Szerkesztés"
+
+#: lib/Kronolith.php:2116
+msgid "_Goto"
+msgstr "_Ugrás"
+
+#: lib/Kronolith.php:2122
+msgid "_Import/Export"
+msgstr "Import/_Export"
+
+#: lib/Kronolith.php:2112
+msgid "_New Event"
+msgstr "Ú_j esemény"
+
+#: lib/Kronolith.php:2127
+msgid "_Print"
+msgstr "_Nyomtatás"
+
+#: lib/Kronolith.php:2118
+msgid "_Search"
+msgstr "Kere_sés"
+
+#: lib/Kronolith.php:2107
+msgid "_Today"
+msgstr "_Ma"
+
+#: templates/edit/edit.inc:77
+msgid "as %s"
+msgstr "mint %s"
+
+#: templates/edit/edit.inc:173
+msgid "before the event starts"
+msgstr "az esemény elõtt"
+
+#: templates/prefs/default_alarm_management.inc:31
+msgid "before the event starts. A value of \"0\" means no default alarms."
+msgstr ""
+"az esemény kezdete elõtt. A \"0\" érték azt jelenti, hogy alapértelmezetten "
+"nincs emlékeztetõ."
+
+#: lib/Views/Event.php:63 lib/Views/Event.php:72
+msgid "by %s"
+msgstr "%s által"
+
+#: lib/Views/Event.php:65 lib/Views/Event.php:74
+msgid "by me"
+msgstr "általam"
+
+#: config/prefs.php:242
+msgid "day"
+msgstr "nap"
+
+#: templates/edit/edit.inc:227 templates/view/view.inc:98
+msgid "day(s)"
+msgstr "nap"
+
+#: config/prefs.php:243 config/prefs.php:244 config/prefs.php:245
+#: config/prefs.php:246 config/prefs.php:247
+msgid "days"
+msgstr "nap"
+
+#: data.php:159 templates/data/export.inc:1
+msgid "events.csv"
+msgstr "naptar.csv"
+
+#: data.php:186
+msgid "events.ics"
+msgstr "naptar.ics"
+
+#: templates/contacts/contacts.inc:147
+msgid "in"
+msgstr "a következõben"
+
+#: templates/edit/edit.inc:247 templates/edit/edit.inc:253
+#: templates/view/view.inc:110 templates/view/view.inc:112
+msgid "month(s)"
+msgstr "hónap"
+
+#: lib/Kronolith.php:1523
+msgid "on %s at %s"
+msgstr "%s, %s"
+
+#: templates/edit/edit.inc:247 templates/view/view.inc:110
+msgid "on the same date"
+msgstr "a hónap ugyanazon napján"
+
+#: templates/edit/edit.inc:253 templates/view/view.inc:112
+msgid "on the same weekday"
+msgstr "a hét ugyanazon napján"
+
+#: templates/edit/edit.inc:312
+msgid "recurrences"
+msgstr "ismétlõdés"
+
+#: data.php:31 templates/data/import.inc:14
+msgid "vCalendar/iCalendar"
+msgstr "vCalendar/iCalendar"
+
+#: config/prefs.php:248
+msgid "week"
+msgstr "hét"
+
+#: templates/edit/edit.inc:234 templates/view/view.inc:108
+msgid "week(s) on:"
+msgstr ". héten a következõ nap(ok)on:"
+
+#: config/prefs.php:249 config/prefs.php:250 config/prefs.php:251
+msgid "weeks"
+msgstr "hét"
+
+#: templates/edit/edit.inc:259 templates/view/view.inc:114
+msgid "year(s) on the same date"
+msgstr "évente, ugyanazon a napon"
+
+#: templates/edit/edit.inc:265 templates/view/view.inc:116
+msgid "year(s) on the same day of the year"
+msgstr "évente, az év ugyanazon napján"
+
+#: templates/edit/edit.inc:271 templates/view/view.inc:118
+msgid "year(s) on the same weekday and month of the year"
+msgstr "évente, ugyanabban a hónapban, és a hét ugyanazon napján"

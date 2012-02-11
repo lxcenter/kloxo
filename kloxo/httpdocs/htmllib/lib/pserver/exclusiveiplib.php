@@ -81,7 +81,11 @@ static function initThisList($parent, $class)
 	if ($parent->isAdmin()) {
 		$result = $db->getTable();
 	} else {
+<<<<<<< HEAD
 		$result = $db->getRowsWhere("clientname = '" . $parent->nname . "'");
+=======
+		$result = $db->getRowsWhere('clientname = :nname', array(':nname' => $parent->nname));
+>>>>>>> upstream/dev
 	}
 	return $result;
 
