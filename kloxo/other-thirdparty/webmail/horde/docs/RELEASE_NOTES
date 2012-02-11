@@ -1,0 +1,50 @@
+<?php
+/**
+ * Release focus. Possible values:
+ * Horde_Release::FOCUS_INITIAL - Initial announcement
+ * Horde_Release::FOCUS_MINORFEATURE - Minor feature enhancement
+ * Horde_Release::FOCUS_MAJORFEATURE - Major feature enhancement
+ * Horde_Release::FOCUS_MINORBUG - Minor bugfixes
+ * Horde_Release::FOCUS_MAJORBUG - Major bugfixes
+ * Horde_Release::FOCUS_MINORSECURITY - Minor security fixes
+ * Horde_Release::FOCUS_MAJORSECURITY - Major security fixes
+ * Horde_Release::FOCUS_DOCS - Documentation improvements
+ */
+$this->notes['fm']['focus'] = 0;
+
+/* Mailing list release notes. */
+$this->notes['ml']['changes'] = <<<ML
+The Horde Team is pleased to announce the final release of the Horde Groupware
+Webmail Edition version 1.2.10.
+
+Horde Groupware Webmail Edition is a free, enterprise ready, browser based
+communication suite. Users can read, send and organize email messages with
+three different webmail interfaces and manage and share calendars, contacts,
+tasks and notes with the standards compliant components from the Horde
+Project.
+
+The major changes compared to the Horde Groupware Webmail Edition version 1.2.9
+are:
+    * Added an experimental new Share SQL driver with better performance.
+    * Fixed a minor bug in the iTip attachment viewer.
+    * Fixed encoding of vacation message in the maildrop driver.
+    * Minor bug fixes and improvements.
+    * Added holiday drivers for Australia, Croatia, Finland, Portugal, San
+      Marino, and Spain.
+    * Updated Brazilian Portuguese, Czech, French, Hungarian, Russian, and
+      Spanish translations.
+ML;
+
+/* Freshmeat release notes, not more than 600 characters. */
+$this->notes['fm']['changes'] = <<<FM
+An experimental new Share SQL driver with better performance has been added.
+Fixed a minor bug in the iTip attachment viewer.
+The encoding of vacation messages in the maildrop driver has been fixed.
+Other minor bugfixes and improvements have been made.
+Added holiday drivers for Australia, Croatia, Finland, Portugal, San Marino, and Spain.
+Updated Brazilian Portuguese, Czech, French, Hungarian, Russian, and Spanish translations.
+FM;
+
+$this->notes['name'] = 'Horde Groupware Webmail Edition';
+$this->notes['fm']['project'] = 'horde-webmail';
+$this->notes['fm']['branch'] = 'Default';

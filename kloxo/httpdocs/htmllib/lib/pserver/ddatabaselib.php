@@ -317,7 +317,11 @@ function getDbAdminPass()
 	$db = new Sqlite($this->__masterserver, 'dbadmin');
 
 
+<<<<<<< HEAD
 	$res = $db->getRowsWhere("dbtype = '$this->dbtype' AND syncserver = '$this->syncserver'");
+=======
+	$res = $db->getRowsWhere('dbtype = :dbtype AND syncserver = :syncserver', array(':dbtype' => $this->dbtype, ':syncserver' => $this->syncserver));
+>>>>>>> upstream/dev
 
 
 	if (!$res) {

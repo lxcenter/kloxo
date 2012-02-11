@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<driver-data>
+    <holidays>
+    
+            
+        <holiday>
+            <internal-name>newYearsDay</internal-name>
+            <translation>Jour de l'an</translation>
+        </holiday>
+            
+        <holiday>
+            <internal-name>valentinesDay</internal-name>
+            <translation>Saint Valentin</translation>
+        </holiday>
+            
+        <holiday>
+            <internal-name>fasnet</internal-name>
+            <translation>Carnaval</translation>
+        </holiday>
+            
+        <holiday>
+            <internal-name>womensDay</internal-name>
+            <translation>Journée Internationale de la Femme</translation>
+        </holiday>
+            
+        <holiday>
+            <internal-name>april1st</internal-name>
+            <translation>1er Avril</translation>
+        </holiday>
+            
+        <holiday>
+            <internal-name>girlsDay</internal-name>
+            <translation>Journée des Filles</translation>
+        </holiday>
+            
+        <holiday>
+            <internal-name>earthDay</internal-name>
+            <translation>Journée de la Terre</translation>
+        </holiday>
+            
+        <holiday>
+            <internal-name>beersDay</internal-name>
+            <translation>Journée de la Bière</translation>
+        </holiday>
+            
+        <holiday>
+            <internal-name>dayOfWork</internal-name>
+            <translation>Journée du Travail</translation>
+        </holiday>
+            
+        <holiday>
+            <internal-name>europeDay</internal-name>
+            <translation>Journée de l'Europe</translation>
+        </holiday>
+            
+        <holiday>
+            <internal-name>mothersDay</internal-name>
+            <translation>Fête des Mères</translation>
+        </holiday>
+            
+        <holiday>
+            <internal-name>endOfWWar2</internal-name>
+            <translation>Armistice</translation>
+        </holiday>
+            
+        <holiday>
+            <internal-name>fathersDay</internal-name>
+            <translation>Fête des Pères</translation>
+        </holiday>
+            
+        <holiday>
+            <internal-name>aiDay</internal-name>
+            <translation>Amnesty International</translation>
+        </holiday>
+            
+        <holiday>
+            <internal-name>intChildrenDay</internal-name>
+            <translation>Journée Internationale des Enfants</translation>
+        </holiday>
+            
+        <holiday>
+            <internal-name>organDonationDay</internal-name>
+            <translation>Journée pour la donation d'organe</translation>
+        </holiday>
+            
+        <holiday>
+            <internal-name>christopherStreetDay</internal-name>
+            <translation>Fête de la rue Christophe</translation>
+        </holiday>
+            
+        <holiday>
+            <internal-name>leftHandedDay</internal-name>
+            <translation>Journée Internationale des Gauchers</translation>
+        </holiday>
+            
+        <holiday>
+            <internal-name>antiWarDay</internal-name>
+            <translation>Journée contre la Guerre</translation>
+        </holiday>
+            
+        <holiday>
+            <internal-name>halloween</internal-name>
+            <translation>Halloween</translation>
+        </holiday>
+            
+        <holiday>
+            <internal-name>wallOfBerlin</internal-name>
+            <translation>Chute du mur de Berlin 1989</translation>
+        </holiday>
+            
+        <holiday>
+            <internal-name>carnivalBeginning</internal-name>
+            <translation>Carnaval commence</translation>
+        </holiday>
+        
+        
+    </holidays>
+</driver-data>

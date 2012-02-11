@@ -266,7 +266,11 @@ function getFreeIp($num)
 	$pingip = null;
 	foreach($list as $l) {
 
+<<<<<<< HEAD
 		$p = $sq->getRowsWhere("nname = '$l'");
+=======
+		$p = $sq->getRowsWhere('nname = :nname', array(':nname' => $l));
+>>>>>>> upstream/dev
 
 		if ($p) { continue; }
 
@@ -361,12 +365,20 @@ function getIndividualIpList()
 static function checkIfAlreadyAssigned($class, $ipaddr)
 {
 	$sq = new Sqlite(null, 'ipaddress');
+<<<<<<< HEAD
 	$res = $sq->getRowsWhere("ipaddr = '$ipaddr'", array('nname'));
+=======
+	$res = $sq->getRowsWhere('ipaddr = :ipaddr', array(':ipaddr' => $ipaddr), array('nname'));
+>>>>>>> upstream/dev
 
 	if ($res) { return $res[0]['nname']; }
 
 	$sq = new Sqlite(null, 'vps');
+<<<<<<< HEAD
 	$res = $sq->getRowsWhere("coma_vmipaddress_a LIKE '%,$ipaddr,%'", array('nname'));
+=======
+	$res = $sq->getRowsWhere("coma_vmipaddress_a LIKE CONCAT('%,' :ipaddr, ',%')", array(':ipaddr' => $ipaddr), array('nname'));
+>>>>>>> upstream/dev
 
 	if ($res) { return $res[0]['nname']; }
 	return false;

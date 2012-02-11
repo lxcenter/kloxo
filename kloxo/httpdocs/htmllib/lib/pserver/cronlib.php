@@ -97,6 +97,7 @@ function createExtraVariables()
 	$this->__var_mailto = $this->getParentO()->cron_mailto;
 	$mydb = new Sqlite($this->__masterserver, "cron");
 	$parent = $this->getParentO();
+<<<<<<< HEAD
 	$this->__var_cron_list = $mydb->getRowsWhere("username = '{$parent->username}'");
 
 	$mydb = new Sqlite($this->__masterserver, "uuser");
@@ -108,6 +109,16 @@ function createExtraVariables()
 
 
 static function  createListNlist($parent)
+=======
+	$this->__var_cron_list = $mydb->getRowsWhere('username = :username', array(':username' => $parent->username)); 
+
+	$mydb = new Sqlite($this->__masterserver, "uuser");
+	$userlist = $mydb->getRowsWhere('nname = :username', array(':username' => $parent->username));
+	$this->__var_user_list = $userlist[0];
+}
+
+static function createListNlist($parent, $view)
+>>>>>>> upstream/dev
 {
 	//$nlist["nname"] = "5%";
 	//$nlist["minute"] = "5%";

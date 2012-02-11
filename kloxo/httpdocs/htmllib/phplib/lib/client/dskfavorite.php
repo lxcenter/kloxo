@@ -53,6 +53,7 @@ function postAdd()
 	global $gbl, $sgbl, $login, $ghtml; 
 	if (!$this->isOn('external') && !$this->isSeparator()) {
 		$url = base64_decode($this->url);
+<<<<<<< HEAD
 		if ($sgbl->isHyperVM() && isset($this->vpsparent_clname)) {
 			$url = kloxo::generateKloxoUrl($this->vpsparent_clname, null, $url);
 			$gbl->__this_redirect = "$url&frm_refresh_lpanel=true";
@@ -60,6 +61,10 @@ function postAdd()
 			$gbl->__this_redirect = $url;
 			$gbl->setSessionV("__refresh_lpanel", true);
 		}
+=======
+		$gbl->__this_redirect = $url;
+		$gbl->setSessionV("__refresh_lpanel", true);
+>>>>>>> upstream/dev
 	}
 	$gbl->setSessionV("__refresh_lpanel", true);
 	$this->ddate = time();

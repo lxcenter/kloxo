@@ -1,0 +1,128 @@
+# Kloxo master POT file
+# Copyright (C) 2011 LxCenter
+# License AGPL-V3
+# http://www.lxcenter.org/
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Kloxo 6.2.0\n"
+"Report-Msgid-Bugs-To: LxCenter <contact@lxcenter.org>\n"
+"POT-Creation-Date: 2011-12-09 00:08+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: LxCenter <contact@lxcenter.org>\n"
+"Language-Team: LxCenter <contact@lxcenter.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: httpdocs/lib/programlib.php:71 httpdocs/lib/programlib.php:74
+msgid " OK\n"
+msgstr ""
+
+#: httpdocs/lib/programlib.php:72
+msgid "Remove downloaded InstallApp data zip file"
+msgstr ""
+
+#: httpdocs/htmllib/coredisplaylib.php:1765
+msgid "The system is locked by u"
+msgstr ""
+
+#: httpdocs/htmllib/coredisplaylib.php:1778
+msgid "This is a Slave server and is controlled by the Master server.\n"
+msgstr ""
+
+#: httpdocs/htmllib/coredisplaylib.php:1831
+msgid "Action not set.\n"
+msgstr ""
+
+#: httpdocs/htmllib/coredisplaylib.php:1838
+msgid "Action not supported.\n"
+msgstr ""
+
+#: httpdocs/htmllib/coredisplaylib.php:1958
+msgid "The resource you requested could not be retrieved..."
+msgstr ""
+
+#: httpdocs/htmllib/lib/indexcontent.php:38
+msgid "Slave Server"
+msgstr ""
+
+#: httpdocs/htmllib/lib/indexcontent.php:58
+#: httpdocs/htmllib/lib/indexcontent.php:73
+msgid "Login"
+msgstr ""
+
+#: httpdocs/htmllib/lib/indexcontent.php:64
+#: httpdocs/htmllib/lib/indexcontent.php:117
+msgid "Username"
+msgstr ""
+
+#: httpdocs/htmllib/lib/indexcontent.php:67
+msgid "Password"
+msgstr ""
+
+#: httpdocs/htmllib/lib/indexcontent.php:79
+#: httpdocs/htmllib/lib/indexcontent.php:131
+msgid "Welcome to"
+msgstr ""
+
+#: httpdocs/htmllib/lib/indexcontent.php:81
+msgid "Use a valid username and password to gain access to the Control Panel."
+msgstr ""
+
+#: httpdocs/htmllib/lib/indexcontent.php:84
+msgid "Forgot Password?"
+msgstr ""
+
+#: httpdocs/htmllib/lib/indexcontent.php:112
+msgid "Forgot Password"
+msgstr ""
+
+#: httpdocs/htmllib/lib/indexcontent.php:120
+msgid "Email"
+msgstr ""
+
+#: httpdocs/htmllib/lib/indexcontent.php:125
+msgid "Send"
+msgstr ""
+
+#: httpdocs/htmllib/lib/indexcontent.php:133
+msgid "Use a valid username and email address to get a password."
+msgstr ""
+
+#: httpdocs/htmllib/lib/indexcontent.php:136
+msgid "Back to Login"
+msgstr ""
+
+#: httpdocs/htmllib/lib/indexcontent.php:187
+msgid "Password Reset Request"
+msgstr ""
+
+#: httpdocs/htmllib/lib/indexcontent.php:188
+msgid "Your password has been reset to the one below for your"
+msgstr ""
+
+#: httpdocs/htmllib/lib/indexcontent.php:188
+msgid "Control Panel login."
+msgstr ""
+
+#: httpdocs/htmllib/lib/indexcontent.php:189
+msgid "The Client IP address which requested the reset:"
+msgstr ""
+
+#: httpdocs/htmllib/lib/indexcontent.php:190
+msgid "Username:"
+msgstr ""
+
+#: httpdocs/htmllib/lib/indexcontent.php:191
+msgid "New Password:"
+msgstr ""
+
+#: httpdocs/htmllib/phplib/index.php:143
+msgid "Successful Login to "
+msgstr ""
+
+#: httpdocs/htmllib/phplib/index.php:143
+msgid " from "
+msgstr ""

@@ -1,0 +1,317 @@
+a:24:{s:7:"attribs";a:6:{s:15:"packagerversion";s:5:"1.7.2";s:7:"version";s:3:"2.0";s:5:"xmlns";s:35:"http://pear.php.net/dtd/package-2.0";s:11:"xmlns:tasks";s:33:"http://pear.php.net/dtd/tasks-1.0";s:9:"xmlns:xsi";s:41:"http://www.w3.org/2001/XMLSchema-instance";s:18:"xsi:schemaLocation";s:147:"http://pear.php.net/dtd/tasks-1.0 http://pear.php.net/dtd/tasks-1.0.xsd http://pear.php.net/dtd/package-2.0 http://pear.php.net/dtd/package-2.0.xsd";}s:4:"name";s:17:"MDB2_Driver_pgsql";s:7:"channel";s:12:"pear.php.net";s:7:"summary";s:17:"pgsql MDB2 driver";s:11:"description";s:35:"This is the PostgreSQL MDB2 driver.";s:4:"lead";a:2:{i:0;a:4:{s:4:"name";s:17:"Lukas Kahwe Smith";s:4:"user";s:6:"lsmith";s:5:"email";s:20:"smith@pooteeweet.org";s:6:"active";s:2:"no";}i:1;a:4:{s:4:"name";s:16:"Lorenzo Alberton";s:4:"user";s:5:"quipo";s:5:"email";s:19:"l.alberton@quipo.it";s:6:"active";s:3:"yes";}}s:9:"developer";a:4:{s:4:"name";s:18:"Nathan Fredrickson";s:4:"user";s:3:"nrf";s:5:"email";s:23:"nathan@silverorange.com";s:6:"active";s:3:"yes";}s:6:"helper";a:4:{s:4:"name";s:14:"Ali Fazelzadeh";s:4:"user";s:3:"afz";s:5:"email";s:16:"afz@dev-code.com";s:6:"active";s:3:"yes";}s:4:"date";s:10:"2009-01-14";s:4:"time";s:8:"16:39:15";s:7:"version";a:2:{s:7:"release";s:7:"1.5.0b2";s:3:"api";s:7:"1.5.0b2";}s:9:"stability";a:2:{s:7:"release";s:4:"beta";s:3:"api";s:4:"beta";}s:7:"license";s:11:"BSD License";s:5:"notes";s:927:"- fixed bug #12117: disconnect() does not work as documented
+- fixed bug #13481: getTableConstraintDefinition() may return incomplete results
+- fixed bug #13877: UNIQUE index not always recognized as constraint
+- fixed bug #14292: alterTable() cannot change column type when no implicit cast is defined
+- fixed bug #14510: getTableFieldDefinition() does not unquote defaults
+- fixed bug #14828: unixtimestamp() generates invalid SQL for non-constant argument
+- fixed bug #15056: tableInfo does not work with pgsql schemas (added support to
+  table schemas to Manager module)
+
+Thanks to Holger Schletz for all the above patches!
+
+open todo items:
+- enable pg_execute() once issues with bytea column are resolved
+- use pg_result_error_field() to handle localized error messages (Request #7059)
+- add option to use unnamed prepared statements
+  (see http://www.postgresql.org/docs/current/static/protocol-flow.html Extended Query)";s:8:"contents";a:1:{s:3:"dir";a:2:{s:7:"attribs";a:2:{s:14:"baseinstalldir";s:1:"/";s:4:"name";s:1:"/";}s:4:"file";a:8:{i:0;a:2:{s:7:"attribs";a:4:{s:14:"baseinstalldir";s:1:"/";s:6:"md5sum";s:32:"0fba2d24c9159fb31606cdcb00adf8ec";s:4:"name";s:30:"MDB2/Driver/Datatype/pgsql.php";s:4:"role";s:3:"php";}s:13:"tasks:replace";a:1:{s:7:"attribs";a:3:{s:4:"from";s:17:"@package_version@";s:2:"to";s:7:"version";s:4:"type";s:12:"package-info";}}}i:1;a:2:{s:7:"attribs";a:4:{s:14:"baseinstalldir";s:1:"/";s:6:"md5sum";s:32:"70aa923a97b2e7f2c015b79281981629";s:4:"name";s:30:"MDB2/Driver/Function/pgsql.php";s:4:"role";s:3:"php";}s:13:"tasks:replace";a:1:{s:7:"attribs";a:3:{s:4:"from";s:17:"@package_version@";s:2:"to";s:7:"version";s:4:"type";s:12:"package-info";}}}i:2;a:2:{s:7:"attribs";a:4:{s:14:"baseinstalldir";s:1:"/";s:6:"md5sum";s:32:"26622e9ce0a4fd122579c6bfec72561b";s:4:"name";s:29:"MDB2/Driver/Manager/pgsql.php";s:4:"role";s:3:"php";}s:13:"tasks:replace";a:1:{s:7:"attribs";a:3:{s:4:"from";s:17:"@package_version@";s:2:"to";s:7:"version";s:4:"type";s:12:"package-info";}}}i:3;a:2:{s:7:"attribs";a:4:{s:14:"baseinstalldir";s:1:"/";s:6:"md5sum";s:32:"1cd0f377be5bccaf197a6f76aad563cb";s:4:"name";s:28:"MDB2/Driver/Native/pgsql.php";s:4:"role";s:3:"php";}s:13:"tasks:replace";a:1:{s:7:"attribs";a:3:{s:4:"from";s:17:"@package_version@";s:2:"to";s:7:"version";s:4:"type";s:12:"package-info";}}}i:4;a:2:{s:7:"attribs";a:4:{s:14:"baseinstalldir";s:1:"/";s:6:"md5sum";s:32:"c042d6bad241aae0e7474dae8367ab00";s:4:"name";s:29:"MDB2/Driver/Reverse/pgsql.php";s:4:"role";s:3:"php";}s:13:"tasks:replace";a:1:{s:7:"attribs";a:3:{s:4:"from";s:17:"@package_version@";s:2:"to";s:7:"version";s:4:"type";s:12:"package-info";}}}i:5;a:2:{s:7:"attribs";a:4:{s:14:"baseinstalldir";s:1:"/";s:6:"md5sum";s:32:"b989a41625d1d8b0a8a3c60f3064185f";s:4:"name";s:21:"MDB2/Driver/pgsql.php";s:4:"role";s:3:"php";}s:13:"tasks:replace";a:1:{s:7:"attribs";a:3:{s:4:"from";s:17:"@package_version@";s:2:"to";s:7:"version";s:4:"type";s:12:"package-info";}}}i:6;a:1:{s:7:"attribs";a:4:{s:14:"baseinstalldir";s:1:"/";s:6:"md5sum";s:32:"3e790ed8bf0b3b91ec518cdab9eba271";s:4:"name";s:32:"tests/MDB2_nonstandard_pgsql.php";s:4:"role";s:4:"test";}}i:7;a:1:{s:7:"attribs";a:4:{s:14:"baseinstalldir";s:1:"/";s:6:"md5sum";s:32:"09a52d0b29649be2ca271a9262198194";s:4:"name";s:17:"package_pgsql.xml";s:4:"role";s:4:"data";}}}}}s:12:"dependencies";a:1:{s:8:"required";a:4:{s:3:"php";a:1:{s:3:"min";s:5:"4.3.0";}s:13:"pearinstaller";a:1:{s:3:"min";s:7:"1.4.0b1";}s:7:"package";a:3:{s:4:"name";s:4:"MDB2";s:7:"channel";s:12:"pear.php.net";s:3:"min";s:7:"2.5.0b2";}s:9:"extension";a:1:{s:4:"name";s:5:"pgsql";}}}s:10:"phprelease";s:0:"";s:9:"changelog";a:1:{s:7:"release";a:21:{i:0;a:5:{s:7:"version";a:2:{s:7:"release";s:7:"1.5.0b2";s:3:"api";s:7:"1.5.0b2";}s:9:"stability";a:2:{s:7:"release";s:4:"beta";s:3:"api";s:4:"beta";}s:4:"date";s:10:"2009-01-14";s:7:"license";s:11:"BSD License";s:5:"notes";s:927:"- fixed bug #12117: disconnect() does not work as documented
+- fixed bug #13481: getTableConstraintDefinition() may return incomplete results
+- fixed bug #13877: UNIQUE index not always recognized as constraint
+- fixed bug #14292: alterTable() cannot change column type when no implicit cast is defined
+- fixed bug #14510: getTableFieldDefinition() does not unquote defaults
+- fixed bug #14828: unixtimestamp() generates invalid SQL for non-constant argument
+- fixed bug #15056: tableInfo does not work with pgsql schemas (added support to
+  table schemas to Manager module)
+
+Thanks to Holger Schletz for all the above patches!
+
+open todo items:
+- enable pg_execute() once issues with bytea column are resolved
+- use pg_result_error_field() to handle localized error messages (Request #7059)
+- add option to use unnamed prepared statements
+  (see http://www.postgresql.org/docs/current/static/protocol-flow.html Extended Query)";}i:1;a:5:{s:7:"version";a:2:{s:7:"release";s:7:"1.5.0b1";s:3:"api";s:7:"1.5.0b1";}s:9:"stability";a:2:{s:7:"release";s:5:"alpha";s:3:"api";s:5:"alpha";}s:4:"date";s:10:"2008-03-15";s:7:"license";s:11:"BSD License";s:5:"notes";s:1348:"- request #12731: added truncateTable() in the Manager module
+- request #12732: added vacuum() in the Manager module for OPTIMIZE/VACUUM TABLE abstraction
+- request #12800: added alterDatabase() in the Manager module
+- fixed bug #12846: missing escape in getSequenceName() on PostgreSQL 8.2.4
+  [thanks to Stephane Berthelot]
+- fixed bug #12920: added new error info and fixed escape method if connection doesn't exist [afz]
+- fixed bug #12922: use standaloneQuery() in alterDatabase() [afz]
+- fixed bug #12924: correctly handle internal expected errors even with custom error handling
+- added standaloneQuery() and databaseExists()
+- fixed bug #13112: the Reverse module does not know the timestamptz data type
+- request #13106: added unixtimestamp() in the Function module
+- fixed bug #13281: list FOREIGN KEY constraints in listTableConstraints() in the Manager module
+- fixed bug #13356: added float4 to _mapNativeDatatype()
+- fixed query in getTableConstraintDefinition() for FK constraints in the Reverse module
+  (thanks to Andre' Restivo)
+
+open todo items:
+- enable pg_execute() once issues with bytea column are resolved
+- use pg_result_error_field() to handle localized error messages (Request #7059)
+- add option to use unnamed prepared statements
+  (see http://www.postgresql.org/docs/current/static/protocol-flow.html "Extended Query")";}i:2;a:5:{s:7:"version";a:2:{s:7:"release";s:7:"1.5.0a2";s:3:"api";s:7:"1.5.0a2";}s:9:"stability";a:2:{s:7:"release";s:5:"alpha";s:3:"api";s:5:"alpha";}s:4:"date";s:10:"2007-12-06";s:7:"license";s:11:"BSD License";s:5:"notes";s:662:"- fixed bug #12376: getTableConstraintDefinition() in the Reverse module
+  uses incorrect column number in certain cases (thanks to Dennis Birne)
+- request #12338: added 'disable_smart_seqname' option to make improved
+  getSequenceName() behaviour optional (thanks to Dennis Birne) (@see bug #9106)
+- request #12012: added collation support in createDatabase()
+
+open todo items:
+- enable pg_execute() once issues with bytea column are resolved
+- use pg_result_error_field() to handle localized error messages (Request #7059)
+- add option to use unnamed prepared statements
+  (see http://www.postgresql.org/docs/current/static/protocol-flow.html "Extended Query")";}i:3;a:5:{s:7:"version";a:2:{s:7:"release";s:7:"1.5.0a1";s:3:"api";s:7:"1.5.0a1";}s:9:"stability";a:2:{s:7:"release";s:5:"alpha";s:3:"api";s:5:"alpha";}s:4:"date";s:10:"2007-10-28";s:7:"license";s:11:"BSD License";s:5:"notes";s:1439:"- initial support for FOREIGN KEY and CHECK constraints in the Reverse and Manager modules
+- fixed bug #10986: Using more random statement names (request #11625)
+- request #11297: added support for "schema.table" (or "owner.table") notation
+  in the Reverse module (related to bug #11207)
+- fixed bug #11428: propagate quote() errors with invalid data types
+- fixed bug in MDB2_Statement_pgsql::_execute(), called property of invalid object
+- fixed bug #11624: getSequenceName() returning incorrect results with multiple
+  schemas and 'SET search_path'
+- fixed bug #11652: failed prepared queries containing the "::type" style of casting
+- fixed bug #11694: remove data type cast from DEFAULT value in getTableFieldDefinition()
+  in the Reverse module
+- fixed bug #11753: NOTICEs in alterTable() in the Manager module
+- fixed bug #11790: avoid array_diff() because it has a memory leak in PHP 5.1.x
+- fixed some E_STRICT errors with PHP5
+- fixed bug #12083: createTable() in the Manager module now returns MDB2_OK on success,
+  as documented
+- fixed bug #12269: tableInfo() in the Reverse module detect 'clob' data type
+  as first option
+
+open todo items:
+- enable pg_execute() once issues with bytea column are resolved
+- use pg_result_error_field() to handle localized error messages (Request #7059)
+- add option to use unnamed prepared statements
+  (see http://www.postgresql.org/docs/current/static/protocol-flow.html "Extended Query")";}i:4;a:5:{s:7:"version";a:2:{s:7:"release";s:5:"1.4.1";s:3:"api";s:5:"1.4.1";}s:9:"stability";a:2:{s:7:"release";s:6:"stable";s:3:"api";s:6:"stable";}s:4:"date";s:10:"2007-05-03";s:7:"license";s:11:"BSD License";s:5:"notes";s:795:"- return length as "precision,scale" for NUMERIC and DECIMAL fields in mapNativeDatatype()
+- more accurate field size information in getTableFieldDefinition() in the
+  Reverse module
+- in getTableIndexDefinition() and getTableConstraintDefinition() in the Reverse
+  module, also return the field position in the index/constraint
+- Request #9106: more accurate sequence name retrieval routine in getSequenceName()
+- fixed bug #10895: setLimit() does not work properly when a subquery uses LIMIT
+
+open todo items:
+- enable pg_execute() once issues with bytea column are resolved
+- use pg_result_error_field() to handle localized error messages (Request #7059)
+- add option to use unnamed prepared statements
+  (see http://www.postgresql.org/docs/current/static/protocol-flow.html "Extended Query")";}i:5;a:5:{s:7:"version";a:2:{s:7:"release";s:5:"1.4.0";s:3:"api";s:5:"1.4.0";}s:9:"stability";a:2:{s:7:"release";s:6:"stable";s:3:"api";s:6:"stable";}s:4:"date";s:10:"2007-03-13";s:7:"license";s:11:"BSD License";s:5:"notes";s:1038:"- propagate errors in getTableFieldDefinition() in the Reverse module
+- implemented getTriggerDefinition() in the Reverse module [experimental]
+- implemented listTableTriggers() in the Manager module
+- don't show catalog views in listViews() in the Manager module
+- implemented a fallback mechanism within getTableIndexDefinition() and
+  getTableConstraintDefinition() in the Reverse module to ignore the 'idxname_format'
+  option and use the index name as provided in case of failure before returning
+  an error
+- added a 'nativetype_map_callback' option to map native data declarations back to
+  custom data types (thanks to Andrew Hill).
+- lastInsertID() without parameters now returns the last used ID (request #9989)
+- phpdoc fixes
+
+open todo items:
+- enable pg_execute() once issues with bytea column are resolved
+- use pg_result_error_field() to handle localized error messages (Request #7059)
+- add option to use unnamed prepared statements
+  (see http://www.postgresql.org/docs/current/static/protocol-flow.html "Extended Query")";}i:6;a:5:{s:7:"version";a:2:{s:7:"release";s:5:"1.3.0";s:3:"api";s:5:"2.3.0";}s:9:"stability";a:2:{s:7:"release";s:6:"stable";s:3:"api";s:6:"stable";}s:4:"date";s:10:"2006-11-03";s:7:"license";s:11:"BSD License";s:5:"notes";s:724:"- fixed _modifyQuery() for manipulation queries
+- fixed inheritance structure of convertResult()
+- added support for new 'disable_iso_date' date DSN option (Request #8739)
+- added support for getting the table name in tableInfo()
+- added connection to pg_escape_*() calls
+- fixed _modifyQuery() for manipulation queries
+- enable detection of proper size of integers in mapNativeDatatype
+- migrated to package.xml version 2
+
+open todo items:
+- enable pg_execute() once issues with bytea column are resolved
+- use pg_result_error_field() to handle localized error messages (Request #7059)
+- add option to use unnamed prepared statements
+  (see http://www.postgresql.org/docs/current/static/protocol-flow.html "Extended Query")";}i:7;a:5:{s:7:"version";a:2:{s:7:"release";s:5:"1.2.2";s:3:"api";s:5:"1.2.2";}s:9:"stability";a:2:{s:7:"release";s:6:"stable";s:3:"api";s:6:"stable";}s:4:"date";s:10:"2006-09-03";s:7:"license";a:2:{s:7:"attribs";a:1:{s:3:"uri";s:22:"http://www.example.com";}s:8:"_content";s:11:"BSD License";}s:5:"notes";s:348:"- flip positions property array in prepared statement objects to make it
+  possible to optionally use the same named placeholder in multiple places
+  inside a single prepared statement
+
+open todo items:
+- enable pg_execute() once issues with bytea column are resolved
+- use pg_result_error_field() to handle localized error messages (Request #7059)";}i:8;a:5:{s:7:"version";a:2:{s:7:"release";s:5:"1.2.1";s:3:"api";s:5:"1.2.1";}s:9:"stability";a:2:{s:7:"release";s:6:"stable";s:3:"api";s:6:"stable";}s:4:"date";s:10:"2006-08-21";s:7:"license";a:2:{s:7:"attribs";a:1:{s:3:"uri";s:22:"http://www.example.com";}s:8:"_content";s:11:"BSD License";}s:5:"notes";s:472:"- return an error if a named placeholder name is used twice inside a single statement
+- do not list empty contraints and indexes
+- do not set a default if type is a LOB (Request #8074)
+- fixed handling return values when disable_query is set in _doQuery() and _execute()
+- increased MDB2 dependency too 2.2.1
+
+open todo items:
+- enable pg_execute() once issues with bytea column are resolved
+- use pg_result_error_field() to handle localized error messages (Request #7059)";}i:9;a:5:{s:7:"version";a:2:{s:7:"release";s:5:"1.2.0";s:3:"api";s:5:"1.2.0";}s:9:"stability";a:2:{s:7:"release";s:6:"stable";s:3:"api";s:6:"stable";}s:4:"date";s:10:"2006-07-23";s:7:"license";a:2:{s:7:"attribs";a:1:{s:3:"uri";s:22:"http://www.example.com";}s:8:"_content";s:11:"BSD License";}s:5:"notes";s:1352:"- performance tweaks for pg_prepare() enabled installations
+- MDB2_PORTABILITY_RTRIM ignored by driver (Bug #8239)
+- added ability to escape wildcard characters in escape() and quote()
+- added setTransactionIsolation()
+- added savepoint support to beginTransaction(), commit() and rollback()
+- added debug() call at the end of a query/prepare/execute calling (Request #7933)
+- added context array parameter to debug() and make use of it whereever sensible
+- added optional method name parameter to raiseError() and use whereever possible
+- added ability to escape wildcard characters in escape() and quote()
+- added debug() call at the end of a query/prepare/execute calling (Request #7933)
+- added 'nativetype' output to tableInfo() and getTableFieldDefinition()
+- added 'mdb2type' output to getTableFieldDefinition()
+- reworked tableInfo() to use a common implementation based on getTableFieldDefinition()
+  when a table name is passed (Bug #8124)
+- fixed incorrect regex in mapNativeDatatype() (Bug #8256) (thx ioz at ionosfera dot com)
+- disconnect after changing database/DSN (otherwise transactions may be left open)
+- use old dsn when rolling back open transactions in disconnect()
+
+open todo items:
+- enable pg_execute() once issues with bytea column are resolved
+- use pg_result_error_field() to handle localized error messages (Request #7059)";}i:10;a:5:{s:7:"version";a:2:{s:7:"release";s:5:"1.1.0";s:3:"api";s:5:"1.1.0";}s:9:"stability";a:2:{s:7:"release";s:6:"stable";s:3:"api";s:6:"stable";}s:4:"date";s:10:"2006-06-15";s:7:"license";a:2:{s:7:"attribs";a:1:{s:3:"uri";s:22:"http://www.example.com";}s:8:"_content";s:11:"BSD License";}s:5:"notes";s:1106:"- added setCharset()
+- use setCharset() in connect()/_doConnect()
+- generalized quoteIdentifier() with a property
+- switched most array_key_exists() calls to !empty() to improve readability and performance
+- fixed a few edge cases and potential warnings
+- return error when changing datatypes in alterTable() on pgsql version lower than 8.x (Bug #7731)
+- added ability to rewrite queries for query(), exec() and prepare() using a debug handler callback
+- fixed missing error handling in getTableFieldDefinition() (Bug #7791)
+- pass limit and offset to the result object constructor in _execute() for read statements
+- use pg_prepare() if available so that we do not need to define the types anymore (Request #7797)
+- added code to use pg_execute() but disabled due to issues with bytea fields
+- check if result/connection has not yet been freed/dicsonnected before
+  attempting to free a result set(Bug #7790)
+- revert change that would prefer 'clob' over 'text' for TEXT fields
+  (this was breaking runtime instrospection)
+
+open todo items:
+- enable pg_execute() once issues with bytea column are resolved";}i:11;a:5:{s:7:"version";a:2:{s:7:"release";s:5:"1.0.3";s:3:"api";s:5:"1.0.3";}s:9:"stability";a:2:{s:7:"release";s:6:"stable";s:3:"api";s:6:"stable";}s:4:"date";s:10:"2006-05-24";s:7:"license";a:2:{s:7:"attribs";a:1:{s:3:"uri";s:22:"http://www.example.com";}s:8:"_content";s:11:"BSD License";}s:5:"notes";s:160:"SECURITY FIX (http://www.postgresql.org/docs/techdocs.50)
+- use pg_escape_string()
+- use "'" as the escape character
+- limit fetch to 1 row in listTableFields()";}i:12;a:5:{s:7:"version";a:2:{s:7:"release";s:5:"1.0.2";s:3:"api";s:5:"1.0.2";}s:9:"stability";a:2:{s:7:"release";s:6:"stable";s:3:"api";s:6:"stable";}s:4:"date";s:10:"2006-05-23";s:7:"license";a:2:{s:7:"attribs";a:1:{s:3:"uri";s:22:"http://www.example.com";}s:8:"_content";s:11:"BSD License";}s:5:"notes";s:251:"- added "emulate_prepared" option to force prepared statement emulation
+- tweaked handling of free() for prepared statements
+- return error if a prepared statement is attempted to be freed twice
+- fixed notice when using prepare() without placeholders";}i:13;a:5:{s:7:"version";a:2:{s:7:"release";s:5:"1.0.1";s:3:"api";s:5:"1.0.1";}s:9:"stability";a:2:{s:7:"release";s:6:"stable";s:3:"api";s:6:"stable";}s:4:"date";s:10:"2006-05-14";s:7:"license";a:2:{s:7:"attribs";a:1:{s:3:"uri";s:22:"http://www.example.com";}s:8:"_content";s:11:"BSD License";}s:5:"notes";s:863:"- added listTableViews() (request #6773)
+- explicitly set is_manip parameter to false for transaction debug calls
+- pass parameter array as debug() all with scope "parameters" in every execute()
+  call (bug #4119)
+- typo fixes in phpdoc (thx Stoyan)
+- added support for fixed and variable types for 'text' in declarations,
+  as well as in reverse engineering (Request #1523)
+- made _doQuery() return a reference
+- added userinfo's to all raiseError calls that previously had none
+- calling PREPARE is always a manip query
+- added 'prepared_statements' supported meta data setting
+- strip of file:// prefix in writeLOBToFile()
+- typo fix ressource/resource in LOB array
+- added missing supported parameter to prepare() signature
+- properly handle explicit error codes in errorInfo()
+- moved from OID to TEXT and BYTEA (OID handling was broken, its also deprecated)";}i:14;a:5:{s:7:"version";a:2:{s:7:"release";s:5:"1.0.0";s:3:"api";s:5:"1.0.0";}s:9:"stability";a:2:{s:7:"release";s:6:"stable";s:3:"api";s:6:"stable";}s:4:"date";s:10:"2006-02-09";s:7:"license";a:2:{s:7:"attribs";a:1:{s:3:"uri";s:22:"http://www.example.com";}s:8:"_content";s:11:"BSD License";}s:5:"notes";s:334:"- handle null as resource when disable_query option is enabled in result object
+
+open todo items:
+- considering migrating away from OID's to bytea, since this is encourage
+  since version 8 and is also what PDO expects, however there is no streaming
+  API for bytea columns .. this needs to be done using manually chunked reads/writes";}i:15;a:5:{s:7:"version";a:2:{s:7:"release";s:5:"0.2.4";s:3:"api";s:5:"0.2.4";}s:9:"stability";a:2:{s:7:"release";s:4:"beta";s:3:"api";s:4:"beta";}s:4:"date";s:10:"2006-02-05";s:7:"license";a:2:{s:7:"attribs";a:1:{s:3:"uri";s:22:"http://www.example.com";}s:8:"_content";s:11:"BSD License";}s:5:"notes";s:719:"- added support for length in integer and decimal columns
+- removed ugly hack for quote parameter in quote() since it was insufficient
+  (escaping also needs to be prevented)
+- added support for out of order parameter binding in prepared queries
+- reset row_limit and row_offset after calling prepare() just like we do for query() and exec()
+- cosmetic fix (removed "row_" prefix from "row_limit" and "row_offset")
+- improved parsing in getServerInfo() (bug #6550)
+
+open todo items:
+- considering migrating away from OID's to bytea, since this is encourage
+  since version 8 and is also what PDO expects, however there is no streaming
+  API for bytea columns .. this needs to be done using manually chunked reads/writes";}i:16;a:5:{s:7:"version";a:2:{s:7:"release";s:5:"0.2.3";s:3:"api";s:5:"0.2.3";}s:9:"stability";a:2:{s:7:"release";s:4:"beta";s:3:"api";s:4:"beta";}s:4:"date";s:10:"2006-01-13";s:7:"license";a:2:{s:7:"attribs";a:1:{s:3:"uri";s:22:"http://www.example.com";}s:8:"_content";s:11:"BSD License";}s:5:"notes";s:811:"- explicitly pass if the module is phptype specific in all loadModule calls (bug #6226)
+- fixed signature of executeStoredProc()
+- typo fixes in error handling of nextResult() and numRows() calls
+- _fixIndexName() now just attempts to remove possible formatting
+- renamed _isSequenceName() to _fixSequenceName()
+- _fixSequenceName() now just attempts to remove possible formatting, and only
+  returns a boolean if no formatting was applied when the new "check" parameter is set to true
+- fixed bug that caused unique indexes from not being seen (bug #6476)
+
+open todo items:
+- considering migrating away from OID's to bytea, since this is encourage
+  since version 8 and is also what PDO expects, however there is no streaming
+  API for bytea columns .. this needs to be done using manually chunked reads/writes";}i:17;a:5:{s:7:"version";a:2:{s:7:"release";s:5:"0.2.2";s:3:"api";s:5:"0.2.2";}s:9:"stability";a:2:{s:7:"release";s:4:"beta";s:3:"api";s:4:"beta";}s:4:"date";s:10:"2005-12-30";s:7:"license";a:2:{s:7:"attribs";a:1:{s:3:"uri";s:22:"http://www.example.com";}s:8:"_content";s:11:"BSD License";}s:5:"notes";s:306:"- types can now always be keyed by name or by order
+
+open todo items:
+- considering migrating away from OID's to bytea, since this is encourage
+  since version 8 and is also what PDO expects, however there is no streaming
+  API for bytea columns .. this needs to be done using manually chunked reads/writes";}i:18;a:5:{s:7:"version";a:2:{s:7:"release";s:5:"0.2.1";s:3:"api";s:5:"0.2.1";}s:9:"stability";a:2:{s:7:"release";s:4:"beta";s:3:"api";s:4:"beta";}s:4:"date";s:10:"2005-12-28";s:7:"license";a:2:{s:7:"attribs";a:1:{s:3:"uri";s:22:"http://www.example.com";}s:8:"_content";s:11:"BSD License";}s:5:"notes";s:787:"- fixed datatype conversion for "time" values
+- fixed getTableFieldDefinition() default handling (though still a bit shaky)
+- reverse module: ensure that parameters in queries are properly quoted
+- fixed bug in alterTable() where "rename" would be skipped if no other alteration is done
+- do not use multiple commands in ALTER TABLE (only supported since 8.0)
+- implemented native prepared queries
+- use proper error code in alterTable()
+- renamed table as the last step in alterTable()
+- proper quote new table name in alterTable()
+
+open todo items:
+- considering migrating away from OID's to bytea, since this is encourage
+  since version 8 and is also what PDO expects, however there is no streaming
+  API for bytea columns .. this needs to be done using manually chunked reads/writes";}i:19;a:5:{s:7:"version";a:2:{s:7:"release";s:5:"0.2.0";s:3:"api";s:5:"0.2.0";}s:9:"stability";a:2:{s:7:"release";s:4:"beta";s:3:"api";s:4:"beta";}s:4:"date";s:10:"2005-12-21";s:7:"license";a:2:{s:7:"attribs";a:1:{s:3:"uri";s:22:"http://www.example.com";}s:8:"_content";s:11:"BSD License";}s:5:"notes";s:1734:"- do not fix case in listUsers()
+- unified case fixing in the list*() methods
+- tweaked text handling in mapNativeDatatype()
+- use getConnection() to access connection property
+- split index and constraint handling
+- quote identifiers where possible inside the manager methods depending on
+  the new 'quote_identifier' option (defaults to off)
+- refactored get*Declaration() methods to use getTypeDeclaration()
+- added support for table and column renaming as well as default and nullability
+  changing in alterTable()
+- setting in_transaction to false on disconnect
+- added new Function modules to handle difference in SQL functions
+- force rollback() with open transactions on disconnect
+- escape floats to make sure they do not contain evil characters (bug #5608)
+- split off manipulation queries into exec() method from the query() method *BC BREAK*
+- if result_types is set to false in prepare() method the query will be handled as a DML statement *BC BREAK*
+- use a proper default value if a field is set to not null in _getDeclaration*() (bug #5930)
+- added ability to determine unsigned in mapNativeDatatype()
+  (only really implemented in the mysql(i) drivers) (bug #6054)
+- use MDB2_ERROR_NOT_FOUND in getTableConstraintDefinition() and getTableIndexDefinition() (bug #6055)
+- added getServerVersion()
+- unified array structure in mapNativeDatatype() *BC BREAK*
+- added 'mdbtype' to tableInfo() output that is generated from mapNativeDatatype()
+- changed 'len' to 'length' in tableInfo() output *BC BREAK*
+
+open todo items:
+- implement native prepared queries
+- migrate away from OID's to bytea, since this is encourage since version 8
+  and is also what PDO expects
+- testgettablefielddefinition and testnow test cases fail";}i:20;a:5:{s:7:"version";a:2:{s:7:"release";s:5:"0.1.1";s:3:"api";s:5:"0.1.1";}s:9:"stability";a:2:{s:7:"release";s:4:"beta";s:3:"api";s:4:"beta";}s:4:"date";s:10:"2005-10-10";s:7:"license";a:2:{s:7:"attribs";a:1:{s:3:"uri";s:22:"http://www.example.com";}s:8:"_content";s:11:"BSD License";}s:5:"notes";s:1654:"Warning: this release features numerous BC breaks!
+
+There have been considerable improvements to the datatype, manager and reverse
+modules. Furthermore preliminary support for auto increment and primary keys
+has been added. Please note that making a field auto increment implies a single
+column primary key on this field.
+
+- increased php dependency to 4.3.0 due to the usage of the streams API since beta5
+- fixed typo in _getTextDeclaration()
+- alterTable now needs the full definition to work (use getTableFieldDefinition
+ from Reverse module if you do not have a definition at hand) this eliminates the need
+ of the declaration part in the alterTable array.
+- fix PHP4.4 breakage
+- improved error mapping (ported from DB)
+- better detect if the query returned a result set or not in _doQuery()
+- minor tweaks to LOB handling
+- use !empty() instead of isset() in fetchRow to determine if result cols were bound or result types were set
+- moved all private fetch mode fix methods into _fixResultArrayValues() for performance reasons
+- renamed MDB2_PORTABILITY_LOWERCASE to MDB2_PORTABILITY_FIX_CASE and use 'field_case' option to determine if to upper- or lowercase (CASE_LOWER/CASE_UPPER)
+- use array_key_exists() instead of isset() where possible
+- changed structure of field add/remove/change in alterTable() to match MDB2_Schema
+- added createIndex()
+- return 0 for manipulation queries when disable_query is enabled
+- tweaked getTableFieldDefinition() in reverse module
+- added getTypeDeclaration() in the datatype module
+- tweaked field changing in alterTable()
+- fixed alterTable() signature
+
+open todo items:
+- implement native prepared queries";}}}s:8:"filelist";a:8:{s:30:"MDB2/Driver/Datatype/pgsql.php";a:5:{s:14:"baseinstalldir";s:1:"/";s:6:"md5sum";s:32:"0fba2d24c9159fb31606cdcb00adf8ec";s:4:"name";s:30:"MDB2/Driver/Datatype/pgsql.php";s:4:"role";s:3:"php";s:12:"installed_as";s:64:"/var/www/horde/groupware/pear/php/MDB2/Driver/Datatype/pgsql.php";}s:30:"MDB2/Driver/Function/pgsql.php";a:5:{s:14:"baseinstalldir";s:1:"/";s:6:"md5sum";s:32:"70aa923a97b2e7f2c015b79281981629";s:4:"name";s:30:"MDB2/Driver/Function/pgsql.php";s:4:"role";s:3:"php";s:12:"installed_as";s:64:"/var/www/horde/groupware/pear/php/MDB2/Driver/Function/pgsql.php";}s:29:"MDB2/Driver/Manager/pgsql.php";a:5:{s:14:"baseinstalldir";s:1:"/";s:6:"md5sum";s:32:"26622e9ce0a4fd122579c6bfec72561b";s:4:"name";s:29:"MDB2/Driver/Manager/pgsql.php";s:4:"role";s:3:"php";s:12:"installed_as";s:63:"/var/www/horde/groupware/pear/php/MDB2/Driver/Manager/pgsql.php";}s:28:"MDB2/Driver/Native/pgsql.php";a:5:{s:14:"baseinstalldir";s:1:"/";s:6:"md5sum";s:32:"1cd0f377be5bccaf197a6f76aad563cb";s:4:"name";s:28:"MDB2/Driver/Native/pgsql.php";s:4:"role";s:3:"php";s:12:"installed_as";s:62:"/var/www/horde/groupware/pear/php/MDB2/Driver/Native/pgsql.php";}s:29:"MDB2/Driver/Reverse/pgsql.php";a:5:{s:14:"baseinstalldir";s:1:"/";s:6:"md5sum";s:32:"c042d6bad241aae0e7474dae8367ab00";s:4:"name";s:29:"MDB2/Driver/Reverse/pgsql.php";s:4:"role";s:3:"php";s:12:"installed_as";s:63:"/var/www/horde/groupware/pear/php/MDB2/Driver/Reverse/pgsql.php";}s:21:"MDB2/Driver/pgsql.php";a:5:{s:14:"baseinstalldir";s:1:"/";s:6:"md5sum";s:32:"b989a41625d1d8b0a8a3c60f3064185f";s:4:"name";s:21:"MDB2/Driver/pgsql.php";s:4:"role";s:3:"php";s:12:"installed_as";s:55:"/var/www/horde/groupware/pear/php/MDB2/Driver/pgsql.php";}s:32:"tests/MDB2_nonstandard_pgsql.php";a:5:{s:14:"baseinstalldir";s:1:"/";s:6:"md5sum";s:32:"3e790ed8bf0b3b91ec518cdab9eba271";s:4:"name";s:32:"tests/MDB2_nonstandard_pgsql.php";s:4:"role";s:4:"test";s:12:"installed_as";s:86:"/var/www/horde/groupware/pear/tests/MDB2_Driver_pgsql/tests/MDB2_nonstandard_pgsql.php";}s:17:"package_pgsql.xml";a:5:{s:14:"baseinstalldir";s:1:"/";s:6:"md5sum";s:32:"09a52d0b29649be2ca271a9262198194";s:4:"name";s:17:"package_pgsql.xml";s:4:"role";s:4:"data";s:12:"installed_as";s:70:"/var/www/horde/groupware/pear/data/MDB2_Driver_pgsql/package_pgsql.xml";}}s:12:"_lastversion";N;s:7:"dirtree";a:10:{s:54:"/var/www/horde/groupware/pear/php/MDB2/Driver/Datatype";b:1;s:45:"/var/www/horde/groupware/pear/php/MDB2/Driver";b:1;s:38:"/var/www/horde/groupware/pear/php/MDB2";b:1;s:54:"/var/www/horde/groupware/pear/php/MDB2/Driver/Function";b:1;s:53:"/var/www/horde/groupware/pear/php/MDB2/Driver/Manager";b:1;s:52:"/var/www/horde/groupware/pear/php/MDB2/Driver/Native";b:1;s:53:"/var/www/horde/groupware/pear/php/MDB2/Driver/Reverse";b:1;s:59:"/var/www/horde/groupware/pear/tests/MDB2_Driver_pgsql/tests";b:1;s:53:"/var/www/horde/groupware/pear/tests/MDB2_Driver_pgsql";b:1;s:52:"/var/www/horde/groupware/pear/data/MDB2_Driver_pgsql";b:1;}s:3:"old";a:7:{s:7:"version";s:7:"1.5.0b2";s:12:"release_date";s:10:"2009-01-14";s:13:"release_state";s:4:"beta";s:15:"release_license";s:11:"BSD License";s:13:"release_notes";s:927:"- fixed bug #12117: disconnect() does not work as documented
+- fixed bug #13481: getTableConstraintDefinition() may return incomplete results
+- fixed bug #13877: UNIQUE index not always recognized as constraint
+- fixed bug #14292: alterTable() cannot change column type when no implicit cast is defined
+- fixed bug #14510: getTableFieldDefinition() does not unquote defaults
+- fixed bug #14828: unixtimestamp() generates invalid SQL for non-constant argument
+- fixed bug #15056: tableInfo does not work with pgsql schemas (added support to
+  table schemas to Manager module)
+
+Thanks to Holger Schletz for all the above patches!
+
+open todo items:
+- enable pg_execute() once issues with bytea column are resolved
+- use pg_result_error_field() to handle localized error messages (Request #7059)
+- add option to use unnamed prepared statements
+  (see http://www.postgresql.org/docs/current/static/protocol-flow.html Extended Query)";s:12:"release_deps";a:4:{i:0;a:4:{s:4:"type";s:3:"php";s:3:"rel";s:2:"ge";s:7:"version";s:5:"4.3.0";s:8:"optional";s:2:"no";}i:1;a:6:{s:4:"type";s:3:"pkg";s:7:"channel";s:12:"pear.php.net";s:4:"name";s:4:"PEAR";s:3:"rel";s:2:"ge";s:7:"version";s:7:"1.4.0b1";s:8:"optional";s:2:"no";}i:2;a:6:{s:4:"type";s:3:"pkg";s:7:"channel";s:12:"pear.php.net";s:4:"name";s:4:"MDB2";s:3:"rel";s:2:"ge";s:7:"version";s:7:"2.5.0b2";s:8:"optional";s:2:"no";}i:3;a:4:{s:4:"type";s:3:"ext";s:4:"name";s:5:"pgsql";s:3:"rel";s:3:"has";s:8:"optional";s:2:"no";}}s:11:"maintainers";a:4:{i:0;a:5:{s:4:"name";s:17:"Lukas Kahwe Smith";s:5:"email";s:20:"smith@pooteeweet.org";s:6:"active";s:2:"no";s:6:"handle";s:6:"lsmith";s:4:"role";s:4:"lead";}i:1;a:5:{s:4:"name";s:16:"Lorenzo Alberton";s:5:"email";s:19:"l.alberton@quipo.it";s:6:"active";s:3:"yes";s:6:"handle";s:5:"quipo";s:4:"role";s:4:"lead";}i:2;a:5:{s:4:"name";s:18:"Nathan Fredrickson";s:5:"email";s:23:"nathan@silverorange.com";s:6:"active";s:3:"yes";s:6:"handle";s:3:"nrf";s:4:"role";s:9:"developer";}i:3;a:5:{s:4:"name";s:14:"Ali Fazelzadeh";s:5:"email";s:16:"afz@dev-code.com";s:6:"active";s:3:"yes";s:6:"handle";s:3:"afz";s:4:"role";s:6:"helper";}}}s:10:"xsdversion";s:3:"2.0";s:13:"_lastmodified";i:1311701858;}

@@ -2,37 +2,56 @@
 
 include_once "htmllib/lib/displayinclude.php";
 
+<<<<<<< HEAD
 redirect_to_https();
 main_main();
 
 function domainshow()
 {   
 	global $gbl, $sgbl, $login, $ghtml; 
+=======
+function domainshow()
+{
+	global $gbl, $sgbl, $login, $ghtml;
+>>>>>>> upstream/dev
 
 	if ($login->isAdmin()) {
 		$doctype = "admin";
 		$domainclass = "all_domaina";
+<<<<<<< HEAD
 	} else  {
+=======
+	} else {
+>>>>>>> upstream/dev
 		$doctype = "client";
 		$domainclass = "domaina";
 	}
 
+<<<<<<< HEAD
 
 	//$url = $login->getUrlFromLoginTo();
 	$url = "a=show";
 	$url = $ghtml->getFullUrl($url);
 
 
+=======
+	$url = "a=show";
+	$url = $ghtml->getFullUrl($url);
+
+>>>>>>> upstream/dev
 	if (lxfile_exists("lbin/header_vendor.php")) {
 		$file = "/lbin/header_vendor.php";
 	} else {
 		$file = "/lbin/header.php";
 	}
 
+<<<<<<< HEAD
 
 	if ($login->isAdmin()) {
 		//$url = '/display.php?frm_action=list&frm_o_cname=client';
 	}
+=======
+>>>>>>> upstream/dev
 	$sp = $login->getSpecialObject('sp_specialplay');
 
 	if ($sp->isOn('lpanel_scrollbar')) {
@@ -49,6 +68,7 @@ function domainshow()
 		$width = $sgbl->__var_lpanelwidth;
 	}
 
+<<<<<<< HEAD
 
     $title = get_title();
 	?> 
@@ -124,4 +144,65 @@ function main_main()
 
 }
 
+=======
+	$title = get_title();
+	?>
+<head>
+	<title> <?php echo $title ?> </title>
+
+	<?php $ghtml->print_refresh_key();
+
+	if ($login->getSpecialObject('sp_specialplay')->isOn('simple_skin')) {
+		print("<FRAMESET frameborder=\"0\" rows=\"96%,*\"  border=\"0\">");
+		print("<FRAME name=\"mainframe\" src=\"$url\">");
+		print("<FRAME name=\"bottomframe\" src=\"htmllib/lbin/bottom.php\">");
+		return;
+	}
+
+	$headerheight = 29;
+
+	if ($login->isDefaultSkin()) {
+		$headerheight = 93;
+	} else {
+		if ($login->getSpecialObject('sp_specialplay')->isOn('show_thin_header')) {
+			$headerheight = 29;
+		}
+	}
+
+	print("<FRAMESET frameborder=\"0\" rows=\"$headerheight,*\"  border=\"0\">");
+	print("<FRAME name=\"topframe\" src=\"$file\" scrolling=\"no\">");
+
+	if (!$sp->isOn('split_frame')) {
+		print("<FRAMESET frameborder=\"0\" cols=\"$width,*\" border=\"0\">");
+		print("<FRAME name=\"leftframe\" src=\"/htmllib/lbin/lpanel.php?lpanel_type=tree\" $scrollstring border=\"0\">");
+	}
+
+	if ($sp->isOn('split_frame')) {
+		print("<FRAMESET frameborder=\"0\" cols=\"50%,*\" border=\"0\">");
+	}
+	print("<FRAMESET frameborder=\"0\" rows=\"96%,*\"  border=\"0\">");
+	print("<FRAME name=\"mainframe\"  src=\"$url\">");
+	print("<FRAME name=\"bottomframe\" src=\"htmllib/lbin/bottom.php\">");
+
+	if ($sp->isOn('split_frame')) {
+		print("<FRAME name=\"rightframe\" src=\"$url\">");
+	}
+	print("</FRAMESET>\n");
+	print("</FRAMESET>\n");
+	?>
+</head>
+<?php
+
+}
+
+function main_main()
+{
+	global $gbl, $login, $ghtml;
+	initProgram();
+	domainshow();
+}
+
+redirect_to_https();
+main_main();
+>>>>>>> upstream/dev
 

@@ -1,0 +1,231 @@
+a:22:{s:7:"attribs";a:6:{s:15:"packagerversion";s:5:"1.7.2";s:7:"version";s:3:"2.0";s:5:"xmlns";s:35:"http://pear.php.net/dtd/package-2.0";s:11:"xmlns:tasks";s:33:"http://pear.php.net/dtd/tasks-1.0";s:9:"xmlns:xsi";s:41:"http://www.w3.org/2001/XMLSchema-instance";s:18:"xsi:schemaLocation";s:147:"http://pear.php.net/dtd/tasks-1.0 http://pear.php.net/dtd/tasks-1.0.xsd http://pear.php.net/dtd/package-2.0 http://pear.php.net/dtd/package-2.0.xsd";}s:4:"name";s:17:"MDB2_Driver_ibase";s:7:"channel";s:12:"pear.php.net";s:7:"summary";s:17:"ibase MDB2 driver";s:11:"description";s:43:"This is the Interbase/Firebird MDB2 driver.";s:4:"lead";a:2:{i:0;a:4:{s:4:"name";s:16:"Lorenzo Alberton";s:4:"user";s:5:"quipo";s:5:"email";s:19:"l.alberton@quipo.it";s:6:"active";s:3:"yes";}i:1;a:4:{s:4:"name";s:17:"Lukas Kahwe Smith";s:4:"user";s:6:"lsmith";s:5:"email";s:20:"smith@pooteeweet.org";s:6:"active";s:2:"no";}}s:4:"date";s:10:"2009-01-14";s:4:"time";s:8:"16:28:41";s:7:"version";a:2:{s:7:"release";s:7:"1.5.0b2";s:3:"api";s:7:"1.5.0b2";}s:9:"stability";a:2:{s:7:"release";s:4:"beta";s:3:"api";s:4:"beta";}s:7:"license";s:11:"BSD License";s:5:"notes";s:232:"- fixed bug #12117: disconnect() does not work as documented
+- request #14639: automatically fetch CLOBs when retrieved with 'text' data type
+- getTableFieldDefinition() now returns the charset and collation of the field, if defined";s:8:"contents";a:1:{s:3:"dir";a:2:{s:7:"attribs";a:2:{s:14:"baseinstalldir";s:1:"/";s:4:"name";s:1:"/";}s:4:"file";a:8:{i:0;a:2:{s:7:"attribs";a:4:{s:14:"baseinstalldir";s:1:"/";s:6:"md5sum";s:32:"2c9ca6014c2a0e3309a48024cf24d14d";s:4:"name";s:30:"MDB2/Driver/Datatype/ibase.php";s:4:"role";s:3:"php";}s:13:"tasks:replace";a:1:{s:7:"attribs";a:3:{s:4:"from";s:17:"@package_version@";s:2:"to";s:7:"version";s:4:"type";s:12:"package-info";}}}i:1;a:2:{s:7:"attribs";a:4:{s:14:"baseinstalldir";s:1:"/";s:6:"md5sum";s:32:"600fbfdad8a8a372217c9244bcabbdff";s:4:"name";s:30:"MDB2/Driver/Function/ibase.php";s:4:"role";s:3:"php";}s:13:"tasks:replace";a:1:{s:7:"attribs";a:3:{s:4:"from";s:17:"@package_version@";s:2:"to";s:7:"version";s:4:"type";s:12:"package-info";}}}i:2;a:2:{s:7:"attribs";a:4:{s:14:"baseinstalldir";s:1:"/";s:6:"md5sum";s:32:"d2256bf918a10a95165f3f5226f85aca";s:4:"name";s:29:"MDB2/Driver/Manager/ibase.php";s:4:"role";s:3:"php";}s:13:"tasks:replace";a:1:{s:7:"attribs";a:3:{s:4:"from";s:17:"@package_version@";s:2:"to";s:7:"version";s:4:"type";s:12:"package-info";}}}i:3;a:2:{s:7:"attribs";a:4:{s:14:"baseinstalldir";s:1:"/";s:6:"md5sum";s:32:"d0de5aff17fffcdfa0d79c6b4999a0c6";s:4:"name";s:28:"MDB2/Driver/Native/ibase.php";s:4:"role";s:3:"php";}s:13:"tasks:replace";a:1:{s:7:"attribs";a:3:{s:4:"from";s:17:"@package_version@";s:2:"to";s:7:"version";s:4:"type";s:12:"package-info";}}}i:4;a:2:{s:7:"attribs";a:4:{s:14:"baseinstalldir";s:1:"/";s:6:"md5sum";s:32:"9231b3d4f1ff2f0c4113bab976569531";s:4:"name";s:29:"MDB2/Driver/Reverse/ibase.php";s:4:"role";s:3:"php";}s:13:"tasks:replace";a:1:{s:7:"attribs";a:3:{s:4:"from";s:17:"@package_version@";s:2:"to";s:7:"version";s:4:"type";s:12:"package-info";}}}i:5;a:2:{s:7:"attribs";a:4:{s:14:"baseinstalldir";s:1:"/";s:6:"md5sum";s:32:"8af3c485261b50d7e54f86fd90df252f";s:4:"name";s:21:"MDB2/Driver/ibase.php";s:4:"role";s:3:"php";}s:13:"tasks:replace";a:1:{s:7:"attribs";a:3:{s:4:"from";s:17:"@package_version@";s:2:"to";s:7:"version";s:4:"type";s:12:"package-info";}}}i:6;a:1:{s:7:"attribs";a:4:{s:14:"baseinstalldir";s:1:"/";s:6:"md5sum";s:32:"32504b5dd5ff479da628abd6f96753c3";s:4:"name";s:32:"tests/MDB2_nonstandard_ibase.php";s:4:"role";s:4:"test";}}i:7;a:1:{s:7:"attribs";a:4:{s:14:"baseinstalldir";s:1:"/";s:6:"md5sum";s:32:"04d1b77db4e4ddecf8fbeb010de1644d";s:4:"name";s:17:"package_ibase.xml";s:4:"role";s:4:"data";}}}}}s:12:"dependencies";a:1:{s:8:"required";a:4:{s:3:"php";a:1:{s:3:"min";s:5:"5.0.4";}s:13:"pearinstaller";a:1:{s:3:"min";s:7:"1.4.0b1";}s:7:"package";a:3:{s:4:"name";s:4:"MDB2";s:7:"channel";s:12:"pear.php.net";s:3:"min";s:7:"2.5.0b2";}s:9:"extension";a:1:{s:4:"name";s:9:"interbase";}}}s:10:"phprelease";s:0:"";s:9:"changelog";a:1:{s:7:"release";a:19:{i:0;a:5:{s:7:"version";a:2:{s:7:"release";s:7:"1.5.0b2";s:3:"api";s:7:"1.5.0b2";}s:9:"stability";a:2:{s:7:"release";s:4:"beta";s:3:"api";s:4:"beta";}s:4:"date";s:10:"2009-01-14";s:7:"license";s:11:"BSD License";s:5:"notes";s:232:"- fixed bug #12117: disconnect() does not work as documented
+- request #14639: automatically fetch CLOBs when retrieved with 'text' data type
+- getTableFieldDefinition() now returns the charset and collation of the field, if defined";}i:1;a:5:{s:7:"version";a:2:{s:7:"release";s:7:"1.5.0b1";s:3:"api";s:7:"1.5.0b1";}s:9:"stability";a:2:{s:7:"release";s:5:"alpha";s:3:"api";s:5:"alpha";}s:4:"date";s:10:"2008-03-15";s:7:"license";s:11:"BSD License";s:5:"notes";s:882:"- request #12731: added truncateTable() in the Manager module
+- request #12732: added vacuum() in the Manager module for OPTIMIZE/VACUUM TABLE abstraction
+- fixed bug #12924: correctly handle internal expected errors even with custom error handling
+- fixed bug #12948: removed setCharset(), since "SET NAMES" is only supported in ISQL
+- fixed bug #12958: support multi autoincrement fields in _makeAutoincrement() [patch by Ali Fazelzadeh]
+- fixed listSequences() and listFunctions() in the Manager module with Firebird 2.x
+- fixed getServerVersion() with Firebird 2.x
+- feature #12962: in getServerVersion(), fallback to the username/password of the
+  connected user if DBA_username/DBA_password options are not provided [thanks to Ali Fazelzadeh]
+- added standaloneQuery() and databaseExists()
+- added length() function in the Function module (use STRLEN in the std UDF functions)";}i:2;a:5:{s:7:"version";a:2:{s:7:"release";s:7:"1.5.0a2";s:3:"api";s:7:"1.5.0a2";}s:9:"stability";a:2:{s:7:"release";s:5:"alpha";s:3:"api";s:5:"alpha";}s:4:"date";s:10:"2007-12-06";s:7:"license";s:11:"BSD License";s:5:"notes";s:81:"- added missing parentheses in query in listTableTriggers() in the Manager module";}i:3;a:5:{s:7:"version";a:2:{s:7:"release";s:7:"1.5.0a1";s:3:"api";s:7:"1.5.0a1";}s:9:"stability";a:2:{s:7:"release";s:5:"alpha";s:3:"api";s:5:"alpha";}s:4:"date";s:10:"2007-10-28";s:7:"license";s:11:"BSD License";s:5:"notes";s:383:"- initial support for FOREIGN KEY and CHECK constraints in the Reverse and Manager modules
+- fixed bug #11428: propagate quote() errors with invalid data types
+- fixed bug #11790: avoid array_diff() because it has a memory leak in PHP 5.1.x
+- fixed some E_STRICT errors with PHP5
+- fixed bug #12083: createTable() in the Manager module now returns MDB2_OK on success,
+  as documented";}i:4;a:5:{s:7:"version";a:2:{s:7:"release";s:5:"1.4.1";s:3:"api";s:5:"1.4.1";}s:9:"stability";a:2:{s:7:"release";s:6:"stable";s:3:"api";s:6:"stable";}s:4:"date";s:10:"2007-05-03";s:7:"license";s:11:"BSD License";s:5:"notes";s:438:"- return length as "precision,scale" for NUMERIC and DECIMAL fields in mapNativeDatatype()
+- in getTableIndexDefinition() and getTableConstraintDefinition() in the Reverse
+  module, also return the field position in the index/constraint
+- fixed failed connection when DSN is passed as an uppercase string (db file
+  extension appended twice)
+- fixed array key case issue with resultset in getTableIndexDefinition() in the
+  Reverse module";}i:5;a:5:{s:7:"version";a:2:{s:7:"release";s:5:"1.4.0";s:3:"api";s:5:"1.4.0";}s:9:"stability";a:2:{s:7:"release";s:6:"stable";s:3:"api";s:6:"stable";}s:4:"date";s:10:"2007-03-13";s:7:"license";s:11:"BSD License";s:5:"notes";s:862:"- propagate errors in getTableFieldDefinition() in the Reverse module
+- fixed getTriggerDefinition() in the Reverse module [experimental]
+- fixed listTableTriggers() in the Manager module
+- added support for the -902 (feature is not supported) error code
+  (thanks to Adam Harvey)
+- fixed bug #9943: MDB2_Driver_ibase install failing because wrong
+  extension name (ibase instead of interbase)
+- implemented a fallback mechanism within getTableIndexDefinition() and
+  getTableConstraintDefinition() in the Reverse module to ignore the 'idxname_format'
+  option and use the index name as provided in case of failure before returning
+  an error
+- added a 'nativetype_map_callback' option to map native data declarations back to
+  custom data types (thanks to Andrew Hill).
+- listFunctions() in the Manager module now lists UDFs and stored procedures
+- phpdoc fixes";}i:6;a:5:{s:7:"version";a:2:{s:7:"release";s:5:"1.3.0";s:3:"api";s:5:"2.3.0";}s:9:"stability";a:2:{s:7:"release";s:6:"stable";s:3:"api";s:6:"stable";}s:4:"date";s:10:"2006-11-03";s:7:"license";s:11:"BSD License";s:5:"notes";s:525:"- added charset and collation support to field declaration
+- fixed bug #9024: typo in currID() error checking
+- added lastInsertID() method (reads global current value instead of connection level)
+- fixed inheritance structure of convertResult()
+- added support for new 'disable_iso_date' date DSN option (Request #8739)
+- removed spurious 4th parameter of getDeclaration()
+- fix typos in error handling in a few places (bug #9024)
+- added support for getting the table name in tableInfo()
+- migrated to package.xml version 2";}i:7;a:5:{s:7:"version";a:2:{s:7:"release";s:5:"1.2.1";s:3:"api";s:5:"1.2.1";}s:9:"stability";a:2:{s:7:"release";s:6:"stable";s:3:"api";s:6:"stable";}s:4:"date";s:10:"2006-08-29";s:7:"license";a:2:{s:7:"attribs";a:1:{s:3:"uri";s:38:"http://www.debian.org/misc/bsd.license";}s:8:"_content";s:3:"BSD";}s:5:"notes";s:517:"- flip positions property array in prepared statement objects to make it
+  possible to optionally use the same named placeholder in multiple places
+  inside a single prepared statement
+- do not list empty contraints and indexes
+- added support for 'primary' option in createTable()
+- added missing 'mdb2type' to getTableFieldDefinition()
+- do not set a default if type is a LOB (Request #8074)
+- fixed handling return values when disable_query is set in _doQuery() and _execute()
+- increased MDB2 dependency too 2.2.1";}i:8;a:5:{s:7:"version";a:2:{s:7:"release";s:5:"1.2.0";s:3:"api";s:5:"1.2.0";}s:9:"stability";a:2:{s:7:"release";s:6:"stable";s:3:"api";s:6:"stable";}s:4:"date";s:10:"2006-07-25";s:7:"license";a:2:{s:7:"attribs";a:1:{s:3:"uri";s:38:"http://www.debian.org/misc/bsd.license";}s:8:"_content";s:3:"BSD";}s:5:"notes";s:990:"- added ability to escape wildcard characters in escape() and quote()
+- added setTransactionIsolation()
+- added savepoint support to beginTransaction(), commit() and rollback()
+- added debug() call at the end of a query/prepare/execute calling (Request #7933)
+- added context array parameter to debug() and make use of it whereever sensible
+- added optional method name parameter to raiseError() and use whereever possible
+- added ability to escape wildcard characters in escape() and quote()
+- added debug() call at the end of a query/prepare/execute calling (Request #7933)
+- added 'nativetype' output to tableInfo() and getTableFieldDefinition()
+- added 'mdb2type' output to getTableFieldDefinition()
+- reworked tableInfo() to use a common implementation based on getTableFieldDefinition()
+  when a table name is passed (Bug #8124)
+- fixed incorrect regex in mapNativeDatatype() (Bug #8256) (thx ioz at ionosfera dot com)
+- use old dsn when rolling back open transactions in disconnect()";}i:9;a:5:{s:7:"version";a:2:{s:7:"release";s:5:"1.1.0";s:3:"api";s:5:"1.1.0";}s:9:"stability";a:2:{s:7:"release";s:6:"stable";s:3:"api";s:6:"stable";}s:4:"date";s:10:"2006-06-15";s:7:"license";a:2:{s:7:"attribs";a:1:{s:3:"uri";s:38:"http://www.debian.org/misc/bsd.license";}s:8:"_content";s:3:"BSD";}s:5:"notes";s:830:"- added "emulate_prepared" option to force prepared statement emulation
+- tweaked handling of free() for prepared statements
+- return error if a prepared statement is attempted to be freed twice
+- added setCharset()
+- use setCharset() in connect()/_doConnect()
+- generalized quoteIdentifier() with a property
+- cosmetic performance tweak in getTableFieldDefinition()
+- switched most array_key_exists() calls to !empty() to improve readability and performance
+- fixed a few edge cases and potential warnings
+- added ability to rewrite queries for query(), exec() and prepare() using a debug handler callback
+- check if result/connection has not yet been freed/dicsonnected before
+  attempting to free a result set(Bug #7790)
+- fixed control flow in MDB2_Driver_Datatype_ibase::mapNativeDatatype()
+  for 'numeric' or 'decimal' types";}i:10;a:5:{s:7:"version";a:2:{s:7:"release";s:5:"1.0.2";s:3:"api";s:5:"1.0.2";}s:9:"stability";a:2:{s:7:"release";s:6:"stable";s:3:"api";s:6:"stable";}s:4:"date";s:10:"2006-05-14";s:7:"license";a:2:{s:7:"attribs";a:1:{s:3:"uri";s:38:"http://www.debian.org/misc/bsd.license";}s:8:"_content";s:3:"BSD";}s:5:"notes";s:978:"- implemented listTableTriggers(), listTableViews() and listFunctions()
+  in the Manager module
+- implemented getTriggerDefinition() in the Reverse module
+- explicitly set is_manip parameter to false for transaction debug calls
+- pass parameter array as debug() all with scope "parameters" in every execute()
+  call (bug #4119)
+- typo fixes in phpdoc (thx Stoyan)
+- added support for fixed and variable types for 'text' in declarations,
+  as well as in reverse engineering (Request #1523)
+- made _doQuery() return a reference
+- added userinfo's to all raiseError calls that previously had none
+- added 'prepared_statements' supported meta data setting
+- typo fix ressource/resource in LOB array
+- added missing unset() to _destroyLOB()
+- fixed _destroyLOB() API to match other private LOB methods
+- fixed phpdoc comments of all private LOB methods
+- added missing supported parameter to prepare() signature
+- fix default field value in getTableFieldDefinition() [Reverse module]";}i:11;a:5:{s:7:"version";a:2:{s:7:"release";s:5:"1.0.1";s:3:"api";s:5:"1.0.1";}s:9:"stability";a:2:{s:7:"release";s:6:"stable";s:3:"api";s:6:"stable";}s:4:"date";s:10:"2006-04-16";s:7:"license";a:2:{s:7:"attribs";a:1:{s:3:"uri";s:38:"http://www.debian.org/misc/bsd.license";}s:8:"_content";s:3:"BSD";}s:5:"notes";s:847:"- discard all constraints in MDB2_Driver_Reverse::getTableIndexDefinition(),
+  leave them to MDB2_Driver_Reverse::getTableConstraintDefinition().
+- return the constraint type in MDB2_Driver_Reverse::getTableConstraintDefinition().
+- aligned _modifyQuery() signature and phpdoc
+- added 'result_introspection' supported metadata support
+- added server_version option
+- some clean ups with determining if limit_queries needs to be emulated or not
+- honor check_option parameter in quoteIdentifier()
+- properly quote table names in tableInfo() (related to bug #6573)
+- use connected_server_info in getServerVersion() as a cache cache
+- use parent::disconnect() in disconnect()
+- set error code in all raiseError() calls
+- don't return views in listTables()
+- fixed query in listViews()
+- protect against sql injection in the reverse and manager module";}i:12;a:5:{s:7:"version";a:2:{s:7:"release";s:5:"1.0.0";s:3:"api";s:5:"1.0.0";}s:9:"stability";a:2:{s:7:"release";s:6:"stable";s:3:"api";s:6:"stable";}s:4:"date";s:10:"2006-02-09";s:7:"license";a:2:{s:7:"attribs";a:1:{s:3:"uri";s:38:"http://www.debian.org/misc/bsd.license";}s:8:"_content";s:3:"BSD";}s:5:"notes";s:145:"- handle null as resource when disable_query option is enabled in result object
+
+open todo items:
+- handle autoincremement fields in alterTable()";}i:13;a:5:{s:7:"version";a:2:{s:7:"release";s:5:"0.2.2";s:3:"api";s:5:"0.2.2";}s:9:"stability";a:2:{s:7:"release";s:4:"beta";s:3:"api";s:4:"beta";}s:4:"date";s:10:"2006-02-05";s:7:"license";a:2:{s:7:"attribs";a:1:{s:3:"uri";s:38:"http://www.debian.org/misc/bsd.license";}s:8:"_content";s:3:"BSD";}s:5:"notes";s:866:"- native DECIMAL datatype is now used instead of converting it to a string
+- added support for length in decimal columns
+- removed ugly hack for quote parameter in quote() since it was insufficient
+  (escaping also needs to be prevented)
+- added support for out of order parameter binding in prepared queries
+- reset row_limit and row_offset after calling prepare() just like we do for query() and exec()
+- cosmetic fix (removed "row_" prefix from "row_limit" and "row_offset")
+- now using SMALLINT by default instead of CHAR(1) for the boolean datatype (BC BREAK!)
+- check if a constraint name is given in createConstraint()
+- added private _silentCommit() method to avoid uncommitted queries preventing
+  further queries to succeed (@see bug #6494)
+- improved parsing in getServerInfo() (bug #6550)
+
+open todo items:
+- handle autoincremement fields in alterTable()";}i:14;a:5:{s:7:"version";a:2:{s:7:"release";s:5:"0.2.1";s:3:"api";s:5:"0.2.1";}s:9:"stability";a:2:{s:7:"release";s:4:"beta";s:3:"api";s:4:"beta";}s:4:"date";s:10:"2006-01-14";s:7:"license";a:2:{s:7:"attribs";a:1:{s:3:"uri";s:38:"http://www.debian.org/misc/bsd.license";}s:8:"_content";s:3:"BSD";}s:5:"notes";s:1381:"- removed unnecessary if statement in getTableFieldDefinition()
+- no need to register a shutdown function since te ibase driver is php5 only
+  and therefore always uses the destructor
+- fixed typo in _execute() that would lead to using the wrong types inside the result object
+- use proper error code in alterTable()
+- explicitly pass if the module is phptype specific in all loadModule calls (bug #6226)
+- added error handling in prepare()
+- fixed signature of quoteIdentifier() to make second param optional
+- req #6464: add the extension only if neither '.gdb' nor '.fdb' is given in the
+  database name, for compatibility with PEAR::DB DNS (Mark Wiesemann)
+- fixed bug #6465: possible mismatch in MDB2_Reverse_ibase due to parentheses
+  in the returned datatype (Mark Wiesemann)
+- fixed bug #6468: possible NOTICE in Driver/Datatype/ibase.php (Mark Wiesemann)
+- fixed bug #6475: listTableIndexes() should only list indices, not constraints,
+  and listTableConstraints() should return the user-defined names when available
+- _fixIndexName() now just attempts to remove possible formatting
+- renamed _isSequenceName() to _fixSequenceName()
+- _fixSequenceName() now just attempts to remove possible formatting, and only
+  returns a boolean if no formatting was applied when the new "check" parameter is set to true
+
+open todo items:
+- handle autoincremement fields in alterTable()";}i:15;a:5:{s:7:"version";a:2:{s:7:"release";s:5:"0.2.0";s:3:"api";s:5:"0.2.0";}s:9:"stability";a:2:{s:7:"release";s:4:"beta";s:3:"api";s:4:"beta";}s:4:"date";s:10:"2005-12-22";s:7:"license";a:2:{s:7:"attribs";a:1:{s:3:"uri";s:38:"http://www.debian.org/misc/bsd.license";}s:8:"_content";s:3:"BSD";}s:5:"notes";s:1823:"- fixed _dropAutoincrement()
+- use _dropAutoincrement() in dropTable()
+- fixed mapNativeDatatype()
+- implemented getTableFieldDefinition() and getTableIndexDefinition() in the Reverse module
+- implemented listUsers() in the Manager module
+- unified case fixing in the list*() methods
+- use custom implementation of getConnection() to access connection property
+- split index and constraint handling
+- return "0" as default value for integer NOT NULL fields with no default value
+- quoteIdentifier() is just returning an uppercase string, since quoted
+  identifiers in ibase do more harm than good
+- refactored get*Declaration() methods to use getTypeDeclaration()
+- set in_transaction to false on disconnect
+- fixed type changing in alterTable()
+- added new Function modules to handle difference in SQL functions
+- autoincrement emulation works correctly
+- pass the correct connection resource to ibase_blob_import()
+- force rollback() with open transactions on disconnect
+- escape floats to make sure they do not contain evil characters (bug #5608)
+- in listSequences(), skip system generators
+- split off manipulation queries into exec() method from the query() method *BC BREAK*
+- only if result_types is set to false in prepare() method the query will be
+  handled as a DML statement *BC BREAK*
+- added ability to determine unsigned in mapNativeDatatype()
+  (only really implemented in the mysql(i) drivers) (bug #6054)
+- use MDB2_ERROR_NOT_FOUND in getTableConstraintDefinition() and getTableIndexDefinition() (bug #6055)
+- added getServerVersion()
+- unified array structure in mapNativeDatatype() *BC BREAK*
+- added 'mdbtype' to tableInfo() output that is generated from mapNativeDatatype()
+- changed 'len' to 'length' in tableInfo() output *BC BREAK*
+
+open todo items:
+- handle autoincremement fields in alterTable()";}i:16;a:5:{s:7:"version";a:2:{s:7:"release";s:5:"0.1.2";s:3:"api";s:5:"0.1.2";}s:9:"stability";a:2:{s:7:"release";s:4:"beta";s:3:"api";s:4:"beta";}s:4:"date";s:10:"2005-10-10";s:7:"license";a:2:{s:7:"attribs";a:1:{s:3:"uri";s:38:"http://www.debian.org/misc/bsd.license";}s:8:"_content";s:3:"BSD";}s:5:"notes";s:1946:"Warning: this release features numerous BC breaks!
+
+There have been considerable improvements to the datatype, manager and reverse
+modules. Furthermore preliminary support for auto increment and primary keys
+has been added. Please note that making a field auto increment implies a single
+column primary key on this field.
+
+- added support for auto increment and primary key in schema.
+- alterTable now needs the full definition to work (use getTableFieldDefinition
+ from Reverse module if you do not have a definition at hand) this eliminates the need
+ of the declaration part in the alterTable array.
+- fix PHP4.4 breakage
+- fixed several incorrect raiseError() calls in manager module
+- use !empty() instead of isset() in fetchRow to determine if result cols were bound or result types were set
+- expect keys in type arrays the same way as they are passed for the values in execute() and bindParamArray()
+- add s pattern modifier to preg_replace() call for parameter searches in prepare() (bug #5362)
+- moved all private fetch mode fix methods into _fixResultArrayValues() for performance reasons
+- renamed MDB2_PORTABILITY_LOWERCASE to MDB2_PORTABILITY_FIX_CASE and use 'field_case' option to determine if to upper- or lowercase (CASE_LOWER/CASE_UPPER)
+- use array_key_exists() instead of isset() where possible
+- changed structure of field add/remove/change in alterTable() to match MDB2_Schema
+- createIndex(): index_sorting is not a feature in the supported array, but is supported by interbase
+- return 0 for manipulation queries when disable_query is enabled
+- tweaked field changing in alterTable()
+- getTypeDeclaration() in the datatype module is now a public method
+- fixed alterTable() signature
+- fixed listTableFields()
+- added listTableIndexes()
+- added listTables()
+
+open todo items:
+- code to be able to list primary contraints inside listTableIndexes()/dropIndex()
+- handle autoincremement fields in alterTable() and dropTable()";}i:17;a:5:{s:7:"version";a:2:{s:7:"release";s:5:"0.1.1";s:3:"api";s:5:"0.1.1";}s:9:"stability";a:2:{s:7:"release";s:4:"beta";s:3:"api";s:4:"beta";}s:4:"date";s:10:"2005-06-08";s:7:"license";a:2:{s:7:"attribs";a:1:{s:3:"uri";s:38:"http://www.debian.org/misc/bsd.license";}s:8:"_content";s:3:"BSD";}s:5:"notes";s:62:"- fixed LOB management and package dependencies
+- fully tested";}i:18;a:5:{s:7:"version";a:2:{s:7:"release";s:5:"0.1.0";s:3:"api";s:5:"0.1.0";}s:9:"stability";a:2:{s:7:"release";s:5:"alpha";s:3:"api";s:5:"alpha";}s:4:"date";s:10:"2005-06-08";s:7:"license";a:2:{s:7:"attribs";a:1:{s:3:"uri";s:38:"http://www.debian.org/misc/bsd.license";}s:8:"_content";s:3:"BSD";}s:5:"notes";s:687:"first unbundled release from MDB2 core
+
+- cosmetic fixes to _getDatabaseFile()
+- removed redundant code from datatype module
+- dont just check for isset() for boolean values in order to support
+  setting them false as well (bug #4373)
+- ensure SQL injection protection in all _quote() methods (was missing in
+  some decimal, float, time, date and timestamp implementations)
+- use new quote() parameter
+- renamed execute() to _execute() since common provides some common
+  functionality via execute()
+- fixed decimal result conversion in datatype module
+- typo fixes in result class
+- support numeric and string keys in types array for prepared queries
+- Warning: this release is untested";}}}s:8:"filelist";a:8:{s:30:"MDB2/Driver/Datatype/ibase.php";a:5:{s:14:"baseinstalldir";s:1:"/";s:6:"md5sum";s:32:"2c9ca6014c2a0e3309a48024cf24d14d";s:4:"name";s:30:"MDB2/Driver/Datatype/ibase.php";s:4:"role";s:3:"php";s:12:"installed_as";s:64:"/var/www/horde/groupware/pear/php/MDB2/Driver/Datatype/ibase.php";}s:30:"MDB2/Driver/Function/ibase.php";a:5:{s:14:"baseinstalldir";s:1:"/";s:6:"md5sum";s:32:"600fbfdad8a8a372217c9244bcabbdff";s:4:"name";s:30:"MDB2/Driver/Function/ibase.php";s:4:"role";s:3:"php";s:12:"installed_as";s:64:"/var/www/horde/groupware/pear/php/MDB2/Driver/Function/ibase.php";}s:29:"MDB2/Driver/Manager/ibase.php";a:5:{s:14:"baseinstalldir";s:1:"/";s:6:"md5sum";s:32:"d2256bf918a10a95165f3f5226f85aca";s:4:"name";s:29:"MDB2/Driver/Manager/ibase.php";s:4:"role";s:3:"php";s:12:"installed_as";s:63:"/var/www/horde/groupware/pear/php/MDB2/Driver/Manager/ibase.php";}s:28:"MDB2/Driver/Native/ibase.php";a:5:{s:14:"baseinstalldir";s:1:"/";s:6:"md5sum";s:32:"d0de5aff17fffcdfa0d79c6b4999a0c6";s:4:"name";s:28:"MDB2/Driver/Native/ibase.php";s:4:"role";s:3:"php";s:12:"installed_as";s:62:"/var/www/horde/groupware/pear/php/MDB2/Driver/Native/ibase.php";}s:29:"MDB2/Driver/Reverse/ibase.php";a:5:{s:14:"baseinstalldir";s:1:"/";s:6:"md5sum";s:32:"9231b3d4f1ff2f0c4113bab976569531";s:4:"name";s:29:"MDB2/Driver/Reverse/ibase.php";s:4:"role";s:3:"php";s:12:"installed_as";s:63:"/var/www/horde/groupware/pear/php/MDB2/Driver/Reverse/ibase.php";}s:21:"MDB2/Driver/ibase.php";a:5:{s:14:"baseinstalldir";s:1:"/";s:6:"md5sum";s:32:"8af3c485261b50d7e54f86fd90df252f";s:4:"name";s:21:"MDB2/Driver/ibase.php";s:4:"role";s:3:"php";s:12:"installed_as";s:55:"/var/www/horde/groupware/pear/php/MDB2/Driver/ibase.php";}s:32:"tests/MDB2_nonstandard_ibase.php";a:5:{s:14:"baseinstalldir";s:1:"/";s:6:"md5sum";s:32:"32504b5dd5ff479da628abd6f96753c3";s:4:"name";s:32:"tests/MDB2_nonstandard_ibase.php";s:4:"role";s:4:"test";s:12:"installed_as";s:86:"/var/www/horde/groupware/pear/tests/MDB2_Driver_ibase/tests/MDB2_nonstandard_ibase.php";}s:17:"package_ibase.xml";a:5:{s:14:"baseinstalldir";s:1:"/";s:6:"md5sum";s:32:"04d1b77db4e4ddecf8fbeb010de1644d";s:4:"name";s:17:"package_ibase.xml";s:4:"role";s:4:"data";s:12:"installed_as";s:70:"/var/www/horde/groupware/pear/data/MDB2_Driver_ibase/package_ibase.xml";}}s:12:"_lastversion";N;s:7:"dirtree";a:10:{s:54:"/var/www/horde/groupware/pear/php/MDB2/Driver/Datatype";b:1;s:45:"/var/www/horde/groupware/pear/php/MDB2/Driver";b:1;s:38:"/var/www/horde/groupware/pear/php/MDB2";b:1;s:54:"/var/www/horde/groupware/pear/php/MDB2/Driver/Function";b:1;s:53:"/var/www/horde/groupware/pear/php/MDB2/Driver/Manager";b:1;s:52:"/var/www/horde/groupware/pear/php/MDB2/Driver/Native";b:1;s:53:"/var/www/horde/groupware/pear/php/MDB2/Driver/Reverse";b:1;s:59:"/var/www/horde/groupware/pear/tests/MDB2_Driver_ibase/tests";b:1;s:53:"/var/www/horde/groupware/pear/tests/MDB2_Driver_ibase";b:1;s:52:"/var/www/horde/groupware/pear/data/MDB2_Driver_ibase";b:1;}s:3:"old";a:7:{s:7:"version";s:7:"1.5.0b2";s:12:"release_date";s:10:"2009-01-14";s:13:"release_state";s:4:"beta";s:15:"release_license";s:11:"BSD License";s:13:"release_notes";s:232:"- fixed bug #12117: disconnect() does not work as documented
+- request #14639: automatically fetch CLOBs when retrieved with 'text' data type
+- getTableFieldDefinition() now returns the charset and collation of the field, if defined";s:12:"release_deps";a:4:{i:0;a:4:{s:4:"type";s:3:"php";s:3:"rel";s:2:"ge";s:7:"version";s:5:"5.0.4";s:8:"optional";s:2:"no";}i:1;a:6:{s:4:"type";s:3:"pkg";s:7:"channel";s:12:"pear.php.net";s:4:"name";s:4:"PEAR";s:3:"rel";s:2:"ge";s:7:"version";s:7:"1.4.0b1";s:8:"optional";s:2:"no";}i:2;a:6:{s:4:"type";s:3:"pkg";s:7:"channel";s:12:"pear.php.net";s:4:"name";s:4:"MDB2";s:3:"rel";s:2:"ge";s:7:"version";s:7:"2.5.0b2";s:8:"optional";s:2:"no";}i:3;a:4:{s:4:"type";s:3:"ext";s:4:"name";s:9:"interbase";s:3:"rel";s:3:"has";s:8:"optional";s:2:"no";}}s:11:"maintainers";a:2:{i:0;a:5:{s:4:"name";s:16:"Lorenzo Alberton";s:5:"email";s:19:"l.alberton@quipo.it";s:6:"active";s:3:"yes";s:6:"handle";s:5:"quipo";s:4:"role";s:4:"lead";}i:1;a:5:{s:4:"name";s:17:"Lukas Kahwe Smith";s:5:"email";s:20:"smith@pooteeweet.org";s:6:"active";s:2:"no";s:6:"handle";s:6:"lsmith";s:4:"role";s:4:"lead";}}}s:10:"xsdversion";s:3:"2.0";s:13:"_lastmodified";i:1311701857;}

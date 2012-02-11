@@ -5,7 +5,11 @@ function update_main()
 	global $argc, $argv;
 	global $gbl, $sgbl, $login, $ghtml; 
 
+<<<<<<< HEAD
 	log_cleanup("*** Executing Update (upcp) - BEGIN ***");
+=======
+	log_cleanup("*** Executing Update upcp - BEGIN ***");
+>>>>>>> upstream/dev
 
 	debug_for_backend();
 	$login = new Client(null, null, 'upgrade');
@@ -16,12 +20,19 @@ function update_main()
 	log_cleanup("Kloxo Install/Update");
 	
 	if (lxfile_exists("/var/cache/kloxo/kloxo-install-firsttime.flg")) {
+<<<<<<< HEAD
 		log_cleanup("- Installing Kloxo packages at the first time");
+=======
+		log_cleanup("- Install Kloxo packages at the first time");
+>>>>>>> upstream/dev
 		$DoUpdate = true;
 	}
 	else {
 		log_cleanup("- Getting Version Info from the LxCenter download Server");
+<<<<<<< HEAD
 		$upversion = false;
+=======
+>>>>>>> upstream/dev
 		if ((isset($opt['till-version']) && $opt['till-version']) || lxfile_exists("__path_slave_db")) {
 			$sgbl->slave = true;
 			$upversion = findNextVersion($opt['till-version']);
@@ -66,15 +77,27 @@ function update_main()
 		}
 
 }
+<<<<<<< HEAD
 	log_cleanup("*** Executing Update (upcp) - END ***");
 
 	if ( $DoUpdate == false ) {
 		log_cleanup("Run /script/cleanup if you want to fix/restore/(re)install non-working components.");
+=======
+
+	log_cleanup("*** Executing Update upcp - END ***");
+
+	if ( $DoUpdate == false ) {
+		log_cleanup("Run /script/cleanup if you want to fix/restore/(re)install non working components.");
+>>>>>>> upstream/dev
 			exit;
 	}
 
 	if (is_running_secondary()) {
+<<<<<<< HEAD
 		log_cleanup("Not running Update cleanup, because this is running as secondary\n");
+=======
+		log_cleanup("Not running Update Cleanup, because this is running secondary \n");
+>>>>>>> upstream/dev
 		exit;
 	}
 	
@@ -90,8 +113,13 @@ function do_upgrade($upversion)
 	global $gbl, $sgbl, $login, $ghtml; 
 	$program = $sgbl->__var_program_name;
 
+<<<<<<< HEAD
 	if (file_exists('.svn') || file_exists('.git')) {
 		log_cleanup('BREAK -> Development version found');
+=======
+	if (file_exists(".svn")) {
+		log_cleanup("BREAK - Development version found");
+>>>>>>> upstream/dev
 		exit;
 	}
 
@@ -110,7 +138,11 @@ function do_upgrade($upversion)
 	download_source("/$program/$programfile");
 	log_cleanup("Download Done!... Start unzip");
 	system("cd ../../ ; unzip -o httpdocs/download/$programfile");
+<<<<<<< HEAD
 	// issue #710 - Make sure the files are owned by lxlabs UID/GID
+=======
+	// issue #710 - [beta] upcp updated files are now owned by root
+>>>>>>> upstream/dev
 	system("chown -R lxlabs:lxlabs /usr/local/lxlabs/");
 	chdir($saveddir);
 }
@@ -177,7 +209,11 @@ function fixDataBaseIssues()
 	$sq->rawQuery("update resourceplan set realname = nname where realname is null");
 	lxshell_php("../bin/common/fixresourceplan.php");
 
+<<<<<<< HEAD
 	log_cleanup("- Alter some database tables to fit that of Kloxo");
+=======
+	log_cleanup("- Alter some database tables");
+>>>>>>> upstream/dev
 	// TODO: Check if this is still longer needed!
 	$sq->rawQuery("alter table sslcert change text_ca_content text_ca_content longtext");
 	$sq->rawQuery("alter table sslcert change text_key_content text_key_content longtext");

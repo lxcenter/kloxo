@@ -1,0 +1,88 @@
+#!/usr/bin/php
+
+<?php
+/**
+ * Script that can be used to compile xml-based language-files.
+ * 
+ * @version     $Id: pear-dh-compile-translationfile 286748 2009-08-03 17:38:38Z kguest $
+ * @author      Carsten Lucke <luckec@php.net>
+ */
+
+require_once 'Console/Getargs.php';
+require_once 'XML/Unserializer.php';
+$options = array(
+    'parseAttributes'   =>  false,
+    'attributesArray'   =>  false,
+    'keyAttribute'      => array('property' => 'id')
+);
+                
+                
+$config = array(
+    'outputdir' => array(
+        'short'     => 'd',
+        'min'       => 1,
+        'max'       => 1,
+        'desc'      => 'Directory where compiled files are saved. Defaults to the current working directory.',
+        'default'   => getcwd()
+    ),
+    
+    'verbose' => array(
+        'short'     => 'v',
+        'min'       => 0,
+        'max'       => 0,
+        'desc'      => 'Enable verbose mode.'
+    ),
+    
+    CONSOLE_GETARGS_PARAMS => array(
+        'min'       => 1,
+        'max'       => -1,
+        'desc'      => 'Input file(s)'
+    )
+);
+
+$args = &Console_Getargs::factory($config);
+if (PEAR::isError($args) || is_null($args->getValue(CONSOLE_GETARGS_PARAMS))) {
+    $header = "Date_Holidays language-file compiler\n--\n".
+              'Usage: '.basename($_SERVER['SCRIPT_NAME'])." [options] filename(s)\n\n";
+    if (is_a($args, 'PEAR_Error') && $args->getCode() === CONSOLE_GETARGS_ERROR_USER) {
+        echo Console_Getargs::getHelp($config, $header, $args->getMessage())."\n";
+    } else {
+        echo Console_Getargs::getHelp($config, $header)."\n";
+    }
+    exit;
+}
+
+$files = $args->getValue(CONSOLE_GETARGS_PARAMS);
+if (is_string($files)) {
+    $files = array($files);
+}
+$outputDir = $args->getValue('outputdir');
+
+
+foreach ($files as $file) {
+    
+    if (! file_exists($file)) {
+        die(sprintf('File not found: %s', $file) . "\n");
+    }
+    
+    $unserializer = &new XML_Unserializer($options);
+    $status = $unserializer->unserialize($file, true);    
+    if (PEAR::isError($status)) {
+        die('Error occurred: ' . $status->getMessage());
+    } else {
+        $content = $unserializer->getUnserializedData();
+        
+        $filename = $outputDir . DIRECTORY_SEPARATOR . basename($file, '.xml') . '.ser';
+        if ($fp = fopen($filename, 'w')) {
+            fwrite($fp, serialize($content));
+            fclose($fp);
+            if ($args->isDefined('v')) {
+                echo 'Writing compiled data to: ' . $filename . "\n";
+            }
+        } else  {
+            die('Could not write compiled file' . "\n");
+        }
+    }
+}
+       
+?>

@@ -1,0 +1,247 @@
+a:23:{s:7:"attribs";a:6:{s:15:"packagerversion";s:5:"1.7.2";s:7:"version";s:3:"2.0";s:5:"xmlns";s:35:"http://pear.php.net/dtd/package-2.0";s:11:"xmlns:tasks";s:33:"http://pear.php.net/dtd/tasks-1.0";s:9:"xmlns:xsi";s:41:"http://www.w3.org/2001/XMLSchema-instance";s:18:"xsi:schemaLocation";s:147:"http://pear.php.net/dtd/tasks-1.0 http://pear.php.net/dtd/tasks-1.0.xsd http://pear.php.net/dtd/package-2.0 http://pear.php.net/dtd/package-2.0.xsd";}s:4:"name";s:17:"MDB2_Driver_mssql";s:7:"channel";s:12:"pear.php.net";s:7:"summary";s:17:"mssql MDB2 driver";s:11:"description";s:38:"This is the MS SQL Server MDB2 driver.";s:4:"lead";a:4:{i:0;a:4:{s:4:"name";s:14:"David Coallier";s:4:"user";s:6:"davidc";s:5:"email";s:26:"davidc@agoraproduction.com";s:6:"active";s:3:"yes";}i:1;a:4:{s:4:"name";s:17:"Lukas Kahwe Smith";s:4:"user";s:6:"lsmith";s:5:"email";s:20:"smith@pooteeweet.org";s:6:"active";s:2:"no";}i:2;a:4:{s:4:"name";s:18:"Nathan Fredrickson";s:4:"user";s:3:"nrf";s:5:"email";s:23:"nathan@silverorange.com";s:6:"active";s:3:"yes";}i:3;a:4:{s:4:"name";s:16:"Lorenzo Alberton";s:4:"user";s:5:"quipo";s:5:"email";s:19:"l.alberton@quipo.it";s:6:"active";s:3:"yes";}}s:6:"helper";a:4:{s:4:"name";s:14:"Ali Fazelzadeh";s:4:"user";s:3:"afz";s:5:"email";s:16:"afz@dev-code.com";s:6:"active";s:3:"yes";}s:4:"date";s:10:"2009-01-14";s:4:"time";s:8:"16:30:15";s:7:"version";a:2:{s:7:"release";s:7:"1.3.0b2";s:3:"api";s:7:"1.3.0b2";}s:9:"stability";a:2:{s:7:"release";s:4:"beta";s:3:"api";s:4:"beta";}s:7:"license";s:11:"BSD License";s:5:"notes";s:275:"- fixed bug #11571: when using setLimit(), numRows() returns wrong values
+- fixed bug #12117: disconnect() does not work as documented
+- fixed bug #14019: MDB2 is not aware of MS-SQL 'smalldatetime' type
+
+open todo items:
+- explore fast limit/offset emulation (Request #4544)";s:8:"contents";a:1:{s:3:"dir";a:2:{s:7:"attribs";a:2:{s:14:"baseinstalldir";s:1:"/";s:4:"name";s:1:"/";}s:4:"file";a:8:{i:0;a:2:{s:7:"attribs";a:4:{s:14:"baseinstalldir";s:1:"/";s:6:"md5sum";s:32:"9b566966d40ff7bf167f18c1ca399db9";s:4:"name";s:30:"MDB2/Driver/Datatype/mssql.php";s:4:"role";s:3:"php";}s:13:"tasks:replace";a:1:{s:7:"attribs";a:3:{s:4:"from";s:17:"@package_version@";s:2:"to";s:7:"version";s:4:"type";s:12:"package-info";}}}i:1;a:2:{s:7:"attribs";a:4:{s:14:"baseinstalldir";s:1:"/";s:6:"md5sum";s:32:"a5037cf194582fbe41c2eded5fd8e04e";s:4:"name";s:30:"MDB2/Driver/Function/mssql.php";s:4:"role";s:3:"php";}s:13:"tasks:replace";a:1:{s:7:"attribs";a:3:{s:4:"from";s:17:"@package_version@";s:2:"to";s:7:"version";s:4:"type";s:12:"package-info";}}}i:2;a:2:{s:7:"attribs";a:4:{s:14:"baseinstalldir";s:1:"/";s:6:"md5sum";s:32:"8dc8f630182359e4a2b3a9f25314144e";s:4:"name";s:29:"MDB2/Driver/Manager/mssql.php";s:4:"role";s:3:"php";}s:13:"tasks:replace";a:1:{s:7:"attribs";a:3:{s:4:"from";s:17:"@package_version@";s:2:"to";s:7:"version";s:4:"type";s:12:"package-info";}}}i:3;a:2:{s:7:"attribs";a:4:{s:14:"baseinstalldir";s:1:"/";s:6:"md5sum";s:32:"5dbd5617315b528a400802f6228cf350";s:4:"name";s:28:"MDB2/Driver/Native/mssql.php";s:4:"role";s:3:"php";}s:13:"tasks:replace";a:1:{s:7:"attribs";a:3:{s:4:"from";s:17:"@package_version@";s:2:"to";s:7:"version";s:4:"type";s:12:"package-info";}}}i:4;a:2:{s:7:"attribs";a:4:{s:14:"baseinstalldir";s:1:"/";s:6:"md5sum";s:32:"ee9043ccf705ab1cb8c05a760c186da7";s:4:"name";s:29:"MDB2/Driver/Reverse/mssql.php";s:4:"role";s:3:"php";}s:13:"tasks:replace";a:1:{s:7:"attribs";a:3:{s:4:"from";s:17:"@package_version@";s:2:"to";s:7:"version";s:4:"type";s:12:"package-info";}}}i:5;a:2:{s:7:"attribs";a:4:{s:14:"baseinstalldir";s:1:"/";s:6:"md5sum";s:32:"4c934f8c74e9a967e7f13128baa96116";s:4:"name";s:21:"MDB2/Driver/mssql.php";s:4:"role";s:3:"php";}s:13:"tasks:replace";a:1:{s:7:"attribs";a:3:{s:4:"from";s:17:"@package_version@";s:2:"to";s:7:"version";s:4:"type";s:12:"package-info";}}}i:6;a:1:{s:7:"attribs";a:4:{s:14:"baseinstalldir";s:1:"/";s:6:"md5sum";s:32:"dee3b6f3069fe286c304ca32b77dbe99";s:4:"name";s:32:"tests/MDB2_nonstandard_mssql.php";s:4:"role";s:4:"test";}}i:7;a:1:{s:7:"attribs";a:4:{s:14:"baseinstalldir";s:1:"/";s:6:"md5sum";s:32:"38e6bb3648e3db9ef1000a3693654b07";s:4:"name";s:17:"package_mssql.xml";s:4:"role";s:4:"data";}}}}}s:12:"dependencies";a:1:{s:8:"required";a:4:{s:3:"php";a:1:{s:3:"min";s:5:"4.3.0";}s:13:"pearinstaller";a:1:{s:3:"min";s:7:"1.4.0b1";}s:7:"package";a:3:{s:4:"name";s:4:"MDB2";s:7:"channel";s:12:"pear.php.net";s:3:"min";s:7:"2.5.0b2";}s:9:"extension";a:1:{s:4:"name";s:5:"mssql";}}}s:10:"phprelease";s:0:"";s:9:"changelog";a:1:{s:7:"release";a:13:{i:0;a:5:{s:7:"version";a:2:{s:7:"release";s:7:"1.3.0b2";s:3:"api";s:7:"1.3.0b2";}s:9:"stability";a:2:{s:7:"release";s:4:"beta";s:3:"api";s:4:"beta";}s:4:"date";s:10:"2009-01-14";s:7:"license";s:11:"BSD License";s:5:"notes";s:275:"- fixed bug #11571: when using setLimit(), numRows() returns wrong values
+- fixed bug #12117: disconnect() does not work as documented
+- fixed bug #14019: MDB2 is not aware of MS-SQL 'smalldatetime' type
+
+open todo items:
+- explore fast limit/offset emulation (Request #4544)";}i:1;a:5:{s:7:"version";a:2:{s:7:"release";s:7:"1.3.0b1";s:3:"api";s:7:"1.3.0b1";}s:9:"stability";a:2:{s:7:"release";s:5:"alpha";s:3:"api";s:5:"alpha";}s:4:"date";s:10:"2008-03-15";s:7:"license";s:11:"BSD License";s:5:"notes";s:773:"- fixed bug #12391: fixed lastInsertID() (thanks to Marius Toma)
+- fixed bug #12599: BLOB quoting incorrect (thanks to Ferdy Hanssen)
+- fixed bug #12697: MDB2_Driver_mssql fails to load with the sybase_ct extension
+- request #12731: added truncateTable() in the Manager module
+- request #12732: added vacuum() in the Manager module for OPTIMIZE/VACUUM TABLE abstraction
+- request #12800: added alterDatabase() in the Manager module [afz]
+- fixed bug #12924: correctly handle internal expected errors even with custom error handling
+- extended alterTable() support in the Manager module [afz]
+- added standaloneQuery() and databaseExists()
+- request #13106: added unixtimestamp() in the Function module
+
+open todo items:
+- explore fast limit/offset emulation (Request #4544)";}i:2;a:5:{s:7:"version";a:2:{s:7:"release";s:7:"1.3.0a2";s:3:"api";s:7:"1.3.0a2";}s:9:"stability";a:2:{s:7:"release";s:5:"alpha";s:3:"api";s:5:"alpha";}s:4:"date";s:10:"2007-12-06";s:7:"license";s:11:"BSD License";s:5:"notes";s:247:"- fixed bug #11571: when using setLimit(), numRows() returns wrong values
+- request #12012: added collation support in createDatabase() and in createTable()
+  for table fields
+
+open todo items:
+- explore fast limit/offset emulation (Request #4544)";}i:3;a:5:{s:7:"version";a:2:{s:7:"release";s:7:"1.3.0a1";s:3:"api";s:7:"1.3.0a1";}s:9:"stability";a:2:{s:7:"release";s:5:"alpha";s:3:"api";s:5:"alpha";}s:4:"date";s:10:"2007-10-28";s:7:"license";s:11:"BSD License";s:5:"notes";s:934:"- initial support for FOREIGN KEY and CHECK constraints in the Reverse and Manager modules
+- fixed bug #9735, #11175, #11228: two instances fail to keep different databases selected
+- request #11297: added support for "schema.table" notation in the Reverse module
+- request #11445: added support for unicode datatypes (nchar, nvarchar, ntext)
+- fixed bug #11479: wrong query in nextID()
+- fixed bug #11790: avoid array_diff() because it has a memory leak in PHP 5.1.x
+- request #11797: don't use mssql_field_name() in listTableFields() in the Manager module
+  since it only returns the first 30 chars
+- fixed bug #12010: MDB2_PORTABILITY_RTRIM option was ignored
+- fixed bug #12083: createTable() in the Manager module now returns MDB2_OK on success,
+  as documented
+- fixed bug #12269: tableInfo() in the Reverse module detect 'clob' data type
+  as first option
+
+open todo items:
+- explore fast limit/offset emulation (Request #4544)";}i:4;a:5:{s:7:"version";a:2:{s:7:"release";s:5:"1.2.1";s:3:"api";s:5:"1.2.1";}s:9:"stability";a:2:{s:7:"release";s:6:"stable";s:3:"api";s:6:"stable";}s:4:"date";s:10:"2007-05-03";s:7:"license";s:11:"BSD License";s:5:"notes";s:308:"- return length as "precision,scale" for NUMERIC and DECIMAL fields in mapNativeDatatype()
+- in getTableIndexDefinition() and getTableConstraintDefinition() in the Reverse
+  module, also return the field position in the index/constraint
+
+open todo items:
+- explore fast limit/offset emulation (Request #4544)";}i:5;a:5:{s:7:"version";a:2:{s:7:"release";s:5:"1.2.0";s:3:"api";s:5:"1.2.0";}s:9:"stability";a:2:{s:7:"release";s:6:"stable";s:3:"api";s:6:"stable";}s:4:"date";s:10:"2007-03-13";s:7:"license";s:11:"BSD License";s:5:"notes";s:3060:"- added ability to escape wildcard characters in escape() and quote()
+- added setTransactionIsolation()
+- added savepoint support to beginTransaction(), commit() and rollback()
+- added debug() call at the end of a query/prepare/execute calling (Request #7933)
+- added context array parameter to debug() and make use of it whereever sensible
+- added optional method name parameter to raiseError() and use whereever possible
+- added ability to escape wildcard characters in escape() and quote()
+- added debug() call at the end of a query/prepare/execute calling (Request #7933)
+- added 'nativetype' output to tableInfo() and getTableFieldDefinition()
+- added 'mdb2type' output to getTableFieldDefinition()
+- reworked tableInfo() to use a common implementation based on getTableFieldDefinition()
+  when a table name is passed (Bug #8124)
+- fixed incorrect regex in mapNativeDatatype() (Bug #8256) (thx ioz at ionosfera dot com)
+- use old DSN when rolling back open transactions in disconnect()
+- MSSQL requires making columns exlicitly NULLable (Bug #8359)
+- do not list empty contraints and indexes
+- added support for autoincrement via IDENTITY in getDeclaration()
+- ALTER TABLE bug when adding more than 1 column (Bug #8373)
+- fixed handling return values when disable_query is set in _doQuery() and _execute()
+- added dropIndex() to the manager module
+- increased MDB2 dependency to XXX
+- renamed valid_types property to valid_default_values in the Datatype module
+- increased PHP dependency due to bug #31195
+- using 'ADD COLUMN' syntax instead of just 'ADD' in alterTable()
+- fixed bug #9024: typo in error checking
+- fixed inheritance structure of convertResult()
+- added support for new 'disable_iso_date' date DSN option (Request #8739)
+- fix typos in error handling in a few places (bug #9024)
+- do not skip id generation in nextId() when creating a sequence on demand
+  because this prevents lastInsertID() from working
+- added support for more error codes (patch by Adam Harvey)
+- migrated to package.xml version 2
+- implemented getTableFieldDefinition() in the Reverse module
+- implemented getTableIndexDefinition() in the Reverse module
+- implemented getTableConstraintDefinition() in the Reverse module
+- implemented getTriggerDefinition() in the Reverse module
+- implemented listTableConstraints() in the Manager module
+- implemented listFunctions() in the Manager module
+- implemented listDatabases() in the Manager module
+- implemented listUsers() in the Manager module
+- implemented guid() in the Function module [globally unique identifier]
+- implemented a fallback mechanism within getTableIndexDefinition() in the Reverse
+  module to ignore the 'idxname_format' option and use the index name as provided
+  in case of failure before returning an error
+- added a 'nativetype_map_callback' option to map native data declarations back to
+  custom data types (thanks to Andrew Hill).
+- added missing integer data types and their length in _mapNativeDatatype()
+- phpdoc fixes
+
+open todo items:
+- explore fast limit/offset emulation (Request #4544)";}i:6;a:5:{s:7:"version";a:2:{s:7:"release";s:5:"1.1.2";s:3:"api";s:5:"1.1.2";}s:9:"stability";a:2:{s:7:"release";s:6:"stable";s:3:"api";s:6:"stable";}s:4:"date";s:10:"2007-01-10";s:7:"license";s:11:"BSD License";s:5:"notes";s:123:"- removed mysql_select_db and used mssql_select_db
+
+
+open todo items:
+- explore fast limit/offset emulation (Request #4544)";}i:7;a:5:{s:7:"version";a:2:{s:7:"release";s:5:"1.1.0";s:3:"api";s:5:"1.1.0";}s:9:"stability";a:2:{s:7:"release";s:6:"stable";s:3:"api";s:6:"stable";}s:4:"date";s:10:"2006-06-15";s:7:"license";a:2:{s:7:"attribs";a:1:{s:3:"uri";s:22:"http://www.example.com";}s:8:"_content";s:11:"BSD License";}s:5:"notes";s:2221:"- added the listTableTriggers() method to the Manager.
+- added the listViews() method to the Manager.
+- aligned _modifyQuery() signature and phpdoc
+- added the map datatype patch for (bug #6863)
+- added support for length in reverse engineering of integer fields
+- added 'result_introspection' supported metadata support
+- fixed alterTable() when adding/dropping multiple columns
+- properly quote table names in tableInfo() (related to bug #6573)
+- use connected_server_info in getServerVersion() as a cache cache
+- use parent::disconnect() in disconnect()
+- added support for length in integer reverse engineering
+- some fixes regarding boolean reverse engineering
+- protect against sql injection in the reverse and manager module
+- explicitly set is_manip parameter to false for transaction debug calls
+- various minor tweaks to error messages, phpdoc and adding stub methods to the
+  common driver
+- typo fixes in phpdoc (thx Stoyan)
+- added support for fixed and variable types for 'text' in declarations,
+  as well as in reverse engineering (Request #1523)
+- made _doQuery() return a reference
+- added userinfo's to all raiseError calls that previously had none
+- added 'prepared_statements' supported meta data setting
+- limit fetch to 1 row in listTableFields()
+- use setCharset() in connect()/_doConnect()
+- generalized quoteIdentifier() with a property
+- drop parentheses from executeStoredProc() syntax (bug #7855)
+- switched most array_key_exists() calls to !empty() to improve readability and performance
+- fixed a few edge cases and potential warnings
+- added ability to rewrite queries for query(), exec() and prepare() using a debug handler callback
+- added implementation for now() and substring() (Request #7774)
+- check if result/connection has not yet been freed/dicsonnected before
+  attempting to free a result set(Bug #7790)
+- fix range offsets (bug #7448)
+- revert change that would prefer 'clob' over 'text' for TEXT fields
+  (this was breaking runtime instrospection)
+- use SCOPE_IDENTITY() when version >= 8 (SQL Server 2000) otherwise fallback to
+  @@IDENTITY to retrieve last inserted value (bug #7291)
+- implement getServerVersion()
+- removed bogus but unharmful code from mapNativeDatatype()";}i:8;a:5:{s:7:"version";a:2:{s:7:"release";s:5:"1.0.1";s:3:"api";s:5:"1.0.1";}s:9:"stability";a:2:{s:7:"release";s:6:"stable";s:3:"api";s:6:"stable";}s:4:"date";s:10:"2006-04-16";s:7:"license";a:2:{s:7:"attribs";a:1:{s:3:"uri";s:22:"http://www.example.com";}s:8:"_content";s:11:"BSD License";}s:5:"notes";s:731:"- added the listTableTriggers() method to the Manager.
+- added the listViews() method to the Manager.
+- aligned _modifyQuery() signature and phpdoc
+- added the map datatype patch for (bug #6863)
+- added support for length in reverse engineering of integer fields
+- added 'result_introspection' supported metadata support
+- fixed alterTable() when adding/dropping multiple columns
+- properly quote table names in tableInfo() (related to bug #6573)
+- use connected_server_info in getServerVersion() as a cache cache
+- use parent::disconnect() in disconnect()
+- added support for length in integer reverse engineering
+- some fixes regarding boolean reverse engineering
+- protect against sql injection in the reverse and manager module";}i:9;a:5:{s:7:"version";a:2:{s:7:"release";s:5:"1.0.0";s:3:"api";s:5:"1.0.0";}s:9:"stability";a:2:{s:7:"release";s:6:"stable";s:3:"api";s:6:"stable";}s:4:"date";s:10:"2006-02-09";s:7:"license";a:2:{s:7:"attribs";a:1:{s:3:"uri";s:22:"http://www.example.com";}s:8:"_content";s:11:"BSD License";}s:5:"notes";s:2073:"- unified case fixing in the list*() methods
+- use getConnection() to access connection property
+- split index and constraint handling
+- quote identifiers where possible inside the manager methods depending on
+  the new 'quote_identifier' option (defaults to off)
+- refactored get*Declaration() methods to use getTypeDeclaration()
+- setting in_transaction to false on disconnect
+- added new Function modules to handle difference in SQL functions
+- force rollback() with open transactions on disconnect
+- escape floats to make sure they do not contain evil characters (bug #5608)
+- split off manipulation queries into exec() method from the query() method *BC BREAK*
+- only if result_types is set to false in prepare() method the query will be
+  handled as a DML statement *BC BREAK*
+- use lastInsertID() method in nextID()
+- cleanup _checkSequence() method to not raise errors when no table was found
+- added 'mdbtype' to tableInfo() output
+- changed 'len' to 'length' in tableInfo() output *BC BREAK*
+- explicitly pass if the module is phptype specific in all loadModule calls (bug #6226)
+- fixed signature of quoteIdentifier() to make second param optional
+- fixed signature of executeStoredProc()
+- typo fixes in error handling of nextResult() and numRows() calls
+- nextResult() returns false if there are no more result sets to read
+- _fixIndexName() now just attempts to remove possible formatting
+- renamed _isSequenceName() to _fixSequenceName()
+- _fixSequenceName() now just attempts to remove possible formatting, and only
+  returns a boolean if no formatting was applied when the new "check" parameter is set to true
+- added support for length in decimal columns
+- removed ugly hack for quote parameter in quote() since it was insufficient
+  (escaping also needs to be prevented)
+- handle null as resource when disable_query option is enabled in result object
+
+open todo items:
+- add missing index/contraint methods to the manager and reverse module methods
+- ensure that all primary/unique/foreign key handling is only in the contraint methods
+- fix alterTable()";}i:10;a:5:{s:7:"version";a:2:{s:7:"release";s:5:"0.2.0";s:3:"api";s:5:"0.2.0";}s:9:"stability";a:2:{s:7:"release";s:5:"alpha";s:3:"api";s:5:"alpha";}s:4:"date";s:10:"2005-12-18";s:7:"license";a:2:{s:7:"attribs";a:1:{s:3:"uri";s:22:"http://www.example.com";}s:8:"_content";s:11:"BSD License";}s:5:"notes";s:1188:"- unified case fixing in the list*() methods
+- use getConnection() to access connection property
+- split index and constraint handling
+- quote identifiers where possible inside the manager methods depending on
+  the new 'quote_identifier' option (defaults to off)
+- refactored get*Declaration() methods to use getTypeDeclaration()
+- setting in_transaction to false on disconnect
+- added new Function modules to handle difference in SQL functions
+- force rollback() with open transactions on disconnect
+- escape floats to make sure they do not contain evil characters (bug #5608)
+- split off manipulation queries into exec() method from the query() method *BC BREAK*
+- only if result_types is set to false in prepare() method the query will be
+  handled as a DML statement *BC BREAK*
+- use lastInsertID() method in nextID()
+- cleanup _checkSequence() method to not raise errors when no table was found
+- added 'mdbtype' to tableInfo() output
+- changed 'len' to 'length' in tableInfo() output *BC BREAK*
+
+open todo items:
+- added missing index/contraint methods to the manager and reverse module methods
+- ensure that all primary/unique/foreign key handling is only in the contraint methods";}i:11;a:5:{s:7:"version";a:2:{s:7:"release";s:5:"0.1.1";s:3:"api";s:5:"0.1.1";}s:9:"stability";a:2:{s:7:"release";s:5:"alpha";s:3:"api";s:5:"alpha";}s:4:"date";s:10:"2005-10-10";s:7:"license";a:2:{s:7:"attribs";a:1:{s:3:"uri";s:22:"http://www.example.com";}s:8:"_content";s:11:"BSD License";}s:5:"notes";s:1728:"Warning: this release features numerous BC breaks!
+
+There have been considerable improvements to the datatype, manager and reverse
+modules. Furthermore preliminary support for auto increment and primary keys
+has been added. Please note that making a field auto increment implies a single
+column primary key on this field.
+
+- increased php dependency to 4.3.0 due to the usage of the streams API since beta5
+- MDB2_MSSQL_Driver: fixed a bug about missing msg variable,
+  fixed problem with database creation (incorrect ON clause)
+- alterTable now needs the full definition to work (use getTableFieldDefinition
+ from Reverse module if you do not have a definition at hand) this eliminates the need
+ of the declaration part in the alterTable array.
+- fix typo in error code mapping
+- fixed problem with database creation (incorrect ON clause)
+- fixed listTableIndexes()
+- fix PHP4.4 breakage
+- moved getInsertID() into core as lastInsertID()
+- MDB2_ERROR does not evaluate to false in _skipLimitOffset()
+- use !empty() instead of isset() in fetchRow to determine if result cols were bound or result types were set
+- moved all private fetch mode fix methods into _fixResultArrayValues() for performance reasons
+- renamed MDB2_PORTABILITY_LOWERCASE to MDB2_PORTABILITY_FIX_CASE and use 'field_case' option to determine if to upper- or lowercase (CASE_LOWER/CASE_UPPER)
+- fixed bug in nextID (bug #5507)
+- fixed bug in sequence handling in the manager module (bug #5507)
+- use array_key_exists() instead of isset() where possible
+- changed structure of field add/remove/change in alterTable() to match MDB2_Schema
+- return 0 for manipulation queries when disable_query is enabled
+
+open todo items:
+- added missing createIndex() method";}i:12;a:5:{s:7:"version";a:2:{s:7:"release";s:5:"0.1.0";s:3:"api";s:5:"0.1.0";}s:9:"stability";a:2:{s:7:"release";s:5:"alpha";s:3:"api";s:5:"alpha";}s:4:"date";s:10:"2005-04-29";s:7:"license";a:2:{s:7:"attribs";a:1:{s:3:"uri";s:22:"http://www.example.com";}s:8:"_content";s:11:"BSD License";}s:5:"notes";s:352:"first unbundled release from MDB2 core
+
+- dont just check for isset() for boolean values in order to support
+  setting them false as well (bug #4373)
+- ensure SQL injection protection in all _quote() methods (was missing in
+  some decimal, float, time, date and timestamp implementations)
+- typo fixes in constructor
+- Warning: this release is untested";}}}s:8:"filelist";a:8:{s:30:"MDB2/Driver/Datatype/mssql.php";a:5:{s:14:"baseinstalldir";s:1:"/";s:6:"md5sum";s:32:"9b566966d40ff7bf167f18c1ca399db9";s:4:"name";s:30:"MDB2/Driver/Datatype/mssql.php";s:4:"role";s:3:"php";s:12:"installed_as";s:64:"/var/www/horde/groupware/pear/php/MDB2/Driver/Datatype/mssql.php";}s:30:"MDB2/Driver/Function/mssql.php";a:5:{s:14:"baseinstalldir";s:1:"/";s:6:"md5sum";s:32:"a5037cf194582fbe41c2eded5fd8e04e";s:4:"name";s:30:"MDB2/Driver/Function/mssql.php";s:4:"role";s:3:"php";s:12:"installed_as";s:64:"/var/www/horde/groupware/pear/php/MDB2/Driver/Function/mssql.php";}s:29:"MDB2/Driver/Manager/mssql.php";a:5:{s:14:"baseinstalldir";s:1:"/";s:6:"md5sum";s:32:"8dc8f630182359e4a2b3a9f25314144e";s:4:"name";s:29:"MDB2/Driver/Manager/mssql.php";s:4:"role";s:3:"php";s:12:"installed_as";s:63:"/var/www/horde/groupware/pear/php/MDB2/Driver/Manager/mssql.php";}s:28:"MDB2/Driver/Native/mssql.php";a:5:{s:14:"baseinstalldir";s:1:"/";s:6:"md5sum";s:32:"5dbd5617315b528a400802f6228cf350";s:4:"name";s:28:"MDB2/Driver/Native/mssql.php";s:4:"role";s:3:"php";s:12:"installed_as";s:62:"/var/www/horde/groupware/pear/php/MDB2/Driver/Native/mssql.php";}s:29:"MDB2/Driver/Reverse/mssql.php";a:5:{s:14:"baseinstalldir";s:1:"/";s:6:"md5sum";s:32:"ee9043ccf705ab1cb8c05a760c186da7";s:4:"name";s:29:"MDB2/Driver/Reverse/mssql.php";s:4:"role";s:3:"php";s:12:"installed_as";s:63:"/var/www/horde/groupware/pear/php/MDB2/Driver/Reverse/mssql.php";}s:21:"MDB2/Driver/mssql.php";a:5:{s:14:"baseinstalldir";s:1:"/";s:6:"md5sum";s:32:"4c934f8c74e9a967e7f13128baa96116";s:4:"name";s:21:"MDB2/Driver/mssql.php";s:4:"role";s:3:"php";s:12:"installed_as";s:55:"/var/www/horde/groupware/pear/php/MDB2/Driver/mssql.php";}s:32:"tests/MDB2_nonstandard_mssql.php";a:5:{s:14:"baseinstalldir";s:1:"/";s:6:"md5sum";s:32:"dee3b6f3069fe286c304ca32b77dbe99";s:4:"name";s:32:"tests/MDB2_nonstandard_mssql.php";s:4:"role";s:4:"test";s:12:"installed_as";s:86:"/var/www/horde/groupware/pear/tests/MDB2_Driver_mssql/tests/MDB2_nonstandard_mssql.php";}s:17:"package_mssql.xml";a:5:{s:14:"baseinstalldir";s:1:"/";s:6:"md5sum";s:32:"38e6bb3648e3db9ef1000a3693654b07";s:4:"name";s:17:"package_mssql.xml";s:4:"role";s:4:"data";s:12:"installed_as";s:70:"/var/www/horde/groupware/pear/data/MDB2_Driver_mssql/package_mssql.xml";}}s:12:"_lastversion";N;s:7:"dirtree";a:10:{s:54:"/var/www/horde/groupware/pear/php/MDB2/Driver/Datatype";b:1;s:45:"/var/www/horde/groupware/pear/php/MDB2/Driver";b:1;s:38:"/var/www/horde/groupware/pear/php/MDB2";b:1;s:54:"/var/www/horde/groupware/pear/php/MDB2/Driver/Function";b:1;s:53:"/var/www/horde/groupware/pear/php/MDB2/Driver/Manager";b:1;s:52:"/var/www/horde/groupware/pear/php/MDB2/Driver/Native";b:1;s:53:"/var/www/horde/groupware/pear/php/MDB2/Driver/Reverse";b:1;s:59:"/var/www/horde/groupware/pear/tests/MDB2_Driver_mssql/tests";b:1;s:53:"/var/www/horde/groupware/pear/tests/MDB2_Driver_mssql";b:1;s:52:"/var/www/horde/groupware/pear/data/MDB2_Driver_mssql";b:1;}s:3:"old";a:7:{s:7:"version";s:7:"1.3.0b2";s:12:"release_date";s:10:"2009-01-14";s:13:"release_state";s:4:"beta";s:15:"release_license";s:11:"BSD License";s:13:"release_notes";s:275:"- fixed bug #11571: when using setLimit(), numRows() returns wrong values
+- fixed bug #12117: disconnect() does not work as documented
+- fixed bug #14019: MDB2 is not aware of MS-SQL 'smalldatetime' type
+
+open todo items:
+- explore fast limit/offset emulation (Request #4544)";s:12:"release_deps";a:4:{i:0;a:4:{s:4:"type";s:3:"php";s:3:"rel";s:2:"ge";s:7:"version";s:5:"4.3.0";s:8:"optional";s:2:"no";}i:1;a:6:{s:4:"type";s:3:"pkg";s:7:"channel";s:12:"pear.php.net";s:4:"name";s:4:"PEAR";s:3:"rel";s:2:"ge";s:7:"version";s:7:"1.4.0b1";s:8:"optional";s:2:"no";}i:2;a:6:{s:4:"type";s:3:"pkg";s:7:"channel";s:12:"pear.php.net";s:4:"name";s:4:"MDB2";s:3:"rel";s:2:"ge";s:7:"version";s:7:"2.5.0b2";s:8:"optional";s:2:"no";}i:3;a:4:{s:4:"type";s:3:"ext";s:4:"name";s:5:"mssql";s:3:"rel";s:3:"has";s:8:"optional";s:2:"no";}}s:11:"maintainers";a:5:{i:0;a:5:{s:4:"name";s:14:"David Coallier";s:5:"email";s:26:"davidc@agoraproduction.com";s:6:"active";s:3:"yes";s:6:"handle";s:6:"davidc";s:4:"role";s:4:"lead";}i:1;a:5:{s:4:"name";s:17:"Lukas Kahwe Smith";s:5:"email";s:20:"smith@pooteeweet.org";s:6:"active";s:2:"no";s:6:"handle";s:6:"lsmith";s:4:"role";s:4:"lead";}i:2;a:5:{s:4:"name";s:18:"Nathan Fredrickson";s:5:"email";s:23:"nathan@silverorange.com";s:6:"active";s:3:"yes";s:6:"handle";s:3:"nrf";s:4:"role";s:4:"lead";}i:3;a:5:{s:4:"name";s:16:"Lorenzo Alberton";s:5:"email";s:19:"l.alberton@quipo.it";s:6:"active";s:3:"yes";s:6:"handle";s:5:"quipo";s:4:"role";s:4:"lead";}i:4;a:5:{s:4:"name";s:14:"Ali Fazelzadeh";s:5:"email";s:16:"afz@dev-code.com";s:6:"active";s:3:"yes";s:6:"handle";s:3:"afz";s:4:"role";s:6:"helper";}}}s:10:"xsdversion";s:3:"2.0";s:13:"_lastmodified";i:1311701858;}

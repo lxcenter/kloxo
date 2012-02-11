@@ -1,0 +1,181 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html><head>
+<meta name="keywords" content="awstats, awstat, log, logs, file, analyzer, analysis, web, server, reporting, reports, geoip, index, main, page, faq, doc, documentation, docs, setup, manual, instructions, questions, support, help, problems">
+<meta name="robots" content="index,follow">
+<meta name="author" content="Laurent Destailleur">
+<meta name="description" content="AWStats official documentation pages (setup, FAQ, demo...)">
+<meta name="title" content="AWStats log analyzer Documentation">
+
+<title>AWStats logfile analyzer Documentation</title><link rel="stylesheet" href="styles.css" type="text/css"><!-- $Revision: 1.52 $ - $Author: eldy $ - $Date: 2010/08/18 11:11:10 $ --></head>
+
+<body topmargin="10" leftmargin="5">
+
+<center>
+<table style="font-family: arial,helvetica,verdana; font-style: normal; font-variant: normal; font-weight: normal; font-size: 10pt; line-height: normal; font-size-adjust: none; font-stretch: normal;" bgcolor="#ffffff" border="0" cellpadding="0" cellspacing="0" width="100%">
+
+<!-- Large -->
+<tbody><tr style="font-family: arial,helvetica,verdana; font-style: normal; font-variant: normal; font-weight: normal; font-size: 10pt; line-height: normal; font-size-adjust: none; font-stretch: normal;">
+<td align="center" bgcolor="#9999cc"><a href="/"><img src="images/awstats_logo4.png" border="0"></a></td>
+<td align="center" bgcolor="#9999cc">
+<br>
+<font style="font-family: arial,helvetica,sans-serif; font-style: normal; font-variant: normal; font-weight: normal; font-size: 16pt; line-height: normal; font-size-adjust: none; font-stretch: normal;" color="#eeeeff"><b>AWStats logfile analyzer 7.0 Documentation</b></font><br>
+<br>
+</td>
+<td align="center" bgcolor="#9999cc">
+&nbsp;
+</td>
+</tr>
+
+</tbody></table>
+
+
+<br><h1 style="font-family: arial,helvetica,sans-serif; font-style: normal; font-variant: normal; font-weight: normal; font-size: 20px; line-height: normal; font-size-adjust: none; font-stretch: normal;">Table of contents</h1>
+
+
+<table style="border: 1px solid rgb(153, 153, 204);"><tbody><tr><td>
+<!-- SiteSearch Google -->
+<form method="get" action="http://www.google.com/custom" target="google_window">
+<table bgcolor="#ffffff" border="0">
+<tbody><tr><td align="left" height="32" nowrap="nowrap" valign="top">
+
+</td>
+<td nowrap="nowrap">
+<input name="domains" value="awstats.sourceforge.net" type="hidden">
+<label for="sbi" style="display: none;"><font color="#ffffff"><font style="color: rgb(0, 0, 0);">Enter your search terms</font></font></label>
+<input name="q" size="28" maxlength="255" value="" id="sbi" type="text">
+<label for="sbb" style="display: none;"><font color="#ffffff"><font style="color: rgb(0, 0, 0);">Submit search form</font></font></label>
+<input name="sa" value="Google Search" id="sbb" type="submit">
+</td></tr>
+<tr>
+<td>&nbsp;</td>
+<td nowrap="nowrap">
+<table>
+<tbody><tr>
+<td>
+<input name="sitesearch" value="awstats.sourceforge.net" checked="checked" id="ss1" type="radio">
+<label for="ss1" title="Search awstats.sourceforge.net"><font color="#ffffff" size="-1"><font style="color: rgb(0, 0, 0);">AWStats web and documentation</font></font></label></td>
+<td>
+<input name="sitesearch" value="" id="ss0" type="radio">
+<label for="ss0" title="Search the Web"><font color="#ffffff" size="-1"><font style="color: rgb(0, 0, 0);">Web</font></font></label></td>
+</tr>
+</tbody></table>
+<input name="client" value="pub-1071905880519467" type="hidden">
+<input name="forid" value="1" type="hidden">
+<input name="channel" value="8915254648" type="hidden">
+<input name="ie" value="ISO-8859-1" type="hidden">
+<input name="oe" value="ISO-8859-1" type="hidden">
+<input name="safe" value="active" type="hidden">
+<input name="cof" value="GALT:#008080;GL:1;DIV:#9999CC;VLC:663399;AH:center;BGC:FFFFFF;LBGC:9999CC;ALC:0000FF;LC:0000FF;T:000000;GFNT:0000FF;GIMP:0000FF;LH:47;LW:102;L:http://awstats.sourceforge.net/docs/images/awstats_logo3.gif;S:http://awstats.sourceforge.net/;FORID:1" type="hidden">
+<input name="hl" value="en" type="hidden">
+</td></tr></tbody></table>
+</form>
+<!-- SiteSearch Google -->
+</td></tr></tbody></table>
+
+<br>
+
+
+<table border="0" cellpadding="6" cellspacing="0" width="600">
+
+<!-- Ligne 1 -->
+
+<tbody><tr><td align="center" valign="top" width="50%">
+
+<table bgcolor="#ffffff" border="0" cellpadding="4" cellspacing="0" width="100%">
+<tbody><tr><td align="center" bgcolor="#e9e9e9">
+<strong>Release Notes</strong>
+</td></tr><tr><td>
+<a href="awstats_what.html">What is AWStats / Features</a>
+</td></tr><tr><td>
+<a href="awstats_changelog.txt">New Features / Changelog</a>
+</td></tr><tr><td>
+<a href="awstats_upgrade.html">Upgrade</a>
+</td></tr>
+</tbody></table>
+
+</td><td align="center" valign="top" width="50%">
+
+<table bgcolor="#ffffff" border="0" cellpadding="4" cellspacing="0" width="100%">
+<tbody><tr><td align="center" bgcolor="#e9e9e9">
+<strong>Reference manual</strong>
+</td></tr><tr><td>
+<a href="awstats_setup.html">Install, Setup and Use AWStats</a>
+</td></tr><tr><td>
+<a href="awstats_config.html">Configuration Directives/Options</a>
+</td></tr><tr><td>
+<a href="awstats_extra.html">Configuration for Extra Sections feature</a>
+</td></tr><tr><td>
+<a href="awstats_contrib.html">Contribs, plugins and resources</a>
+</td></tr><tr><td>
+<a href="awstats_tools.html">Other provided utilities</a>
+</td></tr><tr><td>
+<a href="awstats_glossary.html">Glossary of terms</a>
+</td></tr>
+</tbody></table>
+
+</td></tr>
+
+<!-- Ligne 2 -->
+
+<tr><td colspan="2" align="center" valign="top" width="100%">
+
+<table bgcolor="#ffffff" border="0" cellpadding="4" cellspacing="0" width="100%">
+
+<tbody><tr><td colspan="2" align="center" bgcolor="#e9e9e9">
+<strong>Other Topics</strong>
+</td></tr>
+
+<tr><td width="50%">
+<a href="awstats_compare.html">Comparison with other log analyzers</a>
+</td><td width="50%">
+<a href="awstats_faq.html">FAQ and Troubleshooting</a>
+</td></tr>
+
+<tr><td width="50%">
+<a href="awstats_benchmark.html">Benchmarks</a>
+</td><td width="50%">
+<a href="awstats_license.html">AWStats License</a>
+</td></tr>
+
+<tr><td><a href="awstats_dev_plugins.html">Plugin Developement</a></td><td></td></tr>
+
+</tbody></table>
+
+</td></tr>
+
+<!-- Ligne 3 -->
+
+<tr><td colspan="2" align="center" valign="top" width="100%">
+
+<table bgcolor="#ffffff" border="0" cellpadding="4" cellspacing="0" width="100%">
+
+<tbody><tr><td colspan="2" align="center" bgcolor="#e9e9e9">
+<strong>AWStats modules for third tools</strong>
+</td></tr>
+
+<tr><td width="50%">
+<a href="awstats_webmin.html">AWStats module for Webmin</a>
+</td><td width="50%">
+<a href="awstats_dolibarr.html">AWStats module for Dolibarr ERP & CRM</a>
+</td></tr>
+
+
+
+</tbody></table>
+
+</td></tr></tbody></table>
+
+<hr color="DDDDDD">
+
+<!-- Paypal donation -->
+<form action="https://www.paypal.com/cgi-bin/webscr" method="post">
+<input type="hidden" name="cmd" value="_s-xclick">
+<input type="hidden" name="hosted_button_id" value="8968579">
+<input type="image" src="https://www.paypal.com/en_US/i/btn/btn_donateCC_LG_global.gif" border="0" name="submit" alt="PayPal - The safer, easier way to pay online.">
+<img alt="" border="0" src="https://www.paypal.com/en_US/i/scr/pixel.gif" width="1" height="1">
+</form>
+
+</center>
+
+
+</body></html>

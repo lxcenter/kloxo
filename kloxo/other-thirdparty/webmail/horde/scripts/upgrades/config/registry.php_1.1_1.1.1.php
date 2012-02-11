@@ -1,0 +1,1 @@
+unset($this->applications['swoosh']);

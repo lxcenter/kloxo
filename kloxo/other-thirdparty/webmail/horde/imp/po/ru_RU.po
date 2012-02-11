@@ -1,0 +1,6104 @@
+# translation of ru_RU.po to Russian
+# IMP Russian translation.
+# Copyright
+#
+# Anton Nekhoroshih <anton@valuehost.ru>, 2001.
+# Fedor A. Fetisov <faf@ssc.ru>, 2002.
+# Alexey Zakharov <baber@mosga.net>, 2008.
+# Rashid N. Achilov <citycat4@ngs.ru>, 2011.
+msgid ""
+msgstr ""
+"Project-Id-Version: ru_RU\n"
+"Report-Msgid-Bugs-To: dev@lists.horde.org\n"
+"POT-Creation-Date: 2011-03-22 15:09+0600\n"
+"PO-Revision-Date: 2011-03-25 18:02+0600\n"
+"Last-Translator: Rashid N. Achilov <citycat4@ngs.ru>\n"
+"Language-Team: Russian <i18n@lists.horde.org>\n"
+"Language: ru\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CP1251\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: KBabel 1.11.4\n"
+"Plural-Forms:  nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
+"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+
+#: lib/Compose.php:2009
+msgid "      Cc: "
+msgstr "      Копия:"
+
+#: lib/Compose.php:2006
+msgid "      To: "
+msgstr "      Кому:"
+
+#: lib/Compose.php:1994
+msgid "    Date: "
+msgstr "    Дата:"
+
+#: lib/Compose.php:1997
+msgid "    From: "
+msgstr "    От кого:"
+
+#: folders.php:381 mailbox.php:357
+#, php-format
+msgid " (Accesskey %s)"
+msgstr "(Клавиша %s)"
+
+#: lib/Compose.php:2003
+msgid " Subject: "
+msgstr " Тема: "
+
+#: lib/Quota.php:73
+#, php-format
+msgid "%.0f MB"
+msgstr "%.0f Mб"
+
+#: lib/Quota.php:67
+#, php-format
+msgid "%.0f%% of %.0f MB"
+msgstr "%.0f%% из %.0f Mб"
+
+#: folders.php:311 folders.php:322 lib/Message.php:862
+#, php-format
+msgid "%.2fMB"
+msgstr "%.2fMб"
+
+# fuzzy, php-format
+# fuzzy, php-format
+#: thread.php:164
+#, php-format
+msgid "%d Messages"
+msgstr "%d сообщений"
+
+#: lib/Spam.php:224
+#, php-format
+msgid "%d messages have been deleted."
+msgstr "%d сообщений было удалено."
+
+#: lib/Spam.php:201
+#, php-format
+msgid ""
+"%d messages have been reported as not spam to your system administrator."
+msgstr "%d сообщений, отмеченных как не-спам вашему системному администратору."
+
+#: lib/Spam.php:181
+#, php-format
+msgid "%d messages have been reported as not spam."
+msgstr "%d сообщений, отмеченных как не-спам."
+
+#: lib/Spam.php:193
+#, php-format
+msgid "%d messages have been reported as spam to your system administrator."
+msgstr "%d сообщений, отмеченных как спам вашему системному администратору."
+
+#: lib/Spam.php:173
+#, php-format
+msgid "%d messages have been reported as spam."
+msgstr "%d сообщений, отмеченных как спам."
+
+#: mailbox.php:265
+#, php-format
+msgid "%d to %d of %d Messages"
+msgstr "%d по %d из %d сообщений"
+
+#: lib/UI/Mailbox.php:134
+#, php-format
+msgid "%s KB"
+msgstr "%s кб"
+
+#: lib/UI/Mailbox.php:132
+#, php-format
+msgid "%s MB"
+msgstr "%s Мб"
+
+#: lib/Maintenance/Task/rename_sentmail_monthly.php:39
+#, php-format
+msgid "%s already exists. Your %s folder was not renamed."
+msgstr "%s уже сущетвует. Ваша %s папка не была переименована."
+
+#: lib/Maintenance/Task/rename_sentmail_monthly.php:37
+#, php-format
+msgid "%s folder being renamed at the start of the month."
+msgstr "%s папка будет переименована в начале месяца."
+
+# fuzzy, php-format
+#: lib/api.php:188 lib/api.php:191 lib/api.php:196
+#, php-format
+msgid "%s for %s"
+msgstr "%s для %s"
+
+#: lib/MIME/Viewer/itip.php:283
+#, php-format
+msgid "%s has accepted."
+msgstr "%s было принято."
+
+#: lib/MIME/Viewer/itip.php:744
+#, php-format
+msgid "%s has cancelled \"%s\"."
+msgstr "%s было отменено \"%s\"."
+
+#: lib/MIME/Viewer/itip.php:749
+#, php-format
+msgid "%s has cancelled an instance of the recurring \"%s\"."
+msgstr "%s было отменено как пример повтора \"%s\"."
+
+#: lib/MIME/Viewer/itip.php:289
+#, php-format
+msgid "%s has declined."
+msgstr "%s было отклонено."
+
+#: lib/MIME/Viewer/itip.php:584
+#, php-format
+msgid "%s has replied to a free/busy request."
+msgstr "%s ответил на запрос Free/Busy"
+
+#: lib/MIME/Viewer/itip.php:735
+#, php-format
+msgid "%s has replied to the invitation to \"%s\"."
+msgstr "%s ответил на приглашение на \"%s\"."
+
+#: lib/MIME/Viewer/itip.php:575
+#, php-format
+msgid "%s has sent you free/busy information."
+msgstr "%s послал Вам информацию Free/Busy."
+
+#: lib/MIME/Viewer/itip.php:295
+#, php-format
+msgid "%s has tentatively accepted."
+msgstr "%s был принят в виде эксперимента."
+
+#: lib/Spam.php:272
+#, php-format
+msgid "%s report from %s"
+msgstr "%s отчет от %s"
+
+#: lib/MIME/Viewer/itip.php:580
+#, php-format
+msgid "%s requests your free/busy information."
+msgstr "%s запросов Вашей информации Free/Busy."
+
+# #-#-#-#-#  compendium.po (IMP v4.0.2)  #-#-#-#-#
+# #-#-#-#-#  compendium.po (IMP v4.0.2)  #-#-#-#-#
+# #-#-#-#-#  ru_RU.po (Horde v3.0.3)  #-#-#-#-#
+# fuzzy
+# #-#-#-#-#  ru_RU.po (Horde v3.0.3)  #-#-#-#-#
+# fuzzy
+# #-#-#-#-#  ru_RU.po (Horde v3.0.3)  #-#-#-#-#
+# fuzzy
+#: lib/MIME/Viewer/itip.php:706
+#, php-format
+msgid "%s requests your presence at \"%s\"."
+msgstr "%s запросов Вашего пристутствия в \"%s\"."
+
+#: lib/MIME/Viewer/itip.php:686
+#, php-format
+msgid "%s wants to notify you about changes of \"%s\"."
+msgstr "%s извещает Вас об изменениях в \"%s\"."
+
+#: lib/Message.php:470
+#, php-format
+msgid "%s was successfully added to \"%s\"."
+msgstr "%s был успешно добавлен в \"%s\"."
+
+#: lib/MIME/Viewer/itip.php:723
+#, php-format
+msgid "%s wishes to ammend \"%s\"."
+msgstr "%s хочет исправить \"%s\"."
+
+#: lib/MIME/Viewer/itip.php:675 lib/MIME/Viewer/itip.php:707
+#: lib/MIME/Viewer/itip.php:894
+#, php-format
+msgid "%s wishes to make you aware of \"%s\"."
+msgstr "%s хочет осведомить об \"%s\"."
+
+#: lib/MIME/Viewer/itip.php:730
+#, php-format
+msgid "%s wishes to receive the latest information about \"%s\"."
+msgstr "%s хочет получить последнюю инофрмацию об \"%s\"."
+
+#: compose.php:1243
+#, php-format
+msgid "%s%% of allowed size"
+msgstr "%s%% от разрешенного размера"
+
+#: message.php:283 message.php:288 message.php:506
+#, php-format
+msgid "%s: %s"
+msgstr "%s: %s"
+
+#: lib/Compose.php:1938
+#, php-format
+msgid "%u Forwarded Messages"
+msgstr "%u пересланных сообщений"
+
+# fuzzy, php-format
+#: rss.php:87
+#, php-format
+msgid "%u of %u messages in %s unread."
+msgstr "%u из %u сообщений в %s непрочитано."
+
+#: message.php:507
+#, php-format
+msgid "(%d&nbsp;of&nbsp;%d)"
+msgstr "(%d&nbsp;из&nbsp;%d)"
+
+#: stationery.php:129
+msgid "(Plain Text)"
+msgstr "(Простой Текст)"
+
+#: templates/contacts/contacts.html:49
+msgid "* Add these by clicking OK *"
+msgstr "* Для добавления нажмите OK *"
+
+#: templates/contacts/contacts.html:33
+msgid "* Please select address(es) *"
+msgstr "* Пожалуйста выберите адрес(а) *"
+
+#: config/prefs.php.dist:1109
+msgid "100 characters"
+msgstr "100 символов"
+
+#: config/prefs.php.dist:1112
+msgid "1000 characters"
+msgstr "1000 символов"
+
+#: config/prefs.php.dist:1110
+msgid "250 characters"
+msgstr "250 символов"
+
+#: config/prefs.php.dist:1111
+msgid "500 characters"
+msgstr "500 символов"
+
+#: lib/MIME/Viewer/pdf.php:84
+#, php-format
+msgid "A PDF file named %s is attached to this message. A thumbnail is below."
+msgstr ""
+"PDF файл %s приложен к сообщению. Картинка предварительного просмотра "
+"приведена ниже."
+
+#: lib/MIME/Viewer/notification.php:49
+msgid ""
+"A message you have sent has resulted in a return notification from the "
+"recipient."
+msgstr ""
+"Сообщение, которое Вы отправили, является извещением о возврате от "
+"получателя."
+
+#: templates/javascript_defs.php:67
+msgid ""
+"A popup window could not be opened. Perhaps you have set your browser to "
+"block popup windows?"
+msgstr ""
+"Отдельное окно не может быть открыто. Вы не блокировали всплывающие окна в "
+"Вашем браузере?"
+
+#: templates/search/search.html:61
+msgid "AND"
+msgstr "И"
+
+#: config/prefs.php.dist:670
+msgid "About this editor"
+msgstr "О редакторе"
+
+#: config/prefs.php.dist:978
+msgid "Above the message text"
+msgstr "Над сообщением"
+
+#: lib/MIME/Viewer/itip.php:713
+msgid "Accept and add to my calendar"
+msgstr "Принять и добавить в мой календарь"
+
+#: lib/MIME/Viewer/itip.php:710
+msgid "Accept and update in my calendar"
+msgstr "Принять и обновить в моем календаре"
+
+#: lib/MIME/Viewer/itip.php:716
+msgid "Accept request"
+msgstr "Принять запрос"
+
+#: lib/MIME/Viewer/itip.php:1009
+msgid "Accepted"
+msgstr "Принято"
+
+#: lib/MIME/Viewer/itip.php:284
+msgid "Accepted: "
+msgstr "Принято:"
+
+# fuzzy
+#: templates/fetchmail/fetchmailprefs.html:43
+msgid "Account's name:"
+msgstr "Профиль:"
+
+#: lib/MIME/Viewer/itip.php:618 lib/MIME/Viewer/itip.php:856
+#: lib/MIME/Viewer/itip.php:857 lib/MIME/Viewer/itip.php:988
+msgid "Actions"
+msgstr "Действия"
+
+#: lib/MIME/Headers.php:216 lib/MIME/Headers.php:217 lib/MIME/Headers.php:239
+#: lib/MIME/Headers.php:240
+#, php-format
+msgid "Add %s to my Address Book"
+msgstr "Добавить %s в мою адресную книгу"
+
+#: templates/prefs/sourceselect.inc:300
+msgid "Add source"
+msgstr "добавить текст"
+
+#: lib/MIME/Viewer/itip.php:677
+msgid "Add this to my calendar"
+msgstr "Добавить в мой каледнарь"
+
+#: lib/MIME/Viewer/itip.php:896
+msgid "Add this to my tasklist"
+msgstr "Добавить в мой список задач"
+
+#: lib/MIME/Viewer/itip.php:714
+msgid "Add to my calendar"
+msgstr "Добавить в мой каледнарь"
+
+# fuzzy, php-format
+#: lib/Compose.php:2983
+#, php-format
+msgid "Added \"%s\" as an attachment."
+msgstr "Файл \"%s\" прикреплен к письму"
+
+#: config/prefs.php.dist:955
+msgid ""
+"Additional headers to display when viewing: <em>(optional, enter each header "
+"on a new line)</em>"
+msgstr ""
+"Дополнительно отображать следующие заголовки:  <em>(не обязательны, каждый с "
+"новой строки)</em>"
+
+#: lib/MIME/Viewer/notification.php:60
+#, php-format
+msgid "Additional information can be viewed %s."
+msgstr "Дополнительная информация может быть просмотрена %s."
+
+#: lib/MIME/Viewer/notification.php:60
+msgid "Additional information details"
+msgstr "Дополнительная информация"
+
+#: lib/MIME/Viewer/status.php:92
+msgid "Additional message details"
+msgstr "Дополнительные детали сообщения"
+
+#: lib/MIME/Viewer/status.php:91
+#, php-format
+msgid "Additional message details can be viewed %s."
+msgstr "Дополнительные детали сообщения могут быть просмотрены %s."
+
+# fuzzy
+#: lib/MIME/Viewer/status.php:77
+msgid "Additional message error details"
+msgstr "Дополнительная информация об ошибке"
+
+#: lib/MIME/Viewer/status.php:76
+#, php-format
+msgid "Additional message error details can be viewed %s."
+msgstr "Дополнительная информация об ошибке может быть просмотрена %s."
+
+#: compose.php:830 compose.php:1075 contacts.php:120
+#: templates/contacts/contacts.html:8
+msgid "Address Book"
+msgstr "Адресная книга"
+
+# fuzzy
+#: config/prefs.php.dist:170
+msgid "Address Books"
+msgstr "Адресные книги"
+
+#: templates/prefs/sourceselect.inc:345
+msgid "Address book to add addresses to"
+msgstr "Адресная книга для добавления адресов"
+
+#: config/prefs.php.dist:226
+msgid ""
+"Addresses to BCC all messages: <em>(optional, enter each address on a new "
+"line)</em>"
+msgstr ""
+"Направлять копии всех сообщений данным адресатам:  <em>(не обязательны, "
+"каждый с новой строки)</em>"
+
+#: config/prefs.php.dist:218
+msgid ""
+"Addresses to explicitly tie to this identity: <em>(optional, enter each "
+"address on a new line)</em>"
+msgstr ""
+"Адреса, относящиеся к данному профилю:  <em>(не обязательны, каждый с новой "
+"строки)</em>"
+
+# fuzzy
+#: lib/IMAP/ACL/rfc2086.php:57 lib/IMAP/ACL/rfc4314.php:59
+msgid "Administer"
+msgstr "Управление"
+
+#: templates/mailbox/navbar.html:10
+msgid "All"
+msgstr "Все"
+
+#: lib/Maintenance/Task/purge_sentmail.php:82
+#, php-format
+msgid ""
+"All messages in the folder(s) \"%s\" older than %s days will be permanently "
+"deleted."
+msgstr ""
+"Все сообщения в  Вашей папке \"%s\" старше %s дня(дней) будут уничтоженны."
+
+#: templates/javascript_defs.php:57
+msgid ""
+"All messages in the following folder(s) will be downloaded into one MBOX "
+"file:"
+msgstr "Все сообщения в указанной папке(ах) будут перемещены в файл MBOX:"
+
+#: lib/Maintenance/Task/purge_spam.php:79
+#: lib/Maintenance/Task/purge_trash.php:78
+#, php-format
+msgid ""
+"All messages in your \"%s\" folder older than %s days will be permanently "
+"deleted."
+msgstr ""
+"Все сообщения в  Вашей папке \"%s\" старше %s дня(дней) будут уничтоженны."
+
+# fuzzy, php-format
+#: lib/Maintenance/Task/delete_attachments_monthly.php:59
+#, php-format
+msgid "All old linked attachments more than %s months old will be deleted."
+msgstr "Все вложения старше %s месяцев будут удалены."
+
+#: lib/Maintenance/Task/delete_sentmail_monthly.php:72
+#, php-format
+msgid "All old sent-mail folders more than %s months old will be deleted."
+msgstr "Все папки отправленных сообщений старше %s месяцев будут удалены."
+
+#: acl.php:93 acl.php:135
+#, php-format
+msgid "All rights on folder \"%s\" successfully removed for user \"%s\"."
+msgstr "Все права в папке \"%s\" успешно удалены для пользователя \"%s\"."
+
+#: lib/api.php:100
+msgid "Allow Folder Creation?"
+msgstr "Разрешить создание папок?"
+
+#: filterprefs.php:111
+msgid "Allow filter rules to be applied in any mailbox?"
+msgstr "Разрешить применение фильтров ко всем папкам?"
+
+#: lib/MIME/Viewer/alternative.php:79
+msgid "Alternative parts for this section:"
+msgstr "Альтернативный вид этого сообщения:"
+
+#: config/prefs.php.dist:735
+msgid "Always"
+msgstr "Всегда"
+
+# fuzzy
+#: config/prefs.php.dist:720
+msgid "Always save attachments"
+msgstr "Всегда сохранять вложения"
+
+#: lib/Message.php:581
+msgid ""
+"An error occured while attempting to strip the attachment. The IMAP server "
+"said: "
+msgstr ""
+"Обнаружена ошибка во время попытки удаления вложения. IMAP сервер сообщил:"
+
+#: lib/MIME/Viewer/images.php:148
+#, php-format
+msgid "An image named %s is attached to this message. A thumbnail is below."
+msgstr ""
+"Графический файл %s приложен к сообщению. Картинка предварительного "
+"просмотра приведена ниже."
+
+#: lib/Message.php:444
+msgid "An unknown error occured while creating the new note."
+msgstr "Неизвестная ошибка при создании нового примечания."
+
+#: lib/Message.php:443
+msgid "An unknown error occured while creating the new task."
+msgstr "Неизвестная ошибка при создании новой задачи."
+
+#: lib/MIME/Viewer/itip.php:882
+msgid "An unknown person"
+msgstr "Неизвестная персона"
+
+#: mailbox.php:764 message.php:478 templates/message/navbar_navigate.html:12
+#: templates/mailbox/navbar.html:18 templates/mailbox/navbar.html:34
+msgid "Answered"
+msgstr "Отвеченные"
+
+#: lib/Search.php:797
+msgid "Answered messages"
+msgstr "Отвеченные сообщения"
+
+# fuzzy
+#: mailbox.php:419
+msgid "Apply Filters"
+msgstr "Включить фильтрацию"
+
+# fuzzy, php-format
+#: mailbox.php:419
+#, php-format
+msgid "Apply Filters to %s"
+msgstr "Включить фильтрацию для %s"
+
+# fuzzy
+#: filterprefs.php:108
+msgid "Apply filter rules upon logging on?"
+msgstr "Применить правила фильтрации при входе в систему"
+
+# fuzzy
+#: filterprefs.php:109
+msgid "Apply filter rules whenever Inbox is displayed?"
+msgstr "Применить правила фильтрации при обновлении почтового ящика?"
+
+# fuzzy
+#: filterprefs.php:110
+msgid "Apply filter rules whenever sidebar is refreshed?"
+msgstr "Применить правила фильтрации при обновлении sidebar?"
+
+#: thread.php:176
+msgid "Are you sure you want to delete all messages in this thread?"
+msgstr "Вы уверены, что хотите удалить все сообщения в этом обсуждении?"
+
+# fuzzy
+#: mailbox.php:428
+msgid "Are you sure you want to delete this Virtual Folder Definition?"
+msgstr "Вы уверены, что хотите сделать это?"
+
+#: pgp.php:419 smime.php:320
+msgid "Are you sure you want to delete this public key?"
+msgstr "Вы уверены, что хотите удалить этот общий ключ?"
+
+#: pgp.php:451 smime.php:348
+msgid ""
+"Are you sure you want to delete your keypair? (This is NOT recommended!)"
+msgstr ""
+"Вы уверены, что хотите удалить эту пару ключей? (Это НЕ рекомендуется!)"
+
+#: templates/javascript_defs.php:29
+msgid "Are you sure you want to do this?"
+msgstr "Вы уверены, что хотите сделать это?"
+
+# fuzzy
+#: message.php:685
+msgid "Are you sure you wish to PERMANENTLY delete all attachments?"
+msgstr "Вы уверены, что хотите ОКОНЧАТЕЛЬНО удалить все вложения?"
+
+#: message.php:555 templates/javascript_defs.php:41
+msgid "Are you sure you wish to PERMANENTLY delete these messages?"
+msgstr "Вы уверены, что хотите ОКОНЧАТЕЛЬНО удалить эти сообщения?"
+
+# fuzzy
+#: lib/MIME/Contents.php:273
+msgid "Are you sure you wish to PERMANENTLY delete this attachment?"
+msgstr "Вы уверены, что хотите ОКОНЧАТЕЛЬНО удалить эти вложения?"
+
+#: mailbox.php:424
+msgid "Are you sure you wish to delete all mail in this folder?"
+msgstr "Вы уверены, что хотите очистить эту папку?"
+
+# fuzzy
+#: lib/IMP.php:865
+msgid "Are you sure you wish to empty your spam folder?"
+msgstr "Вы уверены, что хотите очистить корзину?"
+
+# fuzzy
+#: lib/IMP.php:857
+msgid "Are you sure you wish to empty your trash folder?"
+msgstr "Вы уверены, что хотите очистить корзину?"
+
+# fuzzy
+#: mailbox.php:508
+msgid "Are you sure you wish to permanently delete these messages?"
+msgstr "Вы уверены, что хотите ОКОНЧАТЕЛЬНО удалить эти сообщения?"
+
+#: templates/javascript_defs.php:75
+msgid "Are you sure you wish to report this message as innocent?"
+msgstr "Вы уверены, что хотите отметить это письмо, как не-спам?"
+
+#: templates/javascript_defs.php:74
+msgid "Are you sure you wish to report this message as spam?"
+msgstr "Вы уверены, что хотите отметить это письмо как спам?"
+
+#: config/prefs.php.dist:1205
+msgid "Arrival Time"
+msgstr "Время получения"
+
+#: config/prefs.php.dist:1220
+msgid "Ascending"
+msgstr "По возрастанию"
+
+#: config/prefs.php.dist:734
+msgid "Ask"
+msgstr "Спрашивать"
+
+# fuzzy
+#: compose.php:1181
+msgid "Attach Files"
+msgstr "Прикрепить"
+
+#: compose.php:1171
+msgid "Attach a copy of your PGP public key to the message?"
+msgstr "Приложить к письму копию публичного PGP ключа?"
+
+#: compose.php:1176
+msgid "Attach your contact information to the message?"
+msgstr "Приложить к письму Вашу контактную информацию?"
+
+# fuzzy
+#: lib/MIME/Viewer/tnef.php:110
+msgid "Attached File:"
+msgstr "Прикрепленные:"
+
+#: lib/Compose.php:2042 lib/Compose.php:2148
+#, php-format
+msgid ""
+"Attached file \"%s\" exceeds the attachment size limits. File NOT attached."
+msgstr ""
+"Прикладываемый файл \"%s\" превышает максимально допустимый размер вложения. "
+"Файл НЕ приложен."
+
+#: lib/MIME/Viewer/itip.php:411
+msgid "Attached is a reply to a calendar request you sent."
+msgstr ""
+"Приложение является ответом на запрос календаря, который Вы отправляли."
+
+#: templates/javascript_defs.php:36 templates/compose/compose.html:276
+#: templates/compose/compose.html:335
+msgid "Attachment"
+msgstr "Вложение"
+
+#: attachment.php:73
+#, php-format
+msgid "Attachment %s deleted."
+msgstr "Вложение %s удалено"
+
+#: lib/Compose.php:2671
+msgid "Attachment Information"
+msgstr "Информация о вложении"
+
+#: lib/Compose.php:823
+msgid "Attachment stripped: Original attachment type"
+msgstr "Вложение не сохранялось, тип"
+
+#: compose.php:1108 lib/Compose.php:2638 templates/compose/compose.html:252
+msgid "Attachments"
+msgstr "Вложения"
+
+#: lib/MIME/Viewer/itip.php:808 lib/MIME/Viewer/itip.php:937
+msgid "Attendees"
+msgstr "Посетители"
+
+#: lib/MIME/Viewer/notification.php:52
+msgid "Attention"
+msgstr "Внимание"
+
+#: lib/Auth/imp.php:33
+msgid "Auth_imp: Required IMAP extension not found."
+msgstr "Auth_imp: Требуемое расширение IMAP не найдено."
+
+#: config/prefs.php.dist:887
+msgid ""
+"Automatically show images in HTML messages when the sender is in my address "
+"book?"
+msgstr "Отображать картинки в HTML сообщениях для адресатов из адресной книги"
+
+#: templates/prefs/sourceselect.inc:293 templates/prefs/sourceselect.inc:295
+msgid "Available Address books:"
+msgstr "Доступные адресные книги:"
+
+#: lib/MIME/Viewer/itip.php:841 lib/MIME/Viewer/itip.php:973
+msgid "Awaiting Response"
+msgstr "Ожидает ответа"
+
+# fuzzy, php-format
+#: message.php:525 thread.php:143
+#, php-format
+msgid "Bac_k to %s"
+msgstr "Вернуться в %s"
+
+# php-format
+#: message.php:525 thread.php:143
+#, php-format
+msgid "Back to %s"
+msgstr "Вернуться в %s"
+
+#: thread.php:140
+msgid "Back to Multiple Message View Index"
+msgstr "Индекс"
+
+#: thread.php:138
+msgid "Back to Thread Display"
+msgstr "Назад к экрану обсуждений"
+
+#: config/prefs.php.dist:636
+msgid "Background Color"
+msgstr "Цвет фона"
+
+#: lib/IMAP/Client.php:480
+#, php-format
+msgid "Bad login name or password."
+msgstr "Неверное имя пользователя или пароль"
+
+#: lib/IMAP/Client.php:195
+#, php-format
+msgid "Bad or malformed request. Server Responded: %s"
+msgstr "Неверный или ошибочный запрос. Сервер ответил: %s"
+
+#: lib/IMAP/Client.php:484
+#, php-format
+msgid "Bad request: %s"
+msgstr "Неверный запрос: %s"
+
+#: lib/Search.php:726 lib/UI/Message.php:28 templates/login/recompose.html:32
+#: templates/contacts/contacts.html:43
+msgid "Bcc"
+msgstr "Bcc"
+
+#: config/prefs.php.dist:690
+msgid "Before Signature"
+msgstr "Перед подписью"
+
+#: lib/MIME/Viewer/status.php:160
+msgid "Below is the raw text of the status information message."
+msgstr ""
+"Ниже приведен неформатированный текст сообщения с информацией о статусе."
+
+#: config/prefs.php.dist:979
+msgid "Below the message text"
+msgstr "Под сообщением"
+
+#: mailbox.php:526 message.php:581
+msgid "Blacklist"
+msgstr "Черный список"
+
+#: config/prefs.php.dist:876
+msgid "Block images in HTML messages unless they are specifically requested?"
+msgstr "Не отображать картинки в HTML сообщениях"
+
+#: lib/Search.php:736
+msgid "Body"
+msgstr "Текст сообщения"
+
+# fuzzy
+#: message.php:571 config/prefs.php.dist:769
+msgid "Body Text Only"
+msgstr "Только текст сообщения"
+
+# fuzzy
+#: message.php:572 config/prefs.php.dist:770
+msgid "Body Text with Attachments"
+msgstr "Текст письма с вложениями"
+
+#: config/prefs.php.dist:631
+msgid "Bold"
+msgstr "Жирный"
+
+#: config/prefs.php.dist:944
+msgid "Both Header Listing and Body of Message"
+msgstr "В заголовке и в теле сообщения"
+
+#: config/prefs.php.dist:689
+msgid "Bottom"
+msgstr "Снизу"
+
+# fuzzy
+#: config/prefs.php.dist:645
+msgid "Bulleted List"
+msgstr "Список с отметками"
+
+#: lib/IMAP/Client.php:409
+msgid ""
+"CRAM-MD5 or DIGEST-MD5 requires PEAR's Auth_SASL package to be installed."
+msgstr "CRAM-MD5 или DIGEST-MD5 требует пакет PEAR' Auth_SASL."
+
+#: compose.php:1029
+msgid "C_harset"
+msgstr "Кодировка"
+
+#: search.php:279 config/hooks.php.dist:619
+msgid "Calendar"
+msgstr "Еженедельник"
+
+#: templates/smime/import_key.html:70 templates/smime/passphrase.html:24
+#: templates/saveimage/saveimage.html:20 templates/pgp/import_key.html:49
+#: templates/pgp/passphrase.html:22 templates/folders/folders_confirm.html:24
+#: templates/folders/import.html:18 templates/contacts/contacts.html:69
+msgid "Cancel"
+msgstr "Отмена"
+
+#: templates/compose/compose.html:21 templates/compose/compose.html:208
+#: templates/compose/redirect.html:84
+msgid "Cancel Message"
+msgstr "Отменить отправку"
+
+#: templates/javascript_defs.php:29
+msgid "Cancelling this message will permanently discard its contents."
+msgstr "При отмене отправки этого сообщения все его содержание будет утеряно."
+
+#: lib/Fetchmail/imap.php:151
+msgid "Cannot connect to the remote mail server."
+msgstr "Невозможно подключиться к удаленному почтовому серверу."
+
+#: lib/Fetchmail/imap.php:149
+msgid "Cannot connect to the remote mail server: "
+msgstr "Невозможно подключиться к удаленному почтовому серверу:"
+
+#: lib/IMAP/Tree.php:2103
+msgid "Cannot directly create mailbox in this folder."
+msgstr "Невозможно напрямую создать почтовый ящик в этой папке."
+
+#: lib/MIME/Viewer/partial.php:47
+#, php-format
+msgid ""
+"Cannot display - found only %s of %s parts of this message in the current "
+"mailbox."
+msgstr ""
+"Невозможно отобразить - найдено только %s из %s частей сообщения в текущем "
+"почтовом ящике."
+
+#: lib/Message.php:199
+msgid "Cannot move messages to Trash - no Trash mailbox set in preferences."
+msgstr ""
+"Невозможно переместить сообщения в корзину - в настройках не задан почтовый "
+"ящик корзины."
+
+#: pgp.php:282
+msgid "Cannot retrieve public key from cache."
+msgstr "Невозмжно получить общий ключ из кэша."
+
+#: lib/Search.php:721 lib/UI/Message.php:27 templates/login/recompose.html:23
+#: templates/contacts/contacts.html:42
+msgid "Cc"
+msgstr "Cc"
+
+#: templates/smime/smime.html:79
+msgid ""
+"Certificate import is not available. File upload is not enabled on this "
+"server."
+msgstr ""
+"Импорт сертификата недоступен. Выгрузка файлов на данном сервере не "
+"разрешена."
+
+#: lib/MIME/Viewer/itip.php:823 lib/MIME/Viewer/itip.php:955
+msgid "Chair Person"
+msgstr "Главный"
+
+#: acl.php:179 acl.php:180 templates/acl/acl.html:13
+msgid "Change Folder"
+msgstr "Изменить папку"
+
+#: config/prefs.php.dist:149
+msgid ""
+"Change display options such as how many messages you see on each page and "
+"how messages are sorted."
+msgstr ""
+"Настройки просмотра сообщений. (Количество сообщений на странице, порядок "
+"сортировки.)"
+
+#: config/prefs.php.dist:26
+msgid "Change mail server and folder settings."
+msgstr "Настроить папки для различных нужд"
+
+#: config/prefs.php.dist:16
+msgid ""
+"Change the name, address, and signature that people see when they read and "
+"reply to your email."
+msgstr "Настройки имени, адреса, подписи."
+
+#: config/prefs.php.dist:1113
+msgid "Characters to display:"
+msgstr "Символов на экране:"
+
+#: templates/mailbox/message_headers.html:13 templates/folders/actions.html:6
+msgid "Check All/None"
+msgstr "Проверить всех/никого"
+
+#: lib/UI/Compose.php:152
+msgid "Check Spelling"
+msgstr "Проверить правописание"
+
+#: folders.php:394 mailbox.php:656
+msgid "Check _All/None"
+msgstr "Выделить все"
+
+#: templates/folders/actions.html:29
+msgid "Check for New Mail"
+msgstr "Проверить новую почту"
+
+# fuzzy
+#: config/prefs.php.dist:560
+msgid "Check spelling before sending a message?"
+msgstr "Проверять орфографию перед отправкой"
+
+#: lib/UI/Compose.php:153
+msgid "Checking ..."
+msgstr "Проверка..."
+
+#: templates/folders/actions.html:11 templates/folders/actions.html:13
+msgid "Choose Action"
+msgstr "Выберите действие"
+
+#: config/servers.php.dist:224
+msgid "Choose a mail server:"
+msgstr "Выберите почтовый сервер:"
+
+#: templates/compose/compose.html:65
+msgid "Choose a match or edit the address to the right:"
+msgstr "Пожалуйста, выберите или отредактируйте адрес:"
+
+# fuzzy
+#: templates/prefs/sourceselect.inc:343
+msgid "Choose the address book to use when adding addresses."
+msgstr "Выберите адресную книгу для добавления в нее адресов."
+
+#: templates/prefs/sourceselect.inc:289
+msgid "Choose the order of address books to search when expanding addresses."
+msgstr "Выберите порядок перебора адресных книг при поиске адресов."
+
+#: config/prefs.php.dist:662
+msgid "Clear Inline Font Specifications"
+msgstr "Очистить неявную спецификацию шрифта"
+
+#: config/prefs.php.dist:661
+msgid "Clear MSOffice tags"
+msgstr "Очистить тэги MS Office"
+
+#: lib/MIME/Viewer/images.php:101
+#, php-format
+msgid "Click %s to convert the image file into a format your browser can view."
+msgstr ""
+"Нажмите %s для преобразования картинки в формат, который сможет отобразить "
+"Ваш браузер"
+
+#: lib/MIME/Contents.php:449
+#, php-format
+msgid "Click %s to download the data."
+msgstr "Нажмите %s для загрузки данных."
+
+#: lib/MIME/Viewer/images.php:90
+#, php-format
+msgid "Click %s to download the image."
+msgstr "Нажмите %s для загрузки картинки."
+
+#: lib/Filter.php:131
+#, php-format
+msgid "Click %s to go to %s management page."
+msgstr "Нажмите %s для перехода на %s страницу управления."
+
+#: lib/MIME/Viewer/pkcs7.php:491
+#, php-format
+msgid "Click %s to view the attachment in a separate window."
+msgstr "Нажмите %s для просмотра вложения в отдельном окне."
+
+#: lib/MIME/Viewer/related.php:85
+#, php-format
+msgid "Click %s to view this multipart/related part in a separate window."
+msgstr ""
+"Нажмите %s для просмотра этой multipart/related части в отдельном окне."
+
+#: lib/MIME/Viewer/pgp.php:248 lib/MIME/Viewer/pgp.php:275
+#: lib/MIME/Viewer/pkcs7.php:220
+msgid "Click HERE to verify the message."
+msgstr "Нажмите ЗДЕСЬ для проверки сообщения."
+
+#: config/prefs.php.dist:534
+#, php-format
+msgid "Click here to open all mailto: links in %s."
+msgstr "Нажмите здесь для открытия всех ссылок mailto: в %s."
+
+#: templates/prefs/sourceselect.inc:319
+msgid ""
+"Click on one of your selected address books and then select all fields to "
+"search."
+msgstr ""
+"Кликните мышкой по выбраной книге и, затем, отметьте все поля для поиска."
+
+#: config/prefs.php.dist:1246
+msgid "Clicking on the address will compose a new message to the sender"
+msgstr "Создание нового сообщения для данного адресата"
+
+#: config/prefs.php.dist:1247
+msgid "Clicking on the address will open the message to be read"
+msgstr "Открытие входящего письма"
+
+# fuzzy
+#: templates/newmsg/alert.html:17 templates/fetchmail/fetchmail.html:33
+msgid "Close"
+msgstr "Закрыть"
+
+#: compose.php:34
+msgid "Close this window"
+msgstr "Закрыть окно"
+
+#: lib/IMAP/Tree.php:2048
+msgid "Closed Folder"
+msgstr "Закрытая папка"
+
+#: folders.php:475
+msgid "Collapse"
+msgstr "Свернуть"
+
+#: folders.php:410
+msgid "Collapse All"
+msgstr "Свернуть все"
+
+#: folders.php:410
+msgid "Collapse All Folders"
+msgstr "Свернуть все папки"
+
+#: folders.php:475
+msgid "Collapse Folder"
+msgstr "Свернуть папку"
+
+#: templates/fetchmail/fetchmailprefs.html:94
+msgid "Color Indicator:"
+msgstr "Цветовой индикатор:"
+
+#: config/prefs.php.dist:1284
+msgid "Combine all namespaces"
+msgstr "Отобразить все пространства имен вместе"
+
+# fuzzy
+#: templates/pgp/pgp.html:97
+msgid "Comment:"
+msgstr "Комментарий:"
+
+#: lib/MIME/Viewer/itip.php:1025
+msgid "Completed"
+msgstr "Завершено"
+
+# fuzzy
+#: config/prefs.php.dist:584
+msgid "Compose messages in a separate window?"
+msgstr "Создавать новое письмо в отдельном окне"
+
+#: config/prefs.php.dist:594
+msgid ""
+"Compose messages with an HTML GUI by default (if browser supports the "
+"feature)?"
+msgstr "Включить визуальный редактор по умолчанию"
+
+#: config/prefs.php.dist:95
+msgid "Configure how messages are displayed."
+msgstr "Настройка режимов отображения сообщений"
+
+#: config/prefs.php.dist:131
+msgid "Configure mail preview options."
+msgstr "Настроить опции предварительного просмотра почты."
+
+#: config/hooks.php.dist:643
+msgid "Contacts"
+msgstr "Контакты"
+
+# fuzzy, php-format
+#: config/prefs.php.dist:180
+#, php-format
+msgid "Control PGP support for %s."
+msgstr "Поддержка функций PGP для %s"
+
+#: config/prefs.php.dist:189
+#, php-format
+msgid "Control S/MIME support for %s."
+msgstr "Поддержка функций S/MIME для %s"
+
+#: config/prefs.php.dist:123
+msgid ""
+"Control when new mail will be checked for, and whether or not to notify you "
+"when it arrives."
+msgstr "Настройки проверки почты и извещений о новой почте."
+
+#: config/prefs.php.dist:934
+msgid "Convert textual emoticons into graphical ones?"
+msgstr "Конвертировать текстовые эмоции в графические?"
+
+#: mailbox.php:486 mailbox.php:895 message.php:521 message.php:708
+msgid "Copy"
+msgstr "Копировать"
+
+#: config/prefs.php.dist:657
+msgid "Copy selection"
+msgstr "Копировать"
+
+#: mailbox.php:486 mailbox.php:895 message.php:521 message.php:708
+msgid "Copy to folder"
+msgstr "Копировать в папку"
+
+#: lib/Compose.php:2123
+#, php-format
+msgid "Could not attach %s to the message."
+msgstr "Невозможно вложить %s в сообщение."
+
+#: lib/IMAP/Client.php:189
+#, php-format
+msgid "Could not complete request. Reason Given: %s"
+msgstr "Невозможно завершить запрос. Причина: %s"
+
+#: attachment.php:51
+#, php-format
+msgid "Could not create the VFS backend: %s"
+msgstr "Невозможно создать модуль VFS: %s"
+
+#: lib/Message.php:789
+#, php-format
+msgid "Could not delete messages from %s. The server said: %s"
+msgstr "Ошибка при удалении писем из \"%s\". Сервер ответил: %s"
+
+#: lib/Session.php:333
+msgid "Could not execute maintenance operations."
+msgstr "Невозможно выполнить операции обслуживания."
+
+#: lib/MIME/Viewer/tnef.php:53
+msgid "Could not extract the requested file from the MS-TNEF attachment."
+msgstr "Невозхможно извлечь запрошенный файл из вложения MS TNEF."
+
+#: lib/MIME/Viewer/zip.php:61
+msgid "Could not extract the requested file from the Zip archive."
+msgstr "Невозможно прочитать запрошенный файл из архива Zip."
+
+#: lib/Spam.php:239
+msgid ""
+"Could not move message to spam mailbox - no spam mailbox defined in "
+"preferences."
+msgstr ""
+"Невозможно переместить сообщение в папку \"Спам\" - папка \"Спам\" не "
+"определена в настройках."
+
+#: lib/IMAP/Client.php:320
+msgid "Could not open secure connection to the IMAP server."
+msgstr "Невозможно открыть защищенное соединение с сервером IMAP."
+
+#: lib/Session.php:284
+msgid "Could not retrieve namespace information from IMAP server."
+msgstr "Невозможно получить информацию о пространстве имен с сервера IMAP."
+
+#: compose.php:52
+msgid "Could not retrieve the message from the mail server."
+msgstr "Невозможно получить сообщение с почтового сервера."
+
+#: lib/Compose.php:1124
+#, php-format
+msgid "Could not save recipients: %s"
+msgstr "Невозможно сохранить получателей: %s"
+
+#: lib/Template.php:231
+#, php-format
+msgid "Could not save the compiled template file '%s'."
+msgstr "Невозможно сохранить шаблон сообщения '%s'."
+
+#: templates/folders/actions.html:16
+#: templates/fetchmail/fetchmailprefs.html:121
+msgid "Create"
+msgstr "Создать"
+
+#: lib/IMAP/ACL/rfc2086.php:55
+msgid "Create Folder"
+msgstr "Создать папку"
+
+#: lib/IMAP/ACL/rfc4314.php:55
+msgid "Create Folders"
+msgstr "Создать папки"
+
+# fuzzy
+#: templates/pgp/pgp.html:129
+msgid "Create Keys"
+msgstr "Создать ключи"
+
+# fuzzy
+# fuzzy
+#: templates/fetchmail/fetchmailprefs.html:28
+msgid "Create a New Account"
+msgstr "Создать новый"
+
+# fuzzy
+#: templates/prefs/spamselect.inc:11 templates/prefs/spamselect.inc:20
+msgid "Create a new Spam folder"
+msgstr "Создать новую папку для спама"
+
+#: templates/prefs/folderselect.inc:11 templates/prefs/folderselect.inc:22
+msgid "Create a new drafts folder"
+msgstr "Создать новую папку для черновиков"
+
+#: templates/prefs/sentmailselect.inc:25 templates/prefs/sentmailselect.inc:40
+msgid "Create a new sent mail folder"
+msgstr "Создать новую папку для отправленных сообщений"
+
+#: templates/prefs/trashselect.inc:11 templates/prefs/trashselect.inc:25
+msgid "Create a new trash folder"
+msgstr "Создать новую корзину"
+
+# fuzzy
+# fuzzy
+#: templates/fetchmail/fetchmail.html:23
+msgid "Create an account"
+msgstr "Создать учетную запись"
+
+#: config/prefs.php.dist:162
+msgid ""
+"Create filtering rules to organize your incoming mail, sort it into folders, "
+"and delete spam."
+msgstr ""
+"Создание фильтров для входящей почты, сортировка почты в папках, удаление "
+"спама."
+
+#: templates/stationery/stationery.html:14
+msgid "Create new stationery"
+msgstr "Создать новый шаблон"
+
+#: templates/compose/compose.html:317
+msgid "Current Attachments"
+msgstr "Текущие Вложения"
+
+#: acl.php:182
+#, php-format
+msgid "Current access to %s"
+msgstr "Текущий доступ к %s"
+
+#: config/prefs.php.dist:1297
+msgid "Current expanded status in the folders view"
+msgstr "Сохранить текущий статус"
+
+#: config/prefs.php.dist:637
+msgid "Current style"
+msgstr "Текущий стиль"
+
+# fuzzy
+#: config/prefs.php.dist:140
+msgid "Customize accounts for fetching mail from other accounts."
+msgstr ""
+"Настройка возможности сбора почты с ваших почтовых ящиков, расположенных на "
+"других серверах"
+
+#: config/prefs.php.dist:88
+msgid "Customize how to deal with message drafts."
+msgstr "Настройка действий с черновиками сообщений"
+
+#: config/prefs.php.dist:80
+msgid "Customize how you reply to or forward mail."
+msgstr "Настройка вариантов ответов или пересылки почты."
+
+#: config/prefs.php.dist:64
+msgid "Customize how you send mail."
+msgstr "Настройка режимов составления новых сообщений, сохранения черновиков"
+
+# php-format
+# fuzzy, php-format
+# fuzzy, php-format
+# fuzzy, php-format
+#: config/prefs.php.dist:44
+#, php-format
+msgid "Customize tasks to run upon logon to %s."
+msgstr "Задачи, выполняемые в момент входа в %s."
+
+#: config/prefs.php.dist:656
+msgid "Cut selection"
+msgstr "Вырезать выбранное"
+
+# fuzzy
+#: mailbox.php:582
+msgid "Dat_e"
+msgstr "Дата"
+
+#: lib/UI/Message.php:24
+msgid "Date"
+msgstr "Дата"
+
+#: lib/Search.php:751
+msgid "Date <"
+msgstr "Дата <"
+
+#: lib/Search.php:746
+msgid "Date ="
+msgstr "Дата ="
+
+#: lib/Search.php:756
+msgid "Date >="
+msgstr "Дата >="
+
+#: templates/thread/thread.html:26
+msgid "Date:"
+msgstr "Дата:"
+
+#: templates/search/search.html:99
+msgid "Day"
+msgstr "Ежедневно"
+
+#: lib/MIME/Viewer/itip.php:1013
+msgid "Declined"
+msgstr "Удаленные"
+
+#: lib/MIME/Viewer/itip.php:290
+msgid "Declined: "
+msgstr "Удаленные:"
+
+#: config/prefs.php.dist:646
+msgid "Decrease Indent"
+msgstr "Уменьшить отступ"
+
+#: config/prefs.php.dist:700
+msgid "Default"
+msgstr "По умолчанию"
+
+#: config/prefs.php.dist:967
+msgid "Default (US-ASCII)"
+msgstr "По умолчанию (US-ASCII)"
+
+# fuzzy
+#: config/prefs.php.dist:771
+msgid "Default forwarding method:"
+msgstr "Метод пересылки по умолчанию:"
+
+#: config/prefs.php.dist:1212
+msgid "Default sorting criteria:"
+msgstr "Сортировка по умолчанию:"
+
+# fuzzy
+#: config/prefs.php.dist:1222
+msgid "Default sorting direction:"
+msgstr "Порядок сортировки"
+
+#: lib/MIME/Viewer/itip.php:1021
+msgid "Delegated"
+msgstr "Уполномоченные"
+
+#: folders.php:440 mailbox.php:508 mailbox.php:510 message.php:555
+#: lib/IMAP/ACL/rfc4314.php:57 templates/smime/smime.html:35
+#: templates/pgp/pgp.html:43 templates/folders/actions.html:19
+#: templates/fetchmail/fetchmailprefs.html:122
+#: templates/contacts/contacts.html:59
+msgid "Delete"
+msgstr "Удалить"
+
+#: pgp.php:419 smime.php:320
+#, php-format
+msgid "Delete %s Public Key"
+msgstr "Удалить %s общий ключ"
+
+# fuzzy
+#: templates/smime/smime.html:75 templates/pgp/pgp.html:86
+msgid "Delete Current Keys"
+msgstr "Удалить текущие ключи"
+
+#: lib/IMAP/ACL/rfc4314.php:56
+msgid "Delete Folders"
+msgstr "Удалить папку(и)"
+
+# fuzzy
+#: templates/folders/folders_confirm.html:23
+msgid "Delete Selected Folders"
+msgstr "Удалить выбранные папки"
+
+# fuzzy
+#: templates/stationery/stationery.html:44
+msgid "Delete Stationery"
+msgstr "Удалить шаблон"
+
+#: thread.php:176
+msgid "Delete Thread"
+msgstr "Удалить обсуждение"
+
+# fuzzy
+#: folders.php:440
+msgid "Delete Virtual Folder"
+msgstr "Удалить виртуальную папку"
+
+#: mailbox.php:428
+#, php-format
+msgid "Delete Virtual Folder Definition for %s"
+msgstr "Удалить определение виртуальных папок для %s"
+
+#: templates/fetchmail/fetchmailprefs.html:86
+msgid "Delete fetched messages from remote server?"
+msgstr "Удалить принятые сообщения со стороннего сервера"
+
+#: lib/MIME/Viewer/itip.php:746
+msgid "Delete from my calendar"
+msgstr "Удалить из моего календаря"
+
+#: config/prefs.php.dist:433
+msgid "Delete old linked attachments at beginning of month?"
+msgstr "Удалять старые вложения в начале месяца?"
+
+# fuzzy
+#: config/prefs.php.dist:387
+msgid "Delete old sent-mail folders at beginning of month?"
+msgstr "Удалять папку отправленных сообщений в начале месяца?"
+
+# fuzzy
+#: config/prefs.php.dist:861
+msgid "Delete spam messages"
+msgstr "Удалять спам"
+
+#: lib/IMAP/ACL/rfc2086.php:56
+msgid "Delete/purge"
+msgstr "Удалить/очистить"
+
+#: templates/compose/compose.html:345
+msgid "Delete?"
+msgstr "Удалить?"
+
+#: mailbox.php:779 message.php:481 templates/mailbox/navbar.html:20
+#: templates/mailbox/navbar.html:37
+msgid "Deleted"
+msgstr "Удаленные"
+
+#: lib/Search.php:817
+msgid "Deleted messages"
+msgstr "Удаленные сообщения"
+
+#: compose.php:240
+#, php-format
+msgid "Deleted the attachment \"%s\"."
+msgstr "Удаленное вложение \"%s\"."
+
+# fuzzy
+#: config/prefs.php.dist:109
+msgid "Deleting and Moving Messages"
+msgstr "Удаленные сообщения"
+
+#: lib/MIME/Viewer/itip.php:718
+msgid "Deny request"
+msgstr "Отклонить запрос"
+
+#: lib/MIME/Viewer/itip.php:638
+msgid "Deny request for free/busy information"
+msgstr "Отклонить запрос об информации Free/Busy"
+
+#: config/prefs.php.dist:1221
+msgid "Descending"
+msgstr "По убыванию"
+
+# fuzzy
+#: lib/MIME/Viewer/itip.php:799 lib/MIME/Viewer/itip.php:930
+msgid "Description"
+msgstr "Описание"
+
+# fuzzy
+# fuzzy
+#: templates/compose/compose.html:341
+msgid "Description:"
+msgstr "Описание"
+
+# fuzzy
+#: templates/smime/smime.html:35 templates/smime/smime.html:67
+#: templates/pgp/pgp.html:43 templates/pgp/pgp.html:75
+#: templates/pgp/pgp.html:80
+msgid "Details"
+msgstr "Информация"
+
+#: lib/Compose.php:2965
+#, php-format
+msgid "Did not attach \"%s\" as it was only partially uploaded."
+msgstr "Не вкладывать \"%s\", поскольку он был только частично выгружен."
+
+#: lib/Compose.php:2974
+#, php-format
+msgid "Did not attach \"%s\" as the file was empty."
+msgstr "Не вкладывать \"%s\", так как файл пустой."
+
+#: lib/Compose.php:2961
+#, php-format
+msgid ""
+"Did not attach \"%s\" as the maximum allowed upload size has been exceeded."
+msgstr ""
+"Не вкладывать \"%s\", так как достигнут максимально допустимый размер "
+"загрузки."
+
+#: lib/Compose.php:2969
+#, php-format
+msgid ""
+"Did not attach \"%s\" as the server configuration did not allow the file to "
+"be uploaded."
+msgstr ""
+"Не вкалдывать \"%s\", так как настройки сервера не разрешают загружать файлы."
+
+#: config/prefs.php.dist:926
+msgid "Dim signatures?"
+msgstr "Оттенять подписи?"
+
+#: config/prefs.php.dist:666
+msgid "Direction left to right"
+msgstr "Направление слева направо"
+
+#: config/prefs.php.dist:667
+msgid "Direction right to left"
+msgstr "Направление справа налево"
+
+#: config/prefs.php.dist:286
+msgid "Display Virtual Inbox?"
+msgstr "Показывать Виртуальные Входящие?"
+
+#: config/prefs.php.dist:568
+msgid "Display confirmation after sending a message?"
+msgstr "Отображать подтверждение после отправки сообщения"
+
+#: config/prefs.php.dist:943
+msgid "Display in Body of Message"
+msgstr "В теле сообщения"
+
+#: config/prefs.php.dist:1077
+msgid "Display pop-up notification of new mail?"
+msgstr "Отображать всплывающее сообщение при приходе почты?"
+
+# fuzzy
+#: config/prefs.php.dist:1042
+msgid "Display the \"Empty Spam\" link in the menubar?"
+msgstr "Отображать кнопку 'Очистить Спам' в верхнем меню?"
+
+# fuzzy
+#: config/prefs.php.dist:1034
+msgid "Display the \"Empty Trash\" link in the menubar?"
+msgstr "Отображать кнопку 'Очистить корзину' в верхнем меню?"
+
+# fuzzy
+#: templates/compose/compose.html:332
+msgid "Disposition:"
+msgstr "Описание:"
+
+#: templates/search/search.html:87
+msgid "Do NOT match"
+msgstr "НЕ совпадает"
+
+#: templates/folders/actions.html:30
+msgid "Do Not Check for New Mail"
+msgstr "Не проверять папку(и) на новую почту"
+
+#: config/prefs.php.dist:1248
+msgid "Do not generate a link in the From: column"
+msgstr "Не генерировать ссылку в столбце From:"
+
+#: templates/javascript_defs.php:30
+msgid "Doing so will discard this message permanently."
+msgstr "Это вызовет удаление сообщения навсегда."
+
+#: login.php:430
+msgid "Don't have an account? Sign up."
+msgstr "Отсутствует учетная запись? Зарегистрируйтесь."
+
+# fuzzy
+#: templates/folders/actions.html:34
+msgid "Download"
+msgstr "Загрузить"
+
+#: lib/MIME/Contents.php:250
+#, php-format
+msgid "Download %s in .zip Format"
+msgstr "Загрузить %s в архив"
+
+# fuzzy
+#: message.php:681
+msgid "Download All Attachments (in .zip file)"
+msgstr "Загрузить все вложения в архив"
+
+#: templates/folders/actions.html:35
+msgid "Download [.zip format]"
+msgstr "Загрузить в .zip формате"
+
+#: lib/MIME/Contents.php:250
+msgid "Download in .zip Format"
+msgstr "Загрузить в архив"
+
+#: mailbox.php:769 message.php:479 templates/message/navbar_navigate.html:14
+#: templates/mailbox/navbar.html:22 templates/mailbox/navbar.html:40
+msgid "Draft"
+msgstr "Черновики"
+
+#: lib/IMAP/Tree.php:2003
+msgid "Draft folder"
+msgstr "Папка черновиков"
+
+#: config/prefs.php.dist:304
+msgid "Drafts"
+msgstr "Черновики"
+
+#: templates/prefs/folderselect.inc:19
+msgid "Drafts folder:"
+msgstr "Папка черновиков:"
+
+#: login.php:266
+msgid "Dynamic"
+msgstr "dIMP"
+
+# fuzzy
+#: templates/pgp/pgp.html:102
+msgid "E-mail Address:"
+msgstr "Адрес E-mail:"
+
+# fuzzy
+#: lib/MIME/Viewer/status.php:73
+msgid "ERROR: Your message could not be delivered."
+msgstr "ОШИБКА: Ваше сообщение не было доставлено получателю"
+
+#: folders.php:441 templates/stationery/stationery.html:19
+msgid "Edit"
+msgstr "Редактирование"
+
+#: mailbox.php:431
+msgid "Edit Search Query"
+msgstr "Редактировать запрос поиска"
+
+# fuzzy
+# fuzzy
+#: folders.php:441 templates/search/search.html:17
+msgid "Edit Virtual Folder"
+msgstr "Редактировать виртуальную папку"
+
+#: mailbox.php:427
+#, php-format
+msgid "Edit Virtual Folder Definition for %s"
+msgstr "Редактировать определение виртуальной папки для %s"
+
+#: filterprefs.php:91
+msgid "Edit your Blacklist"
+msgstr "Редактировать черный список"
+
+#: filterprefs.php:90
+msgid "Edit your Filter Rules"
+msgstr "Редактирование Ваших правил фильтрации"
+
+#: filterprefs.php:92
+msgid "Edit your Whitelist"
+msgstr "Редактировать белый список"
+
+#: config/prefs.php.dist:1150
+msgid "Edit your preferences for accessing other mail accounts."
+msgstr "Редактировать настройки сбора почты с других серверов"
+
+# fuzzy, php-format
+#: lib/Message.php:806
+#, php-format
+msgid "Emptied all messages from %s."
+msgstr "Очищены все сообщения из %s"
+
+# fuzzy, php-format
+#: lib/Message.php:782
+msgid "Emptied all messages from Virtual Trash Folder."
+msgstr "Очищены все сообщения из Виртуальной Корзины"
+
+# fuzzy
+#: templates/folders/actions.html:20
+msgid "Empty"
+msgstr "Очистить"
+
+# fuzzy
+#: templates/folders/folders_confirm.html:23
+msgid "Empty Selected Folders"
+msgstr "Очистить выбранные папки"
+
+# fuzzy
+#: lib/IMP.php:865
+msgid "Empty _Spam"
+msgstr "Очитить папку \"Спам\""
+
+# fuzzy
+#: lib/IMP.php:857
+msgid "Empty _Trash"
+msgstr "Очитить корзину"
+
+#: mailbox.php:424
+msgid "Empty folder"
+msgstr "Очистить папку"
+
+# fuzzy
+#: pgp.php:472 templates/pgp/pgp.html:2
+msgid "Enable PGP functionality?"
+msgstr "Включить поддержку PGP?"
+
+#: smime.php:358 templates/smime/smime.html:2
+msgid "Enable S/MIME functionality?"
+msgstr "Включить S/MIME"
+
+#: config/prefs.php.dist:1101
+msgid "Enable message previews?"
+msgstr "Разрешить предварительный просмотр сообщений?"
+
+# fuzzy
+#: compose.php:1164
+msgid "Encr_yption Options"
+msgstr "Шифрование"
+
+#: lib/Compose.php:1840
+msgid "End forwarded message"
+msgstr "Конец пересылаемого сообщения"
+
+#: lib/Compose.php:1730
+msgid "End message"
+msgstr "Конец сообщения"
+
+#: lib/Compose.php:1728
+#, php-format
+msgid "End message from %s"
+msgstr "Конец сообщения от %s"
+
+#: lib/MIME/Viewer/itip.php:608 lib/MIME/Viewer/itip.php:610
+#: lib/MIME/Viewer/itip.php:784 lib/MIME/Viewer/itip.php:786
+msgid "End:"
+msgstr "Конец:"
+
+#: pgp.php:447 smime.php:346
+msgid "Enter Passphrase"
+msgstr "Ввести пароль"
+
+#: templates/prefs/spamselect.inc:8
+msgid "Enter the name for your new Spam folder"
+msgstr "Введите имя папки для Вашей новой корзины"
+
+#: templates/prefs/folderselect.inc:8
+msgid "Enter the name for your new drafts folder"
+msgstr "Введите имя новой папки для черновиков"
+
+#: templates/prefs/sentmailselect.inc:22
+msgid "Enter the name for your new sent mail folder"
+msgstr "Введите имя новой папки для отправленных сообщений"
+
+#: templates/prefs/trashselect.inc:8
+msgid "Enter the name for your new trash folder"
+msgstr "Введите имя папки для Вашей новой корзины"
+
+# fuzzy
+#: message.php:570 lib/Search.php:741 config/prefs.php.dist:768
+msgid "Entire Message"
+msgstr "Сообщение целиком"
+
+# fuzzy, php-format
+#: message.php:176 thread.php:73 lib/Compose.php:1164
+#, php-format
+msgid "Entry \"%s\" was successfully added to the address book"
+msgstr "Запись \"%s\" была добавлена в адресную книгу"
+
+#: lib/MIME/Viewer/pgp.php:453 lib/MIME/Viewer/pkcs7.php:448
+#: lib/MIME/Viewer/status.php:71 lib/MIME/Viewer/status.php:162
+msgid "Error"
+msgstr "Ошибка"
+
+#: lib/IMAP/Client.php:305 lib/IMAP/Client.php:325
+#, php-format
+msgid "Error connecting to IMAP server: [%s] %s."
+msgstr "Ошибка соединения с сервером IMAP: [%s] %s."
+
+#: lib/MIME/Contents.php:150
+msgid "Error displaying message."
+msgstr "Ошибка при отображении сообщения"
+
+#: lib/MIME/Viewer/itip.php:340 lib/MIME/Viewer/itip.php:446
+#, php-format
+msgid "Error sending reply: %s."
+msgstr "Ошибка отправки ответа: %s."
+
+#: templates/smime/smime.html:29 templates/pgp/pgp.html:37
+msgid "Error:"
+msgstr "Ошибка:"
+
+#: lib/MIME/Viewer/itip.php:103
+msgid "Event successfully deleted."
+msgstr "Событие успешно удалено."
+
+# fuzzy
+#: config/prefs.php.dist:1066
+msgid "Every 15 minutes"
+msgstr "Каждые 15 минут"
+
+#: config/prefs.php.dist:1063
+msgid "Every 30 seconds"
+msgstr "Каждые 30 секунд"
+
+# fuzzy
+#: config/prefs.php.dist:829 config/prefs.php.dist:1065
+msgid "Every 5 minutes"
+msgstr "Каждые 5 минут"
+
+#: config/prefs.php.dist:1067
+msgid "Every half hour"
+msgstr "Каждые полчаса"
+
+# fuzzy
+#: config/prefs.php.dist:1064
+msgid "Every minute"
+msgstr "Каждую минуту"
+
+#: folders.php:486
+msgid "Expand"
+msgstr "Развернуть"
+
+#: folders.php:409
+msgid "Expand All"
+msgstr "Развернуть все"
+
+#: folders.php:409
+msgid "Expand All Folders"
+msgstr "Развернуть все папки"
+
+#: folders.php:486
+msgid "Expand Folder"
+msgstr "Развернуть папку"
+
+#: compose.php:832 compose.php:1083
+msgid "Expand Names"
+msgstr "Развернуть имена"
+
+#: config/prefs.php.dist:1276
+msgid "Expand the entire folder tree by default in the folders view?"
+msgstr "Развернуть дерево папок по умолчанию?"
+
+#: config/prefs.php.dist:1298
+msgid "Expand the entire folder tree by default in the sidebar?"
+msgstr "Развернуть дерево папок по умолчанию?"
+
+# fuzzy
+# fuzzy
+#: lib/IMP.php:876 lib/IMP.php:878
+msgid "F_etch Mail"
+msgstr "Сбор"
+
+# fuzzy
+#: fetchmail.php:50 config/prefs.php.dist:139
+#: templates/fetchmail/fetchmail.html:6 templates/fetchmail/fetchmail.html:30
+msgid "Fetch Mail"
+msgstr "Сбор"
+
+# fuzzy
+#: config/prefs.php.dist:1158
+msgid "Fetch Mail in a separate window?"
+msgstr "Собирать почту в отдельном окне."
+
+# fuzzy
+#: templates/fetchmail/fetchmailprefs.html:89
+msgid "Fetch messages upon logging on?"
+msgstr "Принять сообщения при входе в систему"
+
+# fuzzy, php-format
+#: lib/Fetchmail.php:285
+#, php-format
+msgid "Fetched %d messages from %s"
+msgstr "Принято %d писем из %s"
+
+# fuzzy, php-format
+#: lib/Fetchmail.php:283
+#, php-format
+msgid "Fetched 1 message from %s"
+msgstr "Принято 1 сообщение от %s"
+
+# fuzzy
+# fuzzy
+#: lib/Fetchmail.php:281 lib/Fetchmail.php:283 lib/Fetchmail.php:285
+msgid "Fetchmail: "
+msgstr "Сбор почты: "
+
+# fuzzy
+#: lib/Fetchmail.php:287
+msgid "Fetchmail: no new messages."
+msgstr "Для Вас нет новых сообщений."
+
+# fuzzy
+#: lib/IMP.php:882
+msgid "Fi_lters"
+msgstr "Фильтры"
+
+#: templates/prefs/sourceselect.inc:329
+msgid "Fields to search"
+msgstr "Поля для поиска"
+
+# fuzzy
+#: templates/javascript_defs.php:35 templates/compose/compose.html:271
+msgid "File"
+msgstr "Файл"
+
+#: templates/filters/prefs.html:2
+msgid "Filter Settings"
+msgstr "Правила фильтрации"
+
+#: config/prefs.php.dist:844
+msgid "Filter message content for profanity?"
+msgstr "Фильтровать содержимое сообщений?"
+
+#: templates/filters/prefs.html:7
+msgid "Filter support is disabled on this system."
+msgstr "Поддержка фильтрации в вашей системе не включена"
+
+# fuzzy
+#: config/prefs.php.dist:161
+msgid "Filters"
+msgstr "Фильтры"
+
+#: lib/Filter.php:130
+#, php-format
+msgid "Filters: %s management page"
+msgstr "Фильтры: %s страница управления"
+
+#: templates/contacts/contacts.html:13
+msgid "Find:"
+msgstr "Найти:"
+
+# fuzzy
+#: config/prefs.php.dist:1194
+msgid "First Mailbox Page"
+msgstr "Первая страница"
+
+#: mailbox.php:278
+msgid "First Page"
+msgstr "Первая страница"
+
+#: mailbox.php:774 message.php:480 templates/message/navbar_navigate.html:10
+#: templates/mailbox/navbar.html:16 templates/mailbox/navbar.html:32
+msgid "Flagged For Followup"
+msgstr "Важное"
+
+#: lib/Search.php:807
+msgid "Flagged messages"
+msgstr "Важные сообщения"
+
+# fuzzy
+#: mailbox.php:533 message.php:569
+msgid "Fo_rward"
+msgstr "Переслать"
+
+#: lib/IMAP/Tree.php:2048 templates/folders/folders_size.html:6
+msgid "Folder"
+msgstr "Папка"
+
+#: folders.php:273 templates/folders/folders_confirm.html:6
+msgid "Folder Actions - Confirmation"
+msgstr "Подтверждение действия с папкой"
+
+#: folders.php:336 templates/prefs/initialpageselect.inc:11
+#: templates/folders/head.html:2
+msgid "Folder Navigator"
+msgstr "Навигатор папок"
+
+#: folders.php:293 templates/folders/folders_size.html:1
+msgid "Folder Sizes"
+msgstr "Размер папок"
+
+# fuzzy
+#: lib/Block/summary.php:3
+msgid "Folder Summary"
+msgstr "Статистика"
+
+#: acl.php:25
+msgid "Folder sharing is not enabled."
+msgstr "Общие папки не разрешены."
+
+#: folders.php:46
+msgid "Folder use is not enabled."
+msgstr "Использование папок не разрешено."
+
+# fuzzy
+#: config/prefs.php.dist:635
+msgid "Font Color"
+msgstr "Цвет шрифта"
+
+#: config/prefs.php.dist:1265
+msgid "Format of message dates in the mailbox view for messages dated today"
+msgstr "Формат отображения даты для сообщений, пришедших сегодня"
+
+#: mailbox.php:533 message.php:569 lib/Compose.php:1823
+msgid "Forward"
+msgstr "Переслать"
+
+#: lib/Compose.php:1809
+msgid "Forward:"
+msgstr "Переслать:"
+
+#: lib/Compose.php:1924
+msgid "Forwarded Message:"
+msgstr "Пресылаемое сообщение:"
+
+#: lib/Compose.php:1836
+msgid "Forwarded message"
+msgstr "Пересылаемое сообщение"
+
+#: lib/Compose.php:1834
+#, php-format
+msgid "Forwarded message from %s"
+msgstr "Переправленое сообщение от %s"
+
+#: lib/MIME/Viewer/itip.php:437
+msgid "Free/Busy Request Response"
+msgstr "Ответ на запрос Free/Busy"
+
+# fuzzy
+#: mailbox.php:592
+msgid "Fro_m"
+msgstr "От кого"
+
+#: lib/Search.php:711 lib/UI/Mailbox.php:99 lib/UI/Message.php:25
+#: templates/compose/compose.html:27
+msgid "From"
+msgstr "От кого"
+
+# fuzzy
+#: config/prefs.php.dist:1207
+msgid "From Address"
+msgstr "Адрес отправителя"
+
+#: templates/thread/thread.html:31
+msgid "From:"
+msgstr "От:"
+
+#: templates/saveimage/saveimage.html:12
+msgid "Gallery"
+msgstr "Галерея"
+
+# fuzzy
+#: config/prefs.php.dist:14 config/prefs.php.dist:24 config/prefs.php.dist:34
+#: config/prefs.php.dist:42
+msgid "General Options"
+msgstr "Общие настройки"
+
+#: templates/fetchmail/fetchmailprefs.html:80
+msgid "Get only new messages? (IMAP only)"
+msgstr "Получить только новые сообщения (для IMAP)"
+
+#: folders.php:396 lib/MIME/Viewer/itip.php:650 lib/MIME/Viewer/itip.php:860
+#: lib/MIME/Viewer/itip.php:991
+msgid "Go"
+msgstr "Перейти"
+
+# fuzzy
+#: thread.php:142
+msgid "Go to Message"
+msgstr "Перейти к письму"
+
+#: templates/newmsg/alert.html:11
+msgid "Go to Virtual Inbox"
+msgstr "Перейти в виртуальные входящие"
+
+# fuzzy, php-format
+# php-format
+#: lib/IMP.php:404
+#, php-format
+msgid "Go to address book entry of \"%s\""
+msgstr "Перейти к записи адресной книги \"%s\""
+
+#: message.php:448 lib/Filter.php:130 lib/MIME/Contents.php:449
+#: lib/MIME/Viewer/appledouble.php:48 lib/MIME/Viewer/images.php:90
+#: lib/MIME/Viewer/images.php:97 lib/MIME/Viewer/images.php:99
+#: lib/MIME/Viewer/notification.php:60 lib/MIME/Viewer/notification.php:67
+#: lib/MIME/Viewer/pkcs7.php:491 lib/MIME/Viewer/related.php:85
+#: lib/MIME/Viewer/status.php:119 lib/MIME/Viewer/status.php:128
+msgid "HERE"
+msgstr "ЗДЕСЬ"
+
+#: lib/Compose.php:489
+msgid "HTML Version of Message"
+msgstr "HTML-вариант сообщения"
+
+#: message.php:620
+msgid "Headers"
+msgstr "Заголовки"
+
+#: config/prefs.php.dist:669
+msgid "Help using editor"
+msgstr "Помощь по редактору"
+
+#: templates/login/recompose.html:7
+msgid "Here is the message you were composing:"
+msgstr "Сообщение, которое Вы редактировали:"
+
+# fuzzy
+#: config/prefs.php.dist:917
+msgid "Hidden"
+msgstr "Скрывать"
+
+# fuzzy
+#: config/prefs.php.dist:915
+msgid "Hidden in List Messages"
+msgstr "Скрыть в списке сообщений"
+
+# fuzzy
+#: config/prefs.php.dist:914
+msgid "Hidden in Thread View"
+msgstr "Скрывать при группировке"
+
+# fuzzy
+#: config/prefs.php.dist:916
+msgid "Hidden in Thread View and List Messages"
+msgstr "Скрыть при просмотре обсуждений и в списке сообщений"
+
+#: mailbox.php:259
+msgid "Hide Deleted"
+msgstr "Скрыть удаленные"
+
+#: folders.php:402
+msgid "Hide Unsubscribed"
+msgstr "Скрыть неподписанные"
+
+#: compose.php:1045
+msgid "High"
+msgstr "Высокий"
+
+#: message.php:294
+msgid "High Priority"
+msgstr "Высокий приоритет"
+
+#: compose.php:1044
+msgid "Highest"
+msgstr "Самый высокий"
+
+#: config/prefs.php.dist:648
+msgid "Horizontal Rule"
+msgstr "Горизонтальная линейка"
+
+#: config/prefs.php.dist:945
+msgid "How do you want to display attachments?"
+msgstr "Каким образом отображать вложения?"
+
+#: config/prefs.php.dist:1286
+msgid "How should namespaces be displayed in the folder tree view?"
+msgstr "Как отображать разные пространства имен в дереве папок?"
+
+#: config/prefs.php.dist:797
+msgid "How to attribute quoted lines in a reply"
+msgstr "Каким образом помечать вставленный в ответ оригинальный текст:"
+
+#: lib/Fetchmail/imap.php:97
+msgid "IMAP (Auto Detect Protocols)"
+msgstr "IMAP (Автоматически обнаруженный протокол)"
+
+#: lib/IMAP.php:315
+msgid "IMAP (self-signed certificate)"
+msgstr "IMAP (самоподписанный сертификат)"
+
+#: lib/IMAP/Client.php:200
+#, php-format
+msgid "IMAP Server closed the connection. Server Responded: %s"
+msgstr "IMAP сервер завершил соединение. Ответ сервера: %s"
+
+#: lib/IMAP.php:327
+msgid "IMAP over SSL"
+msgstr "IMAP через SSL"
+
+#: lib/IMAP.php:333
+msgid "IMAP over SSL (self-signed certificate)"
+msgstr "IMAP через SSL (самоподписанный сертификат)"
+
+#: lib/IMAP.php:321
+msgid "IMAP, no TLS"
+msgstr "IMAP, без TLS"
+
+#: lib/Fetchmail/imap.php:47
+msgid "IMAP/POP3 Mail Servers"
+msgstr "Сервер POP3/IMAP"
+
+#: lib/IMAP/Client.php:285
+msgid "If using SSL or TLS, you must have the PHP openssl extension loaded."
+msgstr ""
+"Если используется SSL или TLS, Вы должны иметь установленное расширение PHP "
+"openssl."
+
+# fuzzy
+#: templates/folders/folders_confirm.html:13
+msgid "If you continue, all messages in the folder(s) will be lost!"
+msgstr "Если вы продолжите, все сообщения в папке будут утеряны!"
+
+#: saveimage.php:48
+msgid "Image"
+msgstr "Картинка"
+
+#: lib/MIME/Viewer/html.php:160
+msgid "Images have been blocked to protect your privacy."
+msgstr "Картинки заблокированы в целях безопасности."
+
+# fuzzy
+#: templates/folders/import.html:17
+msgid "Import"
+msgstr "Импортировать"
+
+# fuzzy
+#: templates/smime/import_key.html:69 templates/pgp/import_key.html:48
+msgid "Import Key"
+msgstr "Импортировать ключ"
+
+# fuzzy
+#: templates/smime/smime.html:81 templates/pgp/pgp.html:131
+msgid "Import Keypair"
+msgstr "Импортировать пару"
+
+# fuzzy
+#: templates/folders/actions.html:37
+msgid "Import Messages"
+msgstr "Импортировать сообщения"
+
+#: pgp.php:50
+msgid "Import PGP Key"
+msgstr "Импортировать ключ PGP"
+
+#: templates/pgp/import_key.html:11
+msgid "Import Personal Private PGP Key"
+msgstr "Импортировать персональный личный ключ PGP"
+
+# fuzzy
+#: templates/pgp/import_key.html:18
+msgid "Import Personal Private PGP Key Here:"
+msgstr "Импортировать персональный личный ключ PGP здесь:"
+
+#: templates/pgp/import_key.html:11
+msgid "Import Personal Public PGP Key"
+msgstr "Импортировать персональный общий ключ PGP"
+
+#: templates/pgp/import_key.html:18
+msgid "Import Personal Public PGP Key Here:"
+msgstr "Импортировать персональный общий ключ PGP здесь:"
+
+#: templates/smime/import_key.html:11
+msgid "Import Personal S/MIME Certificates"
+msgstr "Импортировать персональный сертификат S/MIME"
+
+# fuzzy
+#: templates/smime/smime.html:47 templates/pgp/pgp.html:55
+msgid "Import Public Key"
+msgstr "Импортировать публичный ключ"
+
+# fuzzy
+#: templates/pgp/import_key.html:11
+msgid "Import Public PGP Key"
+msgstr "Импортировать публичный ключ PGP"
+
+# fuzzy
+#: templates/pgp/import_key.html:18
+msgid "Import Public PGP Key Here:"
+msgstr "Импортировать публичный ключ PGP здесь:"
+
+# fuzzy
+#: templates/smime/import_key.html:11
+msgid "Import Public S/MIME Key"
+msgstr "Импортировать публичный ключ S/MIME"
+
+# fuzzy
+#: smime.php:16
+msgid "Import S/MIME Key"
+msgstr "Импортировать ключ S/MIME"
+
+#: templates/folders/import.html:7
+msgid "Import mbox File"
+msgstr "Импортировать почтовый ящик"
+
+#: templates/folders/import.html:12
+msgid "Import mbox file"
+msgstr "Импортировать почтовый ящик"
+
+#: folders.php:150
+#, php-format
+msgid "Imported %d messages from %s."
+msgstr "Импортированное %d сообщение от %s."
+
+#: pgp.php:179
+msgid ""
+"Imported key contains your PGP private key. Only add your public key in the "
+"first step!"
+msgstr ""
+"Импортированный ключ содержит Ваш личный ключ PGP. Добавляйте только общий "
+"ключ на первом шаге!"
+
+#: lib/MIME/Viewer/itip.php:1029
+msgid "In Process"
+msgstr "В процессе"
+
+#: templates/prefs/initialpageselect.inc:4 lib/Folder.php:68 lib/IMP.php:733
+#: lib/IMP.php:744 lib/api.php:293 lib/IMAP/Tree.php:415
+#: lib/IMAP/Tree.php:1986
+msgid "Inbox"
+msgstr "Входящие"
+
+#: config/prefs.php.dist:785
+msgid "Include a brief summary of the header in a reply?"
+msgstr "Включать часть заголовка письма при ответе"
+
+#: config/prefs.php.dist:780
+msgid "Include body text in forward message by default?"
+msgstr "Включить текст письма при пересылке по умолчанию?"
+
+#: config/prefs.php.dist:751
+msgid "Include original message in a reply?"
+msgstr "Включать текст оригинального сообщения при ответе"
+
+#: config/prefs.php.dist:647
+msgid "Increase Indent"
+msgstr "Увеличить отступ"
+
+#: lib/MIME/Viewer/notification.php:59 lib/MIME/Viewer/status.php:131
+msgid "Info"
+msgstr "Информация"
+
+#: pgp.php:418 smime.php:319
+#, php-format
+msgid "Information on %s Public Key"
+msgstr "Информация о %s общем ключе"
+
+#: pgp.php:449
+msgid "Information on Personal Private Key"
+msgstr "Информация о персональном личном ключе"
+
+#: pgp.php:443 smime.php:344
+msgid "Information on Personal Public Key"
+msgstr "Информация о персональном общем ключе"
+
+# fuzzy
+#: templates/javascript_defs.php:37 templates/compose/compose.html:277
+#: templates/compose/compose.html:336
+msgid "Inline"
+msgstr "в текст"
+
+#: lib/IMAP/ACL/rfc2086.php:53 lib/IMAP/ACL/rfc4314.php:53
+msgid "Insert"
+msgstr "Вставить"
+
+# fuzzy, php-format
+# fuzzy
+#: templates/smime/import_key.html:19
+msgid "Insert Certificate Here:"
+msgstr "Вставить сертификат здесь:"
+
+# fuzzy
+#: config/prefs.php.dist:651
+msgid "Insert Table"
+msgstr "Вставить таблицу"
+
+#: config/prefs.php.dist:649
+msgid "Insert Web Link"
+msgstr "Вставить ссылку"
+
+#: config/prefs.php.dist:650
+msgid "Insert/Modify Image"
+msgstr "Вставить/Изменить картинку"
+
+#: config/prefs.php.dist:659
+msgid "Insert/Overwrite"
+msgstr "Вставка/Перезапись"
+
+#: lib/MIME/Viewer/itip.php:451
+msgid "Invalid Action selected for this component."
+msgstr "Выбрано неверное действие для данного компонента"
+
+#: lib/UI/Mailbox.php:62 lib/UI/Mailbox.php:113
+msgid "Invalid Address"
+msgstr "Неверный адрес"
+
+# fuzzy
+#: lib/Fetchmail/imap.php:225
+msgid "Invalid Remote Mailbox"
+msgstr "Неверная папка на стороннем сервере:"
+
+#: lib/Compose.php:1214 lib/Compose.php:1229 lib/Compose.php:1241
+#: lib/Compose.php:1256
+#, php-format
+msgid "Invalid character in e-mail address: %s."
+msgstr "Неверный символ в адресе электронной почты: %s."
+
+#: lib/Compose.php:1206
+#, php-format
+msgid "Invalid e-mail address: %s."
+msgstr "Неверный адрес электронной почты: %s."
+
+# fuzzy
+#: lib/Compose.php:1225 lib/Compose.php:1252
+msgid "Invalid hostname."
+msgstr "Неверное имя хоста."
+
+#: pgp.php:18 smime.php:101
+msgid "Invalid key"
+msgstr "Неверный ключ."
+
+#: lib/Compose.php:300
+msgid "Invalid message, cannot resume draft."
+msgstr "Неверное сообщение, невозможно восстановить черновик."
+
+#: pgp.php:215
+msgid "Invalid personal PGP private key."
+msgstr "Неверный персональный личный ключ PGP."
+
+#: pgp.php:191
+msgid "Invalid personal PGP public key."
+msgstr "Неверный персональный общий ключ PGP."
+
+#: templates/mailbox/navbar.html:12
+msgid "Invert"
+msgstr "Инвертировать"
+
+#: config/prefs.php.dist:632
+msgid "Italic"
+msgstr "Наклонный"
+
+#: config/prefs.php.dist:641
+msgid "Justify Center"
+msgstr "Выровнять по центру"
+
+#: config/prefs.php.dist:643
+msgid "Justify Full"
+msgstr "Растянуть"
+
+#: config/prefs.php.dist:640
+msgid "Justify Left"
+msgstr "Выровнять по левому краю"
+
+#: config/prefs.php.dist:642
+msgid "Justify Right"
+msgstr "Выровнять по правому краю"
+
+#: templates/compose/compose.html:317 templates/compose/compose.html:325
+msgid "KB"
+msgstr "кб"
+
+#: templates/pgp/pgp.html:107
+msgid "Key Length:"
+msgstr "Длина ключа:"
+
+#: pgp.php:463
+msgid ""
+"Key generation may take a long time to complete.  Continue with key "
+"generation?"
+msgstr "Генерация ключей может занять определенное время. Сгенерировать ключи?"
+
+#: templates/smime/smime.html:42 templates/pgp/pgp.html:50
+msgid "Key import is not available. File upload is not enabled on this server."
+msgstr "Импорт ключа невозможен. Выгрузка файлов не разрешена на этом сервере."
+
+#: templates/smime/smime.html:45 templates/pgp/pgp.html:53
+msgid ""
+"Key import is not available. You have no address book defined to add your "
+"contacts."
+msgstr ""
+"Импорт ключа невозможен. Вы не определили адресную книгу для добавления "
+"контактов."
+
+#: pgp.php:355
+msgid "Key successfully sent to the public keyserver."
+msgstr "Ключ успешно послан на публичный сервер"
+
+#: templates/login/login.html:116
+msgid "Language"
+msgstr "Язык"
+
+#: login.php:299
+msgid "Language:"
+msgstr "Язык:"
+
+# fuzzy
+#: config/prefs.php.dist:1195
+msgid "Last Mailbox Page"
+msgstr "Последняя страница"
+
+#: mailbox.php:290
+msgid "Last Page"
+msgstr "Последняя страница"
+
+# fuzzy
+# fuzzy
+#: compose.php:1207
+msgid "Link Attachments?"
+msgstr "Отправлять вложения как ссылки"
+
+#: attachment.php:35 lib/Compose.php:2629
+msgid "Linked attachments are forbidden."
+msgstr "Связанные вложения запрещены."
+
+#: lib/Compose.php:2645
+#, php-format
+msgid "Links will expire on %s"
+msgstr "Ссылка устареет в %s"
+
+#: lib/IMAP/ACL/rfc2086.php:49 lib/IMAP/ACL/rfc4314.php:49
+msgid "List"
+msgstr "Список"
+
+#: config/prefs.php.dist:1384
+msgid ""
+"List all contacts when loading the contacts screen? (if disabled, you will "
+"only see contacts that you search for explicitly)"
+msgstr "Отображать в адресной книге все контакты?"
+
+#: config/prefs.php.dist:942
+msgid "Listing in the Header"
+msgstr "В заголовке сообщения"
+
+#: compose.php:817
+msgid "Loading..."
+msgstr "Загрузка..."
+
+# fuzzy
+#: templates/fetchmail/fetchmailprefs.html:72
+msgid "Local Mailbox:"
+msgstr "Папка на локальном сервере:"
+
+#: lib/MIME/Viewer/itip.php:804
+msgid "Location"
+msgstr "Расположение"
+
+#: templates/login/mobile.inc:3 templates/login/mobile.inc:37
+msgid "Log in"
+msgstr "Вход"
+
+#: lib/Block/summary.php:45
+#, php-format
+msgid "Log in to %s"
+msgstr "Войти в %s"
+
+#: login.php:426
+msgid "Login"
+msgstr "Вход"
+
+# fuzzy
+#: config/prefs.php.dist:43
+msgid "Login Tasks"
+msgstr "Вход"
+
+#: compose.php:1047
+msgid "Low"
+msgstr "Низкий"
+
+#: message.php:298
+msgid "Low Priority"
+msgstr "Низкий приоритет"
+
+#: compose.php:1048
+msgid "Lowest"
+msgstr "Самый низкий"
+
+#: lib/MIME/Viewer/appledouble.php:51
+msgid "Macintosh File"
+msgstr "Файл Macintosh"
+
+#: config/prefs.php.dist:130
+msgid "Mail Previews"
+msgstr "Предварительный просмотр сообщения"
+
+#: templates/fetchmail/fetchmailprefs.html:31
+msgid "Mail server type to connect to:"
+msgstr "Тип стороннего почтового сервера:"
+
+#: lib/IMAP/Tree.php:1993 lib/IMAP/Tree.php:2020
+msgid "Mailbox"
+msgstr "Ящики"
+
+#: config/prefs.php.dist:148
+msgid "Mailbox and Folder Display Options"
+msgstr "Параметры отображения папок"
+
+#: lib/IMAP/ACL/rfc2086.php:52 lib/IMAP/ACL/rfc4314.php:52
+msgid "Mark (Other)"
+msgstr "Отметить (Прочее)"
+
+#: lib/IMAP/ACL/rfc2086.php:51 lib/IMAP/ACL/rfc4314.php:51
+msgid "Mark (Seen)"
+msgstr "Отметить (Просмотрено)"
+
+#: templates/folders/actions.html:32
+msgid "Mark All Messages as Seen"
+msgstr "Пометить все сообщения как прочитанные"
+
+#: templates/folders/actions.html:33
+msgid "Mark All Messages as Unseen"
+msgstr "Пометить все сообщения как непрочитанные"
+
+#: templates/message/navbar_navigate.html:6
+#: templates/message/navbar_navigate.html:8 templates/mailbox/navbar.html:27
+#: templates/mailbox/navbar.html:29
+msgid "Mark as:"
+msgstr "Отметить как:"
+
+#: config/prefs.php.dist:897
+msgid "Mark different levels of quoting with different colors?"
+msgstr "Выделять цветами разные уровни цитирования"
+
+#: templates/fetchmail/fetchmailprefs.html:83
+msgid "Mark messages as seen? (IMAP only)"
+msgstr "Пометить сообщения как прочитанные (для IMAP)"
+
+#: config/prefs.php.dist:905
+msgid "Mark simple markup?"
+msgstr "Помечать простую разметку?"
+
+#: search.php:165
+msgid "Match All Queries"
+msgstr "По ВСЕМ критериям"
+
+#: search.php:163
+msgid "Match Any Query"
+msgstr "По ЛЮБОМУ критерию"
+
+#: config/prefs.php.dist:627
+msgid "Maximize/Minimize Editor"
+msgstr "Развернуть/Свернуть редактор"
+
+# fuzzy
+#: templates/compose/compose.html:283
+msgid "Maximum Attachment Size"
+msgstr "Максимальный размер вложений"
+
+#: lib/api.php:101
+msgid "Maximum Number of Folders"
+msgstr "Максимальное количество папок"
+
+# fuzzy
+#: lib/api.php:102
+msgid "Maximum Number of Recipients per Message"
+msgstr "Максимальное количество получателей в сообщении"
+
+# fuzzy
+#: lib/api.php:103
+msgid "Maximum Number of Recipients per Time Period"
+msgstr "Максимальное количество получателей за интервал времени"
+
+# fuzzy
+#: templates/compose/compose.html:265
+msgid "Maximum number of attachments reached."
+msgstr "Максимальное количество вложений достигнуто."
+
+# fuzzy
+#: templates/compose/compose.html:262
+msgid "Maximum total attachment size reached."
+msgstr "Максимальный общий размер вложений достигнут."
+
+#: lib/Block/tree_folders.php:3
+msgid "Menu Folder List"
+msgstr "Список папок меню"
+
+#: lib/Compose.php:1721
+msgid "Message"
+msgstr "Сообщение"
+
+#: config/prefs.php.dist:63
+msgid "Message Composition"
+msgstr "Составление сообщения"
+
+# fuzzy
+#: config/prefs.php.dist:1206
+msgid "Message Date"
+msgstr "Время отправки"
+
+# fuzzy
+#: config/prefs.php.dist:87
+msgid "Message Drafts"
+msgstr "Черновик сообщения"
+
+# fuzzy
+#: config/prefs.php.dist:62 config/prefs.php.dist:78 config/prefs.php.dist:86
+#: config/prefs.php.dist:93 config/prefs.php.dist:108
+#: config/prefs.php.dist:121 config/prefs.php.dist:129
+#: config/prefs.php.dist:138
+msgid "Message Options"
+msgstr "Настройки сообщений"
+
+#: config/prefs.php.dist:79
+msgid "Message Replies/Forwards"
+msgstr "Отправка/Пересылка сообщения"
+
+#: search.php:338
+msgid "Message Search"
+msgstr "Поиск сообщения"
+
+# fuzzy
+#: config/prefs.php.dist:1210
+msgid "Message Size"
+msgstr "Размер сообщения"
+
+#: message.php:590
+msgid "Message Source"
+msgstr "Исходник"
+
+# fuzzy
+#: config/prefs.php.dist:94
+msgid "Message Viewing"
+msgstr "Просмотр сообщения"
+
+#: lib/Compose.php:1719
+#, php-format
+msgid "Message from %s"
+msgstr "Сообщение от %s"
+
+# fuzzy
+#: lib/UI/Mailbox.php:148
+msgid "Message has attachments"
+msgstr "В сообщении есть вложения"
+
+#: lib/UI/Mailbox.php:147
+msgid "Message is encrypted"
+msgstr "Сообщение зашифровано"
+
+#: lib/UI/Mailbox.php:146
+msgid "Message is signed"
+msgstr "Сообщение подписано"
+
+#: compose.php:394 compose.php:401
+msgid "Message redirected successfully."
+msgstr "Сообщение успешно перенаправлено."
+
+# fuzzy, php-format
+#: lib/Compose.php:841
+#, php-format
+msgid "Message sent successfully, but not saved to %s"
+msgstr "Сообщение успешно отправлено, но не сохранено в %s"
+
+# fuzzy
+#: compose.php:465 compose.php:473
+msgid "Message sent successfully."
+msgstr "Сообщение успешно отправлено."
+
+# fuzzy
+#: config/prefs.php.dist:1237
+msgid "Messages per page in the mailbox view."
+msgstr "Сколько сообщений отображать на странице"
+
+#: mailbox.php:225
+msgid "Messages to"
+msgstr "Сообщения в"
+
+#: templates/login/login.html:129
+msgid "Mode"
+msgstr "Режим"
+
+#: login.php:308
+msgid "Mode:"
+msgstr "Режим:"
+
+#: templates/search/search.html:93
+msgid "Month"
+msgstr "Месяц"
+
+#: mailbox.php:485 mailbox.php:894 message.php:520 message.php:707
+msgid "Move"
+msgstr "Переместить"
+
+#: templates/prefs/sourceselect.inc:314
+msgid "Move down"
+msgstr "Переместить вниз"
+
+#: config/prefs.php.dist:867
+msgid "Move spam messages to spam folder and innocent messages to INBOX"
+msgstr "Перемещать спам в специальную папку, а не спам во Входящие"
+
+#: mailbox.php:485 mailbox.php:894 message.php:520 message.php:707
+msgid "Move to folder"
+msgstr "Переместить в папку"
+
+#: templates/prefs/sourceselect.inc:312
+msgid "Move up"
+msgstr "Переместить вверх"
+
+# fuzzy
+# fuzzy
+#: thread.php:183
+msgid "Multiple Message View"
+msgstr "Просмотр сообщений"
+
+# fuzzy
+# fuzzy
+#: templates/thread/thread.html:2
+msgid "Multiple Message View:"
+msgstr "Просмотр нескольких сообщений:"
+
+#: templates/smime/smime.html:4 templates/pgp/pgp.html:4
+#: templates/fetchmail/fetchmailprefs.html:91
+msgid "NOTE:"
+msgstr "Замечание:"
+
+#: lib/MIME/Viewer/itip.php:810 lib/MIME/Viewer/itip.php:942
+msgid "Name"
+msgstr "Имя"
+
+#: pgp.php:120
+msgid "Name and/or email cannot be empty"
+msgstr "Имя и/или адрес электронной почты не может быть пустым"
+
+#: lib/MIME/Viewer/itip.php:1034
+msgid "Needs Action"
+msgstr "Требуется Действие"
+
+#: config/prefs.php.dist:733 config/prefs.php.dist:1062
+msgid "Never"
+msgstr "Никогда"
+
+# fuzzy
+#: config/prefs.php.dist:723
+msgid "Never save attachments"
+msgstr "Никогда не сохранять вложения"
+
+# fuzzy
+#: lib/IMP.php:490
+msgid "New Folder"
+msgstr "Новая папка"
+
+# fuzzy
+# fuzzy
+#: config/prefs.php.dist:122
+msgid "New Mail"
+msgstr "Новая почта"
+
+# fuzzy
+#: compose.php:33 compose.php:253 lib/Block/tree_folders.php:35
+msgid "New Message"
+msgstr "Написать"
+
+#: mailbox.php:854 lib/MIME/Headers.php:209 lib/MIME/Headers.php:232
+#, php-format
+msgid "New Message to %s"
+msgstr "Новое сообщение для %s"
+
+#: message.php:536
+msgid "Next Message"
+msgstr "Следующее сообшение"
+
+#: mailbox.php:288
+msgid "Next Page"
+msgstr "Следующея страница"
+
+#: templates/javascript_defs.php:44 config/prefs.php.dist:828
+#: config/prefs.php.dist:1273 config/prefs.php.dist:1295
+#: templates/compose/compose.html:303
+msgid "No"
+msgstr "Нет"
+
+#: smime.php:246
+msgid "No Certificate found"
+msgstr "Сертификат не найден"
+
+#: lib/IMP.php:1462
+msgid "No Encryption"
+msgstr "Без шифрования"
+
+#: templates/smime/smime.html:26 templates/pgp/pgp.html:34
+msgid "No Keys in Keyring"
+msgstr "Нет ключей в связке"
+
+# fuzzy, php-format
+#: mailbox.php:267 rss.php:86
+#, php-format
+msgid "No Messages"
+msgstr "Нет сообщений"
+
+#: pgp.php:147
+msgid "No PGP public key imported."
+msgstr "Ключ PGP не был импортирован."
+
+#: mailbox.php:815
+msgid "No Preview Text"
+msgstr "Нет текста для предварительного просмотра"
+
+#: smime.php:171
+msgid "No S/MIME public key imported."
+msgstr "Общий ключ S/MIME не был испортирован."
+
+#: templates/prefs/soundselect.inc:5
+msgid "No Sound"
+msgstr "Без звука"
+
+#: lib/MIME/Viewer/tnef.php:91
+msgid "No attachments found."
+msgstr "Вложений не найдено."
+
+#: lib/Crypt/SMIME.php:131
+msgid "No email information located in the public key."
+msgstr "Информация об адресе электронной почты не найдена в общем ключе."
+
+#: acl.php:78
+msgid "No folder selected."
+msgstr "Не выбрана папка"
+
+#: lib/Block/summary.php:134
+msgid "No folders are being checked for new mail."
+msgstr "Нет папок, которые бы проверялись на наличие новой почты"
+
+#: folders.php:210 lib/Folder.php:423 lib/Folder.php:471
+msgid "No folders were specified"
+msgstr "Вы не указали папки"
+
+#: lib/Block/summary.php:138
+msgid "No folders with new messages"
+msgstr "Нет папок с новыми сообщениями"
+
+#: lib/Block/summary.php:136
+msgid "No folders with unseen messages"
+msgstr "Нет папок с непрочитанными сообщениями"
+
+#: lib/IMP.php:1054
+msgid "No limit"
+msgstr "Нет ограничений"
+
+#: lib/Compose.php:1757
+msgid "No message body text"
+msgstr "Нет текста сообщения"
+
+#: lib/IMAP/Client.php:476
+msgid "No message returned."
+msgstr "Не вернули сообщение."
+
+# fuzzy
+#: mailbox.php:240
+msgid "No messages matched your search."
+msgstr "Сообщений, удовлетворяющих критериям поиска, не найдено"
+
+#: pgp.php:220
+msgid "No personal PGP private key imported."
+msgstr "Персональный личный ключ PGP не импортирован."
+
+#: pgp.php:196
+msgid "No personal PGP public key imported."
+msgstr "Персональный общий ключ PGP не импортирован."
+
+#: smime.php:221
+msgid "No personal S/MIME certificates imported."
+msgstr "Персональные сертификаты S/MIME не импортированы."
+
+#: lib/MIME/Viewer/pkcs7.php:305
+msgid ""
+"No personal private key exists so the message is unable to be decrypted."
+msgstr ""
+"Отсутствует персональный личный ключ, сообщение не может быть расшифровано."
+
+#: lib/IMAP/Client.php:376
+msgid "No supported IMAP authentication method could be found."
+msgstr "Не найдено поддерживаемых методов аутентификации IMAP."
+
+#: acl.php:114
+msgid "No user specified."
+msgstr "Пользователь не указан."
+
+#: lib/MIME/Viewer/itip.php:831 lib/MIME/Viewer/itip.php:963
+msgid "Non Participant"
+msgstr "Не участник"
+
+#: templates/prefs/folderselect.inc:21 templates/prefs/sentmailselect.inc:38
+#: templates/prefs/sourceselect.inc:35 templates/prefs/spamselect.inc:20
+#: templates/prefs/trashselect.inc:23 lib/MIME/Viewer/itip.php:794
+#: lib/MIME/Viewer/itip.php:925 templates/mailbox/navbar.html:11
+msgid "None"
+msgstr "Нет"
+
+#: compose.php:1046
+msgid "Normal"
+msgstr "Нормальный"
+
+#: templates/mailbox/navbar.html:21 templates/mailbox/navbar.html:38
+msgid "Not Deleted"
+msgstr "Не удаленные"
+
+#: templates/message/navbar_navigate.html:15 templates/mailbox/navbar.html:23
+#: templates/mailbox/navbar.html:41
+msgid "Not Draft"
+msgstr "Не черновики"
+
+#: templates/message/navbar_navigate.html:11 templates/mailbox/navbar.html:17
+#: templates/mailbox/navbar.html:33
+msgid "Not Flagged"
+msgstr "Не важное"
+
+#: templates/mailbox/navbar.html:25
+msgid "Not Personal"
+msgstr "Не личное"
+
+#: lib/Crypt/PGP.php:136 lib/Crypt/SMIME.php:125 lib/Crypt/SMIME.php:140
+msgid "Not a valid public key."
+msgstr "Неверный общий ключ."
+
+# fuzzy
+#: config/prefs.php.dist:980
+msgid "Not at all"
+msgstr "Не отображать"
+
+#: lib/Maintenance/Task/fetchmail_login.php:70
+msgid "Note that this can take some time"
+msgstr "Это может занять некоторое время"
+
+# fuzzy
+#: lib/IMP.php:542
+msgid "Notepads"
+msgstr "Записные книжки"
+
+#: config/hooks.php.dist:635
+msgid "Notes"
+msgstr "Заметки"
+
+# fuzzy
+#: config/prefs.php.dist:860
+msgid "Nothing"
+msgstr "Ничего"
+
+#: attachment.php:109
+msgid "Notification: Linked attachment downloaded"
+msgstr "Примечание: загружены связанные вложения"
+
+#: config/prefs.php.dist:442
+msgid "Number of months to keep old linked attachments if deleting monthly."
+msgstr "За сколько месяцев хранить старые вложения"
+
+#: config/prefs.php.dist:396
+msgid "Number of old sent-mail folders to keep if deleting monthly."
+msgstr "За сколько месяцев хранить старые папки отправленных сообщений"
+
+#: templates/contacts/contacts.html:68
+msgid "OK"
+msgstr "OK"
+
+#: templates/smime/import_key.html:31 templates/search/search.html:61
+#: templates/pgp/import_key.html:30
+msgid "OR"
+msgstr "ИЛИ"
+
+#: lib/Maintenance/Task/delete_sentmail_monthly.php:51
+msgid "Old sent-mail folders being purged."
+msgstr "Старая папка для отправленных сообщений очищенна."
+
+#: lib/Block/summary.php:27
+msgid "Only display folders with unread messages in them?"
+msgstr "Только по папкам с непрочитанными сообщениями?"
+
+#: templates/javascript_defs.php:53
+msgid "Only one folder should be selected for this action."
+msgstr "Пожалуйста, выберите только одну папку для этой операции."
+
+# fuzzy
+#: lib/IMP.php:933 lib/IMP.php:938
+msgid "Open Fo_lder"
+msgstr "Открыть папку"
+
+#: lib/IMP.php:938
+msgid "Open Folder"
+msgstr "Открыть папку"
+
+#: lib/IMAP/Tree.php:2044
+msgid "Opened Folder"
+msgstr "Открытая папка"
+
+#: lib/MIME/Viewer/itip.php:827 lib/MIME/Viewer/itip.php:959
+msgid "Optional Participant"
+msgstr "Возможный участник"
+
+#: config/prefs.php.dist:644
+msgid "Ordered List"
+msgstr "Упорядоченный список"
+
+# fuzzy
+#: templates/fetchmail/fetchmailprefs.html:3
+msgid "Other Mail Accounts"
+msgstr "Ваши почтовые ящики на других серверах"
+
+# fuzzy
+#: config/prefs.php.dist:147 config/prefs.php.dist:160
+#: config/prefs.php.dist:169 config/prefs.php.dist:178
+#: config/prefs.php.dist:187
+msgid "Other Options"
+msgstr "Другие настройки"
+
+#: lib/IMAP/Tree.php:72
+msgid "Other Users' Folders"
+msgstr "Папки других пользователей"
+
+#: lib/api.php:178 templates/login/login.html:103
+msgid "Outbound Server"
+msgstr "Исходящий сервер"
+
+# fuzzy
+#: lib/IMP.php:1465
+msgid "PGP Encrypt Message"
+msgstr "Шифрованние PGP"
+
+# fuzzy
+#: lib/IMP.php:1470
+msgid "PGP Encrypt Message with passphrase"
+msgstr "Сообщение, зашифрованное PGP с парольной фразой"
+
+# fuzzy
+#: lib/Compose.php:1431
+msgid "PGP Error: "
+msgstr "Ошибка PGP"
+
+# fuzzy
+#: config/prefs.php.dist:179
+msgid "PGP Options"
+msgstr "Настройки PGP"
+
+#: pgp.php:30
+msgid "PGP Passphrase Input"
+msgstr "PGP Пароль"
+
+#: templates/pgp/pgp.html:69
+msgid "PGP Personal Keypair support requires a secure web connection."
+msgstr "Поддержка PGP требует защищенного соединения"
+
+# fuzzy, php-format
+#: pgp.php:159
+#, php-format
+msgid "PGP Public Key for \"%s (%s)\" was successfully added."
+msgstr "Публичный ключ PGP для %s (%s) был успешно добавлен"
+
+# fuzzy, php-format
+#: pgp.php:262
+#, php-format
+msgid "PGP Public Key for \"%s\" was successfully deleted."
+msgstr "Публичный ключ PGP для \"%s\" был успешно удален"
+
+# fuzzy
+#: templates/pgp/pgp.html:29
+msgid "PGP Public Keyring"
+msgstr "Связка публичных ключей PGP"
+
+# fuzzy
+#: lib/IMP.php:1466
+msgid "PGP Sign Message"
+msgstr "Подпись PGP"
+
+# fuzzy
+#: lib/IMP.php:1467
+msgid "PGP Sign/Encrypt Message"
+msgstr "Подпись и шифрование PGP"
+
+# fuzzy
+#: lib/IMP.php:1471
+msgid "PGP Sign/Encrypt Message with passphrase"
+msgstr "Сообщение, зашифрованное и подписанное PGP с парольной фразой"
+
+#: compose.php:737
+msgid ""
+"PGP encryption cannot be used by default as public keys cannot be found for "
+"all recipients."
+msgstr ""
+"Шифрование PGP не может быть использовано по умолчанию, потому что не для "
+"всех получателей найдены общие ключи."
+
+# fuzzy
+#: pgp.php:210
+msgid "PGP private key successfully added."
+msgstr "Секретный ключ успешно добавлен"
+
+# fuzzy
+#: pgp.php:185
+msgid "PGP public key successfully added."
+msgstr "Публичный ключ успешно добавлен"
+
+# fuzzy
+#: templates/pgp/pgp.html:138
+msgid "PGP support is disabled on this system."
+msgstr "Поддержка PGP в вашей системе не включена"
+
+#: templates/pgp/pgp.html:4
+msgid ""
+"PGP support requires popup windows to be used.  If your browser is currently "
+"set to disable popup windows, you must change this setting or else the PGP "
+"features will not work correctly."
+msgstr ""
+"Поддержка PGP использует для работы всплывающие окна. Если ваш браузер "
+"настроен на подавление всплывающих окон, вам необходимо изменить эти "
+"настройки, иначе поддержка PGP не сможет работать правильно."
+
+#: lib/Compose.php:1391
+msgid "PGP: Need passphrase for personal private key."
+msgstr "PGP требует парольную фразу для персонального личного ключа."
+
+#: lib/Compose.php:1400
+msgid "PGP: Need passphrase to encrypt your message with."
+msgstr "PGP требует парольную фразу для шифрования Вашего сообщения."
+
+#: lib/Fetchmail/imap.php:92
+msgid "POP3 (Auto Detect Protocols)"
+msgstr "POP3 (автоматически обнаруженный протокол)"
+
+#: lib/IMAP.php:285
+msgid "POP3 (self-signed certificate)"
+msgstr "POP3 (с самоподписанным сертификатом)"
+
+#: lib/IMAP.php:297
+msgid "POP3 over SSL"
+msgstr "POP3 поверх SSL"
+
+#: lib/IMAP.php:303
+msgid "POP3 over SSL (self-signed certificate)"
+msgstr "POP3 поверх SSL (с самоподписанным сертификатом)"
+
+#: lib/IMAP.php:291
+msgid "POP3, no TLS"
+msgstr "POP3, без TLS"
+
+#: mailbox.php:440
+#, php-format
+msgid "Page %d of %d"
+msgstr "Страница %d из %d"
+
+#: config/prefs.php.dist:1192
+msgid "Page with the First Unseen Message"
+msgstr "Первое непрочитанное сообщение"
+
+#: config/prefs.php.dist:1193
+msgid "Page with the Last Unseen Message"
+msgstr "Последнее непрочитанное сообщение"
+
+#: templates/mailbox/navbar.html:67
+msgid "Page:"
+msgstr "Страница:"
+
+#: message.php:688
+msgid "Part(s)"
+msgstr "Вложения"
+
+#: templates/pgp/pgp.html:122
+msgid "Passphrase (Again):"
+msgstr "Пароль (повторить):"
+
+#: pgp.php:347 smime.php:255
+msgid "Passphrase successfully unloaded."
+msgstr "Парольная фраза успешно выгружена."
+
+#: templates/smime/passphrase.html:21 templates/pgp/passphrase.html:19
+#: templates/pgp/pgp.html:117
+msgid "Passphrase:"
+msgstr "Пароль:"
+
+#: pgp.php:122
+msgid "Passphrases cannot be empty"
+msgstr "Пароль не может быть пустым"
+
+#: pgp.php:124
+msgid "Passphrases do not match"
+msgstr "Пароли не совпадают"
+
+#: lib/api.php:191 templates/login/login.html:92
+msgid "Password"
+msgstr "Пароль"
+
+# fuzzy
+#: templates/smime/import_key.html:54
+#: templates/fetchmail/fetchmailprefs.html:59
+msgid "Password:"
+msgstr "Пароль"
+
+# fuzzy
+#: templates/login/mobile.inc:17
+msgid "Password: "
+msgstr "Пароль"
+
+#: config/prefs.php.dist:658
+msgid "Paste from clipboard"
+msgstr "Вставка из буфера"
+
+#: mailbox.php:752 message.php:466 templates/mailbox/navbar.html:24
+msgid "Personal"
+msgstr "Личные"
+
+# fuzzy
+#: config/prefs.php.dist:15
+msgid "Personal Information"
+msgstr "Личные"
+
+# fuzzy
+#: pgp.php:130
+msgid "Personal PGP keypair generated successfully."
+msgstr "Персональная пара PGP ключей была успешно сгенерирована."
+
+#: pgp.php:137
+msgid "Personal PGP keys deleted successfully."
+msgstr "Личные ключи PGP успешно удалены."
+
+#: smime.php:227
+msgid "Personal S/MIME certificates NOT imported: "
+msgstr "Персональные сертификаты S/MIME НЕ были импортированы:"
+
+#: smime.php:152
+msgid "Personal S/MIME keys deleted successfully."
+msgstr "Личные сертификаты S/MIME успешно удалены."
+
+#: config/prefs.php.dist:250
+msgid "Place your signature before replies and forwards?"
+msgstr "Размещать подпись перед ответами и пересылками?"
+
+#: lib/Compose.php:486
+msgid "Plaintext Version of Message"
+msgstr "Сообщение в виде простого текста"
+
+#: templates/prefs/soundselect.inc:3
+msgid ""
+"Play a sound on new mail?  This requires your browser to support embedded "
+"sound files.  Almost all do on Windows and Mac, but other platforms may "
+"require a plugin."
+msgstr ""
+"Использовать звуковое уведомление? Это требует поддержки в браузере, возожно "
+"с помощью специальных плагинов."
+
+# fuzzy
+#: templates/javascript_defs.php:76
+msgid "Please enter a name for the new folder:"
+msgstr "Введите имя новой папки:"
+
+#: templates/javascript_defs.php:55 templates/javascript_defs.php:56
+msgid "Please enter the name of the new folder:"
+msgstr "Введите имя новой папки:"
+
+#: templates/javascript_defs.php:60
+msgid "Please enter the new name:"
+msgstr "Пожалуйста введите новое имя:"
+
+#: templates/pgp/passphrase.html:12
+msgid "Please enter the passphrase for this message."
+msgstr "Введите парольную фразу для этого сообщения:"
+
+#: templates/pgp/passphrase.html:14
+msgid ""
+"Please enter the passphrase for your PGP private key. You will only need to "
+"enter this passphrase once per session."
+msgstr ""
+"Введите пароль для вашего секретного PGP ключа. Вам необходимо вводить "
+"пароль один раз за сессию работы."
+
+#: templates/smime/passphrase.html:15
+msgid ""
+"Please enter the passphrase for your S/MIME private key. You will only need "
+"to enter this passphrase once per session."
+msgstr ""
+"Введите пароль для вашего секретного S/MIME ключа. Вам необходимо вводить "
+"пароль один раз за сессию работы."
+
+#: login.php:192
+msgid ""
+"Please log in again to resume composing your message. If you are NOT using "
+"cookies AND you are composing messages in popup windows, you will have to "
+"log in again in your main window as well. This is to keep attackers from "
+"hijacking your session ID. We apologize for any inconvenience."
+msgstr ""
+"Пожалуйста, войдите в систему снова для продолжения редактирования "
+"сообщения. Если Вы не используете куки И редактировали сообщение в отдельном "
+"окне, Вам придется также повторно войти в систему в главном окне. Это "
+"предпринято для предотвращения хищения атакующими хакерами идентификатора "
+"Вашей сессии. Надеемся на понимание."
+
+#: templates/javascript_defs.php:71
+msgid "Please provide your password."
+msgstr "Пожалуйста, укажите Ваш пароль"
+
+#: templates/javascript_defs.php:70
+msgid "Please provide your username."
+msgstr "Пожалуйста, укажите Ваши логин"
+
+#: lib/Compose.php:2819 lib/UI/Compose.php:26
+msgid "Please resolve ambiguous or invalid addresses."
+msgstr "Пожалуйста, удалите сомнительные или неправильные адреса."
+
+#: templates/javascript_defs.php:52
+msgid "Please select a folder before you perform this action."
+msgstr "Пожалуйста, выберите папку перед осуществлением действия."
+
+#: templates/javascript_defs.php:64
+msgid "Please select at least one folder to search."
+msgstr "Пожалуйста, выберите хотя бы одну папку для поиска."
+
+#: templates/compose/redirect.html:40
+msgid "Please select or edit in the box to the right:"
+msgstr "Пожалуйста, выберите или отредактируйте в окне справа:"
+
+#: config/prefs.php.dist:1306
+msgid "Poll all folders for new mail?"
+msgstr "Проверить почту в папке(ах)"
+
+#: lib/api.php:169 templates/login/login.html:67
+msgid "Port"
+msgstr "Порт"
+
+#: lib/IMAP/ACL/rfc2086.php:54 lib/IMAP/ACL/rfc4314.php:54
+msgid "Post"
+msgstr "Почта"
+
+#: config/prefs.php.dist:242
+msgid "Precede your signature with dashes ('-- ')?"
+msgstr "Отделить вашу подпись от сообщения чертой?"
+
+#: config/hooks.php.dist:651
+msgid "Preferences"
+msgstr "Настройки"
+
+#: filterprefs.php:53 pgp.php:271 smime.php:262
+msgid "Preferences successfully updated."
+msgstr "Настройки успешно обновлены."
+
+#: compose.php:1227
+msgid "Preview"
+msgstr "Предварительный просмотр"
+
+#: message.php:529
+msgid "Previous Message"
+msgstr "Предыдущее сообщение"
+
+#: mailbox.php:280
+msgid "Previous Page"
+msgstr "Предыдущая страница"
+
+#: message.php:604
+msgid "Print"
+msgstr "Печать"
+
+#: config/prefs.php.dist:655
+msgid "Print document"
+msgstr "Напечатать"
+
+#: message.php:692
+msgid "Printed By"
+msgstr "Напечатано в"
+
+#: message.php:672 lib/MIME/Viewer/itip.php:918
+msgid "Priority"
+msgstr "Приоритет"
+
+# fuzzy
+#: templates/smime/import_key.html:59
+msgid "Private Key Password:"
+msgstr "Пароль личного ключа:"
+
+#: config/prefs.php.dist:722
+msgid "Prompt every time an attachment is sent; default to NO"
+msgstr "Спрашивать каждый раз при вложении, по умолчанию НЕТ"
+
+#: config/prefs.php.dist:721
+msgid "Prompt every time an attachment is sent; default to YES"
+msgstr "Спрашивать каждый раз при вложении, по умолчанию ДА"
+
+#: config/prefs.php.dist:988
+msgid "Prompt to send read receipt when requested by the sender?"
+msgstr "Отсылать запрошенное адресатом подтверждение о прочтении?"
+
+#: lib/api.php:173 templates/login/login.html:72
+msgid "Protocol"
+msgstr "Протокол"
+
+#: login.php:290 templates/fetchmail/fetchmailprefs.html:47
+msgid "Protocol:"
+msgstr "Протокол:"
+
+#: lib/Crypt/PGP.php:491
+msgid "Public PGP keyserver support has been disabled."
+msgstr "Поддержка общих ключей PGP запрещена."
+
+# fuzzy
+#: mailbox.php:454 mailbox.php:522
+msgid "Pur_ge Deleted"
+msgstr "Очистить Корзину"
+
+#: lib/IMAP/ACL/rfc4314.php:58 templates/folders/actions.html:22
+msgid "Purge"
+msgstr "Очистить"
+
+#: mailbox.php:454 mailbox.php:522
+msgid "Purge Deleted"
+msgstr "Очистить Корзину"
+
+#: config/prefs.php.dist:461
+msgid "Purge Spam how often:"
+msgstr "Как часто очищать Спам:"
+
+#: config/prefs.php.dist:489
+msgid "Purge Trash how often:"
+msgstr "Как часто очищать корзину:"
+
+# fuzzy
+#: config/prefs.php.dist:470
+msgid "Purge messages in Spam folder older than this amount of days."
+msgstr "Удалять из Спама сообщения старше указанного количества дней"
+
+# fuzzy
+#: config/prefs.php.dist:498
+msgid "Purge messages in Trash folder older than this amount of days."
+msgstr "Удалять из корзины сообщения старше указанного количества дней"
+
+# fuzzy
+#: config/prefs.php.dist:424
+msgid "Purge messages in sent-mail folder(s) older than this amount of days."
+msgstr "Удалять из Отправленны сообщения старше указанного количества дней"
+
+# fuzzy
+#: config/prefs.php.dist:451
+msgid "Purge old messages in the Spam folder?"
+msgstr "Удалять старые сообщения из Спама?"
+
+# fuzzy
+#: config/prefs.php.dist:479
+msgid "Purge old messages in the Trash folder?"
+msgstr "Удалять старые сообщения из Корзины?"
+
+# fuzzy
+#: config/prefs.php.dist:405
+msgid "Purge old messages in the sent-mail folder(s)?"
+msgstr "Удалять старые сообщения из Отправленных?"
+
+#: config/prefs.php.dist:415
+msgid "Purge sent-mail how often:"
+msgstr "Как часто удалять Отправленные?"
+
+#: lib/Maintenance/Task/purge_spam.php:64
+#, php-format
+msgid "Purging %d messages from Spam folder."
+msgstr "Удалено %d сообщений из папки \"Спам\"."
+
+#: lib/Maintenance/Task/purge_trash.php:63
+#, php-format
+msgid "Purging %d messages from Trash folder."
+msgstr "Удалено %d сообщений из Корзины."
+
+#: lib/Maintenance/Task/purge_sentmail.php:63
+#, php-format
+msgid "Purging %d messages from sent-mail folder."
+msgstr "Удалено %d сообщений из папки \"Отправленные\"."
+
+#: lib/Maintenance/Task/purge_spam.php:62
+msgid "Purging 1 message from Spam folder."
+msgstr "Удалено сообщение из папки \"Спам\"."
+
+#: lib/Maintenance/Task/purge_trash.php:61
+msgid "Purging 1 message from Trash folder."
+msgstr "Удалено сообщение из Корзины."
+
+#: lib/Maintenance/Task/purge_sentmail.php:61
+#, php-format
+msgid "Purging 1 message from sent-mail folder %s."
+msgstr "Удалено сообщение из папки \"Отправленные\" %s"
+
+#: lib/Quota.php:64
+#, php-format
+msgid "Quota status: %.2f MB / %.2f MB  (%.2f%%)"
+msgstr "Использовано: %.2fМб из %.2fМб (%.2f%%)"
+
+#: lib/Quota.php:70
+#, php-format
+msgid "Quota status: %.2f MB / NO LIMIT"
+msgstr "Использовано: %.2f Mб / БЕЗ ОГРАНИЧЕНИЙ"
+
+#: lib/IMP.php:1052
+#, php-format
+msgid "Quota status: NO LIMIT"
+msgstr "Использовано: БЕЗ ОГРАНИЧЕНИЙ"
+
+# php-format
+#: config/prefs.php.dist:793
+#, php-format
+msgid "Quoting %f:"
+msgstr "Цитирую %f:"
+
+# fuzzy
+#: lib/IMAP/ACL/rfc2086.php:50 lib/IMAP/ACL/rfc4314.php:50
+msgid "Read"
+msgstr "Читать"
+
+#: templates/folders/actions.html:40
+msgid "Rebuild Folder Tree"
+msgstr "Перестроить дерево"
+
+#: templates/search/search.html:31
+msgid "Recent Searches"
+msgstr "Последние поиски"
+
+#: templates/search/search.html:35 templates/search/search.html:37
+msgid "Recent Searches:"
+msgstr "Последние поиски:"
+
+# fuzzy
+#: message.php:574 message.php:618
+msgid "Redirec_t"
+msgstr "Перенаправить"
+
+#: message.php:574 message.php:618
+msgid "Redirect"
+msgstr "Перенаправить"
+
+#: templates/compose/redirect.html:83
+msgid "Redirect Message"
+msgstr "Перенаправить сообщение"
+
+#: compose.php:380
+msgid "Redirect this message"
+msgstr "Перенаправить это сообщение"
+
+#: config/prefs.php.dist:653
+msgid "Redoes your last action"
+msgstr "Повторить последнее действие"
+
+#: folders.php:383
+msgid "Refresh"
+msgstr "Обновить"
+
+#: config/prefs.php.dist:1068
+msgid "Refresh Folder Views:"
+msgstr "Проверять почту на сервере:"
+
+#: mailbox.php:417
+msgid "Reload"
+msgstr "Перезагрузить"
+
+#: folders.php:373
+msgid "Reload View"
+msgstr "Перегрузить просмотр"
+
+#: lib/MIME/Viewer/itip.php:624 lib/MIME/Viewer/itip.php:643
+msgid "Remember the free/busy information."
+msgstr "Запомнить Free/Busy информацию."
+
+#: config/prefs.php.dist:1275
+msgid "Remember the last view"
+msgstr "Запомнить последнее состояние"
+
+# fuzzy
+#: templates/fetchmail/fetchmailprefs.html:68
+msgid "Remote Mailbox:"
+msgstr "Папка на стороннем сервере:"
+
+#: search.php:287
+msgid "Remove Field From Search"
+msgstr "Удалить поле из поиска"
+
+#: config/prefs.php.dist:663
+msgid "Remove formatting"
+msgstr "Удалить форматирование"
+
+#: templates/prefs/sourceselect.inc:302
+msgid "Remove source"
+msgstr "Удалить исходное"
+
+# fuzzy
+#: templates/folders/actions.html:18
+msgid "Rename"
+msgstr "Переименовать"
+
+#: config/prefs.php.dist:378
+msgid "Rename sent-mail folder at beginning of month?"
+msgstr "Переименовывать папку отправленных сообщений в начале месяца?"
+
+#: lib/Folder.php:380
+#, php-format
+msgid "Renaming \"%s\" to \"%s\" failed. This is what the server said"
+msgstr "Переименование \"%s\" в \"%s\" не удалось. Сервер пишет"
+
+#: message.php:558
+msgid "Reply"
+msgstr "Ответить"
+
+#: lib/MIME/Viewer/itip.php:342 lib/MIME/Viewer/itip.php:448
+msgid "Reply Sent."
+msgstr "Ответ отправлен."
+
+#: compose.php:349
+msgid "Reply to All:"
+msgstr "Ответить всем:"
+
+#: compose.php:351
+msgid "Reply to List:"
+msgstr "Ответить всем:"
+
+#: lib/MIME/Viewer/itip.php:626 lib/MIME/Viewer/itip.php:635
+#: lib/MIME/Viewer/itip.php:645
+msgid "Reply with Not Supported Message"
+msgstr "Ответить с неподдерижваемем сообщением"
+
+#: lib/MIME/Viewer/itip.php:633
+msgid "Reply with free/busy for next 2 months."
+msgstr "Ответить с статусом Free/Busy на следующие 2 месяца"
+
+#: lib/MIME/Viewer/itip.php:632
+msgid "Reply with requested free/busy information."
+msgstr "Ответить с запрошенной информацией Free/Busy"
+
+# fuzzy
+#: lib/UI/Message.php:29
+msgid "Reply-To"
+msgstr "Кому ответить:"
+
+#: lib/Compose.php:2000
+msgid "Reply-To: "
+msgstr "Ответить"
+
+#: compose.php:347
+msgid "Reply:"
+msgstr "Ответить:"
+
+#: mailbox.php:544 message.php:615
+msgid "Report as Innocent"
+msgstr "Отметить как не-спам"
+
+#: mailbox.php:538 message.php:609
+msgid "Report as Spam"
+msgstr "Отправить сообщение о спаме"
+
+# fuzzy
+#: compose.php:1145
+msgid "Request a _Read Receipt"
+msgstr "Запросить подтверждение получения"
+
+# fuzzy
+#: config/prefs.php.dist:736
+msgid "Request read receipts?"
+msgstr "Запросить подтверждение получения?"
+
+#: mailbox.php:115
+msgid "Requested message not found."
+msgstr "Запрошенное сообщение не найдено."
+
+#: lib/MIME/Viewer/itip.php:819 lib/MIME/Viewer/itip.php:951
+msgid "Required Participant"
+msgstr "Запрошенный участиник"
+
+#: templates/search/search.html:26 templates/search/search.html:183
+#: templates/acl/acl.html:80
+msgid "Reset"
+msgstr "Сбросить"
+
+#: lib/MIME/Viewer/itip.php:117
+msgid "Respondent Status Updated."
+msgstr "Статус Респондента выгружен."
+
+#: message.php:597
+msgid "Resume"
+msgstr "Продолжить"
+
+#: lib/UI/Compose.php:154
+msgid "Resume Editing"
+msgstr "Продолжить правку"
+
+#: login.php:193
+msgid "Resume your session"
+msgstr "Продолжить сессию"
+
+# fuzzy
+#: templates/fetchmail/fetchmailprefs.html:125
+msgid "Return to Fetch Mail"
+msgstr "Вернуться к настройкам"
+
+#: templates/folders/folders_size.html:30
+msgid "Return to Folders"
+msgstr "Вернуться к папкам"
+
+# fuzzy
+#: stationery.php:143
+msgid "Return to Message Composition"
+msgstr "Вернуться к созданию сообщения"
+
+#: filterprefs.php:66 templates/smime/smime.html:13
+#: templates/smime/smime.html:93 templates/pgp/pgp.html:21
+#: templates/pgp/pgp.html:145 templates/acl/acl.html:35
+#: templates/acl/acl.html:81 templates/acl/acl.html:95
+msgid "Return to Options"
+msgstr "Вернуться к настройкам"
+
+#: config/prefs.php.dist:1003
+msgid ""
+"Return to the mailbox listing after deleting, moving, or copying a message?"
+msgstr "Отобразить почтовый ящик после удаления или перемещения сообщения"
+
+#: acl.php:120
+#, php-format
+msgid "Rights for user \"%s\" cannot be modified."
+msgstr "Права пользователя \"%s\" не могут быть модифицированы."
+
+#: lib/MIME/Viewer/itip.php:810 lib/MIME/Viewer/itip.php:942
+msgid "Role"
+msgstr "Сценарий"
+
+# fuzzy
+#: smime.php:67 lib/MIME/Viewer/pkcs7.php:173 lib/MIME/Viewer/pkcs7.php:296
+#: lib/MIME/Viewer/pkcs7.php:492
+msgid "S/MIME"
+msgstr "Настройки S/MIME"
+
+#: lib/IMP.php:1475
+msgid "S/MIME Encrypt Message"
+msgstr "Зашифрованное сообщение S/MIME"
+
+#: lib/Compose.php:1463
+msgid "S/MIME Error: "
+msgstr "Ошибка S/MIME:"
+
+#: lib/Compose.php:1442
+msgid "S/MIME Error: Need passphrase for personal private key."
+msgstr ""
+"Ошибка S/MIME: Требуется парольная фраза для персонального личного ключа."
+
+# fuzzy
+#: config/prefs.php.dist:188
+msgid "S/MIME Options"
+msgstr "Настройки S/MIME"
+
+#: smime.php:54
+msgid "S/MIME Passphrase Input"
+msgstr "Ввод парольной фразы S/MIME"
+
+#: templates/smime/smime.html:61
+msgid "S/MIME Personal Keypair support requires a secure web connection."
+msgstr ""
+"Поддержка персональных пар ключей S/MIME требует защищенного соединения."
+
+#: smime.php:160
+#, php-format
+msgid "S/MIME Public Key for \"%s\" was successfully deleted."
+msgstr "Общий ключ S/MIME для \"%s\" был успешно удален."
+
+#: smime.php:182
+msgid "S/MIME Public Key successfully added."
+msgstr "Общий ключ S/MIME был успешно добавлен.."
+
+# fuzzy
+#: templates/smime/smime.html:21
+msgid "S/MIME Public Keyring"
+msgstr "Связка публичных ключей S/MIME"
+
+#: smime.php:231
+msgid "S/MIME Public/Private Keypair successfully added."
+msgstr "Пара ключей S/MIME - общий и личный были успешно добавлены."
+
+#: lib/IMP.php:1476
+msgid "S/MIME Sign Message"
+msgstr "Подписать сообщение S/MIME"
+
+#: lib/IMP.php:1477
+msgid "S/MIME Sign/Encrypt Message"
+msgstr "Подписать и зашифровать сообщение S/MIME"
+
+#: templates/smime/smime.html:86
+msgid "S/MIME support is disabled on this system."
+msgstr "Поддержка S/MIME в данной системе запрещена."
+
+#: lib/MIME/Viewer/pkcs7.php:300
+msgid ""
+"S/MIME support is not currently enabled so the message is unable to be "
+"decrypted."
+msgstr ""
+"Поддержка S/MIME сейчас не разрешена, поэтому сообщение не может быть "
+"расшифровано."
+
+#: lib/MIME/Viewer/pkcs7.php:204
+msgid ""
+"S/MIME support is not enabled so the contents of this signed message cannot "
+"be displayed."
+msgstr ""
+"Поддержка S/MIME не разрешена, поэтому содержимое подписанного сообщения не "
+"может быть отображено."
+
+#: lib/MIME/Viewer/pkcs7.php:177
+msgid ""
+"S/MIME support is not enabled so the digital signature is unable to be "
+"verified."
+msgstr ""
+"Поддержка S/MIME не разрешена, поэтому цифровая подпись не может быть "
+"проверена."
+
+#: lib/MIME/Viewer/pkcs7.php:134
+msgid "S/MIME support is not enabled."
+msgstr "Поддержка S/MIME не разрешена."
+
+#: templates/smime/smime.html:4
+msgid ""
+"S/MIME support requires popup windows to be used.  If your browser is "
+"currently set to disable popup windows, you must change this setting or else "
+"the S/MIME features will not work correctly."
+msgstr ""
+"Поддержка S/MIME использует для работы всплывающие окна. Если ваш браузер "
+"настроенна подавление всплывающих окон, вам необходимо изменить эти "
+"настройки, иначе поддержка S/MIME не сможет работать правильно."
+
+#: lib/api.php:181 templates/login/login.html:107
+msgid "SMTP Port"
+msgstr "Порт SMTP"
+
+# fuzzy
+#: compose.php:1021
+msgid "S_ubject"
+msgstr "Тема"
+
+# fuzzy
+#: compose.php:1116
+msgid "Sa_ve a copy in "
+msgstr "Сохранить копию в"
+
+# fuzzy
+#: message.php:601
+msgid "Sa_ve as"
+msgstr "Сохранить как"
+
+# fuzzy
+#: templates/search/search.html:25 templates/search/search.html:182
+#: templates/fetchmail/fetchmailprefs.html:121 templates/acl/acl.html:79
+msgid "Save"
+msgstr "Сохранить как"
+
+#: compose.php:1203
+msgid "Save Attachments with message in sent-mail folder?"
+msgstr "Сохранить вложения внутри сообщений в папке отправленной почты?"
+
+#: templates/compose/compose.html:19 templates/compose/compose.html:206
+msgid "Save Draft"
+msgstr "Сохранить как черновик"
+
+#: saveimage.php:53
+msgid "Save Image"
+msgstr "Сохранить картинку"
+
+#: lib/MIME/Contents.php:262
+msgid "Save Image in Gallery"
+msgstr "Сохранить картинку в галерею"
+
+#: filterprefs.php:129 templates/smime/smime.html:12
+#: templates/smime/smime.html:92 templates/pgp/pgp.html:20
+#: templates/pgp/pgp.html:144
+msgid "Save Options"
+msgstr "Записать настройки"
+
+# fuzzy
+#: templates/stationery/stationery.html:42
+msgid "Save Stationery"
+msgstr "Сохранить"
+
+# fuzzy
+#: compose.php:934
+msgid "Save _Draft"
+msgstr "Сохранить как черновик"
+
+#: message.php:601 config/prefs.php.dist:660
+msgid "Save as"
+msgstr "Сохранить как"
+
+#: config/prefs.php.dist:819
+msgid "Save drafts as unseen?"
+msgstr "Помечать черновики как непрочитанные"
+
+#: config/prefs.php.dist:830
+msgid "Save drafts automatically while composing?"
+msgstr "Автоматически сохранять черновик во время редактирования?"
+
+# fuzzy
+#: lib/MIME/Viewer/pkcs7.php:257
+msgid "Save in your Address Book"
+msgstr "Сохранить в адресную книгу"
+
+#: config/prefs.php.dist:1374
+msgid "Save recipients automatically to the default address book?"
+msgstr "Автоматически записывать получателя в адресную книгу"
+
+#: templates/search/search.html:173
+msgid "Save search as a virtual folder?"
+msgstr "Записать результат поиска в виртуальную папку?"
+
+#: config/prefs.php.dist:258
+msgid "Save sent mail?"
+msgstr "Сохранять отправленные сообщения?"
+
+#: lib/Compose.php:251
+msgid "Saving the draft failed. Could not create a drafts folder."
+msgstr "Сохранение черновика неуспешно. Невозможно создать папку черновиков."
+
+#: lib/Compose.php:187
+msgid "Saving the draft failed. No draft folder specified."
+msgstr "Сохранение черновика неуспешно. Не указана папка черновиков."
+
+#: lib/Compose.php:218
+#, php-format
+msgid ""
+"Saving the draft failed. The %s header contains an invalid e-mail address: "
+"%s."
+msgstr ""
+"Сохранение черновика неуспешно. Заголовок %s содержит неверный адрес "
+"электронной почты: %s."
+
+#: lib/Compose.php:258
+#, php-format
+msgid "Saving the draft failed. This is what the server said: %s"
+msgstr "Ошибка записи черновика. Сервер ответил: %s"
+
+#: mailbox.php:423 search.php:147 lib/Search.php:574
+#: lib/Block/tree_folders.php:43 templates/contacts/contacts.html:25
+msgid "Search"
+msgstr "Поиск"
+
+# fuzzy, php-format
+# fuzzy, php-format
+#: mailbox.php:423 search.php:151
+#, php-format
+msgid "Search %s"
+msgstr "Искать %s"
+
+# fuzzy
+#: templates/search/search.html:46
+msgid "Search Criteria"
+msgstr "Критерии поиска"
+
+#: templates/search/search.html:137
+msgid "Search Folders"
+msgstr "Искать в папках"
+
+#: search.php:93 templates/contacts/contacts.html:31
+msgid "Search Results"
+msgstr "Результаты поиска"
+
+#: templates/search/search.html:84
+msgid "Search Text"
+msgstr "Текст для поиска"
+
+#: templates/mailbox/navbar.html:14 templates/mailbox/navbar.html:30
+msgid "Seen"
+msgstr "Прочитанные"
+
+#: lib/Search.php:787
+msgid "Seen messages"
+msgstr "Просмотренные сообщения"
+
+# fuzzy
+#: templates/fetchmail/fetchmailprefs.html:123
+msgid "Select Another Account"
+msgstr "Выбрать другой профиль:"
+
+#: search.php:278
+msgid "Select a date"
+msgstr "Выберите дату"
+
+# fuzzy
+#: templates/search/search.html:65 templates/search/search.html:68
+msgid "Select a field"
+msgstr "Выберите поле"
+
+#: templates/fetchmail/fetchmail.html:11
+msgid "Select accounts to fetch mail from:"
+msgstr "Забрать почту с указанных почтовых серверов:"
+
+# fuzzy
+#: config/prefs.php.dist:171
+msgid "Select address book sources for adding and searching for addresses."
+msgstr "Выберите адресную книгу для добавления в нее адресов."
+
+#: config/prefs.php.dist:654 templates/search/search.html:141
+msgid "Select all"
+msgstr "Выбрать все"
+
+# fuzzy
+#: templates/prefs/sourceselect.inc:321
+msgid "Select all fields to search when expanding addresses."
+msgstr "Выберите поля для поиска при разворачивании имен."
+
+# fuzzy
+#: templates/fetchmail/fetchmailprefs.html:21
+msgid "Select an account:"
+msgstr "Выберите профиль"
+
+#: templates/folders/folders.html:3
+msgid "Select mailbox"
+msgstr "Выберите почтовый ящик"
+
+#: templates/search/search.html:142
+msgid "Select none"
+msgstr "Отменить выбор"
+
+# fuzzy
+#: templates/compose/compose.html:134
+msgid "Select stationery:"
+msgstr "Выберите шаблон"
+
+# fuzzy
+#: templates/saveimage/saveimage.html:8
+msgid "Select the gallery to save the image in."
+msgstr "Выберите галерею для сохранения картинки:"
+
+#: templates/fetchmail/fetchmailprefs.html:34
+msgid "Select the mail server type:"
+msgstr "Выберите тип почтового сервера:"
+
+#: templates/mailbox/navbar.html:7 templates/mailbox/navbar.html:9
+msgid "Select:"
+msgstr "Выбрать"
+
+# fuzzy
+#: templates/prefs/sourceselect.inc:305 templates/prefs/sourceselect.inc:307
+msgid "Selected Address books:"
+msgstr "Выбранные адресные книги:"
+
+# fuzzy
+#: templates/contacts/contacts.html:47
+msgid "Selected Addresses"
+msgstr "Выбранные адресные книги:"
+
+#: pgp.php:444 templates/pgp/pgp.html:75
+msgid "Send Key to Public Keyserver"
+msgstr "Послать ключ на публичный сервер"
+
+#: lib/MIME/Viewer/itip.php:731
+msgid "Send Latest Information"
+msgstr "Отправить последнюю информацию"
+
+#: templates/compose/compose.html:17 templates/compose/compose.html:204
+msgid "Send Message"
+msgstr "Отправить сообщение"
+
+#: templates/javascript_defs.php:34
+msgid "Send message without a Subject?"
+msgstr "Отправить сообщение без темы?"
+
+#: config/prefs.php.dist:264
+msgid "Sent"
+msgstr "Отправленные"
+
+#: lib/IMAP/Tree.php:2016
+msgid "Sent mail folder"
+msgstr "Папка отправленных сообщений"
+
+#: templates/prefs/sentmailselect.inc:36
+msgid "Sent mail folder:"
+msgstr "Папка отправленных сообщений:"
+
+#: lib/api.php:166 templates/login/login.html:36 templates/login/login.html:50
+#: templates/login/login.html:62
+msgid "Server"
+msgstr "Сервер"
+
+# fuzzy
+#: config/prefs.php.dist:25
+msgid "Server and Folder Information"
+msgstr "Папки"
+
+# fuzzy
+#: login.php:282 templates/fetchmail/fetchmailprefs.html:63
+msgid "Server:"
+msgstr "Сервер"
+
+#: config/prefs.php.dist:110
+msgid "Set preferences for what happens when you move and delete messages."
+msgstr "Настройка манипуляций с удаленными или перемещенными сообщениями"
+
+#: config/prefs.php.dist:576
+msgid "Set the X-Priority header when composing messages?"
+msgstr "Установить приоритет письма при отправке"
+
+#: config/prefs.php.dist:35
+msgid "Share Folders"
+msgstr "Общие папки"
+
+#: templates/acl/acl.html:7
+msgid "Share mail folders"
+msgstr "Предоставить доступ к почтовым папкам"
+
+#: config/prefs.php.dist:36
+msgid "Share your mail folders with other users."
+msgstr "Предоставить доступ к почтовым папкам другим пользователям."
+
+#: lib/IMAP/Tree.php:70
+msgid "Shared Folders"
+msgstr "Общие папки"
+
+#: templates/pgp/pgp.html:15
+msgid "Should PGP signed messages automatically be verified when viewed?"
+msgstr "Автоматические проверять PGP подписи сообщений при просмотре?"
+
+#: templates/smime/smime.html:7
+msgid "Should S/MIME signed messages automatically be verified when viewed?"
+msgstr "Автоматически проверять подписанные S/MIME сообщения при просмотре?"
+
+#: config/prefs.php.dist:918
+msgid ""
+"Should large blocks of quoted text be shown or hidden by default? It can be "
+"toggled easily whichever you choose."
+msgstr "По умолчанию, скрывать большие блоки цитируемого текста?"
+
+#: templates/pgp/pgp.html:11
+msgid "Should the body of text/plain messages be scanned for PGP data?"
+msgstr "Искать в теле текстовых сообщений данные PGP?"
+
+#: config/prefs.php.dist:811
+msgid "Should the compose window be closed after saving a draft?"
+msgstr "Закрывать окно составления сообщения, при сохранении черновика?"
+
+#: templates/pgp/pgp.html:7
+msgid "Should your PGP public key to be attached to your messages by default?"
+msgstr ""
+"Добавлять ваш публичный ключ ко всем исходящим сообщениям по умолчанию?"
+
+#: templates/search/search.html:144
+msgid "Show All Folders"
+msgstr "Показать все папки"
+
+#: message.php:625
+msgid "Show All Headers"
+msgstr "Показать все заголовки"
+
+#: message.php:622
+msgid "Show Common Headers"
+msgstr "Показать общие заголовки"
+
+#: mailbox.php:257
+msgid "Show Deleted"
+msgstr "Показать удаленные"
+
+#: lib/MIME/Viewer/html.php:160
+msgid "Show Images?"
+msgstr "Показать картинки?"
+
+# fuzzy
+#: message.php:628
+msgid "Show Mailing List Information"
+msgstr "Показать заголовки рассылки"
+
+#: templates/search/search.html:144
+msgid "Show Only Subscribed Folders"
+msgstr "Показать только подписанные папки"
+
+#: templates/folders/actions.html:39
+msgid "Show Size"
+msgstr "Показать размер"
+
+#: folders.php:402
+msgid "Show Unsubscribed"
+msgstr "Показать неподписанные"
+
+#: config/prefs.php.dist:852
+msgid "Show an icon to allow stripping of attachments from messages?"
+msgstr "Позволять удалять вложения из писем, нажатием на иконку"
+
+#: config/prefs.php.dist:1285
+msgid "Show non-private mailboxes in separate folders"
+msgstr "Показать все публичные ящики в отдельных папках"
+
+#: config/prefs.php.dist:1129
+msgid "Show previews for unread messages only?"
+msgstr ""
+"Показывать предварительный просмотр только для непрочитанных сообщений?"
+
+#: config/prefs.php.dist:1137
+msgid "Show previews in tooltips?"
+msgstr "Показать предварительный просмотр в подсказках?"
+
+#: config/prefs.php.dist:551
+msgid "Show the Bcc: header field when composing mail?"
+msgstr "Показать заголовок BCC при составлении письма?"
+
+#: config/prefs.php.dist:542
+msgid "Show the Cc: header field when composing mail?"
+msgstr "Показать заголовок СС при составлении письма?"
+
+#: config/prefs.php.dist:1166
+msgid "Show the Fetch Mail icon on the menubar?"
+msgstr "Отобразить иконку сбора почты в верхнем меню?"
+
+#: filterprefs.php:112
+msgid "Show the filter icon on the menubar?"
+msgstr "Отобразить иконку фильтра в верхнем меню?"
+
+# fuzzy
+#: lib/MIME/Viewer/html.php:175
+msgid "Show this HTML in a new window?"
+msgstr "Отобразить HTML в отдельном окне?"
+
+# fuzzy
+#: lib/Block/summary.php:30
+msgid "Show total number of mails in folder?"
+msgstr "Показать суммарное количество писем в папке?"
+
+# fuzzy
+#: config/prefs.php.dist:913
+msgid "Shown"
+msgstr "Отображать"
+
+# fuzzy
+#: mailbox.php:607
+msgid "Si_ze"
+msgstr "Размер"
+
+#: templates/folders/folders_size.html:7
+msgid "Size"
+msgstr "Размер"
+
+#: lib/Search.php:762
+msgid "Size (KB) <"
+msgstr "Размер (кб) <"
+
+#: lib/Search.php:768
+msgid "Size (KB) >"
+msgstr "Размер (кб) >"
+
+#: templates/compose/compose.html:325
+msgid "Size:"
+msgstr "Размер:"
+
+#: mailbox.php:576
+msgid "Sort by Arrival"
+msgstr "Сортировать по времени доставки"
+
+#: mailbox.php:581
+msgid "Sort by Date"
+msgstr "Сортировать по дате"
+
+#: mailbox.php:591
+msgid "Sort by From Address"
+msgstr "Сортировать по адресу отправителя"
+
+#: mailbox.php:606
+msgid "Sort by Message Size"
+msgstr "Сортировать по размеру сообщения"
+
+#: mailbox.php:601
+msgid "Sort by Subject"
+msgstr "Сортировать по теме"
+
+#: mailbox.php:596
+msgid "Sort by Thread"
+msgstr "Сортировать по обсуждению"
+
+#: mailbox.php:586
+msgid "Sort by To Address"
+msgstr "Сортировать по адресу получателя"
+
+#: config/prefs.php.dist:332
+msgid "Spam"
+msgstr "Спам"
+
+# fuzzy
+#: lib/IMAP/Tree.php:2009
+msgid "Spam folder"
+msgstr "Папка \"Спам\""
+
+# fuzzy
+#: templates/prefs/spamselect.inc:19
+msgid "Spam folder:"
+msgstr "Нежелательные рассылки:"
+
+#: compose.php:1102
+msgid "Special Characters"
+msgstr "Специальные символы"
+
+#: search.php:40
+msgid "Special Virtual Folders cannot be edited."
+msgstr "Виртуальные папки не могут редактироваться."
+
+#: lib/UI/Compose.php:155
+msgid "Spell Check Failed"
+msgstr "Проверка орфографии неуспешна"
+
+# fuzzy
+#: config/prefs.php.dist:665
+msgid "Split Block"
+msgstr "Разбить блок"
+
+#: lib/MIME/Viewer/itip.php:599 lib/MIME/Viewer/itip.php:601
+#: lib/MIME/Viewer/itip.php:775 lib/MIME/Viewer/itip.php:777
+msgid "Start:"
+msgstr "Начало:"
+
+# fuzzy
+#: compose.php:1060 templates/stationery/stationery.html:8
+#: templates/stationery/stationery.html:12
+msgid "Stationery"
+msgstr "Шаблоны"
+
+# fuzzy
+# fuzzy
+#: stationery.php:135
+msgid "Stationery name:"
+msgstr "Название:"
+
+# fuzzy
+#: stationery.php:137
+msgid "Stationery type:"
+msgstr "Тип:"
+
+# fuzzy
+#: stationery.php:140
+msgid "Stationery:"
+msgstr "Шаблон:"
+
+#: lib/MIME/Viewer/itip.php:810 lib/MIME/Viewer/itip.php:942
+msgid "Status"
+msgstr "Статус"
+
+#: config/prefs.php.dist:634
+msgid "Strikethrough"
+msgstr "Зачеркнутый"
+
+# fuzzy
+#: message.php:685
+msgid "Strip All Attachments"
+msgstr "Удалить все вложения"
+
+# fuzzy
+#: lib/MIME/Contents.php:273
+msgid "Strip Attachment"
+msgstr "Удалить вложение"
+
+# fuzzy
+#: message.php:685
+msgid "Strip Attachments"
+msgstr "Удалить вложение"
+
+#: config/prefs.php.dist:1121
+msgid "Strip linebreaks?"
+msgstr "Удалить разрывы строк?"
+
+#: mailbox.php:602
+msgid "Sub_ject"
+msgstr "Тема"
+
+#: lib/Search.php:731 lib/UI/Message.php:30 templates/login/recompose.html:41
+msgid "Subject"
+msgstr "Тема"
+
+# fuzzy
+#: config/prefs.php.dist:1209
+msgid "Subject Field"
+msgstr "Тема сообщения"
+
+#: templates/thread/thread.html:36
+msgid "Subject:"
+msgstr "Тема:"
+
+# fuzzy
+#: templates/smime/passphrase.html:23 templates/search/search.html:25
+#: templates/search/search.html:182 templates/saveimage/saveimage.html:19
+#: templates/pgp/passphrase.html:21
+msgid "Submit"
+msgstr "Ок"
+
+# fuzzy
+#: templates/folders/actions.html:25
+msgid "Subscribe"
+msgstr "Подписать"
+
+#: config/prefs.php.dist:638
+msgid "Subscript"
+msgstr "Нижний индекс"
+
+#: lib/MIME/Viewer/pgp.php:456 lib/MIME/Viewer/pkcs7.php:452
+#: lib/MIME/Viewer/status.php:86
+msgid "Success"
+msgstr "Выполнено"
+
+# fuzzy
+#: templates/folders/folders_size.html:22
+msgid "Sum"
+msgstr "Всего"
+
+#: lib/MIME/Viewer/itip.php:792 lib/MIME/Viewer/itip.php:794
+#: lib/MIME/Viewer/itip.php:923 lib/MIME/Viewer/itip.php:925
+msgid "Summary"
+msgstr "Общее"
+
+#: config/prefs.php.dist:639
+msgid "Superscript"
+msgstr "Верхний индекс"
+
+#: compose.php:1150 compose.php:1151
+msgid "Switch Composition Method"
+msgstr "Переключить метод редактирования"
+
+#: templates/compose/compose.html:189
+msgid "Switch to HTML composition"
+msgstr "Визуальный редактор"
+
+#: templates/compose/compose.html:189
+msgid "Switch to plain text composition"
+msgstr "Переключиться в обычный режим составления сообщения"
+
+#: templates/message/navbar_navigate.html:27
+msgid "Target Folder"
+msgstr "Папка назначения"
+
+# fuzzy
+#: templates/mailbox/navbar.html:54
+msgid "Target Mailbox:"
+msgstr "Целевой почтовый ящик:"
+
+# fuzzy
+#: lib/IMP.php:525
+msgid "Task Lists"
+msgstr "Задачи"
+
+#: config/hooks.php.dist:627
+msgid "Tasks"
+msgstr "Задачи"
+
+# fuzzy
+#: compose.php:1155
+msgid "Te_xt"
+msgstr "Текст"
+
+#: lib/MIME/Viewer/itip.php:296
+msgid "Tentative: "
+msgstr "Экспериментальный:"
+
+#: lib/MIME/Viewer/itip.php:717
+msgid "Tentatively Accept request"
+msgstr "Запрос принят в порядке эксперимента"
+
+#: lib/MIME/Viewer/itip.php:1017
+msgid "Tentatively Accepted"
+msgstr "Принято в порядке эксперимента"
+
+#: lib/Maintenance/Task/tos_agreement.php:46
+#, php-format
+msgid "Terms of Service file not specified in conf.php"
+msgstr "Соглашение о сервисе не указано в conf.php"
+
+# fuzzy
+#: templates/stationery/stationery.html:31
+msgid "Text"
+msgstr "Текст"
+
+#: config/prefs.php.dist:629
+msgid "Text Font"
+msgstr "Шрифт текста"
+
+# fuzzy
+#: config/prefs.php.dist:628
+msgid "Text Format"
+msgstr "Формат текста"
+
+# fuzzy
+#: config/prefs.php.dist:630
+msgid "Text Size"
+msgstr "Размер текста"
+
+#: config/prefs.php.dist:1250
+msgid "The From: column of the message should be linked:"
+msgstr "Какое действие вызывает щелчок по адресу отправителя:"
+
+#: lib/IMAP/Client.php:434
+msgid ""
+"The IMAP server does not appear to support the authentication method "
+"selected. Please contact your system administrator."
+msgstr ""
+"Сервер IMAP видимо не поддерживает выбранный метод аутентификации. Свяжитесь "
+"с Вашим системным администратором."
+
+#: lib/MIME/Viewer/pkcs7.php:255
+#, php-format
+msgid "The S/MIME certificate of %s: "
+msgstr "Сертификат S/MIME %s:"
+
+# fuzzy, php-format
+#: fetchmailprefs.php:85
+#, php-format
+msgid "The account \"%s\" has been deleted."
+msgstr "Профиль \"%s\" был удален."
+
+# fuzzy, php-format
+#: fetchmailprefs.php:78
+#, php-format
+msgid "The account \"%s\" has been saved."
+msgstr "Профиль \"%s\" был сохранен."
+
+#: attachment.php:44
+msgid "The attachment was not found."
+msgstr "Вложение не найдено."
+
+#: config/prefs.php.dist:671
+msgid "The buttons NOT to show when using Xinha."
+msgstr "Кнопки, которые НЕ будут показаны при использовании Xinha"
+
+#: config/prefs.php.dist:617
+msgid "The buttons to show when using FCKeditor."
+msgstr "Кнопки, которые будут показаны при использовании FCKeditor"
+
+#: lib/MIME/Viewer/itip.php:70
+msgid "The calendar data is invalid"
+msgstr "Данные календаря неверные"
+
+#: lib/MIME/Viewer/appledouble.php:49
+msgid "The contents of the Macintosh file are below."
+msgstr "Содержимое файла Macintosh ниже"
+
+#: lib/Maintenance/Task/rename_sentmail_monthly.php:69
+#, php-format
+msgid "The current folder(s) \"%s\" will be renamed to \"%s\"."
+msgstr "Текущая папка(и) \"%s\" будет переименована в \"%s\"."
+
+#: templates/acl/acl.html:29
+msgid ""
+"The current list of users with access to this folder could not be retrieved."
+msgstr ""
+"Текущий список пользователей с доступом к этой папке не может быть получен."
+
+#: config/prefs.php.dist:969
+msgid "The default charset for messages with no charset information:"
+msgstr "Кодировка по умолчанию для сообщений без информации о кодировке"
+
+#: lib/Compose.php:268
+#, php-format
+msgid "The draft has been saved to the \"%s\" folder."
+msgstr "Черновик был сохранен в папку \"%s\"."
+
+#: lib/MIME/Viewer/itip.php:161
+msgid "The event was added to your calendar."
+msgstr "Событие было добавлено в Ваш календарь."
+
+#: lib/MIME/Viewer/itip.php:148
+msgid "The event was updated in your calendar."
+msgstr "Событие было обновлено в Вашем календаре."
+
+#: lib/Compose.php:2076
+#, php-format
+msgid "The file %s could not be attached."
+msgstr "Файл %s не может быть вложен."
+
+#: lib/Folder.php:284
+#, php-format
+msgid "The folder \"%s\" already exists"
+msgstr "Папка \"%s\" уже существует"
+
+#: folders.php:259 lib/Folder.php:190
+#, php-format
+msgid "The folder \"%s\" may not be deleted."
+msgstr "Папка \"%s\" не может быть удалена."
+
+#: lib/Folder.php:363
+#, php-format
+msgid "The folder \"%s\" may not be renamed."
+msgstr "Папка \"%s\" не может быть переименована."
+
+#: lib/Folder.php:306
+#, php-format
+msgid "The folder \"%s\" was created but you were not subscribed to it."
+msgstr "Папка \"%s\" была создана, но Вы не были на нее подписаны."
+
+#: lib/Folder.php:293
+#, php-format
+msgid "The folder \"%s\" was not created. This is what the server said"
+msgstr "Папка \"%s\" не была создана. Сервер ответил"
+
+#: lib/Folder.php:194
+#, php-format
+msgid "The folder \"%s\" was not deleted. This is what the server said"
+msgstr "Папка \"%s\" не была удалена. Сервер ответил"
+
+#: lib/Folder.php:309
+#, php-format
+msgid "The folder \"%s\" was successfully created."
+msgstr "Папка \"%s\" была успешно создана."
+
+#: lib/Folder.php:199
+#, php-format
+msgid "The folder \"%s\" was successfully deleted."
+msgstr "Папка \"%s\" была успешно удалена."
+
+#: lib/Folder.php:383
+#, php-format
+msgid "The folder \"%s\" was successfully renamed to \"%s\"."
+msgstr "Папка \"%s\" была успешно переименована в \"%s\"."
+
+#: lib/MIME/Viewer/tnef.php:93
+msgid "The following files were attached to this part:"
+msgstr "Следующие файлы были вложены в эту часть:"
+
+#: templates/javascript/popup.js:59
+msgid ""
+"The image save window can not be opened. Perhaps you have set your browser "
+"to block popup windows?"
+msgstr ""
+"Окно сохранения картинки не может быть открыто. Возможно, в Вашем браузере "
+"блокируются всплывающие окна?"
+
+#: config/prefs.php.dist:606
+msgid "The javascript editor to use on the compose page."
+msgstr "Javascript редактор, используемый при составлении письма"
+
+# fuzzy
+#: lib/MIME/Viewer/status.php:74
+msgid "The mail server generated the following error message:"
+msgstr "Почтовый сервер прислал следующее сообщение об ошибке:"
+
+#: lib/MIME/Viewer/notification.php:50
+msgid "The mail server generated the following informational message:"
+msgstr "Почтовый сервер отправил следующее информационное сообщение:"
+
+#: lib/MIME/Viewer/status.php:89
+msgid "The mail server generated the following message:"
+msgstr "Почтовый сервер отправил следующее сообщение:"
+
+# fuzzy, php-format
+#: lib/Message.php:796
+#, php-format
+msgid "The mailbox %s is already empty."
+msgstr "Папка \"%s\" уже пустая"
+
+#: lib/Fetchmail.php:238
+#, php-format
+msgid "The message \"%s\" from \"%s\" (%d bytes) exceeds fetch size limit."
+msgstr ""
+"Сообщение \"%s\" от \"%s\" (%d байт) превышает максимальный размер сообщения."
+
+#: templates/javascript_defs.php:48
+msgid "The message being composed has been closed. Exiting."
+msgstr "Создаваемое сообщение было закрыто. Выхожу."
+
+#: lib/MIME/Viewer/pgp.php:381
+msgid ""
+"The message below does not appear to be a valid PGP encrypted message. "
+"Error: "
+msgstr ""
+"Сообщение ниже не является правильным PGP-шифрованным сообщением. Ошибка:"
+
+#: lib/MIME/Viewer/pgp.php:252 lib/MIME/Viewer/pgp.php:416
+msgid ""
+"The message below does not appear to be in the correct PGP format (according "
+"to RFC 2015)."
+msgstr ""
+"Сообщение ниже не является сообщением в правильном формате PGP (согласно RFC "
+"2015)."
+
+# fuzzy
+#: lib/MIME/Viewer/pgp.php:376
+msgid "The message below has been compressed with PGP."
+msgstr "Это письмо было сжато с помощью PGP."
+
+#: lib/MIME/Viewer/pgp.php:201
+msgid ""
+"The message below has been digitally signed and encrypted with PGP, but the "
+"signature cannot be verified."
+msgstr ""
+"Сообщение ниже было подписано цифровой подписью и зашифровано PGP, но "
+"подпись не может быть проверена."
+
+#: lib/MIME/Viewer/pgp.php:207
+msgid "The message below has been digitally signed and encrypted with PGP."
+msgstr "Это письмо было подписано цифровой подписью и зашифровано PGP."
+
+#: lib/MIME/Viewer/pgp.php:203
+msgid ""
+"The message below has been digitally signed with PGP, but the signature "
+"cannot be verified."
+msgstr ""
+"Это письмо было подписано цифровой подписью PGP, но подпись не может быть "
+"проверена."
+
+#: lib/MIME/Viewer/pgp.php:209
+msgid "The message below has been digitally signed with PGP."
+msgstr "Это письмо было подписано цифровой подписью PGP."
+
+#: lib/MIME/Viewer/pgp.php:318
+msgid ""
+"The message below has been encrypted with PGP, however, PGP support is "
+"disabled so the message cannot be decrypted."
+msgstr ""
+"Это письмо было зашифровано PGP, тем не менее, поддержка PGP запрещена и "
+"сообщение не может быть расшифровано."
+
+#: lib/MIME/Viewer/pgp.php:360
+msgid ""
+"The message below has been encrypted with PGP, however, no personal private "
+"key exists so the message cannot be decrypted."
+msgstr ""
+"Сообщение ниже было зашифровано PGP, тем не менее, не существует "
+"персонального личного ключа и сообщение не может быть расшифровано."
+
+# fuzzy
+#: lib/MIME/Viewer/pgp.php:376
+msgid "The message below has been encrypted with PGP."
+msgstr "Это письмо было зашифровано PGP."
+
+#: lib/MIME/Viewer/pgp.php:370
+msgid ""
+"The message below has been encrypted with PGP. You must enter the passphrase "
+"for your PGP private key before it can be decrypted."
+msgstr ""
+"Это письмо было зашифровано PGP. Вы должны ввести парольную фразу Вашего "
+"ключа PGP до того, как оно будет расшифровано."
+
+#: lib/MIME/Viewer/pgp.php:353
+msgid ""
+"The message below has been encrypted with PGP. You must enter the passphrase "
+"that was used to encrypt this message."
+msgstr ""
+"Это письмо было зашифровано PGP. Вы должны ввести парольную фразу Вашего "
+"ключа PGP, который будет использоваться для расшифровки сообщения."
+
+#: lib/MIME/Viewer/pgp.php:460
+msgid "The message below has been verified."
+msgstr "Сообщение ниже было проверено."
+
+#: lib/Crypt/PGP.php:382
+msgid "The message below has not been digitally signed or encrypted with PGP."
+msgstr "Сообщение ниже не было ни подписано, ни зашифровано PGP."
+
+#: templates/javascript_defs.php:34
+msgid "The message does not have a Subject entered."
+msgstr "В сообщении отсутствует тема."
+
+#: lib/Filter.php:72 lib/Spam.php:222
+msgid "The message has been deleted."
+msgstr "Сообщение было удалено."
+
+#: lib/Spam.php:203
+msgid "The message has been reported as not spam to your system administrator."
+msgstr "Об этом письме, как о не-спаме было сообщено администратору."
+
+#: lib/Spam.php:183
+msgid "The message has been reported as not spam."
+msgstr "Об этом письме, как о не-спаме было сообщено."
+
+#: lib/Spam.php:195
+msgid "The message has been reported as spam to your system administrator."
+msgstr "Об этом письме, как о спаме было сообщено администратору."
+
+#: lib/Spam.php:175
+msgid "The message has been reported as spam."
+msgstr "Об этом письме, как о спаме было сообщено."
+
+#: lib/MIME/Viewer/pkcs7.php:457
+#, php-format
+msgid "The message has been verified. Sender: %s."
+msgstr "Сообщение было проверено. Отправитель: %s."
+
+#: lib/Filter.php:74
+msgid "The messages have been deleted."
+msgstr "Сообщение было удалено."
+
+#: lib/MIME/Viewer/tnef.php:59
+msgid "The requested file does not exist in the MS-TNEF attachment."
+msgstr "Запрошенный файл не существует во вложении MS TNEF."
+
+#: lib/MIME/Viewer/zip.php:67
+msgid "The requested file does not exist in the Zip attachment."
+msgstr "Запрошенный файл не существует во вложении Zip."
+
+#: message.php:449
+#, php-format
+msgid ""
+"The sender of this message is requesting a Message Disposition Notification "
+"from you when you have read this message. Please click %s to send the "
+"notification message."
+msgstr ""
+"Отправитель этого сообщения запросил оповещение о прочтении от Вас, когда Вы "
+"прочитате это сообщение. Нажмите %s для отправки оповещения."
+
+#: templates/javascript_defs.php:33
+msgid "The signature could not be replaced."
+msgstr "Подпись не может быть заменена."
+
+#: templates/javascript_defs.php:32
+msgid "The signature was successfully replaced."
+msgstr "Подпись успешно заменена."
+
+#: attachment.php:60
+msgid ""
+"The specified attachment does not exist. It may have been deleted by the "
+"original sender."
+msgstr "Указанное вложение не существует. Оно могло быть удалено отправителем."
+
+#: attachment.php:129
+msgid "The specified file cannot be read."
+msgstr "Указанный файл не может быть прочитан."
+
+#: stationery.php:84
+#, php-format
+msgid "The stationery \"%s\" has been added."
+msgstr "Бланк \"%s\" был добавлен."
+
+#: stationery.php:74
+#, php-format
+msgid "The stationery \"%s\" has been deleted."
+msgstr "Бланк \"%s\" был удален."
+
+#: stationery.php:87
+#, php-format
+msgid "The stationery \"%s\" has been updated."
+msgstr "Бланк \"%s\" был обновлен."
+
+#: lib/Compose.php:997
+msgid ""
+"The system is not properly configured. A detailed error description has been "
+"logged for the administrator."
+msgstr ""
+"Ошибка настроек системы. Подробности были зафиксированы в журнал для "
+"администратора."
+
+#: lib/MIME/Viewer/itip.php:192
+msgid "The task has been added to your tasklist."
+msgstr "Задача была добавлена в Ваш перечень задач."
+
+#: lib/MIME/Viewer/status.php:94
+msgid "The text of the message"
+msgstr "Текст сообщения"
+
+#: lib/MIME/Viewer/status.php:93
+#, php-format
+msgid "The text of the message can be viewed %s."
+msgstr "Текст сообщения может быть просмотрен %s."
+
+#: lib/MIME/Viewer/status.php:79
+msgid "The text of the returned message"
+msgstr "Текст извещения о возврате"
+
+# fuzzy, php-format
+#: lib/MIME/Viewer/status.php:78
+#, php-format
+msgid "The text of the returned message can be viewed %s."
+msgstr "Текст вернувшегося письма может быть просмотрен %s."
+
+#: lib/MIME/Viewer/notification.php:67
+msgid "The text of the sent message"
+msgstr "Текст отправленного сообщения"
+
+#: lib/MIME/Viewer/notification.php:67
+#, php-format
+msgid "The text of the sent message can be viewed %s."
+msgstr "Текст отправленного сообщения может быть просмотрен %s."
+
+#: lib/MIME/Viewer/itip.php:177
+msgid "The user's free/busy information was sucessfully stored."
+msgstr "Пользовательская информация Free/Busy была успешно записана."
+
+# fuzzy
+#: lib/MIME/Viewer/alternative.php:56
+msgid "There are no alternative parts that can be displayed."
+msgstr "Нет дополнительных частей, которые могут быть отображены."
+
+#: templates/mailbox/empty_mailbox.html:2
+msgid "There are no messages in this mailbox."
+msgstr "В этом ящике нет писем."
+
+#: thread.php:110
+msgid "There is no text that can be displayed inline."
+msgstr "Нет текстовых частей, которые могут быть отображены непосредственно."
+
+#: lib/Message.php:140
+#, php-format
+msgid ""
+"There was an error copying messages from \"%s\" to \"%s\". This is what the "
+"server said"
+msgstr "Ошибка копирования сообщений из \"%s\" в \"%s\". Сервер сообщил"
+
+#: lib/Message.php:270
+#, php-format
+msgid ""
+"There was an error deleting messages from the folder \"%s\". This is what "
+"the server said"
+msgstr "Ошибка при удалении писем из папки \"%s\". Сервер ответил"
+
+#: lib/MIME/Viewer/itip.php:101
+msgid "There was an error deleting the event:"
+msgstr "Ошибка удаления события:"
+
+#: lib/MIME/Viewer/enriched.php:36 lib/MIME/Viewer/plain.php:50
+msgid "There was an error displaying this message part"
+msgstr "Ошибка при отображении этой части сообщения"
+
+#: lib/Message.php:634
+#, php-format
+msgid ""
+"There was an error flagging messages in the folder \"%s\". This is what the "
+"server said"
+msgstr "Ошибка при пометке писем в папке \"%s\". Сервер ответил "
+
+#: folders.php:148
+#, php-format
+msgid "There was an error importing %s."
+msgstr "Ошибка импортирования %s."
+
+#: lib/MIME/Viewer/itip.php:158
+msgid "There was an error importing the event:"
+msgstr "Ошибка импортирования события:"
+
+#: lib/MIME/Viewer/itip.php:189
+msgid "There was an error importing the task:"
+msgstr "Ошибка импортирования задачи:"
+
+#: lib/MIME/Viewer/itip.php:175
+msgid "There was an error importing user's free/busy information:"
+msgstr "Ошибка импортирования пользовательской информации Free/Busy:"
+
+#: lib/Message.php:136
+#, php-format
+msgid ""
+"There was an error moving messages from \"%s\" to \"%s\". This is what the "
+"server said"
+msgstr "Ошибка перемещения сообщений из \"%s\" в \"%s\". Сервер сообщил"
+
+#: lib/Compose.php:755
+#, php-format
+msgid "There was an error sending your message: %s"
+msgstr "Ошибка отправки письма: %s"
+
+#: lib/MIME/Viewer/itip.php:115 lib/MIME/Viewer/itip.php:144
+msgid "There was an error updating the event:"
+msgstr "Ошибка обновления события:"
+
+#: lib/MIME/Viewer/pgp.php:166
+msgid "This PGP Public Key was attached to the message."
+msgstr "К сообщению приложен публичный PGP ключ."
+
+#: lib/MIME/Viewer/itip.php:106 lib/MIME/Viewer/itip.php:120
+#: lib/MIME/Viewer/itip.php:166 lib/MIME/Viewer/itip.php:180
+#: lib/MIME/Viewer/itip.php:196 lib/MIME/Viewer/itip.php:345
+msgid "This action is not supported."
+msgstr "Действие не поддерживается."
+
+#: lib/MIME/Viewer/itip.php:202 lib/MIME/Viewer/itip.php:458
+msgid "This action is not yet implemented."
+msgstr "Действие не реализовано."
+
+#: templates/javascript_defs.php:61
+msgid "This folder may not be renamed:"
+msgstr "Эта папка не может быть переименована:"
+
+#: templates/javascript_defs.php:58
+msgid "This may take some time. Are you sure you want to continue?"
+msgstr "Это может занять какое-то время. Вы точно хотите продолжить?"
+
+#: lib/MIME/Viewer/appledouble.php:47
+msgid "This message contains a Macintosh file."
+msgstr "Сообщение содержит файл Macintosh."
+
+#: lib/MIME/Viewer/pkcs7.php:483
+msgid ""
+"This message contains an attachment that has been digitally signed via S/"
+"MIME."
+msgstr ""
+"Это сообщение содержит вложение, которое было подписано цифровой подписью S/"
+"MIME."
+
+#: lib/MIME/Viewer/pkcs7.php:487
+msgid "This message contains an attachment that has been encrypted via S/MIME."
+msgstr "Это сообщение содержит вложение, которое было зашифровано S/MIME."
+
+#: lib/MIME/Viewer/status.php:159
+msgid ""
+"This message contains mail delivery status information, but the format of "
+"this message is unknown."
+msgstr ""
+"Это сообщение содержит информацию о статусе доставки почты, но формат "
+"сообщения статуса неопределен."
+
+#: lib/MIME/Viewer/pkcs7.php:201
+msgid "This message does not appear to be in the correct S/MIME format."
+msgstr "Это сообщение не является правильным сообщением S/MIME."
+
+#: lib/MIME/Viewer/pkcs7.php:174
+msgid "This message has been digitally signed via S/MIME."
+msgstr "Это письмо было подписано цифровой подписью S/MIME."
+
+#: lib/MIME/Viewer/pkcs7.php:170 lib/MIME/Viewer/pkcs7.php:297
+msgid "This message has been encrypted via S/MIME."
+msgstr "Это сообщение было зашифровано S/MIME."
+
+#: lib/MIME/Contents.php:449
+msgid "This message part cannot be viewed because it is too large."
+msgstr ""
+"Эта часть сообщения не может быть отображена, потому что она слишком большая."
+
+#: message.php:522
+msgid "This message to"
+msgstr "Это сообщение в"
+
+#: lib/IMP.php:338
+#, php-format
+msgid ""
+"This request cannot be completed because the link you followed or the form "
+"you submitted was only valid for %d minutes. Please try again now."
+msgstr ""
+"Запрос не может быть завершен потому что ссылка, по которой Вы проследовали, "
+"или форма, которую Вы отправили, действует только в течение %d минут. "
+"Пожалуйста, попробуйте еще раз."
+
+#: acl.php:47
+msgid "This server does not support sharing folders."
+msgstr "Сервер не поддерживает общие папки."
+
+#: templates/javascript_defs.php:49
+msgid "This window must be called from a compose window."
+msgstr "Это окно должно вызываться из окна создания сообщения."
+
+#: templates/thread/thread.html:2
+msgid "Thread Display:"
+msgstr "Отображение обсуждений:"
+
+#: thread.php:183 config/prefs.php.dist:1211
+msgid "Thread View"
+msgstr "Просморт по темам"
+
+#: lib/MIME/Viewer/pdf.php:103
+msgid "Thumbnail of attached PDF file"
+msgstr "Образ вложения в формате PDF"
+
+#: lib/MIME/Viewer/images.php:167
+msgid "Thumbnail of attached image"
+msgstr "Образ вложения картинки"
+
+#: compose.php:836 mailbox.php:587 lib/Search.php:716 lib/UI/Mailbox.php:90
+#: lib/UI/Message.php:26 templates/login/recompose.html:14
+#: templates/contacts/contacts.html:40
+msgid "To"
+msgstr "Кому"
+
+# fuzzy
+#: config/prefs.php.dist:1208
+msgid "To Address"
+msgstr "Адрес получателя"
+
+#: message.php:566
+msgid "To All"
+msgstr "Всем"
+
+# fuzzy
+#: message.php:562
+msgid "To List"
+msgstr "В список"
+
+#: message.php:559
+msgid "To Sender"
+msgstr "Отправителю"
+
+#: message.php:566
+msgid "To _All"
+msgstr "Всем"
+
+#: message.php:562
+msgid "To _List"
+msgstr "В список"
+
+#: templates/compose/redirect.html:47
+msgid "To field"
+msgstr "В поле"
+
+#: templates/prefs/sourceselect.inc:324
+msgid ""
+"To select multiple fields, hold down the Control (PC) or Command (Mac) while "
+"clicking."
+msgstr "Для выбора нескольких полей держите клавишу Ctrl"
+
+#: config/prefs.php.dist:517
+msgid "To the stationery and form responses."
+msgstr "В бланк и форму"
+
+#: lib/IMAP/Client.php:131
+msgid ""
+"To use a TLS connection, you must be running a version of PHP 5.1.0 or "
+"higher."
+msgstr ""
+"Для использования соединения TLS, на Вашем сервере должен работать PHP 5.1.0 "
+"или выше."
+
+#: thread.php:123 templates/thread/thread.html:31
+msgid "To:"
+msgstr "Кому:"
+
+#: config/prefs.php.dist:664
+msgid "Toggle Borders"
+msgstr "Показывать границы"
+
+#: config/prefs.php.dist:668
+msgid "Toggle HTML Source"
+msgstr "Показывать исходный код HTML"
+
+#: config/prefs.php.dist:688
+msgid "Top"
+msgstr "Сверху"
+
+# fuzzy
+#: templates/compose/compose.html:317
+msgid "Total Size:"
+msgstr "Общий размер:"
+
+#: login.php:263
+msgid "Traditional"
+msgstr "Классический"
+
+#: config/prefs.php.dist:317
+msgid "Trash"
+msgstr "Корзина"
+
+#: lib/IMAP/Tree.php:1996
+msgid "Trash folder"
+msgstr "Мусорная корзина"
+
+#: templates/prefs/trashselect.inc:18
+msgid "Trash folder:"
+msgstr "Мусорная корзина:"
+
+#: lib/MIME/Viewer/itip.php:144
+msgid "Trying to import the event instead."
+msgstr "Вместо этого пытаемся импортировать событие."
+
+#: lib/Quota/sql.php:73
+msgid "Unable to connect to SQL server."
+msgstr "Невозможно соединиться с SQL сервером."
+
+#: lib/Quota/command.php:91 lib/Quota/hook.php:42 lib/Quota/imap.php:42
+#: lib/Quota/logfile.php:85 lib/Quota/maildir.php:111 lib/Quota/mdaemon.php:45
+#: lib/Quota/mercury32.php:68
+msgid "Unable to retrieve quota"
+msgstr "Невозможно определить квоту"
+
+#: templates/message/navbar_navigate.html:13 templates/mailbox/navbar.html:19
+#: templates/mailbox/navbar.html:35
+msgid "Unanswered"
+msgstr "Не отвеченные"
+
+#: lib/Search.php:802
+msgid "Unanswered messages"
+msgstr "Не отвеченные сообщения"
+
+#: mailbox.php:514 message.php:553
+msgid "Undelete"
+msgstr "Восстановить"
+
+#: lib/Search.php:822
+msgid "Undeleted messages"
+msgstr "Не удаленные сообщения"
+
+#: config/prefs.php.dist:633
+msgid "Underline"
+msgstr "Подчеркнутый"
+
+#: lib/UI/Mailbox.php:67 lib/UI/Mailbox.php:86 lib/MIME/Headers.php:251
+msgid "Undisclosed Recipients"
+msgstr "Нераскрытые получатели"
+
+#: config/prefs.php.dist:652
+msgid "Undoes your last action"
+msgstr "Отменить последнее действие"
+
+#: lib/IMAP/Client.php:464
+msgid "Unexpected response from server to AUTHENTICATE command."
+msgstr "Неожиданный ответ от сервера на команду AUTHENTICATE."
+
+#: lib/IMAP/Client.php:430
+msgid "Unexpected response from server to Digest-MD5 response."
+msgstr "Нежиданный ответ от сервера на ответ Digest MD5."
+
+#: lib/Search.php:812
+msgid "Unflagged messages"
+msgstr "Не важные сообщения"
+
+#: lib/MIME/Viewer/itip.php:492
+#, php-format
+msgid "Unhandled component of type: %s"
+msgstr "Необслуживаемый компонент типа: %s"
+
+#: lib/MIME/Viewer/itip.php:813
+msgid "Unknown"
+msgstr "Неизвесно"
+
+#: lib/UI/Mailbox.php:203 lib/UI/Mailbox.php:206 lib/UI/Mailbox.php:210
+msgid "Unknown Date"
+msgstr "Неизвестная дата"
+
+#: lib/IMAP/Client.php:205
+#, php-format
+msgid "Unknown IMAP response from the server. Server Responded: %s"
+msgstr "Неизвестный ответ IMAP  от сервера. Сервер ответил: %s"
+
+#: lib/MIME/Viewer/itip.php:759
+msgid "Unknown Meeting"
+msgstr "Неизвестная встреча"
+
+#: lib/UI/Mailbox.php:105
+msgid "Unknown Recipient"
+msgstr "Неизвестный получатель"
+
+#: lib/MIME/Viewer/itip.php:903
+msgid "Unknown Task"
+msgstr "Неизвестная задача"
+
+#: pgp.php:447 smime.php:346
+msgid "Unload Passphrase"
+msgstr "Выгрузить парольную фразу"
+
+#: fetchmailprefs.php:69
+msgid "Unnamed"
+msgstr "Неназванные"
+
+#: mailbox.php:757 message.php:475 templates/message/navbar_navigate.html:9
+#: templates/mailbox/navbar.html:15 templates/mailbox/navbar.html:31
+msgid "Unseen"
+msgstr "Новые"
+
+#: lib/Search.php:792
+msgid "Unseen messages"
+msgstr "Неотвеченные сообщения"
+
+# fuzzy
+#: templates/folders/actions.html:26
+msgid "Unsubscribe"
+msgstr "Отписаться"
+
+# fuzzy
+#: templates/compose/compose.html:291
+msgid "Update"
+msgstr "Применить"
+
+#: lib/MIME/Viewer/itip.php:711 lib/MIME/Viewer/itip.php:751
+msgid "Update in my calendar"
+msgstr "Обновить в моем календаре"
+
+#: lib/MIME/Viewer/itip.php:738
+msgid "Update respondent status"
+msgstr "Обновить статус респондента"
+
+#: lib/MIME/Viewer/itip.php:725
+msgid "Update this event on my calendar"
+msgstr "Обновить событие в моем календаре"
+
+# fuzzy
+#: templates/smime/import_key.html:40 templates/pgp/import_key.html:38
+msgid "Upload:"
+msgstr "Загрузить:"
+
+#: templates/prefs/sentmailselect.inc:39
+msgid "Use Default Value"
+msgstr "Использовать значения по умолчанию"
+
+#: config/prefs.php.dist:294
+msgid "Use IMAP folder subscriptions?"
+msgstr "Использовать подписку на папки IMAP?"
+
+# fuzzy
+# fuzzy
+#: templates/prefs/trashselect.inc:24
+msgid "Use Virtual Trash"
+msgstr "Использовать виртуальную корзину"
+
+#: templates/acl/acl.html:42
+msgid "User"
+msgstr "Пользователь"
+
+#: acl.php:96 acl.php:137
+#, php-format
+msgid ""
+"User \"%s\" successfully given the specified rights for the folder \"%s\"."
+msgstr "Пользователь \"%s\" успешно дал указанные права на папку \"%s\"."
+
+#: lib/api.php:188 templates/login/login.html:85
+msgid "Username"
+msgstr "Имя пользователя"
+
+# fuzzy
+#: templates/fetchmail/fetchmailprefs.html:55
+msgid "Username:"
+msgstr "Имя пользователя"
+
+# fuzzy
+#: templates/login/mobile.inc:14
+msgid "Username: "
+msgstr "Имя пользователя"
+
+# fuzzy
+#: lib/MIME/Viewer/pkcs7.php:256 templates/smime/smime.html:35
+#: templates/smime/smime.html:67 templates/smime/smime.html:71
+#: templates/pgp/pgp.html:43 templates/pgp/pgp.html:75
+#: templates/pgp/pgp.html:80
+msgid "View"
+msgstr "Просмотр"
+
+#: lib/MIME/Viewer/tnef.php:109 lib/MIME/Viewer/zip.php:99
+#, php-format
+msgid "View %s"
+msgstr "Просмотр %s"
+
+#: pgp.php:417 smime.php:318
+#, php-format
+msgid "View %s Public Key"
+msgstr "Просмотреть %s общий ключ"
+
+#: lib/MIME/Viewer/images.php:157 lib/MIME/Viewer/images.php:162
+#: lib/MIME/Viewer/pdf.php:93 lib/MIME/Viewer/pdf.php:98
+msgid "View Attachment"
+msgstr "Просмотреть вложение"
+
+# fuzzy
+#: mailbox.php:547
+msgid "View Messages"
+msgstr "Просмотреть сообщения"
+
+#: pgp.php:448 smime.php:347
+msgid "View Personal Private Key"
+msgstr "Просмотреть персональный личный ключ"
+
+#: pgp.php:442 smime.php:343
+msgid "View Personal Public Key"
+msgstr "Просмотреть персональный общий ключ"
+
+#: message.php:577
+msgid "View Thread"
+msgstr "Просмотреть по темам"
+
+#: lib/MIME/Viewer/pkcs7.php:491
+msgid "View attachment in a separate window"
+msgstr "Просмотреть вложение в отдельном окне"
+
+#: lib/MIME/Viewer/related.php:85
+msgid "View content in a separate window"
+msgstr "Просмотреть содержимое в отдельном окне"
+
+#: lib/MIME/Viewer/itip.php:149 lib/MIME/Viewer/itip.php:162
+msgid "View event"
+msgstr "Просмотреть событие"
+
+# fuzzy, php-format
+#: folders.php:458 mailbox.php:695
+#, php-format
+msgid "View messages in %s"
+msgstr "Просмотр сообщений в %s"
+
+#: templates/prefs/initialpageselect.inc:16
+msgid "View or mailbox to display after login:"
+msgstr "Просмотр ящика после входа в систему:"
+
+#: lib/MIME/Viewer/itip.php:193
+msgid "View task"
+msgstr "Просмотреть задачу"
+
+# fuzzy
+#: mailbox.php:366 mailbox.php:367
+msgid "Virtual Folder"
+msgstr "Виртуальные папки"
+
+#: search.php:90
+#, php-format
+msgid "Virtual Folder \"%s\" created succesfully."
+msgstr "Виртуальная папка \"%s\" была успешно удалена."
+
+# fuzzy
+#: lib/IMAP/Tree.php:66 templates/search/search.html:166
+msgid "Virtual Folders"
+msgstr "Виртуальные папки"
+
+#: search.php:85
+msgid "Virtual Folders require a label."
+msgstr "Виртуальные папки требуют метку."
+
+#: lib/Search.php:441
+msgid "Virtual INBOX"
+msgstr "Виртуальные Входящие"
+
+# fuzzy
+# fuzzy
+#: lib/IMAP/Tree.php:2036
+msgid "Virtual INBOX Folder"
+msgstr "Виртуальные Входящие"
+
+# fuzzy
+# fuzzy
+#: lib/Search.php:385
+msgid "Virtual Trash"
+msgstr "Виртуальная корзина"
+
+# fuzzy
+# fuzzy
+#: lib/IMAP/Tree.php:2032
+msgid "Virtual Trash Folder"
+msgstr "Виртуальная корзина"
+
+#: templates/search/search.html:177
+msgid "Virtual folder label:"
+msgstr "Название виртуальной папки"
+
+#: lib/MIME/Viewer/pkcs7.php:446 lib/Crypt/PGP.php:382
+msgid "Warning"
+msgstr "Замечание"
+
+#: lib/IMP.php:334
+msgid ""
+"We cannot verify that this request was really sent by you. It could be a "
+"malicious request. If you intended to perform this action, you can retry it "
+"now."
+msgstr ""
+"Мы не можем проверить, что этот запрос был на самом деле отправлен Вами. Это "
+"может быть запрос, отправленный злоумышленником. Если Вы планировали "
+"выполнить это действие, Вы можете повторить его сейчас."
+
+#: login.php:196 login.php:355 templates/login/mobile.inc:11
+#, php-format
+msgid "Welcome to %s"
+msgstr "Добро пожаловать в %s"
+
+# fuzzy
+# fuzzy
+#: config/prefs.php.dist:862
+msgid ""
+"What should we do with spam messages after they have been reported as spam "
+"or innocent?"
+msgstr ""
+"Что делать с сообщением, после того как оно было помечено как спам или не "
+"спам?"
+
+#: config/prefs.php.dist:1012
+msgid ""
+"When deleting messages, move them to your Trash folder instead of marking "
+"them as deleted?"
+msgstr ""
+"При удалении сообщения, переместить его в Корзину, а не помечать как "
+"удаленное?"
+
+#: config/prefs.php.dist:1196
+msgid ""
+"When opening a new mailbox for the first time, which page do you want to "
+"start on?"
+msgstr "При открытии нового ящика, какие сообщения отобразить сразу?"
+
+#: config/prefs.php.dist:760
+msgid ""
+"When replying/forwarding to a message, should we use the same format as the "
+"original message?"
+msgstr "При ответе/пересылке письма, использовать формат оригинала?"
+
+#: config/prefs.php.dist:724
+msgid "When saving sent-mail, should we save attachment data?"
+msgstr "Сохранять вложения в исходящих сообщениях?"
+
+#: config/prefs.php.dist:680
+msgid ""
+"When sending mail or expanding addresses, what domain should we append to "
+"unqualified addresses (email addresses without \"@\")?"
+msgstr "Домен по умолчанию:"
+
+#: config/prefs.php.dist:981
+msgid "Where do you want to display links to alternative formats of a message?"
+msgstr "Где разместить ссылки на альтернативные форматы отображения сообщения?"
+
+#: config/prefs.php.dist:691
+msgid "Where should the cursor be located in the compose text area by default?"
+msgstr "Где поместить курсор в теле письма по умолчанию?"
+
+#: mailbox.php:530 message.php:585
+msgid "Whitelist"
+msgstr "Белый список"
+
+#: templates/search/search.html:105
+msgid "Year"
+msgstr "Год"
+
+#: templates/javascript_defs.php:43 config/prefs.php.dist:1274
+#: config/prefs.php.dist:1296 templates/compose/compose.html:302
+msgid "Yes"
+msgstr "Да"
+
+#: lib/Maintenance/Task/fetchmail_login.php:57
+msgid "You are about to fetch email from the following account(s):"
+msgstr "Вы получитепочту для следующих учетных записей:"
+
+# fuzzy
+#: templates/folders/folders_confirm.html:11
+msgid ""
+"You are attempting to delete all messages contained in the following folder"
+"(s)."
+msgstr "Вы пытаетесь удалить все сообщения в следующей папке:"
+
+# fuzzy
+#: templates/folders/folders_confirm.html:10
+msgid "You are attempting to delete the following folder(s)."
+msgstr "Вы пытаетесь удалить следующие папки:"
+
+#: templates/javascript_defs.php:76
+msgid "You are copying/moving to a new folder."
+msgstr "Вы копируете или перемещаете в новую папку."
+
+#: templates/javascript_defs.php:54
+msgid "You are creating a sub-folder to"
+msgstr "Вы создаете вложенную папку в "
+
+#: templates/javascript_defs.php:56
+msgid "You are creating a top-level folder."
+msgstr "Вы создаете папку верхнего уровня."
+
+#: lib/Folder.php:265
+msgid "You are not allowed to create folders."
+msgstr "Вам не разрешено создавать папки."
+
+#: lib/Folder.php:272
+#, php-format
+msgid "You are not allowed to create more than %d folders."
+msgstr "Вам не разрешено создавать более чем %d папок."
+
+#: lib/Compose.php:1010
+#, php-format
+msgid ""
+"You are not allowed to send messages to more than %d recipients within %d "
+"hours."
+msgstr ""
+"Вам не разрешено отправлять сообщения более чем %d получателям в течение %d "
+"часов."
+
+#: lib/Compose.php:1282
+#, php-format
+msgid "You are not allowed to send messages to more than %d recipients."
+msgstr "Вам не разрешено отправлять сообщения более чем %d получателям."
+
+#: templates/javascript_defs.php:59
+msgid "You are renaming the folder:"
+msgstr "Вы переименовываете папку: "
+
+#: templates/stationery/stationery.html:39
+msgid ""
+"You can use the following placeholders in the stationery text: %c for the "
+"current message content; %s for the signature."
+msgstr ""
+"Вы можете использовать следующие переменные для шаблонов: %c для "
+"содержаниясообщения, %s для подписи"
+
+#: lib/Folder.php:480
+#, php-format
+msgid "You cannot unsubscribe from \"%s\"."
+msgstr "Вы успешно отказались от подписки на \"%s\"."
+
+#: lib/Maintenance/Task/tos_agreement.php:33
+msgid ""
+"You did not agree to the Terms of Service agreement, so you were not allowed "
+"to login."
+msgstr ""
+"Вы не приняли Соглашение о Сервисе, поэтому Вы не можете войти в систему."
+
+#: templates/acl/acl.html:88
+msgid "You do not have permission to change access to this folder."
+msgstr "У Вас нет прав на изменение доступа к этой папке."
+
+#: lib/Maillog.php:130
+#, php-format
+msgid "You forwarded this message on %%s to the following recipients: %s."
+msgstr "Вы перенаправили это сообщение в %%s следующим получателям: %s."
+
+#: lib/IMP.php:1098
+#, php-format
+msgid "You have %s new messages."
+msgstr "Для Вас есть %s новых сообщений."
+
+#: lib/IMP.php:1098
+msgid "You have 1 new message."
+msgstr "Для Вас есть одно новое сообщение."
+
+#: lib/prefs.php:172
+msgid ""
+"You have activated move to Trash but no Trash folder is defined. You will be "
+"unable to delete messages until you set a Trash folder in the preferences."
+msgstr ""
+"Вы активировали перемещение в Корзину, но определили папку Корзины. Вы не "
+"сможете удалять сообщения до тех пор, пока не определите папку Корзины в "
+"настройках."
+
+#: compose.php:150
+msgid "You have already submitted this page."
+msgstr "Вы уже подписались на эту страницу."
+
+#: templates/newmsg/alert.html:3
+msgid "You have new mail in:"
+msgstr "У Вас есть новая почта в:"
+
+#: templates/fetchmail/fetchmail.html:22
+msgid "You have not configured any external mail accounts."
+msgstr "Вы не настроили ни одной внешней учетной записи почты."
+
+#: lib/Compose.php:1269
+msgid "You must enter at least one recipient."
+msgstr "Вы должны указать по крайней мере одного получателя."
+
+#: lib/MIME/Viewer/pgp.php:370
+msgid ""
+"You must enter the passphrase for your PGP private key to view this message."
+msgstr ""
+"Вы должны ввести пароль своего секретного ключа для того чтобы просмотреть "
+"сообщение"
+
+#: lib/MIME/Viewer/pkcs7.php:316
+msgid ""
+"You must enter the passphrase for your S/MIME private key to view this "
+"message"
+msgstr ""
+"Вы должны ввести парольную фразу Вашего личного ключа S/MIME для просмотра "
+"сообщения"
+
+#: lib/MIME/Viewer/pgp.php:353
+msgid "You must enter the passphrase that was used to encrypt this message."
+msgstr ""
+"Вы должны ввести парольную фразу, котооая будет использоваться для "
+"шифрования сообщения."
+
+#: templates/javascript_defs.php:77
+msgid "You must select a target mailbox first."
+msgstr "Вы должны указать сначала в какую папку."
+
+#: fetchmailprefs.php:89
+msgid "You must select an account to be deleted."
+msgstr "Вы должны выбрать учетную запись для удаления."
+
+#: templates/javascript_defs.php:47
+msgid "You must select an address first."
+msgstr "Вы должны сначала выбрать адрес."
+
+#: templates/javascript_defs.php:40 templates/javascript_defs.php:42
+msgid "You must select at least one message first."
+msgstr "Вы должны сначала выбрать по крайней мере одно сообщение."
+
+#: templates/javascript_defs.php:31
+msgid "You must specify a recipient."
+msgstr "Вы должны указать получателя."
+
+#: templates/fetchmail/fetchmailprefs.html:91
+msgid ""
+"You need to have \"Perform maintenance operations on login?\" enabled in "
+"your maintenance options."
+msgstr ""
+"Вам необходимо иметь включенной опцию 'Выполнять операции обслуживания при "
+"входе в систему' в опциях входа в Портал "
+
+#: lib/Maillog.php:138
+#, php-format
+msgid "You redirected this message to %s on %%s."
+msgstr "Вы перенаправили это сообщение к %s в %%s."
+
+# fuzzy, php-format
+#: lib/Maillog.php:142
+#, php-format
+msgid "You replied to this message on %s."
+msgstr "Вы ответили на это сообщение %s"
+
+#: lib/Folder.php:432
+#, php-format
+msgid "You were not subscribed to \"%s\". Here is what the server said"
+msgstr "Вы не были подписаны на \"%s\". Сервер ответил"
+
+#: lib/Folder.php:482
+#, php-format
+msgid "You were not unsubscribed from \"%s\". Here is what the server said"
+msgstr "Вы не смогли оказаться от подписки на \"%s\". Сервер ответил"
+
+#: lib/Folder.php:435
+#, php-format
+msgid "You were successfully subscribed to \"%s\""
+msgstr "Вы успешно подписались на \"%s\""
+
+#: lib/Folder.php:485
+#, php-format
+msgid "You were successfully unsubscribed from \"%s\""
+msgstr "Вы успешно отказались от подписки на \"%s\""
+
+#: lib/Identity/imp.php:156
+msgid ""
+"Your From address is not a valid email address. This can be fixed in your "
+"Personal Information options page."
+msgstr ""
+"Ваш адрес отправителя не является допустимым адресом электронной почты. Это "
+"может быть исправлено на странице настроек персональной информации."
+
+# fuzzy
+#: templates/pgp/pgp.html:92
+msgid "Your Name:"
+msgstr "Ваше имя:"
+
+# fuzzy
+#: templates/pgp/pgp.html:64
+msgid "Your PGP Public/Private Keys"
+msgstr "Ваши публичные/секретные ключи PGP"
+
+# fuzzy
+#: templates/smime/smime.html:70 templates/pgp/pgp.html:79
+msgid "Your Private Key:"
+msgstr "Ваш секретный ключ:"
+
+# fuzzy
+#: templates/smime/smime.html:66 templates/pgp/pgp.html:74
+msgid "Your Public Key:"
+msgstr "Ваш публичный ключ:"
+
+# fuzzy
+#: config/prefs.php.dist:202
+msgid "Your Reply-to: address: <em>(optional)</em>"
+msgstr "Ваш адрес для ответа <i>(не обязателен)</i>"
+
+#: templates/smime/smime.html:56
+msgid "Your S/MIME Public/Private Certificates"
+msgstr "Ваши публичные/секретные сертификаты S/MIME"
+
+#: fetchmail.php:22
+msgid "Your account does not support fetching external mail."
+msgstr "Ваш броузер не поддерживает получение внешней почты."
+
+# fuzzy
+#: templates/fetchmail/fetchmailprefs.html:18
+msgid "Your accounts:"
+msgstr "Ваши профили:"
+
+#: config/prefs.php.dist:210
+msgid ""
+"Your alias addresses: <em>(optional, enter each address on a new line)</em>"
+msgstr ""
+"Ваши адреса-псевдонимы <em>(не обязательны, каждый с новой строки)</em>"
+
+#: lib/MIME/Viewer/images.php:87
+msgid "Your browser does not support inline display of this image type."
+msgstr "Ваш броузер не поддерживает отображение картинок этого типа в тексте."
+
+#: config/prefs.php.dist:529
+msgid "Your browser does not support this feature."
+msgstr "Ваш браузер не поддерживает данную возможность."
+
+# fuzzy
+#: config/prefs.php.dist:702
+msgid "Your default charset for sending messages:"
+msgstr "Кодировка по умолчанию для исходящих сообщений:"
+
+#: templates/prefs/encryptselect.inc:1
+msgid "Your default encryption method for sending messages:"
+msgstr "Метод шифрования исходящих сообщений:"
+
+#: attachment.php:115
+#, php-format
+msgid ""
+"Your linked attachment has been downloaded by at least one user.\n"
+"\n"
+"Attachment name: %s\n"
+"Attachment date: %s\n"
+"\n"
+"Click on the following link to permanently delete the attachment:\n"
+"%s"
+msgstr ""
+"Ваше связанное вложение было загружено как минимум одним пользователем.\n"
+"\n"
+"Имя вложения: %s\n"
+"Дата вложения: %s\n"
+"\n"
+"Нажмите на ссылку ниже для удаления вложения навсегда:\n"
+"%s"
+
+#: lib/MIME/Viewer/status.php:88
+msgid "Your message was successfully delivered."
+msgstr "Ваше сообщение было успешно доставлено."
+
+#: config/prefs.php.dist:234
+msgid "Your signature:"
+msgstr "Ваша подпись:"
+
+#: lib/Message.php:535
+#, php-format
+msgid "[Attachment stripped: Original attachment type: %s, name: %s]"
+msgstr "[Вложение удалено: Тип оригинального вложения: %s, имя: %s]"
+
+#: templates/javascript/addressesBlocks.js:7 lib/MIME/Headers.php:261
+msgid "[Hide Addresses]"
+msgstr "[Скрыть адреса]"
+
+#: mailbox.php:719 message.php:286 rss.php:75 lib/Compose.php:1920
+#: lib/Compose.php:2398
+msgid "[No Subject]"
+msgstr "[Без темы]"
+
+#: lib/MIME/Viewer/pgp.php:170
+msgid "[Save the key to your Address book]"
+msgstr "[Сохранить ключ в Вашей адресной книге]"
+
+# fuzzy
+#: templates/javascript/addressesBlocks.js:8
+msgid "[Show Addresses -"
+msgstr "[Показать адреса -"
+
+# fuzzy
+#: lib/MIME/Headers.php:260
+#, php-format
+msgid "[Show Addresses - %d recipients]"
+msgstr "[Показать адреса - %d получателей]"
+
+#: lib/Compose.php:3044
+msgid "[Truncated Text]"
+msgstr "[Усеченный текст]"
+
+#: lib/MIME/Viewer/pgp.php:172
+msgid "[View the raw key]"
+msgstr "[Просмотреть ключ в виде неформатированного текста]"
+
+#: compose.php:970
+msgid "_Bcc"
+msgstr "Bcc"
+
+#: mailbox.php:526 message.php:581
+msgid "_Blacklist"
+msgstr "Черный список"
+
+# fuzzy
+#: compose.php:967
+msgid "_Cc"
+msgstr "Копии"
+
+# fuzzy
+#: mailbox.php:508 mailbox.php:510 message.php:555
+msgid "_Delete"
+msgstr "Удалить"
+
+#: lib/IMP.php:871
+msgid "_Folders"
+msgstr "Папки"
+
+# fuzzy
+#: compose.php:947
+msgid "_Identity"
+msgstr "Профиль"
+
+#: lib/IMP.php:840
+msgid "_Inbox"
+msgstr "Входящие"
+
+# fuzzy
+#: lib/IMP.php:908
+msgid "_Log out"
+msgstr "Выход"
+
+# fuzzy
+#: message.php:590
+msgid "_Message Source"
+msgstr "Исходник "
+
+# fuzzy
+#: lib/IMP.php:868
+msgid "_New Message"
+msgstr "Написать"
+
+# fuzzy
+#: message.php:604
+msgid "_Print"
+msgstr "Печать"
+
+#: compose.php:1039
+msgid "_Priority"
+msgstr "Приоритет"
+
+#: mailbox.php:353
+#, php-format
+msgid "_Refresh %s"
+msgstr "Обновить %s"
+
+# fuzzy
+#: message.php:558
+msgid "_Reply"
+msgstr "Ответить"
+
+# fuzzy
+#: lib/IMP.php:873
+msgid "_Search"
+msgstr "Поиск"
+
+#: compose.php:932
+msgid "_Send Message"
+msgstr "Отправить сообщение"
+
+# fuzzy
+#: mailbox.php:597
+msgid "_Thread"
+msgstr "по темам"
+
+# fuzzy
+#: compose.php:963 compose.php:965
+msgid "_To"
+msgstr "Кому"
+
+# fuzzy
+#: mailbox.php:514
+msgid "_Undelete"
+msgstr "Восстановить"
+
+#: message.php:577
+msgid "_View Thread"
+msgstr "По темам"
+
+#: mailbox.php:530 message.php:585
+msgid "_Whitelist"
+msgstr "Белый список"
+
+#: lib/Compose.php:1037
+msgid "addressee unknown"
+msgstr "адрес неизвестен"
+
+#: lib/Search.php:595
+msgid "and"
+msgstr "и"
+
+#: lib/Compose.php:2031
+msgid "attachment"
+msgstr "вложение"
+
+#: templates/compose/compose.html:283
+msgid "bytes"
+msgstr "байт"
+
+#: lib/Compose.php:1061
+msgid "cannot create output file"
+msgstr "невозможно создать выходной файл"
+
+#: lib/Compose.php:1033
+msgid "cannot open input"
+msgstr "невозможно открыть входной файл"
+
+#: lib/Compose.php:1025
+msgid "command line usage error"
+msgstr "ошибка использования командной строки"
+
+#: lib/Compose.php:1081
+msgid "configuration error"
+msgstr "ошибка конфигурации"
+
+#: lib/Compose.php:1057
+msgid "critical system file missing"
+msgstr "отсутствует критически важный системный файл"
+
+#: lib/Compose.php:1029
+msgid "data format error"
+msgstr "ошибка формата данных"
+
+#: lib/Compose.php:1085
+msgid "entry not found"
+msgstr "точка входа не найдена"
+
+#: templates/contacts/contacts.html:16
+msgid "from"
+msgstr "от"
+
+#: lib/Compose.php:1041
+msgid "host name unknown"
+msgstr "неизвестное имя хоста"
+
+#: lib/Search.php:598
+msgid "in"
+msgstr "в"
+
+#: lib/Compose.php:1065
+msgid "input/output error"
+msgstr "ошибка ввода/вывода"
+
+#: lib/Compose.php:1049
+msgid "internal software error"
+msgstr "внутренняя ошибка программы"
+
+#: templates/folders/import.html:14
+msgid "into folder"
+msgstr "в папку"
+
+#: pgp.php:84 smime.php:39
+msgid "key"
+msgstr "ключ"
+
+#: folders.php:143
+msgid "mailbox file"
+msgstr "файл почтового ящика"
+
+#: lib/Compose.php:823
+msgid "name"
+msgstr "Имя"
+
+#: lib/Search.php:590
+msgid "not"
+msgstr "Нет"
+
+#: lib/Search.php:595 templates/fetchmail/fetchmailprefs.html:26
+msgid "or"
+msgstr "или"
+
+#: lib/Compose.php:1077
+msgid "permission denied"
+msgstr "доступ запрещен"
+
+#: templates/javascript/addressesBlocks.js:8
+msgid "recipients]"
+msgstr "получателей]"
+
+#: lib/Compose.php:1073
+msgid "remote error in protocol"
+msgstr "удаленная ошибка в протоколе"
+
+#: lib/Compose.php:1045
+msgid "service unavailable"
+msgstr "сервис недоступен"
+
+#: lib/Compose.php:1053
+msgid "system error"
+msgstr "системная ошибка"
+
+#: lib/Compose.php:1069
+msgid "temporary failure"
+msgstr "временный сбой"
+
+#: lib/Filter.php:65
+msgid "your blacklist"
+msgstr "черный список"
+
+#: lib/Filter.php:91
+msgid "your whitelist"
+msgstr "белый список"

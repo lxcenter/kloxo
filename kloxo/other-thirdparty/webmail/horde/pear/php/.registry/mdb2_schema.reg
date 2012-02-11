@@ -1,0 +1,489 @@
+a:23:{s:7:"attribs";a:6:{s:15:"packagerversion";s:5:"1.7.2";s:7:"version";s:3:"2.0";s:5:"xmlns";s:35:"http://pear.php.net/dtd/package-2.0";s:11:"xmlns:tasks";s:33:"http://pear.php.net/dtd/tasks-1.0";s:9:"xmlns:xsi";s:41:"http://www.w3.org/2001/XMLSchema-instance";s:18:"xsi:schemaLocation";s:147:"http://pear.php.net/dtd/tasks-1.0 http://pear.php.net/dtd/tasks-1.0.xsd http://pear.php.net/dtd/package-2.0 http://pear.php.net/dtd/package-2.0.xsd";}s:4:"name";s:11:"MDB2_Schema";s:7:"channel";s:12:"pear.php.net";s:7:"extends";s:4:"MDB2";s:7:"summary";s:33:"XML based database schema manager";s:11:"description";s:314:"PEAR::MDB2_Schema enables users to maintain RDBMS independant schema
+files in XML that can be used to create, alter and drop database entities
+and insert data into a database. Reverse engineering database schemas from
+existing databases is also supported. The format is compatible with both
+PEAR::MDB and Metabase.";s:4:"lead";a:3:{i:0;a:4:{s:4:"name";s:17:"Lukas Kahwe Smith";s:4:"user";s:6:"lsmith";s:5:"email";s:20:"smith@pooteeweet.org";s:6:"active";s:2:"no";}i:1;a:4:{s:4:"name";s:12:"Igor Feghali";s:4:"user";s:8:"ifeghali";s:5:"email";s:16:"ifeghali@php.net";s:6:"active";s:3:"yes";}i:2;a:4:{s:4:"name";s:13:"Helgi Thormar";s:4:"user";s:5:"dufuz";s:5:"email";s:13:"dufuz@php.net";s:6:"active";s:2:"no";}}s:4:"date";s:10:"2009-02-22";s:4:"time";s:8:"19:10:46";s:7:"version";a:2:{s:7:"release";s:5:"0.8.5";s:3:"api";s:5:"0.8.0";}s:9:"stability";a:2:{s:7:"release";s:4:"beta";s:3:"api";s:4:"beta";}s:7:"license";a:2:{s:7:"attribs";a:1:{s:3:"uri";s:50:"http://www.opensource.org/licenses/bsd-license.php";}s:8:"_content";s:11:"BSD License";}s:5:"notes";s:1611:"- PEAR dependency updated (Bug #15923)
+- XML_DTD dependency updated (past releases of XML_DTD doesn't works anymore. release 0.5.1 works only with PHP 5).
+- Fixed 'disable_queries' and 'show_structure' options that were malfunctioning in mdb2_schematool web version
+- Added an option to not drop obsolete tables when updating (Request #15278). It defaults not to drop, which reverts the behavior introduced in Release 0.8.3
+
+open todo items:
+- Clean up output of getDefinitionFromDatabase(). Sync it with Parser and Parser2.
+- Automatically load reserved keywords
+- Make MDB2_Schema loadable via MDB2_Driver_Common::loadModule() (Bug #8270)
+- Allow simple if statements that mean that anything enclosed is only executed
+  if it meets certain criterias based on that version number (or some other
+  variable). This would enable people to add DML statements that are only
+  executed when updating from a specific version.
+- Modularize Writer code or remake it
+- Add specific error codes for Validate class
+- Add support for ORDER clauses on UPDATEs (to resolve the duplicate key 
+  problem)
+- Update description.schema.xml
+- Create unit test for comparedefinitions()
+- Create unit test for initializetable()
+- Create unit test to compare the expected array definition with what is parsed
+- Improve validateDataFieldValue() to validate <column>
+- Provide more info on MDB2_Schema_Validate errors (output parsed value and expected value)
+- Views support
+- Fulltext index support
+- PKs as constraints, not indices
+- Creation of constraints only after all tables have been created/updated to avoid invalid references.";s:8:"contents";a:1:{s:3:"dir";a:2:{s:7:"attribs";a:2:{s:14:"baseinstalldir";s:1:"/";s:4:"name";s:1:"/";}s:4:"file";a:39:{i:0;a:1:{s:7:"attribs";a:4:{s:14:"baseinstalldir";s:1:"/";s:6:"md5sum";s:32:"84d20bf2d1cd1ff8fd6df3510a5e8a2b";s:4:"name";s:23:"docs/examples/parse.php";s:4:"role";s:3:"doc";}}i:1;a:1:{s:7:"attribs";a:4:{s:14:"baseinstalldir";s:1:"/";s:6:"md5sum";s:32:"39b5f0bd2f409e123e22a74b9ecd00ba";s:4:"name";s:24:"docs/examples/schema.xml";s:4:"role";s:3:"doc";}}i:2;a:1:{s:7:"attribs";a:4:{s:14:"baseinstalldir";s:1:"/";s:6:"md5sum";s:32:"bfb15927b18744d0cb2f2e8bf238ad90";s:4:"name";s:27:"docs/description.schema.xml";s:4:"role";s:3:"doc";}}i:3;a:1:{s:7:"attribs";a:4:{s:14:"baseinstalldir";s:1:"/";s:6:"md5sum";s:32:"a3d9b7fd36beed4a243795a6866acac6";s:4:"name";s:12:"docs/MDB.dtd";s:4:"role";s:3:"doc";}}i:4;a:1:{s:7:"attribs";a:4:{s:14:"baseinstalldir";s:1:"/";s:6:"md5sum";s:32:"2e68b91a7651174d117bc08165244ebc";s:4:"name";s:12:"docs/MDB.xsd";s:4:"role";s:3:"doc";}}i:5;a:1:{s:7:"attribs";a:4:{s:14:"baseinstalldir";s:1:"/";s:6:"md5sum";s:32:"b3d035e29e4b95c8be879a1b42d8c2cb";s:4:"name";s:12:"docs/MDB.xsl";s:4:"role";s:3:"doc";}}i:6;a:1:{s:7:"attribs";a:4:{s:14:"baseinstalldir";s:1:"/";s:6:"md5sum";s:32:"ee008f8f6731028732079901d2ae2087";s:4:"name";s:11:"docs/README";s:4:"role";s:3:"doc";}}i:7;a:1:{s:7:"attribs";a:4:{s:14:"baseinstalldir";s:1:"/";s:6:"md5sum";s:32:"749f53c379353e01b990b721838ac366";s:4:"name";s:20:"docs/schema2html.css";s:4:"role";s:3:"doc";}}i:8;a:1:{s:7:"attribs";a:4:{s:14:"baseinstalldir";s:1:"/";s:6:"md5sum";s:32:"6094846cbceb788e266892255814da73";s:4:"name";s:20:"docs/schema2html.xsl";s:4:"role";s:3:"doc";}}i:9;a:1:{s:7:"attribs";a:4:{s:14:"baseinstalldir";s:1:"/";s:6:"md5sum";s:32:"88ef99e5ed631d2e3e81ff47cc88ff7a";s:4:"name";s:34:"docs/xml_schema_documentation.html";s:4:"role";s:3:"doc";}}i:10;a:1:{s:7:"attribs";a:4:{s:14:"baseinstalldir";s:1:"/";s:6:"md5sum";s:32:"aadf5ba8291da1c3b83f4fcee9179abe";s:4:"name";s:30:"MDB2/Schema/Reserved/ibase.php";s:4:"role";s:3:"php";}}i:11;a:1:{s:7:"attribs";a:4:{s:14:"baseinstalldir";s:1:"/";s:6:"md5sum";s:32:"1990d8b529f5fbce1d210e50a272f142";s:4:"name";s:30:"MDB2/Schema/Reserved/mssql.php";s:4:"role";s:3:"php";}}i:12;a:1:{s:7:"attribs";a:4:{s:14:"baseinstalldir";s:1:"/";s:6:"md5sum";s:32:"e5d78d6b6d65760c268ffd02817bc1a0";s:4:"name";s:30:"MDB2/Schema/Reserved/mysql.php";s:4:"role";s:3:"php";}}i:13;a:1:{s:7:"attribs";a:4:{s:14:"baseinstalldir";s:1:"/";s:6:"md5sum";s:32:"e8a900bac6f71bd834b600356fe0490d";s:4:"name";s:29:"MDB2/Schema/Reserved/oci8.php";s:4:"role";s:3:"php";}}i:14;a:1:{s:7:"attribs";a:4:{s:14:"baseinstalldir";s:1:"/";s:6:"md5sum";s:32:"e749e668b8c8704be1006996a5c7ceaf";s:4:"name";s:30:"MDB2/Schema/Reserved/pgsql.php";s:4:"role";s:3:"php";}}i:15;a:1:{s:7:"attribs";a:4:{s:14:"baseinstalldir";s:1:"/";s:6:"md5sum";s:32:"794903d743c39b61a0780e5989a5ac75";s:4:"name";s:39:"MDB2/Schema/Tool/ParameterException.php";s:4:"role";s:3:"php";}}i:16;a:1:{s:7:"attribs";a:4:{s:14:"baseinstalldir";s:1:"/";s:6:"md5sum";s:32:"1916b02187fcdc584e4aeb29461524d2";s:4:"name";s:22:"MDB2/Schema/Parser.php";s:4:"role";s:3:"php";}}i:17;a:1:{s:7:"attribs";a:4:{s:14:"baseinstalldir";s:1:"/";s:6:"md5sum";s:32:"9089b4919680439e093f7b2f4e4d783c";s:4:"name";s:23:"MDB2/Schema/Parser2.php";s:4:"role";s:3:"php";}}i:18;a:1:{s:7:"attribs";a:4:{s:14:"baseinstalldir";s:1:"/";s:6:"md5sum";s:32:"b326f643b0b9cb136b2cda0a4cde8082";s:4:"name";s:20:"MDB2/Schema/Tool.php";s:4:"role";s:3:"php";}}i:19;a:1:{s:7:"attribs";a:4:{s:14:"baseinstalldir";s:1:"/";s:6:"md5sum";s:32:"0096b0696fd417418bfb9b2be78f98fd";s:4:"name";s:24:"MDB2/Schema/Validate.php";s:4:"role";s:3:"php";}}i:20;a:1:{s:7:"attribs";a:4:{s:14:"baseinstalldir";s:1:"/";s:6:"md5sum";s:32:"e904db4fa2bfd983e5096ec49d89ebe0";s:4:"name";s:22:"MDB2/Schema/Writer.php";s:4:"role";s:3:"php";}}i:21;a:1:{s:7:"attribs";a:4:{s:14:"baseinstalldir";s:1:"/";s:6:"md5sum";s:32:"bc5c139674e5780f76186b77308f126a";s:4:"name";s:15:"MDB2/Schema.php";s:4:"role";s:3:"php";}}i:22;a:2:{s:7:"attribs";a:4:{s:14:"baseinstalldir";s:1:"/";s:6:"md5sum";s:32:"8c382926b7bdd19f585c9010ee13ec70";s:4:"name";s:23:"scripts/mdb2_schematool";s:4:"role";s:6:"script";}s:13:"tasks:replace";a:1:{s:7:"attribs";a:3:{s:4:"from";s:9:"@php_bin@";s:2:"to";s:7:"php_bin";s:4:"type";s:11:"pear-config";}}}i:23;a:1:{s:7:"attribs";a:4:{s:14:"baseinstalldir";s:1:"/";s:6:"md5sum";s:32:"5bea21e3490a90b87251fb32ee06be13";s:4:"name";s:17:"tests/clitest.php";s:4:"role";s:4:"test";}}i:24;a:1:{s:7:"attribs";a:4:{s:14:"baseinstalldir";s:1:"/";s:6:"md5sum";s:32:"2a2c534ab4afb0c05ca9d7ca47815bf5";s:4:"name";s:30:"tests/Console_TestListener.php";s:4:"role";s:4:"test";}}i:25;a:1:{s:7:"attribs";a:4:{s:14:"baseinstalldir";s:1:"/";s:6:"md5sum";s:32:"d667aaba879d61bf36667a570005d4c2";s:4:"name";s:24:"tests/driver_test.schema";s:4:"role";s:4:"test";}}i:26;a:1:{s:7:"attribs";a:4:{s:14:"baseinstalldir";s:1:"/";s:6:"md5sum";s:32:"d46a8f267dbd54f0c7ff55e479d33e7e";s:4:"name";s:27:"tests/HTML_TestListener.php";s:4:"role";s:4:"test";}}i:27;a:1:{s:7:"attribs";a:4:{s:14:"baseinstalldir";s:1:"/";s:6:"md5sum";s:32:"927c5fdcbef1718132ddfec5802f1b3b";s:4:"name";s:21:"tests/lob_test.schema";s:4:"role";s:4:"test";}}i:28;a:1:{s:7:"attribs";a:4:{s:14:"baseinstalldir";s:1:"/";s:6:"md5sum";s:32:"e992a39815e80f0910b676f34dfc2708";s:4:"name";s:30:"tests/MDB2_Schema_testcase.php";s:4:"role";s:4:"test";}}i:29;a:1:{s:7:"attribs";a:4:{s:14:"baseinstalldir";s:1:"/";s:6:"md5sum";s:32:"33c6bb3157d8b7502b43030d8df2df5e";s:4:"name";s:12:"tests/README";s:4:"role";s:4:"test";}}i:30;a:1:{s:7:"attribs";a:4:{s:14:"baseinstalldir";s:1:"/";s:6:"md5sum";s:32:"9c992a588d3d8a4706481e5e9effb03d";s:4:"name";s:14:"tests/test.php";s:4:"role";s:4:"test";}}i:31;a:1:{s:7:"attribs";a:4:{s:14:"baseinstalldir";s:1:"/";s:6:"md5sum";s:32:"dc05c6cc4540981d350ccac2005c2578";s:4:"name";s:20:"tests/testchoose.php";s:4:"role";s:4:"test";}}i:32;a:1:{s:7:"attribs";a:4:{s:14:"baseinstalldir";s:1:"/";s:6:"md5sum";s:32:"3c4d2c9d89398c5692d36299d98f9c6e";s:4:"name";s:15:"tests/tests.css";s:4:"role";s:4:"test";}}i:33;a:1:{s:7:"attribs";a:4:{s:14:"baseinstalldir";s:1:"/";s:6:"md5sum";s:32:"ab4fa5f6da10bed373a5d52ab9b011bf";s:4:"name";s:19:"tests/testUtils.php";s:4:"role";s:4:"test";}}i:34;a:1:{s:7:"attribs";a:4:{s:14:"baseinstalldir";s:1:"/";s:6:"md5sum";s:32:"b7f20bbc8ea7869cf3ad83de7151ebc6";s:4:"name";s:25:"tests/test_setup.php.dist";s:4:"role";s:4:"test";}}i:35;a:1:{s:7:"attribs";a:4:{s:14:"baseinstalldir";s:1:"/";s:6:"md5sum";s:32:"658b8cdb91cc3c2bbce2854b18349a43";s:4:"name";s:30:"www/mdb2_schematool/action.php";s:4:"role";s:3:"www";}}i:36;a:1:{s:7:"attribs";a:4:{s:14:"baseinstalldir";s:1:"/";s:6:"md5sum";s:32:"b63d8a99b54902654b071d3b4c1c5afd";s:4:"name";s:33:"www/mdb2_schematool/class.inc.php";s:4:"role";s:3:"www";}}i:37;a:1:{s:7:"attribs";a:4:{s:14:"baseinstalldir";s:1:"/";s:6:"md5sum";s:32:"d808a2a21b09802f1c4a536441d1c166";s:4:"name";s:29:"www/mdb2_schematool/index.php";s:4:"role";s:3:"www";}}i:38;a:1:{s:7:"attribs";a:4:{s:14:"baseinstalldir";s:1:"/";s:6:"md5sum";s:32:"d10e54dd5e44155c8470d8f3a1856bee";s:4:"name";s:30:"www/mdb2_schematool/result.php";s:4:"role";s:3:"www";}}}}}s:12:"dependencies";a:2:{s:8:"required";a:3:{s:3:"php";a:1:{s:3:"min";s:5:"4.3.2";}s:13:"pearinstaller";a:1:{s:3:"min";s:5:"1.7.0";}s:7:"package";a:2:{i:0;a:3:{s:4:"name";s:4:"MDB2";s:7:"channel";s:12:"pear.php.net";s:3:"min";s:7:"2.5.0b1";}i:1;a:3:{s:4:"name";s:10:"XML_Parser";s:7:"channel";s:12:"pear.php.net";s:3:"min";s:5:"1.2.8";}}}s:8:"optional";a:1:{s:7:"package";a:2:{i:0;a:3:{s:4:"name";s:7:"XML_DTD";s:7:"channel";s:12:"pear.php.net";s:3:"min";s:5:"0.5.1";}i:1;a:3:{s:4:"name";s:14:"XML_Serializer";s:7:"channel";s:12:"pear.php.net";s:3:"min";s:6:"0.18.0";}}}}s:10:"phprelease";a:2:{i:0;a:1:{s:8:"filelist";a:1:{s:7:"install";a:5:{i:0;a:1:{s:7:"attribs";a:2:{s:2:"as";s:26:"mdb2_schematool/action.php";s:4:"name";s:30:"www/mdb2_schematool/action.php";}}i:1;a:1:{s:7:"attribs";a:2:{s:2:"as";s:29:"mdb2_schematool/class.inc.php";s:4:"name";s:33:"www/mdb2_schematool/class.inc.php";}}i:2;a:1:{s:7:"attribs";a:2:{s:2:"as";s:25:"mdb2_schematool/index.php";s:4:"name";s:29:"www/mdb2_schematool/index.php";}}i:3;a:1:{s:7:"attribs";a:2:{s:2:"as";s:26:"mdb2_schematool/result.php";s:4:"name";s:30:"www/mdb2_schematool/result.php";}}i:4;a:1:{s:7:"attribs";a:2:{s:2:"as";s:15:"mdb2_schematool";s:4:"name";s:23:"scripts/mdb2_schematool";}}}}}i:1;s:0:"";}s:9:"changelog";a:1:{s:7:"release";a:18:{i:0;a:5:{s:7:"version";a:2:{s:7:"release";s:5:"0.8.5";s:3:"api";s:5:"0.8.0";}s:9:"stability";a:2:{s:7:"release";s:4:"beta";s:3:"api";s:4:"beta";}s:4:"date";s:10:"2009-02-22";s:7:"license";a:2:{s:7:"attribs";a:1:{s:3:"uri";s:50:"http://www.opensource.org/licenses/bsd-license.php";}s:8:"_content";s:11:"BSD License";}s:5:"notes";s:1611:"- PEAR dependency updated (Bug #15923)
+- XML_DTD dependency updated (past releases of XML_DTD doesn't works anymore. release 0.5.1 works only with PHP 5).
+- Fixed 'disable_queries' and 'show_structure' options that were malfunctioning in mdb2_schematool web version
+- Added an option to not drop obsolete tables when updating (Request #15278). It defaults not to drop, which reverts the behavior introduced in Release 0.8.3
+
+open todo items:
+- Clean up output of getDefinitionFromDatabase(). Sync it with Parser and Parser2.
+- Automatically load reserved keywords
+- Make MDB2_Schema loadable via MDB2_Driver_Common::loadModule() (Bug #8270)
+- Allow simple if statements that mean that anything enclosed is only executed
+  if it meets certain criterias based on that version number (or some other
+  variable). This would enable people to add DML statements that are only
+  executed when updating from a specific version.
+- Modularize Writer code or remake it
+- Add specific error codes for Validate class
+- Add support for ORDER clauses on UPDATEs (to resolve the duplicate key 
+  problem)
+- Update description.schema.xml
+- Create unit test for comparedefinitions()
+- Create unit test for initializetable()
+- Create unit test to compare the expected array definition with what is parsed
+- Improve validateDataFieldValue() to validate <column>
+- Provide more info on MDB2_Schema_Validate errors (output parsed value and expected value)
+- Views support
+- Fulltext index support
+- PKs as constraints, not indices
+- Creation of constraints only after all tables have been created/updated to avoid invalid references.";}i:1;a:5:{s:7:"version";a:2:{s:7:"release";s:5:"0.8.4";s:3:"api";s:5:"0.8.0";}s:9:"stability";a:2:{s:7:"release";s:4:"beta";s:3:"api";s:4:"beta";}s:4:"date";s:10:"2008-11-17";s:7:"license";a:2:{s:7:"attribs";a:1:{s:3:"uri";s:50:"http://www.opensource.org/licenses/bsd-license.php";}s:8:"_content";s:11:"BSD License";}s:5:"notes";s:1361:"- fixed warning in validateTable() that was introduced in last release (Bug #15055)
+- fixed interpreter for mdb2_schematool, plus it is now been installed to bin_dir (now, really!)
+- mdb2_schematool has a new feature: initialize database
+- mdb2_schematool can now be used to dump data and/or database structure
+
+open todo items:
+- Clean up output of getDefinitionFromDatabase(). Sync it with Parser and Parser2.
+- Automatically load reserved keywords
+- Make MDB2_Schema loadable via MDB2_Driver_Common::loadModule() (Bug #8270)
+- Allow simple if statements that mean that anything enclosed is only executed
+  if it meets certain criterias based on that version number (or some other
+  variable). This would enable people to add DML statements that are only
+  executed when updating from a specific version.
+- Modularize Writer code or remake it
+- Add specific error codes for Validate class
+- Add support for ORDER clauses on UPDATEs (to resolve the duplicate key 
+  problem)
+- Update description.schema.xml
+- Create unit test for comparedefinitions()
+- Create unit test for initializetable()
+- Create unit test to compare the expected array definition with what is parsed
+- Improve validateDataFieldValue() to validate <column>
+- Provide more info on MDB2_Schema_Validate errors (output parsed value and expected value)
+- Views support
+- Fulltext index support";}i:2;a:5:{s:7:"version";a:2:{s:7:"release";s:5:"0.8.3";s:3:"api";s:5:"0.8.0";}s:9:"stability";a:2:{s:7:"release";s:4:"beta";s:3:"api";s:4:"beta";}s:4:"date";s:10:"2008-11-16";s:7:"license";a:2:{s:7:"attribs";a:1:{s:3:"uri";s:50:"http://www.opensource.org/licenses/bsd-license.php";}s:8:"_content";s:11:"BSD License";}s:5:"notes";s:2473:"- updateDatabase() cannot add UNIQUE attribute to an existing index (Bug #13977). Patch by Holger Schletz
+- updateDatabase() keeps old default value even though new column has no default (Bug #13836). Patch by Holger Schletz
+- Obsolete tables and sequences not dropped on updateDatabase() (Bug #13608). Patch by Holger Schletz
+- Error when creating a new index for a renamed table (Bug #13397)
+- Makes use of MDB2::databaseExists() to check whether updating database exists (Bug #13073). This feature was removed on previous release and now is back again.
+- createDatabase() correctly lower/upper database name when portability option deems so. 
+- mdb2_schematool now disables transactions
+- mdb2_schematool was missing argument "help"
+- mdb2_schematool moved from "bin" to "scripts" folder. now installs to pear_bin dir
+- Schema validation not failing when autoincrement field is defined but another column is used as primary key (Bug #14213)
+- Accepting NOW() as value for timestamp fields on schema validation (Bug #14052). Patch by Holger Schletz
+- Introducing www/mdb2_schematool that is a rewrite of docs/examples/example.php and is now installed to web root
+- Web frontend (www/mdb2_schematool) has new options "DBA_username" and "DBA_password"
+- Tests missing sequences on database dump (Bug #13562). Patch by Luca Corbo
+- When reverse engineering a database, the XML schema file will have <charset> forced to UTF8
+
+open todo items:
+- Clean up output of getDefinitionFromDatabase(). Sync it with Parser and Parser2.
+- Automatically load reserved keywords
+- Make MDB2_Schema loadable via MDB2_Driver_Common::loadModule() (Bug #8270)
+- Allow simple if statements that mean that anything enclosed is only executed
+  if it meets certain criterias based on that version number (or some other
+  variable). This would enable people to add DML statements that are only
+  executed when updating from a specific version.
+- Modularize Writer code or remake it
+- Add specific error codes for Validate class
+- Add support for ORDER clauses on UPDATEs (to resolve the duplicate key 
+  problem)
+- Update description.schema.xml
+- Create unit test for comparedefinitions()
+- Create unit test for initializetable()
+- Create unit test to compare the expected array definition with what is parsed
+- Improve validateDataFieldValue() to validate <column>
+- Provide more info on MDB2_Schema_Validate errors (output parsed value and expected value)
+- Views support
+- Fulltext index support";}i:3;a:5:{s:7:"version";a:2:{s:7:"release";s:5:"0.8.2";s:3:"api";s:5:"0.8.0";}s:9:"stability";a:2:{s:7:"release";s:4:"beta";s:3:"api";s:4:"beta";}s:4:"date";s:10:"2008-02-23";s:7:"license";a:2:{s:7:"attribs";a:1:{s:3:"uri";s:50:"http://www.opensource.org/licenses/bsd-license.php";}s:8:"_content";s:11:"BSD License";}s:5:"notes";s:1866:"- updated dependency
+- updated license disclaimer in source code files
+- use quoteIdentifier in getInstructionFields() (Bug #13037)
+- After database creation, sqlite db connection not usable (Bug #11920)
+- Supporting Database Charset (Bug #12908)
+- writeInitialization() fails at given conditions (Bug #12950)
+- drop usage of listDatabases() (Bug #12636), as a consequence updateDatabase() doesn't check anymore whether updating database exists
+- index-length documented and included in Parser2 (Bug #12540)
+- xsl transformation chooses wrong value for length (Bug #12261)
+- added README file for docs dir
+- the correct variable name for warning is "warnings" not "operation" in example script
+- disabled transactions in the example script
+- introducing mdb2_schematool, a command line tool to dump and load schemas
+
+open todo items:
+- Clean up output of getDefinitionFromDatabase(). Sync it with Parser and Parser2.
+- Automatically load reserved keywords
+- Make MDB2_Schema loadable via MDB2_Driver_Common::loadModule() (Bug #8270)
+- Allow simple if statements that mean that anything enclosed is only executed
+  if it meets certain criterias based on that version number (or some other
+  variable). This would enable people to add DML statements that are only
+  executed when updating from a specific version.
+- Modularize Writer code or remake it
+- Add specific error codes for Validate class
+- Add support for ORDER clauses on UPDATEs (to resolve the duplicate key 
+  problem)
+- Update description.schema.xml
+- Create unit test for comparedefinitions()
+- Create unit test for initializetable()
+- Create unit test to compare the expected array definition with what is parsed
+- Improve validateDataFieldValue() to validate <column>
+- Provide more info on MDB2_Schema_Validate errors (output parsed value and expected value)
+- Views support
+- Fulltext index support";}i:4;a:5:{s:7:"version";a:2:{s:7:"release";s:5:"0.8.1";s:3:"api";s:5:"0.8.0";}s:9:"stability";a:2:{s:7:"release";s:4:"beta";s:3:"api";s:4:"beta";}s:4:"date";s:10:"2007-08-30";s:7:"license";s:11:"BSD License";s:5:"notes";s:1071:"- updated dependency
+
+open todo items:
+- Clean up output of getDefinitionFromDatabase(). Sync it with Parser and Parser2.
+- Automatically load reserved keywords
+- Make MDB2_Schema loadable via MDB2_Driver_Common::loadModule() (Bug #8270)
+- Allow simple if statements that mean that anything enclosed is only executed
+  if it meets certain criterias based on that version number (or some other
+  variable). This would enable people to add DML statements that are only
+  executed when updating from a specific version.
+- Modularize Writer code or remake it
+- Add specific error codes for Validate class
+- Add support for ORDER clauses on UPDATEs (to resolve the duplicate key 
+  problem)
+- Update description.schema.xml
+- Create unit test for comparedefinitions()
+- Create unit test for initializetable()
+- Create unit test to compare the expected array definition with what is parsed
+- Improve validateDataFieldValue() to validate <column>
+- Provide more info on MDB2_Schema_Validate errors (output parsed value and expected value)
+- Views support
+- Fulltext index support";}i:5;a:5:{s:7:"version";a:2:{s:7:"release";s:5:"0.8.0";s:3:"api";s:5:"0.8.0";}s:9:"stability";a:2:{s:7:"release";s:4:"beta";s:3:"api";s:4:"beta";}s:4:"date";s:10:"2007-08-20";s:7:"license";s:11:"BSD License";s:5:"notes";s:2756:"- Primary Key is removed when updating a table against its XML (Bug #11604)
+- Added support to INSERT...SELECT syntax, so it is now possible to prevent data loss when rollback an updated database (Bug #10892)
+- Updated API of getInstructionFields() and getInstructionWhere()
+- It is now possible to prevent updateDatabase() of overwriting the old schema file
+- alterDatabaseTables() first add new tables, then remove the old one. it is necessary to save table data before a remove
+- updateDatabase() was aborting, under certain conditions, when <was> was not found (Bug #11600)
+- Now validating database definition when reverse engineering (Bug #11604)
+- createDatabase() has a new parameter that is passed to the database driver to set some options like table engine
+- Foreign Keys support
+- It is now possible to assign to a column the value of another column, of the same table, when inserting data
+- Fixed the HTML etities issue when parsing a schema file (Bug #11676)
+- XML Documentation, XSD and DST updated to show/expect the attributes in a unique order. Writer and parsers was also updated to handle the attributes in that some order. That said Parser and Parser2 must have the exactly same output for a given XML
+- Except for table fields, all other database elements are being initialized with all its attributes, no matter if those attributes are present on the XML or not
+- Many bugs fixed in Parser2, that was not creating a valid database definition
+- Introduced attribute "fixed" of table field declaration
+- validateIndex() is now checking whether a index has fields
+- Validate is not returning MDB2_OK instead of boolean true
+- XML Documentation and schema validators revised and updated
+
+open todo items:
+- Clean up output of getDefinitionFromDatabase(). Sync it with Parser and Parser2.
+- Automatically load reserved keywords
+- Make MDB2_Schema loadable via MDB2_Driver_Common::loadModule() (Bug #8270)
+- Allow simple if statements that mean that anything enclosed is only executed
+  if it meets certain criterias based on that version number (or some other
+  variable). This would enable people to add DML statements that are only
+  executed when updating from a specific version.
+- Modularize Writer code or remake it
+- Add specific error codes for Validate class
+- Add support for ORDER clauses on UPDATEs (to resolve the duplicate key 
+  problem)
+- Update description.schema.xml
+- Create unit test for comparedefinitions()
+- Create unit test for initializetable()
+- Create unit test to compare the expected array definition with what is parsed
+- Improve validateDataFieldValue() to validate <column>
+- Provide more info on MDB2_Schema_Validate errors (output parsed value and expected value)
+- Views support
+- Fulltext index support";}i:6;a:5:{s:7:"version";a:2:{s:7:"release";s:5:"0.7.2";s:3:"api";s:5:"0.7.2";}s:9:"stability";a:2:{s:7:"release";s:4:"beta";s:3:"api";s:4:"beta";}s:4:"date";s:10:"2007-04-07";s:7:"license";s:11:"BSD License";s:5:"notes";s:1613:"- Allow options to be passed in when creating tables (Bug #10278)
+- Existence of a single index results in no further index creation (Bug #10296)
+- MDB2_Schema::createTableIndexes() ignores indexes (Bug #10285)
+- column identifiers quoting problem (Bug #10195)
+- Handle 'scale' value in DECIMAL field definition (Bug #10475)
+- fixed phpdoc comment for validateDataField()
+- all primary keys are given an index name of "primary" (Bug #10457)
+- example.php should echo xml when no filename is given (Bug #10226)
+
+open todo items:
+- Make MDB2_Schema loadable via MDB2_Driver_Common::loadModule() (Bug #8270)
+- Add ability to define variables inside the schema (like a version number)
+- Allow simple if statements that mean that anything enclosed is only executed
+  if it meets certain criterias based on that version number (or some other
+  variable). This would enable people to add DML statements that are only
+  executed when updating from a specific version.
+- Modularize Writer code or remake it
+- Add specific error codes for Validate class
+- Add support for ORDER clauses on UPDATEs (to resolve the duplicate key 
+  problem)
+- Update description.schema.xml
+- Document how to use the API
+- Create unit test for comparedefinitions()
+- Create unit test for initializetable()
+- Create unit test to compare the expected array definition with what is parsed
+- HTML entities aren't being parsed correctly
+- Improve validateDataFieldValue() to validate <column>
+- Provide more info on MDB2_Schema_Validate errors (output parsed value and expected value)
+- Views support
+- Foreign keys support
+- Fulltext index support";}i:7;a:5:{s:7:"version";a:2:{s:7:"release";s:5:"0.7.1";s:3:"api";s:5:"0.7.1";}s:9:"stability";a:2:{s:7:"release";s:4:"beta";s:3:"api";s:4:"beta";}s:4:"date";s:10:"2007-02-21";s:7:"license";s:11:"BSD License";s:5:"notes";s:2055:"- Package converted to version 2
+- compareDefinition() was trying to update non-changing id field (Bug #8820)
+- for a moment <default> should be always parsed as string, no matter the field
+  type. this behavior may change in the future.
+- undefined method MDB2_Schema::quoteIdentifier() (Bug #9172)
+- added support for explicit NULL (<null></null>)
+- <value></value> is now correctly being parsed as an empty string
+- fixed internal bug in Parser that was introduced in revision 1.46 (Bug #9435)
+- MDB2_Schema_Parser::setData() has been removed
+- MDB2_Schema_Validate::validateDataField() is validating field data again
+  (Bug #9181)
+- updated reserved keywords of ibase
+- updated XML Schema documentation
+- updated XML Schema example
+- added a new test case to isBoolean() (empty string)
+- released the very first approach of the new parser that makes usage of
+  XML_Serializer (alternative parser)
+
+open todo items:
+- Make MDB2_Schema loadable via MDB2_Driver_Common::loadModule() (Bug #8270)
+- Add ability to define variables inside the schema (like a version number)
+- Allow simple if statements that mean that anything enclosed is only executed
+  if it meets certain criterias based on that version number (or some other
+  variable). This would enable people to add DML statements that are only
+  executed when updating from a specific version.
+- Modularize Writer code or remake it
+- Add specific error codes for Validate class
+- Add support for ORDER clauses on UPDATEs (to resolve the duplicate key 
+  problem)
+- Update description.schema.xml
+- Document how to use the API
+- Create unit test for comparedefinitions()
+- Create unit test for initializetable()
+- Create unit test to compare the expected array definition with what is parsed
+- HTML entities aren't being parsed correctly
+- Add optional support for scale in decimal fields
+- Improve validateDataFieldValue() to validate <column>
+- Provide more info on MDB2_Schema_Validate errors (output parsed value and expected value)
+- Views support
+- Foreign keys support
+- Fulltext index support";}i:8;a:5:{s:7:"version";a:2:{s:7:"release";s:5:"0.7.0";s:3:"api";s:5:"0.7.0";}s:9:"stability";a:2:{s:7:"release";s:4:"beta";s:3:"api";s:4:"beta";}s:4:"date";s:10:"2006-11-07";s:7:"license";s:11:"BSD License";s:5:"notes";s:3096:"- Improved INSERT support, added UPDATE and DELETE statements
+- XML syntax redesigned to cover DML addictions
+- Creation of an explicit NULL (<null></null>)
+- various fixes to the DTD, including DML addictions
+- XSD schema definition created
+- Tests also output php version
+- New example parse.php lets you check how a XML schema is stored
+- Updated schema.xml to demo the DML support
+- Documentation reformulated, also covering new XML syntax
+- Improved demo script example.php, which now includes more actions and options
+- Writer is returning an error when fopen() fails
+- Writer has now its own error code
+- Variable "seq" became "sequence" and "seq_name" became "sequence_name" in the
+  Parser
+- Moved validation code out of the Parser into a new separate class called
+  Validation
+- Fixed index handling in the Parser
+- Refactored error handling in the Parser
+- Removed variable "init_field", that wasn't being used, from the Parser
+- Parser simulates only one level of recurssion, which means no more than 
+  function-expression or vice-versa
+- Fixed warning due to not checking with isset() in the Parser
+- Fixed warning due to not checking with isset() in the Schema
+- Typo fix (related to Bug #9024)
+- Fixed createDatabase() that was trying to use a non-existant database that 
+  was about to be created
+- Simplified API for compareTableFieldsDefinitions() and 
+  compareTableIndexesDefinitions()
+- Rewritten some docblocks
+- Added fold markers where missing
+- Removed @static from non static methods
+- Fixed several PEAR CS issues
+- Added code for field/identifier quoting
+- Ensure all identifiers are passed to quoteIdentifier() (Bug #8429)
+
+open todo items:
+- Make MDB2_Schema loadable via MDB2_Driver_Common::loadModule() (Bug #8270)
+- Add ability to define variables inside the schema (like a version number)
+- Allow simple if statements that mean that anything enclosed is only executed
+  if it meets certain criterias based on that version number (or some other
+  variable). This would enable people to add DML statements that are only
+  executed when updating from a specific version.
+- Add support for recursive tag parsing. Currently only expression<->function
+  is supported but not expression-expression or function-function, although
+  recursion is already supported by the initializeTable() method
+- Parser should be replaced for XML serializer ?
+- Modularize Writer code or remake it
+- Add specific error codes for Validate class
+- Add support for ORDER clauses on UPDATEs (to resolve the duplicate key 
+  problem)
+- Update description.schema.xml
+- Document how to use the API
+- Create unit test for comparedefinitions()
+- Create unit test for initializetable()
+- Create unit test to compare the expected array definition with what is parsed
+- HTML entities aren't being parsed correctly
+- Add optional support for scale in decimal fields
+- Implement "WHERE column IS NULL"
+- Add ability to parse a "contents-only" XML dump
+- Improve validateDataFieldValue() to validate <column>
+- Provide more info on MDB2_Schema_Validate errors (output parsed value and expected value)";}i:9;a:5:{s:7:"version";a:2:{s:7:"release";s:5:"0.6.0";s:3:"api";s:5:"0.6.0";}s:9:"stability";a:2:{s:7:"release";s:4:"beta";s:3:"api";s:4:"beta";}s:4:"date";s:10:"2006-07-23";s:7:"license";a:2:{s:7:"attribs";a:1:{s:3:"uri";s:22:"http://www.example.com";}s:8:"_content";s:11:"BSD License";}s:5:"notes";s:1227:"- added new XSL and CSS for xml schema file rendering (thx Bertrand)
+- automatically generate <on> tags in <sequence> tags if there is a table with
+  the same name and a single column primary key
+- do not dump default for LOB fields (Bug #7596)
+- added support for "fixed" (needs more testing)
+- phpdoc tweaks (thx Stoyan)
+- fixed primary key emulation and some other minor issues in createTableIndexes() (Bug #7758)
+- implemented skip_unreadable parameter in parseDatabaseDefinition() (Bug #7756)
+- switched most array_key_exists() calls to !empty() to improve readability and performance
+- fixed a few edge cases and potential warnings
+- add method name as scope for call debug() calls
+- use getValidTypes() from MDB2
+- hint if dropping a primary constraint
+- minor code tweak in how initialization data is set in the prepared statement
+- force ISO-8859-1 when parsing XML due to different defaults for PHP4 and PHP5
+- fixed handling for changes in indexes/constaints (Bug #7901)
+- made forcing of defaults optional via the 'force_defaults' option (Request #8074)
+- fixed several issues in the DTD (Bug #7890)
+- set length and fixed for user_password in the test suite
+- use nested transactions instead of normal transactions";}i:10;a:5:{s:7:"version";a:2:{s:7:"release";s:5:"0.5.0";s:3:"api";s:5:"0.5.0";}s:9:"stability";a:2:{s:7:"release";s:4:"beta";s:3:"api";s:4:"beta";}s:4:"date";s:10:"2006-04-16";s:7:"license";a:2:{s:7:"attribs";a:1:{s:3:"uri";s:22:"http://www.example.com";}s:8:"_content";s:11:"BSD License";}s:5:"notes";s:1138:"- expanded reserved word handling
+- fix LOB data dumping
+- added overwrite support to writer class
+- added comment for idxname_format setting to example
+- added autoincrement and primary to the documentation and .xsl/.dtd
+- if we cannot create the database, then assume it was created manually in the
+  test suite
+- added option valid_types
+- added option to set parser and writer class
+- automatically let the installer set the API Version
+- make sure that the Datatype module is loaded
+- added valid_types property to determine if a given type is valid
+  schema and to set missing default values
+- allow CURRENT_* as default in temporal types (bug #6416)
+- improve test suite documentation
+- added parseDatabaseDefinition() that can work with a file or array definition
+- removed database_definition property and as a result reworked the API of most
+  methods *BC BREAK*
+- added _dumpBoolean() in writer to better support variables in boolean fields
+- allow method callbacks in MDB2_Schema_Writer::dumpDatabase (bug #7363)
+- set error code in all raiseError() calls
+- minor updates to the xml schema xsl and documentation (thx Bertrand)";}i:11;a:5:{s:7:"version";a:2:{s:7:"release";s:5:"0.4.3";s:3:"api";s:5:"0.4.3";}s:9:"stability";a:2:{s:7:"release";s:4:"beta";s:3:"api";s:4:"beta";}s:4:"date";s:10:"2006-02-05";s:7:"license";a:2:{s:7:"attribs";a:1:{s:3:"uri";s:22:"http://www.example.com";}s:8:"_content";s:11:"BSD License";}s:5:"notes";s:233:"- renamed "manager" property to "schema" for clarity in the testsuite
+- fixed logic related to using a non existant previous schema name in updateDatabase()
+
+open todo items:
+- better handling for NULL values in the xml schema format";}i:12;a:5:{s:7:"version";a:2:{s:7:"release";s:5:"0.4.2";s:3:"api";s:5:"0.4.2";}s:9:"stability";a:2:{s:7:"release";s:4:"beta";s:3:"api";s:4:"beta";}s:4:"date";s:10:"2006-01-14";s:7:"license";a:2:{s:7:"attribs";a:1:{s:3:"uri";s:22:"http://www.example.com";}s:8:"_content";s:11:"BSD License";}s:5:"notes";s:535:"- added ability to dump sql instead of commiting it to the database in the example
+- fix for bug in handling of boolean default values (bug #6397)
+- default to notnull = false in the schema parser
+- several fixes for database alterations (thx Matthias)
+- default for autoincrement can be '0' or 0 in the parser
+- set default 0 for autoincrement columns when reverse engineering a schema
+- expect MDB2_ERROR_ALREADY_EXISTS when creating a database (bug #6481)
+
+open todo items:
+- better handling for NULL values in the xml schema format";}i:13;a:5:{s:7:"version";a:2:{s:7:"release";s:5:"0.4.1";s:3:"api";s:5:"0.4.1";}s:9:"stability";a:2:{s:7:"release";s:4:"beta";s:3:"api";s:4:"beta";}s:4:"date";s:10:"2005-12-30";s:7:"license";a:2:{s:7:"attribs";a:1:{s:3:"uri";s:22:"http://www.example.com";}s:8:"_content";s:11:"BSD License";}s:5:"notes";s:148:"- fixed bug in updateDatabase() when using a file as the previous schema
+  (bug was introduced in last release)
+- fixed install roles for test files";}i:14;a:5:{s:7:"version";a:2:{s:7:"release";s:5:"0.4.0";s:3:"api";s:5:"0.4.0";}s:9:"stability";a:2:{s:7:"release";s:4:"beta";s:3:"api";s:4:"beta";}s:4:"date";s:10:"2005-12-21";s:7:"license";a:2:{s:7:"attribs";a:1:{s:3:"uri";s:22:"http://www.example.com";}s:8:"_content";s:11:"BSD License";}s:5:"notes";s:1060:"- Silence a "error" when there is auto increment and a primary key index defined
+  on the same field, since auto increment implies a primary key
+- support column length in create index (mysql only feature, but a nice touch,
+  emulating it with substring is not feasible though)
+- use exec() for INSERT statement
+- add extra debug info better use of the var_dump package if present in example
+- fixed bug in verifyAlterDatabase() when checking table alterations (bug #5977)
+- fixed typo in getTableConstraintDefinition() method name (removed additional "s") (bug #6054)
+- expect and ignore MDB2_ERROR_NOT_FOUND when calling getTableConstraintDefinition()
+  and getTableIndexDefinition() (bug #6055)
+- fixed typo in verifyAlterDatabase() (bug #6053)
+- fixed typo in alterDatabaseSequences() (bug #6053)
+- added test suite
+- fixed issue in createDatabase() with portability fix case turned
+- ensure that all primary/unique/foreign key handling is only in the contraint methods
+- optionally allow schemas to be passed as an array to updateDatabase() (thx Matthias)";}i:15;a:5:{s:7:"version";a:2:{s:7:"release";s:5:"0.3.0";s:3:"api";s:5:"0.3.0";}s:9:"stability";a:2:{s:7:"release";s:4:"beta";s:3:"api";s:4:"beta";}s:4:"date";s:10:"2005-10-10";s:7:"license";a:2:{s:7:"attribs";a:1:{s:3:"uri";s:22:"http://www.example.com";}s:8:"_content";s:11:"BSD License";}s:5:"notes";s:1266:"Warning: this is an intermediary release to address php 4.4/5.0.5. Some of the
+new features still need a bit more tweaking.
+
+- use MDB2::factory() by default instead of MDB2::connect()
+- added support for auto increment and primary key in schema.
+- alterTable now needs the full definition to work (use getTableFieldDefinition
+ from Reverse module if you do not have a definition at hand) this eliminates the need
+ of the declaration part in the alterTable array.
+- typo fix (bug #4620)
+- php 4.4.x/5.0.5 fixes
+- updated getTableFieldDefinition() call to accomodate API changes in MDB2
+- MDB2_Schema has its own error class and error codes
+- made it easier to add new database backend to the example
+- better handle removing of indexes on renamed columns in alterDatabaseTables()
+- use array_key_exists() instead of isset() where possible
+- restructured changes array to fix bugs due to inconsistency in the handling of array keys
+- added ability to disable query for the alterDatabase()/createDatabase() call
+  in updateDatabase(). this is useful to generate an RDBMS specific SQL file
+  using a custom debug callback
+- prefer "true" and "false" over "1" and "0"
+- an emty default tag now implies NULL for nullable columns and an empty string
+  for NOT NULL columns";}i:16;a:5:{s:7:"version";a:2:{s:7:"release";s:5:"0.2.0";s:3:"api";s:5:"0.2.0";}s:9:"stability";a:2:{s:7:"release";s:4:"beta";s:3:"api";s:4:"beta";}s:4:"date";s:10:"2005-04-29";s:7:"license";a:2:{s:7:"attribs";a:1:{s:3:"uri";s:22:"http://www.example.com";}s:8:"_content";s:11:"BSD License";}s:5:"notes";s:870:"- fixed error handling in updateDatabase()
+- use MDB2::raiseError
+- always copy schema file in updateDatabase()
+- cosmetic fixes and tweaks
+- improved overwrite to check via list*() before creating (bug #3857, #4101)
+- updated MDB2 dependency
+- fixed sequence dumping
+- moved schema documentation, xml_reverse_engineering.php, MDB.dtd
+  and MDB.xls from MDB package
+- added optional support for PEAR::XML_DTD based validation of schema files
+- index can be defined on fields that dont explicity prohibit null values
+- dont disable sequence dumping when implicit sequences have been found
+- added code to support dumping of lobs (MDB2 really should move to streams)
+- added writeInitialization() method (untested)
+- is_boolean() => isBoolean() in parser (CS fix)
+- added MDB2_Schema::factory()
+- Parser: if set grab definition of a table from the strucure property if set";}i:17;a:5:{s:7:"version";a:2:{s:7:"release";s:5:"0.1.0";s:3:"api";s:5:"0.1.0";}s:9:"stability";a:2:{s:7:"release";s:4:"beta";s:3:"api";s:4:"beta";}s:4:"date";s:10:"2005-04-07";s:7:"license";a:2:{s:7:"attribs";a:1:{s:3:"uri";s:22:"http://www.example.com";}s:8:"_content";s:11:"BSD License";}s:5:"notes";s:1048:"This is the first unbundled release of the old MDB2_Tools_Manager class that was
+previously part of MDB2 until 2.0.0beta4. Due to the name change the package
+does not collide with previous versions of MDB2.
+
+Also the following changes were made in the process:
+- fixed index alteration in the Manager (bug #3710)
+- fixed bug in the Manager when upgrading a database that doesnt exist
+- moved logic to compareDefinitions from the Manager into the Datatype module
+- removed default_values property from the Manager
+  (the user will now need to set the proper defaults himself)
+- do not require that not null fields have a default set in the Manager (bug #3997)
+- use MDB2::raiseError() instead of MDB2_Driver_Common::raiseError()
+- cleanedup connect() method to ensure that only MDB2 connections can be
+  assigned to the db property
+- fixed bug in connect() method that prevented overwriting of options
+- several cleanups and fixes to the example.php (used to be called
+  reverse_engineer_xml_schema.php)
+- added apiVersion()
+- use PEAR::raiseError()";}}}s:8:"filelist";a:39:{s:23:"docs/examples/parse.php";a:5:{s:14:"baseinstalldir";s:1:"/";s:6:"md5sum";s:32:"84d20bf2d1cd1ff8fd6df3510a5e8a2b";s:4:"name";s:23:"docs/examples/parse.php";s:4:"role";s:3:"doc";s:12:"installed_as";s:70:"/var/www/horde/groupware/pear/docs/MDB2_Schema/docs/examples/parse.php";}s:24:"docs/examples/schema.xml";a:5:{s:14:"baseinstalldir";s:1:"/";s:6:"md5sum";s:32:"39b5f0bd2f409e123e22a74b9ecd00ba";s:4:"name";s:24:"docs/examples/schema.xml";s:4:"role";s:3:"doc";s:12:"installed_as";s:71:"/var/www/horde/groupware/pear/docs/MDB2_Schema/docs/examples/schema.xml";}s:27:"docs/description.schema.xml";a:5:{s:14:"baseinstalldir";s:1:"/";s:6:"md5sum";s:32:"bfb15927b18744d0cb2f2e8bf238ad90";s:4:"name";s:27:"docs/description.schema.xml";s:4:"role";s:3:"doc";s:12:"installed_as";s:74:"/var/www/horde/groupware/pear/docs/MDB2_Schema/docs/description.schema.xml";}s:12:"docs/MDB.dtd";a:5:{s:14:"baseinstalldir";s:1:"/";s:6:"md5sum";s:32:"a3d9b7fd36beed4a243795a6866acac6";s:4:"name";s:12:"docs/MDB.dtd";s:4:"role";s:3:"doc";s:12:"installed_as";s:59:"/var/www/horde/groupware/pear/docs/MDB2_Schema/docs/MDB.dtd";}s:12:"docs/MDB.xsd";a:5:{s:14:"baseinstalldir";s:1:"/";s:6:"md5sum";s:32:"2e68b91a7651174d117bc08165244ebc";s:4:"name";s:12:"docs/MDB.xsd";s:4:"role";s:3:"doc";s:12:"installed_as";s:59:"/var/www/horde/groupware/pear/docs/MDB2_Schema/docs/MDB.xsd";}s:12:"docs/MDB.xsl";a:5:{s:14:"baseinstalldir";s:1:"/";s:6:"md5sum";s:32:"b3d035e29e4b95c8be879a1b42d8c2cb";s:4:"name";s:12:"docs/MDB.xsl";s:4:"role";s:3:"doc";s:12:"installed_as";s:59:"/var/www/horde/groupware/pear/docs/MDB2_Schema/docs/MDB.xsl";}s:11:"docs/README";a:5:{s:14:"baseinstalldir";s:1:"/";s:6:"md5sum";s:32:"ee008f8f6731028732079901d2ae2087";s:4:"name";s:11:"docs/README";s:4:"role";s:3:"doc";s:12:"installed_as";s:58:"/var/www/horde/groupware/pear/docs/MDB2_Schema/docs/README";}s:20:"docs/schema2html.css";a:5:{s:14:"baseinstalldir";s:1:"/";s:6:"md5sum";s:32:"749f53c379353e01b990b721838ac366";s:4:"name";s:20:"docs/schema2html.css";s:4:"role";s:3:"doc";s:12:"installed_as";s:67:"/var/www/horde/groupware/pear/docs/MDB2_Schema/docs/schema2html.css";}s:20:"docs/schema2html.xsl";a:5:{s:14:"baseinstalldir";s:1:"/";s:6:"md5sum";s:32:"6094846cbceb788e266892255814da73";s:4:"name";s:20:"docs/schema2html.xsl";s:4:"role";s:3:"doc";s:12:"installed_as";s:67:"/var/www/horde/groupware/pear/docs/MDB2_Schema/docs/schema2html.xsl";}s:34:"docs/xml_schema_documentation.html";a:5:{s:14:"baseinstalldir";s:1:"/";s:6:"md5sum";s:32:"88ef99e5ed631d2e3e81ff47cc88ff7a";s:4:"name";s:34:"docs/xml_schema_documentation.html";s:4:"role";s:3:"doc";s:12:"installed_as";s:81:"/var/www/horde/groupware/pear/docs/MDB2_Schema/docs/xml_schema_documentation.html";}s:30:"MDB2/Schema/Reserved/ibase.php";a:5:{s:14:"baseinstalldir";s:1:"/";s:6:"md5sum";s:32:"aadf5ba8291da1c3b83f4fcee9179abe";s:4:"name";s:30:"MDB2/Schema/Reserved/ibase.php";s:4:"role";s:3:"php";s:12:"installed_as";s:64:"/var/www/horde/groupware/pear/php/MDB2/Schema/Reserved/ibase.php";}s:30:"MDB2/Schema/Reserved/mssql.php";a:5:{s:14:"baseinstalldir";s:1:"/";s:6:"md5sum";s:32:"1990d8b529f5fbce1d210e50a272f142";s:4:"name";s:30:"MDB2/Schema/Reserved/mssql.php";s:4:"role";s:3:"php";s:12:"installed_as";s:64:"/var/www/horde/groupware/pear/php/MDB2/Schema/Reserved/mssql.php";}s:30:"MDB2/Schema/Reserved/mysql.php";a:5:{s:14:"baseinstalldir";s:1:"/";s:6:"md5sum";s:32:"e5d78d6b6d65760c268ffd02817bc1a0";s:4:"name";s:30:"MDB2/Schema/Reserved/mysql.php";s:4:"role";s:3:"php";s:12:"installed_as";s:64:"/var/www/horde/groupware/pear/php/MDB2/Schema/Reserved/mysql.php";}s:29:"MDB2/Schema/Reserved/oci8.php";a:5:{s:14:"baseinstalldir";s:1:"/";s:6:"md5sum";s:32:"e8a900bac6f71bd834b600356fe0490d";s:4:"name";s:29:"MDB2/Schema/Reserved/oci8.php";s:4:"role";s:3:"php";s:12:"installed_as";s:63:"/var/www/horde/groupware/pear/php/MDB2/Schema/Reserved/oci8.php";}s:30:"MDB2/Schema/Reserved/pgsql.php";a:5:{s:14:"baseinstalldir";s:1:"/";s:6:"md5sum";s:32:"e749e668b8c8704be1006996a5c7ceaf";s:4:"name";s:30:"MDB2/Schema/Reserved/pgsql.php";s:4:"role";s:3:"php";s:12:"installed_as";s:64:"/var/www/horde/groupware/pear/php/MDB2/Schema/Reserved/pgsql.php";}s:39:"MDB2/Schema/Tool/ParameterException.php";a:5:{s:14:"baseinstalldir";s:1:"/";s:6:"md5sum";s:32:"794903d743c39b61a0780e5989a5ac75";s:4:"name";s:39:"MDB2/Schema/Tool/ParameterException.php";s:4:"role";s:3:"php";s:12:"installed_as";s:73:"/var/www/horde/groupware/pear/php/MDB2/Schema/Tool/ParameterException.php";}s:22:"MDB2/Schema/Parser.php";a:5:{s:14:"baseinstalldir";s:1:"/";s:6:"md5sum";s:32:"1916b02187fcdc584e4aeb29461524d2";s:4:"name";s:22:"MDB2/Schema/Parser.php";s:4:"role";s:3:"php";s:12:"installed_as";s:56:"/var/www/horde/groupware/pear/php/MDB2/Schema/Parser.php";}s:23:"MDB2/Schema/Parser2.php";a:5:{s:14:"baseinstalldir";s:1:"/";s:6:"md5sum";s:32:"9089b4919680439e093f7b2f4e4d783c";s:4:"name";s:23:"MDB2/Schema/Parser2.php";s:4:"role";s:3:"php";s:12:"installed_as";s:57:"/var/www/horde/groupware/pear/php/MDB2/Schema/Parser2.php";}s:20:"MDB2/Schema/Tool.php";a:5:{s:14:"baseinstalldir";s:1:"/";s:6:"md5sum";s:32:"b326f643b0b9cb136b2cda0a4cde8082";s:4:"name";s:20:"MDB2/Schema/Tool.php";s:4:"role";s:3:"php";s:12:"installed_as";s:54:"/var/www/horde/groupware/pear/php/MDB2/Schema/Tool.php";}s:24:"MDB2/Schema/Validate.php";a:5:{s:14:"baseinstalldir";s:1:"/";s:6:"md5sum";s:32:"0096b0696fd417418bfb9b2be78f98fd";s:4:"name";s:24:"MDB2/Schema/Validate.php";s:4:"role";s:3:"php";s:12:"installed_as";s:58:"/var/www/horde/groupware/pear/php/MDB2/Schema/Validate.php";}s:22:"MDB2/Schema/Writer.php";a:5:{s:14:"baseinstalldir";s:1:"/";s:6:"md5sum";s:32:"e904db4fa2bfd983e5096ec49d89ebe0";s:4:"name";s:22:"MDB2/Schema/Writer.php";s:4:"role";s:3:"php";s:12:"installed_as";s:56:"/var/www/horde/groupware/pear/php/MDB2/Schema/Writer.php";}s:15:"MDB2/Schema.php";a:5:{s:14:"baseinstalldir";s:1:"/";s:6:"md5sum";s:32:"bc5c139674e5780f76186b77308f126a";s:4:"name";s:15:"MDB2/Schema.php";s:4:"role";s:3:"php";s:12:"installed_as";s:49:"/var/www/horde/groupware/pear/php/MDB2/Schema.php";}s:23:"scripts/mdb2_schematool";a:6:{s:14:"baseinstalldir";s:1:"/";s:6:"md5sum";s:32:"973b0c9adf811363d2cce9a29c9ca854";s:4:"name";s:23:"scripts/mdb2_schematool";s:4:"role";s:6:"script";s:10:"install-as";s:15:"mdb2_schematool";s:12:"installed_as";s:45:"/var/www/horde/groupware/pear/mdb2_schematool";}s:17:"tests/clitest.php";a:5:{s:14:"baseinstalldir";s:1:"/";s:6:"md5sum";s:32:"5bea21e3490a90b87251fb32ee06be13";s:4:"name";s:17:"tests/clitest.php";s:4:"role";s:4:"test";s:12:"installed_as";s:65:"/var/www/horde/groupware/pear/tests/MDB2_Schema/tests/clitest.php";}s:30:"tests/Console_TestListener.php";a:5:{s:14:"baseinstalldir";s:1:"/";s:6:"md5sum";s:32:"2a2c534ab4afb0c05ca9d7ca47815bf5";s:4:"name";s:30:"tests/Console_TestListener.php";s:4:"role";s:4:"test";s:12:"installed_as";s:78:"/var/www/horde/groupware/pear/tests/MDB2_Schema/tests/Console_TestListener.php";}s:24:"tests/driver_test.schema";a:5:{s:14:"baseinstalldir";s:1:"/";s:6:"md5sum";s:32:"d667aaba879d61bf36667a570005d4c2";s:4:"name";s:24:"tests/driver_test.schema";s:4:"role";s:4:"test";s:12:"installed_as";s:72:"/var/www/horde/groupware/pear/tests/MDB2_Schema/tests/driver_test.schema";}s:27:"tests/HTML_TestListener.php";a:5:{s:14:"baseinstalldir";s:1:"/";s:6:"md5sum";s:32:"d46a8f267dbd54f0c7ff55e479d33e7e";s:4:"name";s:27:"tests/HTML_TestListener.php";s:4:"role";s:4:"test";s:12:"installed_as";s:75:"/var/www/horde/groupware/pear/tests/MDB2_Schema/tests/HTML_TestListener.php";}s:21:"tests/lob_test.schema";a:5:{s:14:"baseinstalldir";s:1:"/";s:6:"md5sum";s:32:"927c5fdcbef1718132ddfec5802f1b3b";s:4:"name";s:21:"tests/lob_test.schema";s:4:"role";s:4:"test";s:12:"installed_as";s:69:"/var/www/horde/groupware/pear/tests/MDB2_Schema/tests/lob_test.schema";}s:30:"tests/MDB2_Schema_testcase.php";a:5:{s:14:"baseinstalldir";s:1:"/";s:6:"md5sum";s:32:"e992a39815e80f0910b676f34dfc2708";s:4:"name";s:30:"tests/MDB2_Schema_testcase.php";s:4:"role";s:4:"test";s:12:"installed_as";s:78:"/var/www/horde/groupware/pear/tests/MDB2_Schema/tests/MDB2_Schema_testcase.php";}s:12:"tests/README";a:5:{s:14:"baseinstalldir";s:1:"/";s:6:"md5sum";s:32:"33c6bb3157d8b7502b43030d8df2df5e";s:4:"name";s:12:"tests/README";s:4:"role";s:4:"test";s:12:"installed_as";s:60:"/var/www/horde/groupware/pear/tests/MDB2_Schema/tests/README";}s:14:"tests/test.php";a:5:{s:14:"baseinstalldir";s:1:"/";s:6:"md5sum";s:32:"9c992a588d3d8a4706481e5e9effb03d";s:4:"name";s:14:"tests/test.php";s:4:"role";s:4:"test";s:12:"installed_as";s:62:"/var/www/horde/groupware/pear/tests/MDB2_Schema/tests/test.php";}s:20:"tests/testchoose.php";a:5:{s:14:"baseinstalldir";s:1:"/";s:6:"md5sum";s:32:"dc05c6cc4540981d350ccac2005c2578";s:4:"name";s:20:"tests/testchoose.php";s:4:"role";s:4:"test";s:12:"installed_as";s:68:"/var/www/horde/groupware/pear/tests/MDB2_Schema/tests/testchoose.php";}s:15:"tests/tests.css";a:5:{s:14:"baseinstalldir";s:1:"/";s:6:"md5sum";s:32:"3c4d2c9d89398c5692d36299d98f9c6e";s:4:"name";s:15:"tests/tests.css";s:4:"role";s:4:"test";s:12:"installed_as";s:63:"/var/www/horde/groupware/pear/tests/MDB2_Schema/tests/tests.css";}s:19:"tests/testUtils.php";a:5:{s:14:"baseinstalldir";s:1:"/";s:6:"md5sum";s:32:"ab4fa5f6da10bed373a5d52ab9b011bf";s:4:"name";s:19:"tests/testUtils.php";s:4:"role";s:4:"test";s:12:"installed_as";s:67:"/var/www/horde/groupware/pear/tests/MDB2_Schema/tests/testUtils.php";}s:25:"tests/test_setup.php.dist";a:5:{s:14:"baseinstalldir";s:1:"/";s:6:"md5sum";s:32:"b7f20bbc8ea7869cf3ad83de7151ebc6";s:4:"name";s:25:"tests/test_setup.php.dist";s:4:"role";s:4:"test";s:12:"installed_as";s:73:"/var/www/horde/groupware/pear/tests/MDB2_Schema/tests/test_setup.php.dist";}s:30:"www/mdb2_schematool/action.php";a:6:{s:14:"baseinstalldir";s:1:"/";s:6:"md5sum";s:32:"658b8cdb91cc3c2bbce2854b18349a43";s:4:"name";s:30:"www/mdb2_schematool/action.php";s:4:"role";s:3:"www";s:10:"install-as";s:26:"mdb2_schematool/action.php";s:12:"installed_as";s:60:"/var/www/horde/groupware/pear/www/mdb2_schematool/action.php";}s:33:"www/mdb2_schematool/class.inc.php";a:6:{s:14:"baseinstalldir";s:1:"/";s:6:"md5sum";s:32:"b63d8a99b54902654b071d3b4c1c5afd";s:4:"name";s:33:"www/mdb2_schematool/class.inc.php";s:4:"role";s:3:"www";s:10:"install-as";s:29:"mdb2_schematool/class.inc.php";s:12:"installed_as";s:63:"/var/www/horde/groupware/pear/www/mdb2_schematool/class.inc.php";}s:29:"www/mdb2_schematool/index.php";a:6:{s:14:"baseinstalldir";s:1:"/";s:6:"md5sum";s:32:"d808a2a21b09802f1c4a536441d1c166";s:4:"name";s:29:"www/mdb2_schematool/index.php";s:4:"role";s:3:"www";s:10:"install-as";s:25:"mdb2_schematool/index.php";s:12:"installed_as";s:59:"/var/www/horde/groupware/pear/www/mdb2_schematool/index.php";}s:30:"www/mdb2_schematool/result.php";a:6:{s:14:"baseinstalldir";s:1:"/";s:6:"md5sum";s:32:"d10e54dd5e44155c8470d8f3a1856bee";s:4:"name";s:30:"www/mdb2_schematool/result.php";s:4:"role";s:3:"www";s:10:"install-as";s:26:"mdb2_schematool/result.php";s:12:"installed_as";s:60:"/var/www/horde/groupware/pear/www/mdb2_schematool/result.php";}}s:12:"_lastversion";N;s:7:"dirtree";a:11:{s:60:"/var/www/horde/groupware/pear/docs/MDB2_Schema/docs/examples";b:1;s:51:"/var/www/horde/groupware/pear/docs/MDB2_Schema/docs";b:1;s:46:"/var/www/horde/groupware/pear/docs/MDB2_Schema";b:1;s:54:"/var/www/horde/groupware/pear/php/MDB2/Schema/Reserved";b:1;s:45:"/var/www/horde/groupware/pear/php/MDB2/Schema";b:1;s:38:"/var/www/horde/groupware/pear/php/MDB2";b:1;s:50:"/var/www/horde/groupware/pear/php/MDB2/Schema/Tool";b:1;s:29:"/var/www/horde/groupware/pear";b:1;s:53:"/var/www/horde/groupware/pear/tests/MDB2_Schema/tests";b:1;s:47:"/var/www/horde/groupware/pear/tests/MDB2_Schema";b:1;s:49:"/var/www/horde/groupware/pear/www/mdb2_schematool";b:1;}s:3:"old";a:7:{s:7:"version";s:5:"0.8.5";s:12:"release_date";s:10:"2009-02-22";s:13:"release_state";s:4:"beta";s:15:"release_license";s:11:"BSD License";s:13:"release_notes";s:1611:"- PEAR dependency updated (Bug #15923)
+- XML_DTD dependency updated (past releases of XML_DTD doesn't works anymore. release 0.5.1 works only with PHP 5).
+- Fixed 'disable_queries' and 'show_structure' options that were malfunctioning in mdb2_schematool web version
+- Added an option to not drop obsolete tables when updating (Request #15278). It defaults not to drop, which reverts the behavior introduced in Release 0.8.3
+
+open todo items:
+- Clean up output of getDefinitionFromDatabase(). Sync it with Parser and Parser2.
+- Automatically load reserved keywords
+- Make MDB2_Schema loadable via MDB2_Driver_Common::loadModule() (Bug #8270)
+- Allow simple if statements that mean that anything enclosed is only executed
+  if it meets certain criterias based on that version number (or some other
+  variable). This would enable people to add DML statements that are only
+  executed when updating from a specific version.
+- Modularize Writer code or remake it
+- Add specific error codes for Validate class
+- Add support for ORDER clauses on UPDATEs (to resolve the duplicate key 
+  problem)
+- Update description.schema.xml
+- Create unit test for comparedefinitions()
+- Create unit test for initializetable()
+- Create unit test to compare the expected array definition with what is parsed
+- Improve validateDataFieldValue() to validate <column>
+- Provide more info on MDB2_Schema_Validate errors (output parsed value and expected value)
+- Views support
+- Fulltext index support
+- PKs as constraints, not indices
+- Creation of constraints only after all tables have been created/updated to avoid invalid references.";s:12:"release_deps";a:6:{i:0;a:4:{s:4:"type";s:3:"php";s:3:"rel";s:2:"ge";s:7:"version";s:5:"4.3.2";s:8:"optional";s:2:"no";}i:1;a:6:{s:4:"type";s:3:"pkg";s:7:"channel";s:12:"pear.php.net";s:4:"name";s:4:"PEAR";s:3:"rel";s:2:"ge";s:7:"version";s:5:"1.7.0";s:8:"optional";s:2:"no";}i:2;a:6:{s:4:"type";s:3:"pkg";s:7:"channel";s:12:"pear.php.net";s:4:"name";s:4:"MDB2";s:3:"rel";s:2:"ge";s:7:"version";s:7:"2.5.0b1";s:8:"optional";s:2:"no";}i:3;a:6:{s:4:"type";s:3:"pkg";s:7:"channel";s:12:"pear.php.net";s:4:"name";s:10:"XML_Parser";s:3:"rel";s:2:"ge";s:7:"version";s:5:"1.2.8";s:8:"optional";s:2:"no";}i:4;a:6:{s:4:"type";s:3:"pkg";s:7:"channel";s:12:"pear.php.net";s:4:"name";s:7:"XML_DTD";s:3:"rel";s:2:"ge";s:7:"version";s:5:"0.5.1";s:8:"optional";s:3:"yes";}i:5;a:6:{s:4:"type";s:3:"pkg";s:7:"channel";s:12:"pear.php.net";s:4:"name";s:14:"XML_Serializer";s:3:"rel";s:2:"ge";s:7:"version";s:6:"0.18.0";s:8:"optional";s:3:"yes";}}s:11:"maintainers";a:3:{i:0;a:5:{s:4:"name";s:17:"Lukas Kahwe Smith";s:5:"email";s:20:"smith@pooteeweet.org";s:6:"active";s:2:"no";s:6:"handle";s:6:"lsmith";s:4:"role";s:4:"lead";}i:1;a:5:{s:4:"name";s:12:"Igor Feghali";s:5:"email";s:16:"ifeghali@php.net";s:6:"active";s:3:"yes";s:6:"handle";s:8:"ifeghali";s:4:"role";s:4:"lead";}i:2;a:5:{s:4:"name";s:13:"Helgi Thormar";s:5:"email";s:13:"dufuz@php.net";s:6:"active";s:2:"no";s:6:"handle";s:5:"dufuz";s:4:"role";s:4:"lead";}}}s:10:"xsdversion";s:3:"2.0";s:13:"_lastmodified";i:1311701859;}

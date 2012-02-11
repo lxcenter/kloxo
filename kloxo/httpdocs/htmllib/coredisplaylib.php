@@ -1630,7 +1630,11 @@ function license_check()
     $time = getLicense('lic_expiry_date');
     $iip = getLicense('lic_ipaddress');
     $ipdb = new Sqlite(null, 'ipaddress');
+<<<<<<< HEAD
     $iplist = $ipdb->getRowsWhere("syncserver = 'localhost'", array('ipaddr'));
+=======
+    $iplist = $ipdb->getRowsWhere("syncserver = 'localhost'", null, array('ipaddr'));
+>>>>>>> upstream/dev
     $match = false;
     // Lack of ip should give a warning. Or allow people to reread the ip address.
     foreach((array) $iplist as $ip) {
@@ -1758,10 +1762,13 @@ function main_system_lock()
 {
     global $gbl, $sgbl, $login, $ghtml;
 
+<<<<<<< HEAD
     // Not needed for hyperVM. HyperVM has more intelligent per vps locking.
     if ($sgbl->isHyperVm())
         return;
 
+=======
+>>>>>>> upstream/dev
     return;
     $lname = null;
     $nlname = $login->getClName();

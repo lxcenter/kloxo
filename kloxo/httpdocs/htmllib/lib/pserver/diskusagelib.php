@@ -26,7 +26,11 @@ function perDisplay($var)
 	}
 }
 
+<<<<<<< HEAD
 Function display($var)
+=======
+function display($var)
+>>>>>>> upstream/dev
 {
 	if (array_search_bool($var, array('used', 'available', 'kblock'))) {
 		return getGBOrMB($this->$var);
@@ -34,10 +38,14 @@ Function display($var)
 	return $this->$var;
 }
 
+<<<<<<< HEAD
 
 
 
 static  function createListNlist($parent)
+=======
+static function createListNlist($parent, $view)
+>>>>>>> upstream/dev
 {
 	$nlist["nname"] = "100%";
 	$nlist["used"] = "15%";

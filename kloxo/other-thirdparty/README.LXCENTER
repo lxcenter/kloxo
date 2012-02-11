@@ -1,0 +1,11 @@
+This directory is not inlcluded in main distribution file kloxo-[version].zip
+
+Use make-other-thirdparty.sh (in kloxo directory) to create distribution packages.
+
+Current Tools:
+
+-awstats
+-webmail (Horde & Roundcube)
+-Ioncube loader (32 & 64 bit)
+-Zend loader (32 & 64 bit)
+

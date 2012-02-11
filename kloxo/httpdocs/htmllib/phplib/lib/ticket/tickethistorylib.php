@@ -185,7 +185,11 @@ static function getObjectsTosend($parent, $param, $action)
 		if ($obj->isClient() && !$obj->isAdmin()) {
 			$obj->findTotalBalance(null);
 			$sq = new Sqlite(null, "ticket");
+<<<<<<< HEAD
 			$tlist = $sq->getRowsWhere("made_by = 'client-$obj->nname' AND category LIKE '%TechnicalSupport%'");
+=======
+			$tlist = $sq->getRowsWhere("made_by = :nname AND category LIKE '%TechnicalSupport%'", array(':nname' => "client-$obj->nname"));
+>>>>>>> upstream/dev
 			$nticket = count($tlist);
 			$to = $obj->find_actual_billing("2009.05");
 			$extra .= "X-lxheader: $to->total P: $obj->total_paid B: $obj->total_balance T: $nticket\n";

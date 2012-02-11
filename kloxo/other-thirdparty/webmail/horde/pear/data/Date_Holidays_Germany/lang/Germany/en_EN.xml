@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<driver-data>
+    <holidays>
+    
+            
+        <holiday>
+            <internal-name>newYearsDay</internal-name>
+            <translation>New Year's Day</translation>
+        </holiday>
+            
+        <holiday>
+            <internal-name>valentinesDay</internal-name>
+            <translation>Valentine's Day</translation>
+        </holiday>
+            
+        <holiday>
+            <internal-name>fasnet</internal-name>
+            <translation>Carnival</translation>
+        </holiday>
+            
+        <holiday>
+            <internal-name>roseMonday</internal-name>
+            <translation>Rose Monday</translation>
+        </holiday>
+            
+        <holiday>
+            <internal-name>womensDay</internal-name>
+            <translation>International Women's Day</translation>
+        </holiday>
+            
+        <holiday>
+            <internal-name>april1st</internal-name>
+            <translation>April Fools</translation>
+        </holiday>
+            
+        <holiday>
+            <internal-name>girlsDay</internal-name>
+            <translation>Girls' Day</translation>
+        </holiday>
+            
+        <holiday>
+            <internal-name>earthDay</internal-name>
+            <translation>International Earth' Day</translation>
+        </holiday>
+            
+        <holiday>
+            <internal-name>beersDay</internal-name>
+            <translation>German Beer's Day</translation>
+        </holiday>
+            
+        <holiday>
+            <internal-name>walpurgisNight</internal-name>
+            <translation>Walpurgis Night</translation>
+        </holiday>
+            
+        <holiday>
+            <internal-name>dayOfWork</internal-name>
+            <translation>Labor Day</translation>
+        </holiday>
+            
+        <holiday>
+            <internal-name>laughingDay</internal-name>
+            <translation>World's Laughing Day</translation>
+        </holiday>
+            
+        <holiday>
+            <internal-name>europeDay</internal-name>
+            <translation>Europe Day</translation>
+        </holiday>
+            
+        <holiday>
+            <internal-name>mothersDay</internal-name>
+            <translation>Mothers' Day</translation>
+        </holiday>
+            
+        <holiday>
+            <internal-name>endOfWWar2</internal-name>
+            <translation>End of World War 2 in Germany</translation>
+        </holiday>
+            
+        <holiday>
+            <internal-name>fathersDay</internal-name>
+            <translation>Fathers' Day</translation>
+        </holiday>
+            
+        <holiday>
+            <internal-name>aiDay</internal-name>
+            <translation>Amnesty International Day</translation>
+        </holiday>
+            
+        <holiday>
+            <internal-name>intChildrenDay</internal-name>
+            <translation>International Children's Day</translation>
+        </holiday>
+            
+        <holiday>
+            <internal-name>organDonationDay</internal-name>
+            <translation>Day of organ donation</translation>
+        </holiday>
+            
+        <holiday>
+            <internal-name>dormouseDay</internal-name>
+            <translation>Dormouse' Day</translation>
+        </holiday>
+            
+        <holiday>
+            <internal-name>christopherStreetDay</internal-name>
+            <translation>Christopher Street Day</translation>
+        </holiday>
+            
+        <holiday>
+            <internal-name>hiroshimaCommemorationDay</internal-name>
+            <translation>Hiroshima Commemoration Day</translation>
+        </holiday>
+            
+        <holiday>
+            <internal-name>augsburgPeaceCelebration</internal-name>
+            <translation>Augsburg peace celebration</translation>
+        </holiday>
+            
+        <holiday>
+            <internal-name>leftHandedDay</internal-name>
+            <translation>International left-handeds' Day</translation>
+        </holiday>
+            
+        <holiday>
+            <internal-name>antiWarDay</internal-name>
+            <translation>Anti-War Day</translation>
+        </holiday>
+            
+        <holiday>
+            <internal-name>germanLanguageDay</internal-name>
+            <translation>Day of German Language</translation>
+        </holiday>
+            
+        <holiday>
+            <internal-name>diabetesDay</internal-name>
+            <translation>International diabetes day</translation>
+        </holiday>
+            
+        <holiday>
+            <internal-name>germanUnificationDay</internal-name>
+            <translation>German Unification Day</translation>
+        </holiday>
+            
+        <holiday>
+            <internal-name>librariesDay</internal-name>
+            <translation>Libraries' Day</translation>
+        </holiday>
+            
+        <holiday>
+            <internal-name>savingsDay</internal-name>
+            <translation>World's Savings Day</translation>
+        </holiday>
+            
+        <holiday>
+            <internal-name>halloween</internal-name>
+            <translation>Halloween</translation>
+        </holiday>
+            
+        <holiday>
+            <internal-name>stampsDay</internal-name>
+            <translation>Stamp's Day</translation>
+        </holiday>
+            
+        <holiday>
+            <internal-name>mensDay</internal-name>
+            <translation>International Men's Day</translation>
+        </holiday>
+            
+        <holiday>
+            <internal-name>wallOfBerlin</internal-name>
+            <translation>Fall of the Berlin Wall 1989</translation>
+        </holiday>
+            
+        <holiday>
+            <internal-name>carnivalBeginning</internal-name>
+            <translation>Beginning of the Carnival</translation>
+        </holiday>
+            
+        <holiday>
+            <internal-name>dayOfMourning</internal-name>
+            <translation>People's Day of Mourning</translation>
+        </holiday>
+        
+        
+    </holidays>
+</driver-data>

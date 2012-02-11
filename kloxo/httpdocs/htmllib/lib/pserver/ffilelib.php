@@ -762,7 +762,15 @@ function downloadFromBackup(&$vlist)
 	if (!$parent->ftp_server) {
 		throw new lxexception('ftp_server_not_set', '');
 	}
+<<<<<<< HEAD
 	$fn = ftp_connect($parent->ftp_server);
+=======
+
+	// issue #39 - call new function inside linuxfslib.php
+//	$fn = ftp_connect($parent->ftp_server);
+	$fn = lxftp_connect($parent->ftp_server);
+
+>>>>>>> upstream/dev
 	$mylogin = ftp_login($fn, $parent->rm_username, $parent->rm_password);
 	if ($parent->rm_directory) {
 		ftp_chdir($fn, $parent->rm_directory);
