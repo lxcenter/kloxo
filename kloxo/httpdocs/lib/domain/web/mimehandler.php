@@ -6,7 +6,11 @@ class mimehandler extends lxdb {
 
 static $__desc_extension	 = array("n", "",  "extension(s)");
 
+<<<<<<< HEAD
 static function createListNlist($parent)
+=======
+static function createListNlist($parent, $view)
+>>>>>>> upstream/dev
 {
 	$nlist['mimehandler'] = '100%';
 	$nlist['extension'] = '10%';
@@ -20,7 +24,11 @@ function createExtraVariables()
 	$this->__var_htp = "$path/.htaccess";
 	
 	$sq = new Sqlite(null, $this->get__table());
+<<<<<<< HEAD
 	$res = $sq->getRowsWhere("parent_clname = '$this->parent_clname'");
+=======
+	$res = $sq->getRowsWhere('parent_clname = :clname', array(':clname' => $this->parent_clname));
+>>>>>>> upstream/dev
 
 	$result = merge_array_object_not_deleted($res, $this);
 

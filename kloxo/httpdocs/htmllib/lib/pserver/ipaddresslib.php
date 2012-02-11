@@ -519,7 +519,11 @@ static function VerifyString($parent, $param)
 	}
 
 	$sq = new Sqlite($parent->__masterserver, "ipaddress");
+<<<<<<< HEAD
 	$res = $sq->getRowsWhere("syncserver = '$parent->nname'");
+=======
+	$res = $sq->getRowsWhere('syncserver = :nname', array(':nname' => $parent->nname));
+>>>>>>> upstream/dev
 	$list = get_namelist_from_arraylist($res, "ipaddr");
 
 	if (array_search_bool($param['ipaddr'], $list)) {

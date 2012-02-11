@@ -1,0 +1,41 @@
+<?php 
+$__keyword['under'] = "onder"; // under
+$__keyword['filtered'] = "gefilterd"; // filtered
+$__keyword['no'] = "Geen"; // No
+$__keyword['matching_the_filter'] = "Het afstemmen van de filter"; // Matching the Filter
+$__keyword['no_matches_found'] = "Geen wedstrijden gevonden"; // No Matches Found
+$__keyword['db_will_be_used'] = "Nieuwe databank zal worden gemaakt"; // New Database will be created
+$__keyword['master_cannot_be_assigned'] = "Master kan niet worden toegewezen aan een client"; // Master cannot be assigned to a client
+$__keyword['resource'] = "middelen"; // resources
+$__keyword['help'] = "Help"; // Help
+$__keyword['desktop'] = "Desktop"; // Desktop
+$__keyword['home'] = "Home"; // Home
+$__keyword['manage'] = "Te beheren"; // Manage
+$__keyword['list'] = "lijst"; // list
+$__keyword['extra'] = "extra"; // extra
+$__keyword['system'] = "het systeem"; // system
+$__keyword['administration'] = "administratie"; // administration
+$__keyword['logout'] = "Afmelden"; // Logout
+$__keyword['about'] = "over"; // about
+$__keyword['status'] = "Status"; // Status
+$__keyword['enable'] = "Staat"; // Enable
+$__keyword['disable'] = "Uitschakelen"; // Disable
+$__keyword['console'] = "Console"; // Console
+$__keyword['webmailanddb'] = "Web &amp; Mail &amp; DB"; // Web & Mail & DB
+$__keyword['trafficandlog'] = "Verkeer &amp; Log"; // Traffic & Log
+$__keyword['script'] = "script"; // script
+$__keyword['action'] = "Actie"; // Action
+$__keyword['power'] = "vermogen"; // power
+$__keyword['cpenabled'] = "CP Ingeschakeld"; // CP Enabled
+$__keyword['cpdisabled'] = "CP met een handicap"; // CP Disabled
+$__keyword['virtual'] = "virtuele"; // virtual
+$__keyword['continue_without_plan'] = "Voort te zetten zonder plan"; // Continue Without Plan
+$__keyword['add'] = "toe te voegen"; // add
+$__keyword['continue'] = "blijven"; // continue
+$__keyword['all'] = "alle"; // all
+$__keyword['search_on'] = "Zoeken op"; // search on
+$__keyword['search_note'] = "Zoek is, en dat is waarom deze lijst Nill is. Om alle resultaten, klik op toon alle"; // Search is on, and thats why this list is nill. To see all results, click on show all
+$__keyword['deprecated'] = "afgekeurd in Reseller en Admin."; // deprecated in Reseller and Admin.
+
+$__keyword['console_message'] = "Je bent eigenlijk te loggen op een gebruiker (% username%) op de host machine, die automatisch je erbij neervalt in de VPS. Het wachtwoord is uw Control Panel wachtwoord voor de VPS. U kunt ook inloggen om deze gebruiker% username% met behulp van uw favoriete ssh-client, en ook daar op een succesvolle login, wordt u neergezet in het VPS. Merk op dat je geen behoefte aan een ipadres te worden geconfigureerd op de vps deze faciliteit te gebruiken. U bent in principe aansluiten op de host als gebruiker, die automatisch zal u naar het VPS."; // You are actually logging into a user (%username%) on the HOST machine, which will automatically drop you into the vps. The password is your Control Panel password for the vps. You can also login to this user %username%  using your favorite ssh client, and there too on a successful login, you will be dropped into the vps. Note that you don't need an ipaddress to be configured on the vps to use this facility. You are basically connecting to the HOST as user, which will automatically transfer you to the vps.
+

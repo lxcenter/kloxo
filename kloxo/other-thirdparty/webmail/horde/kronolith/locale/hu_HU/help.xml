@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="iso-8859-2"?>
+<help>
+  <entry id="Overview" md5="1585927d48e4627c792fe0332c41fd39" state="uptodate">
+    <title>Naptár: Áttekintés</title>
+    <heading>Mire jó a Naptár?</heading>
+    <para>
+A Naptár egy web alapú naptárprogram. Azon túl, hogy eseményeket
+lehet létrehozni, változtatni és törölni, egy sor egyéb dolgot is támogat:
+ismétlődő eseményeket (kivételekkel és törlési lehetőségekkel), emlékeztetőket, importálást
+és exportálást, mutatja a feladatok listáját (amennyiben ez a
+program telepítve van), továbbá az események listáját a személyes kezdőlapon 
+is meg tudja jeleníteni.
+    </para>
+  </entry>
+  <entry id="menu-today" md5="c6d0c0f366175a38d0655ed9969ed4a6" state="uptodate">
+    <title>Menü: Ma</title>
+    <heading>Ma</heading>
+    <para>
+    A "Ma" menüpont az alapértelmezett módon (havi, heti, napi stb. 
+nézetben, ahogy az Opciókban be van állítva) jeleníti meg az aznapi dátumot.
+    </para>
+  </entry>
+  <entry id="menu-Goto" md5="566191775ba90b769f2e3f7cdf24cbfa" state="uptodate">
+    <title>Menü: Ugrás</title>
+    <heading>Ugrás</heading>
+    <para>
+    Az "Ugrás" menüpont egy kis felbukkanó ablakot jelenít meg, melyben
+gyorsan kiválasztható, hogy melyik napra ugorjunk (pl. megadható az év,
+a hónap, az év valahányadik hete, a hónap adott napja). Rendszerint ez a 
+a naptárban való dátumválasztás leggyorsabb módja.
+    </para>
+  </entry>
+  <entry id="menu-Day" md5="3cd62e10116058db52a15fecd7ddbcb0" state="uptodate">
+    <title>Menü: Nap</title>
+    <heading>Napi nézet</heading>
+    <para>
+    A "Nap" menüpont a kiválasztott dátum napi nézetét jeleníti meg.
+    </para>
+  </entry>
+  <entry id="menu-work-week" md5="f9a63585c81dca63887e130dbbea91de" state="uptodate">
+    <title>Menü: Munkahét</title>
+    <heading>Munkahét nézet</heading>
+    <para>
+    A "Munkahét" menüpont a kiválasztott dátumhoz legközelebb eső
+munkahetet jeleníti meg (hétfőtől péntekig).
+    </para>
+  </entry>
+  <entry id="menu-week" md5="3d8a3bfda629bb6e09819b2e660546e5" state="uptodate">
+    <title>Menü: Hét</title>
+    <heading>Heti nézet</heading>
+    <para>
+    A "Hét" menüpont a kiválasztott dátumot tartalmazó hét adatait
+jeleníti meg (7 napos nézet).
+    </para>
+  </entry>
+  <entry id="menu-month" md5="4be2056875775ec1f5b0f920a1dab608" state="uptodate">
+    <title>Menü: Hónap</title>
+    <heading>Hónap nézet</heading>
+    <para>
+    A "Hónap" menüpont a kiválasztott dátumot tartalmazó hónap adatait
+jeleníti meg.
+    </para>
+  </entry>
+  <entry id="menu-new-event" md5="37406cc2ee51040862df1eaa2f645d4e" state="uptodate">
+    <title>Menü: Új esemény</title>
+    <heading>Új esemény létrehozása</heading>
+    <para>
+    Az "Új esemény" menüpont segítségével új eseményt rögzíthet
+a naptárban.
+    </para>
+  </entry>
+  <entry id="menu-options" md5="d7df2c0cda84c89c638d9d6e59307976" state="uptodate">
+    <title>Menü: Opciók</title>
+    <heading>Opciók</heading>
+    <para>
+    Az "Opciók" menüpont segítségével személyes igényeinek megfelelően
+állíthatja be a program tulajdonságait, más Horde programmodulokkal való 
+együttműködését, több ill. másokkal közös naptárakat használhat, továbbá
+személyes igényeinek megfelelően alakíthatja eseményeinek kategorizálását.
+    </para>
+  </entry>
+  <entry id="menu-import-export" md5="34bc9dfc4d6302fc1011696a1b8d1ca8" state="uptodate">
+    <title>Menü: Import/Export</title>
+    <heading>Import/Export</heading>
+    <para>
+    Az "Import/Export" menüpont segítségével importálhatók ill.
+exportálhatók a naptári események. Jelenleg CSV (comma separated value:
+vesszővel elválasztott adatformátum) és Microsoft Outlook formátumú adatok
+importálhatók. Exportálni csak CSV formátumban lehet.
+    </para>
+  </entry>
+  <entry id="alarms" md5="4c1c6f3eb13a416031ffbee4fce99ea1" state="uptodate">
+    <title>Emlékeztetők</title>
+    <heading>Emlékeztetők</heading>
+    <para>
+    A program emlékeztetni tudja Önt az egyes eseményekről. Alapértelmezés szerint az
+első emlékeztetőt 15 perccel az esemény kezdete előtt kapja
+a felhasználó, de ez szabadon állítható be, külön-külön az egyes 
+eseményekre.
+    </para>
+  </entry>
+  <entry id="recurring-events" md5="8ea7be1fb6cee0b4131c9a548e25d92f" state="uptodate">
+    <title>Ismétlődő események</title>
+    <heading>Ismétlődő események</heading>
+    <para>
+    Az egyes eseményekhez többféle módon állítható be az ismétlődés. Az
+események gyakran egyszerű módon ismétlődnek, pl. a "havi"
+vagy "heti" ismétlődés a kiválasztott eseményt havi ill. heti
+ismétődésűvé teszi. Az ismétlődések bonyolultabban is megadhatók: pl.
+minden hónap utolsó péntekén, vagy minden héten hétfőn, szerdán és
+pénteken.
+    </para>
+    <para>
+    Az ismétlődés időtartama behatárolható az ismétlődést végét jelző
+dátum megadásával.
+    </para>
+    <para>
+    Amennyiben módosítunk egy ismétlődő eseményt, akkor a módosítás
+az esemény összes előfordulására érvényes lesz. Amennyiben egy ismétlődő
+esemény egyetlen előfordulását kívánjuk megváltoztatni, akkor szüntessük
+meg az ismétlődését, majd az "Mentés újként" gombra kattintva
+mentsük el. Ezt követően az eseménynek ez az előfordulása a többi 
+ismétlődéstől függetlenül módosítható.
+    </para>
+  </entry>
+  <entry id="Printing" md5="2f90d14e34b715a054fb52bb919ac5f8" state="uptodate">
+    <title>Nyomtatás</title>
+    <heading>A naptár és az események kinyomtatása</heading>
+    <para>
+    A naptár bizonyos megjelenítési módjait ki lehet nyomtatni. Ezekben
+az esetekben a felső menüsorban megjelenik a "Nyomtatás" ikon. Erre
+az ikonra kattintva kinyomtatható a képernyő tartalma.
+    </para>
+</entry>
+  <entry id="shares" md5="bf3a44d08a824979ba8dd8fd0e661eee" state="uptodate">
+  <title>Naptárak megosztása</title>
+  <para>
+    A rendszer felhasználói különböző jogosultságokkal megoszthatják egymás között naptáraikat.
+  </para>
+</entry>
+  <entry id="embed" md5="f62876bee3350ab0066d4f90feeef297" state="uptodate">
+  <title>Naptárak beágyazása</title>
+  <para>
+    Naptárai beágyazhatók külső weboldalakon is megjeleníthetők.
+    Ugyanazokat a megjelenítéseket használhatja, amiket a személyes kezdőlapján.
+    A következők példákban láthatja naptárainak blogokba, és egyéb weboldalakba történő beágyazását.
+    Természetesen szerkeszteni kell az itt megadott példakódokat.
+  </para>
+  <para>
+    Naptára havi nézetének beágyazása külső weboldalba:
+  </para>
+    <i>&lt;div id="kronocalendar"&gt;&lt;/div&gt;&lt;script
+    src="http://hostname.example.com/horde/kronolith/imple.php?imple=Embed
+    /container=kronocalendar/view=month/calendar=calendar_name"
+    type="text/javascript"&gt;&lt;/script&gt;</i>
+  <para>
+    Közelgő eseményeinek beágyazása (figyeljen a 'months' és a 'maxevents' paraméterekre):
+  </para>
+    <i>&lt;div id="kronolist"&gt;&lt;/div&gt;&lt;script
+    src="http://hostname.example.com/horde/kronolith/imple.php?imple=Embed
+    /view=monthlist/calendar=calendar_name/container=kronolist/months=2/
+    maxevents=10" type="text/javascript"&gt;&lt;/script&gt;</i>
+  <para>
+    Áttekintő naptár beágyazása:
+  </para>
+    <i>&lt;div id="kronosummary"&gt;
+    &lt;/div&gt;&lt;script type="text/javascript"
+    src="http://hostname.example.com/horde/kronolith/imple.php?imple=Embed
+    /container=kronosummary/view=summary/calendar=calendar_name
+    "&gt;&lt;/script&gt;</i>
+</entry>
+</help>

@@ -119,7 +119,11 @@ function lxins_main()
 		if (substr($installversion, 0, 4) == '6.0.') {
 			print("\n*** Need additional files installing $installversion (less then 6.1.0)***\n");
 			print("      Run 'sh /script/kloxo-installer.sh' (without argument)\n\n");		
+<<<<<<< HEAD
 			exit;
+=======
+		//	exit;
+>>>>>>> upstream/dev
 		}
 		chdir("/usr/local/lxlabs/kloxo");
 		system("mkdir -p /usr/local/lxlabs/kloxo/log");
