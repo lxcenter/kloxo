@@ -2,20 +2,10 @@
 
 chdir("../../");
 include_once "htmllib/lib/displayinclude.php";
-<<<<<<< HEAD
-=======
-
-#require_once('l18n/l18n.php');
-
->>>>>>> upstream/dev
 index_main();
 
 function index_main()
 {
-<<<<<<< HEAD
-=======
-	#load_l18n();
->>>>>>> upstream/dev
 	init_language();
 	print_index();
 }
@@ -146,11 +136,7 @@ function print_index()
 		return;
 	}
 
-<<<<<<< HEAD
 	log_log("login_success", "Successful Login to $cgi_clientname from " .  $_SERVER['REMOTE_ADDR']);
-=======
-	log_log('login_success', _('Successful Login to ').$cgi_clientname._(' from ').$_SERVER['REMOTE_ADDR']);
->>>>>>> upstream/dev
 	/*
 	try {
 		$att = $gbl->g->getFromList("loginattempt", $ip);

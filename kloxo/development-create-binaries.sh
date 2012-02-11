@@ -1,5 +1,4 @@
 #!/bin/sh
-<<<<<<< HEAD
 #    Kloxo, Hosting Control Panel
 #
 #    Copyright (C) 2000-2009	LxLabs
@@ -18,8 +17,6 @@
 #    You should have received a copy of the GNU Affero General Public License
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
-=======
->>>>>>> upstream/dev
 #
 # This file creates binaries.
 # 

@@ -8,11 +8,8 @@ function fixlogdir_main()
 {
 	global $gbl, $sgbl, $login, $ghtml; 
 
-<<<<<<< HEAD
 	$progname = $sgbl->__var_program_name;
 
-=======
->>>>>>> upstream/dev
 	$logl = lscandir_without_dot("../log");
 	lxfile_mkdir("../processed_log");
 	@ lunlink("../log/access_log");
@@ -42,9 +39,4 @@ function fixlogdir_main()
 	lxfile_generic_chown("../log/access_log", "lxlabs:root");
 	//
 	os_restart_program();
-<<<<<<< HEAD
-=======
-
-
->>>>>>> upstream/dev
 }

@@ -45,11 +45,7 @@ function updateUpdate($param)
 function updateform($subaction, $param)
 {
 	global $gbl, $sgbl, $login, $ghtml; 
-<<<<<<< HEAD
 	$list = array("client"); if ($sgbl->isHyperVm()) { $list = lx_array_merge(array($list, array("vps"))); }
-=======
-	$list = array("client");
->>>>>>> upstream/dev
 	$vlist['class'] = array('s', $list);
 	$vlist['description'] = null;
 	$vlist['url'] = null;
@@ -67,11 +63,7 @@ static function addform($parent, $class, $typetd = null)
 {
 
 	global $gbl, $sgbl, $login, $ghtml; 
-<<<<<<< HEAD
 	$list = array("client"); if ($sgbl->isHyperVm()) { $list = lx_array_merge(array($list, array("vps"))); }
-=======
-	$list = array("client");
->>>>>>> upstream/dev
 
 	$vlist['nname'] = null;
 	$vlist['description'] = null;

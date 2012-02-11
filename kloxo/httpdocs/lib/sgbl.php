@@ -22,7 +22,6 @@ class Sgbl
 		$this->initCtTypes();
 
 		$this->__var_program_name = 'kloxo';
-<<<<<<< HEAD
 		$this->__ver_major = "6";
 		$this->__ver_minor = "1";
 		$this->__ver_release = "10";
@@ -34,32 +33,10 @@ class Sgbl
 		$this->__var_nname_impstr = "___";
 		$this->__var_prog_port = "7778";
 		$this->__var_prog_ssl_port = "7777";
-=======
-
-		// Kloxo version number
-		$this->__ver_major = "6";
-		$this->__ver_minor = "2";
-		$this->__ver_release = "0";
-
-		$this->__ver_enterprise = "Single Server Edition";
-		$this->__ver_type = "production"; // production
-		$this->__ver_extra = "Stable"; // Stable
-		$this->__ver_major_minor = $this->__ver_major . "." . $this->__ver_minor;
-		$this->__ver_major_minor_release = $this->__ver_major . "." . $this->__ver_minor . "." . $this->__ver_release;
-		$this->__var_nname_impstr = "___";
-		$this->__var_prog_port = "7778"; // Kloxo GUI
-		$this->__var_prog_ssl_port = "7777"; // Kloxo GUI
-		$this->__var_mssqlport = '7773'; // Microsoft SQL port
-		$this->__var_local_port = '7776'; // Master Communication (Enterprise Mode)
-		$this->__var_remote_port = '7779'; // Slave Communication (Enterprise Mode)
-
-		$this->__downloadserver = 'http://download.lxcenter.org/'; // Where to get/check for updates
->>>>>>> upstream/dev
 
 		$this->__var_lxlabs_marker = "__lxlabs_marker";
 		$this->__var_lpanelwidth = "220";
 
-<<<<<<< HEAD
 		if (windowsOs()) {
 			$this->__var_quote_char = "\"";
 			$this->__var_database_type = "sqlite";
@@ -143,52 +120,6 @@ class Sgbl
 			$this->__path_program_htmlbase = "/usr/local/lxlabs/kloxo/httpdocs";
 			$this->__path_php_path = $this->__path_lxlabs_base . "/ext/php/php";
 		}
-=======
-
-		$this->__var_quote_char = "'";
-		$this->__path_perl_path = "/usr/bin/perl";
-		$this->__path_kloxo_back_phpini = "/etc/kloxo-backup-php.ini";
-		$this->__var_database_type = "mysql";
-		$this->__path_mysqlclient_path = "mysql";
-		$this->__path_mysqldump_path = "mysqldump";
-		$this->__var_noaccess_shell = '/sbin/nologin';
-		$this->__path_named_path = "/var/named";
-		$this->__path_customer_root = "/home";
-		$this->__path_mysql_datadir = "/var/lib/mysql/";
-
-		$this->__path_slash = "/";
-		$this->__path_tmp = "/tmp";
-		$this->__path_user_root = "/usr";
-		$this->__path_var_root = "/var";
-		$this->__path_real_etc_root = "/etc";
-		$this->__path_log = "/var/log";
-		$this->__path_root_base = "/";
-
-		$this->__path_mara_path = "";
-		$this->__path_mara_chroot = "/etc/maradns/";
-		$this->__path_mara_conf = "/etc/mararc";
-
-		$this->__path_program_home = "/home/kloxo";
-		$this->__path_home_dir = "/home";
-		$this->__path_named_conf = "/etc/kloxo.named.conf";
-		$this->__path_named_chroot = "";
-		$this->__path_home_root = "/home/kloxo";
-		$this->__path_apache_path = "/etc/httpd/conf/";
-		$this->__path_lighty_path = "/etc/lighttpd/";
-		$this->__path_cron_root = '/var/spool/cron/';
-		$this->__path_real_etc_root = "/etc/";
-		$this->__path_httpd_root = "/home/httpd";
-		$this->__path_client_root = "/home/kloxo/client";
-		// TODO: Migrate lxadmin path to kloxo
-		$this->__path_mail_root = "/home/lxadmin/mail";
-
-		$this->__path_kloxo_httpd_root = "/home/kloxo/httpd";
-		$this->__path_lxlabs_base = "/usr/local/lxlabs";
-		$this->__path_program_etc = "/usr/local/lxlabs/kloxo/etc/";
-		$this->__path_program_root = "/usr/local/lxlabs/kloxo";
-		$this->__path_program_htmlbase = "/usr/local/lxlabs/kloxo/httpdocs";
-		$this->__path_php_path = $this->__path_lxlabs_base . "/ext/php/php";
->>>>>>> upstream/dev
 
 		$this->__path_serverfile = $this->__path_lxlabs_base . "/kloxo/serverfile";
 		$this->__path_download_dir = $this->__path_lxlabs_base . "/kloxo/download";
@@ -202,10 +133,7 @@ class Sgbl
 		$this->__var_progservice_apache = 'httpd';
 		$this->__var_programname_ftp = 'pure-ftpd';
 		$this->__var_programname_syslog = 'syslog';
-<<<<<<< HEAD
 		//$this->__var_programname_mysql = 'mysqld';
-=======
->>>>>>> upstream/dev
 		$this->__var_progservice_bind = 'named';
 		$this->__var_programname_mmail = 'qmail';
 		$this->__var_programname_imap = 'courier-imap';
@@ -216,12 +144,9 @@ class Sgbl
 		$this->__path_ssl_root = $this->__path_kloxo_httpd_root . "/ssl";
 		$this->__path_named_realpath = "$this->__path_named_chroot/$this->__path_named_path";
 
-<<<<<<< HEAD
 		$this->__var_mssqlport = '7773';
 		$this->__var_local_port = '7776';
 		$this->__var_remote_port = '7779';
-=======
->>>>>>> upstream/dev
 
 		$conffile = "$this->__path_program_root/file/conf/os.conf";
 
@@ -244,24 +169,15 @@ class Sgbl
 			exit;
 		}
 
-<<<<<<< HEAD
 		foreach($conf as $k => $v) {
-=======
-		foreach ($conf as $k => $v) {
->>>>>>> upstream/dev
 			if (!is_array($v)) {
 				print("Error in Config File Syntax...\n");
 				exit;
 			}
 
 			$vvarcore = "__{$k}_";
-<<<<<<< HEAD
 			foreach($v as $nk => $nv) {
 				$vvar =  $vvarcore . $nk;
-=======
-			foreach ($v as $nk => $nv) {
-				$vvar = $vvarcore . $nk;
->>>>>>> upstream/dev
 				$this->$vvar = $nv;
 			}
 		}
@@ -277,7 +193,6 @@ class Sgbl
 		$this->__path_super_pass = $this->__path_program_etc . "/conf/superadmin.pass";
 		$this->__path_admin_pass = $this->__path_program_etc . "/conf/kloxo.pass";
 		$this->__path_master_pass = $this->__path_program_etc . "/conf/kloxo.pass";
-<<<<<<< HEAD
 
 		$this->__var_super_user = "lxasuper";
 		$this->__var_admin_user = "kloxo";
@@ -289,15 +204,6 @@ class Sgbl
 		$this->__path_sql_file  = "$this->__path_program_htmlbase/sql/full";
 		$this->__path_sql_file_common  = "$this->__path_program_htmlbase/sql/common";
 
-=======
-		$this->__var_super_user = "lxasuper";
-		$this->__var_admin_user = "kloxo";
-		$this->__path_slave_db = $this->__path_program_etc . "/conf/slave-db.db";
-		$this->__path_supernode_db = "lxasuper";
-		$this->__path_sql_file_supernode = "$this->__path_program_htmlbase/sql/supernode";
-		$this->__path_sql_file = "$this->__path_program_htmlbase/sql/full";
-		$this->__path_sql_file_common = "$this->__path_program_htmlbase/sql/common";
->>>>>>> upstream/dev
 		$this->__path_updating_file = $this->__path_program_etc . "/.updating";
 		$this->__path_httpd_conf_file = $this->__path_apache_path . "/httpd.conf";
 		$this->__path_mail_log = $this->__path_log . "/maillog";
@@ -306,7 +212,6 @@ class Sgbl
 		$this->__path_mysql_log = $this->__path_log . "/mysqld.log";
 		$this->__path_vsftpd_log = $this->__path_log . "/vsftpd.log";
 		$this->__path_lxmisc = $this->__path_program_root . "/sbin/lxmisc";
-<<<<<<< HEAD
 
 		$this->__var_rolelist = array("web", "mail", "dns", "secondary_master");
 
@@ -314,11 +219,6 @@ class Sgbl
 
 		$this->__var_error_file = "__path_program_root/httpdocs/.php.err";
 
-=======
-		$this->__var_rolelist = array("web", "mail", "dns", "secondary_master");
-		$this->__var_dblist = array("mysql");
-		$this->__var_error_file = "__path_program_root/httpdocs/.php.err";
->>>>>>> upstream/dev
 		$this->__var_ticket_subcategory = null;
 	}
 

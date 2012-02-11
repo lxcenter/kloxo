@@ -118,11 +118,7 @@ static function initThisArray($parent, $class, $fieldlist)
 	global $gbl, $sgbl, $login, $ghtml; 
 
 	$db = new Sqlite($parent->__masterserver, "component");
-<<<<<<< HEAD
 	$res = $db->getRowsWhere("syncserver = '$parent->syncserver'");
-=======
-	$res = $db->getRowsWhere('syncserver = :syncserver', array(':syncserver' => $parent->syncserver));
->>>>>>> upstream/dev
 
 
 	if ($res) foreach($res as &$__r) {

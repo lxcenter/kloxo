@@ -51,13 +51,8 @@ function updatecleanup_main()
 
 //
 
-<<<<<<< HEAD
 	if (lxfile_exists('.git')) {
 		log_cleanup('- Development found... Exiting');
-=======
-	if (lxfile_exists(".svn")) {
-		log_cleanup("- SVN Found... Exiting");
->>>>>>> upstream/dev
 		exit;
 	}
 

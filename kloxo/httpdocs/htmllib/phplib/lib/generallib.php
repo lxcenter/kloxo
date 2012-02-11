@@ -210,14 +210,7 @@ function createShowPropertyList(&$alist)
 function updateselfbackupconfig($param)
 {
 	if (isOn($param['selfbackupparam_b-selfbackupflag'])) {
-<<<<<<< HEAD
 		$fn = ftp_connect($param['selfbackupparam_b-ftp_server']);
-=======
-		// issue #39 - call new function inside linuxfslib.php
-	//	$fn = ftp_connect($param['selfbackupparam_b-ftp_server']);
-		$fn = lxftp_connect($param['selfbackupparam_b-ftp_server']);
-
->>>>>>> upstream/dev
 		$mylogin = ftp_login($fn, $param['selfbackupparam_b-rm_username'], $param['selfbackupparam_b-rm_password']);
 		if (!$mylogin) {
 			$p = error_get_last();

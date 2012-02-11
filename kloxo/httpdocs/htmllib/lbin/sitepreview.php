@@ -30,11 +30,7 @@ $request = $_SERVER['REQUEST_URI'];
 
 if (!csa($request, "sitepreview/")) {
 	header("HTTP/1.0 404 Not Found");
-<<<<<<< HEAD
 	print("404--- <br> ");
-=======
-	print("404<br>Action: sitepreview<br>Page/URL not found! <br>");
->>>>>>> upstream/dev
 	exit;
 }
 
@@ -44,11 +40,7 @@ $domain = strtilfirst($request, "/");
 
 dprint($domain);
 $sq = new Sqlite(null, 'web');
-<<<<<<< HEAD
 $res = $sq->getRowsWhere("nname = '$domain'");
-=======
-$res = $sq->getRowsWhere('nname = :domain', array(':domain' => $domain));
->>>>>>> upstream/dev
 
 if (!$res) {
 	print("Domain Doesn't exist\n");
@@ -74,11 +66,7 @@ if (isset($res[$ext]) && $res[$ext] !== 'text/html' && $res[$ext] !== 'text/css'
 
 rl_exec_get(null, 'localhost', 'removeFromEtcHost', array($domain));
 
-<<<<<<< HEAD
 include "/usr/local/lxlabs/kloxo/httpdocs/lib/hn_urlrewrite_example/hn_urlrewrite.class.php";
-=======
-include "/usr/local/lxlabs/kloxo/httpdocs/lib/hn_urlrewrite/hn_urlrewrite.class.php";
->>>>>>> upstream/dev
 
 $rewrite = new hn_urlrewrite();
 

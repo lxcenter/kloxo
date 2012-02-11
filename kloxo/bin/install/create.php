@@ -20,10 +20,7 @@ function create_main()
 
 	os_fix_lxlabs_permission();
 	os_create_program_service();
-<<<<<<< HEAD
 	os_create_kloxo_service_once();
-=======
->>>>>>> upstream/dev
 
 	if (isset($opt['admin-password'])) {
 		$admin_pass = $opt['admin-password'];
@@ -59,10 +56,7 @@ function create_main()
 	}
 
 	os_create_default_slave_driver_db();
-<<<<<<< HEAD
 	os_fix_some_permissions();
-=======
->>>>>>> upstream/dev
 }
 
 

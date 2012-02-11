@@ -6,13 +6,7 @@ include_once "htmllib/lib/displayinclude.php";
 $nonsslhash = "#";
 $sslport = $sgbl->__var_prog_ssl_port;
 $nonsslport = $sgbl->__var_prog_port;
-<<<<<<< HEAD
 
-=======
-//TODO
-//find nonsslport settings and add a setting for client cert mode
-//build a template switch around this.
->>>>>>> upstream/dev
 $list = parse_opt($argv);
 if (!isset($list['default-port']) && !lxfile_exists("__path_slave_db")) {
 
@@ -28,12 +22,6 @@ if (!isset($list['default-port']) && !lxfile_exists("__path_slave_db")) {
 		if (isset($gen->nonsslport)) {
 			$nonsslport = $gen->nonsslport;
 		}
-<<<<<<< HEAD
-=======
-		if (isset($gen->sslextraconf)) {
-			$sslextraconf= $gen->sslextraconf;
-		}
->>>>>>> upstream/dev
 	}
 }
 
@@ -80,10 +68,6 @@ foreach($list as &$l) {
 	$l = preg_replace("/__program_port__/", $nonsslport, $l);
 	$l = preg_replace("/__program_sslport__/", $sslport, $l);
 	$l = preg_replace("/__program_user__/", $user, $l);
-<<<<<<< HEAD
-=======
-	$l = preg_replace("/__program_sslextraconf__/",$sslextraconf, $l);
->>>>>>> upstream/dev
 }
 
 lfile_put_contents("../file/lighttpd.conf", implode("", $list));

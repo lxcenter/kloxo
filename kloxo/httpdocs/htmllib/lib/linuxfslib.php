@@ -701,31 +701,3 @@ function do_exec_system($username, $dir, $cmd, &$out, &$err, &$ret, $input)
 	}
 
 }
-<<<<<<< HEAD
-=======
-
-// issue #39 -- new function for handle ftp connection
-function lxftp_connect($ftp_server) {
-
-	list($ftp_protocol, $ftp_rest) = explode("://", $ftp_server);
-
-	// Remark - if not use 'ftp://' or 'ftps://', ftp_protocol=ftp_server and ftp_rest=null
-	if (!$ftp_rest) {
-		$ftp_rest = $ftp_protocol;
-		$ftp_protocol = "ftp";
-	}
-
-	list($ftp_domain, $ftp_port) = explode(":", $ftp_rest);
-
-	if (!$ftp_port) {
-		$ftp_port = "21";
-	}
-
-	if ($ftp_url === 'ftps') {
-		return ftp_ssl_connect($ftp_domain, $ftp_port);
-	}
-	else {
-		return ftp_connect($ftp_domain, $ftp_port);
-	}
-}
->>>>>>> upstream/dev

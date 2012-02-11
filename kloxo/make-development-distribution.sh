@@ -1,5 +1,4 @@
 #!/bin/sh
-<<<<<<< HEAD
 #    Kloxo, Hosting Control Panel
 #
 #    Copyright (C) 2000-2009	LxLabs
@@ -18,8 +17,6 @@
 #    You should have received a copy of the GNU Affero General Public License
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
-=======
->>>>>>> upstream/dev
 #
 # This file creates kloxo-[version]-R[svn].zip for development testing
 # 
@@ -28,14 +25,11 @@
 # - compile c files
 # - create zip package
 ######
-<<<<<<< HEAD
 #
 # Script is broken since the move to GitHub. Need to be rewritten.
 #
 exit # remove this when fixed.
 #
-=======
->>>>>>> upstream/dev
 printUsage() {
  echo "Usage:"
  echo "make-development-distribution.sh <n> <n> <n> ( Where n are numbers.   Example: 6 1 0 )"
@@ -105,10 +99,7 @@ zip -r9yq kloxo-$KVERSION-R$SVNVERSION.zip ./bin ./cexe ./file ./httpdocs ./pscr
 "*httpdocs/.php.err" \
 "*/CVS/*" \
 "*/.svn/*" \
-<<<<<<< HEAD
 "*/.git/*" \
-=======
->>>>>>> upstream/dev
 "*httpdocs/thirdparty/*" \
 "*httpdocs/htmllib/extjs/*" \
 "*httpdocs/htmllib/fckeditor/*" \

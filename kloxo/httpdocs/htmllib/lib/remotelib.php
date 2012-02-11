@@ -805,11 +805,7 @@ function do_master_get_data($var)
 	switch($var) {
 		case "contactemail":
 			$sq = new Sqlite(null, 'client', true);
-<<<<<<< HEAD
 			$vv = $sq->getRowsWhere("nname = 'admin'", array("contactemail"));
-=======
-			$vv = $sq->getRowsWhere("nname = 'admin'", null, array("contactemail"));
->>>>>>> upstream/dev
 			return $vv[0]['contactemail'];
 	}
 

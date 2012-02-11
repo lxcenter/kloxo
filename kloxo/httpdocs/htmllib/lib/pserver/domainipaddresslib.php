@@ -22,11 +22,7 @@ function defaultValue($var)
 {
 	if ($var === 'ipaddr') {
 		$db = new Sqlite($this->__masterserver, 'ipaddress');
-<<<<<<< HEAD
 		$res = $db->getRowsWhere("nname = '$this->nname'");
-=======
-		$res = $db->getRowsWhere('nname = :nname', array(':nname' => $this->nname));
->>>>>>> upstream/dev
 		return $res[0]['ipaddr'];
 	}
 	return null;
@@ -39,21 +35,13 @@ function updateform($subaction, $param)
 
 
 	$sq = new Sqlite(null, 'web');
-<<<<<<< HEAD
 	$list = $sq->getRowsWhere("syncserver = '$this->syncserver'", array('nname'));
-=======
-	$list = $sq->getRowsWhere('syncserver = :syncserver', array(':syncserver' => $this->syncserver), array('nname'));
->>>>>>> upstream/dev
 	$dlist = get_namelist_from_arraylist($list, 'nname');
 
 
 	if (!$login->isAdmin()) {
 		$sq = new Sqlite(null, 'domain');
-<<<<<<< HEAD
 		$nlist = $sq->getRowsWhere("parent_clname = '{$login->getClName()}'", array('nname'));
-=======
-		$nlist = $sq->getRowsWhere('parent_clname = :clname', array(':clname' => $login->getClName()), array('nname'));
->>>>>>> upstream/dev
 		$ndlist = get_namelist_from_arraylist($nlist);
 		foreach($dlist as $k => $v) {
 			if (!array_search_bool($v, $ndlist)) {

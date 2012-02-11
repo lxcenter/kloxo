@@ -447,11 +447,7 @@ function deleteSpecific()
 	$dom = $web->getParentO();
 	$client = $dom->getRealClientParentO();
 	$sq = new Sqlite($this->__masterserver, 'mysqldb');
-<<<<<<< HEAD
 	$res = $sq->getRowsWhere("installapp_app = '{$this->getClName()}'");
-=======
-	$res = $sq->getRowsWhere('installapp_app = :clname', array(':clname' => $this->getClName()));
->>>>>>> upstream/dev
 	if (!$res) {
 		return;
 	}

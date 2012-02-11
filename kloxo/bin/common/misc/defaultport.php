@@ -10,10 +10,6 @@ $gen->portconfig_b->sslport = null;
 $gen->portconfig_b->nonsslport = null;
 $gen->portconfig_b->nonsslportdisable_flag = null;
 $gen->portconfig_b->redirectnonssl_flag = null;
-<<<<<<< HEAD
-=======
-$gen->portconfig_b->sslextraconf = null;
->>>>>>> upstream/dev
 
 $gen->setUpdateSubaction();
 $gen->write();

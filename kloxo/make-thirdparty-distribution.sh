@@ -2,11 +2,7 @@
 #    Kloxo, Hosting Control Panel
 #
 #    Copyright (C) 2000-2009	LxLabs
-<<<<<<< HEAD
 #    Copyright (C) 2009-2012	LxCenter
-=======
-#    Copyright (C) 2009-2011	LxCenter
->>>>>>> upstream/dev
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU Affero General Public License as
@@ -32,11 +28,7 @@
 # Pack:
 # httpdocs/thirdparty 
 # httpdocs/htmllib/extjs
-<<<<<<< HEAD
 # httpdocs/htmllib/fckeditor
-=======
-# httpdocs/htmllib/ckeditor
->>>>>>> upstream/dev
 # httpdocs/htmllib/yui-dragdrop
 #
 ###############################
@@ -62,16 +54,10 @@
 	echo "### Create zip package...";
 	zip -qr9 kloxo-thirdparty.$VERSION.zip \
 	./httpdocs/thirdparty/ ./httpdocs/htmllib/extjs/ \
-<<<<<<< HEAD
 	./httpdocs/htmllib/fckeditor/ ./httpdocs/htmllib/yui-dragdrop/ \
 	-x \
 	"*/CVS/*" \
     "*/.git/*" \
-=======
-	./httpdocs/htmllib/ckeditor/ ./httpdocs/htmllib/yui-dragdrop/ \
-	-x \
-	"*/CVS/*" \
->>>>>>> upstream/dev
 	"*/.svn/*"
 	echo "### Finished!"
 	echo "################################"

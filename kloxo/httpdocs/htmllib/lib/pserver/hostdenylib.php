@@ -20,12 +20,8 @@ function createExtraVariables()
 {
 	$pserver = $this->getParentO();
 	$hdb = new Sqlite($this->__masterserver, 'hostdeny');
-<<<<<<< HEAD
 	$string = "syncserver = '{$pserver->nname}' " ;
 	$hlist = $hdb->getRowsWhere($string);
-=======
-	$hlist = $hdb->getRowsWhere('syncserver = :nname', array(':nname' => $pserver->nname));
->>>>>>> upstream/dev
 	$this->__var_hostlist = $hlist;
 	dprintr($this->__var_hostlist);
 

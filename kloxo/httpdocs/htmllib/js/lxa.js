@@ -1,10 +1,6 @@
 
 function hide_a_div_box(nameid){
-<<<<<<< HEAD
 crossobj= document.getElementById(nameid);
-=======
-crossobj = document.getElementById(nameid);
->>>>>>> upstream/dev
 crossobj.style.visibility="hidden";
 }
 
@@ -15,18 +11,12 @@ function getRandomChar() {
 	var numberChars = "0123456789";
 	var lowerChars = "abcdefghijklmnopqrstuvwxyz";
 	var upperChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-<<<<<<< HEAD
 	var otherChars = "`~!@#%^*()-_=+[{]}\\|\",<.>/? ";
-=======
->>>>>>> upstream/dev
 	var charSet = "";
 	charSet += numberChars;
 	charSet += lowerChars;
 	charSet += upperChars;
-<<<<<<< HEAD
 	//charSet += otherChars;
-=======
->>>>>>> upstream/dev
 	return charSet.charAt(getRandomNum(0, charSet.length));
 }
 
@@ -162,17 +152,10 @@ function createTextAreaWithLines(id)
 	setLine();
 	//ta.focus();
 
-<<<<<<< HEAD
 	ta.onkeydown    = function() { setLine(); }
 	ta.onmousedown  = function() { setLine(); tl_move=true; }
 	ta.onmouseup    = function() { setLine(); tl_move=false; }
 	ta.onmousemove  = function() { if(tl_move){setLine();} }
-=======
-	ta.onkeydown    = function() { setLine(); };
-	ta.onmousedown  = function() { setLine(); tl_move=true; };
-	ta.onmouseup    = function() { setLine(); tl_move=false; };
-	ta.onmousemove  = function() { if(tl_move){setLine();} };
->>>>>>> upstream/dev
 
 
 	function setLine(){
@@ -272,11 +255,7 @@ function navigtoggleNavigation()
 		changeContent('help', expandMess);
 		navigpoint.src = gl_imgleftpoint
 	} else {
-<<<<<<< HEAD
 		navigpoint.src = gl_imgrightpoint
-=======
-		navigpoint.src = gl_imgrightpoint;
->>>>>>> upstream/dev
 		navig.style.visibility = 'visible';
 		changeContent('help', retractMess);
 	}
@@ -300,11 +279,7 @@ function navigShowHelpMessage()
 
 }
 
-<<<<<<< HEAD
 var selFolderObj
-=======
-var selFolderObj;
->>>>>>> upstream/dev
 function selectFolder(obj, rootFolder, url){
 	selFolderObj=obj;
 	windowFolderSel=window.open(url,'FolderSel','toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=yes,resizable=no,titlebar=no,width=500,height=400,top='+ parseInt((window.screen.height-185) / 2) +',left='+ parseInt((window.screen.width-210) / 2));
@@ -332,22 +307,14 @@ function setSelectFolderValue(value, form){
 
 function onMouseOverLinkButton(obj, help)
 {
-<<<<<<< HEAD
 	changeContent('help', help)
-=======
-	changeContent('help', help);
->>>>>>> upstream/dev
 	return;
 	obj.style.cursor='pointer';
 	obj.style.textDecoration='underline';
 }
 function onMouseOutLinkButton(obj)
 {
-<<<<<<< HEAD
 	changeContent('help','helparea')
-=======
-	changeContent('help','helparea');
->>>>>>> upstream/dev
 	return;
 	obj.style.cursor='pointer';
 	obj.style.cursor='normal';
@@ -605,11 +572,7 @@ function jselectall(safrmelement,frmelecount, keyid )
 	  ckb = "ckbox"+ keyid + i;
        tid = "tr" + keyid + c++;
 
-<<<<<<< HEAD
 	   if (safrmelement.checked == true) {
-=======
-	   if (safrmelement.checked) {
->>>>>>> upstream/dev
 	   if ( ! document.getElementById(ckb).disabled ){
            document.getElementById(ckb).checked = true;
            document.getElementById(tid).className = "hiliterow"; 
@@ -685,11 +648,8 @@ function storevalue(frmname,elementid,ckbname,ckcount,noselect, doconfirm)
 			if (confirm("Do you really want to proceed with the action?")) {
 				frmname.frm_accountselect.value = dataarr;
 				frmname.submit();
-<<<<<<< HEAD
 			} else {
 				return;
-=======
->>>>>>> upstream/dev
 			}
 		} else {
 			frmname.frm_accountselect.value = dataarr;
@@ -734,11 +694,7 @@ function hiliteRowColor(tid,cname,frmelement) {
   else
 	  row.className = cname;
 
-<<<<<<< HEAD
  if(frmelement.checked == true)
-=======
- if(frmelement.checked)
->>>>>>> upstream/dev
 	 frmelement.checked = false;
 
 }
@@ -749,11 +705,7 @@ function restoreListOnMouseOver(tid, cname, inputid)
 
   frmelement = document.getElementById(inputid);
 
-<<<<<<< HEAD
   if (frmelement && frmelement.checked == true && frmelement.disabled !== true) {
-=======
-  if (frmelement && frmelement.checked && frmelement.disabled !== true) {
->>>>>>> upstream/dev
 	  row.className = 'hiliterow';
   } else {
 	  row.className = cname;
@@ -783,15 +735,11 @@ var en=0;
 var k;
 //alert(element.length);
 for(k=0;k<ename.length;k++) {
-<<<<<<< HEAD
     if(ename[k].checked == true) {
      ename[k].disabled = true;
 	} else {
      ename[k].disabled = false;
 	}
-=======
-    ename[k].disabled=ename[k].checked;
->>>>>>> upstream/dev
 //   alert(ename[k].value);
 }
 
@@ -805,11 +753,7 @@ for(k=0;k<ename.length;k++) {
   classtype1 = 'textdisable';
   classtype2 = 'textenable';
 
-<<<<<<< HEAD
   if(element.checked==true)
-=======
-  if(element.checked)
->>>>>>> upstream/dev
  
  
   for(i=0;i<frmname.length;i++) {
@@ -827,11 +771,7 @@ if (status == 0) {
 
 //       alert (frmname.elements[i].type + "  " + frmname.elements[i].className +  " " + frmname.elements[i].disabled);
 
-<<<<<<< HEAD
 		     if(frmname.elements[i].checked==true){
-=======
-		     if(frmname.elements[i].checked){
->>>>>>> upstream/dev
 				 frmname.elements[i-1].disabled = true;
    				 frmname.elements[i-1].value = "-";
 				 frmname.elements[i-1].className= classtype1;
@@ -845,11 +785,7 @@ if (status == 0) {
 
    	 } else if(frmname.elements[i].className == 'dckbox2' && frmname.elements[i].type=='checkbox' ) {
 		
-<<<<<<< HEAD
 		     if(frmname.elements[i].checked==true){
-=======
-		     if(frmname.elements[i].checked){
->>>>>>> upstream/dev
 				 frmname.elements[i-1].disabled = false;
                  frmname.elements[i-1].className= classtype2; 
     		 } else {
@@ -915,17 +851,12 @@ function check_password(formpasswd)
 
 function change_notify(element)
 {
-<<<<<<< HEAD
 	if(element.checked == true)		element.value = 'yes';
-=======
-	if(element.checked)		element.value = 'yes';
->>>>>>> upstream/dev
 	else							element.value = 'no';
 }
 
 function encode_url(form)
 {
-<<<<<<< HEAD
 	return;
 	for (var i=0; i < form.elements.length; i++) {
 		if (form.elements[i].type != 'text' && form.elements[i].type != 'password') {
@@ -934,16 +865,6 @@ function encode_url(form)
 		form.elements[i].value = encodeURIComponent(form.elements[i].value);
 		//alert(form.elements[i].value);
 	}
-=======
-
-//	for (var i=0; i < form.elements.length; i++) {
-//		if (form.elements[i].type != 'text' && form.elements[i].type != 'password') {
-//			continue;
-//		}
-//		form.elements[i].value = encodeURIComponent(form.elements[i].value);
-//		//alert(form.elements[i].value);
-//	}
->>>>>>> upstream/dev
 }
 
 function uplevel(num)
@@ -1062,11 +983,7 @@ if(mode=='user')   { e = frmname.eu; w = frmname.wu; r = frmname.ru; txt=frmname
 if(mode=='group')  { e = frmname.eg; w = frmname.wg; r = frmname.rg; txt=frmname.group; } 
 if(mode=='other')  { e = frmname.eo; w = frmname.wo; r = frmname.ro; txt=frmname.other; } 
 
-<<<<<<< HEAD
 if(element.checked == true) {
-=======
-if(element.checked) {
->>>>>>> upstream/dev
  e.checked=true;  w.checked=true;   r.checked=true; 	   
  txt.value=7;
 
@@ -1082,20 +999,12 @@ if(mode=='user')  {  txt=frmname.user;  ckall=frmname.userall;  }
 if(mode=='group') {  txt=frmname.group; ckall=frmname.groupall; } 
 if(mode=='other') {  txt=frmname.other; ckall=frmname.otherall; } 
 
-<<<<<<< HEAD
 if(element.checked == true) {
-=======
-if(element.checked) {
->>>>>>> upstream/dev
  txt.value = parseInt(txt.value) + val;
 } else {
  txt.value = parseInt(txt.value) - val;
  
-<<<<<<< HEAD
  if(ckall.checked == true)
-=======
- if(ckall.checked)
->>>>>>> upstream/dev
 	 ckall.checked = false;
 
 }
@@ -1108,11 +1017,7 @@ var conf;
 Item = form.frm_iplist.selectedIndex;
 Result = form.frm_iplist.options[Item].text; 
 conf = confirm("Do you want to change IP Address?");
-<<<<<<< HEAD
 if(conf==true)
-=======
-if(conf)
->>>>>>> upstream/dev
 {
 	return form.submit();
 }            

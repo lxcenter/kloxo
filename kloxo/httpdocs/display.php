@@ -1,5 +1,4 @@
 <?php
-<<<<<<< HEAD
 $v = 0;
 include_once 'htmllib/coredisplaylib.php';
 sleep($v);
@@ -18,14 +17,3 @@ print_time("start", "Start");
 //dprintr($gbl->__c_object->priv);
 display_exec();
 echo '<br />';
-=======
-
-include_once 'htmllib/coredisplaylib.php';
-
-print_time("start");
-display_init();
-print_time("start", "Start");
-display_exec();
-echo '<br />';
-
->>>>>>> upstream/dev

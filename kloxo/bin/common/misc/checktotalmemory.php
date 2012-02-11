@@ -1,14 +1,11 @@
 <?php 
 include_once "htmllib/lib/include.php";
 
-<<<<<<< HEAD
 if ($sgbl->isHyperVm()) {
 	exit(10);
 }
 
 
-=======
->>>>>>> upstream/dev
 if (lxfile_exists("/proc/user_beancounters")) {
 	$list = lfile("/proc/user_beancounters");
 	foreach($list as $l) {

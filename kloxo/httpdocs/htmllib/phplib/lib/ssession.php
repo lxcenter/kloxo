@@ -53,24 +53,7 @@ function write()
 			if (is_object($v)) { continue; }
 			$array[$k] = $v;
 		}
-<<<<<<< HEAD
 		lfile_put_json_serialize("__path_program_root/session/{$this->nname}", $array);
-=======
-		if(lxfile_exists("__path_program_root/session/{$this->nname}")){
-			lfile_put_json_serialize("__path_program_root/session/{$this->nname}", $array);
-		}
-		else{
-			# This check a that the session file is really created
-			if(lxfile_touch("__path_program_root/session/{$this->nname}")){
-				lfile_put_json_serialize("__path_program_root/session/{$this->nname}", $array);
-			}
-			else{
-				$error_msg = 'Fatal error: Could not create the session file, the login access do not work';
-				dprint($error_msg);
-				log_log('filesys', $error_msg);
-			}
-		}
->>>>>>> upstream/dev
 	}
 }
 

@@ -38,21 +38,12 @@ function createConfFile()
 
 function syncAddFile($domainname)
 {
-<<<<<<< HEAD
 	global $gbl, $sgbl, $login, $ghtml; 
-=======
-	global $gbl, $sgbl, $login, $ghtml;
->>>>>>> upstream/dev
 
 
 	$nameduser = "tinydns";
 	$fdata = null;
 
-<<<<<<< HEAD
-=======
-	// #772 - Add TTL Support
-	$ttl=$this->main->ttl;
->>>>>>> upstream/dev
 
 	$dnsrec = $this->main->dns_record_a;
 	$arec = null;
@@ -60,13 +51,10 @@ function syncAddFile($domainname)
 	$starvalue = null;
 	$dnsdata = null;
 	$nameserver = null;
-<<<<<<< HEAD
 
 	// #772 - Add TTL Support
 	$ttl=$this->main->ttl;
 
-=======
->>>>>>> upstream/dev
 	foreach($dnsrec as $dns) {
 		if ($dns->ttype === "ns") {
 			if (!$nameserver) {
@@ -124,11 +112,7 @@ function syncAddFile($domainname)
 					$key = "$domainname";
 				}
 
-<<<<<<< HEAD
 				$tmp= "+$key:$value:$ttl\n";
-=======
-				$tmp= "+$key:$value\n";
->>>>>>> upstream/dev
 				$fdata .= $tmp;
 				break;
 
@@ -184,11 +168,7 @@ function syncAddFile($domainname)
 			case "txt":
 				$key = $o->hostname;
 				$value = $o->param;
-<<<<<<< HEAD
 				if($o->param === null) continue;	
-=======
-				if($o->param === null) continue;
->>>>>>> upstream/dev
 
 				if ($key !== "__base__") {
 					$key = "$key.$domainname";
@@ -215,15 +195,9 @@ function syncAddFile($domainname)
 function syncCreateConf()
 {
 
-<<<<<<< HEAD
 	global $gbl, $sgbl, $login, $ghtml; 
 
 	
-=======
-	global $gbl, $sgbl, $login, $ghtml;
-
-
->>>>>>> upstream/dev
 //	$host = `hostname`;
 	$dlistv = "__var_domainlist_{$this->main->__var_syncserver}";
 	$result = $this->main->$dlistv;
@@ -299,11 +273,7 @@ function dbactionUpdate($subaction)
 
 function dbactionDelete()
 {
-<<<<<<< HEAD
 	global $gbl, $sgbl, $login, $ghtml; 
-=======
-	global $gbl, $sgbl, $login, $ghtml;
->>>>>>> upstream/dev
 
 	$dnsfile = "/var/dnscache/root/servers/{$this->main->nname}" ;
 	$tinyfile = "/var/tinydns/root/kloxo/{$this->main->nname}.data";
