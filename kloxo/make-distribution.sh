@@ -85,5 +85,3 @@ echo "### Created TAR.GZ package"
 echo "### Finished"
 echo "################################"
 ls -lh kloxo-*
-#
-
