@@ -70,6 +70,14 @@ static function add($parent, $class, $param)
 	$param['forwardaddress'] = trim($param['forwardaddress']);
 	$param['forwardaddress'] = trim($param['forwardaddress'], '"');
         
+        if (empty($param['forwardaddress'])) {
+            throw new lxException('forwardaddress_cannot_empty', 'forwardaddress');
+        }
+        else if ((substr($param['forwardaddress'], 0, 1) != '|') 
+                && (!validate_email($param['forwardaddress']))) {
+            throw new lxException('forwardaddress_invaild', 'forwardaddress');
+        }
+        
 	if ($parent->isClient()) {
 		$param['nname'] = "{$param['nname']}@{$param['real_clparent_f']}";
 		$param['syncserver'] = $parent->mmailsyncserver;
