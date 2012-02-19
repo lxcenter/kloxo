@@ -66,7 +66,7 @@ static function add($parent, $class, $param)
 {
 	global $gbl, $sgbl, $login, $ghtml; 
         
-	$param['forwardaddress'] = trim($param['forwardaddress'], "'");
+	$param['forwardaddress'] = trim($param['forwardaddress'], '\'');
 	$param['forwardaddress'] = trim($param['forwardaddress']);
 	$param['forwardaddress'] = trim($param['forwardaddress'], '"');
         
@@ -79,15 +79,15 @@ static function add($parent, $class, $param)
         }
         
 	if ($parent->isClient()) {
-		$param['nname'] = "{$param['nname']}@{$param['real_clparent_f']}";
+		$param['nname'] = $param['nname'] . '@' . $param['real_clparent_f'];
 		$param['syncserver'] = $parent->mmailsyncserver;
 	} else {
-		$param['nname'] = "{$param['nname']}@$parent->nname";
+		$param['nname'] = $param['nname'] . '@' . $parent->nname;
 		$param['syncserver'] = $parent->syncserver;
 	}
         
         if (!validate_email($param['nname'])) {
-            throw new lxException("invalid_email_id", 'nname');
+            throw new lxException('invalid_email_id', 'nname');
 	}
 
 	return $param;
