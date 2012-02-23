@@ -7000,8 +7000,9 @@ class HtmlLib
 		} else {
 			if (trim($variable->texttype) != "password") {
 				$m_value = null;
-				if (isset($prevvar[trim($variable->name)])) {
-					$m_value = $this->checkForScript($prevvar[trim($variable->name)];
+				$index = trim($variable->name);
+				if (isset($prevvar[$index])) {
+					$m_value = $this->checkForScript($prevvar[$index]);
 				}
 			}
 		}
