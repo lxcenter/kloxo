@@ -66,7 +66,6 @@ static function add($parent, $class, $param)
 {
 	global $gbl, $sgbl, $login, $ghtml; 
         
-	$param['forwardaddress'] = trim($param['forwardaddress'], '\'');
 	$param['forwardaddress'] = trim($param['forwardaddress']);
 	$param['forwardaddress'] = trim($param['forwardaddress'], '"');
         
