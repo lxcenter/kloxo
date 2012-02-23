@@ -71,11 +71,11 @@ static function add($parent, $class, $param)
 	$param['forwardaddress'] = trim($param['forwardaddress'], '"');
         
         if (empty($param['forwardaddress'])) {
-            throw new lxException('forwardaddress_cannot_empty', 'forwardaddress');
+            throw new lxException('forwardaddress cannot be empty', 'forwardaddress');
         }
         else if ((substr($param['forwardaddress'], 0, 1) != '|') 
                 && (!validate_email($param['forwardaddress']))) {
-            throw new lxException('forwardaddress_invaild', 'forwardaddress');
+            throw new lxException('forwardaddress invaild', 'forwardaddress');
         }
         
 	if ($parent->isClient()) {
