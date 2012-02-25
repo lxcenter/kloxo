@@ -6,60 +6,69 @@ K.T. Ligesh original developer of HyperVM/Kloxo/LxAdmin, rest in peace m8.. we m
 Consortium:
 Brijesh			- India 		- Head (Cousin of Ligesh)	- brijesh@lxcenter.org
 S. Bhargava 	- India 		- General Leader			- bhargava@lxcenter.org
+Arthur Thornton	- USA 			- Leader					- arthur@lxcenter.org
 Danny Terweij 	- Netherlands	- Leader					- d.terweij@lxcenter.org
-
 
 Secretary
 ---------
 * Peter Jones	- peter.jones@lxcenter.org
 
-
-Core Leader
+Project Manager
 ---------------
-* Walter Secco			- walter.secco@lxcenter.org
+*
 
-
-System Operations LxCenter (Managing LxCenter Servers)
+System Operations LxCenter
 --------------------------
-* Danny Terweij         - d.terweij@lxcenter.org
-
+* Danny Terweij
+* Arthur Thornton
 
 Web Designers
 -------------
 * Peter Jones			- peter.jones@lxcenter.org
 * Walter Secco (GFX)	- walter.secco@lxcenter.org
 
-
-Core
+Developers
 ----------
-* Walter Secco			- walter.secco@lxcenter.org
-* Andrew Ying			- andrew.ying@lxcenter.org
-* William Leonard		- william.leonard@lxcenter.org
-* Martin Sefcik			- martin.sefcik@lxcenter.org
-* Angel Guzman Maeso	- angel.guzman@lxcenter.org
-
-
-Other Developers/Representatives/Contributors
-----------
-* Rene Nieuwburg		- rene.nieuwburg@lxcenter.org
-* Mustafa Ramadhan		- mustafa.ramadhan@lxcenter.org
-
 * Joko Frank Octo
 * Deen Yusoff			- deen.yusoff@lxcenter.org
+* Martin Sefcik			- martin.sefcik@lxcenter.org
 * Michele Piperis		- michele@lxcenter.org
+* Walter Secco			- walter.secco@lxcenter.org
 * Reid Forrest			- reid.forrest@lxcenter.org
 * Harry Spink			- harry.spink@lxcenter.org
+* Angel Guzman Maeso	- angel.guzman@lxcenter.org
 * Dimitris Travlos		- dimitris.travlos@lxcenter.org
 * Mohamed Nabil			- mohamed.nabil@lxcenter.org
 * George Hafiz			- george.hafiz@lxcenter.org
 * Steve Amerige			- steve.amerige@lxcenter.org
 * Daniel Onisoru
+* Rene Nieuwburg		- rene.nieuwburg@lxcenter.org
 * Sai Krishna
 * Jean-Claude Richard	- jean-claude.richard@lxcenter.org
 * Eric Thygesen			- eric.thygesen@lxcenter.org
 * Jack John				- jack.john@lxcenter.org
+* Mustafa Ramadhan		- mustafa.ramadhan@lxcenter.org
+* William Leonard		- william.leonard@lxcenter.org
 * James Kennon			- james.kennon@lxcenter.org
+* Andrew Ying			- andrew.ying@lxcenter.org
 
+Translators
+-----------
+* Angel Guzman Maeso 		- Kloxo ES
+* Marek Zakrzewski			- Kloxo PL
+* Rene Nieuwburg			- HyperVM ES
+* Danny Terweij				- Kloxo/HyperVM NL
+* George Hafiz				- en-gb corrector
+
+InstallApp software updater
+---------------------------
+* lego (Forum name)
+* troylight (Forum Name)
+* Semir
+
+Others
+------
+* Steve Amerige	- Documentation
 
 Sponsors
 --------
@@ -70,18 +79,17 @@ Sponsors
 * Nuisoft		- Test/Development server
 * Axisnext		- Test/Development server
 
-
  Special thanks
 --------------
 * Andre Allen
 * Eduardo Silva
 * Keiran Smith
-* Arthur Thornton
 
 Software
 --------
 * JetBrains PHPStorm ( http://www.jetbrains.com )
 - An PHP Development IDE.
+- Thank you JetBrains, for a tryout License for LxCenter developers!
 
 Donations
 ---------
@@ -91,3 +99,6 @@ Every cent helps!
 
 
 #################################################
+Developers, Translators,
+Please subscribe to the SVN mailinglists. More info on main website and
+forum.
