@@ -192,6 +192,7 @@ $__information['webserver_config'] =
 	"[b]Fix 'Ownership' And 'Permissions'[/b] - Prevent '500 Internal server error' on secure environment<br />".
 		"&nbsp;&nbsp;&nbsp;&nbsp;- Fix-ownership ('chown -R client:client' for directories and files) and ".
 		"Fix-permissions ('chmod 755' for directories and 'chmod 644' for .php files)";
+
+// Language Content for #656
+// by Andrew Ying
 $__emessage['document_root_may_not_contain_spaces'] = "The document root may not contain any space at the end or before the slash. Please check and submit again.";
-$__emessage['forwardaddress cannot be empty'] = 'The forward-to address cannot be empty.';
-$__emessage['forwardaddress invaild'] = 'The forward-to address is invalid.';
