@@ -199,10 +199,17 @@ function getIPs_from_ifcfg()
 		$list = Ipaddress__Redhat::getCurrentIps();
 	}
 
-	foreach($list as $k => $v) {
-		if ($v['ipaddr'] === '127.0.0.1') { continue; };
-
-		$iplist[] = $v['ipaddr'];
+	$iplist = array(); // Initialize return value
+	if(!empty($list)) {
+		foreach($list as $k => $v) {
+			// Check ipaddr index
+			$ip_address = isset($v['ipaddr']) ? $v['ipaddr'] : NULL;
+			
+			// Skip localhost IP or empty values
+			if ($ip_address !== '127.0.0.1' && !empty($ip_address)) { 
+				$iplist[] = $ip_address;
+			}
+		}
 	}
 
 	return $iplist;
