@@ -1,5 +1,10 @@
 Changelog
 
+Kloxo 6.1.12 - 03-mar-2012
+##################################
+Bug #925: Advanced PHP Config page shows empty input fields
+Bug #926: 6.1.11 writes empty ipaddr into apache conf files, causing apache to fail.
+
 Kloxo 6.1.11 - 23-feb-2012
 ##################################
 Security hotfix-2012-2: Prevent Web injection
