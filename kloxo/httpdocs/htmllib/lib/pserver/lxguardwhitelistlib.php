@@ -13,7 +13,7 @@ function createExtraVariables()
 {
 	$parent = $this->getParentO();
 	$sq = new Sqlite(null, "lxguardwhitelist");
-	$res = $sq->getRowsWhere('syncserver = :syncserver', array(':syncserver' => $parent->syncserver), array('nname', 'ipaddress'));
+	$res = $sq->getRowsWhere("syncserver = '$parent->syncserver'", array('nname', 'ipaddress'));
 	$this->__var_whitelist = $res;
 }
 

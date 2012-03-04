@@ -178,9 +178,15 @@ function getAccountList()
 {
 	global $gbl, $sgbl, $login, $ghtml; 
 	$sq = new Sqlite(null, 'client');
-	$res = $sq->getRowsWhere('resourceplan_used = :nname', array('nname' => $this->nname), array('nname'));
+	$res = $sq->getRowsWhere("resourceplan_used = '$this->nname'", array('nname'));
 	$total['client'] = get_namelist_from_arraylist($res);
 
+	if ($sgbl->isHyperVm()) {
+		$sq = new Sqlite(null, 'vps');
+		$res = $sq->getRowsWhere("resourceplan_used = '$this->nname'", array('nname'));
+		$vlist = get_namelist_from_arraylist($res);
+		$total['vps'] = $vlist;
+	}
 	return $total;
 }
 
@@ -278,6 +284,9 @@ function updateform($subaction, $param)
 		case "description":
 			if ($this->islogin()) { throw new lxException('you_cannot_set_your_own_limit', ''); }
 			$vlist['disable_per'] = array('s', array('off', '95', '100', '110', '120', '130'));
+			if ($sgbl->isHyperVm() && $sgbl->isDebug()) {
+				//$vlist['centralbackup_flag'] = null;
+			}
 			$vlist['description'] = null;
 			//$vlist['share_status'] = null;
 			if (!$this->isRightParent()) {
@@ -320,7 +329,10 @@ function createShowPropertyList(&$alist)
 	if ($sgbl->isKloxo() && $this->getParentO()->isLte('reseller')) {
 		$alist['property'][] = "a=updateform&sa=dnstemplatelist";
 	}
-
+	if ($sgbl->isHyperVm()) {
+		$alist['property'][] = "a=updateForm&sa=pserver_s";
+		$alist['property'][] = "a=updateForm&sa=ostemplatelist";
+	}
 	if ($sgbl->isKloxo() && check_if_many_server()) {
 		//$alist['property'][] = "a=updateForm&sa=pserver_s";
 	}

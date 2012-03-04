@@ -98,7 +98,7 @@ static function initThisListRule($parent, $class)
 static function initThisOutOfBand($parent, $iclass, $mclass, $rclass)
 {
 	$sq = new Sqlite(null, $iclass);
-	$res = $sq->getRowsWhere('parent_clname = :clname', array(':clname' => $parent->getClName()), array("nname"));
+	$res = $sq->getRowsWhere("parent_clname = '{$parent->getClName()}'", array("nname"));
 	$res = get_namelist_from_arraylist($res);
 	$ret = null;
 	foreach($res as $r) {

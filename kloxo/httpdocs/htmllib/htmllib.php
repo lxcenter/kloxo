@@ -51,10 +51,8 @@ class HtmlLib
 		}
 
 		if (isset($tmp['frm_dttype']) && $tmp['frm_dttype']) {
-			foreach ($tmp['frm_dttype'] as $k => $v) {
-				if (isset($v)) {
-					self::checkForScript($v);
-				}
+			foreach ($tmp['frm_dttype'] as $k => $v) if (isset($v)) {
+				self::checkForScript($v);
 			}
 		}
 
@@ -63,12 +61,8 @@ class HtmlLib
 		}
 
 		if (isset($tmp['frm_hpfilter'])) {
-			foreach ($tmp['frm_hpfilter'] as $k => $v) {
-				if (is_array($v)) {
-					foreach ($v as $kk => $vv) {
-						self::checkForScript($vv);
-					}
-				}
+			foreach ($tmp['frm_hpfilter'] as $k => $v) if (is_array($v)) {
+				foreach ($v as $kk => $vv) self::checkForScript($vv);
 			}
 		}
 
@@ -179,9 +173,7 @@ class HtmlLib
 			if (is_array($value)) {
 				foreach ($value as $k => &$v) {
 					if (is_array($v)) {
-						foreach ($v as $nk => &$nv) {
-							$nv = urldecode($nv);
-						}
+						foreach ($v as $nk => &$nv) $nv = urldecode($nv);
 					} else {
 						$v = urldecode($v);
 					}
@@ -272,9 +264,7 @@ class HtmlLib
 		$v = $this->__http_vars[$newkey];
 
 		if (is_array($v)) {
-			foreach ($v as $kk => $vv) {
-				$nv[$kk] = $vv;
-			}
+			foreach ($v as $kk => $vv) $nv[$kk] = $vv;
 		} else {
 			$nv = $v;
 		}
@@ -359,9 +349,7 @@ class HtmlLib
 		$img_path = $login->getSkinDir();
 		$imgtop = $img_path . "/top_line.gif";
 
-		foreach ($alist as $k => $a) {
-			$alist[$k] = $ghtml->getFullUrl($a);
-		}
+		foreach ($alist as $k => $a) $alist[$k] = $ghtml->getFullUrl($a);
 
 		if ($login->getSpecialObject('sp_specialplay')->isOn('enable_ajax')) {
 			$this->print_dialog($alist, $gbl->__c_object);
@@ -372,9 +360,7 @@ class HtmlLib
             <tr align=left valign=bottom> <td width=10>
             <img src=$imgtop width=10 height=2></td> <td >
             <table cellspacing=0 cellspacing=0> <tr valign=bottom> ";
-		foreach ($alist as $k => $a) {
-			$sel = $this->printTabButtonOld($k, $a);
-		}
+		foreach ($alist as $k => $a) $sel = $this->printTabButtonOld($k, $a);
 
 		echo " </tr> </table> </td> <td width=100%>  <img src=$imgtop width=100% height=2></td></tr> </table> <br> <br> ";
 
@@ -494,10 +480,8 @@ class HtmlLib
 			}
 		}
 
-		foreach ($rvar as $k) {
-			if ($pa[$k] != $pb[$k]) {
-				return false;
-			}
+		foreach ($rvar as $k) if ($pa[$k] != $pb[$k]) {
+			return false;
 		}
 		return true;
 	}
@@ -735,12 +719,10 @@ class HtmlLib
 				$nret[$k] = $ret[$k];
 				$nret[$k]['open'] = $v;
 			}
-			foreach ($ret as $k => $v) {
-				if (!isset($nret[$k])) {
-					$nret[$k] = $ret[$k];
-				}
+			foreach ($ret as $k => $v) if (!isset($nret[$k])) {
+				$nret[$k] = $ret[$k];
 			}
-		} else {
+		} else  {
 			$nret = $ret;
 		}
 
@@ -907,7 +889,7 @@ class HtmlLib
 		{
 			padding: 5px 1em;
 		}
-
+		
 		img
 		{
 			border: 0;
@@ -2633,9 +2615,7 @@ class HtmlLib
 
 		$estring = null;
 		if ($opt) {
-			foreach ($opt as $key => $val) {
-				$rvr->$key = $val;
-			}
+			foreach ($opt as $key => $val) $rvr->$key = $val;
 		}
 
 		$rvr->name = "frm_{$class}_c_$variable";
@@ -2658,9 +2638,7 @@ class HtmlLib
 		$rvr = new formVar();
 		$estring = null;
 		if ($opt) {
-			foreach ($opt as $key => $val) {
-				$rvr->$key = $val;
-			}
+			foreach ($opt as $key => $val) $rvr->$key = $val;
 		}
 
 		$rvr->name = "frm_{$class}_c_$variable";
@@ -2697,16 +2675,14 @@ class HtmlLib
 
 		$estring = null;
 		if ($opt) {
-			foreach ($opt as $key => $value) {
-				if ($key === 'postvar') {
-					$postvar = new FormVar();
-					$postvar->option = $value['val'][1];
-					$postvar->name = "frm_{$class}_c_{$value['var']}";
-					$postvar->type = 'select';
-					$rvr->postvar = $postvar;
-				} else {
-					$rvr->$key = $value;
-				}
+			foreach ($opt as $key => $value) if ($key === 'postvar') {
+				$postvar = new FormVar();
+				$postvar->option = $value['val'][1];
+				$postvar->name = "frm_{$class}_c_{$value['var']}";
+				$postvar->type = 'select';
+				$rvr->postvar = $postvar;
+			} else {
+				$rvr->$key = $value;
 			}
 		}
 
@@ -2920,9 +2896,7 @@ class HtmlLib
 
 	function object_variable_hiddenlist($hlist)
 	{
-		foreach ($hlist as $key => $val) {
-			$a[] = $this->object_variable_hidden($key, $val);
-		}
+		foreach ($hlist as $key => $val) $a[] = $this->object_variable_hidden($key, $val);
 
 		return lx_array_merge($a);
 	}
@@ -3015,16 +2989,14 @@ class HtmlLib
 			}
 
 			if (is_array($value)) {
-				foreach ($value as $k => $v) {
-					if (is_array($v)) {
-						foreach ($v as $nk => $nv) {
-							$str = "{$key}" . "[$k][$nk]";
-							print("<input type=hidden name=$str value=$nv>");
-						}
-					} else {
-						$str = "{$key}" . "[$k]";
-						print("<input type=hidden name=$str value=$v>");
+				foreach ($value as $k => $v) if (is_array($v)) {
+					foreach ($v as $nk => $nv) {
+						$str = "{$key}" . "[$k][$nk]";
+						print("<input type=hidden name=$str value=$nv>");
 					}
+				} else {
+					$str = "{$key}" . "[$k]";
+					print("<input type=hidden name=$str value=$v>");
 				}
 			} else {
 				if (!$value) {
@@ -3343,7 +3315,7 @@ class HtmlLib
 		}
 
 		$match = false;
-		foreach ((array)$list as $k => $l) {
+		foreach ((array) $list as $k => $l) {
 			$value = ($assoc) ? $k : $l;
 
 			if ($l === '--Disabled--') {
@@ -3401,7 +3373,7 @@ class HtmlLib
 
 	function print_input_vars($post, $ignore = array())
 	{
-		foreach ((array)$post as $key => $value) {
+		foreach ((array) $post as $key => $value) {
 			if (array_search_bool($key, $ignore)) {
 				continue;
 			}
@@ -3475,10 +3447,8 @@ class HtmlLib
 
 	function fix_variable_overload(&$descr, $classdesc)
 	{
-		foreach ($descr as &$d) {
-			if (strstr($d, "[%v]") !== false) {
-				$d = str_replace("[%v]", $classdesc, $d);
-			}
+		foreach ($descr as &$d) if (strstr($d, "[%v]") !== false) {
+			$d = str_replace("[%v]", $classdesc, $d);
 		}
 	}
 
@@ -3659,7 +3629,7 @@ class HtmlLib
 			$npost['frm_dttype']['val'] = $post['dta']['val'];
 		}
 
-		foreach ((array)$post as $k => $v) {
+		foreach ((array) $post as $k => $v) {
 			if (csa($k, "_c_")) {
 				$npost[$k] = $v;
 			}
@@ -4484,10 +4454,9 @@ class HtmlLib
 			$sortdir = $fil[$filtername]['sortdir'];
 		}
 
-		$pagesize = (int)$login->issetHpFilter($filtername, 'pagesize') ? $login->getHPFilter($filtername, 'pagesize')
-				: exec_class_method($rclass, "perPage");
+		$pagesize = (int) $login->issetHpFilter($filtername, 'pagesize') ? $login->getHPFilter($filtername, 'pagesize') : exec_class_method($rclass, "perPage");
 
-		if (!(int)$pagesize) {
+		if (!(int) $pagesize) {
 			$pagesize = 10;
 		}
 
@@ -4700,8 +4669,7 @@ class HtmlLib
 			print("<td width=100%> </td>");
 
 			print("<td nowrap> <b>Show</b> &nbsp;</td>\n");
-			$f_page = (int)$login->issetHpFilter($filtername, 'pagesize') ? $login->getHPFilter($filtername, 'pagesize')
-					: $pagesize;
+			$f_page = (int) $login->issetHpFilter($filtername, 'pagesize') ? $login->getHPFilter($filtername, 'pagesize') : $pagesize;
 			if ($rpagesize < 1000) {
 				$list = array($rpagesize / 2, $rpagesize, $rpagesize * 2, $rpagesize * 4, $rpagesize * 8, $rpagesize * 16);
 				$i = 0;
@@ -4834,7 +4802,7 @@ class HtmlLib
 		print_time('loop');
 
 		$n = 1;
-		foreach ((array)$obj_list as $okey => $obj) {
+		foreach ((array) $obj_list as $okey => $obj) {
 			if (!$obj) {
 				continue;
 			}
@@ -5007,8 +4975,7 @@ class HtmlLib
 			print("<table width=90% cellpadding=0 cellspacing=0><tr><td width=40><b>Show</b></td><td width=$width>");
 			$this->print_current_input_var_unset_filter($filtername, array('pagesize', 'pagenum'));
 			$this->print_current_input_vars(array('frm_hpfilter'));
-			$f_page = (int)$login->issetHpFilter($filtername, 'pagesize') ? $login->getHPFilter($filtername, 'pagesize')
-					: $pagesize;
+			$f_page = (int) $login->issetHpFilter($filtername, 'pagesize') ? $login->getHPFilter($filtername, 'pagesize') : $pagesize;
 			if ($rpagesize < 1000) {
 
 				print("<select class=textbox onchange='document.perpage_{$unique_name}.submit()' style='width:40' name=frm_hpfilter[$filtername][pagesize]>");
@@ -5078,7 +5045,7 @@ class HtmlLib
 		$rclass = $class;
 		$this->print_list_submit_start();
 
-		foreach ((array)$blist as $b) {
+		foreach ((array) $blist as $b) {
 			$this->print_list_submit_middle($b, $uniquename);
 		}
 		$refreshpost = $this->getCurrentInheritVar();
@@ -5251,7 +5218,7 @@ class HtmlLib
 
 		print("<script>");
 		if ($login->getSpecialObject('sp_specialplay')->isOn('ultra_navig')) {
-			foreach ((array)$gbl->__navigmenu as $n => $v) {
+			foreach ((array) $gbl->__navigmenu as $n => $v) {
 				create_navmenu($n, $v[0], $v[1]);
 			}
 		}
@@ -6189,7 +6156,7 @@ class HtmlLib
 	function print_toolbar()
 	{
 		$list = get_favorite("ndskshortcut");
-		foreach ((array)$list as $l) {
+		foreach ((array) $list as $l) {
 			if ($l['ttype'] === 'separator') {
 				print("<td nowrap width=20> </td>");
 				continue;
@@ -6735,8 +6702,9 @@ class HtmlLib
 	function print_multiselect($form, $variable, $rowuniqueid, $rowclass, $rowcount)
 	{
 		global $gbl, $sgbl, $login, $ghtml;
-		$m_value = "";
+
 		$_t_name = $this->getcgikey($variable->name);
+		$this->checkForScript($this->$_t_name);
 		$m_value = $this->$_t_name;
 		$ts_name = "ts_$variable->name";
 		$ts_name2 = "ts_{$variable->name}2";
@@ -6769,9 +6737,7 @@ class HtmlLib
 
 				<select class=textbox id=<?=$ts_name ?>  multiple size=5 class=textbox name=<?=$variable1->name ?>>
 					<?php
-		foreach ($variable1->option as $k => $option) {
-					echo '<option value="' . $k . '" >' . $option . '</option>';
-				}
+		foreach ($variable1->option as $k => $option) echo '<option value="' . $k . '" >' . $option . '</option>';
 					?>
 				</select>
 
@@ -6801,10 +6767,8 @@ class HtmlLib
 						?>
 					<?php
 	if (!$v2count) {
-					foreach ((array)$variable2->option as $k => $option) {
-						echo '<option value="' . $option . '" >' . $option . '</option>';
-					}
-					}
+					foreach ((array) $variable2->option as $k => $option) echo '<option value="' . $option . '" >' . $option . '</option>';
+				}
 						?>
 				</select>
 				<script>
@@ -7033,12 +6997,15 @@ class HtmlLib
 
 
 		if ($variable->value != "") {
+			$this->checkForScript($variable->value);
 			$m_value = $variable->value;
 		} else {
 			if (trim($variable->texttype) != "password") {
 				$m_value = null;
-				if (isset($prevvar[trim($variable->name)])) {
-					$m_value = $prevvar[trim($variable->name)];
+				$index = trim($variable->name);
+				if (isset($prevvar[$index])) {
+					$this->checkForScript($prevvar[$index]);
+					$m_value = $prevvar[$index];
 				}
 			}
 		}
@@ -7061,7 +7028,7 @@ class HtmlLib
 
 		if ($variable->type === 'fileselect') {
 			?>
-			<?php /*--- issue #609 - "'<?=$url ?>';);"><img" to "'<?=$url ?>');"><img;" ---*/ ?>
+		<?php /*--- issue #609 - "'<?=$url ?>';);"><img" to "'<?=$url ?>');"><img;" ---*/ ?>
 		<a href="javascript:void(0);"
 		   onclick="javascript:selectFolder(<?=trim($form) ?>.<?=trim($variable->name)?>, '', '<?=$url ?>');"><img
 				width=15 height=15 src="img/image/collage/button/ffile_ttype_v_directory.gif" border="0"
@@ -7251,6 +7218,7 @@ class HtmlLib
 			case "checkbox":
 				$m_value = null;
 				if (isset($prevvar[trim($variable->name)])) {
+					$this->checkForScript($prevvar[trim($variable->name)]);
 					$m_value = $prevvar[trim($variable->name)];
 				}
 				$checkedvalue = trim($variable->checked);
@@ -7268,9 +7236,9 @@ class HtmlLib
 
 
 			case "select":
-				$m_value = "";
 				$m_value = null;
 				if (isset($prevvar[trim($variable->name)])) {
+					$this->checkForScript($prevvar[trim($variable->name)]);
 					$m_value = $prevvar[trim($variable->name)];
 				}
 				print("$variable_description <br> ");
@@ -7346,7 +7314,7 @@ class HtmlLib
 
 			case "htmltextarea":
 				{
-				print('<tr><td colspan="1000">');
+				print("<tr> <td colspan=1000 >\n");
 				if ($variable->height != "") {
 					$rows = $variable->height;
 				} else {
@@ -7374,21 +7342,13 @@ class HtmlLib
 				}
 
 
-				if (lxfile_exists("htmllib/fckeditor/fckeditor.php")) {
-					include("htmllib/fckeditor/fckeditor_php5.php");
-					$oFCKeditor = new FCKeditor($variable->name);
-					$oFCKeditor->BasePath = '/htmllib/fckeditor/';
-					$oFCKeditor->Value = $value;
-					$oFCKeditor->Create();
-				} else {
-					// Changed from FCKeditor to CKeditor Issue #574
-					include("htmllib/ckeditor/ckeditor_php5.php");
-					$oFCKeditor = new CKeditor($variable->name);
-					$oFCKeditor->basePath = '/htmllib/ckeditor/';
-					$CKconfig['skin'] = 'office2003';
-					$CKconfig['readOnly'] = false;
-					$oFCKeditor->editor($variable->name, $value, $CKconfig);
-				}
+				include("htmllib/fckeditor/fckeditor_php5.php");
+				$oFCKeditor = new FCKeditor($variable->name);
+				$oFCKeditor->BasePath = '/htmllib/fckeditor/';
+				$oFCKeditor->Value = $value;
+				$oFCKeditor->Create();
+
+
 				print("</td> </tr> \n");
 				break;
 				}
@@ -7955,7 +7915,7 @@ class HtmlLib
 			if ($login->isLte('reseller')) {
 				print("xxpDescr = createMenu('<font color=#003360>Usage', '', true);");
 				$rdesc = null;
-				foreach ((array)$qlist as $or) {
+				foreach ((array) $qlist as $or) {
 					if (!cse($or->vv, "usage") && !cse($or->vv, "_num")) {
 						continue;
 					}
@@ -8275,7 +8235,7 @@ class HtmlLib
 		}
 
 
-		foreach ((array)$cnl as $v) {
+		foreach ((array) $cnl as $v) {
 			$name = $object->getChildNameFromDes($v);
 
 			if (cse($v, "_o")) {
@@ -8325,8 +8285,7 @@ class HtmlLib
 
 			$filtername = $object->getFilterVariableForThis($name);
 
-			$pagesize = (int)$login->issetHpFilter($filtername, 'pagesize')
-					? $login->gethpfilter($filtername, 'pagesize') : exec_class_method($class, "perPage");
+			$pagesize = (int) $login->issetHpFilter($filtername, 'pagesize') ? $login->gethpfilter($filtername, 'pagesize') : exec_class_method($class, "perPage");
 
 			if (isset($sgbl->__var_main_resource) && $sgbl->__var_main_resource) {
 				$cl = $object->getList($name);
@@ -8401,7 +8360,7 @@ class HtmlLib
 		$alt = null;
 
 
-		foreach ((array)$alist as $k => $a) {
+		foreach ((array) $alist as $k => $a) {
 			if (is_array($a)) {
 				if ($k === 'home') {
 					continue;
@@ -8434,7 +8393,7 @@ class HtmlLib
 			}
 		}
 
-		foreach ((array)$alist as $k => $a) {
+		foreach ((array) $alist as $k => $a) {
 			if ($k === 'home') {
 				continue;
 			}
@@ -8504,7 +8463,7 @@ class HtmlLib
 	{
 		global $gbl, $sgbl, $login, $ghtml;
 
-		foreach ((array)$alist as $k => $a) {
+		foreach ((array) $alist as $k => $a) {
 			if (is_array($a)) {
 				continue;
 				if ($k === 'home') {
@@ -8537,7 +8496,7 @@ class HtmlLib
 			$aa = $this->getFullUrl('a=show', $base);
 			$this->print_pmenu($name, $aa);
 		}
-		foreach ((array)$alist as $k => $a) {
+		foreach ((array) $alist as $k => $a) {
 			if (!strcmp($k, 'home')) {
 				continue;
 			}

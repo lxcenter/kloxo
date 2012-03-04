@@ -1,0 +1,113 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<!-- saved from url=(0066)file://Q:\Ant\jakarta-ant-1.5.1\docs\manual\OptionalTasks\ftp.html -->
+<HTML><HEAD><TITLE>SSHTerm Applet</TITLE>
+<META http-equiv=Content-Type content="text/html; charset=windows-1252">
+<META http-equiv=Content-Language content=en-us>
+<META content="MSHTML 6.00.2800.1170" name=GENERATOR></HEAD>
+<BODY>
+<H2><font size="5" face="Verdana, Arial, Helvetica, sans-serif">SSHTerm Applet</font></H2>
+<H3><font size="2" face="Verdana, Arial, Helvetica, sans-serif">Description</font></H3>
+<P><font face="Verdana, Arial, Helvetica, sans-serif">The SSHTerm Applet is designed 
+  for environments where ease of access to SSH connectivity applications is crucial. 
+  The applet is accessible through a standard web browser and requires no physical 
+  installation on the host machine. This is useful for cases where you have perhaps 
+  borrowed a computer without SSH software installed, you simply point your web 
+  browser at a page containing an embedded SSHTerm applet - the terminal starts 
+  after a brief delay and you can be connecting over SSH seconds later!</font></P>
+<P><font size="2" face="Verdana, Arial, Helvetica, sans-serif">To install the 
+  applet simply extract the distribution zip file onto your web server. The applet 
+  HTML file is pre-configured so you can test the applet by launching the <em>sshterm-applet.html</em> 
+  file in your browser. If you are deploying to environments where clients use 
+  JRE 1.4 exclusively you can remove the reference to <em>SSHTermApplet-jdk1.3.1-dependencies-signed.jar</em> 
+  from the APPLET tag and remove this file from the web server to avoid any additional 
+  overhead in downloading this un required dependency.</font></P>
+<P><font size="2" face="Verdana, Arial, Helvetica, sans-serif">SSHTerm can be 
+  configured through a series of parameters which can be tailored to your own 
+  company's connectivity requirements. For example you may want the terminal to 
+  connect automatically to a certain server when the page loads. This helps to 
+  reduce the learning curve associated with the application and can be great for 
+  those users who are less familiar with connectivity applications.</font></P>
+<font size="2" face="Verdana, Arial, Helvetica, sans-serif">For systems administrators 
+who wish to customize the functionality of the terminal, we have listed these 
+and their relevant functions below.</font>
+<H3><font size="2" face="Verdana, Arial, Helvetica, sans-serif">Parameters</font></H3>
+<TABLE cellSpacing=0 cellPadding=2 border=1>
+  <TBODY>
+    <TR> 
+      <TD vAlign=top><font size="2" face="Verdana, Arial, Helvetica, sans-serif"><B>Attribute</B></font></TD>
+      <TD vAlign=top><font size="2" face="Verdana, Arial, Helvetica, sans-serif"><B>Description</B></font></TD>
+    </TR>
+    <TR> 
+      <TD vAlign=top><strong><font size="2" face="Verdana, Arial, Helvetica, sans-serif">sshapps.connection.url</font></strong></TD>
+      <TD vAlign=top><font size="2" face="Verdana, Arial, Helvetica, sans-serif">The 
+        URL of a connection profile to open. Connection profiles are XML files 
+        which specify connection parameters and these may be created by setting 
+        up a connection through the standard SSHTerm application.</font></TD>
+    </TR>
+    <TR> 
+      <TD vAlign=top><strong><font size="2" face="Verdana, Arial, Helvetica, sans-serif">sshapps.connection.host</font></strong></TD>
+      <TD vAlign=top><font size="2" face="Verdana, Arial, Helvetica, sans-serif">The 
+        host to connect to (e.g &quot;ssh.mycompany.com&quot;)</font></TD>
+    </TR>
+    <TR> 
+      <TD vAlign=top><strong><font size="2" face="Verdana, Arial, Helvetica, sans-serif">sshapps.connection.userName</font></strong></TD>
+      <TD vAlign=top><font size="2" face="Verdana, Arial, Helvetica, sans-serif">The 
+        username to connect as (e.g. &quot;root&quot;)</font></TD>
+    </TR>
+    <TR> 
+      <TD vAlign=top><strong><font size="2" face="Verdana, Arial, Helvetica, sans-serif">sshapps.connection.authenticationMethod</font></strong></TD>
+      <TD vAlign=top><font size="2" face="Verdana, Arial, Helvetica, sans-serif">The 
+        authentication method to use when connecting. (e.g password, publickey)</font></TD>
+    </TR>
+    <TR> 
+      <TD vAlign=top><strong><font size="2" face="Verdana, Arial, Helvetica, sans-serif">sshapps.connection.connectImmediately</font></strong></TD>
+      <TD vAlign=top><font size="2" face="Verdana, Arial, Helvetica, sans-serif">Connect 
+        immediately to the specified host upon startup. (e.g &quot;true&quot; 
+        or &quot;false&quot;)</font></TD>
+    </TR>
+    <TR> 
+      <TD vAlign=top><strong><font size="2" face="Verdana, Arial, Helvetica, sans-serif">sshapps.connection.showConnectionDialog</font></strong></TD>
+      <TD vAlign=top><font size="2" face="Verdana, Arial, Helvetica, sans-serif">Show 
+        the connection dialog (e.g &quot;true&quot; or &quot;false&quot;)</font></TD>
+    </TR>
+    <TR> 
+      <TD vAlign=top><strong><font size="2" face="Verdana, Arial, Helvetica, sans-serif">sshapps.connection.disableHostKeyVerification</font></strong></TD>
+      <TD vAlign=top><font size="2" face="Verdana, Arial, Helvetica, sans-serif">Disables 
+        host key verification checking. This means that clients will not attempt 
+        to check the authenticity of the server. (e.g &quot;true&quot; or &quot;false&quot;)</font></TD>
+    </TR>
+    <TR> 
+      <TD vAlign=top><strong><font size="2" face="Verdana, Arial, Helvetica, sans-serif">sshterm.ui.scrollBar</font></strong></TD>
+      <TD vAlign=top><font size="2" face="Verdana, Arial, Helvetica, sans-serif">Enables/disables 
+        the SSHTerm menubar (e.g &quot;true&quot; or &quot;false&quot;)</font></TD>
+    </TR>
+    <TR> 
+      <TD height="22" vAlign=top><strong><font size="2" face="Verdana, Arial, Helvetica, sans-serif">sshterm.ui.autoHide</font></strong></TD>
+      <TD vAlign=top><font size="2" face="Verdana, Arial, Helvetica, sans-serif">Enable 
+        / disable auto-hiding of the toolbar, menu bar, status bar and scroll 
+        bar.</font></TD>
+    </TR>
+  </TBODY>
+</TABLE>
+<H3><br>
+  <font size="2" face="Verdana, Arial, Helvetica, sans-serif"><strong>Embedding 
+  the applet into a web page</strong></font></H3>
+<font size="2" face="Verdana, Arial, Helvetica, sans-serif">To embed the applet 
+into a web page, use code similar to the following. This example creates a small 
+terminal window of 640 x 480 pixels in size, and connects to the host &quot;ssh.mycompany.com&quot; 
+immediately when loaded. The username parameter has also been set to default to 
+&quot;root&quot;. </font> 
+<blockquote> <font size="2" face="Courier New, Courier, mono">&lt;applet width=&quot;640&quot; 
+  height=&quot;480&quot; <br>
+  archive=&quot;SSHTermApplet-signed.jar,SSHTermApplet-jdk1.4-workaround-signed.jar&quot;<br>
+  code=&quot;com.sshtools.sshterm.SshTermApplet&quot; <br>
+  codebase=&quot;.&quot; style=&quot;border-style: solid; border-width: 1; padding-left: 
+  <br>
+  4; padding-right: 4; padding-top: 1; padding-bottom: 1&quot;&gt;<br>
+  &lt;param name=&quot;sshapps.connection.host&quot; value=&quot;ssh.mycompany.com&quot;&gt;<br>
+  &lt;param name=&quot;sshapps.connection.userName&quot; value=&quot;root&quot;&gt;<br>
+  &lt;param name=&quot;sshapps.connection.connectImmediately&quot; value=&quot;true&quot;&gt;<br>
+  &lt;param name=&quot;sshapps.connection.authenticationMethod&quot; value=&quot;password&quot;&gt;<br>
+  &lt;/applet&gt;</font> </blockquote>
+</p>
+</BODY></HTML>

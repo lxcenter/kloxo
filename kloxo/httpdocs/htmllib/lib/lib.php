@@ -1561,7 +1561,6 @@ function cp_fileserv($file)
 	return $res;
 }
 
-
 function do_zip_to_fileserv($type, $arg)
 {
 	lxfile_mkdir("__path_serverfile/tmp");
@@ -1619,6 +1618,7 @@ function do_zip_to_fileserv($type, $arg)
 
 	return "__path_serverfile/tmp/$base";
 }
+
 
 function fileserv_unlink_if_tmp($file)
 {
@@ -2668,10 +2668,7 @@ function download_source($file)
 
 function download_from_ftp($ftp_server, $ftp_user, $ftp_pass, $file, $localfile)
 {
-	// issue #39 - call new function inside linuxfslib.php
-//	$fn = ftp_connect(ftp_server);
-	$fn = lxftp_connect(ftp_server);
-	
+	$fn = ftp_connect($ftp_server);
 	$login = ftp_login($fn, $ftp_user, $ftp_pass);
 	if (!$login) {
 		throw new lxException('could_not_connect_to_ftp_server', 'download_ftp_f', $ftp_server);
@@ -2842,8 +2839,8 @@ function get_title()
 	} else {
 		$enterprise = "Single Server";
 	}
-	if (file_exists(".svn")) {
-		$enterprise .= " Development";
+	if (file_exists('.git')) {
+		$enterprise .= ' Development';
 	}
 	$title = "$host $progname $enterprise $title" ;
 	return $title;
@@ -5323,7 +5320,7 @@ function changeMailSoftlimit()
 {
 	log_cleanup("Changing softlimit for incoming/receive mailserver");
 	
-	$list = array("imap4", "imap4-ssl", "pop3", "pop3-ssl", "smtp");
+	$list = array("imap4", "imap4-ssl", "pop3", "pop3-ssl");
 
 	$path = "/var/qmail/supervise";
 	
@@ -5333,13 +5330,7 @@ function changeMailSoftlimit()
 		if (file_exists($file)) {
 			system("svc -d {$path}/{$l} {$path}/{$l}/log > /dev/null 2>&1");
 			$content = file_get_contents($file);
-			// for value before 6.1.7
 			$content = str_replace("9000000", "18000000", $content);
-			// for value 6.1.7-6.1.9
-			$content = str_replace("18000000", "40000000", $content);			
-			// Also for smtp -- http://forum.lxcenter.org/index.php?t=msg&th=17382
-			$content = str_replace("12000000", "40000000", $content);
-			$content = str_replace("20000000", "80000000", $content);
 			lfile_put_contents($file, $content);
 			system("svc -u {$path}/{$l} {$path}/{$l}/log > /dev/null 2>&1");
 		}
@@ -5511,14 +5502,14 @@ function setInitialPureftpConfig()
 		lxfile_touch("/etc/pure-ftpd/pureftpd.passwd");
 		lxshell_return("pure-pw", "mkdb");
 	}
-
+	
 	if (lxfile_exists("/etc/rc.d/init.d/pure-ftpd")) {
 		log_cleanup("- Turn off and remove pure-ftpd service");
 		@ exec("chkconfig pure-ftpd off 2>/dev/null");
 		// MR --- chkconfig off not enough because can restart with 'service pure-ftpd start'
 		@lxfile_rm("/etc/rc.d/init.d/pure-ftpd");
 	}
-	
+		
 	if (!lxfile_exists("/etc/pure-ftpd/pureftpd.passwd")) {
 		log_cleanup("- Initialize /etc/pure-ftpd/pureftpd.passwd password database");
 		lxfile_cp("/etc/pureftpd.passwd", "/etc/pure-ftpd/pureftpd.passwd");
@@ -5844,7 +5835,7 @@ function setSomeScript()
 
 function setInitialLogrotate()
 {
-//	return; // Kloxo 6.2.0 (#295)
+	return; // Kloxo 6.2.0 (#295)
 	log_cleanup("Initialize logrotate");
 
 	if (lxfile_exists("/etc/logrotate.d/kloxo")) {
@@ -6451,18 +6442,6 @@ function updatecleanup()
 	installInstallApp();
 	setFreshClam();
 	changeMailSoftlimit();
-
-	// DT #574 - Remove FCKEditor if CKEditor is present
-	removeOldFCKEditor();
-}
-
-function removeOldFCKEditor()
-{
-	if (lxfile_exists("/usr/local/lxlabs/kloxo/httpdocs/htmllib/fckeditor/fckeditor.php")) {
-		log_cleanup("Removing old FCKEditor version");
-		lxfile_rm_rec("/usr/local/lxlabs/kloxo/httpdocs/htmllib/fckeditor");
-	}
-
 }
 
 function setPrepareKloxo()
@@ -6507,26 +6486,20 @@ function findNextVersion($lastversion = null)
 
 	$upgrade = null;
 	$nlist = getVersionList($lastversion);
-
+	dprintr($nlist);
+	$k = 0;
 	print("Found version(s):");
 	foreach($nlist as $l) {
 		print(" $l");
+		if (version_cmp($thisversion, $l) === -1) {
+			$upgrade = $l;
+			break;
+		}
+		$k++;
 	}
 	print("\n");
-
-	if (version_cmp($thisversion, $l) === -1) {
-		$upgrade = $l;
-	}
-
-	if (version_cmp($thisversion, $l) === 1) {
-    	unset($upgrade);
-		print("Your version $thisversion is higher then $l\n\n");
-		print("Script aborted.\n\n");
-		exit;
-	}
-
 	if (!$upgrade) {
-    	return 0;
+		return 0;
 	}
 
 	print("Upgrading from $thisversion to $upgrade\n");

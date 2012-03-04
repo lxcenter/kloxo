@@ -303,9 +303,7 @@ function createNewcertificate()
 		$ltemp[$key] = $name;
 	}
 
-	// Issue #648/#479 - add dropdown / ability to generate 2048 SSL keys directly from Kloxo
-//	$config['private_key_bits'] = 1024;
-	$config['private_key_bits'] = 2048;
+	$config['private_key_bits'] = 1024;
 	$privkey = openssl_pkey_new($config);
 	openssl_pkey_export($privkey, $text_key_content);
 	$csr = openssl_csr_new($ltemp, $privkey);

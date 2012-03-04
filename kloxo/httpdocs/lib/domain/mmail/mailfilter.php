@@ -12,7 +12,7 @@ static $__desc_rule  	 = array("", "",  "rule");
 static $__desc_action  	 = array("", "",  "action");
 static $__rewrite_nname_const =    Array("parent_clname", "rule");
 
-function createListNlist($parent, $view)
+function createListNlist()
 {
 	$nlist['rule'] = '100%';
 	$nlist['action'] = null;

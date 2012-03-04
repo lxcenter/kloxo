@@ -12,7 +12,7 @@ function write() {}
 function doSyncToSystem() {}
 
 
-static function createListNlist($parent, $view)
+static function createListNlist($parent)
 {
 	$nlist['clientname'] = '100%';
 	$nlist['mailnum'] = '10%';

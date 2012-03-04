@@ -59,8 +59,7 @@ function display($var)
 function checkIfInstalled()
 {
 	$sq = new Sqlite($this->__masterserver, 'installsoft');
-	$params = array(':appname' => $this->appname, ':clname' => $this->getParentO()->getClName());
-	$res = $sq->getRowsWhere('appname = :appname AND parent_clname = :clname', $params);
+	$res = $sq->getRowsWhere("appname = '$this->appname' AND parent_clname = '{$this->getParentO()->getClName()}'");
 	if ($res) {
 		return 'on';
 	}

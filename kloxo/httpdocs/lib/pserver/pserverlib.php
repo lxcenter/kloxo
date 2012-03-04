@@ -84,7 +84,7 @@ function createUsed()
 
 function getUsed()
 {
-	$vlist = array('mmail' => 'mmail', 'dns' => 'dns',  'web' => 'web', 'mysqldb' => 'mysqldb', 'mssqldb' => 'mssqldb');
+	$vlist = array("mmail" => "mmail", "dns" => "dns",  "web" => "web", "mysqldb" => 'mysqldb', 'mssqldb' => 'mssqldb');
 	$ret = null;
 	foreach($vlist as $k => $v) {
 		if (!is_array($v)) {
@@ -96,7 +96,8 @@ function getUsed()
 		}
 
 		$db = new Sqlite($this->__masterserver, $db);
-		$res = $db->getRowsWhere("$vname = :nname", array(':nname' => $this->nname), array('nname'));
+		$str = "$vname = '$this->nname'";
+		$res = $db->getRowsWhere($str, array('nname'));
 		if ($res) {
 			$tmp = null;
 			foreach($res as $r) {
@@ -124,22 +125,20 @@ function createUsedDomainList()
 
 function getMysqlDbAdmin(&$alist)
 {
-	global $gbl, $sgbl, $login, $ghtml;
-
-	$sslport = $sgbl->__var_prog_port;
-	$normalport = $sgbl->__var_prog_ssl_port;
 
 	if (!$this->isLocalhost('nname')) {
 		$fqdn = getFQDNforServer($this->nname);
+		//$dbadminUrl =  "http://$fqdn:7778/thirdparty/phpMyAdmin/";
 		if (http_is_self_ssl()) {
-			$dbadminUrl =  "https://$fqdn:$sslport/thirdparty/phpMyAdmin/";
+			$dbadminUrl =  "https://$fqdn:7777/thirdparty/phpMyAdmin/";
 		} else {
-			$dbadminUrl = "http://$fqdn:$normalport/thirdparty/phpMyAdmin/";
+			$dbadminUrl = "http://$fqdn:7778/thirdparty/phpMyAdmin/";
 		}
 
 	} else {
 		$dbadminUrl =  "/thirdparty/phpMyAdmin/";
 	}
+	//$pass = urlencode($pass);
 
 	$server = $_SERVER['SERVER_NAME'];
 	if (csa($server, ":")) {
@@ -163,6 +162,7 @@ function getMysqlDbAdmin(&$alist)
 
 function createShowPropertyList(&$alist)
 {
+	//$alist['property'][] = "o=sp_specialplay&a=updateForm&sa=skin";
 	$alist['property'][] = 'a=show';
 	$alist['property'][] = "a=updateform&sa=information";
 	if ($this->nname !== 'localhost') {
@@ -177,8 +177,8 @@ function createShowAlist(&$alist, $subaction = null)
 {
         global $gbl, $sgbl, $login, $ghtml;
 
-// TODO: LxCenter:
-// TODO: No menu structures for Domain and Advanced here?
+// LxCenter:
+// No menu structures for Domain and Advanced here?
 //
 
         $alist['__title_security'] = "Security";

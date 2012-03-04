@@ -8,13 +8,13 @@
 
 var TabsExample = {
     init : function(){
+        // basic tabs 1, built from existing content
         var tabs = new Ext.TabPanel('tabs1');
-        tabs.addTab('script', "Skin");
-        tabs.addTab('markup', "Tree");
-		//
-		// Show tree style as default
-		// TODO: make it user selectable because some wants show the other tab as default.
+        tabs.addTab('script', "Vista Style");
+        tabs.addTab('markup', "Tree View");
         tabs.activate('markup');
+    
+        // second tabs built from JS
     }
-};
+}
 Ext.EventManager.onDocumentReady(TabsExample.init, TabsExample, true);

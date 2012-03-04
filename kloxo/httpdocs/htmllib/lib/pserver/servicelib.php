@@ -172,7 +172,7 @@ static function initThisList($parent, $class)
 	$driverapp = $gbl->getSyncClass($parent->__masterserver, $parent->__readserver, 'service');
 	if (!$driverapp) { return; }
 
-	$list = $sql->getRowsWhere('parent_clname = :clname', array(':clname' => $parent->getClname()));
+	$list = $sql->getRowsWhere("parent_clname = '{$parent->getClname()}'");
 	foreach($list as $l) {
 		$nlist[$l['servicename']] = $l;
 	}

@@ -147,11 +147,7 @@ function updateFtp_conf($param)
 
 
 	if (isOn($param['upload_to_ftp']) && !isOn($param['dont_verify_ftp_f'])) {
-
-		// issue #39 - call new function inside linuxfslib.php
-//		$fn = ftp_connect($param['ftp_server']);
-		$fn = lxftp_connect($param['ftp_server']);
-
+		$fn = ftp_connect($param['ftp_server']);
 		$mylogin = ftp_login($fn, $param['rm_username'], $param['rm_password']);
 		if (!$mylogin) {
 			$p = error_get_last();

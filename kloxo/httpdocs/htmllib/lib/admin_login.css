@@ -1,47 +1,18 @@
-/*
- *  Kloxo, Hosting Control Panel
- *
- *  Copyright (C) 2000-2009	LxLabs
- *  Copyright (C) 2009-2011	LxCenter
- *
- *  This program is free software: you can redistribute it and/or modify
- *  it under the terms of the GNU Affero General Public License as
- *  published by the Free Software Foundation, either version 3 of the
- *  License, or (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU Affero General Public License for more details.
- *
- *  You should have received a copy of the GNU Affero General Public License
- *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
-
 body {
-    margin: 0;
-}
-
-.loginboxtitle {
-	font-family: Verdana, Geneva, sans-serif;
-	font-size: 15px;
-    font-weight: bold;
-    color: #F00;
-}
-
-.loginlinks {
-	font-family: Verdana, Geneva, sans-serif;
-	font-size: 9px;
-	text-decoration: underline;
-	color: #666;
-}
+ 	margin: 0px;
+	padding: 0px;
+	color : #333;
+	background-color : #FFF;
+	font-size : 11px;
+	font-family : Arial, Helvetica, sans-serif;
+		 }
 
 #wrapper {
-    border: 0;
-    margin: 0;
+    border: 0px;
+    margin: 0px;
     margin-left: auto;
     margin-right: auto;
-    padding: 0;
+    padding: 0px;
 }
 
 #break {
@@ -49,7 +20,7 @@ body {
 }
 
 form {
-	margin: 0;
+	margin: 0px;
 }
 
 .button {
@@ -78,7 +49,10 @@ form {
 .form-block {
 	border: 1px solid #cccccc;
 	background: #E9ECEF;
-	padding: 15px 10px 10px 10px;
+	padding-top: 15px;
+	padding-left: 10px;
+	padding-bottom: 10px;
+	padding-right: 10px;
 }
 
 .login-form {
@@ -99,34 +73,38 @@ form {
 }
 
 .inputbox {
-	color: #000000;
-    font-family: Verdana, Geneva, sans-serif;
-	font-size: 11px;
-	width: 190px;
-	padding: 2px 2px 3px 2px;
-	background: URL('/img/login/user.gif') no-repeat;
-	background-position: 1px 1px;
-	background-color: #FFFFFF;
-	padding-left: 18px;
-	vertical-align: middle;
+	COLOR: #000000;
+	FONT-FAMILY: Verdana, Tahoma;
+	FONT-SIZE: 11px;
+	BORDER: 1px SOLID #666666;
+	WIDTH: 190px;
+	PADDING: 2px 2px 3px 2px;
+	MARGIN: 0px;
+	BACKGROUND: URL(/img/login/user.gif) no-repeat;
+	BACKGROUND-POSITION: 1px 1px;
+	BACKGROUND-COLOR: #FFFFFF;
+	PADDING-LEFT: 18px;
+	VERTICAL-ALIGN: middle;
 	margin: 0 0 1em 0;
 	border: 1px solid #cccccc;
 }
 .passbox {
-	color: #000000;
-    font-family: Verdana, Geneva, sans-serif;
-	font-size: 11px;
-	width: 190px;
-	padding: 2px 2px 3px 2px;
-	background-position: 1px 1px;
-	background-color: #FFFFFF;
-	vertical-align: middle;
+	COLOR: #000000;
+	FONT-FAMILY: Verdana, Tahoma;
+	FONT-SIZE: 11px;
+	BORDER: 1px SOLID #666666;
+	WIDTH: 190px;
+	PADDING: 2px 2px 3px 2px;
+	MARGIN: 0px;
+	BACKGROUND-POSITION: 1px 1px;
+	BACKGROUND-COLOR: #FFFFFF;
+	VERTICAL-ALIGN: middle;
 	margin: 0 0 1em 0;
 	border: 1px solid #cccccc;
 }
 
 .clr {
-	clear:both;
+    clear:both;
 }
 
 .ctr {

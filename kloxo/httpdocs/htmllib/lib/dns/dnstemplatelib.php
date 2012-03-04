@@ -108,20 +108,13 @@ static function addform($parent, $class, $typetd = null)
 	if (!$res) {
 		throw new lxexception('no_ip_address', 'parent');
 	}
+
     $vlist['__m_message_pre'] = 'vv_dns_template_message';
 	$vlist['nname'] = null;
 	$vlist['webipaddress'] = array('s', $res);
 	$vlist['mmailipaddress'] = array('s', $res);
 	$vlist['nameserver_f'] = null;
 	$vlist['secnameserver_f'] = null;
-	
-	// 2010-06-08 LN: New values for SOA
-	$vlist['email'] = null;
-	$vlist['refresh'] = null;
-	$vlist['retry'] = null;
-	$vlist['expire'] = null;
-	$vlist['minimum'] = null;
-	
 	$ret['action'] = 'add';
 	$ret['variable'] = $vlist;
 	return $ret;

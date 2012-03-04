@@ -1,0 +1,8 @@
+# Ignore config files from Eclipse IDE
+.buildpath
+.project
+.settings/
+
+# Ignore .diff files on development
+*.diff
+

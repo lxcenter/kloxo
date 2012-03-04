@@ -19,7 +19,7 @@ static $__acdesc_update_update = array("", "",  "edit");
 function createExtraVariables()
 {
 	$sq = new Sqlite(null, 'watchdog');
-	$this->__var_watchlist = $sq->getRowsWhere('syncserver = :syncserver', array(':syncserver' => $this->syncserver));
+	$this->__var_watchlist = $sq->getRowsWhere("syncserver = '$this->syncserver'");
 }
 
 function createShowUpdateform()

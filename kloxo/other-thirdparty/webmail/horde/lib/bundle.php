@@ -1,1 +1,0 @@
-<?php define('BUNDLE_NAME', 'webmail'); define('BUNDLE_FULLNAME', 'Horde Groupware Webmail Edition'); define('BUNDLE_VERSION', '1.2.10'); ?>

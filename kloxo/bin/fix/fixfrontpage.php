@@ -5,7 +5,7 @@ include_once "htmllib/lib/include.php";
 $driverapp = slave_get_driver('web');
 
 if ($driverapp === 'lighttpd') {
-	print("Driver is lighty\n");
+	print("Driver is currently lighttpd\n");
 	exit;
 }
 

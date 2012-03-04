@@ -23,7 +23,10 @@ static function createListAlist($parent, $class)
 		$alist[] = "o=general&a=updateform&sa=reversedns";
 		$alist[] = "a=list&c=rdnsrange";
 	}
-
+	if ($login->isAdmin() && $sgbl->isHyperVm()) {
+		$alist[] = "a=list&c=all_dns";
+		$alist[] = "a=list&c=all_reversedns";
+	}
 	return $alist;
 }
 

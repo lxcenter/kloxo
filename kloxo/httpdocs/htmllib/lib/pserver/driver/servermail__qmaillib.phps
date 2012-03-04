@@ -49,6 +49,8 @@ function save_xinetd_qmail()
 	if (if_demo()) { throw new lxException ("demo", $v); }
 
 	$bcont = lfile_get_contents("../file/template/xinetd.smtp_lxa");
+	$maps = null;
+	if ($this->main->isOn("enable_maps")) { $maps = "/usr/bin/rblsmtpd -r bl.spamcop.net"; }
 
 	$domkey = null;
 	if ($this->main->isOn('domainkey_flag')) { $domkey = "DKSIGN=/var/qmail/control/domainkeys/%/private"; }
@@ -97,12 +99,15 @@ function save_xinetd_qmail()
 	}
 
 
+	$bcont = str_replace("%maps%", $maps, $bcont);
 	$bcont = str_replace("%domainkey%", $domkey, $bcont);
 	$bcont = str_replace("%virusscan%", $virus, $bcont);
 	$bcont = str_replace("%instance%", $instance, $bcont);
 
 	if ($this->main->additional_smtp_port > 0) {
-        $cont = str_replace("%spamdyke%", ( $this->main->isOn('alt_smtp_sdyke_flag') ? $spamdyke : "" ), $bcont);
+        if ( !$this->main->isOn('alt_smtp_sdyke_flag') )
+            $spamdyke = "";
+        $cont = str_replace("%spamdyke%", $spamdyke, $bcont);
  		$cont = str_replace("%servicename%", "kloxo_smtp", $cont);
 		lfile_put_contents("/etc/xinetd.d/kloxo_smtp_lxa", $cont);
 		remove_line("/etc/services", "kloxo_smtp");

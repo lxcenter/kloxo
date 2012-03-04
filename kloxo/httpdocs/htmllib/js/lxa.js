@@ -1,6 +1,6 @@
 
 function hide_a_div_box(nameid){
-crossobj = document.getElementById(nameid);
+crossobj= document.getElementById(nameid);
 crossobj.style.visibility="hidden";
 }
 
@@ -11,10 +11,12 @@ function getRandomChar() {
 	var numberChars = "0123456789";
 	var lowerChars = "abcdefghijklmnopqrstuvwxyz";
 	var upperChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+	var otherChars = "`~!@#%^*()-_=+[{]}\\|\",<.>/? ";
 	var charSet = "";
 	charSet += numberChars;
 	charSet += lowerChars;
 	charSet += upperChars;
+	//charSet += otherChars;
 	return charSet.charAt(getRandomNum(0, charSet.length));
 }
 
@@ -150,10 +152,10 @@ function createTextAreaWithLines(id)
 	setLine();
 	//ta.focus();
 
-	ta.onkeydown    = function() { setLine(); };
-	ta.onmousedown  = function() { setLine(); tl_move=true; };
-	ta.onmouseup    = function() { setLine(); tl_move=false; };
-	ta.onmousemove  = function() { if(tl_move){setLine();} };
+	ta.onkeydown    = function() { setLine(); }
+	ta.onmousedown  = function() { setLine(); tl_move=true; }
+	ta.onmouseup    = function() { setLine(); tl_move=false; }
+	ta.onmousemove  = function() { if(tl_move){setLine();} }
 
 
 	function setLine(){
@@ -253,7 +255,7 @@ function navigtoggleNavigation()
 		changeContent('help', expandMess);
 		navigpoint.src = gl_imgleftpoint
 	} else {
-		navigpoint.src = gl_imgrightpoint;
+		navigpoint.src = gl_imgrightpoint
 		navig.style.visibility = 'visible';
 		changeContent('help', retractMess);
 	}
@@ -277,7 +279,7 @@ function navigShowHelpMessage()
 
 }
 
-var selFolderObj;
+var selFolderObj
 function selectFolder(obj, rootFolder, url){
 	selFolderObj=obj;
 	windowFolderSel=window.open(url,'FolderSel','toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=yes,resizable=no,titlebar=no,width=500,height=400,top='+ parseInt((window.screen.height-185) / 2) +',left='+ parseInt((window.screen.width-210) / 2));
@@ -305,14 +307,14 @@ function setSelectFolderValue(value, form){
 
 function onMouseOverLinkButton(obj, help)
 {
-	changeContent('help', help);
+	changeContent('help', help)
 	return;
 	obj.style.cursor='pointer';
 	obj.style.textDecoration='underline';
 }
 function onMouseOutLinkButton(obj)
 {
-	changeContent('help','helparea');
+	changeContent('help','helparea')
 	return;
 	obj.style.cursor='pointer';
 	obj.style.cursor='normal';
@@ -570,7 +572,7 @@ function jselectall(safrmelement,frmelecount, keyid )
 	  ckb = "ckbox"+ keyid + i;
        tid = "tr" + keyid + c++;
 
-	   if (safrmelement.checked) {
+	   if (safrmelement.checked == true) {
 	   if ( ! document.getElementById(ckb).disabled ){
            document.getElementById(ckb).checked = true;
            document.getElementById(tid).className = "hiliterow"; 
@@ -646,6 +648,8 @@ function storevalue(frmname,elementid,ckbname,ckcount,noselect, doconfirm)
 			if (confirm("Do you really want to proceed with the action?")) {
 				frmname.frm_accountselect.value = dataarr;
 				frmname.submit();
+			} else {
+				return;
 			}
 		} else {
 			frmname.frm_accountselect.value = dataarr;
@@ -690,7 +694,7 @@ function hiliteRowColor(tid,cname,frmelement) {
   else
 	  row.className = cname;
 
- if(frmelement.checked)
+ if(frmelement.checked == true)
 	 frmelement.checked = false;
 
 }
@@ -701,7 +705,7 @@ function restoreListOnMouseOver(tid, cname, inputid)
 
   frmelement = document.getElementById(inputid);
 
-  if (frmelement && frmelement.checked && frmelement.disabled !== true) {
+  if (frmelement && frmelement.checked == true && frmelement.disabled !== true) {
 	  row.className = 'hiliterow';
   } else {
 	  row.className = cname;
@@ -731,7 +735,11 @@ var en=0;
 var k;
 //alert(element.length);
 for(k=0;k<ename.length;k++) {
-    ename[k].disabled=ename[k].checked;
+    if(ename[k].checked == true) {
+     ename[k].disabled = true;
+	} else {
+     ename[k].disabled = false;
+	}
 //   alert(ename[k].value);
 }
 
@@ -745,7 +753,7 @@ for(k=0;k<ename.length;k++) {
   classtype1 = 'textdisable';
   classtype2 = 'textenable';
 
-  if(element.checked)
+  if(element.checked==true)
  
  
   for(i=0;i<frmname.length;i++) {
@@ -763,7 +771,7 @@ if (status == 0) {
 
 //       alert (frmname.elements[i].type + "  " + frmname.elements[i].className +  " " + frmname.elements[i].disabled);
 
-		     if(frmname.elements[i].checked){
+		     if(frmname.elements[i].checked==true){
 				 frmname.elements[i-1].disabled = true;
    				 frmname.elements[i-1].value = "-";
 				 frmname.elements[i-1].className= classtype1;
@@ -777,7 +785,7 @@ if (status == 0) {
 
    	 } else if(frmname.elements[i].className == 'dckbox2' && frmname.elements[i].type=='checkbox' ) {
 		
-		     if(frmname.elements[i].checked){
+		     if(frmname.elements[i].checked==true){
 				 frmname.elements[i-1].disabled = false;
                  frmname.elements[i-1].className= classtype2; 
     		 } else {
@@ -843,20 +851,20 @@ function check_password(formpasswd)
 
 function change_notify(element)
 {
-	if(element.checked)		element.value = 'yes';
+	if(element.checked == true)		element.value = 'yes';
 	else							element.value = 'no';
 }
 
 function encode_url(form)
 {
-
-//	for (var i=0; i < form.elements.length; i++) {
-//		if (form.elements[i].type != 'text' && form.elements[i].type != 'password') {
-//			continue;
-//		}
-//		form.elements[i].value = encodeURIComponent(form.elements[i].value);
-//		//alert(form.elements[i].value);
-//	}
+	return;
+	for (var i=0; i < form.elements.length; i++) {
+		if (form.elements[i].type != 'text' && form.elements[i].type != 'password') {
+			continue;
+		}
+		form.elements[i].value = encodeURIComponent(form.elements[i].value);
+		//alert(form.elements[i].value);
+	}
 }
 
 function uplevel(num)
@@ -975,7 +983,7 @@ if(mode=='user')   { e = frmname.eu; w = frmname.wu; r = frmname.ru; txt=frmname
 if(mode=='group')  { e = frmname.eg; w = frmname.wg; r = frmname.rg; txt=frmname.group; } 
 if(mode=='other')  { e = frmname.eo; w = frmname.wo; r = frmname.ro; txt=frmname.other; } 
 
-if(element.checked) {
+if(element.checked == true) {
  e.checked=true;  w.checked=true;   r.checked=true; 	   
  txt.value=7;
 
@@ -991,12 +999,12 @@ if(mode=='user')  {  txt=frmname.user;  ckall=frmname.userall;  }
 if(mode=='group') {  txt=frmname.group; ckall=frmname.groupall; } 
 if(mode=='other') {  txt=frmname.other; ckall=frmname.otherall; } 
 
-if(element.checked) {
+if(element.checked == true) {
  txt.value = parseInt(txt.value) + val;
 } else {
  txt.value = parseInt(txt.value) - val;
  
- if(ckall.checked)
+ if(ckall.checked == true)
 	 ckall.checked = false;
 
 }
@@ -1009,7 +1017,7 @@ var conf;
 Item = form.frm_iplist.selectedIndex;
 Result = form.frm_iplist.options[Item].text; 
 conf = confirm("Do you want to change IP Address?");
-if(conf)
+if(conf==true)
 {
 	return form.submit();
 }            
