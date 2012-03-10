@@ -78,7 +78,7 @@ elseif ($cgi_forgotpwd == 1) {
 		<div class="login-form">
 			<div align="center"><font name=Verdana size=5 color=red ><b> Forgot Password </b></font></div>
 			<br />
-			<form name="sendmail" action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
+			<form name="sendmail" action="/login/" method="post">
 				<div class="form-block">
 					<div class="inputlabel">Username</div>
 					<input name="frm_clientname" type="text" class="inputbox" size="30" />
@@ -87,6 +87,7 @@ elseif ($cgi_forgotpwd == 1) {
 					<br />	  	
 					<div align="left"><input type="submit" class="button" name="forgot" value="Send" /></div>
 				</div>	
+				<input type="hidden" name="frm_forgotpwd" value="2" />
 			</form>
 		</div>
 		<div class="login-text">
@@ -95,9 +96,6 @@ elseif ($cgi_forgotpwd == 1) {
 			<p>Use a valid username and email-id to get password.</p>
 			<br />
 			<a class=forgotpwd href="javascript:history.go(-1);"><font color="black"><u>Back to login</u></a>
-			<form name="forgotpassword" method="post" action="/login/">
-				<input type="hidden" name="frm_forgotpwd" value="2" />
-			</form>
 		</div>
 
 		<script> document.sendmail.frm_clientname.focus(); </script>
@@ -109,8 +107,7 @@ elseif ($cgi_forgotpwd == 1) {
 
 <?php
 } elseif ($cgi_forgotpwd==2) {
-
-
+	
 	$progname = $sgbl->__var_program_name;
 	$cprogname = ucfirst($progname);
 
@@ -132,31 +129,46 @@ elseif ($cgi_forgotpwd == 1) {
 	}
 */
 
-	if ($cgi_clientname != "" && $cgi_email != "") { 
+	if (!empty($cgi_clientname) && !empty($cgi_email)) { 
 		$tablename = $classname;
-		$rawdb = new Sqlite(null, $tablename);
-		$email = $rawdb->rawQuery("select contactemail from $tablename where nname = '$cgi_clientname';");
+		$database = new Sqlite(null, $tablename);
 
-
-		if($email && $cgi_email == $email[0]['contactemail']) {
+		$data = $database->rawQuery("select contactemail from $tablename where nname = '$cgi_clientname';");
+		
+		if(empty($data)) {
+			$ghtml->print_redirect("/login/?frm_emessage=nouser_email");
+			//throw lxException('Contact email is not set on Kloxo, it could not be send to a empty address.');
+		}
+		elseif(!isset($data[0]['contactemail'])) {
+			$ghtml->print_redirect("/login/?frm_emessage=nouser_email");
+			//throw lxException('Contact email is not set on Kloxo, it could not be send to a empty address.');
+		}
+		else {
+			$contact_email = $data[0]['contactemail'];
+			
+			if(empty($contact_email)) {
+				//throw lxException('Contact email is not set on Kloxo, it could not be send to a empty address.');
+				$ghtml->print_redirect("/login/?frm_emessage=nouser_email");
+			}
+		}
+		
+		if($cgi_email == $contact_email) {
 			$rndstring =  randomString(8);
 			$pass = crypt($rndstring);
 
-			$rawdb->rawQuery("update $tablename set password = '$pass' where nname = '$cgi_clientname'");
-			$mailto = $email[0]['contactemail'];
-			$name = "$cprogname";
-			$email = "Admin";
+			$database->rawQuery("update $tablename set password = '$pass' where nname = '$cgi_clientname'");
 
-			$cc = "";
 			$subject = "$cprogname Password Reset Request";
-			$message = "\n\n\nYour password has been reset to the one below for your $cprogname login.\n";
-			$message .= "The Client IP address which requested the Reset: {$_SERVER['REMOTE_ADDR']}\n";
-			$message .= 'Username: '. $cgi_clientname."\n";
-			$message .= 'New Password: '. $rndstring.'';
+			
+			$message = "\n\n\nYour password has been reset to the one below for your $cprogname login.\n" .
+			           "The Client IP address which requested the Reset: {$_SERVER['REMOTE_ADDR']}\n" .
+					   'Username: '. $cgi_clientname."\n" .
+					   'New Password: '. $rndstring;
 
 			//$message = nl2br($message);
 
-			lx_mail(null, $mailto, $subject, $message);
+			$from = NULL; //Setting NULL gets the program@hostname.com
+			lx_mail($from, $contact_email, $subject, $message);
 
 			$ghtml->print_redirect("/login/?frm_smessage=password_sent");
 
@@ -165,4 +177,3 @@ elseif ($cgi_forgotpwd == 1) {
 		}
 	}
 }
-?>
