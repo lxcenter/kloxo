@@ -55,10 +55,13 @@ function syncCreateConf()
 		$cmd .= 'MAILTO=' . $mailto . PHP_EOL;
 	}
 	else {
-		$cmd .= 'MAILTO=' . PHP_EOL;
+		$cmd .= 'MAILTO=""' . PHP_EOL;
 	}
 
-	$result = $this->main->__var_cron_list;
+	// Get the cron list and init as array() if no isset or empty
+	$cron_list =  isset($this->main->__var_cron_list) ? $this->main->__var_cron_list : array();
+	
+	$result = empty($cron_list) ? array() : $cron_list;
 
 	foreach($result as &$__r) {
 		foreach($list as $l) {
