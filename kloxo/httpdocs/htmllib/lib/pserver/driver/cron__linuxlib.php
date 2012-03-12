@@ -49,8 +49,13 @@ function syncCreateConf()
 
 	$cmd = null;
 
-	if ($this->main->__var_mailto) {
-		$cmd .= "MAILTO={$this->main->__var_mailto}\n";
+	$mailto = isset($this->main->__var_mailto) ? $this->main->__var_mailto : NULL;
+	
+	if(!empty($mailto)) {
+		$cmd .= 'MAILTO=' . $mailto . PHP_EOL;
+	}
+	else {
+		$cmd .= 'MAILTO=' . PHP_EOL;
 	}
 
 	$result = $this->main->__var_cron_list;
