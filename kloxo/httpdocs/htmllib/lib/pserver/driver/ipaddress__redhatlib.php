@@ -208,7 +208,7 @@ static function getCurrentIps()
 		}
 	}
 
-	$result = "";
+	$result = array(); // Initialize as array (expected return result)
 
 	foreach($result1 as $res) {
 
