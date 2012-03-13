@@ -192,18 +192,37 @@ function getIPs_from_ifcfg()
 
 	global $gbl, $sgbl, $login, $ghtml;
 
-	$driverapp = $gbl->getSyncClass(null, null, 'ipaddress');
-//	print($driverapp);
+	$master      = NULL;
+	$sync_server = NULL;
+	// This actually does nothing, because it doesn't return any driver app on djbdns 
+	// (Commented by Angel, added by Mustafa previously)
+	// @deprecated This should be deprecated and confirmed.
+	$driverapp = $gbl->getSyncClass($master, $sync_server, 'ipaddress');
 
-	if ($driverapp === 'redhat') {
-		$list = Ipaddress__Redhat::getCurrentIps();
+	$current_ip_address_list = array();
+	//var_dump($driverapp);
+	
+	if(!empty($driverapp))
+	{   // @deprecated This is probably always empty, just left here some time and deprecate
+		if ($driverapp === 'redhat') {
+			$current_ip_address_list = Ipaddress__Redhat::getCurrentIps();
+		}
+		else {
+			$current_ip_address_list = Ipaddress__Redhat::getCurrentIps();
+		}
 	}
-
+	else {
+		// This is the real way to get the IP from djbdns, OS detection should make previously. Assuming Redhat by default.
+		$current_ip_address_list = Ipaddress__Redhat::getCurrentIps();
+	}
+	
+	// var_dump($current_ip_address_list);
+	
 	$iplist = array(); // Initialize return value
-	if(!empty($list)) {
-		foreach($list as $k => $v) {
+	if(!empty($current_ip_address_list)) {
+		foreach($current_ip_address_list as $index => $data) {
 			// Check ipaddr index
-			$ip_address = isset($v['ipaddr']) ? $v['ipaddr'] : NULL;
+			$ip_address = isset($data['ipaddr']) ? $data['ipaddr'] : NULL;
 			
 			// Skip localhost IP or empty values
 			if ($ip_address !== '127.0.0.1' && !empty($ip_address)) { 
