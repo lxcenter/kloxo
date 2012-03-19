@@ -6,3 +6,5 @@
 # Ignore .diff files on development
 *.diff
 
+# Ignore netbeans configuration folder
+nbproject/
