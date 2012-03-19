@@ -1,4 +1,5 @@
-<?php 
+<?php
+
 chdir("..");
 include_once "htmllib/lib/include.php";
 
