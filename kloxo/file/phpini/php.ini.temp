@@ -9,7 +9,6 @@ log_errors = __lx__log_errors_flag
 output_buffering = __lx__output_buffering_flag
 register_argc_argv = __lx__register_argc_argv_flag
 magic_quotes_gpc  = __lx__magic_quotes_gpc_flag 
-post_max_size = __lx__post_max_size_flag
 magic_quotes_runtime = __lx__magic_quotes_runtime_flag
 magic_quotes_sybase = __lx__magic_quotes_sybase_flag
 mysql.allow_persistent = __lx__mysql_allow_persistent_flag
