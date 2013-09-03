@@ -1273,3 +1273,6 @@ $__description["path"] = array("Path");
 $__description["apache_optimize"] = array("Apache memory optimize");
 $__description["mysql_convert"] = array("Mysql convert");
 $__description["fix_chownchmod"] = array("Fix 'ownership' and 'permissions'");
+
+// Server Information [issues #1053]
+$__description["serverinfo"] = array("Server Information");
