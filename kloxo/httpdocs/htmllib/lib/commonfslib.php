@@ -55,7 +55,17 @@ function lxshell_redirect($file, $cmd)
 {
 	global $gbl, $sgbl, $login, $ghtml; 
 	$start = 2;
-	eval($sgbl->arg_getting_string);
+
+        $arglist = array();
+        for ($i = $start; $i < func_num_args(); $i++) {
+                if (isset($transforming_func)) {
+                        $arglist[] = $transforming_func(func_get_arg($i));
+                } else {
+                        $arglist[] = func_get_arg($i);
+                }
+        }
+
+
 	$cmd = getShellCommand($cmd, $arglist);
 	$return = null;
 	system("$cmd > $file 3</dev/null 4</dev/null 5</dev/null 6</dev/null", $return);
@@ -70,7 +80,16 @@ function lxshell_directory($dir, $cmd)
 	$username = '__system__';
 
 	$start = 2;
-	eval($sgbl->arg_getting_string);
+        $arglist = array();
+        for ($i = $start; $i < func_num_args(); $i++) {
+                if (isset($transforming_func)) {
+                        $arglist[] = $transforming_func(func_get_arg($i));
+                } else {
+                        $arglist[] = func_get_arg($i);
+                }
+        }
+
+	
 	$cmd = getShellCommand($cmd, $arglist);
 	do_exec_system($username, $dir, $cmd, $out, $err, $ret, null);
 	return $out;
@@ -84,7 +103,16 @@ function lxshell_output($cmd)
 	$username = '__system__';
 
 	$start = 1;
-	eval($sgbl->arg_getting_string);
+        $arglist = array();
+        for ($i = $start; $i < func_num_args(); $i++) {
+                if (isset($transforming_func)) {
+                        $arglist[] = $transforming_func(func_get_arg($i));
+                } else {
+                        $arglist[] = func_get_arg($i);
+                }
+        }
+
+
 	$cmd = getShellCommand($cmd, $arglist);
 	do_exec_system($username, null, $cmd, $out, $err, $ret, null);
 	return $out;
@@ -96,7 +124,15 @@ function lxshell_return($cmd)
 	$username = '__system__';
 
 	$start = 1;
-	eval($sgbl->arg_getting_string);
+        $arglist = array();
+        for ($i = $start; $i < func_num_args(); $i++) {
+                if (isset($transforming_func)) {
+                        $arglist[] = $transforming_func(func_get_arg($i));
+                } else {
+                        $arglist[] = func_get_arg($i);
+                }
+        }
+
 
 	$cmd = getShellCommand($cmd, $arglist);
 	do_exec_system($username, null, $cmd, $out, $err, $ret, null);
@@ -114,7 +150,16 @@ function lxshell_input($input, $cmd)
 	$username = '__system__';
 
 	$start = 2;
-	eval($sgbl->arg_getting_string);
+        $arglist = array();
+        for ($i = $start; $i < func_num_args(); $i++) {
+                if (isset($transforming_func)) {
+                        $arglist[] = $transforming_func(func_get_arg($i));
+                } else {
+                        $arglist[] = func_get_arg($i);
+                }
+        }
+
+
 	$cmd = getShellCommand($cmd, $arglist);
 	do_exec_system($username, null, $cmd, $out, $err, $ret, $input);
 	return $ret;
@@ -268,7 +313,16 @@ function lxuser_return($username, $cmd) {
 	global $sgbl;
 	
 	$start = 2;
-	eval($sgbl->arg_getting_string);
+        $arglist = array();
+        for ($i = $start; $i < func_num_args(); $i++) {
+                if (isset($transforming_func)) {
+                        $arglist[] = $transforming_func(func_get_arg($i));
+                } else {
+                        $arglist[] = func_get_arg($i);
+                }
+        }
+
+
 	$cmd = getShellCommand($cmd, $arglist);
 	
 	$ret = new_process_cmd($username, null, $cmd);
