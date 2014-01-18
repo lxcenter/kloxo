@@ -51,6 +51,10 @@ function syncAddFile($domainname)
 	$starvalue = null;
 	$dnsdata = null;
 	$nameserver = null;
+
+	// #772 - Add TTL Support
+	$ttl=$this->main->ttl;
+
 	foreach($dnsrec as $dns) {
 		if ($dns->ttype === "ns") {
 			if (!$nameserver) {
