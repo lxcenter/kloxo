@@ -138,7 +138,16 @@ function lxshell_background($cmd)
 	global $gbl, $sgbl, $login, $ghtml; 
 	$username = '__system__';
 	$start = 1;
-	eval($sgbl->arg_getting_string);
+        $arglist = array();
+        for ($i = $start; $i < func_num_args(); $i++) {
+                if (isset($transforming_func)) {
+                        $arglist[] = $transforming_func(func_get_arg($i));
+                } else {
+                        $arglist[] = func_get_arg($i);
+                }
+        }
+
+
 	$cmd = getShellCommand($cmd, $arglist);
 	$sh = new COM("Wscript.shell");
 	$cmdobject = $sh->Run($cmd, 1);

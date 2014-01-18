@@ -653,7 +653,15 @@ function lx_merge_good($arg)
 	$start = 0;
 	$transforming_func = null;
 
-	eval($sgbl->arg_getting_string);
+        $arglist = array();
+        for ($i = $start; $i < func_num_args(); $i++) {
+                if (isset($transforming_func)) {
+                        $arglist[] = $transforming_func(func_get_arg($i));
+                } else {
+                        $arglist[] = func_get_arg($i);
+                }
+        }
+
 
 	//dprintr($arglist);
 
@@ -952,7 +960,15 @@ function lx_redefine_func($func)
 	$start = 1;
 	$transforming_func = "expand_real_root";
 
-	eval($sgbl->arg_getting_string);
+        $arglist = array();
+        for ($i = $start; $i < func_num_args(); $i++) {
+                if (isset($transforming_func)) {
+                        $arglist[] = $transforming_func(func_get_arg($i));
+                } else {
+                        $arglist[] = func_get_arg($i);
+                }
+        }
+
 
 	return call_user_func_array($func, $arglist);
 }
@@ -2726,7 +2742,15 @@ function exec_class_method($class, $func)
 	//Arg getting string is a function that needs $start to be set.
 	$start = 2;
 
-	eval($sgbl->arg_getting_string);
+        $arglist = array();
+        for ($i = $start; $i < func_num_args(); $i++) {
+                if (isset($transforming_func)) {
+                        $arglist[] = $transforming_func(func_get_arg($i));
+                } else {
+                        $arglist[] = func_get_arg($i);
+                }
+        }
+
 
 	// workaround for the following php bug:
 	//   http://bugs.php.net/bug.php?id=47948
