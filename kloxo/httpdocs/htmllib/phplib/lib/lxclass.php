@@ -512,7 +512,24 @@ final static function calldriverappFunc($class, $func)
 
 	$start = 2;
 
-	eval($sgbl->arg_getting_string);
+        $arglist = array();
+        for ($i = $start; $i < func_num_args(); $i++) {
+                if (isset($transforming_func)) {
+                        $arglist[] = $transforming_func(func_get_arg($i));
+                } else {
+                        $arglist[] = func_get_arg($i);
+                }
+        }
+
+        $arglist = array();
+        for ($i = $start; $i < func_num_args(); $i++) {
+                if (isset($transforming_func)) {
+                        $arglist[] = $transforming_func(func_get_arg($i));
+                } else {
+                        $arglist[] = func_get_arg($i);
+                }
+        }
+
 
 
 	return call_user_func_array(array($class, $func), $arglist);
@@ -3821,7 +3838,7 @@ function getSpecialParentClass()
 	return 'client';
 }
 function createShowIlist() { return null; }
-static function AddListForm() { return null; }
+static function AddListForm($parent, $class) { return null; }
 
 function createShowPropertyList(&$alist) { $alist['property'][] = 'a=show';}
 function createShowActionList(&$alist) { }

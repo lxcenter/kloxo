@@ -36,7 +36,7 @@ function updateform($subaction, $param)
 	return $vlist;
 }
 
-function isAction()
+function isAction($var)
 {
 	if ($this->ttype === 'ns') {
 		return false;

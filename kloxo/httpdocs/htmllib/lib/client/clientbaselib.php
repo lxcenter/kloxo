@@ -345,7 +345,7 @@ function createShowAlist(&$alist, $subaction = null)
 
 
 
-function createShowAlistConfig(&$alist)
+function createShowAlistConfig(&$alist, $class=null)
 {
 	global $gbl, $sgbl, $login, $ghtml; 
 
