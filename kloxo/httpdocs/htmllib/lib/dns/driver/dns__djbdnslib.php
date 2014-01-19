@@ -65,14 +65,17 @@ function syncAddFile($domainname)
 		if ($dns->ttype === 'a') {
 			$arecord[$dns->hostname] = $dns->param;
 		}
+		if ($dns->ttype === 'aaaa') {
+			$aaaarecord[$dns->hostname] = $dns->param;
+		}
 	}
 
 	if ($this->main->soanameserver) {
 		$nameserver = $this->main->soanameserver;
 	}
 
-	$dnsdata .= "Z{$domainname}:$nameserver:{$this->main->__var_email}:{$this->main->__var_ddate}:::::$ttl\n";
-	$dnsdata .= ".{$domainname}::$nameserver:$ttl\n";
+	$dnsdata .= "Z{$domainname}:$nameserver:{$this->main->__var_email}:{$this->main->__var_ddate}\n";
+	$dnsdata .= ".{$domainname}::$nameserver\n";
 
 
 	$starvalue = null;
@@ -86,13 +89,13 @@ function syncAddFile($domainname)
 
 			case "ns":
 				if ($o->param !== $nameserver) {
-					$fdata .= "&{$domainname}::$o->param:$ttl\n";
+					$fdata .= "&{$domainname}::$o->param\n";
 				}
 				break;
 
 			case "mx":
 				$v = $o->priority;
-				$tmp= "@$domainname::{$o->param}:$v:$ttl\n";
+				$tmp= "@$domainname::{$o->param}:$v\n";
 				$fdata .= $tmp;
 				break;
 
@@ -102,7 +105,7 @@ function syncAddFile($domainname)
 				$key = $o->hostname;
 				$value = $o->param;
 				if ($key === '*') {
-					$starvalue = "+*.$domainname:$value:$ttl";
+					$starvalue = "+*.$domainname:$value". ":".  $this->main->ttl;
 					break;
 				}
 
@@ -112,29 +115,63 @@ function syncAddFile($domainname)
 					$key = "$domainname";
 				}
 
-				$tmp= "+$key:$value:$ttl\n";
+				$tmp= "+$key:$value". ":".  $this->main->ttl ."\n";
 				$fdata .= $tmp;
 				break;
+				
+				
+				
+			case "aaaa":
+				$key = $o->hostname;
+				$value = $o->param;
+				
 
+				if ($key !== "__base6__") {
+					$key = "$key.$domainname";
+				} else {
+					$key = "$domainname";
+				}
 
+				$tmp = $this->ip6AAAA($this->ip6Array($o->param));
+				if($tmp){
+					if ($key === '*') {
+						$starvalue = ":*.$domainname:28:$tmp:".  $this->main->ttl . "\n";
+						break;
+					}
+					$res =":".$key.":28:"; 
+
+					$fdata .= $res. $tmp. ":".  $this->main->ttl ."\n";
+				}	
+				
+				break;
 			case "cn":
 			case "cname":
 				$key = $o->hostname;
 				$value = $o->param;
 
-				if (isset($arecord[$value])) {
-					$rvalue = $arecord[$value];
+				if (isset($arecord[$value]) || isset($aaaarecord[$value])) {
+					if(isset($arecord[$value]))
+					{
+						$rvalue = $arecord[$value];
+						$stch = "+";
+					}
+					else {
+						// ipv6
+						$rvalue=$this->ip6AAAA($this->ip6Array($aaaarecord[$value]));
+						if(!$rvalue) break;
+						$stch=":";
+					}
 
 					if ($key === '*') {
-						$starvalue = "+*.$domainname:$rvalue:$ttl\n";
+						$starvalue = "$stch*.$domainname:$rvalue\n";
 						break;
 					}
 					$key .= ".$domainname";
-					$fdata .= "+$key:$rvalue:$ttl\n" ;
+					$fdata .= $stch.$key.":".$rvalue.":".  $this->main->ttl ."\n";
 					break;
 				}
 
-				if ($value !== "__base__") {
+				if ($value !== "__base__"  && $value!= "__base6__") {
 					$value = "$value.$domainname";
 				} else {
 					$value = "$domainname";
@@ -142,12 +179,12 @@ function syncAddFile($domainname)
 
 
 				if ($key === '*') {
-					$starvalue = "C*.$domainname:$value:$ttl\n";
+					$starvalue = "C*.$domainname:$value:".  $this->main->ttl ."\n";
 					break;
 				}
 
 				$key .= ".{$domainname}";
-				$fdata .= "C$key:$value:$ttl\n" ;
+				$fdata .= "C$key:$value:".  $this->main->ttl ."\n";
 				break;
 
 			case "fcname":
@@ -162,7 +199,7 @@ function syncAddFile($domainname)
 				}
 
 				$key .= ".{$domainname}";
-				$fdata .= "C$key:$value:$ttl\n" ;
+				$fdata .= "C$key:$value:".  $this->main->ttl ."\n";
 				break;
 
 			case "txt":
@@ -179,7 +216,7 @@ function syncAddFile($domainname)
 				$value = str_replace("<%domain>", $domainname, $value);
 				$value = str_replace(":", "\\072", $value);
 
-				$tmp= "'$key:$value:$ttl\n" ;
+				$tmp= "'$key:$value\n" ;
 				$fdata .= $tmp;
 				break;
 		}
@@ -288,6 +325,42 @@ function dbactionDelete()
 	$this->syncCreateConf();
 
 }
+function ip6Array($ip){ 
+	//Make sure we have 8 parts 
+	while(count(explode(":",$ip)) < 8){ 
+		$ip = str_replace("::",":::",$ip); 
+	} 
+	
+	$ipa = explode(":",$ip); 
+	for($i=0;$i<8;$i++){ 
+		$ipa[$i]=str_pad($ipa[$i],4,"0",STRPADLEFT); 
+	} 
+	return $ipa; 
+} 
+
+//Takes in a padded IPv6 array and returns a tinyDNS entry 
+function ip6AAAA($ip)
+{ 
+	if(count($ip) != 8 )
+	{ 
+	 	return; 
+	} 
+	//Convert to octal 
+	$oct=array(); 
+	foreach($ip as $i){ 
+		//Convert the hex into two octal chunks because tinyDNS says so. 
+		$p1 = base_convert(substr($i,0,2), 16, 8); 
+		$p2 = base_convert(substr($i,2,2), 16, 8); 
+		$oct[] = "\\".str_pad($p1,3,"0",STRPADLEFT); 
+		$oct[] = "\\".str_pad($p2,3,"0",STRPADLEFT); 
+	} 
+	//Assemble it 
+	foreach($oct as $o) $result .= $o; 
+	return $result; 
+}
+
+// For rev only for future ref -- OA 20130303 
+//Takes in a padded IPv6 array and returns a tinyDNS entry function ip6rDNS($ip,$host,$ttl=86400){ //Now let's make the rDNS $result = "ip6.arpa"; foreach($ip as $i){ $result = substr($i,3,1).'.'.substr($i,2,1).'.'.substr($i,1,1).'.'.substr($i,0,1).'.'.$result; } return "^".$result.":".$host.":".$ttl; }
 
 function dosyncToSystemPost()
 {
