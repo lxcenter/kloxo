@@ -583,6 +583,11 @@ function updatePerm($param)
 function updateNewDir($param)
 {
 	global $gbl, $sgbl, $login, $ghtml; 
+	
+	if (strpos($param['newfolder_f'], '../') !== false) {
+	  throw new lxexception("folder_name_may_not_contain_doubledotsslash", '', '');
+	}
+
 	$this->setUpdateSubaction('newdir');
 	$this->newfolder_f = $param['newfolder_f'];
 	$gbl->__this_redirect = $this->getDirUrl($this->nname);
@@ -593,6 +598,11 @@ function updateNewDir($param)
 function updateNewFile($param)
 {
 	global $gbl, $sgbl, $login, $ghtml; 
+
+	if (strpos($param['newfile_f'], '../') !== false) {
+	  throw new lxexception("file_name_may_not_contain_doubledotsslash", '', '');
+	}
+
 	$this->newfile_f = $param['newfile_f'];
 
 	$file = "$this->nname/$this->newfile_f";
