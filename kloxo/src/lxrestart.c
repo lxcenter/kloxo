@@ -58,6 +58,20 @@ int main(int argc, char **argv)
 	}
 
 	setgid(0); setegid(0); setuid(0); seteuid(0);
+
+	// Well OKay, escaping is not needed here as we want to run at
+	// most two commands: kloxo/hypervm
+	if(strlen(argv[1]) > strlen("hypervm") &&
+	   !memcmp(argv[1], "hypervm", 7))
+	{
+		exit(0);
+	} 
+	if(strlen(argv[1]) > strlen("kloxo") &&
+	   !memcmp(argv[1], "kloxo", 5))
+	{
+		exit(0);
+	} 
+	
 	
 	snprintf(buf, BUFSIZ - 1, "/etc/init.d/%s backendrestart", argv[1]);
 	system(buf);
