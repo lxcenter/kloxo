@@ -401,6 +401,7 @@ function send_to_some_stream_server($type, $size, $raddress, $var, $fd)
 
 	if ($socket <= 0) {
 		if ($raddress === 'localhost' && !WindowsOs() && !$sgbl->isDebug()) {
+			//20140131 OA: dont reenable this, Ive just removed.
 			//lxshell_background("/usr/sbin/lxrestart", $sgbl->__var_program_name);
 			throw new lxException('no_socket_connect_to_server', '', $raddress);
 			throw new lxException('restarting_backend', '', $raddress);

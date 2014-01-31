@@ -5634,15 +5634,15 @@ function setInitialBinary()
 {
 
 	log_cleanup("Initialize Some Binary files");
-
-	if (!lxfile_exists("/usr/sbin/lxrestart")) {
+// OA: lxrestart is not used anywhere, no need to install it
+/*	if (!lxfile_exists("/usr/sbin/lxrestart")) {
 		log_cleanup("- Install lxrestart binary");
 		system("cp ../cexe/lxrestart /usr/sbin/");
 		system("chown root:root /usr/sbin/lxrestart");
 		system("chmod 755 /usr/sbin/lxrestart");
 		system("chmod ug+s /usr/sbin/lxrestart");
 	}
-
+*/
 	// issue #637 - Webmail sending problem and possibility solution
 	// change from copy to symlink
 	log_cleanup("- Add symlink for qmail-sendmail");
