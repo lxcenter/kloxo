@@ -14,33 +14,6 @@
 #include <stdlib.h>
 
 
-char* escapeshellarg(char* str) {
-    char *escStr;
-    int i,
-        count = strlen(str);
-
-    escStr = (char *) calloc(count + 3, sizeof(char));
-    if (escStr == NULL) {
-        return NULL;
-    }
-    sprintf(escStr, "'");
-
-    for(i=0; i<count; i++) {
-        if (str[i] == '\'') {
-            escStr = (char *) realloc(escStr, sizeof(escStr) + (3 * sizeof(char)));
-            if (escStr == NULL) {
-                return NULL;
-            }
-            sprintf(escStr, "%s'\\''", escStr);
-        } else {
-            sprintf(escStr, "%s%c", escStr, str[i]);
-        }
-    }
-
-    sprintf(escStr, "%s%c", escStr, '\'');
-    return escStr;
-}
-
 int exec_command(int argc, char **argv)
 {
 	setenv("PATH", "/bin:/sbin:/usr/sbin:/usr/bin:/usr/local/bin:/usr/local/sbin", 1);
@@ -86,7 +59,7 @@ int main(int argc, char **argv)
 
 	setgid(0); setegid(0); setuid(0); seteuid(0);
 	
-	snprintf(buf, BUFSIZ - 1, "/etc/init.d/%s backendrestart", escapeshellarg(argv[1]));
+	snprintf(buf, BUFSIZ - 1, "/etc/init.d/%s backendrestart", argv[1]);
 	system(buf);
 	//printf("this Shouldn't be\n");
 
