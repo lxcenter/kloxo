@@ -74,14 +74,14 @@ function lxins_main()
 	print("Installing LxCenter yum repository for updates\n");
 	install_yum_repo($osversion);
 
-	$packages = array("sendmail", "sendmail-cf", "sendmail-doc", "sendmail-devel", "exim", "vsftpd", "postfix", "vpopmail", "qmail", "lxphp", "lxzend", "pure-ftpd", "imap");
+	$packages = array("sendmail", "sendmail-cf", "sendmail-doc", "sendmail-devel", "exim", "vsftpd", "postfix", "vpopmail", "qmail", "lxphp", "kloxo-core-php", "lxzend", "pure-ftpd", "imap");
 	$list = implode(" ", $packages);
 	print("Removing packages $list...\n");
 	foreach ($packages as $package) {
 		exec("rpm -e --nodeps $package > /dev/null 2>&1");
 	}
 
-	$packages = array("php-mbstring", "php-mysql", "which", "gcc-c++", "php-imap", "php-pear", "php-devel", "lxlighttpd", "httpd", "mod_ssl", "zip", "unzip", "lxphp", "lxzend", "mysql", "mysql-server", "curl","autoconf","automake","libtool", "bogofilter", "gcc", "cpp", "openssl", "pure-ftpd", "yum-protectbase");
+	$packages = array("php-mbstring", "php-mysql", "which", "gcc-c++", "php-imap", "php-pear", "php-devel", "lxlighttpd", "httpd", "mod_ssl", "zip", "unzip", "kloxo-core-php", "mysql", "mysql-server", "curl","autoconf","automake","libtool", "bogofilter", "gcc", "cpp", "openssl", "pure-ftpd", "yum-protectbase");
 	$list = implode(" ", $packages);
 	while (true) {
 		print("Installing packages $list...\n");
