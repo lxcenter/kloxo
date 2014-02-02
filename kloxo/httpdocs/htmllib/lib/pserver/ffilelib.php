@@ -582,8 +582,14 @@ function updatePerm($param)
 
 function updateNewDir($param)
 {
-	global $gbl, $sgbl, $login, $ghtml; 
-	$this->setUpdateSubaction('newdir');
+	global $gbl, $sgbl, $login, $ghtml;
+
+// LxCenter - DT30012014
+   if (strpos($param['newfolder_f'], '../') !== false) {
+     throw new lxexception("folder_name_may_not_contain_doubledotsslash", '', '');
+   }
+   
+ 	$this->setUpdateSubaction('newdir');
 	$this->newfolder_f = $param['newfolder_f'];
 	$gbl->__this_redirect = $this->getDirUrl($this->nname);
 	return null;

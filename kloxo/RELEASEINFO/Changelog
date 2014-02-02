@@ -1,5 +1,11 @@
 Changelog
 
+Kloxo 6.1.13 - 30-jan-2014
+##################################
+Security fixes
+- file manager fix
+- sql injection fix
+
 Kloxo 6.1.12 - 03-mar-2012
 ##################################
 Bug #925: Advanced PHP Config page shows empty input fields

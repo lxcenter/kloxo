@@ -196,3 +196,8 @@ $__information['webserver_config'] =
 // Language Content for #656
 // by Andrew Ying
 $__emessage['document_root_may_not_contain_spaces'] = "The document root may not contain any space at the end or before the slash. Please check and submit again.";
+
+// LxCenter - DT30012014
+$__emessage['forwardaddress cannot be empty'] = 'The forward-to address cannot be empty.';
+$__emessage['forwardaddress invaild'] = 'The forward-to address is invalid.';
+$__emessage['folder_name_may_not_contain_doubledotsslash'] = "Folder name must not contain ../ (double dots).";
