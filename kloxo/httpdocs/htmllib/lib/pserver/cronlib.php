@@ -14,6 +14,7 @@ static $__desc_weekday	  = array("", "",  "day_of_week");
 static $__desc_ddate  = array("", "",  "date");
 static $__desc_month  = array("", "",  "month" );
 static $__desc_command= array("n", "",  "command", URL_SHOW);
+static $__desc_commandurl = array("n", "",  "url_to_load", URL_SHOW);
 static $__desc_ttype_v_simple = array("", "",  "simple");
 static $__desc_ttype_v_complex = array("", "",  "standard");
 static $__desc_ttype = array("", "",  "type");
@@ -107,7 +108,7 @@ function createExtraVariables()
 }
 
 
-static function  createListNlist($parent, $view)
+static function  createListNlist($parent)
 {
 	//$nlist["nname"] = "5%";
 	//$nlist["minute"] = "5%";
@@ -117,7 +118,11 @@ static function  createListNlist($parent, $view)
 	//$nlist["month"] = "5%";
 	//$nlist["syncserver"] = "5%";
 	$nlist["username"] = "10%";
-	$nlist["command"] = "100%";
+//        $parent = $this->getParentO();
+       	if ($parent->isClass('pserver') || $parent->getClientParentO()->priv->isOn('cron_shell_flag')) 
+		$nlist["command"] = "100%";
+	else
+		$nlist["commandurl"] = "100%";
 
 	return $nlist;
 }
@@ -147,6 +152,7 @@ function updateform($subaction, $param)
 		$this->setUpdateSubaction();
 		$this->write();
 	}
+	
 
 	if ($this->isSimple()) {
 		$vlist['simple_cron'] = array('M', $this->simple_cron);
@@ -170,6 +176,7 @@ function updateform($subaction, $param)
 	$vlist["weekday"] = array('U', cron::$weekdaylist);
 	$vlist["month"] =  array('U', cron::$monthlist);
 	$vlist["command"] = null;
+	$vlist["commandurl"] = null;
 	$driverapp = $gbl->getSyncClass($this->__masterserver, $this->__readserver, 'cron');
 	if ($driverapp === 'windows') {
 		$vlist["argument"] = array('M', null);
@@ -194,7 +201,9 @@ static function addform($parent, $class, $typetd = null)
 		$v = self::$hourlist;
 		unset($v[0]);
 		$vlist['cron_day_hour'] = array('s', $v);
-		$vlist['command'] = null;
+	       	if ($parent->isClass('pserver') || $parent->getClientParentO()->priv->isOn('cron_shell_flag')) 
+			$vlist['command'] = null;
+		else $vlist['commandurl'] = null;
 		$ret['action'] = 'add';
 		$ret['variable'] = $vlist;
 		return $ret;
@@ -236,6 +245,7 @@ static function addform($parent, $class, $typetd = null)
 	}
 */
 	$vlist["command"] = null;
+	$vlist["commandurl"] = null;
 	if ($driverapp === 'windows') {
 		$vlist["argument"] = null;
 	}
@@ -332,7 +342,12 @@ static function add($parent, $class, $param)
 		$param['syncserver'] = $parent->syncserver;
 	}
 */
-	$parambase = implode("_", array($param['username'], $param['command']));
+        
+        if ($parent->isClass('pserver') || $parent->priv->isOn('cron_shell_flag')) 
+		$parambase = implode("_", array($param['username'], $param['command']));
+	else 
+		$parambase = implode("_", array($param['username'], $param['commandurl']));
+	
 	$parambase = fix_nname_to_be_variable($parambase);
 	$cronlist = $parent->getList('cron');
 	$count = 0;

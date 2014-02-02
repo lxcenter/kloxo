@@ -49,19 +49,11 @@ function syncCreateConf()
 
 	$cmd = null;
 
-	$mailto = isset($this->main->__var_mailto) ? $this->main->__var_mailto : NULL;
-	
-	if(!empty($mailto)) {
-		$cmd .= 'MAILTO=' . $mailto . PHP_EOL;
-	}
-	else {
-		$cmd .= 'MAILTO=""' . PHP_EOL;
+	if ($this->main->__var_mailto) {
+		$cmd .= "MAILTO={$this->main->__var_mailto}\n";
 	}
 
-	// Get the cron list and init as array() if no isset or empty
-	$cron_list =  isset($this->main->__var_cron_list) ? $this->main->__var_cron_list : array();
-	
-	$result = empty($cron_list) ? array() : $cron_list;
+	$result = $this->main->__var_cron_list;
 
 	foreach($result as &$__r) {
 		foreach($list as $l) {
@@ -105,8 +97,14 @@ function syncCreateConf()
 		}
 
 		if (!$v['minute']) { $v['minute'] = 0; }
-
-		$cmd .= implode("\t", array($v['minute'], $v['hour'], $v['ddate'], $v['month'],$v['weekday'], $v['command']));
+		
+		$parent = $this->getParentO();
+ 
+		if ($parent->isClass('pserver') || $parent->getClientParentO()->priv->isOn('cron_shell_flag')) 
+			$wcmd=$v['command'];
+		else $wcmd= "wget \"" . escapeshellarg( $v['command'])."\"";
+		
+		$cmd .= implode("\t", array($v['minute'], $v['hour'], $v['ddate'], $v['month'],$v['weekday'], $wcmd));
 		$cmd .= "\n";
 	}
 
