@@ -16,7 +16,6 @@ Secretary
 
 Core Leader
 ---------------
-* Walter Secco			- walter.secco@lxcenter.org
 
 
 System Operations LxCenter (Managing LxCenter Servers)
@@ -32,44 +31,23 @@ Web Designers
 
 Core
 ----------
-* Walter Secco			- walter.secco@lxcenter.org
 * Andrew Ying			- andrew.ying@lxcenter.org
 * William Leonard		- william.leonard@lxcenter.org
-* Martin Sefcik			- martin.sefcik@lxcenter.org
-* Angel Guzman Maeso	- angel.guzman@lxcenter.org
-
+* semir
 
 Other Developers/Representatives/Contributors
 ----------
-* Rene Nieuwburg		- rene.nieuwburg@lxcenter.org
-* Mustafa Ramadhan		- mustafa.ramadhan@lxcenter.org
-
-* Joko Frank Octo
-* Deen Yusoff			- deen.yusoff@lxcenter.org
-* Michele Piperis		- michele@lxcenter.org
-* Reid Forrest			- reid.forrest@lxcenter.org
-* Harry Spink			- harry.spink@lxcenter.org
-* Dimitris Travlos		- dimitris.travlos@lxcenter.org
-* Mohamed Nabil			- mohamed.nabil@lxcenter.org
-* George Hafiz			- george.hafiz@lxcenter.org
-* Steve Amerige			- steve.amerige@lxcenter.org
-* Daniel Onisoru
-* Sai Krishna
-* Jean-Claude Richard	- jean-claude.richard@lxcenter.org
-* Eric Thygesen			- eric.thygesen@lxcenter.org
-* Jack John				- jack.john@lxcenter.org
-* James Kennon			- james.kennon@lxcenter.org
 
 
 Sponsors
 --------
-* DMEHosting	- LxCenter main servers
+* DMEHosting	- IRC Server
 * Razorservers	- Test/Development servers
 * Spry/VPSLink	- Test/Development server
-* UBHosting		- Test/Development servers
-* Nuisoft		- Test/Development server
-* Axisnext		- Test/Development server
-
+* MercuryVPS
+* Castlegem 
+* A2
+* CHCenter 
 
  Special thanks
 --------------
@@ -77,6 +55,8 @@ Sponsors
 * Eduardo Silva
 * Keiran Smith
 * Arthur Thornton
+* Angel Guzman
+* DME Hosting
 
 Software
 --------
