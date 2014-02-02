@@ -83,6 +83,7 @@ function update_main()
 	//
 	lxfile_cp("htmllib/filecore/php.ini", "/usr/local/lxlabs/ext/php/etc/php.ini");
 	$res = pcntl_exec("/bin/sh", array("../bin/common/updatecleanup.sh", "--type=$type"));
+    return $res;
 }
 
 function do_upgrade($upversion)
