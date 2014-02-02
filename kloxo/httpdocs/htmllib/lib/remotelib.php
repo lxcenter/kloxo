@@ -52,6 +52,7 @@ function do_do_the_action($rmt)
 	global $gbl, $sgbl, $login, $ghtml; 
 	return do_local_action($rmt);
 
+// This code never gets executed
 	if ($rmt->action == "set" || $rmt->action == 'get') {
 		if (isLocalhost($rmt->slaveserver)) {
 		} else {
@@ -401,6 +402,7 @@ function send_to_some_stream_server($type, $size, $raddress, $var, $fd)
 
 	if ($socket <= 0) {
 		if ($raddress === 'localhost' && !WindowsOs() && !$sgbl->isDebug()) {
+			//20140131 OA: dont reenable this, Ive just removed.
 			//lxshell_background("/usr/sbin/lxrestart", $sgbl->__var_program_name);
 			throw new lxException('no_socket_connect_to_server', '', $raddress);
 			throw new lxException('restarting_backend', '', $raddress);
@@ -864,6 +866,23 @@ function process_server_input($total)
 
 function do_local_action($rmt)
 {
+        $sudoClass= array("ffile");
+        if(isset($rmt->robject)){
+                $class  = lget_class($rmt->robject);
+                log_log("classes_called_remote", $class);
+                if(in_array($class, $sudoClass))
+                {
+                        switch($class){
+                                case "ffile":
+                                        return callWithSudo($rmt, $rmt->robject->__username_o);
+                                default:
+                                        return callWithSudo($rmt);
+                        }
+                }
+        }
+        else return callWithSudo($rmt);
+
+// This code never executes
 	if ($rmt->action === "set") {
 		$object = $rmt->robject;
 		return $object->doSyncToSystem();
