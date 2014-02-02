@@ -140,7 +140,9 @@ function fixDataBaseIssues()
 	$sq->rawQuery("update client set priv_q_webhosting_flag = 'on' where nname = 'admin'");
 	$sq->rawQuery("update ticket set parent_clname = 'client-admin' where subject = 'Welcome to Kloxo'");
 	$sq->rawQuery("update domain set dtype = 'maindomain' where dtype = 'domain'");
-
+        $sq->rawQuery("update client set priv_q_cron_shell_flag = 'on' where nname = 'admin'");
+        
+        
 	log_cleanup("- Set default database settings");
 	db_set_default('mmail', 'remotelocalflag', 'local');
 	db_set_default('mmail', 'syncserver', 'localhost');
@@ -169,6 +171,7 @@ function fixDataBaseIssues()
 	db_set_default_variable('web', 'docroot', 'nname');
 	db_set_default_variable('client', 'used_q_maindomain_num', 'used_q_domain_num');
 	db_set_default_variable('client', 'priv_q_maindomain_num', 'priv_q_domain_num');
+	db_set_default('client', 'priv_q_cron_shell_flag', 'off');
 	db_set_default("servermail", "domainkey_flag", "on");
 
 	log_cleanup("- Fix resourceplan settings in database");

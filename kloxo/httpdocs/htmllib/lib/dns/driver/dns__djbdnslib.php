@@ -333,7 +333,7 @@ function ip6Array($ip){
 	
 	$ipa = explode(":",$ip); 
 	for($i=0;$i<8;$i++){ 
-		$ipa[$i]=str_pad($ipa[$i],4,"0",STRPADLEFT); 
+		$ipa[$i]=str_pad($ipa[$i],4,"0",STR_PAD_LEFT); 
 	} 
 	return $ipa; 
 } 
@@ -351,8 +351,8 @@ function ip6AAAA($ip)
 		//Convert the hex into two octal chunks because tinyDNS says so. 
 		$p1 = base_convert(substr($i,0,2), 16, 8); 
 		$p2 = base_convert(substr($i,2,2), 16, 8); 
-		$oct[] = "\\".str_pad($p1,3,"0",STRPADLEFT); 
-		$oct[] = "\\".str_pad($p2,3,"0",STRPADLEFT); 
+		$oct[] = "\\".str_pad($p1,3,"0",STR_PAD_LEFT); 
+		$oct[] = "\\".str_pad($p2,3,"0",STR_PAD_LEFT); 
 	} 
 	//Assemble it 
 	foreach($oct as $o) $result .= $o; 
