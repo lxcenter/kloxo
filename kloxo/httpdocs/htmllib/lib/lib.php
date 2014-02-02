@@ -2556,6 +2556,23 @@ function install_if_package_not_exist($name)
 	if ($ret) {
 		lxshell_return("yum", "-y", "install", $name);
 	}
+    return $ret;
+}
+
+// New function since Kloxo 6.1.14
+function replace_rpm_package($replace,$replacewith)
+{
+    $ret = lxshell_return("rpm", "-q", "yum-plugin-replace");
+    if ($ret)
+    {
+        lxshell_return("yum", "-y", "install", "yum-plugin-replace");
+    }
+
+    $ret = lxshell_return("rpm", "-q", $replacewith);
+    if ($ret) {
+        lxshell_return("yum", "-y", "replace", $replace, "--replace-with", $replacewith);
+    }
+    return $ret;
 }
 
 function curl_general_get($url)
@@ -5656,7 +5673,7 @@ function setCheckPackages()
 	$list = array("maildrop-toaster", "spamdyke", "spamdyke-utils", "pure-ftpd",
 		"simscan-toaster", "webalizer", "php-mcrypt", "dos2unix",
 		"rrdtool", "xinetd", "lxjailshell", "php-xml", "libmhash",
-		"lxphp");
+		"kloxo-core-php");
 		
 	foreach($list as $l) {
 		log_cleanup("- For {$l} package");
@@ -6448,7 +6465,7 @@ function setPrepareKloxo()
 {
 	log_cleanup("Prepare for Kloxo");
 
-	log_cleanup("- OS Create Kloxo init.d service file and copy core php.ini (lxphp)");
+	log_cleanup("- OS Create Kloxo init.d service file and copy core php.ini (kloxo-core-php)");
 	os_create_program_service();
 
 	log_cleanup("- OS Fix programroot path permissions");

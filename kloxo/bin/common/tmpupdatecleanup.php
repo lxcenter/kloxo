@@ -25,35 +25,18 @@ function updatecleanup_main()
 	}
 
 	log_cleanup("*** Executing Update (cleanup) - BEGIN ***");
-//
-// Check for lxlabs yum repo file and if exists
-// Change to lxcenter repo file
-//
-	if (lxfile_exists("/etc/yum.repos.d/lxlabs.repo")) {
-		log_cleanup("- Deleting old lxlabs yum repo");
-		lxfile_mv("/etc/yum.repos.d/lxlabs.repo","/etc/yum.repos.d/lxlabs.repo.lxsave");
-		exec("rm -f /etc/yum.repos.d/lxlabs.repo");
-		log_cleanup("- Removed lxlabs.repo");
-		log_cleanup("- Installing lxcenter.repo");
-		exec("wget -O /etc/yum.repos.d/lxcenter.repo http://download.lxcenter.org/lxcenter.repo");
-		log_cleanup("- Installing yum-protectbase plugin");
-		exec("yum install -y -q yum-protectbase");
-	}
 
-// Fix #388 - phpMyAdmin config.inc.php permission
-
-	$correct_perm = "0644";
-	$check_perm = substr(decoct( fileperms("/usr/local/lxlabs/$program/httpdocs/thirdparty/phpMyAdmin/config.inc.php") ), 2);
-
-	if ($check_perm != $correct_perm) {
-		lxfile_unix_chmod("/usr/local/lxlabs/$program/httpdocs/thirdparty/phpMyAdmin/config.inc.php","0644");
-	}
-
-//
+    // Do things that is needed before the cleanup starts.
+    print("########################################\n");
+    print("##        Executing PreCleanup        ##\n");
+    print("########################################\n");
+    doBeforeUpdate();
+    print("########################################\n");
+    print("##        Finished PreCleanup         ##\n");
+    print("########################################\n");
 
 	if (lxfile_exists('.git')) {
-		log_cleanup('- Development found... Exiting');
-		exit;
+		log_cleanup('- Development found!');
 	}
 
 	if ($opt['type'] === 'master') {
@@ -132,6 +115,51 @@ function updatecleanup_main()
 
 	// --- for anticipate change xinetd listing
 	exec("service xinetd restart");
+}
+
+function doBeforeUpdate()
+{
+    global $gbl, $sgbl, $login, $ghtml;
+
+    $program = $sgbl->__var_program_name;
+
+    // Check for lxlabs yum repo file and if exists
+    // Change to lxcenter repo file
+    if (lxfile_exists("/etc/yum.repos.d/lxlabs.repo")) {
+        log_cleanup("- Deleting old lxlabs yum repo");
+        lxfile_mv("/etc/yum.repos.d/lxlabs.repo","/etc/yum.repos.d/lxlabs.repo.lxsave");
+        exec("rm -f /etc/yum.repos.d/lxlabs.repo");
+        log_cleanup("- Removed lxlabs.repo");
+        log_cleanup("- Installing lxcenter.repo");
+        exec("wget -O /etc/yum.repos.d/lxcenter.repo http://download.lxcenter.org/lxcenter.repo");
+        log_cleanup("- Installing yum-protectbase plugin");
+        exec("yum install -y -q yum-protectbase");
+    }
+
+    // Project issue #1079
+    // Install yum-plugin-replace (New since Kloxo 6.1.14)
+    $ret =  install_if_package_not_exist("yum-plugin-replace");
+    if ($ret)
+    {
+        print("Installed RPM package yum-plugin-replace\n");
+    }
+
+    // Project issue #1079
+    // Replace lxphp package (New since Kloxo 6.1.14)
+    $ret =  replace_rpm_package("lxphp", "kloxo-core-php");
+    if ($ret)
+    {
+        print("Replaced RPM package lxphp with kloxo-core-php\n");
+    }
+
+    // Fix #388 - phpMyAdmin config.inc.php permission
+    $correct_perm = "0644";
+    $check_perm = substr(decoct( fileperms("/usr/local/lxlabs/$program/httpdocs/thirdparty/phpMyAdmin/config.inc.php") ), 2);
+
+    if ($check_perm != $correct_perm) {
+        lxfile_unix_chmod("/usr/local/lxlabs/$program/httpdocs/thirdparty/phpMyAdmin/config.inc.php","0644");
+    }
+
 }
 
 function cp_dbfile()
