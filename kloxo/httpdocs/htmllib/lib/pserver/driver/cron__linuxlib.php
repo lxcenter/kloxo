@@ -97,8 +97,14 @@ function syncCreateConf()
 		}
 
 		if (!$v['minute']) { $v['minute'] = 0; }
-
-		$cmd .= implode("\t", array($v['minute'], $v['hour'], $v['ddate'], $v['month'],$v['weekday'], $v['command']));
+		
+		$parent = $this->getParentO();
+ 
+		if ($parent->isClass('pserver') || $parent->getClientParentO()->priv->isOn('cron_shell_flag')) 
+			$wcmd=$v['command'];
+		else $wcmd= "wget \"" . escapeshellarg( $v['command'])."\"";
+		
+		$cmd .= implode("\t", array($v['minute'], $v['hour'], $v['ddate'], $v['month'],$v['weekday'], $wcmd));
 		$cmd .= "\n";
 	}
 
