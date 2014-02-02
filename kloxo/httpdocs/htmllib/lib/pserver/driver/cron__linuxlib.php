@@ -100,9 +100,7 @@ function syncCreateConf()
 		
 		$parent = $this->getParentO();
  
-		if ($parent->isClass('pserver') || $parent->getClientParentO()->priv->isOn('cron_shell_flag')) 
-			$wcmd=$v['command'];
-		else $wcmd= "wget \"" . escapeshellarg( $v['command'])."\"";
+                $wcmd=$v['command'];
 		
 		$cmd .= implode("\t", array($v['minute'], $v['hour'], $v['ddate'], $v['month'],$v['weekday'], $wcmd));
 		$cmd .= "\n";
