@@ -5,6 +5,8 @@ class Sgbllib {
 function __construct()
 {
 
+
+	// OA 20140118: To be removed, not compatible with php 5.4
 	$this->arg_getting_string = '
 	$arglist = array();
 	for ($i = $start; $i < func_num_args(); $i++) {
