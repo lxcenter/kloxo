@@ -5321,8 +5321,10 @@ function setFreshClam($nolog = null)
 		system("chkconfig freshclam on > /dev/null 2>&1");
 		system("/etc/init.d/freshclam start >/dev/null 2>&1");
 		if (!$nolog) { log_cleanup("- Enabled freshclam service"); }
-		lxfile_mv("{$path}/down", "{$path}/run");
-		lxfile_mv("{$path}/log/down", "{$path}/log/run");
+            if (file_exists("{$path}/down") || file_exists("{$path}/log/down")) {
+		    lxfile_mv("{$path}/down", "{$path}/run");
+		    lxfile_mv("{$path}/log/down", "{$path}/log/run");
+            }
 		system("svc -u {$path} {$path}/log > /dev/null 2>&1");
 	}
 

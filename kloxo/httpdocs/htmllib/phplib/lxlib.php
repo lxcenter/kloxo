@@ -955,22 +955,13 @@ function licenseDecrypt($license_content)
 
 function lx_redefine_func($func)
 {
-	global $gbl, $sgbl, $login, $ghtml;
+    global $gbl, $sgbl, $login, $ghtml;
 
-	$start = 1;
-	$transforming_func = "expand_real_root";
+    $arglist = array();
+    for ($i = 1; $i < func_num_args(); $i++)
+        $arglist[] = expand_real_root(func_get_arg($i));
 
-        $arglist = array();
-        for ($i = $start; $i < func_num_args(); $i++) {
-                if (isset($transforming_func)) {
-                        $arglist[] = $transforming_func(func_get_arg($i));
-                } else {
-                        $arglist[] = func_get_arg($i);
-                }
-        }
-
-
-	return call_user_func_array($func, $arglist);
+    return call_user_func_array($func, $arglist);
 }
 
 function licenseEncrypt($string)
