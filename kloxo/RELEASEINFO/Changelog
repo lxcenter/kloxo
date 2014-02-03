@@ -1,5 +1,11 @@
 Changelog
 
+Kloxo 6.1.14 - 04-feb-2014
+##################################
+Security #1079: [GUI] Implement new PHP Core
+Enhancement #1080: PHP 5.3+ Compatibility fixes
+Security #1081: Removed lxrestart tool
+
 Kloxo 6.1.13 - 30-jan-2014
 ##################################
 Security fixes
