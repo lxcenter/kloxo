@@ -2,7 +2,7 @@
 #    Kloxo, Hosting Control Panel
 #
 #    Copyright (C) 2000-2009	LxLabs
-#    Copyright (C) 2009-2011	LxCenter
+#    Copyright (C) 2009-2014	LxCenter
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU Affero General Public License as
@@ -19,11 +19,14 @@
 #
 # This file creates kloxo-install.zip for download server.
 # 
+# Version 1.1 DT04022014
+# * Delete old installer package at the right place.
+#
 ######
 echo "################################"
 echo "### Start packaging"
+rm -f kloxo-install.zip
 cd ../
-rm -f ../kloxo-install/kloxo-install.zip
 echo "### Create zip package..."
 #
 zip -r9 ./kloxo-install/kloxo-install.zip ./kloxo-install -x \
@@ -33,6 +36,7 @@ zip -r9 ./kloxo-install/kloxo-install.zip ./kloxo-install -x \
 "*.CVS/*" \
 "*.*~" \
 "*/kloxo-packer.sh" \
+"*/kloxo-installer.zip" \
 "*/kloxo-patcher.sh" \
 "*/kloxo-install-master.sh" \
 "*/kloxo-install-slave.sh" \
