@@ -2556,6 +2556,23 @@ function install_if_package_not_exist($name)
 	if ($ret) {
 		lxshell_return("yum", "-y", "install", $name);
 	}
+    return $ret;
+}
+
+// New function since Kloxo 6.1.14
+function replace_rpm_package($replace,$replacewith)
+{
+    $ret = lxshell_return("rpm", "-q", "yum-plugin-replace");
+    if ($ret)
+    {
+        lxshell_return("yum", "-y", "install", "yum-plugin-replace");
+    }
+
+    $ret = lxshell_return("rpm", "-q", $replacewith);
+    if ($ret) {
+        lxshell_return("yum", "-y", "replace", $replace, "--replace-with", $replacewith);
+    }
+    return $ret;
 }
 
 function curl_general_get($url)
@@ -5304,8 +5321,10 @@ function setFreshClam($nolog = null)
 		system("chkconfig freshclam on > /dev/null 2>&1");
 		system("/etc/init.d/freshclam start >/dev/null 2>&1");
 		if (!$nolog) { log_cleanup("- Enabled freshclam service"); }
-		lxfile_mv("{$path}/down", "{$path}/run");
-		lxfile_mv("{$path}/log/down", "{$path}/log/run");
+            if (file_exists("{$path}/down") || file_exists("{$path}/log/down")) {
+		    lxfile_mv("{$path}/down", "{$path}/run");
+		    lxfile_mv("{$path}/log/down", "{$path}/log/run");
+            }
 		system("svc -u {$path} {$path}/log > /dev/null 2>&1");
 	}
 
@@ -5617,15 +5636,15 @@ function setInitialBinary()
 {
 
 	log_cleanup("Initialize Some Binary files");
-
-	if (!lxfile_exists("/usr/sbin/lxrestart")) {
+// OA: lxrestart is not used anywhere, no need to install it
+/*	if (!lxfile_exists("/usr/sbin/lxrestart")) {
 		log_cleanup("- Install lxrestart binary");
 		system("cp ../cexe/lxrestart /usr/sbin/");
 		system("chown root:root /usr/sbin/lxrestart");
 		system("chmod 755 /usr/sbin/lxrestart");
 		system("chmod ug+s /usr/sbin/lxrestart");
 	}
-
+*/
 	// issue #637 - Webmail sending problem and possibility solution
 	// change from copy to symlink
 	log_cleanup("- Add symlink for qmail-sendmail");
@@ -5656,7 +5675,7 @@ function setCheckPackages()
 	$list = array("maildrop-toaster", "spamdyke", "spamdyke-utils", "pure-ftpd",
 		"simscan-toaster", "webalizer", "php-mcrypt", "dos2unix",
 		"rrdtool", "xinetd", "lxjailshell", "php-xml", "libmhash",
-		"lxphp");
+		"kloxo-core-php");
 		
 	foreach($list as $l) {
 		log_cleanup("- For {$l} package");
@@ -6448,7 +6467,7 @@ function setPrepareKloxo()
 {
 	log_cleanup("Prepare for Kloxo");
 
-	log_cleanup("- OS Create Kloxo init.d service file and copy core php.ini (lxphp)");
+	log_cleanup("- OS Create Kloxo init.d service file and copy core php.ini (kloxo-core-php)");
 	os_create_program_service();
 
 	log_cleanup("- OS Fix programroot path permissions");

@@ -653,7 +653,15 @@ function lx_merge_good($arg)
 	$start = 0;
 	$transforming_func = null;
 
-	eval($sgbl->arg_getting_string);
+        $arglist = array();
+        for ($i = $start; $i < func_num_args(); $i++) {
+                if (isset($transforming_func)) {
+                        $arglist[] = $transforming_func(func_get_arg($i));
+                } else {
+                        $arglist[] = func_get_arg($i);
+                }
+        }
+
 
 	//dprintr($arglist);
 
@@ -947,14 +955,13 @@ function licenseDecrypt($license_content)
 
 function lx_redefine_func($func)
 {
-	global $gbl, $sgbl, $login, $ghtml;
+    global $gbl, $sgbl, $login, $ghtml;
 
-	$start = 1;
-	$transforming_func = "expand_real_root";
+    $arglist = array();
+    for ($i = 1; $i < func_num_args(); $i++)
+        $arglist[] = expand_real_root(func_get_arg($i));
 
-	eval($sgbl->arg_getting_string);
-
-	return call_user_func_array($func, $arglist);
+    return call_user_func_array($func, $arglist);
 }
 
 function licenseEncrypt($string)
@@ -2043,8 +2050,10 @@ function check_raw_password($class, $client, $pass)
 	}
 
 	$rawdb = new Sqlite(null, $class);
-	$password = $rawdb->rawquery("select password from $class where nname = '$client'");
-	$enp = $password[0]['password'];
+// LxCenter - DT30011014
+        $password = $rawdb->rawquery("select password from ".mysql_real_escape_string($class)." where nname = '".mysql_real_escape_string($client)."'");
+        $enp = $password[0]['password'];
+  
 
 	if ($enp && check_password($pass, $enp)) {
 		return true;
@@ -2726,7 +2735,15 @@ function exec_class_method($class, $func)
 	//Arg getting string is a function that needs $start to be set.
 	$start = 2;
 
-	eval($sgbl->arg_getting_string);
+        $arglist = array();
+        for ($i = $start; $i < func_num_args(); $i++) {
+                if (isset($transforming_func)) {
+                        $arglist[] = $transforming_func(func_get_arg($i));
+                } else {
+                        $arglist[] = func_get_arg($i);
+                }
+        }
+
 
 	// workaround for the following php bug:
 	//   http://bugs.php.net/bug.php?id=47948

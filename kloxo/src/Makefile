@@ -25,12 +25,12 @@ all:
 	rm -f ../sbin/kloxo.exe
 	rm -f ../sbin/kloxo.exe.core
 
-	gcc -o lxrestart lxrestart.c
-	cp lxrestart ../cexe/lxrestart
-	cp ../cexe/lxrestart /usr/sbin/
-	chown root:root /usr/sbin/lxrestart
-	chmod 755 /usr/sbin/lxrestart
-	chmod ug+s /usr/sbin/lxrestart
+#	gcc -o lxrestart lxrestart.c
+#	cp lxrestart ../cexe/lxrestart
+#	cp ../cexe/lxrestart /usr/sbin/
+#	chown root:root /usr/sbin/lxrestart
+#	chmod 755 /usr/sbin/lxrestart
+#	chmod ug+s /usr/sbin/lxrestart
 
 	gcc -o lxsuexec ./lxsuexec.c
 	gcc -o lxexec ./lxexec.c

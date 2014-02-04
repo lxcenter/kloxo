@@ -83,7 +83,7 @@ function lxins_main()
 	print("Installing LxCenter yum repository for updates\n");
 	install_yum_repo($osversion);
 
-	$packages = array("sendmail", "sendmail-cf", "sendmail-doc", "sendmail-devel", "exim", "vsftpd", "postfix", "vpopmail", "qmail", "lxphp", "lxzend", "pure-ftpd", "imap");
+	$packages = array("sendmail", "sendmail-cf", "sendmail-doc", "sendmail-devel", "exim", "vsftpd", "postfix", "vpopmail", "qmail", "kloxo-core-php", "lxphp" ,"lxzend", "pure-ftpd", "imap");
 
 	$list = implode(" ", $packages);
 	print("Removing packages $list...\n");
@@ -91,7 +91,7 @@ function lxins_main()
 		exec("rpm -e --nodeps $package > /dev/null 2>&1");
 	}
 
-	$packages = array("php-mbstring", "php-mysql", "which", "gcc-c++", "php-imap", "php-pear", "php-devel", "lxlighttpd", "httpd", "mod_ssl", "zip", "unzip", "lxphp", "lxzend", "mysql", "mysql-server", "curl", "autoconf", "automake", "libtool", "bogofilter", "gcc", "cpp", "openssl", "pure-ftpd", "yum-protectbase");
+	$packages = array("php-mbstring", "php-mysql", "which", "gcc-c++", "php-imap", "php-pear", "php-devel", "lxlighttpd", "httpd", "mod_ssl", "zip", "unzip", "kloxo-core-php", "mysql", "mysql-server", "curl", "autoconf", "automake", "libtool", "bogofilter", "gcc", "cpp", "openssl", "pure-ftpd", "yum-protectbase");
 
 	$list = implode(" ", $packages);
 
@@ -188,7 +188,7 @@ function lxins_main()
 	system("unzip -oq kloxo-current.zip", $return);
 
 	if ($return) {
-		print("Unzipping the core Failed.. Most likely it is corrupted. Report it at http://forum.lxcenter.org/\n");
+		print("Unzipping the core Failed.. Most likely it is corrupted. Report it at http://community.lxcenter.org/\n");
 		exit;
 	}
 

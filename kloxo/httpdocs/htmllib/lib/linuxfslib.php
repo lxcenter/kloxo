@@ -611,7 +611,17 @@ function lxshell_background($cmd)
 	global $global_dontlogshell;
 	$username = '__system__';
 	$start = 1;
-	eval($sgbl->arg_getting_string);
+
+        $arglist = array();
+        for ($i = $start; $i < func_num_args(); $i++) {
+                if (isset($transforming_func)) {
+                        $arglist[] = $transforming_func(func_get_arg($i));
+                } else {
+                        $arglist[] = func_get_arg($i);
+                }
+        }
+
+
 	$cmd = getShellCommand($cmd, $arglist);
 	$cmd .= " >/dev/null 2>&1 &";
 	$pwd = getcwd();
