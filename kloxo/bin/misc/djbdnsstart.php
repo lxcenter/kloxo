@@ -23,9 +23,17 @@ if (!lxfile_exists("/var/tinydns")) {
 if (!lxfile_exists("/var/axfrdns")) {
 	system("axfrdns-conf axfrdns dnslog /var/axfrdns /var/tinydns 0.0.0.0");
 }
-$list = os_get_allips();
 
-$out = implode("/", $list);
+//  Project issue #949 - Hardcode 0.0.0.0
+//  $list = os_get_allips();
+//
+//  $out = implode("/", $list);
+//
+$out = "0.0.0.0\n";
+//
+//  Kloxo development version has this file refactored
+//  LxCenter DT05022014
+//
 
 lfile_put_contents("/var/tinydns/env/IP", "$out");
 
