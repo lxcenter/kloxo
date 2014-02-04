@@ -294,6 +294,7 @@ static $__desc_awstats_flag = array("q", "",  "enable_awstats");
 static $__desc_dotnet_flag = array("q", "",  "enable_asp.net_(windows_only)");
 static $__desc_frontpage_flag = array("q", "",  "enable_frontpage");
 static $__desc_cron_manage_flag = array("q", "",  "allow_scheduler_management");
+static $__desc_cron_shell_flag = array("q", "",  "allow_cron_shell"); 
 static $__desc_installapp_flag = array("q", "",  "enable_installapp");
 static $__desc_text_lighty_rewrite = array("t", "",  "lighttp_rewrite_rule");
 //static $__desc_subweb_a_num = array("q", "",  "number_of_subdomains");
