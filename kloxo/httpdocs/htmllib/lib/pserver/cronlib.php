@@ -107,7 +107,7 @@ function createExtraVariables()
 }
 
 
-static function  createListNlist($parent)
+static function  createListNlist($parent, $view)
 {
 	//$nlist["nname"] = "5%";
 	//$nlist["minute"] = "5%";
@@ -117,7 +117,6 @@ static function  createListNlist($parent)
 	//$nlist["month"] = "5%";
 	//$nlist["syncserver"] = "5%";
 	$nlist["username"] = "10%";
-//        $parent = $this->getParentO();
 	$nlist["command"] = "100%";
 
 	return $nlist;
