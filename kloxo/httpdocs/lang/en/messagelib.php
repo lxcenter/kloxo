@@ -201,3 +201,5 @@ $__emessage['document_root_may_not_contain_spaces'] = "The document root may not
 $__emessage['forwardaddress cannot be empty'] = 'The forward-to address cannot be empty.';
 $__emessage['forwardaddress invaild'] = 'The forward-to address is invalid.';
 $__emessage['folder_name_may_not_contain_doubledotsslash'] = "Folder name must not contain ../ (double dots).";
+$__emessage['command_not_allowd'] = "Command not allowed! (You only have privilege to run 'php' or 'wget' in cron.)";
+

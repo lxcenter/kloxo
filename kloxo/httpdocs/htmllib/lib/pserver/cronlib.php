@@ -147,6 +147,7 @@ function updateform($subaction, $param)
 		$this->setUpdateSubaction();
 		$this->write();
 	}
+	
 
 	if ($this->isSimple()) {
 		$vlist['simple_cron'] = array('M', $this->simple_cron);
@@ -332,7 +333,17 @@ static function add($parent, $class, $param)
 		$param['syncserver'] = $parent->syncserver;
 	}
 */
+
 	$parambase = implode("_", array($param['username'], $param['command']));
+
+        if ( !$parent->priv->isOn('cron_shell_flag')) {
+                if (!(substr($param['command'], 0, 5 ) === "wget ") &&  !(substr($param['command'], 0, 4 ) === "php ")) {
+
+                        throw new lxException ("command_not_allowd", '', '');
+                }
+        }
+        
+	
 	$parambase = fix_nname_to_be_variable($parambase);
 	$cronlist = $parent->getList('cron');
 	$count = 0;

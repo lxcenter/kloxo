@@ -97,7 +97,18 @@ function syncCreateConf()
 		}
 
 		if (!$v['minute']) { $v['minute'] = 0; }
+		
+                if (substr($v['command'], 0, 5 ) === "wget ") {
+                    $escarg = escapeshellarg(substr($v['command'], 5));
+                    $v['command'] = 'wget ' . $escarg;
+                }
+                else if (substr($v['command'], 0, 4 ) === "php ") {
+                    $escarg = escapeshellarg(substr($v['command'], 4));
+                    $v['command'] = 'php ' . $escarg;
+                }
+                else $v['command'] = 'bad';
 
+		
 		$cmd .= implode("\t", array($v['minute'], $v['hour'], $v['ddate'], $v['month'],$v['weekday'], $v['command']));
 		$cmd .= "\n";
 	}

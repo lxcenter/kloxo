@@ -43,6 +43,7 @@ static $__desc_php_flag =  array("q", "",  "enable_php");
 static $__desc_dns_manage_flag =  array("q", "",  "can_manage_dns");
 //static $__desc_ddatabase_usage = array("q", "",  "database_disk_usage_(MB)");
 static $__desc_cron_manage_flag = array("q", "",  "allow_scheduler_management");
+static $__desc_cron_shell_flag = array("q", "",  "allow_cron_shell"); 
 //static $__desc_phpunsafe_flag = array("q", "",  "can_enable_php_unsafe_mode");
 static $__desc_dotnet_flag  	 = array("q", "",  "enable_asp.net_(ignored_on_linux)");
 static $__desc_parent_name_change = array("", "",  "owner");
