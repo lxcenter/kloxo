@@ -11,7 +11,7 @@ $gl_sql_string = <<<SQL
 #mailaccount #lxclient maildisk_usage autoresponder_num
 #mmail #mailaccount mailaccount_num mailinglist_num
 #uuser disk_usage #lxclient
-#web  totaldisk_usage ssl_flag #rubyrails #uuser ftpuser_num frontpage_flag php_manage_flag inc_flag awstats_flag installapp_flag modperl_flag cgi_flag php_flag phpunsafe_flag subweb_a_num  dotnet_flag cron_num cron_minute_flag cron_manage_flag phpfcgi_flag rubyrails_num phpfcgiprocess_num 
+#web  totaldisk_usage ssl_flag #rubyrails #uuser ftpuser_num frontpage_flag php_manage_flag inc_flag awstats_flag installapp_flag modperl_flag cgi_flag php_flag phpunsafe_flag subweb_a_num  dotnet_flag cron_num cron_minute_flag cron_manage_flag cron_shell_flag phpfcgi_flag rubyrails_num phpfcgiprocess_num 
 #lxbackup backupschedule_flag
 #domain  traffic_usage #web  #mmail #mysqldb #mssqldb #lxbackup traffic_last_usage backup_flag  dns_manage_flag mysqldb_num mssqldb_num ftpuser_num addondomain_num
 #client pserver_num client_num maindomain_num domain_num subdomain_num clientdisk_usage domain_add_flag can_change_limit_flag can_set_disabled_flag can_change_password_flag document_root_flag runstats_flag #domain webhosting_flag
