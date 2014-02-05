@@ -1,5 +1,11 @@
 Changelog
 
+Kloxo 6.1.15 - 05-feb-2014
+##################################
+Bug #949: New IP file in /var/tinydns/env is incorrect
+Bug #1083: Kloxo 6.1.14 not installing
+Security #1082: Cron shell disable
+
 Kloxo 6.1.14 - 04-feb-2014
 ##################################
 Security #1079: [GUI] Implement new PHP Core
