@@ -411,7 +411,7 @@ function do_desc_update($object, $subaction, $param)
 		return false;
 	}
 
-	if (array_search_bool('--Select One--', $param)) {
+	if (array_search_bool('--Select One--', $param, true)) {
 		throw new lxException("Select One is not an acceptable Value", '');
 	}
 
