@@ -119,6 +119,13 @@ function install_main() {
     if (!preg_match("+$pattern+i", $cont)) {
         file_put_contents($options_file, "$example_options\n");
     }
+
+    $pattern = 'include "/etc/kglobal.options.named.conf";';
+    $file = "/var/named/chroot/etc/named.conf";
+    $comment = "//Kloxo global config (stop being open recursors)";
+    addLineIfNotExist($file, $pattern, $comment);
+    
+    
     $pattern = 'include "/etc/kloxo.named.conf";';
     $file = "/var/named/chroot/etc/named.conf";
     $comment = "//Kloxo";
