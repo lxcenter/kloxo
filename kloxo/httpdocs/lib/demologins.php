@@ -47,7 +47,7 @@ foreach($res as $k => $v) {
 	print("</td></tr>");
 }
 
-	print(" <tr> <td ><img width=20 height=20 src=/img/general/button/on.gif> </td> <td ><a href=http://forum.lxcenter.org/ target='_blank'> Visit our forums.</a> </td></tr>");
+	print(" <tr> <td ><img width=20 height=20 src=/img/general/button/on.gif> </td> <td ><a href=http://community.lxcenter.org/ target='_blank'> Visit our forums.</a> </td></tr>");
 	print(" <tr> <td ><img width=20 height=20 src=/img/general/button/on.gif> </td> <td ><a href=http://www.lxcenter.org/ target='_blank'> LxCenter</a> </td></tr>");
 print("</table>");
 

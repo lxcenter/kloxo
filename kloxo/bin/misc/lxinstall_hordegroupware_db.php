@@ -151,7 +151,7 @@ if (!$result) {
 	$result = mysql_query("DROP DATABASE `roundcubemail`", $link);
 	$result = mysql_query("CREATE DATABASE `roundcubemail`", $link);
 	if (!$result) {
-		print("There is REALY something very very wrong... Go to http://forum.lxcenter.org/ and report.\n\n");
+		print("There is REALY something very very wrong... Go to http://community.lxcenter.org/ and report.\n\n");
 		exit;
 	}
 

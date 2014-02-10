@@ -1,5 +1,11 @@
 Changelog
 
+Kloxo 6.1.16 - 10-feb-2014
+##################################
+Bug #735: [apache/conf] httpd does not start --> _default.conf | cp_config.conf | disable.conf | webmail.conf
+Bug #999: Spamdyke prompts for password during Kloxo installation
+Bug #1086: [GUI] "--Select One--" fails
+
 Kloxo 6.1.15 - 05-feb-2014
 ##################################
 Bug #949: New IP file in /var/tinydns/env is incorrect
