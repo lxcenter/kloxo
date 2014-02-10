@@ -103,7 +103,7 @@ function lxins_main()
 	system("unzip -oq kloxo-current.zip", $return);
 
 	if ($return) {
-		print("Unzipping the core Failed.. Most likely it is corrupted. Report it at http://forum.lxcenter.org/\n");
+		print("Unzipping the core Failed.. Most likely it is corrupted. Report it at http://community.lxcenter.org/\n");
 		exit;
 	}
 

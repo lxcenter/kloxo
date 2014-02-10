@@ -7942,7 +7942,7 @@ class HtmlLib
 
 
 
-			$forumurl = "http://forum.lxcenter.org";
+			$forumurl = "http://community.lxcenter.org";
 			if (!$login->isAdmin() && isset($login->getObject('general')->generalmisc_b->forumurl)) {
 				$forumurl = $login->getObject('general')->generalmisc_b->forumurl;
 			}

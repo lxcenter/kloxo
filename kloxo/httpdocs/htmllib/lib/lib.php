@@ -652,7 +652,7 @@ function PrepareRoundCubeDb()
 
 	$result = mysql_query("CREATE DATABASE IF NOT EXISTS roundcubemail", $link);
 	if (!$result) {
-		log_cleanup("- ***** There is something REALLY wrong... Go to http://forum.lxcenter.org and report to the team *****");
+		log_cleanup("- ***** There is something REALLY wrong... Go to http://community.lxcenter.org and report to the team *****");
 		exit;
 	}
 
@@ -730,7 +730,7 @@ function PrepareHordeDb()
 
 	$result = mysql_query("CREATE DATABASE IF NOT EXISTS horde_groupware", $link);
 	if (!$result) {
-		log_cleanup("- ***** There is something REALLY wrong... Go to http://forum.lxcenter.org and report to the team *****");
+		log_cleanup("- ***** There is something REALLY wrong... Go to http://community.lxcenter.org and report to the team *****");
 		exit;
 	}
 

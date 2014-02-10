@@ -1015,7 +1015,7 @@ static function continueForm($parent, $class, $param, $continueaction)
 			if (!$param['contactemail']) {
 				throw new lxexception("sending_welcome_needs_contactemail", array('contactemail', 'send_welcome_f'), '');
 			}
-			// accept to more contact mail - http://forum.lxcenter.org/index.php?t=msg&goto=89118
+			// accept to more contact mail - http://community.lxcenter.org/index.php?t=msg&goto=89118
 			$contact = implode(",", str_replace(" ", "", $param['contactemail']));
 			foreach($contact as $c) {
 				if (!validate_email($c)) {
