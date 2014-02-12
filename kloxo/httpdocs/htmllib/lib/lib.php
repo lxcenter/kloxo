@@ -6481,6 +6481,16 @@ function updatecleanup()
 	installInstallApp();
 	setFreshClam();
 	changeMailSoftlimit();
+
+    updatePEARchannel();
+
+}
+
+function updatePEARchannel()
+{
+    log_cleanup("Update PHP PEAR software");
+    system("pear upgrade --force --alldeps");
+    log_cleanup("- You can ignore warnings from PHP PEAR updates above.");
 }
 
 function setPrepareKloxo()
