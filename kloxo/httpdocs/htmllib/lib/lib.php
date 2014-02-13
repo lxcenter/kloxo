@@ -5675,7 +5675,7 @@ function setCheckPackages()
 	$list = array("maildrop-toaster", "spamdyke", "spamdyke-utils", "pure-ftpd",
 		"simscan-toaster", "webalizer", "php-mcrypt", "dos2unix",
 		"rrdtool", "xinetd", "lxjailshell", "php-xml", "libmhash",
-		"kloxo-core-php", "kloxo-theme-default", "kloxo-theme-feather");
+		"kloxo-core-php", "kloxo-theme-default", "kloxo-theme-feather", "php-pear");
 		
 	foreach($list as $l) {
 		log_cleanup("- For {$l} package");
@@ -6481,6 +6481,26 @@ function updatecleanup()
 	installInstallApp();
 	setFreshClam();
 	changeMailSoftlimit();
+
+    updatePEARchannel();
+
+}
+
+function updatePEARchannel()
+{
+    //
+    // Warning! CentOS 5 is shipped with php-pear version 1,4.9
+    // Most pear packages depends on php-pear version <= 1.8.0
+    // So there could be warnings and errors until php-pear is updated.
+    // These errors and warning can be ignored for now.
+    // DT13022014
+    //
+    // php-pear package is updated for CentOS 5. See Project issue #1092
+    // DT13022014
+    log_cleanup("Update PHP PEAR software");
+    system("pear channel-update pear.php.net"); // Updates the channel
+    system("pear upgrade-all"); // Updates the software
+    log_cleanup("- You can ignore warnings from PHP PEAR updates above.");
 }
 
 function setPrepareKloxo()
