@@ -292,7 +292,6 @@ function lxins_main()
 
 function install_general_mine($value) {
 	$value = implode(" ", $value);
-	c
 	system("PATH=\$PATH:/usr/sbin yum -y install $value");
 }
 
