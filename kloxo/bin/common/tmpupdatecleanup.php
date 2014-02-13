@@ -196,6 +196,10 @@ function doBeforeUpdate()
         lxfile_rm('/usr/local/lxlabs/' . $program . '/src/lxsuexec');
     }
 
+    // Project issue #1092 #1085. Can be removed after 6.1.17
+    // DT13022014
+    $slist = array("php-pear");
+    setUpdateServices($slist);
 }
 
 function cp_dbfile()
