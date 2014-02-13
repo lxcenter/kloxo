@@ -6495,10 +6495,11 @@ function updatePEARchannel()
     // These errors and warning can be ignored for now.
     // DT13022014
     //
+    // php-pear package is updated for CentOS 5. See Project issue #1092
+    // DT13022014
     log_cleanup("Update PHP PEAR software");
     system("pear channel-update pear.php.net"); // Updates the channel
     system("pear upgrade-all"); // Updates the software
-    system("pear upgrade --force --alldeps"); // Updates software if any, forced
     log_cleanup("- You can ignore warnings from PHP PEAR updates above.");
 }
 
