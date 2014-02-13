@@ -6488,8 +6488,17 @@ function updatecleanup()
 
 function updatePEARchannel()
 {
+    //
+    // Warning! CentOS 5 is shipped with php-pear version 1,4.9
+    // Most pear packages depends on php-pear version <= 1.8.0
+    // So there could be warnings and errors until php-pear is updated.
+    // These errors and warning can be ignored for now.
+    // DT13022014
+    //
     log_cleanup("Update PHP PEAR software");
-    system("pear upgrade --force --alldeps");
+    system("pear channel-update pear.php.net"); // Updates the channel
+    system("pear upgrade-all"); // Updates the software
+    system("pear upgrade --force --alldeps"); // Updates software if any, forced
     log_cleanup("- You can ignore warnings from PHP PEAR updates above.");
 }
 
