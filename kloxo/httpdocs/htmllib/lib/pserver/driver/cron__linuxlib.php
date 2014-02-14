@@ -98,6 +98,7 @@ function syncCreateConf()
 
 		if (!$v['minute']) { $v['minute'] = 0; }
 		
+		$v['command'] = trim($v['command']);
 		$phpString = explode('/', $v['command']);
 		$phpStringFound = false;
 		foreach($phpString as $php){
