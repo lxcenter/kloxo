@@ -98,13 +98,21 @@ function syncCreateConf()
 
 		if (!$v['minute']) { $v['minute'] = 0; }
 		
+		$v['command'] = trim($v['command']);
+		$phpString = explode('/', $v['command']);
+		$phpStringFound = false;
+		foreach($phpString as $php){
+			if($php == 'php' || $php == 'php ') 
+				$phpStringFound = true;
+		}
+
                 if (substr($v['command'], 0, 5 ) === "wget ") {
                     $escarg = escapeshellarg(substr($v['command'], 5));
                     $v['command'] = 'wget ' . $escarg;
                 }
-                else if (substr($v['command'], 0, 4 ) === "php ") {
-                    $escarg = escapeshellarg(substr($v['command'], 4));
-                    $v['command'] = 'php ' . $escarg;
+                else if ($phpStringFound) {
+                    $escarg = escapeshellarg($v['command']);
+                    $v['command'] = $escarg;
                 }
                 else $v['command'] = 'bad';
 
