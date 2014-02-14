@@ -110,8 +110,8 @@ function syncCreateConf()
                     $v['command'] = 'wget ' . $escarg;
                 }
                 else if ($phpStringFound) {
-                    $escarg = escapeshellarg(substr($v['command'], 4));
-                    $v['command'] = 'php ' . $escarg;
+                    $escarg = escapeshellarg($v['command']);
+                    $v['command'] = $escarg;
                 }
                 else $v['command'] = 'bad';
 
