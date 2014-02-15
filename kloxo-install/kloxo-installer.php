@@ -302,6 +302,8 @@ function installcomp_mail() {
 	system("pear upgrade --force Archive_Tar"); // force is needed
 	system("pear upgrade --force structures_graph"); // force is needed
 	system("pear install log");
+    system("pear upgrade --force --alldeps"); // force is needed, update all what is possible.
+    log_cleanup("You can ignore the above warnings from PEAR.");
 }
 
 function install_main() {

@@ -20,6 +20,10 @@
 #
 # This file creates kloxo-[version].zip for distribution.
 #
+# Version 1.2 DT12022014
+# * Skip packing themes, makes package smaller.
+# - Added themes to RPM format (kloxo-theme-*.rpm).
+#
 # Version 1.1 DT04022014
 # * Added a few dir exclusions, makes package smaller.
 #
@@ -56,6 +60,7 @@ zip -r9y kloxo-$version.zip ./bin ./cexe ./file ./httpdocs ./pscript ./sbin ./RE
 "*/.git/*" \
 "*/.etc/*" \
 "*file/cache/*" \
+"*httpdocs/img/skin/*" \
 "*httpdocs/download/*" \
 "*httpdocs/help/*" \
 "*httpdocs/webdisk/*" \
