@@ -2639,6 +2639,9 @@ function getFullVersionList($till = null)
 
 function getVersionList($till = null)
 {
+    // TODO: Is this the reason why Kloxo versions list not showing versions with number two in it?
+    // Project issue #1091
+    //
 	$list = getFullVersionList($till);
 	foreach($list as $k => $l) {
 		if (preg_match("/2$/", $l) && ($k !== count($list) -1 )) {
@@ -4463,8 +4466,6 @@ function lxguard_main($clearflag = false)
 
 	get_total($list, $total);
 
-	//dprintr($list['192.168.1.11']);
-
 	dprint_r("Debug: Total: " . $total .  "\n");
 	$deny = get_deny_list($total);
 	$hdn = lfile_get_unserialize("$lxgpath/hostdeny.info");
@@ -4516,48 +4517,36 @@ function lxguard_save_hitlist($hl)
 	lxguard_main();
 }
 
-// --- move from kloxo/httpdocs/htmllib/lib/updatelib.php
-
+//
+// $nolog needs to be set else it will log to the Browser screen too.
+//
 function install_xcache($nolog = null)
 {
-	//--- issue 547 - xcache failed to install
-/*
-	return;
-	if (lxfile_exists("/etc/php.d/xcache.ini")) {
-		return;
-	}
-	if (lxfile_exists("/etc/php.d/xcache.noini")) {
-		return;
-	}
 
-	if (!lxfile_exists("../etc/flag/xcache_enabled.flg")) {
-		log_cleanup("- xcache flag not found, removing /etc/php.d/xcache.ini file");
-		lunlink("/etc/php.d/xcache.ini");
-	}
-*/
-	if (!$nolog) { log_cleanup("Install xcache if is not enabled"); }
- 
-	if (lxfile_exists("../etc/flag/xcache_enabled.flg")) {
-		if (!$nolog) { log_cleanup("- Enabled status"); }
-//		$ret = lxshell_return("php -m | grep -i xcache");
-//		$ret = system("rpm -q php-xcache | grep -i 'not installed'");
-		// --- can not use lxshell_return because always return 127
-		// --- return 0 (= false) mean not found 'not installed'
-		exec("rpm -q php-xcache | grep -i 'not installed'", $out, $ret);
-		if ($ret !== false) {
-			if (!$nolog) { log_cleanup("- Installing"); }
+	if (!$nolog) { log_cleanup("Checking for XCache..."); }
+
+    // Make sure the flagdir exists (It might missing that at slaves)
+    If (!lxfile_exists("/usr/local/lxlabs/kloxo/etc/flag")) {
+     lxfile_mkdir("/usr/local/lxlabs/kloxo/etc/flag");
+    }
+
+	if (lxfile_exists("/usr/local/lxlabs/kloxo/etc/flag/xcache_enabled.flg")) {
+		if (!$nolog) { log_cleanup("- XCache is enabled"); }
+
+        $ret = lxshell_return("rpm", "-q", "php-xcache");
+
+		if ($ret) {
+			if (!$nolog) { log_cleanup("- Installing XCache package"); }
 			lxshell_return("yum", "-y", "install", "php-xcache");
 		}
 		else {
-			if (!$nolog) { log_cleanup("- Already installed"); }
-		}		
-		// for customize?
-		lxfile_cp("../file/xcache.ini", "/etc/php.d/xcache.ini");
-	}
-	else {
-		lxshell_return("yum", "-y", "remove", "php-xcache");
-		if (!$nolog) { log_cleanup("- Disabled status"); }
-	}
+			if (!$nolog) { log_cleanup("- XCache is already installed"); }
+		}
+
+        // Copy XCache Template
+		lxfile_cp("/usr/local/lxlabs/kloxo/file/xcache.ini", "/etc/php.d/xcache.ini");
+        if (!$nolog) { log_cleanup("- XCache ini file is installed/recreated"); }
+    }
 
 }
 
@@ -4585,10 +4574,11 @@ function addcustomername()
 
 function fix_phpini()
 {
-	log_cleanup("Fix php.ini");
-	log_cleanup("- Fix process");
+	log_cleanup("Checking the php.ini file(s)");
 
 	lxshell_return("__path_php_path", "../bin/fix/fixphpini.php", "--server=localhost");
+    log_cleanup("- Re-created the php.ini file(s)");
+
 }
 
 function switchtoaliasnext()
