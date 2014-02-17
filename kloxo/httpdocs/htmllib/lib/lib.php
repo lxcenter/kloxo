@@ -6336,7 +6336,7 @@ function setUpdateConfigWithVersionCheck($list, $servertype = null)
 
 function updatecleanup()
 {
-	setPrepareKloxo();
+    setPrepareKloxo();
 
     // Fixes #303 and #304
 	installThirdparty();
@@ -6390,6 +6390,8 @@ function updatecleanup()
 	setCheckPackages();
 
 	copy_script();
+
+    uploadStatsLxCenter();
 
 	install_xcache();
 
@@ -6477,6 +6479,19 @@ function updatecleanup()
 
     updatePEARchannel();
 
+}
+
+
+function uploadStatsLxCenter()
+{
+
+    global $gbl, $sgbl, $login, $ghtml;
+    $thisversion = $sgbl->__ver_major_minor_release;
+    $collectIsAllowed = $sgbl->__var_programname_stats;
+
+    if ($collectIsAllowed === "yes") {
+    system("wget -q -O /dev/null http://stats.lxcenter.org/lxstat.php?version=" . trim($thisversion) . " &");
+    }
 }
 
 function updatePEARchannel()
