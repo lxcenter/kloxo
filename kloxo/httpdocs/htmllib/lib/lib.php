@@ -6455,8 +6455,11 @@ function updatecleanup()
 	setInitialLogrotate();
 	
 	installRoundCube();
-	
-	installHorde();
+
+// DT17022014
+// Disable horde link as horde is not in use
+// Project issue #1084
+//	installHorde();
 
 	installChooser();
 
