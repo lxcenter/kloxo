@@ -39,7 +39,7 @@ function syncCreateConf()
 {
 	global $gbl, $sgbl, $login, $ghtml; 
 	global $global_shell_error;
-	
+
 	if_demo_throw_exception('cron');
 	$conf_file = "__path_cron_root/{$this->main->username}";
 	$list = array('minute', 'hour', 'weekday', 'ddate', 'month');
@@ -97,18 +97,26 @@ function syncCreateConf()
 		}
 
 		if (!$v['minute']) { $v['minute'] = 0; }
-		
+
+		$v['command'] = trim($v['command']);
+		$phpString = explode('/', $v['command']);
+		$phpStringFound = false;
+		foreach($phpString as $php){
+			if($php == 'php' || $php == 'php ') 
+				$phpStringFound = true;
+		}
+
                 if (substr($v['command'], 0, 5 ) === "wget ") {
                     $escarg = escapeshellarg(substr($v['command'], 5));
                     $v['command'] = 'wget ' . $escarg;
                 }
-                else if (substr($v['command'], 0, 4 ) === "php ") {
-                    $escarg = escapeshellarg(substr($v['command'], 4));
-                    $v['command'] = 'php ' . $escarg;
+                else if ($phpStringFound) {
+                    $escarg = escapeshellarg($v['command']);
+                    $v['command'] = $escarg;
                 }
                 else $v['command'] = 'bad';
 
-		
+
 		$cmd .= implode("\t", array($v['minute'], $v['hour'], $v['ddate'], $v['month'],$v['weekday'], $v['command']));
 		$cmd .= "\n";
 	}
