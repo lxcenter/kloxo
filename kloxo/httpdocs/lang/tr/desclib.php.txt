@@ -98,7 +98,6 @@ $__description["number_of_servers"] = array("Sunucu sayısı");
 $__description["number_of_domains"] = array("DOmain Sayısı");
 $__description["number_of_vpses"] = array("VPS sayısı");
 $__description["expiry_date"] = array("Bitiş tarihi");
-$__description["live_support"] = array("Canlı Destek");
 $__description["ip_address"] = array("Ip Adresi");
 $__description["client_support"] = array("Kullanıcı destek");
 $__description["number_of_nodes"] = array("Number Of Nodes");

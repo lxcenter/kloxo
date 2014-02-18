@@ -9030,29 +9030,9 @@ class HtmlLib
 			</td>
 		</tr>
 
-
-
-		<?php if (if_demo()) { ?>
-		<tr>
-			<td align=center>
-				<table>
-					<tr align=center>
-						<td align=center nowrap><a href=/live target=_blank class=tableheadtext>Click Here for Live
-							Support.</a></td>
-					</tr>
-				</table>
-			</td>
-		</tr>
-        </table>
-        <?php 
-	}
-
-
+        <?php
 		return;
-
 	}
-
-
 }
 
 
