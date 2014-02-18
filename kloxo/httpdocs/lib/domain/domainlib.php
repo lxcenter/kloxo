@@ -617,6 +617,10 @@ function postAdd()
 	}
 
 	if (!$this->docroot) { $this->docroot = $this->nname; }
+	///#1069 
+	if(preg_match("/\.\.\//", $web-docroot)){
+	throw new lxexception("folder_name_may_not_contain_doubledotsslash","");
+	}
 
 	$this->docroot = coreFfile::getRealpath($this->docroot);
 
@@ -639,6 +643,11 @@ function postAdd()
 
 	$web->ipaddress = $dnstemplate->getIpForBaseDomain();
 	$web->docroot = $this->docroot;
+
+    ///#1069 
+    if(preg_match("/\.\.\//", $web-docroot)){
+    	throw new lxexception("folder_name_may_not_contain_doubledotsslash","");
+    }
 
     ///#656 When adding a subdomain, the Document Root field is not being validated
     if (csa($web->docroot, " /")) {
