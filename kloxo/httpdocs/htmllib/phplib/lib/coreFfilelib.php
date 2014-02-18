@@ -127,7 +127,7 @@ static function getWithoutExtension($path)
 
 static function getContent($__username_o, $root, $path, $stat, $numlines)
 {
-
+	self::checkOwnership($__username_o, $path);
 	if ($stat['ttype'] === "zip" || $stat['ttype'] === 'tgz' || $stat['ttype'] === 'tar') {
 		$res = lxshell_getzipcontent($path);
 		//$res = str_replace(" ", "&nbsp;  ", $res);
@@ -196,6 +196,19 @@ static function removeLeadingSlash($f)
 	return $f;
 
 }
+
+static function checkOwnership($username, $path)
+{        
+        $owner= posix_getpwuid(fileowner(expand_real_root($path)));
+        if($owner['name']!==$username){
+                log_log("fileacc_hacking", "{$username} tried to access {$owner['name']}'s file: $path");
+                throw new lxexception('file_bad_owner_logged', '');
+        }
+         
+        return true;
+}
+
+
 
 
 }
