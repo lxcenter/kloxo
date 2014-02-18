@@ -160,6 +160,46 @@ function doBeforeUpdate()
         lxfile_unix_chmod("/usr/local/lxlabs/$program/httpdocs/thirdparty/phpMyAdmin/config.inc.php","0644");
     }
 
+    // Project issue #1081
+    // Remove lxrestart
+    if (lxfile_exists("/usr/sbin/lxrestart")) {
+        log_cleanup("- Deleting lxrestart from /usr/sbin/ (not in use anymore)");
+        lxfile_rm('/usr/sbin/lxrestart');
+    }
+    if (lxfile_exists('/usr/local/lxlabs/'. $program . '/cexe/lxrestart')) {
+        log_cleanup("- Deleting lxrestart from cexe (not in use anymore)");
+        lxfile_rm('/usr/local/lxlabs/' . $program . '/cexe/lxrestart');
+    }
+    if (lxfile_exists('/usr/local/lxlabs/'. $program . '/src/lxrestart.c')) {
+        log_cleanup("- Deleting lxrestart.c from src (not in use anymore)");
+        lxfile_rm('/usr/local/lxlabs/' . $program . '/src/lxrestart.c');
+    }
+    // Clean Source dir
+    if (lxfile_exists('/usr/local/lxlabs/'. $program . '/src/lxrestart')) {
+        log_cleanup("- Clean the sources dir - remove lxrestart");
+        lxfile_rm('/usr/local/lxlabs/' . $program . '/src/lxrestart');
+    }
+    if (lxfile_exists('/usr/local/lxlabs/'. $program . '/src/closeallinput')) {
+        log_cleanup("- Clean the sources dir - remove closeallinput");
+        lxfile_rm('/usr/local/lxlabs/' . $program . '/src/closeallinput');
+    }
+    if (lxfile_exists('/usr/local/lxlabs/'. $program . '/src/lxexec')) {
+        log_cleanup("- Clean the sources dir - remove lxexec");
+        lxfile_rm('/usr/local/lxlabs/' . $program . '/src/lxexec');
+    }
+    if (lxfile_exists('/usr/local/lxlabs/'. $program . '/src/lxphpsu')) {
+        log_cleanup("- Clean the sources dir - remove lxphpsu");
+        lxfile_rm('/usr/local/lxlabs/' . $program . '/src/lxphpsu');
+    }
+    if (lxfile_exists('/usr/local/lxlabs/'. $program . '/src/lxsuexec')) {
+        log_cleanup("- Clean the sources dir - remove lxsuexec");
+        lxfile_rm('/usr/local/lxlabs/' . $program . '/src/lxsuexec');
+    }
+
+    // Project issue #1092 #1085. Can be removed after 6.1.17
+    // DT13022014
+    $slist = array("php-pear");
+    setUpdateServices($slist);
 }
 
 function cp_dbfile()

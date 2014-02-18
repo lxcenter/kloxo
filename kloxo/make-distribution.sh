@@ -2,7 +2,7 @@
 #    Kloxo, Hosting Control Panel
 #
 #    Copyright (C) 2000-2009	LxLabs
-#    Copyright (C) 2009-2012	LxCenter
+#    Copyright (C) 2009-2014	LxCenter
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU Affero General Public License as
@@ -18,8 +18,14 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 #
-# This file creates kloxo-[version].zip for distribution from SVN.
-# 
+# This file creates kloxo-[version].zip for distribution.
+#
+# Version 1.2 DT12022014
+# * Skip packing themes, makes package smaller.
+# - Added themes to RPM format (kloxo-theme-*.rpm).
+#
+# Version 1.1 DT04022014
+# * Added a few dir exclusions, makes package smaller.
 #
 # - read version
 # - compile c files
@@ -52,6 +58,13 @@ zip -r9y kloxo-$version.zip ./bin ./cexe ./file ./httpdocs ./pscript ./sbin ./RE
 "*/CVS/*" \
 "*/.svn/*" \
 "*/.git/*" \
+"*/.etc/*" \
+"*file/cache/*" \
+"*httpdocs/img/skin/*" \
+"*httpdocs/download/*" \
+"*httpdocs/help/*" \
+"*httpdocs/webdisk/*" \
+"*httpdocs/img/installapp/*" \
 "*httpdocs/thirdparty/*" \
 "*httpdocs/htmllib/extjs/*" \
 "*httpdocs/htmllib/fckeditor/*" \

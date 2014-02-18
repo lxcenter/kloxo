@@ -1,4 +1,9 @@
-
+<?php
+/*
+ * This file is not in use anymore
+ * DT17022014
+ */
+?>
 <head> 
 		<title> Kloxo </title> 
 		<body leftmargin=0 rightmargin=0 topmargin=0 bottommargin=0>
@@ -28,5 +33,5 @@
 
 print("<a href='horde/'> <img src=horde/themes/graphics/horde-power1.png></a> <br> <br>   ");
 
-print("<a href='roundcube/'> <img src=roundcube/skins/default/images/roundcube_logo.png></a> ");
+print("<a href='roundcube/'> <img src=roundcube/skins/larry/images/roundcube_logo.png></a> ");
 

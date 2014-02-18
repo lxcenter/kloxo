@@ -5,6 +5,9 @@ class phpini__sync extends Lxdriverclass {
 
 function initString($ver)
 {
+    // DT16022014
+    // TODO: Refactor this function See #1075 #1076
+    //
 	$pclass = $this->main->getParentClass();
 
 	$this->main->fixphpIniFlag();
@@ -23,10 +26,15 @@ XML;
 	$this->main->phpini_flag_b->enable_zend_val = "";
 }
 
+    // Project issue #1095
+    // DT16022014 Turn off xcache.so as zend_extension.
+    // It does not work anymore as zend_extension.
+    // It is enabled/disabled with function enableDisableModule()
+
 if ($this->main->phpini_flag_b->isON('enable_xcache_flag')) {
 	lxfile_touch("../etc/flag/xcache_enabled.flg");
 	$this->main->phpini_flag_b->enable_xcache_val =<<<XML
-zend_extension = /usr/lib/php/modules/xcache.so
+;zend_extension = /usr/lib/php/modules/xcache.so
 XML;
 } else {
 	lxfile_rm("../etc/flag/xcache_enabled.flg");

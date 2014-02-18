@@ -1,5 +1,32 @@
 Changelog
 
+Kloxo 6.1.17 - 18-feb-2014
+##################################
+Bug #804: XCache deleted
+Bug #982: Clicking PHP icon causes yum -y install xcache to be runned in background
+Bug #1084: [Cleanup] Remove Horde error messages.
+Bug #1085: [Installer] PEAR channel seems broken
+Enhancement #1088: Implement theme packages
+Enhancement #1095: Improve XCache functions
+
+Kloxo 6.1.16 - 10-feb-2014
+##################################
+Bug #735: [apache/conf] httpd does not start --> _default.conf | cp_config.conf | disable.conf | webmail.conf
+Bug #999: Spamdyke prompts for password during Kloxo installation
+Bug #1086: [GUI] "--Select One--" fails
+
+Kloxo 6.1.15 - 05-feb-2014
+##################################
+Bug #949: New IP file in /var/tinydns/env is incorrect
+Bug #1083: Kloxo 6.1.14 not installing
+Security #1082: Cron shell disable
+
+Kloxo 6.1.14 - 04-feb-2014
+##################################
+Security #1079: [GUI] Implement new PHP Core
+Enhancement #1080: PHP 5.3+ Compatibility fixes
+Security #1081: Removed lxrestart tool
+
 Kloxo 6.1.13 - 30-jan-2014
 ##################################
 Security fixes
