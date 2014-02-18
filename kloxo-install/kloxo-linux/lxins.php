@@ -131,14 +131,17 @@ function lxins_main()
 	system("echo `hostname` > /var/qmail/control/me");
 	system("service qmail restart >/dev/null 2>&1 &");
 	system("service courier-imap restart >/dev/null 2>&1 &");
-	$dbfile="/home/kloxo/httpd/webmail/horde/scripts/sql/create.mysql.sql";
-	if(file_exists($dbfile)) {
-		if($dbpass == "") {
-			system("mysql -u $dbroot  <$dbfile");
-		} else {
-			system("mysql -u $dbroot -p$dbpass <$dbfile");
-		}
-	}
+// DT17022014
+// Disable horde link as horde is not in use
+// Project issue #1084
+//	$dbfile="/home/kloxo/httpd/webmail/horde/scripts/sql/create.mysql.sql";
+//	if(file_exists($dbfile)) {
+//		if($dbpass == "") {
+//			system("mysql -u $dbroot  <$dbfile");
+//		} else {
+//			system("mysql -u $dbroot -p$dbpass <$dbfile");
+//		}
+//	}
 	system("mkdir -p /home/kloxo/httpd");
 	chdir("/home/kloxo/httpd");
 	@ unlink("skeleton-disable.zip");

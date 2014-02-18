@@ -1,5 +1,14 @@
 Changelog
 
+Kloxo 6.1.17 - 18-feb-2014
+##################################
+Bug #804: XCache deleted
+Bug #982: Clicking PHP icon causes yum -y install xcache to be runned in background
+Bug #1084: [Cleanup] Remove Horde error messages.
+Bug #1085: [Installer] PEAR channel seems broken
+Enhancement #1088: Implement theme packages
+Enhancement #1095: Improve XCache functions
+
 Kloxo 6.1.16 - 10-feb-2014
 ##################################
 Bug #735: [apache/conf] httpd does not start --> _default.conf | cp_config.conf | disable.conf | webmail.conf

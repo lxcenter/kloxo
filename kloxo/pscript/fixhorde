@@ -1,5 +1,8 @@
 #!/bin/sh
 . /script/directory
-lphp.exe ../bin/misc/installHorde.php
+#lphp.exe ../bin/misc/installHorde.php
+# DT17022014
+# Disable horde link as horde is not in use
+# Project issue #1084
 
 
