@@ -2,7 +2,7 @@
 #    Kloxo, Hosting Control Panel
 #
 #    Copyright (C) 2000-2009	LxLabs
-#    Copyright (C) 2009-2011	LxCenter
+#    Copyright (C) 2009-2014	LxCenter
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU Affero General Public License as
@@ -19,6 +19,8 @@
 #
 #
 # LxCenter note: uses an lxadmin path!
+#
+# TODO: can this be implemented into kloxo-installer.php?
 #
 name=$1
 pass=$2

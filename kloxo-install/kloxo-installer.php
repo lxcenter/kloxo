@@ -2,7 +2,7 @@
 //    Kloxo, Hosting Control Panel
 //
 //    Copyright (C) 2000-2009	LxLabs
-//    Copyright (C) 2009-2011	LxCenter
+//    Copyright (C) 2009-2014	LxCenter
 //
 //    This program is free software: you can redistribute it and/or modify
 //    it under the terms of the GNU Affero General Public License as
@@ -60,6 +60,9 @@ function lxins_main()
 			print("Installing Kloxo = YES\n\n");
 		}
 	}
+    /*
+     * Installapp apps are removed. InstallApp is not in use
+     *
 	//--- Ask for InstallApp
 	print("InstallApp: PHP Applications like PHPBB, WordPress, Joomla etc\n");
 	print("When you choose Yes, be aware of downloading about 350Mb of data!\n");
@@ -73,6 +76,12 @@ function lxins_main()
 		print("Installing InstallApp = YES\n\n");
 		$installappinst = true;
 	}
+    */
+
+    $installappinst = false;
+    //--- Temporary flag so InstallApp won't be installed
+    system("echo 1 > /var/cache/kloxo/kloxo-install-disableinstallapp.flg");
+
 
 	print("Adding System users and groups (nouser, nogroup and lxlabs, lxlabs)\n");
 	system("groupadd nogroup");
@@ -208,7 +217,7 @@ function lxins_main()
 
 	file_put_contents("/etc/sysconfig/spamassassin", "SPAMDOPTIONS=\" -v -d -p 783 -u lxpopuser\"");
 	print("\nCreating Vpopmail database...\n");
-	system("sh $dir_name/kloxo-linux/vpop.sh $dbroot \"$dbpass\" lxpopuser $mypass");
+	system("sh $dir_name/vpop.sh $dbroot \"$dbpass\" lxpopuser $mypass");
 	system("chmod -R 755 /var/log/httpd/");
 	system("chmod -R 755 /var/log/httpd/fpcgisock >/dev/null 2>&1");
 	system("mkdir -p /var/log/kloxo/");
