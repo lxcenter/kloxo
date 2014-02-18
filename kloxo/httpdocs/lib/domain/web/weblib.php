@@ -1207,6 +1207,10 @@ function updateform($subaction, $param)
 
 		case "docroot":
 			$vlist['docroot'] = null;
+			if($param['docroot'])
+				if(preg_match("/\.\.\//", $param['docroot'])) {
+					throw new lxexception("folder_name_may_not_contain_doubledotsslash", "");
+				}
 			return $vlist;
 
 		case "blockip":
