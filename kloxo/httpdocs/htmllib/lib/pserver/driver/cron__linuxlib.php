@@ -98,12 +98,19 @@ function syncCreateConf()
 
 		if (!$v['minute']) { $v['minute'] = 0; }
 		
+		
+		//We should find a regexp for this and add a global config var 
+		// to enable users add their own allowed commands...
                 if (substr($v['command'], 0, 5 ) === "wget ") {
                     $escarg = escapeshellarg(substr($v['command'], 5));
                     $v['command'] = 'wget ' . $escarg;
                 }
                 else if (substr($v['command'], 0, 4 ) === "php ") {
                     $escarg = escapeshellarg(substr($v['command'], 4));
+                    $v['command'] = 'php ' . $escarg;
+                }
+                else if (substr($v['command'], 0, 19 ) === "/usr/local/bin/php ") {
+                    $escarg = escapeshellarg(substr($v['command'], 19));
                     $v['command'] = 'php ' . $escarg;
                 }
                 else $v['command'] = 'bad';

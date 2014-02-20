@@ -127,17 +127,6 @@ function loadMenus () {
     window.help = new Menu("help",100);
 
     help.addMenuItem("Help","window.open(gl_helpUrl, 'Help')","0","helparea","0");
-    <?php
-    if ($login->isAdmin()) {
-        /*
-        ?>
-        help.addMenuItem("Live","window.open('/live/', 'Live', 'status=no')","0","Live Help","0");
-        help.addMenuItem("Live Transcript","window.open('/live/transcript.php')","0","Live Transcript","0");
-        help.addMenuItem("Help Desk","window.open('http://www.lxlabs.com/lxa/hdesk/')","0","helparea","0");
-        <?php
-        */
-    }
-    ?>
     help.addMenuItem("Forum", "window.open('http://www.lxcenter.org/forum')", "0", "helparea", "0");
 
     }

@@ -196,10 +196,12 @@ function doBeforeUpdate()
         lxfile_rm('/usr/local/lxlabs/' . $program . '/src/lxsuexec');
     }
 
-    // Project issue #1092 #1085. Can be removed after 6.1.17
-    // DT13022014
-    $slist = array("php-pear");
-    setUpdateServices($slist);
+    // DT18022014 - Cleanup the mess.
+    if (lxfile_exists('/usr/local/lxlabs/' . $program . '/httpdocs/live/common.php')) {
+        log_cleanup("- Remove live dir (not in use)");
+        lxfile_rm_rec('/usr/local/lxlabs/' . $program . '/httpdocs/live');
+        lxfile_rm('/usr/local/lxlabs/' . $program . '/etc/phplive.db');
+    }
 }
 
 function cp_dbfile()

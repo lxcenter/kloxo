@@ -17,12 +17,12 @@ static $__desc_lic_maindomain_num_f =     array("","",  "number_of_domains");
 static $__desc_lic_vps_num_f =     array("","",  "number_of_vpses");
 static $__desc_licensecom_b_s_password =  array("", "",  "Password");
 static $__desc_lic_expiry_date_f =     array("","",  "expiry_date");
-static $__desc_lic_live_support_f =     array("","",  "live_support");
+//static $__desc_lic_live_support_f =     array("","",  "live_support");
 static $__desc_lic_ipaddress_f =     array("","",  "ip_address");
 static $__desc_lic_client_f =     array("","",  "client_support");
 static $__desc_lic_node_num_f	 = array("", "",  "number_of_nodes");
 static $__desc_license_upload_f =     array("F","",  "upload_new_license");
-static $__desc_lic_livesupport_name_f =     array("F","",  "username");
+//static $__desc_lic_livesupport_name_f =     array("F","",  "username");
 static $__acdesc_update_login_info = array("", "",  "login_info");
 static $__acdesc_update_license = array("", "",  "license_update");
 
@@ -66,14 +66,8 @@ function updateform($subaction, $param)
 				} else {
 					$vlist['lic_node_num_f'] = array('M', $lic->node_num);
 				}
-				if (isset($lic->lic_livesupport_flag)) {
-				$vlist['lic_live_support_f'] = array('M', $lic->lic_livesupport_flag);
-				}
 				if (isset($lic->lic_client)) {
 				$vlist['lic_client_f'] = array('M', $lic->lic_client);
-				}
-				if (isset($lic->lic_livesupport_name)) {
-				$vlist['lic_livesupport_name_f'] = array('M', $lic->lic_livesupport_name);
 				}
 				return $vlist;
 			}

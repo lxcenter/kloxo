@@ -284,7 +284,6 @@ $__description["number_of_servers"] = array("Number Of Servers");
 $__description["number_of_domains"] = array("Number Of Domains");
 $__description["number_of_vpses"] = array("Number Of Vpses");
 $__description["expiry_date"] = array("Expiry Date");
-$__description["live_support"] = array("Live Support");
 $__description["client_support"] = array("Client Support");
 $__description["number_of_nodes"] = array("Number Of Nodes");
 $__description["upload_new_license"] = array("Upload New License");

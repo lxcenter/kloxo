@@ -63,7 +63,6 @@ $__description["number_of_clients"] = array("Müşteri Adedi");
 $__description["number_of_servers"] = array("Sunucu Adedi");
 $__description["number_of_domains"] = array("Alan Adı Adedi");
 $__description["expiry_date"] = array("Sona Erme Tarihi");
-$__description["live_support"] = array("Online Destek");
 $__description["ip_address"] = array("Ip Adresi");
 $__description["client_support"] = array("Müşteri Destek");
 $__description["number_of_nodes"] = array("Uç Adedi");

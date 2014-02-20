@@ -254,7 +254,7 @@ function lxuser_mv($username, $src, $dst)
 function lxuser_put_contents($username, $file, $data, $flag = 0)
 {
 	$file = expand_real_root($file);
-    dprint("Debug: filename is: ". $file . "\n");
+	dprint("Debug: filename is: ". $file . "\n");
 	if (is_soft_or_hardlink($file)) {
 		log_log("link_error", "$file is hard or symlink. Not writing\n");
 		return false;

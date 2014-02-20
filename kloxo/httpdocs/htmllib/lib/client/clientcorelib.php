@@ -9,7 +9,6 @@ static $__desc_lic_client_num_f =     array("","",  "number_of_clients");
 static $__desc_lic_pserver_num_f =     array("","",  "number_of_servers");
 static $__desc_lic_domain_num_f =     array("","",  "number_of_domains");
 static $__desc_lic_expiry_date_f =     array("","",  "expiry_date");
-static $__desc_lic_live_support_f =     array("","",  "live_support");
 static $__desc_lic_ipaddress_f =     array("","",  "ip_address");
 static $__desc_lic_client_f =     array("","",  "client_support");
 static $__desc_lic_node_num_f	 = array("", "",  "number_of_nodes");
