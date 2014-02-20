@@ -113,6 +113,7 @@ function timed_exec($time, $func)
 
 function exec_scavenge()
 {
+    // TODO: Not used function
 	global $gbl, $sgbl, $login, $ghtml; 
 	dprint("Execing collect quota\n");
 	$olddir = getcwd();

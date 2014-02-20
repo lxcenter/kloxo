@@ -203,3 +203,5 @@ $__emessage['forwardaddress invaild'] = 'The forward-to address is invalid.';
 $__emessage['folder_name_may_not_contain_doubledotsslash'] = "Folder name must not contain ../ (double dots).";
 $__emessage['command_not_allowd'] = "Command not allowed! (You only have privilege to run 'php' or 'wget' in cron.)";
 
+// LxCenter - DT20022014 - Kloxo 6.1.18
+$__information['scavenge_info_pre'] ="[b]What is Scavenge Time.[/b]<br /><br />Scavenge runs once every 24 hours and updates quota's, traffic counters and more.<br />Select the time that fits with you.<br/>Note: When the fields are empty the default is 03:35";

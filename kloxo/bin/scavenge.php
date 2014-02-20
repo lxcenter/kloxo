@@ -3,7 +3,7 @@
 //    Kloxo, Hosting Panel
 //
 //    Copyright (C) 2000-2009     LxLabs
-//    Copyright (C) 2009-2010     LxCenter
+//    Copyright (C) 2009-2014     LxCenter
 //
 //    This program is free software: you can redistribute it and/or modify
 //    it under the terms of the GNU Affero General Public License as
@@ -18,53 +18,72 @@
 //    You should have received a copy of the GNU Affero General Public License
 //    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
-//  This is the scavenge file. It is a master cronjob that runs once every 24h (default at 3:57 AM)
-//
+//  This is the scavenge file. It is a master cronjob that runs once every 24h (default at 3:35 AM)
+//  The default time is inside kloxo.c
+//  Related file: etc/conf/scavenge_time.conf
 
 include_once "htmllib/lib/displayinclude.php";
 
-exit_if_secondary_master();
-exit_if_another_instance_running();
-scavenge_main();
-
-function scavenge_main() {
+function scavenge_main()
+{
     global $gbl, $sgbl, $login, $ghtml;
-    log_shell("Scavenge: Start");
+
+    log_scavenge("### Starting Scavenge");
     initProgramlib('admin');
-    log_shell("Scavenge: Collect Traffic");
+    uploadStatsLxCenter();
+
+    if (lxfile_exists("../etc/conf/scavenge_time.conf")) {
+        log_scavenge("Found scavenge_time.conf");
+    }
+
+    log_scavenge("Collect Traffic");
     passthru("$sgbl->__path_php_path ../bin/gettraffic.php");
-    log_shell("Scavenge: Collect Quota");
+
+    log_scavenge("Collect Quota");
     passthru("$sgbl->__path_php_path ../bin/collectquota.php");
-    log_shell("Scavenge: Schedule backups");
+
+    log_scavenge("Schedule backups");
     passthru("$sgbl->__path_php_path ../bin/common/schedulebackup.php");
-    log_shell("Scavenge: Clear Sessions");
+
+    log_scavenge("Clear Sessions");
     passthru("$sgbl->__path_php_path ../bin/common/clearsession.php");
-    log_shell("Scavenge: Self backup");
+
+    log_scavenge("Self backup");
     passthru("$sgbl->__path_php_path ../bin/common/mebackup.php");
-    log_shell("Scavenge: Check Cluster Disk Quota");
+
+    log_scavenge("Check Cluster Disk Quota");
     checkClusterDiskQuota();
 
     $driverapp = $gbl->getSyncClass(null, 'localhost', 'web');
     if ($driverapp === 'lighttpd') {
-        log_shell("Scavenge: Restarting lighttpd");
+        log_scavenge("Restarting lighttpd");
         system("service lighttpd restart");
     }
 
-    log_shell("Scavenge: Fix log dir");
+    log_scavenge("Fix log dir");
     passthru("$sgbl->__path_php_path ../bin/common/fixlogdir.php");
-    log_shell("Scavenge: InstallApp update");
+
+    log_scavenge("InstallApp update");
     passthru("$sgbl->__path_php_path ../bin/installapp-update.phps");
 
-    log_shell("Scavenge: Watchdog checks");
+    log_scavenge("Watchdog checks");
     $rs = get_all_pserver();
     foreach ($rs as $r) {
         watchdog::addDefaultWatchdog($r);
     }
 
-    log_shell("Scavenge: Collect LxGuard info");
+    log_scavenge("Collect LxGuard info");
     lxguard::collect_lxguard();
-    log_shell("Scavenge: Fix MySQL root password");
+
+    log_scavenge("Fix MySQL root password");
     fix_all_mysql_root_password();
-    log_shell("Scavenge: Auto update Kloxo");
+
+    log_scavenge("Auto update Kloxo");
     auto_update();
+
+    log_scavenge("### End Scavenge");
 }
+
+exit_if_secondary_master();
+exit_if_another_instance_running();
+scavenge_main();

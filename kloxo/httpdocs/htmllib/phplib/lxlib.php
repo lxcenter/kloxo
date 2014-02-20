@@ -834,6 +834,11 @@ function log_shell($mess, $id = 1)
 	log_log('shell_exec', $mess, $id);
 }
 
+function log_scavenge($mess, $id = 1)
+{
+    log_log('scavenge', $mess, $id);
+}
+
 function log_shell_error($mess, $id = 1)
 {
 	log_log('shell_error', $mess, $id);

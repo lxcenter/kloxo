@@ -3999,8 +3999,12 @@ function addLineIfNotExistInside($filename, $pattern, $comment)
 
 function fix_all_mysql_root_password()
 {
+    global $gbl, $sgbl, $login, $ghtml;
+
+    // Function is Called from scavenge.php
 	$rs = get_all_pserver();
 	foreach($rs as $r) {
+        log_scavenge("- ".$r);
 		fix_mysql_root_password($r);
 	}
 }
