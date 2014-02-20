@@ -455,6 +455,7 @@ int exec_scavenge()
 		return 1;
 	}
 
+    // Default Scavenge time when no config file is found.
 	hour = 3;
 	min = 35;
 

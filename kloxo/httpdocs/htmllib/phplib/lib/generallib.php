@@ -386,10 +386,16 @@ function updateform($subaction, $param)
 
 		case "scavengetime":
 			$tcron = new Cron(null, null, 'test');
-			$v = cron::$hourlist;
-			unset($v[0]);
-			$vlist['generalmisc_b-scavengehour'] = array('s', $v);
-			$vlist['generalmisc_b-scavengeminute'] = array('s', array("0", "15", "30", "45"));
+
+			$scavengeHour = cron::$hourlist;
+			unset($scavengeHour[0]);
+
+            $scavengeMinutes = cron::$minutelist;
+            unset($scavengeMinutes[0]);
+
+			$vlist['generalmisc_b-scavengehour'] = array('s', $scavengeHour);
+			$vlist['generalmisc_b-scavengeminute'] = array('s',$scavengeMinutes);
+            $vlist['__m_message_pre'] = 'scavenge_info_pre';
 			break;
 
 		case "selfbackupconfig":
