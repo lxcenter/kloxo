@@ -103,7 +103,7 @@ case $1 in
 		sh ./make-distribution.sh
 		cd ${KLOXO_PATH}/kloxo
 		sh ./make-development-distribution.sh
-		printf "Done.\nInstall Kloxo:\ncd ${KLOXO_PATH}/kloxo-install/kloxo-linux/\nsh kloxo-installer.sh with args\n"
+		printf "Done.\nInstall Kloxo:\ncd ${KLOXO_PATH}/kloxo-install/\nsh kloxo-installer.sh with args\n"
 		;;
 	dev )
 		# Clone from GitHub the last version using git transport (no http or https)
@@ -115,7 +115,7 @@ case $1 in
 		sh ./make-distribution.sh
 		cd ${KLOXO_PATH}/kloxo
 		sh ./make-development-distribution.sh
-		printf "Done.\nInstall Kloxo:\ncd ${KLOXO_PATH}/kloxo-install/kloxo-linux/\nsh kloxo-installer.sh with args\n"
+		printf "Done.\nInstall Kloxo:\ncd ${KLOXO_PATH}/kloxo-install/\nsh kloxo-installer.sh with args\n"
 		;;
 		6.1.x )
 		# Clone from GitHub the last version using git transport (no http or https)
@@ -127,7 +127,7 @@ case $1 in
 		sh ./make-distribution.sh
 		cd ${KLOXO_PATH}/kloxo
 		sh ./make-development-distribution.sh
-		printf "Done.\nInstall Kloxo:\ncd ${KLOXO_PATH}/kloxo-install/kloxo-linux/\nsh kloxo-installer.sh with args\n"
+		printf "Done.\nInstall Kloxo:\ncd ${KLOXO_PATH}/kloxo-install/\nsh kloxo-installer.sh with args\n"
 		;;
 	*   )
 		usage
