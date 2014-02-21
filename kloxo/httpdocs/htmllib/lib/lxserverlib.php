@@ -1,16 +1,32 @@
-<?php 
+<?php
+//    Kloxo, Hosting Control Panel
+//
+//    Copyright (C) 2000-2009	LxLabs
+//    Copyright (C) 2009-2014	LxCenter
+//
+//    This program is free software: you can redistribute it and/or modify
+//    it under the terms of the GNU Affero General Public License as
+//    published by the Free Software Foundation, either version 3 of the
+//    License, or (at your option) any later version.
+//
+//    This program is distributed in the hope that it will be useful,
+//    but WITHOUT ANY WARRANTY; without even the implied warranty of
+//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//    GNU Affero General Public License for more details.
+//
+//    You should have received a copy of the GNU Affero General Public License
+//    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+//
+// This file is running when lowmem flag is disabled
+//
 
 function lxserver_main()
 {
 	global $gbl, $sgbl, $login, $ghtml; 
 	global $argv, $argc;
-	// Set time limit to indefinite execution
-
 
 	if ($argv[1] === 'slave') {
 		$login = new Client(null, null, 'slave');
-		//Initthisdef uses the db to load the drivers. NO longer callable in slave.
-		//$login->initThisDef();
 		$gbl->is_slave = true;
 		$gbl->is_master = false;
 		$rmt = unserialize(lfile_get_contents("__path_slave_db"));
@@ -28,17 +44,11 @@ function lxserver_main()
 	}
 	$login->cttype = 'admin';
 
-	//set_error_handler("lx_error_handler");
-	//set_exception_handler("lx_exception_handler");
+    // Set php script execution timer to unlimited
+	set_time_limit(0);
 
-	set_time_limit (0);
-	if (WindowsOs()) {
-		some_server_windows();
-	} else {
-		some_server();
-	}
-
-
+    // Start internal socket for remote
+	some_server();
 
 }
 
@@ -47,7 +57,6 @@ function lxserver_main()
 function do_server_stuff()
 {
 	global $gbl, $sgbl, $login, $ghtml; 
-	//dprint("in Do server stuff\n");
 
 	if (if_demo()) {
 		return;
@@ -57,13 +66,24 @@ function do_server_stuff()
 		timed_execution();
 		if ($sgbl->is_this_master()) {
 			$schour = null;
-			$schour = $login->getObject('general')->generalmisc_b->scavengehour;
-			$scminute = $login->getObject('general')->generalmisc_b->scavengeminute; 
-			//dprint("Cron exec $schour, $scminute\n");
+            $scminute = null;
+
+            $timefile = "../etc/conf/scavenge_time.conf";
+
+            if (lxfile_exists($timefile)) {
+
+                $readvalue = file_get_contents($timefile);
+                $readvalue = explode(" ", $readvalue);
+                $schour = $readvalue['0'];
+                $scminute = $readvalue['1'];
+
+            }
+
+            log_log("cron_exec", "Initialize Scavenge Cronjob");
 			if ($schour) {
 				cron_exec($schour, $scminute, "exec_scavenge");
 			} else {
-				cron_exec("3", "57", "exec_scavenge");
+				cron_exec("03", "35", "exec_scavenge");
 			}
 		}
 	} catch (exception $e) {
@@ -77,24 +97,34 @@ function cron_exec($hour, $minute, $func)
 {
 	static $localvar;
 
-	//dprint("in Cron exec\n");
-	//dprintr($localvar);
+    $time = mktime($hour, $minute);
+    $now = time();
 
-	$time = mktime($hour, $minute , 0, date('n'), date('j'), date("Y"));
-	$now = time();
+    $nowH = date("H");
+    $nowM = date("i");
+
+    if ($func === "exec_scavenge") {
+        $niceNameFunc = "Scavenge";
+    } else {
+        $niceNameFunc = $func;
+    }
+
+    log_log("cron_exec", "Cron $niceNameFunc starts at ($hour:$minute)");
+    log_log("cron_exec", "Time now is ($nowH:$nowM)");
 
 	if (isset($localvar[$func]) && $localvar[$func]) {
-		//dprint("Already execed \n");
 		if ($now > $time + 2 * 60) {
-			$localvar[$func] = false;
-		}
-		return ;
-		
+            log_log("cron_exec", "Cron timing: $niceNameFunc finished, back to normal state.");
+            $localvar[$func] = false;
+		} else {
+            log_log("cron_exec", "Cron timing: $niceNameFunc is running.");
+            return ;
+        }
 	}
 
-	if ($now > $time && $now < $time + 2* 60) {
-		$localvar[$func] = true;
-		log_log("cron_exec", "Execing $func");
+    if ($hour === $nowH && $minute === $nowM) {
+        $localvar[$func] = true;
+		log_log("cron_exec", "Starting $niceNameFunc");
 		$func();
 	}
 }
@@ -104,8 +134,7 @@ function timed_exec($time, $func)
 	$v = "global_v$func";
 	global $$v;
 	$ct = time();
-	if (($ct - $$v) >= $time * 30 ) {
-		//dprint("Executing at $ct {$$v} rd time $func\n");
+    if (($ct - $$v) >= $time * 30 ) {
 		$$v = $ct;
 		$func();
 	}
@@ -113,9 +142,8 @@ function timed_exec($time, $func)
 
 function exec_scavenge()
 {
-    // TODO: Not used function
-	global $gbl, $sgbl, $login, $ghtml; 
-	dprint("Execing collect quota\n");
+	global $gbl, $sgbl, $login, $ghtml;
+
 	$olddir = getcwd();
 	lchdir("__path_program_htmlbase");
 	exec_with_all_closed("$sgbl->__path_php_path ../bin/scavenge.php");
@@ -128,7 +156,7 @@ function checkRestart()
 	if (if_demo()) {
 		return;
 	}
-
+    log_log("cron_exec","Check service restarts...\n");
 	$res = lscandir_without_dot("__path_program_etc/.restart");
 
 	if ($res === false) {
@@ -143,19 +171,21 @@ function checkRestart()
 		}
 		lunlink("__path_program_etc/.restart/$r");
 		dprint("Restarting $cmd\n");
-		// THe 3,4 etc are the tcp ports of this program, and it should be closed, else some programs will grab it.
-		//exec("/etc/init.d/$cmd restart  </dev/null >/dev/null 2>&1 3</dev/null 4</dev/null 5</dev/null 6</dev/null &");
+
 		switch($cmd) {
 			case 'lxcollectquota':
-				exec_justdb_collectquota();
+                log_log("cron_exec","Start collecting Quota's\n");
+                exec_justdb_collectquota();
 				break;
 
 			case 'openvz_tc':
-				exec_openvz_tc();
+                log_log("cron_exec","Start openvz_tc script\n");
+                exec_openvz_tc();
 				break;
 
 			default:
-				exec_with_all_closed("/etc/init.d/$cmd restart");
+                log_log("cron_exec","Restarting $cmd\n");
+                exec_with_all_closed("/etc/init.d/$cmd restart");
 				break;
 		}
 	}
@@ -209,7 +239,7 @@ function root_main($d)
 		$res = do_root_main($d);
 		$res->exception = null;
 	} catch (exception $e) {
-		dprint("Coaught Execption: " . $e->getMessage());
+		dprint("Caught Exception: " . $e->getMessage());
 		$res = new Remote();
 		$res->ret = -1;
 		$res->exception = $e;
