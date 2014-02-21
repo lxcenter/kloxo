@@ -199,6 +199,8 @@ fi
 	wget http://download.lxcenter.org/download/kloxo-install.zip
 else
 	echo "Development GIT version found. Skipping download sources."
+	rm -Rf kloxo-install/
+	unzip -oq kloxo-install.zip
 fi
 
 if [ -d kloxo-install ] ; then
