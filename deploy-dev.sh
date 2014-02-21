@@ -104,7 +104,6 @@ case $1 in
 		sh ./make-distribution.sh
 		cd ${KLOXO_PATH}/kloxo
 		sh ./make-distribution.sh
-		sh ./development-create-binaries.sh
 		printf "Done.\nInstall Kloxo:\ncd ${KLOXO_PATH}/kloxo-install/\nsh kloxo-installer.sh with args\n"
 		;;
 	dev )
@@ -117,7 +116,6 @@ case $1 in
 		sh ./make-distribution.sh
 		cd ${KLOXO_PATH}/kloxo
 		sh ./make-distribution.sh
-		sh ./development-create-binaries.sh
 		printf "Done.\nInstall Kloxo:\ncd ${KLOXO_PATH}/kloxo-install/\nsh kloxo-installer.sh with args\n"
 		;;
 		6.1.x )
@@ -130,7 +128,6 @@ case $1 in
 		sh ./make-distribution.sh
 		cd ${KLOXO_PATH}/kloxo
 		sh ./make-distribution.sh
-		sh ./development-create-binaries.sh
 		printf "Done.\nInstall Kloxo:\ncd ${KLOXO_PATH}/kloxo-install/\nsh kloxo-installer.sh with args\n"
 		;;
 	*   )
