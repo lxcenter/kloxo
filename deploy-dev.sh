@@ -20,7 +20,8 @@
 #	 author: Ángel Guzmán Maeso <angel.guzman@lxcenter.org>
 #
 #    Install and deploy a develoment version on a local enviroment
-#
+#    
+#    Version 0.5 Copied and patched for Kloxo by dkstiler [ Dionysis Kladis <dkstiler@gmail.com> ]
 #    Version 0.4 Added which, zip and unzip as requirement [ Danny Terweij <d.terweij@lxcenter.org> ]
 #    Version 0.3 Added perl-ExtUtils-MakeMaker as requirement to install_GIT [ Danny Terweij <d.terweij@lxcenter.org> ]
 #    Version 0.2 Changed git version [ Danny Terweij <d.terweij@lxcenter.org> ]
@@ -102,7 +103,8 @@ case $1 in
 		cd ${KLOXO_PATH}/kloxo-install
 		sh ./make-distribution.sh
 		cd ${KLOXO_PATH}/kloxo
-		sh ./make-development-distribution.sh
+		sh ./make-distribution.sh
+		sh ./development-create-binaries.sh
 		printf "Done.\nInstall Kloxo:\ncd ${KLOXO_PATH}/kloxo-install/\nsh kloxo-installer.sh with args\n"
 		;;
 	dev )
@@ -114,7 +116,8 @@ case $1 in
 		cd ${KLOXO_PATH}/kloxo-install
 		sh ./make-distribution.sh
 		cd ${KLOXO_PATH}/kloxo
-		sh ./make-development-distribution.sh
+		sh ./make-distribution.sh
+		sh ./development-create-binaries.sh
 		printf "Done.\nInstall Kloxo:\ncd ${KLOXO_PATH}/kloxo-install/\nsh kloxo-installer.sh with args\n"
 		;;
 		6.1.x )
@@ -126,7 +129,8 @@ case $1 in
 		cd ${KLOXO_PATH}/kloxo-install
 		sh ./make-distribution.sh
 		cd ${KLOXO_PATH}/kloxo
-		sh ./make-development-distribution.sh
+		sh ./make-distribution.sh
+		sh ./development-create-binaries.sh
 		printf "Done.\nInstall Kloxo:\ncd ${KLOXO_PATH}/kloxo-install/\nsh kloxo-installer.sh with args\n"
 		;;
 	*   )
