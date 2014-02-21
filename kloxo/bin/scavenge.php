@@ -28,6 +28,9 @@ function scavenge_main()
 {
     global $gbl, $sgbl, $login, $ghtml;
 
+    log_scavenge("Fix log dir");
+    passthru("$sgbl->__path_php_path ../bin/common/fixlogdir.php");
+
     log_scavenge("### Starting Scavenge");
     initProgramlib('admin');
     uploadStatsLxCenter();
@@ -60,9 +63,6 @@ function scavenge_main()
         system("service lighttpd restart");
     }
 
-    log_scavenge("Fix log dir");
-    passthru("$sgbl->__path_php_path ../bin/common/fixlogdir.php");
-
     log_scavenge("InstallApp update");
     passthru("$sgbl->__path_php_path ../bin/installapp-update.phps");
 
@@ -82,6 +82,9 @@ function scavenge_main()
     auto_update();
 
     log_scavenge("### End Scavenge");
+
+    // Wait at least 60 seconds before ending the scavenge
+    sleep(60);
 }
 
 exit_if_secondary_master();
