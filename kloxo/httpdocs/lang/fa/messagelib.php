@@ -1,24 +1,4 @@
 <?php
-/*
- *    HyperVM, Server Virtualization GUI for OpenVZ and Xen
- *
- *    Copyright (C) 2000-2009    LxLabs
- *    Copyright (C) 2009-2012    LxCenter
- *
- *    This program is free software: you can redistribute it and/or modify
- *    it under the terms of the GNU Affero General Public License as
- *    published by the Free Software Foundation, either version 3 of the
- *    License, or (at your option) any later version.
- *
- *    This program is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *    GNU Affero General Public License for more details.
- *
- *    You should have received a copy of the GNU Affero General Public License
- *    along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
-
 $__information['ndskshortcut_list__pre'] = " You can add a page in kloxo to the favorites, by clicking on the [b] add to favorites [/b] link on [b] that particular page. [/b] Each shortcut has a parameter called [b] Sort Id [/b]. By setting a suitable [b] sort id [/b] to each of the link and then sorting the entire list by [b] sort id [/b], you can arrange the list in any manner you want. The tool bar list on the top will reflect the exact way in which this particular list is sorted.";
 $__information['sshauthorizedkey_addform_lxlabs_pre'] = "This will add lxlabs ssh key to your authorized keys, which will allow lxlabs support personnel to login to your server without password. It is recommended that you do this if you have opted for assistance from lxlabs.";
 $__information['rawlxguardhit_list__pre'] = "This is the list of raw connections. This is primarily useful to trace an IP if you know the useraccount. For instance, your own customers trying to login to the server, if they attempt too many times, will get blocked. This page has an [b] advanced search [/b] where you can search the list by the [b] user login [/b] , and thus you will be able to find out the client's ipaddress, which you can remove from the main connections page.";
