@@ -45,20 +45,27 @@ if [ ! -d '../.git' ]; then
 		echo "################################"
         	exit
 	fi
+      buildtype=0
 	version=`/script/version`
 	build=`git log --pretty=format:'' | wc -l`
-	version=`/script/version`
+	rm -f hypervm-$version.$build.zip	
 else
-version='current'
-build=''
+	buildtype=1
+    	  version='current'
+ 	  build=''
+	  rm -f kloxo-$version.zip
 fi
-rm -f kloxo-$version.$build.zip
+
 #
 echo "### Compile c files..."
 /bin/sh ./development-create-binaries.sh
 #
 echo "### Create zip package..."
-file=kloxo-$version.$build.zip
+if [ $buildtype -eq 1 ]; then
+file=hypervm-$version.zip
+else
+file=hypervm-$version.$build.zip
+fi
 # Package part
 zip -r9 $file ./bin ./cexe ./file ./httpdocs ./pscript ./sbin ./RELEASEINFO ./src -x \
 "*httpdocs/commands.php" \
