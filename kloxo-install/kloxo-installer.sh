@@ -191,15 +191,15 @@ export PATH=/usr/sbin:/sbin:$PATH
 if [ ! -d '../../.git' ]; then
 
 	if [ -f ./kloxo-install.zip ] ; then
-	echo "Remove old installation package"
-     	rm -f kloxo-install.zip
-fi
+		echo "Remove old installation package"
+     		rm -f kloxo-install.zip
+	fi
 	pwd
 	echo "Downloading installation package from LxCenter"
 	wget http://download.lxcenter.org/download/kloxo-install.zip
 else
 	echo "Development GIT version found. Skipping download sources."
-	unzip -oq kloxo-install.zip
+	
 fi
 
 if [ -d kloxo-install ] ; then
