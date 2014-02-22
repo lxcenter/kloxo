@@ -5867,9 +5867,9 @@ function setInitialLogrotate()
 {
     // Project #295
     // Added kloxo 6.1.18
-    if (lxfile_exists("/etc/logrotate.d/kloxo")) {
+    if (!lxfile_exists("/etc/logrotate.d/kloxo")) {
         if (lxfile_exists("../file/kloxo.logrotate")) {
-            log_cleanup("Installing kloxo logrotate");
+            log_cleanup("Installing kloxo logrotate file");
             lxfile_cp("../file/kloxo.logrotate", "/etc/logrotate.d/kloxo");
         }
     }
