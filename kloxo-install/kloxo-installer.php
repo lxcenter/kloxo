@@ -46,7 +46,7 @@ function lxins_main()
 
 	if(file_exists("/usr/local/lxlabs/kloxo")) {
 		//--- Ask Reinstall
-		if (get_yes_no("Kloxo seems already installed do you wish to continue?") == 'n') {
+		if (get_yes_no("Kloxo seems already installed do you want to reinstall or install development version?") == 'n') {
 			print("Installation Aborted.\n");
 			exit;
 		}
@@ -123,11 +123,19 @@ function lxins_main()
 		}
 		chdir("/usr/local/lxlabs/kloxo");
 		system("mkdir -p /usr/local/lxlabs/kloxo/log");
-		@ unlink("/usr/local/lxlabs/kloxo/kloxo-current.zip");
-		print("Downloading Kloxo {$installversion} release\n");
-		system("wget {$downloadserver}download/kloxo/production/kloxo/kloxo-{$installversion}.zip");
-		system("mv -f ./kloxo-{$installversion}.zip ./kloxo-current.zip");
+		 //Prevent accidentaly deletion of the package;
+		
+			@ unlink("/usr/local/lxlabs/kloxo/kloxo-current.zip");	        
+    		
+		if (file_exists('/usr/local/lxlabs/.git')) {
+        		echo 'Development GIT version found. Skipping download from LxCenter.';
+		} else {
+			print("Downloading Kloxo {$installversion} release\n");
+			system("wget {$downloadserver}download/kloxo/production/kloxo/kloxo-{$installversion}.zip");
+			system("mv -f ./kloxo-{$installversion}.zip ./kloxo-current.zip");
+		}
 	}
+	
 	else {
 		if (file_exists("../kloxo-current.zip")) {
 			//--- Install from local file if exists
@@ -179,8 +187,12 @@ function lxins_main()
 			chdir("/usr/local/lxlabs/kloxo");
 			system("mkdir -p /usr/local/lxlabs/kloxo/log");
 			@ unlink("/usr/local/lxlabs/kloxo/kloxo-current.zip");
-			print("Downloading latest Kloxo release\n");
-			system("wget {$downloadserver}download/kloxo/production/kloxo/kloxo-current.zip");
+			if (file_exists('/usr/local/lxlabs/.git')) {
+        			echo 'Development GIT version found. Skipping download from LxCenter.';
+		} 	else {
+				print("Downloading latest Kloxo release\n");
+				system("wget {$downloadserver}download/kloxo/production/kloxo/kloxo-current.zip");
+			}
 		}
 	}
 
