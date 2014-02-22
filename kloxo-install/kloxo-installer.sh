@@ -189,7 +189,8 @@ yum -y install php php-mysql wget zip unzip
 export PATH=/usr/sbin:/sbin:$PATH
 
 if [ ! -d '../../.git' ]; then
-
+	echo "Development GIT version found. Skipping download sources."
+else
 	if [ -f ./kloxo-install.zip ] ; then
 		echo "Remove old installation package"
      		rm -f kloxo-install.zip
@@ -197,9 +198,6 @@ if [ ! -d '../../.git' ]; then
 	pwd
 	echo "Downloading installation package from LxCenter"
 	wget http://download.lxcenter.org/download/kloxo-install.zip
-else
-	echo "Development GIT version found. Skipping download sources."
-	
 fi
 
 if [ -d kloxo-install ] ; then
