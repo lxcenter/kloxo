@@ -28,7 +28,6 @@
 #
 # Script is broken since the move to GitHub. Need to be rewritten.
 #
-exit # remove this when fixed.
 #
 printUsage() {
  echo "Usage:"

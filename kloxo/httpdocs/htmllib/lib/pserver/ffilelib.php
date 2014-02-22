@@ -1226,7 +1226,8 @@ function getCore()
 
 static function initThisList($parent, $class)
 {
-
+        global $login;
+        
 
 	$fpathp = $parent->fullpath;
 
