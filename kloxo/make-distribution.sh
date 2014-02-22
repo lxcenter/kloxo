@@ -48,7 +48,7 @@ if [ ! -d '../.git' ]; then
       buildtype=0
 	version=`/script/version`
 	build=`git log --pretty=format:'' | wc -l`
-	rm -f hypervm-$version.$build.zip	
+	rm -f kloxo-$version.$build.zip	
 else
 	buildtype=1
     	  version='current'
@@ -62,9 +62,9 @@ echo "### Compile c files..."
 #
 echo "### Create zip package..."
 if [ $buildtype -eq 1 ]; then
-file=hypervm-$version.zip
+file=kloxo-$version.zip
 else
-file=hypervm-$version.$build.zip
+file=kloxo-$version.$build.zip
 fi
 # Package part
 zip -r9 $file ./bin ./cexe ./file ./httpdocs ./pscript ./sbin ./RELEASEINFO ./src -x \
