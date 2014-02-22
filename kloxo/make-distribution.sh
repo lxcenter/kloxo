@@ -60,7 +60,7 @@ echo "### Compile c files..."
 echo "### Create zip package..."
 file=kloxo-$version.$build.zip
 # Package part
-zip -r9y $file ./bin ./cexe ./file ./httpdocs ./pscript ./sbin ./RELEASEINFO ./src -x \
+zip -r9 $file ./bin ./cexe ./file ./httpdocs ./pscript ./sbin ./RELEASEINFO ./src -x \
 "*httpdocs/commands.php" \
 "*httpdocs/newpass" \
 "*httpdocs/.php.err" \
