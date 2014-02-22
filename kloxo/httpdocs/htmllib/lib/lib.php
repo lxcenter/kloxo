@@ -2639,14 +2639,11 @@ function getFullVersionList($till = null)
 
 function getVersionList($till = null)
 {
-    // TODO: Is this the reason why Kloxo versions list not showing versions with number two in it?
     // Project issue #1091
-    //
+    // Removed code that skipped every version with a number 2 in it.
+    // DT22022014
 	$list = getFullVersionList($till);
 	foreach($list as $k => $l) {
-		if (preg_match("/2$/", $l) && ($k !== count($list) -1 )) {
-			continue;
-		}
 		$nnlist[] = $l;
 	}
 	$nlist = $nnlist;
