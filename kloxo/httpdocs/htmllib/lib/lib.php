@@ -5865,16 +5865,14 @@ function setSomeScript()
 
 function setInitialLogrotate()
 {
-	return; // Kloxo 6.2.0 (#295)
-	log_cleanup("Initialize logrotate");
-
-	if (lxfile_exists("/etc/logrotate.d/kloxo")) {
-		log_cleanup("- Initialize process");
-
-		if (lxfile_exists("../file/kloxo.logrotate")) {
-			lxfile_cp("../file/kloxo.logrotate", "/etc/logrotate.d/kloxo");
-		}
-	}
+    // Project #295
+    // Added kloxo 6.1.18
+    if (lxfile_exists("/etc/logrotate.d/kloxo")) {
+        if (lxfile_exists("../file/kloxo.logrotate")) {
+            log_cleanup("Installing kloxo logrotate");
+            lxfile_cp("../file/kloxo.logrotate", "/etc/logrotate.d/kloxo");
+        }
+    }
 }
 
 function restart_xinetd_for_pureftp()
