@@ -58,8 +58,9 @@ echo "### Compile c files..."
 /bin/sh ./development-create-binaries.sh
 #
 echo "### Create zip package..."
+file=kloxo-$version.$build.zip
 # Package part
-zip -r9y kloxo-$version.$build.zip ./bin ./cexe ./file ./httpdocs ./pscript ./sbin ./RELEASEINFO ./src -x \
+zip -r9y $file ./bin ./cexe ./file ./httpdocs ./pscript ./sbin ./RELEASEINFO ./src -x \
 "*httpdocs/commands.php" \
 "*httpdocs/newpass" \
 "*httpdocs/.php.err" \
