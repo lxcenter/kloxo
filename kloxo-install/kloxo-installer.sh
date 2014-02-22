@@ -198,14 +198,15 @@ else
 	pwd
 	echo "Downloading installation package from LxCenter"
 	wget http://download.lxcenter.org/download/kloxo-install.zip
+	if [ -d kloxo-install ] ; then
+		cd kloxo-install
+	else
+		unzip -oq kloxo-install.zip
+		cd kloxo-install
+	fi
 fi
 
-if [ -d kloxo-install ] ; then
-	cd kloxo-install
-else
-	unzip -oq kloxo-install.zip
-	cd kloxo-install
-fi
+
 
 if [ -f /usr/local/lxlabs/ext/php/php ] ; then
 	/usr/local/lxlabs/ext/php/php kloxo-installer.php --install-type=$APP_TYPE $* | tee kloxo_install.log
