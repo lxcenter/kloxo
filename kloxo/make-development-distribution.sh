@@ -27,8 +27,12 @@
 ######
 #
 # Script is broken since the move to GitHub. Need to be rewritten.
+ echo "Script is broken since the move to GitHub. Need to be rewritten.";
+ echo "Remove this only with SWAT aid :)";
+ exit;
+
+
 #
-exit # remove this when fixed.
 #
 printUsage() {
  echo "Usage:"
