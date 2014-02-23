@@ -176,7 +176,10 @@ static function createListSlist($parent)
 
 	$web = $parent->getObject('web');
 	// have trouble when use addondomain, so use full_update
-	$web->setUpdateSubaction('full_update');
+
+    // Project issue #863
+    // DT22022014 - Re-added the code because lost somewhere?
+	//$web->setUpdateSubaction('full_update');
 
 	// original code...
 

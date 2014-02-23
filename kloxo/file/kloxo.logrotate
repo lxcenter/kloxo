@@ -1,0 +1,71 @@
+#    Kloxo, Hosting Control Panel
+#
+#    Copyright (C) 2000-2009	LxLabs
+#    Copyright (C) 2009-2014	LxCenter
+#
+#    This program is free software: you can redistribute it and/or modify
+#    it under the terms of the GNU Affero General Public License as
+#    published by the Free Software Foundation, either version 3 of the
+#    License, or (at your option) any later version.
+#
+#    This program is distributed in the hope that it will be useful,
+#    but WITHOUT ANY WARRANTY; without even the implied warranty of
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#    GNU Affero General Public License for more details.
+#
+#    You should have received a copy of the GNU Affero General Public License
+#    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#
+# Kloxo LogRotate
+# Initial version
+# Needs cleanup
+# Using this one on LxCenter server
+# Created by Danny Terweij <d.terweij@lxcenter.org>
+#
+# Defaults to weekly rotates (compressed) and keeps maximum of 8 weeks
+
+/var/log/kloxo/maillog /var/log/kloxo/courier /var/log/kloxo/smtp.log /var/log/kloxo/pureftpd.log {
+        weekly
+        rotate 8
+        create
+        compress
+        notifempty
+        missingok
+        postrotate
+        pkill -HUP syslogd
+        endscript
+}
+/home/httpd/*/stats/*_log {
+        weekly
+        rotate 8
+        create 0664 apache apache
+        compress
+        notifempty
+        missingok
+}
+
+/home/*/__processed_stats/*_log-* {
+        daily
+        rotate 30
+        create 0750 root root
+        compress
+        notifempty
+        missingok
+}
+/home/kloxo/httpd/lighttpd/*.log {
+        weekly
+        rotate 8
+        create 0664 apache apache
+        compress
+        notifempty
+        missingok
+}
+
+/usr/local/lxlabs/ext/php/error.log {
+        weekly
+        rotate 8
+        create 0664 root root
+        compress
+        notifempty
+        missingok
+}

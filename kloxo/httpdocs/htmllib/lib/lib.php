@@ -2639,14 +2639,11 @@ function getFullVersionList($till = null)
 
 function getVersionList($till = null)
 {
-    // TODO: Is this the reason why Kloxo versions list not showing versions with number two in it?
     // Project issue #1091
-    //
+    // Removed code that skipped every version with a number 2 in it.
+    // DT22022014
 	$list = getFullVersionList($till);
 	foreach($list as $k => $l) {
-		if (preg_match("/2$/", $l) && ($k !== count($list) -1 )) {
-			continue;
-		}
 		$nnlist[] = $l;
 	}
 	$nlist = $nnlist;
@@ -3999,8 +3996,12 @@ function addLineIfNotExistInside($filename, $pattern, $comment)
 
 function fix_all_mysql_root_password()
 {
+    global $gbl, $sgbl, $login, $ghtml;
+
+    // Function is Called from scavenge.php
 	$rs = get_all_pserver();
 	foreach($rs as $r) {
+        log_scavenge("- ".$r);
 		fix_mysql_root_password($r);
 	}
 }
@@ -5864,16 +5865,14 @@ function setSomeScript()
 
 function setInitialLogrotate()
 {
-	return; // Kloxo 6.2.0 (#295)
-	log_cleanup("Initialize logrotate");
-
-	if (lxfile_exists("/etc/logrotate.d/kloxo")) {
-		log_cleanup("- Initialize process");
-
-		if (lxfile_exists("../file/kloxo.logrotate")) {
-			lxfile_cp("../file/kloxo.logrotate", "/etc/logrotate.d/kloxo");
-		}
-	}
+    // Project #295
+    // Added kloxo 6.1.18
+    if (!lxfile_exists("/etc/logrotate.d/kloxo")) {
+        if (lxfile_exists("../file/kloxo.logrotate")) {
+            log_cleanup("Installing kloxo logrotate file");
+            lxfile_cp("../file/kloxo.logrotate", "/etc/logrotate.d/kloxo");
+        }
+    }
 }
 
 function restart_xinetd_for_pureftp()
@@ -6546,30 +6545,39 @@ function update_all_slave()
 
 }
 
-function findNextVersion($lastversion = null)
+/**
+ * Get a version list and see if a update is avaible
+ * Issue #781 - Update to the latest version instead one by one
+ * Added _ () for the future :)
+ *
+ * @param      string $LastVersion Not Used?
+ * @return     string    Returns zero or version number
+ * @author     Danny Terweij d.terweij@lxcenter.org
+ */
+function findNextVersion($lastVersion = null)
 {
-	global $gbl, $sgbl, $login, $ghtml; 
-	$thisversion = $sgbl->__ver_major_minor_release;
+    global $sgbl;
+    $thisVersion = $sgbl->__ver_major_minor_release;
+    $Upgrade = null;
+    $versionList = getVersionList($lastVersion);
+    print(_('Found version(s):'));
 
-	$upgrade = null;
-	$nlist = getVersionList($lastversion);
-	dprintr($nlist);
-	$k = 0;
-	print("Found version(s):");
-	foreach($nlist as $l) {
-		print(" $l");
-		if (version_cmp($thisversion, $l) === -1) {
-			$upgrade = $l;
-			break;
-		}
-		$k++;
-	}
-	print("\n");
-	if (!$upgrade) {
-		return 0;
-	}
-
-	print("Upgrading from $thisversion to $upgrade\n");
-	return $upgrade;
-
+    foreach ($versionList as $newVersion) {
+        print(' ' . $newVersion);
+    }
+    print(PHP_EOL);
+    if (version_cmp($thisVersion, $newVersion) === -1) {
+        $Upgrade = $newVersion;
+    }
+    if (version_cmp($thisVersion, $newVersion) === 1) {
+        unset($Upgrade);
+        print(_('Your version ') . $thisVersion . _(' is higher then ') . $newVersion . PHP_EOL);
+        print(_('Script aborted') . PHP_EOL);
+        exit;
+    }
+    if (!$Upgrade) {
+        return 0;
+    }
+    print(_('Upgrading from ') . $thisVersion . _(' to ') . $Upgrade . PHP_EOL);
+    return $Upgrade;
 }

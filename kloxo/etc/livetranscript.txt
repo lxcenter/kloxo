@@ -1,5 +1,0 @@
-lx_ligesh:  hi
-lx_ligesh:  hello
-lx_ligesh:  asdfadf
-lx_ligesh:  asdfasdf
-lx_ligesh:  asdfasdf

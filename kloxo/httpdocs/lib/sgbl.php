@@ -24,7 +24,7 @@ class Sgbl
 		$this->__var_program_name = 'kloxo';
 		$this->__ver_major = "6";
 		$this->__ver_minor = "1";
-		$this->__ver_release = "17";
+		$this->__ver_release = "18";
 		$this->__ver_enterprise = "Single Server Edition";
 		$this->__ver_type = "production";
 		$this->__ver_extra = "Stable";
@@ -249,7 +249,8 @@ class Sgbl
 		$this->__var_language['ro'] = 'Romanian';
 		$this->__var_language['br'] = 'Brazilian Portuguese';
 		$this->__var_language['hu'] = 'Hungarian';
-	}
+        $this->__var_language['fa'] = 'Persian';
+    }
 
 	private function initDeviceDescriptions()
 	{

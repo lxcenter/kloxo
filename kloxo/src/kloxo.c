@@ -2,7 +2,7 @@
  *    Kloxo, Hosting Control Panel
  *
  *    Copyright (C) 2000-2009	LxLabs
- *    Copyright (C) 2009-2010	LxCenter
+ *    Copyright (C) 2009-2014	LxCenter
  *
  *    This program is free software: you can redistribute it and/or modify
  *    it under the terms of the GNU Affero General Public License as
@@ -16,6 +16,10 @@
  *
  *    You should have received a copy of the GNU Affero General Public License
  *    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *
+ *  This executable is only used when lowmem flag is enabled.
+ *  Otherwise the core is running as kloxo.php
  */ 
 
 #include <stdio.h>
@@ -94,7 +98,7 @@ int run_php_prog_ssl(SSL *ssl, int sock)
 		}
 	}
 
-	printf("Input %d %s\n", strlen(data), data);
+	//printf("Input %d %s\n", strlen(data), data);
 	bzero(buf, sizeof(buf));
 	//printf ("Received %d chars:'%s'\n", err, buf);
 
@@ -109,24 +113,24 @@ int run_php_prog_ssl(SSL *ssl, int sock)
 	if (pid == 0) {
 		dup2(pipefd[1], 1);
 		close(pipefd[0]);
-		execl("/usr/local/lxlabs/ext/php/php", "lxphp", "../bin/common/process_single.php", ftempname, NULL);
-		printf("Exec failed\n");
+		execl("/usr/local/lxlabs/ext/php/php", "lxphp", "/usr/local/lxlabs/kloxo/bin/common/process_single.php", ftempname, NULL);
+		printf("Exec failed (process_single.php)\n");
 		exit(0);
 	} else {
 		close(pipefd[1]);
-		printf("Pipe %d\n", pipefd[0]);
+	//	printf("Pipe %d\n", pipefd[0]);
 		while (1) {
 			n = read(pipefd[0], buf, sizeof(buf));
 			totaln += n;
 			if (n > 0) {
 				p = ssl_or_tcp_write(ssl, sock, buf, n);
 			} else {
-				printf("Got %d\n\n", totaln);
+	//			printf("Got %d\n\n", totaln);
 				// Dummy Read... A Must
 				while (1) {
 					bzero(tmpname, sizeof(tmpname));
 					p = ssl_or_tcp_read(ssl, sock, tmpname, sizeof(tmpname));
-					printf("Got %s\n\n", tmpname);
+	//				printf("Got %s\n\n", tmpname);
 					if (p <= 0) {
 						break;
 					}
@@ -389,7 +393,7 @@ int check_restart()
 
 	printf("Checking Restarts...\n");
 
-	n = scandir("../etc/.restart/", &namelist, 0, alphasort);
+	n = scandir("/usr/local/lxlabs/kloxo/etc/.restart/", &namelist, 0, alphasort);
 	if (n < 0) {
 		perror("scandir");
 		return 1;
@@ -401,16 +405,16 @@ int check_restart()
 			neededstring = position + 10;
 			if (!strcmp(neededstring, "lxcollectquota")) {
 				printf("Running CollectQuota\n");
-				close_and_system("/usr/local/lxlabs/ext/php/php ../bin/collectquota.php --just-db=true &");
+				close_and_system("/usr/local/lxlabs/ext/php/php /usr/local/lxlabs/kloxo/bin/collectquota.php --just-db=true &");
 			} else if (!strcmp(neededstring, "openvz_tc")) {
 				printf("Running Openvz\n");
-				close_and_system("sh ../etc/openvz_tc.sh");
+				close_and_system("sh /usr/local/lxlabs/kloxo/etc/openvz_tc.sh");
 			} else {
 				printf("Restarting %s\n", neededstring);
 				snprintf(cmd, sizeof(cmd), "/etc/init.d/%s restart &", neededstring);
 				close_and_system(cmd);
 			}
-			snprintf(cmd, sizeof(cmd), "../etc/.restart/%s", namelist[n]->d_name);
+			snprintf(cmd, sizeof(cmd), "/usr/local/lxlabs/kloxo/etc/.restart/%s", namelist[n]->d_name);
 			unlink(cmd);
 		}
 		free(namelist[n]);
@@ -430,7 +434,8 @@ int exec_sisinfoc()
 	}
 
 	printf("Executing Sisinfoc...\n");
-	close_and_system("/usr/local/lxlabs/ext/php/php ../bin/sisinfoc.php >/dev/null 2>&1 &");
+	close_and_system("/usr/local/lxlabs/ext/php/php /usr/local/lxlabs/kloxo/bin/sisinfoc.php >/dev/null 2>&1 &");
+	printf("Executed in background.\n");
 
 	sisinfoc_timer = now;
 }
@@ -455,13 +460,16 @@ int exec_scavenge()
 		return 1;
 	}
 
+    // Default Scavenge time when no config file is found.
 	hour = 3;
 	min = 35;
 
 	printf("Loading Scavenge time configuation...\n");
 
-	if (!access("../etc/conf/scavenge_time.conf", R_OK)) {
-		fp = fopen("../etc/conf/scavenge_time.conf", "r");
+	if (!access("/usr/local/lxlabs/kloxo/etc/conf/scavenge_time.conf", R_OK)) {
+		fp = fopen("/usr/local/lxlabs/kloxo/etc/conf/scavenge_time.conf", "r");
+		printf("Found user Scavenge time configuation file...\n");
+
 		if (fp) {
 			fscanf(fp, "%d %d", &hour, &min);
 			fclose(fp);
@@ -469,11 +477,11 @@ int exec_scavenge()
 	}
 
 	localtime_r(&now, &tms);
-	printf(" Now Value:  %02d:%02d\n", tms.tm_hour, tms.tm_min);
-	printf(" Read Value: %02d:%02d\n", hour, min);
+	printf(" The Time now:  %02d:%02d\n", tms.tm_hour, tms.tm_min);
+	printf(" The Time when we run: %02d:%02d\n", hour, min);
 
 	// check interval of 5 minutes
-	interval = 5;
+	interval = 1;
 	time_match = 0;
 	for(i = 0; i <= interval; i++) {
 		if (tms.tm_hour == hour && tms.tm_min == min) {
@@ -489,7 +497,9 @@ int exec_scavenge()
 
 	if (time_match) {
 		printf("Executing Scavenge...\n");
-		close_and_system("/usr/local/lxlabs/ext/php/php ../bin/scavenge.php >/dev/null 2>&1 &");
+		close_and_system("/usr/local/lxlabs/ext/php/php /usr/local/lxlabs/kloxo/bin/scavenge.php >/dev/null 2>&1 &");
+		printf("Executed in background.\n");
+
 		scavenge_timer = now + interval * 60;
 	}
 	else {

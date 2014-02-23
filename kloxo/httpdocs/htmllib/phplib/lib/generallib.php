@@ -1,5 +1,22 @@
-<?php 
-
+<?php
+//    Kloxo, Hosting Control Panel
+//
+//    Copyright (C) 2000-2009	LxLabs
+//    Copyright (C) 2009-2014	LxCenter
+//
+//    This program is free software: you can redistribute it and/or modify
+//    it under the terms of the GNU Affero General Public License as
+//    published by the Free Software Foundation, either version 3 of the
+//    License, or (at your option) any later version.
+//
+//    This program is distributed in the hope that it will be useful,
+//    but WITHOUT ANY WARRANTY; without even the implied warranty of
+//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//    GNU Affero General Public License for more details.
+//
+//    You should have received a copy of the GNU Affero General Public License
+//    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+//
 
 
 
@@ -179,7 +196,12 @@ function isSync() { return false; }
 
 function updateScavengeTime($param)
 {
-	$ret = lfile_put_contents("../etc/conf/scavenge_time.conf", "{$param['generalmisc_b-scavengehour']} {$param['generalmisc_b-scavengeminute']}");
+    global $gbl, $sgbl, $login, $ghtml;
+    // Add leading zero's.
+    $padH = str_pad($param['generalmisc_b-scavengehour'], 2, '0', STR_PAD_LEFT);
+    $padM = str_pad($param['generalmisc_b-scavengeminute'], 2, '0', STR_PAD_LEFT);
+
+	$ret = lfile_put_contents("../etc/conf/scavenge_time.conf", "{$padH} {$padM}");
 	if (!$ret) {
 		throw new lxException("could_not_save_file");
 	}
@@ -386,10 +408,16 @@ function updateform($subaction, $param)
 
 		case "scavengetime":
 			$tcron = new Cron(null, null, 'test');
-			$v = cron::$hourlist;
-			unset($v[0]);
-			$vlist['generalmisc_b-scavengehour'] = array('s', $v);
-			$vlist['generalmisc_b-scavengeminute'] = array('s', array("0", "15", "30", "45"));
+
+			$scavengeHour = cron::$hourlist;
+			unset($scavengeHour[0]);
+
+            $scavengeMinutes = cron::$minutelist;
+            unset($scavengeMinutes[0]);
+
+			$vlist['generalmisc_b-scavengehour'] = array('s', $scavengeHour);
+			$vlist['generalmisc_b-scavengeminute'] = array('s',$scavengeMinutes);
+            $vlist['__m_message_pre'] = 'scavenge_info_pre';
 			break;
 
 		case "selfbackupconfig":
