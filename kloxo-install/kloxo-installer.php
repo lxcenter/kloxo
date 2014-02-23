@@ -123,17 +123,10 @@ function lxins_main()
 		}
 		chdir("/usr/local/lxlabs/kloxo");
 		system("mkdir -p /usr/local/lxlabs/kloxo/log");
-		 //Prevent accidentaly deletion of the package;
-		
-			@ unlink("/usr/local/lxlabs/kloxo/kloxo-current.zip");	        
-    		
-		if (file_exists('/usr/local/lxlabs/.git')) {
-        		echo 'Development GIT version found. Skipping download from LxCenter.';
-		} else {
-			print("Downloading Kloxo {$installversion} release\n");
-			system("wget {$downloadserver}download/kloxo/production/kloxo/kloxo-{$installversion}.zip");
-			system("mv -f ./kloxo-{$installversion}.zip ./kloxo-current.zip");
-		}
+		@ unlink("/usr/local/lxlabs/kloxo/kloxo-current.zip");
+		print("Downloading Kloxo {$installversion} release\n");
+		system("wget {$downloadserver}download/kloxo/production/kloxo/kloxo-{$installversion}.zip");
+		system("mv -f ./kloxo-{$installversion}.zip ./kloxo-current.zip");
 	}
 	
 	else {
@@ -187,12 +180,8 @@ function lxins_main()
 			chdir("/usr/local/lxlabs/kloxo");
 			system("mkdir -p /usr/local/lxlabs/kloxo/log");
 			@ unlink("/usr/local/lxlabs/kloxo/kloxo-current.zip");
-			if (file_exists('/usr/local/lxlabs/.git')) {
-        			echo 'Development GIT version found. Skipping download from LxCenter.';
-		} 	else {
-				print("Downloading latest Kloxo release\n");
-				system("wget {$downloadserver}download/kloxo/production/kloxo/kloxo-current.zip");
-			}
+			print("Downloading latest Kloxo release\n");
+			system("wget {$downloadserver}download/kloxo/production/kloxo/kloxo-current.zip");
 		}
 	}
 
