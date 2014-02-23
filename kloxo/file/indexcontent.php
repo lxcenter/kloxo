@@ -1,27 +1,12 @@
-<head> 
-		<title> <?php echo get_title() ?> </title> 
-    	<link href=/htmllib/css/common.css rel=stylesheet type=text/css>
-		<script language=javascript src="/htmllib/js/login.js"></script>
-		<script language=javascript src="/htmllib/js/preop.js"></script>
-		</head>
-		<body leftmargin=0 rightmargin=0 topmargin=0 bottommargin=0>
-		<center>
-<table width=100%  height=" 64" border="0" valign="top" align="center" cellpadding="0" cellspacing="0">
-<tr>
-<td height="64" width="100%" background="/img/header/header_01.gif">
-<table cellpadding=0 cellspacing=0 border=0>
-<tr><td height=20 colspan=2></td></tr>
-<tr><td width=15></td><td></td></tr>
-</table>
-</td>
-<td height="64" width="20%"><img src="/img/header/header_02.gif" width="194" height="64"></td>
-<td width="20%" height="64"><img src="/img/header/header_03.gif" width="238" height="64"></td>
-<td width="20%" height="64"><img src="/img/header/header_04.gif" width="10" height="64"></td></tr>
-<tr><td width="100%" colspan=5 bgcolor="#003366" width="10" height="2"></td></tr>
-</table>
+<?php 
+$accountlist = array('client' => "Kloxo Account",'domain' => 'Domain Owner', 'mailaccount' => "Mail Account");
+$progname = $sgbl->__var_program_name;
 
-		<br><br><br><br><br><br>
-		<?php
+$ghtml->print_jscript_source("/htmllib/js/lxa.js");
+if ($sgbl->is_this_slave()) { print("Slave Server\n"); exit; }
+
+$logfo = db_get_value("general",  "admin", "login_pre");
+$logfo = str_replace("<%programname%>", $sgbl->__var_program_name, $logfo);
 
    if(!$cgi_forgotpwd ){
 	$ghtml->print_message();
@@ -31,158 +16,147 @@
 		include_once "lib/demologins.php";
 	} else {
 ?>
-        <table align=center cellpadding=0 cellspacing=0 border=0 width=314>
-		<tr><td><img src="/img/login_01.gif"></td></tr>
-		<tr><td background="/img/login_02.gif">
-		<form name=loginform action="/htmllib/phplib/" onsubmit="return fieldcheck(this);" method=get>
 
+<style type="text/css">
+	@import url("/htmllib/lib/admin_login.css");
+</style>
 
-		<table cellpadding=2 cellspacing=2 border=0 width=100%>
-		<tr><td width=20 height=10 ></td><td ></td></tr>    
-		<tr><td width=20></td><td ><font name=Verdana size=2 color=#3992DE><b>Username</b></font></td><td ><input type=text name=frm_clientname size=30 class=logintextbox> </td></tr>  
-		<tr><td width=20></td><td ><font name=Verdana size=2 color=#3992DE><b>Password</b></font></td><td ><input type=password name=frm_password size=30 class=logintextbox ></td></tr>  
+<div id="ctr" align="center">
+	<div class="login">
+		<div class="login-form">
+			<div align="center"><font size="5" color="red"><b> Login </b></font></div>
+			<br />
+			<form name="loginform" action="/htmllib/phplib/" onsubmit="encode_url(loginform) ; return fieldcheck(this);" method="post">
+				<div class="form-block">
+					<div class="inputlabel">Username</div>
+					<input name="frm_clientname" type="text" class="inputbox" size="30" />
+					<div class="inputlabel">Password</div>
+					<input name="frm_password" type="password" class="passbox" size="30" />
+					<br />
+					<input type="hidden" name="id" value="<?php echo mt_rand() ?>" />
+					<div align="left"><input type="submit" class="button" name="login" value="Login" /></div>
+				</div>
+			</form>
+		</div>
+		<div class="login-text">
+			<div class="ctr"><img src="/img/login/icon.gif" width="64" height="64" alt="security" /></div>
+			<?=$logfo?> 
+			<a class="forgotpwd" href="javascript:document.forgotpassword.submit()"><font color="black"><u>Forgot Password?</u></a>
+			<form name="forgotpassword" method="post" action="/login/">
+				<input type="hidden" name="frm_forgotpwd" value="1" />
+			</form>
+			<script> document.loginform.frm_clientname.focus(); </script>
+		</div>
+		<div class="clr"></div>
+	</div>
+</div>
+<div id="break"></div>
+	
+<?php
 
-		<?php if ($cgi_typename) {
-			?> 
-			<input type=hidden name=frm_typename value=<?php echo $cgi_typename ?>  class=logintextbox >
-			<?php 
-		} else {
-			?> 
-			<tr><td width=20></td><td ><font name=Verdana size=2 color=#3992DE><b>Login As</b></font></td><td >
-			<select  name=frm_typename class=logintextbox>
-			<option value=kloxoaccount> Kloxo Account</option>
-			<option value=serveradmin> Server Admin</option>
-			<option value=domainowner> Domain Owner </option>
-			<option value=sysuser> System User </option>
-			<option value=ftpuser> Domain User </option>
-			<option value=mailuser> Mail User </option>
-			<option value=superclient> Super Client </option>
-			</select>
-			</td></tr>  
-			<?php 
-		}
-		?> 
-
-		<tr><td colspan=3 height=10></td></tr>
-		<?php 
-		if ($ghtml->iset("_cgi_nf")) {
-			print("<input type=hidden name=frm_nf value=" . $ghtml->_cgi_nf . ">");
-		}
-		?> 
-		<input type=hidden name=id value="<?php echo mt_rand() ?>"> 
-		<tr><td width=20></td><td >  </td><td ></td> </tr>  
-		</table>
-		<table cellpadding=0 cellspacing=0 border=0 bgcolor=#ddf2fb width=100%>
-		<tr><td width=30 ></td><td width=150><a class=forgotpwd  href="javascript:document.forgotpassword.submit()">Forgot Password?</a></td><td align=right ><input name=login type=image src="/img/loginbtn.gif"  onMouseOver="swapImage('login','','/img/loginbtn_1.gif',1);"  onMouseOut="swapImgRestore();" ></td><td width=20></td></tr>
-		</table>
-		</form>
-		</td></tr>
-		<tr><td><img src="img/login_03.gif"></td></tr>
-		</table>
-		<form name="forgotpassword" method="post"  action="/">
-		<input type="hidden" name=frm_forgotpwd value="1">
-		</form>
-         <script> document.loginform.frm_clientname.focus(); </script>
-
-
-		<?php 
 	}
 		
 
 }
 elseif ($cgi_forgotpwd == 1) {
 ?>
-        <table align=center cellpadding=0 cellspacing=0 border=0 width=314>
-		<tr><td><img src="/img/forgot_01.gif"></td></tr>
-		<tr><td background="/img/forgot_02.gif">
-<form name=sendmail action="<?php echo $_SERVER['PHP_SELF']; ?>" onsubmit="return forgotfield(this);" method="post">
-		<table cellpadding=2 cellspacing=2 border=0 width=100%>
-		<tr><td width=20 height=10 ></td><td ></td></tr>    
-		<tr><td width=20></td><td ><font name=Verdana size=2 color=#3992DE><b>Username</b></font></td><td ><input type=text name=frm_clientname size=30 class=forgottextbox> </td></tr>  
-		<tr><td width=20></td><td ><font name=Verdana size=2 color=#3992DE><b>Email Id</b></font></td><td ><input type=text name=frm_email size=30 class=forgottextbox ></td></tr>  
 
-		<?php if ($cgi_typename) {
-			?> 
-			<input type=hidden name=frm_typename value=<?php echo $cgi_typename ?>  class=logintextbox >
-			<?php 
-		} else {
-			?> 
-			<tr><td width=20></td><td ><font name=Verdana size=2 color=#3992DE><b>Login Type</b></font></td><td >
-			<select  name=frm_typename class=logintextbox>
-			<option value=kloxoaccount> Kloxo Account</option>
-			<option value=serveradmin> Server Admin</option>
-			<option value=domainowner> Domain Owner </option>
-			<option value=sysuser> System User </option>
-			<option value=ftpuser> Domain User </option>
-			<option value=mailuser> Mail User </option>
-			</select>
-			</td></tr>  
-			<?php 
-		}
-		?> 
+<style type="text/css">
+	@import url(/htmllib/lib/admin_login.css);
+</style>
 
-		<tr><td colspan=3 height=10></td></tr>
-		<tr><td width=20></td><td >  </td><td ></td> </tr>  
-		</table>
-		<table cellpadding=0 cellspacing=0 border=0 width=100%>
-		<tr><td width=30 ></td><td width=150><a class=forgotpwd href="javascript:history.go(-1);">Back to login</a></td><td align=right ><input name=forgot type=image src="/img/forgotbtn.gif"  onMouseOver="swapImage('forgot','','/img/forgotbtn_1.gif',1);"  onMouseOut="swapImgRestore();" ></td><td width=20></td></tr>
-		</table>
-          <input type="hidden" name="frm_forgotpwd" value="2">    
-	</form>
-		</td></tr>
-		<tr><td><img src="img/forgot_03.gif"></td></tr>
-		</table>
+<div id="ctr" align="center">
+	<div class="login">
+		<div class="login-form">
+			<div align="center"><font name=Verdana size=5 color=red ><b> Forgot Password </b></font></div>
+			<br />
+			<form name="sendmail" action="/login/" method="post">
+				<div class="form-block">
+					<div class="inputlabel">Username</div>
+					<input name="frm_clientname" type="text" class="inputbox" size="30" />
+					<div class="inputlabel">Email Id</div>
+					<input name="frm_email" type="text" class="passbox" size="30" />
+					<br />	  	
+					<div align="left"><input type="submit" class="button" name="forgot" value="Send" /></div>
+				</div>	
+				<input type="hidden" name="frm_forgotpwd" value="2" />
+			</form>
+		</div>
+		<div class="login-text">
+			<div class="ctr"><img src="/img/login/icon1.gif" width="64" height="64" alt="security" /></div>
+			<p>Welcome to <?php echo  $sgbl->__var_program_name; ?></p>
+			<p>Use a valid username and email-id to get password.</p>
+			<br />
+			<a class=forgotpwd href="javascript:history.go(-1);"><font color="black"><u>Back to login</u></a>
+		</div>
 
+		<script> document.sendmail.frm_clientname.focus(); </script>
 
-
-<script> document.sendmail.frm_clientname.focus(); </script>
+		<div class="clr"></div>
+	</div>
+</div>
+<div id="break"></div>
 
 <?php
 } elseif ($cgi_forgotpwd==2) {
+	
+	$progname = $sgbl->__var_program_name;
+	$cprogname = ucfirst($progname);
+
+	$cgi_clientname = $ghtml->frm_clientname;
+	$cgi_email = $ghtml->frm_email;
 
 
+	htmllib::checkForScript($cgi_clientname);
+	$classname = $ghtml->frm_class;
 
-	$cgi_clientname = $ghtml->_cgi_clientname;
-	$cgi_email = $ghtml->_cgi_email;
-
-	/*
-	if ($cgi_clientname == 'admin') {
-		$ghtml->print_redirect("/?frm_emessage=cannot_reset_admin");
+	if (!$classname) {
+		$classname = getClassFromName($cgi_clientname);
 	}
-*/
 
-	if ($cgi_clientname != "" && $cgi_email != "") { 
-		$tablename = $sgbl->__var_ltype[$ghtml->_cgi_typename];
-		$rawdb = new Sqlite(null, $tablename);
-		$email = $rawdb->rawQuery("select contactemail from $tablename where nname = '$cgi_clientname';");
+	if (!empty($cgi_clientname) && !empty($cgi_email)) { 
+		$tablename = $classname;
+		$database = new Sqlite(null, $tablename);
 
-
-		if($email && $cgi_email == $email[0]['contactemail']) {
+		$data = $database->rawQuery("select contactemail from $tablename where nname = '$cgi_clientname';");
+		
+		if(empty($data)) {
+			$ghtml->print_redirect("/login/?frm_emessage=nouser_email");
+			//throw lxException('Contact email is not set on Kloxo, it could not be send to a empty address.');
+		}
+		elseif(!isset($data[0]['contactemail'])) {
+			$ghtml->print_redirect("/login/?frm_emessage=nouser_email");
+			//throw lxException('Contact email is not set on Kloxo, it could not be send to a empty address.');
+		}
+		else {
+			$contact_email = $data[0]['contactemail'];
+			
+			if(empty($contact_email)) {
+				//throw lxException('Contact email is not set on Kloxo, it could not be send to a empty address.');
+				$ghtml->print_redirect("/login/?frm_emessage=nouser_email");
+			}
+		}
+		
+		if($cgi_email == $contact_email) {
 			$rndstring =  randomString(8);
 			$pass = crypt($rndstring);
 
-			$rawdb->rawQuery("update $tablename set password = '$pass' where nname = '$cgi_clientname'");
-			$mailto = $email[0]['contactemail'];
-			$name = "Kloxo";
-			$email = "Admin";
+			$database->rawQuery("update $tablename set password = '$pass' where nname = '$cgi_clientname'");
 
-			$cc = "";
-			$subject = "Kloxo Password Reset Request";
-			$message = "\n\n\nYour password has been reset to the one below for your Kloxo login.\n";
-			$message .= 'Username: '. $cgi_clientname."\n";
-			$message .= 'New Password: '. $rndstring.'';
+			$subject = "$cprogname Password Reset Request";
+			
+			$message = "\n\n\nYour password has been reset to the one below for your $cprogname login.\n" .
+			           "The Client IP address which requested the Reset: {$_SERVER['REMOTE_ADDR']}\n" .
+					   'Username: '. $cgi_clientname."\n" .
+					   'New Password: '. $rndstring;
 
-			//$message = nl2br($message);
+			$from = NULL; //Setting NULL gets the program@hostname.com
+			lx_mail($from, $contact_email, $subject, $message);
 
-			mail($mailto, $subject, $message, "Cc: $cc\nFrom: \"$name\" <$email>\nReply-To: \"$name\" <$email>" );
-
-			$ghtml->print_redirect("/?frm_smessage=password_sent");
+			$ghtml->print_redirect("/login/?frm_smessage=password_sent");
 
 		} else {
-			$ghtml->print_redirect("/?frm_emessage=nouser_email");
+			$ghtml->print_redirect("/login/?frm_emessage=nouser_email");
 		}
 	}
 }
-?>
-</center>
-</html>
