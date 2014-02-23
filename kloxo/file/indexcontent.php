@@ -1,4 +1,8 @@
-<?php 
+<?php
+
+// TODO: This file is not in use
+// See: lib/indexcontent.php (loaded from [login.]inc.php)
+
 $accountlist = array('client' => "Kloxo Account",'domain' => 'Domain Owner', 'mailaccount' => "Mail Account");
 $progname = $sgbl->__var_program_name;
 
