@@ -188,7 +188,7 @@ read -n 1 -p "Press any key to continue ..."
 yum -y install php php-mysql wget zip unzip
 export PATH=/usr/sbin:/sbin:$PATH
 
-if [ ! -d '../../.git' ]; then
+if [ ! -d "../../.git" ]; then
 	echo "Development GIT version found. Skipping download sources."
 else
 	if [ -f ./kloxo-install.zip ] ; then
