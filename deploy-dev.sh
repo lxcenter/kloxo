@@ -96,7 +96,7 @@ fi
 case $1 in 
 	master )
 		# Clone from GitHub the last version using git transport (no http or https)
-		echo "Installing branch kloxo/master"
+		echo "Installing branch kloxo/master from $2 repository"
 		mkdir -p ${KLOXO_PATH}
 		git clone git://github.com/$2/kloxo.git ${KLOXO_PATH}
 		cd ${KLOXO_PATH}
@@ -105,11 +105,11 @@ case $1 in
 		sh ./make-distribution.sh
 		cd ${KLOXO_PATH}/kloxo
 		sh ./make-distribution.sh
-		printf "Done.\nInstall Kloxo:\ncd ${KLOXO_PATH}/kloxo/kloxo-install/\nsh kloxo-installer.sh with args\n"
+		printf "Done.\nInstall Kloxo:\ncd ${KLOXO_PATH}/kloxo-install/\nsh kloxo-installer.sh with args\n"
 		;;
 	dev )
 		# Clone from GitHub the last version using git transport (no http or https)
-		echo "Installing branch kloxo/dev"
+		echo "Installing branch kloxo/dev from $2 repository"
 		git clone git://github.com/$2/kloxo.git ${KLOXO_PATH}
 		cd ${KLOXO_PATH}
 		git checkout dev -f
@@ -117,11 +117,11 @@ case $1 in
 		sh ./make-distribution.sh
 		cd ${KLOXO_PATH}/kloxo
 		sh ./make-distribution.sh
-		printf "Done.\nInstall Kloxo:\ncd ${KLOXO_PATH}/kloxo/kloxo-install/\nsh kloxo-installer.sh with args\n"
+		printf "Done.\nInstall Kloxo:\ncd ${KLOXO_PATH}/kloxo-install/\nsh kloxo-installer.sh with args\n"
 		;;
 	6.1.x )
 		# Clone from GitHub the last version using git transport (no http or https)
-		echo "Installing branch kloxo/6.1.x"
+		echo "Installing branch kloxo/6.1.x from $2 repository"
 		git clone git://github.com/$2/kloxo.git ${KLOXO_PATH}
 		cd ${KLOXO_PATH}
 		git checkout 6.1.x -f
@@ -129,7 +129,7 @@ case $1 in
 		sh ./make-distribution.sh
 		cd ${KLOXO_PATH}/kloxo
 		sh ./make-distribution.sh
-		printf "Done.\nInstall Kloxo:\ncd ${KLOXO_PATH}/kloxo/kloxo-install/\nsh kloxo-installer.sh with args\n"
+		printf "Done.\nInstall Kloxo:\ncd ${KLOXO_PATH}/kloxo-install/\nsh kloxo-installer.sh with args\n"
 		;;
 	*   )
 		usage
