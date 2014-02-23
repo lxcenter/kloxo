@@ -6545,30 +6545,39 @@ function update_all_slave()
 
 }
 
-function findNextVersion($lastversion = null)
+/**
+ * Get a version list and see if a update is avaible
+ * Issue #781 - Update to the latest version instead one by one
+ * Added _ () for the future :)
+ *
+ * @param      string $LastVersion Not Used?
+ * @return     string    Returns zero or version number
+ * @author     Danny Terweij d.terweij@lxcenter.org
+ */
+function findNextVersion($lastVersion = null)
 {
-	global $gbl, $sgbl, $login, $ghtml; 
-	$thisversion = $sgbl->__ver_major_minor_release;
+    global $sgbl;
+    $thisVersion = $sgbl->__ver_major_minor_release;
+    $Upgrade = null;
+    $versionList = getVersionList($lastVersion);
+    print(_('Found version(s):'));
 
-	$upgrade = null;
-	$nlist = getVersionList($lastversion);
-	dprintr($nlist);
-	$k = 0;
-	print("Found version(s):");
-	foreach($nlist as $l) {
-		print(" $l");
-		if (version_cmp($thisversion, $l) === -1) {
-			$upgrade = $l;
-			break;
-		}
-		$k++;
-	}
-	print("\n");
-	if (!$upgrade) {
-		return 0;
-	}
-
-	print("Upgrading from $thisversion to $upgrade\n");
-	return $upgrade;
-
+    foreach ($versionList as $newVersion) {
+        print(' ' . $newVersion);
+    }
+    print(PHP_EOL);
+    if (version_cmp($thisVersion, $newVersion) === -1) {
+        $Upgrade = $newVersion;
+    }
+    if (version_cmp($thisVersion, $newVersion) === 1) {
+        unset($Upgrade);
+        print(_('Your version ') . $thisVersion . _(' is higher then ') . $newVersion . PHP_EOL);
+        print(_('Script aborted') . PHP_EOL);
+        exit;
+    }
+    if (!$Upgrade) {
+        return 0;
+    }
+    print(_('Upgrading from ') . $thisVersion . _(' to ') . $Upgrade . PHP_EOL);
+    return $Upgrade;
 }
