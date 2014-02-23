@@ -36,7 +36,7 @@ echo "### Start packaging"
 echo "### read version..."
 # Read version
 # Please note, this must be a running machine with SVN version (SUURE need to change that)!
-if [ ! -d '../.git' ]; then
+if [ ! -d "../.git" ]; then
 	echo "### read version..."
 	if ! [ -f /script/version ] ; then
 		echo "## Packaging failed. No /script/version found."
