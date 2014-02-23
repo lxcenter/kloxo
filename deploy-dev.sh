@@ -50,7 +50,8 @@ install_GIT()
 	fi
 	
 	# @todo Try to get the lastest version from some site. LATEST file?
-	GIT_VERSION='1.8.3.4'
+##	GIT_VERSION='1.8.3.4'
+	GIT_VERSION='1.9.0'
 	
 	echo "Downloading and compiling GIT ${GIT_VERSION}"
 	wget http://git-core.googlecode.com/files/git-${GIT_VERSION}.tar.gz
