@@ -30,9 +30,9 @@
 KLOXO_PATH='/usr/local/lxlabs'
 
 usage(){
-    echo "Usage: $0 [BRANCH] [REPO] [-h]"
+    echo "Usage: $0 [BRANCH] [REPOSITORY] [-h]"
     echo 'BRANCH: master or dev or 6.1.x'
-    echo 'REPO: lxcenter or the repo you want to use'
+    echo 'REPOSITORY: lxcenter or the repo you want to use'
     echo 'h: shows this help.'
     exit 1
 }
@@ -98,7 +98,7 @@ case $1 in
 		# Clone from GitHub the last version using git transport (no http or https)
 		echo "Installing branch kloxo/master"
 		mkdir -p ${KLOXO_PATH}
-		git clone git://github.com/${REPO}/kloxo.git ${KLOXO_PATH}
+		git clone git://github.com/$2/kloxo.git ${KLOXO_PATH}
 		cd ${KLOXO_PATH}
 		git checkout master
 		cd ${KLOXO_PATH}/kloxo-install
@@ -110,7 +110,7 @@ case $1 in
 	dev )
 		# Clone from GitHub the last version using git transport (no http or https)
 		echo "Installing branch kloxo/dev"
-		git clone git://github.com/${REPO}/kloxo.git ${KLOXO_PATH}
+		git clone git://github.com/$2/kloxo.git ${KLOXO_PATH}
 		cd ${KLOXO_PATH}
 		git checkout dev -f
 		cd ${KLOXO_PATH}/kloxo-install
@@ -122,7 +122,7 @@ case $1 in
 	6.1.x )
 		# Clone from GitHub the last version using git transport (no http or https)
 		echo "Installing branch kloxo/6.1.x"
-		git clone git://github.com/${REPO}/kloxo.git ${KLOXO_PATH}
+		git clone git://github.com/$2/kloxo.git ${KLOXO_PATH}
 		cd ${KLOXO_PATH}
 		git checkout 6.1.x -f
 		cd ${KLOXO_PATH}/kloxo-install
