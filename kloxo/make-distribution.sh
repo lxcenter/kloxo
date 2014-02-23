@@ -49,7 +49,7 @@ if [ ! -d "../.git" ]; then
 	version=`/script/version`
 #maybe implemented later
 #	build=`git log --pretty=format:'' | wc -l`
-	rm -f kloxo-$version.$build.zip	
+	rm -f kloxo-$version.zip	
 else
 	buildtype=1
     	  version='current'
