@@ -47,7 +47,8 @@ if [ ! -d "../.git" ]; then
 	fi
       buildtype=0
 	version=`/script/version`
-	build=`git log --pretty=format:'' | wc -l`
+#maybe implemented later
+#	build=`git log --pretty=format:'' | wc -l`
 	rm -f kloxo-$version.$build.zip	
 else
 	buildtype=1
@@ -64,10 +65,12 @@ echo "### Create zip package..."
 if [ $buildtype -eq 1 ]; then
 file=kloxo-$version.zip
 else
-file=kloxo-$version.$build.zip
+file=kloxo-$version.zip
+#maybe later
+#file=kloxo-$version.$build.zip
 fi
 # Package part
-zip -r9 $file ./bin ./cexe ./file ./httpdocs ./pscript ./sbin ./RELEASEINFO ./src -x \
+zip -r9y $file ./bin ./cexe ./file ./httpdocs ./pscript ./sbin ./RELEASEINFO ./src -x \
 "*httpdocs/commands.php" \
 "*httpdocs/newpass" \
 "*httpdocs/.php.err" \
