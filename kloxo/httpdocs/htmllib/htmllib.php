@@ -7444,12 +7444,6 @@ class HtmlLib
 			if (isset($g_language_mes->__information[$info])) {
 				$pinfo = $g_language_mes->__information[$info];
 			}
-		} else {
-			dprint($info);
-			print("<table cellpadding=0 cellspacing=0> <tr height=10> <td > </td> </tr> </table> ");
-			if (lxfile_exists("__path_program_htmlbase/help/$info.dart")) {
-				$pinfo = lfile_get_contents("__path_program_htmlbase/help/$info.dart");
-			}
 		}
 
 		if (!$pinfo) {
@@ -7516,15 +7510,9 @@ class HtmlLib
 
 		$pinfo = implode("\n", $out);
 
-		$fontcolor = "#000000";
-		if ($sgbl->isBlackBackground()) {
-			$fontcolor = "#999999";
-		}
-
-
 		$this->print_curvy_table_start();
 
-		$pinfo = str_replace("\n", "<br>", $pinfo);
+		$pinfo = str_replace("\n", "<br />", $pinfo);
 		$pinfo = str_replace("[b]", "<font style='font-weight: bold'>", $pinfo);
 		$pinfo = str_replace("[/b]", "</font>", $pinfo);
 
@@ -7549,23 +7537,14 @@ class HtmlLib
 
 	function print_curvy_table_start($width = "100")
 	{
-		global $gbl, $sgbl, $login;
-		$a = $login->getSkinDir();
-		if ($sgbl->isBlackBackground()) {
-			return;
-		}
-		print("<table cellpadding=0  align=center cellspacing=0 width=\"100%\"><tr><td width=$width align=right><img src='$a/tl.gif' align=center></td ><td style='background: url($a/dot.gif) 0 0 repeat-x'></td ><td width=$width align=left><img src='$a/tr.gif' align=center></td > </tr><tr><td height=50px style='background: url($a/dot.gif) 90% 0 repeat-y;'></td><td align=left>");
+        print('<div style="text-align: left; padding:25px; width:75%;-webkit-border-radius: 20px;-moz-border-radius: 20px;border-radius: 20px;border:1px solid #CCCCCC;background-color:#FFFFCC;-webkit-box-shadow: #B3B3B3 10px 10px 10px;-moz-box-shadow: #B3B3B3 10px 10px 10px; box-shadow: #B3B3B3 10px 10px 10px;">');
 	}
 
 	function print_curvy_table_end($width = "100")
 	{
-		global $gbl, $sgbl, $login;
-		$a = $login->getSkinDir();
-		if ($sgbl->isBlackBackground()) {
-			return;
-		}
-		print("<td style='background: url($a/dot.gif) 10% 0 repeat-y'></td></tr><tr><td width=$width align=right><img src='$a/bl.gif' align= center></td ><td style='background: url($a/dot.gif) 0 95% repeat-x'></td><td width=$width align=left><img src='$a/br.gif' align=center></td ></tr></table>");
-	}
+        print('</div>');
+        print('<br /><br />');
+    }
 
 	function print_on_status_bar($message)
 	{
