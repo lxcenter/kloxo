@@ -114,7 +114,7 @@ else
 file=kloxo-$version.$build.zip
 fi
 # Package part
-zip -r9yq $file ./bin ./cexe ./file ./httpdocs ./pscript ./sbin ./RELEASEINFO ./src -x \
+zip -r9y $file ./bin ./cexe ./file ./httpdocs ./pscript ./sbin ./RELEASEINFO ./src -x \
 "*httpdocs/commands.php" \
 "*httpdocs/newpass" \
 "*httpdocs/.php.err" \
