@@ -1497,9 +1497,20 @@ class HtmlLib
 				dialog.addKeyListener(27, dialog.hide, dialog);
 				g_okBtn = dialog.addButton('OK', this.okComment, this);
 				dialog.addButton('Cancel', dialog.hide, dialog);
-				g_postBtn = dialog.addButton('Apply', this.submitComment, this);
-				g_allBtn = dialog.addButton('All Update', this.allComment, this);
-
+                                switch(get_language()) {
+                                 case "hu":
+                                        dialog.addButton('Mégse', dialog.hide, dialog);
+                                        g_postBtn = dialog.addButton('Alkalmaz', this.submitComment, this);
+                                        g_allBtn = dialog.addButton('Mindet frissít', this.allComment, this);
+                
+                                         break;
+                                 default:
+                                        dialog.addButton('Cancel', dialog.hide, dialog);
+                                        g_postBtn = dialog.addButton('Apply', this.submitComment, this);
+                                        g_allBtn = dialog.addButton('All Update', this.allComment, this);
+                 
+                                 }
+         
 
 				// clear any messages and indicators when the dialog is closed
 				dialog.on('hide', function()
@@ -2418,8 +2429,8 @@ class HtmlLib
 	<form name="frmsendchmod" action="display.php">
 		<input type="hidden" name="frm_ffile_c_file_permission_f">
 		<?php
-				$post['frm_o_o'] = $this->__http_vars['frm_o_o'];
-		$ghtml->print_input_vars($post);
+                        $post['frm_o_o'] = $this->__http_vars['frm_o_o'];
+                        $ghtml->print_input_vars($post);
 		?>
 		<input type="hidden" name="frm_ffile_c_recursive_f" value="Off">
 		<input type="hidden" name="frm_action" value="update">
@@ -3248,12 +3259,21 @@ class HtmlLib
 		$header->form = $formname;
 		$header->formtype = "enctype=\"multipart/form-data\"";
 
-		if ($title) {
-			$header->title = "$title for {$obj->getId()} $server";
-		} else {
-			$header->title = null;
+		if ($title) 
+		{
+		        switch(get_language())
+                        {
+                                case "hu":
+                                        $header->title =  "$title, mint {$obj->getId()} $server";
+                                        break;
+                                default: 
+                                        $header->title =  "$title for {$obj->getId()} $server";
+                        }
+                }
+		else 
+		{
+		        $header->title = null;
 		}
-
 		$header->url = $url;
 		return $header;
 	}
@@ -3293,7 +3313,15 @@ class HtmlLib
 
 		$rvr = new FormVar();
 		$rvr->name = "frm_confirm_password";
-		$rvr->desc = "Confirm Password";
+		switch(get_language())
+		{
+		        case "hu":
+		                $rvr->desc = "Jelszó megerő000sítése";
+		                break;
+                        default: 
+                                $rvr->desc = "Confirm Password";
+                }
+
 		$rvr->texttype = "password";
 		$rvr->type = "modify";
 		$rvr->valid = "yes";
@@ -3899,14 +3927,35 @@ class HtmlLib
 		$this->print_current_input_var_unset_filter($filtername, array('pagenum'));
 		$this->print_current_input_vars(array('frm_hpfilter'));
 		$this->print_input("hidden", "frm_hpfilter[$filtername][pagenum]", $page_value);
-		print("</form>");
-		$help = "<font class=bold> Action: </font> <br> <br> ";
-		if ($name === "forward" || $name === "rewind") {
-			$help .= ucfirst($name) . "  a few Pages.";
-		} else {
-			$help .= "Go To " . ucfirst($name) . " Page.";
-		}
 
+		switch(get_language())
+		{
+		        case "hu":
+                                $help = "<font class=bold> Művelet: </font> <br> <br> ";
+                                break;
+                        default:
+                                $help = "<font class=bold> Action: </font> <br> <br> ";
+                }       
+                if($name === "forward" || $name === "rewind") {
+                        switch(get_language())
+                        {
+                                case "hu":
+                                        $help .= ucfirst($login->getKeywordUc($name)) . "  néhány oldalt.";
+                                        break;
+                                default:
+                                        $help .= ucfirst($name) . "  néhány oldalt.";
+                        }        
+                } else {     
+                        switch(get_language())
+                        {	
+                                case "hu":
+                                        $help .= "Ugorjon a " . ucfirst($name) . " oldalra.";
+                                        break;
+                                default:                   
+                                        $help .= "Go To " . ucfirst($name) . " Page.";
+                        }
+                }  
+          
 		$link = "<a  onmouseover=\"javascript:changeContent('help','$help')\" onmouseout=\"changeContent('help','helparea')\" href=javascript:document.form{$name}_page_$place.submit()><img src=$iconpath/{$name}_page.gif align=absbottom ></a> ";
 		return $link;
 	}
@@ -3943,7 +3992,17 @@ class HtmlLib
 			$forward_link = $this->print_next_previous_link($object, $class, $place, $iconpath, "forward", min($cgi_pagenum + ($left + ($left % 2)) / 2, $page));
 			$last_link = $this->print_next_previous_link($object, $class, $place, $iconpath, "last", $page);
 
-			print(" $first_link &nbsp; $rewind_link &nbsp; $prev_link <b> <font class=pagetext>&nbsp;Page $cgi_pagenum (of $page) </b> </font> $next_link $forward_link $last_link");
+
+			switch(get_language())
+			{
+				case "hu":
+					print(" $first_link &nbsp; $rewind_link &nbsp; $prev_link <b> <font class=pagetext>&nbsp;$cgi_pagenum/$page oldal) </b> </font> $next_link $forward_link $last_link");
+					break;
+				default:
+					print(" $first_link &nbsp; $rewind_link &nbsp; $prev_link <b> <font class=pagetext>&nbsp;Page $cgi_pagenum (of $page) </b> </font> $next_link $forward_link $last_link");
+			}
+
+
 			$search_brack_o = "  &nbsp;  (";
 			$search_brack_c = ") ";
 		}
@@ -4146,7 +4205,16 @@ class HtmlLib
 		}
 
 		$unique_name = "{$parent->getClName()}_$class";
-		$showstring = "Show/Hide";
+
+                switch(get_language())
+                {
+                        case "hu":
+                                $showstring = "Rejt/Mutat";
+                                break;
+                        default:
+                                $showstring = "Show/Hide";
+                }
+
 		$show_all_string = null;
 		if ($login->getSpecialObject('sp_specialplay')->isOn('close_add_form')) {
 			$visiblity = "visibility:hidden;display:none";
@@ -4155,7 +4223,15 @@ class HtmlLib
 		}
 
 		$cdesc = get_description($class);
-		$cdesc .= " for $parent->nname";
+		
+		switch(get_language())
+		{
+                        case "hu":
+                                $cdesc .= " hozzáadása, mint $parent->nname";
+                                break;
+                        default:
+                                $cdesc .= " for $parent->nname";
+                }
 
 		$backgroundstring = "background:#fff;";
 		$fontcolor = "black";
@@ -4172,9 +4248,18 @@ class HtmlLib
 		<tr>
 			<td>
 				<font align=left style='color:<?=$fontcolor;?>;font-weight:bold'>
-					<a style='color:<?=$fontcolor; ?> ;font-weight:bold'
-					   href="javascript:toggleVisibility('listaddform_<?=$unique_name?>');"> &nbsp; &nbsp; Click Here to
-						Add <?=$cdesc?> (<?=$showstring?>) </a> <?=$show_all_string?>
+
+                        <?
+                                switch(get_language())
+                                {
+                                        case "hu":
+                                                print("<a style='color:".$fontcolor." ;font-weight:bold' href=\"javascript:toggleVisibility('listaddform_".$unique_name."');\"> &nbsp; &nbsp;  Kattintson ide a ".$cdesc
+                                                break;
+                                        default:
+                                                print("<a style='color:".$fontcolor." ;font-weight:bold' href=\"javascript:toggleVisibility('listaddform_".$unique_name."');\"> &nbsp; &nbsp;  Click Here to Add ".$cdesc
+                                }
+                        ?>
+
 				</font> &nbsp; &nbsp; &nbsp;
 			</td>
 		</tr>
@@ -4944,7 +5029,7 @@ class HtmlLib
 		$ghtml->print_input("hidden", "frm_action", "list");
 		$ghtml->print_input("submit", "Cancel", "Cancel", "class=submitbutton");
 		print("</form> ");
-
+1
 		print("</td> </tr> </table> ");
 
 	}
@@ -4972,7 +5057,7 @@ class HtmlLib
 				$width = 70;
 			}
 
-			print("<table width=90% cellpadding=0 cellspacing=0><tr><td width=40><b>Show</b></td><td width=$width>");
+			print("<table width=90% cellpadding=0 cellspacing=0><tr><td width=40><b>".$login->getKeywordUc('show').."</b></td><td width=$width>");
 			$this->print_current_input_var_unset_filter($filtername, array('pagesize', 'pagenum'));
 			$this->print_current_input_vars(array('frm_hpfilter'));
 			$f_page = (int) $login->issetHpFilter($filtername, 'pagesize') ? $login->getHPFilter($filtername, 'pagesize') : $pagesize;
@@ -4999,7 +5084,7 @@ class HtmlLib
 
 			if ($rpagesize < 1000) {
 				print("<form method=$sgbl->method action=''>");
-				print("<table cellpadding=0 cellspacing=0  border=0 valign=middle><tr valign=middle><td><b> Page </b>");
+				print("<table cellpadding=0 cellspacing=0  border=0 valign=middle><tr valign=middle><td><b> ".ucfirst($login->getKeywordUc("Page"))." </b>");
 				$this->print_current_input_var_unset_filter($filtername, array('pagenum'));
 				$this->print_current_input_vars(array('frm_hpfilter'));
 				print("<input class=textbox style='width:25px' name=\"frm_hpfilter[$filtername][pagenum]\" type=text value=$cgi_pagenum class=small></td><td >");
@@ -5935,7 +6020,11 @@ class HtmlLib
 				$var = $sub . "_" . $var;
 			}
 			$descr = $desc[2];
-			return array("", "", "Add $descr", 'desc' => "Add $descr", 'help' => "{$login->getKeywordUc('add')} $descr", "{$login->getKeywordUc('add')} $descr");
+			switch(get_language())
+                        {
+                                case 'hu':  return array("", "", ucfirst($descr) ." hozzáadás", 'desc' => ucfirst($descr)."  hozzáadás", 'help' => ucfirst($descr)." {$login->getKeyword('add')}",   ucfirst($descr) ."{$login->getKeyword('add')}"); 
+                                default: return array("", "", "Add $descr", 'desc' =>"Add $descr", 'help' => "{$login->getKeywordUc('add')} $descr", "{$login->getKeywordUc('add')} $descr");
+                        }
 		}
 
 		if ($var === "updateform" || $var === "update") {
@@ -7112,6 +7201,7 @@ class HtmlLib
 	{
 
 		global $gbl, $sgbl, $login, $ghtml;
+		global $g_language_mes;
 		static $rowclass, $rowcount;
 
 		if ($gbl->__inside_ajax && $variable->type === 'button') {
@@ -7282,7 +7372,7 @@ class HtmlLib
 				$value = $variable->value;
 				$value = self::fix_lt_gt($value);
 				if ($sgbl->isLxlabsClient()) {
-					$value = preg_replace("+(https://[^ \n]*)+", "<a href=$1 target=_blank style='text-decoration:underline'> Click Here </a>", $value);
+					$value = preg_replace("+(https://[^ \n]*)+", "<a href=$1 target=_blank style='text-decoration:underline'> ".$login->getKeywordUc('click_here')." </a>", $value);
 				}
 				$value = str_replace("\n", "\n<br> ", $value);
 				$ttname = $variable->name;
@@ -7408,7 +7498,7 @@ class HtmlLib
 				$bgcolor = null;
 				$onclick = null;
 				if (strtolower($variable->value) === 'updateall') {
-					$string = "Click Here to Update all the objects that appear in the top selectbox with the above values";
+					$string =  $g_language_mes->__information["click_to_update_all_under"];//"Click Here to Update all the objects that appear in the top selectbox with the above values";
 					$bgcolor = "bgcolor=$skincolor";
 					$onclick = "onclick='return updateallWarning();'";
 				}
