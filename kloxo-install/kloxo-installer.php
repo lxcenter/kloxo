@@ -178,9 +178,15 @@ function lxins_main()
 		else {
 			chdir("/usr/local/lxlabs/kloxo");
 			system("mkdir -p /usr/local/lxlabs/kloxo/log");
-			@ unlink("/usr/local/lxlabs/kloxo/kloxo-current.zip");
-			print("Downloading latest Kloxo release\n");
-			system("wget {$downloadserver}download/kloxo/production/kloxo/kloxo-current.zip");
+			if (file_exists("../.git")) {
+				print("Development GIT version found skiping downloading kloxo sources");
+			}
+			else {
+				@ unlink("/usr/local/lxlabs/kloxo/kloxo-current.zip");
+				print("Downloading latest Kloxo release\n");
+				system("wget {$downloadserver}download/kloxo/production/kloxo/kloxo-current.zip");	
+			}
+			
 		}
 	}
 
