@@ -7,7 +7,7 @@ class Dns__djbdns  extends lxDriverClass {
 
 static function installMe()
 {
-	lxshell_return("yum", "-y", "install", "djbdns", "daemontools");
+	lxshell_return("yum", "-y", "install", "djbdns", "daemontools-toaster");
 	if ($ret) { throw new lxexception('install_djbdns_failed', 'parent'); }
 	lxfile_rm_rec("/var/tinydns");
 	lxfile_rm_rec("/var/axfrdns");

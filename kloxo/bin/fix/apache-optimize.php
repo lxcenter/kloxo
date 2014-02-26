@@ -5,8 +5,6 @@
 
 include_once "htmllib/lib/include.php"; 
 
-// initProgram('admin');
-
 $list = parse_opt($argv);
 
 $select = (isset($list['select'])) ? $list['select'] : 'optimize';
@@ -54,27 +52,18 @@ function setApacheOptimize($select, $spare = null)
 
 		$m['apps']    = (int)shell_exec("free -m | grep buffers/cache: | awk '{print $3}'");
 
-	/*
-		$m['used']    = (int)shell_exec("free -m | grep Mem: | awk '{print $3}'");
-		$m['free']    = (int)shell_exec("free -m | grep Mem: | awk '{print $4}'");
-		$m['shared']  = (int)shell_exec("free -m | grep Mem: | awk '{print $5}'");
-		$m['buffers'] = (int)shell_exec("free -m | grep Mem: | awk '{print $6}'");
-		$m['cached']  = (int)shell_exec("free -m | grep Mem: | awk '{print $7}'");
-	
-		$m['avail']   = $m['free'] + $m['shared'] + $m['buffers'] + $m['cached'] - $m['spare'];
-	*/
-
 		$m['avail'] = $m['total'] - $m['spare'] - $m['apps'];
 
-	//	$maxpar = (int)($m['avail'] / 25);
-	//	$minpar = (int)($maxpar / 2);
+		$maxCl_p = (int) floor($m['avail'] / 30) + 1;
+        $maxSS_p = (int) ceil($maxCl_p / 2);
+        $minSS_p = (int) ceil($maxSS_p / 2);
 
-		$maxpar_p = (int)($m['avail'] / 30) + 1;
-		$minpar_p = (int)($maxpar_p / 2);
+        $maxThr_w = (int) floor($m['avail'] / 35) + 1;
+        $maxCl_w = (int) floor( sqrt($maxThr_w));
+        $ThrPC_w =  (int) floor($maxThr_w / $maxCl_w);
+        $maxST_w = (int) ceil($ThrPC_w / 2);
+        $minST_w = (int) ceil($maxST_w / 2);
 
-		$maxpar_w = (int)($m['avail'] / 35) + 1;
-		$minpar_w = (int)($maxpar_w / 2);
-		
 		// because on apache 2.2.x no appear 'overflow' memory so
 		// no need ServerLimit = MaxClients = $maxpar_p for prefork/itk
 		// no need MaxClients = ThreadsPerChild = $maxpar_p for worker/event
@@ -87,30 +76,30 @@ KeepAliveTimeout 5
 
 <IfModule prefork.c>
 	StartServers 2
-	MinSpareServers {$minpar_p}
-	MaxSpareServers {$maxpar_p}
-	ServerLimit 256
-	MaxClients 256
+	ServerLimit {$maxCl_p}
+	MaxClients {$maxCl_p}
+	MinSpareServers {$minSS_p}
+	MaxSpareServers {$maxSS_p}
 	MaxRequestsPerChild 4000
 	MaxMemFree 2
 </IfModule>
 
 <IfModule itk.c>
 	StartServers 2
-	MinSpareServers {$minpar_p}
-	MaxSpareServers {$maxpar_p}
-	ServerLimit 256
-	MaxClients 256
+	ServerLimit {$maxCl_p}
+	MaxClients {$maxCl_p}
+	MinSpareServers {$minSS_p}
+	MaxSpareServers {$maxSS_p}
 	MaxRequestsPerChild 4000
 	MaxMemFree 2
 </IfModule>
 
 <IfModule worker.c>
 	StartServers 2
-	MaxClients 150
-	MinSpareThreads {$minpar_w}
-	MaxSpareThreads {$maxpar_w}
-	ThreadsPerChild 25
+	MaxClients {$maxCl_w}
+	ThreadsPerChild {$ThrPC_w}
+	MaxSpareThreads {$maxST_w}
+	MinSpareThreads {$minST_w}
 	MaxRequestsPerChild 0
 	ThreadStackSize 8196
 	MaxMemFree 2
@@ -118,10 +107,10 @@ KeepAliveTimeout 5
 
 <IfModule event.c>
 	StartServers 2
-	MaxClients 150
-	MinSpareThreads {$minpar_w}
-	MaxSpareThreads {$maxpar_w}
-	ThreadsPerChild 25
+	MaxClients {$maxCl_w}
+	ThreadsPerChild {$ThrPC_w}
+	MaxSpareThreads {$maxST_w}
+	MinSpareThreads {$minST_w}
 	MaxRequestsPerChild 0
 	ThreadStackSize 8196
 	MaxMemFree 2
@@ -139,10 +128,7 @@ EOF;
 
 		log_cleanup("- Calculate Apache:");
 		log_cleanup("-- threads limit (min/max -> $minpar_w/$maxpar_w) and servers limit (min/max -> $minpar_p/$maxpar_p)");
-
 		log_cleanup("- Write to /etc/httpd/conf.d/~lxcenter.conf");
-
-		// $s=implode("", file("/etc/httpd/conf.d/~lxcenter.conf"));
 		$f = fopen("/etc/httpd/conf.d/~lxcenter.conf", "w");
 		fwrite($f,$s,strlen($s));
 

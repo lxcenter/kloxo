@@ -124,7 +124,7 @@ class Dns extends DnsBase {
             lxshell_return("rpm", "-e", "djbdns");
             lunlink("/etc/init.d/djbdns");
         } else {
-            lxshell_return("yum", "-y", "install", "djbdns", "daemontools");
+            lxshell_return("yum", "-y", "install", "djbdns", "daemontools-toaster");
             if ($ret) { throw new lxexception('install_djbdns_failed', 'parent'); }
             lxshell_return("service",  "named", "stop");
             lxfile_rm_rec("/var/tinydns");
