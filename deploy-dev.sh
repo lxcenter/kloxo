@@ -105,7 +105,7 @@ git checkout master
 cd ${KLOXO_PATH}/kloxo-install
 sh ./make-distribution.sh
 cd ${KLOXO_PATH}/kloxo
-sh ./make-distribution.sh
+sh ./make-development-distribution.sh
 printf "Done.\nInstall Kloxo:\ncd ${KLOXO_PATH}/kloxo-install/\nsh kloxo-installer.sh with args\n"
 ;;
 dev )
@@ -117,7 +117,7 @@ git checkout dev -f
 cd ${KLOXO_PATH}/kloxo-install
 sh ./make-distribution.sh
 cd ${KLOXO_PATH}/kloxo
-sh ./make-distribution.sh
+sh ./make-development-distribution.sh
 printf "Done.\nInstall Kloxo:\ncd ${KLOXO_PATH}/kloxo-install/\nsh kloxo-installer.sh with args\n"
 ;;
 6.1.x )
@@ -129,7 +129,7 @@ git checkout 6.1.x -f
 cd ${KLOXO_PATH}/kloxo-install
 sh ./make-distribution.sh
 cd ${KLOXO_PATH}/kloxo
-sh ./make-distribution.sh
+sh ./make-development-distribution.sh
 printf "Done.\nInstall Kloxo:\ncd ${KLOXO_PATH}/kloxo-install/\nsh kloxo-installer.sh with args\n"
 ;;
 * )
