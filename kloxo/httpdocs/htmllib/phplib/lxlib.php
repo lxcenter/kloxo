@@ -1894,13 +1894,13 @@ function get_charset()
                                 
                                 
 
-function get_charset()
-{
-	$lang = get_language();
-	$charset = @ lfile_get_contents("lang/$lang/charset");
-	$charset = trim($charset);
-	return $charset;
-}
+//function get_charset()
+//{
+//	$lang = get_language();
+//	$charset = @ lfile_get_contents("lang/$lang/charset");
+//	$charset = trim($charset);
+//	return $charset;
+//}
 
 function print_meta_lan()
 {
