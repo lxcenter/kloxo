@@ -214,7 +214,11 @@ function lxins_main()
 
 	file_put_contents("/etc/sysconfig/spamassassin", "SPAMDOPTIONS=\" -v -d -p 783 -u lxpopuser\"");
 	print("\nCreating Vpopmail database...\n");
-	system("sh $dir_name/kloxo-linux/vpop.sh $dbroot \"$dbpass\" lxpopuser $mypass");
+	if (file_exists("/usr/local/lxlabs/kloxo-install/kloxo-linux")){
+		system("sh $dir_name/kloxo-linux/vpop.sh $dbroot \"$dbpass\" lxpopuser $mypass");
+	} else {
+		system("sh $dir_name/vpop.sh $dbroot \"$dbpass\" lxpopuser $mypass");	
+	}
 	system("chmod -R 755 /var/log/httpd/");
 	system("chmod -R 755 /var/log/httpd/fpcgisock >/dev/null 2>&1");
 	system("mkdir -p /var/log/kloxo/");
