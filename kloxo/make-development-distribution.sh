@@ -27,9 +27,9 @@
 ######
 #
 # Script is broken since the move to GitHub. Need to be rewritten.
- echo "Script is broken since the move to GitHub. Need to be rewritten. dkstiler try! ";
+ echo "Script is broken since the move to GitHub. Need to be rewritten. dkstiler tryout! ";
  echo "Remove this only with SWAT aid :)";
- exit;
+ #exit;
 
 
 #
