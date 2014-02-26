@@ -180,8 +180,7 @@ function lxins_main()
 			system("mkdir -p /usr/local/lxlabs/kloxo/log");
 			if (file_exists("../.git")) {
 				print("Development GIT version found skiping downloading kloxo sources");
-			}
-			else {
+			} else {
 				@ unlink("/usr/local/lxlabs/kloxo/kloxo-current.zip");
 				print("Downloading latest Kloxo release\n");
 				system("wget {$downloadserver}download/kloxo/production/kloxo/kloxo-current.zip");	
@@ -214,7 +213,7 @@ function lxins_main()
 
 	file_put_contents("/etc/sysconfig/spamassassin", "SPAMDOPTIONS=\" -v -d -p 783 -u lxpopuser\"");
 	print("\nCreating Vpopmail database...\n");
-	if (file_exists("/usr/local/lxlabs/kloxo-install/kloxo-linux")){
+	if (file_exists("/usr/local/lxlabs/kloxo-install/kloxo-linux")) {
 		system("sh $dir_name/kloxo-linux/vpop.sh $dbroot \"$dbpass\" lxpopuser $mypass");
 	} else {
 		system("sh $dir_name/vpop.sh $dbroot \"$dbpass\" lxpopuser $mypass");	
