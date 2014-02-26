@@ -1062,8 +1062,17 @@ function do_addform($object, $class, $dttype = null, $notitleflag = false)
     if ($notitleflag) {
         $title = null;
     } else {
-        $title = "Add $cdesc";
+        switch(get_language())
+        {
+            case "hu":
+                $title = ucfirst($cdesc)." hozzáadása";
+                break;
+           default:
+           $title = "Add $cdesc ";
+        }
     }
+    
+    
     $string[] = $ghtml->object_variable_startblock($object, $class, $title);
 
     $string[] = $ghtml->object_inherit_classpath();
