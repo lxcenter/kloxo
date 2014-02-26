@@ -121,6 +121,12 @@ zip -r9yq $file ./bin ./cexe ./file ./httpdocs ./pscript ./sbin ./RELEASEINFO ./
 "*/CVS/*" \
 "*/.svn/*" \
 "*/.git/*" \
+"*file/cache/*" \
+"*httpdocs/img/skin/*" \
+"*httpdocs/download/*" \
+"*httpdocs/help/*" \
+"*httpdocs/webdisk/*" \
+"*httpdocs/img/installapp/*" \
 "*httpdocs/thirdparty/*" \
 "*httpdocs/htmllib/extjs/*" \
 "*httpdocs/htmllib/fckeditor/*" \
