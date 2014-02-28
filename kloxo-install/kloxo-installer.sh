@@ -188,15 +188,20 @@ read -n 1 -p "Press any key to continue ..."
 yum -y install php php-mysql wget zip unzip
 export PATH=/usr/sbin:/sbin:$PATH
 
-if [ ! -f ./kloxo-install.zip ] ; then
-	wget http://download.lxcenter.org/download/kloxo-install.zip
-fi
-
-if [ -d kloxo-install ] ; then
-	cd kloxo-install
+if [ -d "../.git" ]; then
+	echo "Development GIT version found. Skipping download installer sources."
 else
-	unzip -oq kloxo-install.zip
-	cd kloxo-install
+
+	if [ ! -f ./kloxo-install.zip ] ; then
+		wget http://download.lxcenter.org/download/kloxo-install.zip
+	fi
+	
+	if [ -d kloxo-install ] ; then
+		cd kloxo-install
+	else
+		unzip -oq kloxo-install.zip
+		cd kloxo-install
+	fi
 fi
 
 if [ -f /usr/local/lxlabs/ext/php/php ] ; then
