@@ -36,10 +36,14 @@ usage(){
     echo 'h: shows this help.'
     exit 1
 }
-if [ $1 == null .OR. $2 == null ] then
-echo "Please Supply Arguments "
+if [ -z "$1" ] ; then
+echo "Please Supply Branch Arguments"
 usage
-else
+elif [ -z "$2" ] ; then 
+echo "Please Sypply Repository Arguments"
+usage
+fi
+
 
 install_GIT()
 {
@@ -137,7 +141,6 @@ dev )
         printf "Done.\nInstall Kloxo:\ncd ${KLOXO_PATH}/kloxo-install/\nsh kloxo-installer.sh with args\n"
         ;;
 * )
-fi
 usage
 return 1 ;;
 esac
