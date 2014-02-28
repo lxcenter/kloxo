@@ -113,7 +113,7 @@ master )
         cd ${KLOXO_PATH}/kloxo-install
         sh ./make-distribution.sh
         cd ${KLOXO_PATH}/kloxo
-        sh ./make-development-distribution.sh
+        sh ./make-distribution.sh
         printf "Done.\nInstall Kloxo:\ncd ${KLOXO_PATH}/kloxo-install/\nsh kloxo-installer.sh with args\n"
         ;;
 dev )
@@ -125,7 +125,7 @@ dev )
         cd ${KLOXO_PATH}/kloxo-install
         sh ./make-distribution.sh
         cd ${KLOXO_PATH}/kloxo
-        sh ./make-development-distribution.sh
+        sh ./make-distribution.sh
         printf "Done.\nInstall Kloxo:\ncd ${KLOXO_PATH}/kloxo-install/\nsh kloxo-installer.sh with args\n"
         ;;
 6.1.x )
@@ -137,7 +137,7 @@ dev )
         cd ${KLOXO_PATH}/kloxo-install
         sh ./make-distribution.sh
         cd ${KLOXO_PATH}/kloxo
-        sh ./make-development-distribution.sh
+        sh ./make-distribution.sh
         printf "Done.\nInstall Kloxo:\ncd ${KLOXO_PATH}/kloxo-install/\nsh kloxo-installer.sh with args\n"
         ;;
 * )
