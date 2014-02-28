@@ -55,7 +55,8 @@ if [ ! -d '../.git' ]; then
 else 
    buildtype=1
    version='current'
-   build=''
+# maybe later
+#build=''
    rm -f kloxo-$version.zip
 fi
 #
