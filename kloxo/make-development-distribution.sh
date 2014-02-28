@@ -115,9 +115,9 @@ file=kloxo-$version.$build.zip
 fi
 # Package part
 zip -r9y $file ./bin ./cexe ./file ./httpdocs ./pscript ./sbin ./RELEASEINFO ./src -x \
-"*httpdocs/commands.php" \
-"*httpdocs/newpass" \
-"*httpdocs/.php.err" \
+#"*httpdocs/commands.php" \
+#"*httpdocs/newpass" \
+#"*httpdocs/.php.err" \
 "*/CVS/*" \
 "*/.svn/*" \
 "*/.git/*" \
