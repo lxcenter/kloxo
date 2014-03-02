@@ -36,22 +36,43 @@ echo "### Start packaging"
 echo "### read version..."
 # Read version
 # Please note, this must be a running machine with SVN version!
-if ! [ -f /script/version ] ; then
-        echo "## Packaging failed. No /script/version found."
-	echo "## Are you sure you are running a development version?"
-	echo "### Aborted."
-	echo "################################"
-        exit
+if [ ! -d '../.git' ]; then
+	echo "### read version..."
+	if ! [ -f /script/version ] ; then
+	        echo "## Packaging failed. No /script/version found."
+		echo "## Are you sure you are running a development version?"
+		echo "### Aborted."
+		echo "################################"
+	        exit
+	fi
+	
+	version=`/script/version`
+	buildtype=0
+#	maybe later addition
+#	build=`git log --pretty=format:'' | wc -l`
+#	rm -f kloxo-$version.$build.zip
+	rm -f kloxo-$version.zip
+else 
+   buildtype=1
+   version='current'
+# maybe later
+#build=''
+   rm -f kloxo-$version.zip
 fi
-version=`/script/version`
-rm -f kloxo-$version.zip
 #
 echo "### Compile c files..."
 /bin/sh ./development-create-binaries.sh
 #
 echo "### Create zip package..."
 # Package part
-zip -r9y kloxo-$version.zip ./bin ./cexe ./file ./httpdocs ./pscript ./sbin ./RELEASEINFO ./src -x \
+if [ $buildtype -eq 1 ]; then
+file=kloxo-$version.zip
+else
+#maybe later
+# file=kloxo-$version.$build.zip
+file=kloxo-$version.zip
+fi
+zip -r9y $file ./bin ./cexe ./file ./httpdocs ./pscript ./sbin ./RELEASEINFO ./src -x \
 "*httpdocs/commands.php" \
 "*httpdocs/newpass" \
 "*httpdocs/.php.err" \

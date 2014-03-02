@@ -1885,11 +1885,22 @@ function get_language()
 
 function get_charset()
 {
-	$lang = get_language();
-	$charset = @ lfile_get_contents("lang/$lang/charset");
-	$charset = trim($charset);
-	return $charset;
+  $lang = get_language();
+  $charset = @ lfile_get_contents("lang/$lang/charset");
+  $charset = trim($charset);
+  if(!$charset || $charset=="") $charset="UTF-8";
+  return $charset;
 }
+                                
+                                
+
+//function get_charset()
+//{
+//	$lang = get_language();
+//	$charset = @ lfile_get_contents("lang/$lang/charset");
+//	$charset = trim($charset);
+//	return $charset;
+//}
 
 function print_open_head_tag()
 {
