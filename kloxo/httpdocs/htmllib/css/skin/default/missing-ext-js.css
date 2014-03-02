@@ -462,21 +462,6 @@ html,body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,form,fieldset,input,p,bloc
     border: 1px solid #B5B8C8;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 .x-form-field-wrap {
     position:relative;
     zoom:1;
@@ -486,6 +471,7 @@ html,body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,form,fieldset,input,p,bloc
 .x-editor .x-form-check-wrap {
     background:#fff;
 }
+
 .x-form-field-wrap .x-form-trigger{
     width:17px;
     height:21px;
@@ -496,6 +482,7 @@ html,body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,form,fieldset,input,p,bloc
     position:absolute;
     top:0;
 }
+
 .ext-safari .x-form-field-wrap .x-form-trigger{
     height:19px; 
 }
@@ -504,10 +491,12 @@ html,body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,form,fieldset,input,p,bloc
     background-image: url(/img/extjs/default/form/date-trigger.gif);
     cursor:pointer;
 }
+
 .x-form-field-wrap .x-form-clear-trigger{
     background-image: url(/img/extjs/default/form/clear-trigger.gif);
     cursor:pointer;
 }
+
 .x-form-field-wrap .x-form-search-trigger{
     background-image: url(/img/extjs/default/form/search-trigger.gif);
     cursor:pointer;

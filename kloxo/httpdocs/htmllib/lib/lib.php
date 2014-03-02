@@ -2828,7 +2828,7 @@ function download_and_print_file($server, $file)
 	curl_close($ch);
 }
 
-function get_title()
+function get_title($indexheader=false)
 {
 	global $gbl, $sgbl, $login, $ghtml; 
 
@@ -2859,8 +2859,14 @@ function get_title()
 	if (file_exists('.git')) {
 		$enterprise .= ' Development';
 	}
-	$title = "$host $progname $enterprise $title" ;
-	return $title;
+
+    if ($indexheader) {
+        $title = "$progname $title $enterprise" ;
+        return $title;
+        } else {
+        $title = "$host $progname $enterprise $title" ;
+        return $title;
+    }
 }
 
 function send_mail_to_admin($subject, $message)
