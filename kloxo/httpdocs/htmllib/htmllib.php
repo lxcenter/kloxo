@@ -3383,15 +3383,15 @@ class HtmlLib
 				foreach ($value as $k => $v) {
 					if (is_array($v)) {
 						foreach ($v as $nk => $nv) {
-							print("<input type=hidden name=\"" . $key . "[" . $k . "]" . "[" . $nk . "]\" value =\"$nv\"> \n");
+							print("<input type=hidden name=\"" . $key . "[" . $k . "]" . "[" . $nk . "]\" value =\"$nv\">\n");
 						}
 
 					} else {
-						print("<input type=hidden name=\"" . $key . "[" . $k . "]\" value =\"$v\"> \n");
+						print("<input type=hidden name=\"" . $key . "[" . $k . "]\" value =\"$v\">\n");
 					}
 				}
 			} else {
-				print("<input type=hidden name=\"$key\" value =\"$value\"> \n");
+				print("<input type=hidden name=\"$key\" value =\"$value\">\n");
 			}
 		}
 	}
@@ -5193,13 +5193,13 @@ class HtmlLib
 
 	function print_jscript_source($jsource)
 	{
-		print("<script language=Javascript src=$jsource> </script>\n");
+		print("<script language=\"Javascript\" src=\"$jsource\"> </script>\n");
 
 	}
 
 	function print_css_source($csource)
 	{
-		print("<link href='$csource' rel=stylesheet type=text/css>\n");
+		print("<link href=\"$csource\" rel=\"stylesheet\" type=\"text/css\">\n");
 	}
 
 	function get_lpanel_file()
@@ -5239,10 +5239,9 @@ class HtmlLib
 	function print_refresh_key()
 	{
 		global $gbl, $sgbl, $login, $ghtml;
-
-
 		?>
-	<script>
+
+<script>
 		document.onkeydown = function(e)
 		{
 			e = e || window.event;
@@ -5258,39 +5257,15 @@ class HtmlLib
 			}
 			return true;
 		}
-
-
-	</script>
-		<?php
-
-		if ($sgbl->dbg <= 0) {
-			return;
-		}
-		?>
-
-	<script>
-		document.onkeyup = function(e)
-		{
-			e = e || window.event;
-			if (e.keyCode == 86 && e.ctrlKey) {
-				top.mainframe.window.location.reload();
-			}
-			return true;
-		}
-	</script>
-		<?php
-
-	}
+</script>
+<?php
+    }
 
 	function print_include_jscript($header = NULL)
 	{
 		global $gbl, $sgbl, $login;
 
-		?>
-	<meta http-equiv="expires" content="Wed, 26 Feb 1997 08:21:57 GMT">
-
-		<?php
-	$this->print_refresh_key();
+	    $this->print_refresh_key();
 		$this->print_jscript_source("/htmllib/js/lxa.js");
 		$this->print_jscript_source("/htmllib/js/helptext.js");
 		$this->print_jscript_source("/htmllib/js/preop.js");
@@ -5317,22 +5292,13 @@ class HtmlLib
 			$this->print_defintion($help);
 		}
 
-		$skin = $login->getSkinDir();
-		$css = "$skin/css.css";
-		if (!lfile_exists(getreal($css))) {
-			$css = "/htmllib/css/skin/base.css";
-		}
-		$this->print_css_source("/htmllib/css/common.css");
-		$this->print_css_source($css);
-		$this->print_css_source("/htmllib/css/ext-all.css");
-
 		$l = @ getdate();
 		$hours = $l['hours'];
 		$minutes = $l['minutes'];
 
 		if ($header === 'left_panel') {
 			?>
-		<script type="text/javascript">
+<script type="text/javascript">
 			var gl_helpUrl;
 			gl_tDate = new Date();
 			var clockTimeZoneMinutes = <?=$l['minutes'] ?> - gl_tDate.getMinutes();
@@ -5342,17 +5308,11 @@ class HtmlLib
 			{
 				window.open(top.mainframe.jsFindHelpUrl());
 			}
-			function lxCallEnd()
-			{
-			}
-
-		</script>
-		</head>
-			<?php
-
+</script>
+<?php
 		}
-		?>
-	<script>
+?>
+<script>
 		function jsFindFilterVar()
 		{
 			gl_filtervar = '<?=$this->get_filter_var() ?>';
@@ -5373,16 +5333,11 @@ class HtmlLib
 			}
 			changeContent('help', 'helparea');
 		}
-	</script>
-		<?php
-	?>
-	<script>
+</script>
+<script>
 		var gl_skin_directory = '<?=$login->getSkinDir();?>';
-	</script>
-		<?php
-	if ($header === 'left_panel') {
-		echo "<script>lxCallEnd();</script>";
-	} #[FIXME] This call a lxCallEnd a empty function
+</script>
+<?php
 	}
 
 	function print_refresh()
@@ -6158,15 +6113,15 @@ class HtmlLib
 		$list = get_favorite("ndskshortcut");
 		foreach ((array) $list as $l) {
 			if ($l['ttype'] === 'separator') {
-				print("<td nowrap width=20> </td>");
+				print("<td nowrap width=\"20\">&nbsp;</td>\n");
 				continue;
 			}
-			print("<td  valign='middle'  align='left' width=5>");
-			print('<form>');
+			print("<td valign=\"middle\" align=\"left\" width=\"5\">\n");
+			print("<form>\n");
 			$l['ac_descr']['desc'] = "{$l['fullstr']} {$l['tag']}";
 			$this->print_div_for_divbutton_on_header($l['url'], $l['target'], null, true, true, $l['url'], $l['__t_identity'], $l['_t_image'], $l['ac_descr']);
-			print('</form>');
-			print("</td >");
+			print("</form>\n");
+			print("</td >\n");
 		}
 
 	}
@@ -6231,25 +6186,19 @@ class HtmlLib
 		}
 		// Use get always. Only in forms should post be used.
 		$formmethod = 'get';
-
-
 		?>
-
-	<td valign="middle" align="left" width=5>
-
-		<form>
-			<?php
-	$this->print_input_vars($post);
+<td valign="middle" align="left" width=5>
+<form>
+<?php
+$this->print_input_vars($post);
 			if (csa($url, "javascript")) {
 				$form_name = $url;
 			}
-			$this->print_div_for_divbutton_on_header($url, $target, $key, $imgflag, $linkflag, $form_name, $name, $image, $descr);
-
-			?>
-		</form>
-	</td>
+$this->print_div_for_divbutton_on_header($url, $target, $key, $imgflag, $linkflag, $form_name, $name, $image, $descr);
+?>
+</form>
+</td>
 			<?php
-
 	}
 
 
@@ -6269,7 +6218,7 @@ class HtmlLib
 		$help = $descr['desc'];
 
 		if ($linkflag) {
-			$displayvar = "<font style='color:#002244' class=icontextlink id=aaid_$formname href=\"javascript:document.form_$formname.submit()\" onmouseover=\" style.textDecoration='underline';\" onmouseout=\"style.textDecoration='none'\"> </font> </span>";
+			$displayvar = "<font style='color:#002244' class=icontextlink id=aaid_$formname href=\"javascript:document.form_$formname.submit()\" onmouseover=\" style.textDecoration='underline';\" onmouseout=\"style.textDecoration='none'\"></font></span>";
 			if (csa($formname, "javascript")) {
 				$onclickvar = "onClick=\"$formname\"";
 			} else {
@@ -6299,9 +6248,6 @@ class HtmlLib
 		}
 
 		?>
-
-	<!--    <span style="background: url(<?=$imagesrc; ?>) no-repeat;" >
--->
 <span title='<?=$alt ?>'>
 <table <?=$idvar?> style='border: 1px solid #<?=$skincolor?>; cursor: pointer' <?=$onclickvar ?>
 				   onmouseover=" getElementById('aaid_<?=$formname?>').style.textDecoration='none' ; this.style.backgroundColor='#fff' ; this.style.border='1px solid #<?=$skincolor ?>';"
@@ -6311,7 +6257,9 @@ class HtmlLib
 		<td valign=top align=center> <?=$imgvar ?> </td>
 	</tr>
 	<tr valign=top height=100%>
-		<td width=10 align=center> <span title='<?=$alt ?>'><?=$displayvar ?>
+		<td width=10 align=center>
+            <span title='<?=$alt ?>'>
+            <?=$displayvar ?>
 		</td>
 	</tr>
 </table>
@@ -7523,13 +7471,7 @@ class HtmlLib
 			$pinfo = preg_replace("/<url:([^>]*)>([^<]*)<\/url>/", "<a class=insidelist href=$fullurl> $matches[2] </a>", $pinfo);
 		}
 
-		if ($sgbl->isBlackBackground()) {
-			print("<font color=#999999>");
-		}
 		print($pinfo);
-		if ($sgbl->isBlackBackground()) {
-			print("</font> ");
-		}
 
 		$this->print_curvy_table_end();
 
@@ -7537,7 +7479,7 @@ class HtmlLib
 
 	function print_curvy_table_start($width = "100")
 	{
-        print('<div style="text-align: left; padding:25px; width:75%;-webkit-border-radius: 20px;-moz-border-radius: 20px;border-radius: 20px;border:1px solid #CCCCCC;background-color:#FFFFCC;-webkit-box-shadow: #B3B3B3 10px 10px 10px;-moz-box-shadow: #B3B3B3 10px 10px 10px; box-shadow: #B3B3B3 10px 10px 10px;">');
+        print('<div style="text-align: left; padding:25px; width:75%;-webkit-border-radius: 15px;-moz-border-radius: 15px;border-radius: 15px;border:1px solid #CCCCCC;background-color:#FFFFCC;-webkit-box-shadow: #B3B3B3 5px 5px 5px;-moz-box-shadow: #B3B3B3 5px 5px 5px; box-shadow: #B3B3B3 5px 5px 5px;">');
 	}
 
 	function print_curvy_table_end($width = "100")
@@ -7619,6 +7561,7 @@ class HtmlLib
 
 	function show_error_message($mess, $message = null, $imgfile = null, $color = null, $style = null, $fontstyle = null)
 	{
+        // Show error message dialog
 		if (!$imgfile) {
 			$img_path = get_general_image_path();
 			$imgfile = $img_path . "/button/warningpic.gif";
@@ -7772,30 +7715,8 @@ class HtmlLib
 		$skincolor = $login->getSkinColor();
 
 
-		$this->print_css_source("/htmllib/css/examples.css");
+
 		print_ext_tree($login);
-		print("<script type='text/javascript' src='/htmllib/js/tabs-example.js'></script>");
-
-		?>
-	<div style='background-color:#ffffff' id="tabs1">
-		<div id="script"
-			 style="overflow:no; height:100%;width:218px;border-bottom:1px solid #c3daf9; border-right:1px solid #c3daf9;"
-			 class="tab-content">
-			<br>
-			<?$ghtml->xp_panel($login);?>
-		</div>
-
-		<div id="markup" class="tab-content">
-
-			<div id="tree-div"
-				 style="overflow:auto; height:100%;width:218px;;border-bottom:1px solid #c3daf9; border-right:1px solid #c3daf9;"></div>
-
-
-		</div>
-	</div>
-
-
-		<?
 
 	}
 
@@ -7929,7 +7850,7 @@ class HtmlLib
 
 			?>
 
-		setTheme("XPClassic.css", null, null);
+		setTheme("xpmenu-theme.css", null, null);
 		initialize(<?=($sgbl->__var_lpanelwidth - 20) ?>);
 
 	</script>
@@ -8550,7 +8471,7 @@ class HtmlLib
 	}
 
 
-	function print_real_beginning()
+	function print_body()
 	{
 		global $gbl, $sgbl, $login, $ghtml;
 		$lightskincolor = $login->getSkinColor();
@@ -8694,13 +8615,14 @@ class HtmlLib
 		$tbg = $img_path . "/lp_bg.gif";
 		$imgbordermain = $login->getSkinDir() . "/top_line_medium.gif";
 
-		$this->print_include_jscript();
-		?>
-
-     <table id=tblmain cellpadding=0 cellspacing=0 border=0 width=100% height=100%>
-     <tr>
-    </td> <td width=100% align=center valign=top>
- <?php
+    print("<!-- Load java Script -->\n");
+    $this->print_include_jscript();
+    print("<!-- Start Main Table -->\n");
+?>
+<table id="tblmain" cellpadding="0" cellspacing="0" border="0" width="100%" height="100%">
+<tr>
+<td width="100%" align="center" valign="top">
+<?php
 
 	}
 
@@ -8803,7 +8725,7 @@ class HtmlLib
 		$img_path = $login->getSkinDir();
 		$tbg = $img_path . "/lp_bg.gif";
 
-		$imgbordermain = $login->getSkinDir() . "/top_line.gif";
+		$imgbordermain = $login->getSkinDir() . "top_line.gif";
 
 		?>
 </td> </tr> </table>

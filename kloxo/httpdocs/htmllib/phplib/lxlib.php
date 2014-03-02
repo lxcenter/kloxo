@@ -1891,18 +1891,101 @@ function get_charset()
 	return $charset;
 }
 
-function print_meta_lan()
+function print_open_head_tag()
+{
+    // GUI is not HTML5 compliant. In fact, all other doctypes screws up GUI layout.
+//    print("<!DOCTYPE html>\n");
+    print("<html>\n");
+    print("<head>\n");
+    print("<title>");
+    print("No Title");
+    print("</title>\n");
+}
+
+function print_close_head_tag()
+{
+    print("</head>\n");
+}
+
+
+function print_meta_tags()
 {
 	global $gbl, $sgbl, $login, $ghtml;
-	$lan = get_language();
+
+    print("<meta http-equiv=\"expires\" content=\"Wed, 01 Feb 2014 23:59:59 GMT\">\n");
+
+    $lan = get_language();
 	$charset = @ lfile_get_contents("lang/$lan/charset");
 	$charset = trim($charset);
-	print("<head>");
 	if ($charset) {
-		print("<meta http-equiv=\"Content-Type\" content=\"text/html; charset=$charset\"  />");
+		print("<meta http-equiv=\"Content-Type\" content=\"text/html; charset=$charset\"  />\n");
 	} else {
-		print("<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\"  />");
+		print("<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\"  />\n");
 	}
+    print("<link rel=\"icon\" href=\"/favicon.ico\" type=\"image/x-icon\" />\n");
+}
+
+function print_meta_css_lpanel()
+{
+    global $gbl, $sgbl, $login, $ghtml;
+    $skin = $login->getSkinDir();
+
+    // Load theme CSS
+    $cssLpanel = $skin. "lpanel.css";
+
+    if (!lfile_exists(getreal($cssLpanel))) {
+        $cssLpanel = "/htmllib/css/skin/default/missing-lpanel.css";
+    }
+
+    // Load lpanel CSS
+    $ghtml->print_css_source($cssLpanel);
+
+    $ghtml->print_css_source("/htmllib/css/xpmenu/xpmenu.css");
+}
+
+function print_meta_css()
+{
+    global $gbl, $sgbl, $login, $ghtml;
+    $skin = $login->getSkinDir();
+    // Load theme CSS
+    $cssTheme = $skin."theme.css";
+    $cssCommon = $skin."common.css";
+    $cssEXTjs = $skin."ext-js.css";
+
+    if (!lfile_exists(getreal($cssTheme))) {
+        $cssTheme = "/htmllib/css/skin/default/missing-theme.css";
+    }
+    if (!lfile_exists(getreal($cssCommon))) {
+        $cssCommon = "/htmllib/css/skin/default/missing-common.css";
+    }
+    if (!lfile_exists(getreal($cssEXTjs))) {
+        $cssEXTjs = "/htmllib/css/skin/default/missing-ext-js.css";
+    }
+
+    // Load Common CSS
+    $ghtml->print_css_source($cssCommon);
+    // Load EXTJS CSS
+    $ghtml->print_css_source($cssEXTjs);
+    // Load Theme CSS
+    $ghtml->print_css_source($cssTheme);
+
+    if (!$login->isDefaultSkin()) {
+        $cssThemeFeather = $skin."feather.css";
+
+        if (!lfile_exists(getreal($cssThemeFeather))) {
+            $cssThemeFeather = "/htmllib/css/skin/feather/missing-feather.css";
+        }
+
+        // Load Theme CSS
+        $ghtml->print_css_source($cssThemeFeather);
+    }
+}
+
+function print_head_javascript()
+{
+    global $gbl, $sgbl, $login, $ghtml;
+    $ghtml->print_jscript_source("/htmllib/js/lxa.js");
+
 }
 
 function init_language()
@@ -2083,16 +2166,9 @@ function check_if_disabled_and_exit()
 
 	if (!$login->isOn('cpstatus')) {
 		Utmp::updateUtmp($gbl->c_session->nname, $login, 'disabled');
-		$ghtml->print_css_source("/htmllib/css/common.css");
 
-		if ($sgbl->isLxlabsClient()) {
-			$ghtml->__http_vars['frm_emessage'] = "This login has been Disabled due to non-payment. Please pay the invoice below, and your account will automatically get enabled.";
-			$ghtml->print_message();
-			$login->print_invoice();
-		} else {
-			$ghtml->__http_vars['frm_emessage'] = "This login has been Disabled. Please contact the $contact";
-			$ghtml->print_message();
-		}
+    	$ghtml->__http_vars['frm_emessage'] = "This login has been Disabled. Please contact the $contact";
+		$ghtml->print_message();
 
 		$gbl->c_session->delete();
 		$gbl->c_session->was();
