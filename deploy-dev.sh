@@ -21,6 +21,7 @@
 #
 # Install and deploy a develoment version on a local enviroment
 #
+# Version 0.6 Added better argument handling and --single-branch to git by Semir 
 # Version 0.5 Copied and patched for Kloxo by dkstiler [ Dionysis Kladis <dkstiler@gmail.com> ]
 # Version 0.4 Added which, zip and unzip as requirement [ Danny Terweij <d.terweij@lxcenter.org> ]
 # Version 0.3 Added perl-ExtUtils-MakeMaker as requirement to install_GIT [ Danny Terweij <d.terweij@lxcenter.org> ]
@@ -28,7 +29,7 @@
 # Version 0.1 Initial release [ Ángel Guzmán Maeso <angel.guzman@lxcenter.org> ]
 #
 KLOXO_PATH='/usr/local/lxlabs'
-REPO="git://github.com/lxcenter/"
+REPO="lxcenter"
 BRANCH="6.1.x"
 
 usage(){
@@ -119,6 +120,10 @@ else
 fi
 
 # Clone from GitHub the last version using git transport (no http or https)
+echo "Cleaning up old installs"
+rm -Rf /usr/local/lxlabs.bak
+mv /usr/local/lxlabs /usr/local/lxlabs.bak
+
 echo "Installing branch $BRANCH from $REPO repository"
 git clone -b $BRANCH --single-branch git://github.com/$REPO/kloxo.git ${KLOXO_PATH}
 
