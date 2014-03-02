@@ -4253,10 +4253,11 @@ class HtmlLib
                                 switch(get_language())
                                 {
                                         case "hu":
-                                                print("<a style='color:".$fontcolor." ;font-weight:bold' href=\"javascript:toggleVisibility('listaddform_".$unique_name."');\"> &nbsp; &nbsp;  Kattintson ide a ".$cdesc
+                                                print("<a style='color:".$fontcolor." ;font-weight:bold' href=\"javascript:toggleVisibility('listaddform_".$unique_name."');\"> &nbsp; &nbsp;   Kattintson ide a ".$cdesc." űrlaphoz (".$showstring.") </a> ".$show_all_string); 
                                                 break;
                                         default:
-                                                print("<a style='color:".$fontcolor." ;font-weight:bold' href=\"javascript:toggleVisibility('listaddform_".$unique_name."');\"> &nbsp; &nbsp;  Click Here to Add ".$cdesc
+                                                print("<a style='color:".$fontcolor." ;font-weight:bold' href=\"javascript:toggleVisibility('listaddform_".$unique_name."');\"> &nbsp; &nbsp;   Click Here to Add ".$cdesc." (".$showstring.") </a> ".$show_all_string);
+                                                
                                 }
                         ?>
 
@@ -5029,7 +5030,6 @@ class HtmlLib
 		$ghtml->print_input("hidden", "frm_action", "list");
 		$ghtml->print_input("submit", "Cancel", "Cancel", "class=submitbutton");
 		print("</form> ");
-1
 		print("</td> </tr> </table> ");
 
 	}
@@ -5057,7 +5057,7 @@ class HtmlLib
 				$width = 70;
 			}
 
-			print("<table width=90% cellpadding=0 cellspacing=0><tr><td width=40><b>".$login->getKeywordUc('show').."</b></td><td width=$width>");
+			print("<table width=90% cellpadding=0 cellspacing=0><tr><td width=40><b>".$login->getKeywordUc('show')."</b></td><td width=$width>");
 			$this->print_current_input_var_unset_filter($filtername, array('pagesize', 'pagenum'));
 			$this->print_current_input_vars(array('frm_hpfilter'));
 			$f_page = (int) $login->issetHpFilter($filtername, 'pagesize') ? $login->getHPFilter($filtername, 'pagesize') : $pagesize;

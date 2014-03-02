@@ -1892,8 +1892,6 @@ function get_charset()
   return $charset;
 }
                                 
-                                
-
 //function get_charset()
 //{
 //	$lang = get_language();
