@@ -28,56 +28,72 @@
 # Version 0.1 Initial release [ Ángel Guzmán Maeso <angel.guzman@lxcenter.org> ]
 #
 KLOXO_PATH='/usr/local/lxlabs'
+REPO="git://github.com/lxcenter/"
+BRANCH="6.1.x"
 
 usage(){
     echo "Usage: $0 [BRANCH] [REPOSITORY] [-h]"
-    echo 'BRANCH: master or dev or 6.1.x'
-    echo 'REPOSITORY: lxcenter or the repo you want to use'
+    echo "-b : BRANCH (optional): git branch (like: $BRANCH)"
+    echo "-r : REPOSITORY (optional): the repo you want to use  (like: $REPO)"
     echo 'h: shows this help.'
     exit 1
 }
-if [ -z "$1" ] ; then
-echo "Please Supply Branch Arguments"
-usage
-elif [ -z "$2" ] ; then 
-echo "Please Sypply Repository Arguments"
-usage
-fi
 
+while getopts “h:r:b:” OPTION
+do
+     case $OPTION in
+         h)
+             usage
+             exit 1
+             ;;
+         r)
+             REPO="$OPTARG"
+             ;;
+         b)
+             BRANCH="$OPTARG"
+             ;;
+         ?)
+             usage
+             exit
+             ;;
+     esac
+done
+
+echo "Using REPO: $REPO BRANCH: $BRANCH " 
 
 install_GIT()
 {
-# Redhat based
-if [ -f /etc/redhat-release ] ; then
-# Install git with curl and expat support to enable support on github cloning
-yum install -y gcc gettext-devel expat-devel curl-devel zlib-devel openssl-devel perl-ExtUtils-MakeMaker
-# Debian based
-elif [ -f /etc/debian_version ] ; then
-# No tested
-apt-get install gcc
-fi
+  # Redhat based
+  if [ -f /etc/redhat-release ] ; then
+  # Install git with curl and expat support to enable support on github cloning
+  yum install -y gcc gettext-devel expat-devel curl-devel zlib-devel openssl-devel perl-ExtUtils-MakeMaker
+  # Debian based
+  elif [ -f /etc/debian_version ] ; then
+  # No tested
+  apt-get install gcc
+  fi
 
-# @todo Try to get the lastest version from some site. LATEST file?
-## GIT_VERSION='1.8.3.4'
-GIT_VERSION='1.9.0'
+  # @todo Try to get the lastest version from some site. LATEST file?
+  ## GIT_VERSION='1.8.3.4'
+  GIT_VERSION='1.9.0'
 
-echo "Downloading and compiling GIT ${GIT_VERSION}"
-wget http://git-core.googlecode.com/files/git-${GIT_VERSION}.tar.gz
-tar xvfz git-*.tar.gz; cd git-*;
-./configure --prefix=/usr --with-curl --with-expat
-make all
-make install
+  echo "Downloading and compiling GIT ${GIT_VERSION}"
+  wget http://git-core.googlecode.com/files/git-${GIT_VERSION}.tar.gz
+  tar xvfz git-*.tar.gz; cd git-*;
+  ./configure --prefix=/usr --with-curl --with-expat
+  make all
+  make install
 
-echo 'Cleaning GIT files.'
-cd ..; rm -rf git-*
+  echo 'Cleaning GIT files.'
+  cd ..; rm -rf git-*
 }
 
 require_root()
 {
-if [ `/usr/bin/id -u` -ne 0 ]; then
-echo 'Please, run this script as root.'
-     usage
-fi
+  if [ `/usr/bin/id -u` -ne 0 ]; then
+  echo 'Please, run this script as root.'
+       usage
+  fi
 }
 
 require_requirements()
@@ -96,51 +112,25 @@ require_requirements
 echo 'Installing Kloxo development version.'
 
 if which git >/dev/null; then
-echo 'GIT support detected.'
+	echo 'GIT support detected.'
 else
-echo 'No GIT support detected. Installing GIT.'
-    install_GIT
+	echo 'No GIT support detected. Installing GIT.'
+	install_GIT
 fi
 
-case $1 in
-master )
-        # Clone from GitHub the last version using git transport (no http or https)
-        echo "Installing branch kloxo/master from $2 repository"
-        mkdir -p ${KLOXO_PATH}  
-        git clone git://github.com/$2/kloxo.git ${KLOXO_PATH}
-        cd ${KLOXO_PATH}
-        git checkout master
-        cd ${KLOXO_PATH}/kloxo-install
-        sh ./make-distribution.sh
-        cd ${KLOXO_PATH}/kloxo
-        sh ./make-distribution.sh
-        printf "Done.\nInstall Kloxo:\ncd ${KLOXO_PATH}/kloxo-install/\nsh kloxo-installer.sh with args\n"
-        ;;
-dev )
-        # Clone from GitHub the last version using git transport (no http or https)
-        echo "Installing branch kloxo/dev from $2 repository"
-        git clone git://github.com/$2/kloxo.git ${KLOXO_PATH}
-        cd ${KLOXO_PATH}
-        git checkout dev -f
-        cd ${KLOXO_PATH}/kloxo-install
-        sh ./make-distribution.sh
-        cd ${KLOXO_PATH}/kloxo
-        sh ./make-distribution.sh
-        printf "Done.\nInstall Kloxo:\ncd ${KLOXO_PATH}/kloxo-install/\nsh kloxo-installer.sh with args\n"
-        ;;
-6.1.x )
-        # Clone from GitHub the last version using git transport (no http or https)
-        echo "Installing branch kloxo/6.1.x from $2 repository"
-        git clone git://github.com/$2/kloxo.git ${KLOXO_PATH}
-        cd ${KLOXO_PATH}
-        git checkout 6.1.x -f
-        cd ${KLOXO_PATH}/kloxo-install
-        sh ./make-distribution.sh
-        cd ${KLOXO_PATH}/kloxo
-        sh ./make-distribution.sh
-        printf "Done.\nInstall Kloxo:\ncd ${KLOXO_PATH}/kloxo-install/\nsh kloxo-installer.sh with args\n"
-        ;;
-* )
-usage
-return 1 ;;
-esac
+# Clone from GitHub the last version using git transport (no http or https)
+echo "Installing branch $BRANCH from $REPO repository"
+git clone git://github.com/$REPO/kloxo.git ${KLOXO_PATH}
+
+if [ $? -ne 0 ]; then
+  echo "Git checkout failed. Exiting."
+  exit 1;
+fi
+
+cd ${KLOXO_PATH}
+git checkout $BRANCH -f
+cd ${KLOXO_PATH}/kloxo-install
+sh ./make-distribution.sh
+cd ${KLOXO_PATH}/kloxo
+sh ./make-distribution.sh
+printf "Done.\nInstall Kloxo:\ncd ${KLOXO_PATH}/kloxo-install/\nsh kloxo-installer.sh with args\n"
