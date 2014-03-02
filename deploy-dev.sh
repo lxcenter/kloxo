@@ -120,15 +120,13 @@ fi
 
 # Clone from GitHub the last version using git transport (no http or https)
 echo "Installing branch $BRANCH from $REPO repository"
-git clone git://github.com/$REPO/kloxo.git ${KLOXO_PATH}
+git clone -b $BRANCH --single-branch git://github.com/$REPO/kloxo.git ${KLOXO_PATH}
 
 if [ $? -ne 0 ]; then
   echo "Git checkout failed. Exiting."
   exit 1;
 fi
 
-cd ${KLOXO_PATH}
-git checkout $BRANCH -f
 cd ${KLOXO_PATH}/kloxo-install
 sh ./make-distribution.sh
 cd ${KLOXO_PATH}/kloxo
