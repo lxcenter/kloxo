@@ -1257,7 +1257,8 @@ static function initThisList($parent, $class)
 		}
                 
                 // dont show other users files
-                if(posix_getpwuid($stat['uid']) != $parent->__username_o && !$login->isAdmin())  continue;
+                $p = posix_getpwuid($stat['uid']);
+                if( $p['name'] != $parent->__username_o && !$login->isAdmin()) continue;
                 		
 		$parent->ffile_l[$file] = new Ffile($parent->__masterserver, $parent->__readserver,  $parent->root, $file, $parent->__username_o);
 		$parent->ffile_l[$file]->setFromArray($stat);
