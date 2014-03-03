@@ -1,0 +1,26 @@
+body {
+    margin-top: 0;
+    margin-left: 0;
+    background-color: #FAFAFA;
+}
+
+.lpanelmain {
+    background-color:#ffffff;
+}
+
+.lpanelnormal {
+    overflow:auto;
+    height:100%;
+    width:218px;
+    border-bottom:1px solid #c3daf9;
+    border-right:1px solid #c3daf9;
+}
+
+.lpaneltree {
+    overflow:auto;
+    height:100%;
+    width:218px;
+    border-bottom:1px solid #c3daf9;
+    border-right:1px solid #c3daf9;
+}
+
