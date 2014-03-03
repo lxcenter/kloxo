@@ -1447,29 +1447,26 @@ function print_navigation($navig)
         $_timg = $ghtml->get_image($buttonpath, $ob->getClass(), "updateform_demo_status", ".gif");
         $demoimg = "<span title=\"Account is Demo\"><img src=\"$_timg\"></span>";
     }
-
-    if ($sgbl->isBlackBackground()) { $imgstr = null; $image = "/img/black.gif"; }
 ?>
 <script>
 var gl_imgrightpoint = '<?php echo $imgleftpoint; ?>';
 var gl_imgleftpoint  = '<?php echo $imgrightpoint; ?>';
 </script>
- <table width="100%" cellspacing="0" cellpadding="0" border="0" bgcolor="aqua">
+<div class="breadmain">
+ <table class="breadtable1" width="100%">
     <tr>
-    <td width="100%" >
-  <table border="0" cellspacing="0" bgcolor="silver">
+    <td >
+  <table class="breadtable2">
     <tr>
-    <td>&nbsp;&nbsp;</td>
-    <td><?php echo "$imgstr $demoimg"; ?><img width="35" height="35" src="<?php echo $image; ?>"></td>
+    <td><?php echo "$demoimg"; ?><img width="35" height="35" src="<?php echo $image; ?>"></td>
     <td>
-   <table cellspacing="0">
+   <table class="breadtable3">
     <tr>
     <td>
-    <table height="10" align="left" border="0">
+    <table class="breadtable4">
     <tr>
     <?php
 
-    $forecolorstring = null; if ($sgbl->isBlackBackground()) { $forecolorstring = "color=gray" ; }
     foreach((array) $navig as $k => $h) {
 
         $url = $ghtml->get_get_from_post(null, $h);
@@ -1489,7 +1486,7 @@ var gl_imgleftpoint  = '<?php echo $imgrightpoint; ?>';
         $menustring = null;
 
         print("<td>\n");
-        print("<a href='$url'><b><font " . $forecolorstring . " style='font-size:7pt'>" . $desc['desc'] .  "</b>&nbsp;" . $bracketedname . "</font></a>");
+        print("<a href=\"$url\"><span class=\"breadcrumbsbold\">" . $desc['desc'] .  "</span><span class=\"breadcrumbs\">" . $bracketedname . "</span></a>");
         print("</td>\n");
         print($sep . "\n");
     }
@@ -1572,7 +1569,7 @@ var gl_imgleftpoint  = '<?php echo $imgrightpoint; ?>';
     }
 
     print("</tr>\n");
-    print("</table>\n");
+    print("</table>\n</div>\n");
     print("<!-- Bread Crumbs End -->\n");
 }
 

@@ -1,188 +1,304 @@
+/*
+ *  Scrollbars
+ */
 
+::-webkit-scrollbar-track
+{
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+    background-color: #F5F5F5;
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar
+{
+    width: 10px;
+    background-color: #F5F5F5;
+}
+
+::-webkit-scrollbar-thumb
+{
+    border-radius: 10px;
+    background-image: -webkit-gradient(linear,
+    left bottom,
+    left top,
+    color-stop(0.0, rgb(177,207,237)),
+    color-stop(0.50, rgb(51,102,153)),
+    color-stop(1.00, rgb(177,207,237)));
+}
+
+/*
+ *  Body
+ */
 
 body {
- scrollbar-face-background		: url('img/skin/new/button/top_line.gif');
- scrollbar-shadow-color		: #ffffff;
- scrollbar-highlight-color	: #ffffff;
- scrollbar-3dlight-color	: #336699;
- scrollbar-track-color		: #ECF3FF;
- scrollbar-darkshadow-color	: #336699;
- scrollbar-arrow-color		: #ffffff; 
+    margin: 0;
+    background-color: #FFFFFF;
 }
 
-.menus { 
-  color           	: #336699; 
+table {
+    border: 0;
+    border-spacing: 0;
+    border-collapse: separate;
+}
+
+/*
+ *  Bread Crumb Table
+ */
+
+.breadmain {
+    margin-top: 5px;
+    width: 98%;
+    -webkit-border-radius: 15px;
+    -moz-border-radius: 15px;border-radius: 15px;
+    border:1px solid #55AFE8;
+    background:rgba(255,255,255,0.0);
+    -webkit-box-shadow: #d6e7f6 5px 5px 5px;
+    -moz-box-shadow: #d6e7f6 5px 5px 5px;
+    box-shadow: #d6e7f6 5px 5px 5px;
+}
+
+.breadtable1 {
+    padding: 5px;
+}
+
+.breadtable2 {
+    padding: 5px;
+}
+
+.breadtable3 {
+    padding: 5px;
+}
+
+.breadtable4 {
+    text-align: left;
+    padding: 5px;
+    height: 10px;
+}
+
+.breadcrumbs {
+    font-size: 7pt;
+    font-weight: normal;
+    padding-left: 5px;
+    padding-right: 5px;
+}
+.breadcrumbsbold {
+    font-size: 7pt;
+    font-weight: bold;
+    padding-left: 5px;
+    padding-right: 5px;
+}
+
+/*
+ * Seems not in use
+ */
+
+.menus {
+    color           	: #336699;
+}
+
+.menuimage {
+    background-color : #b1cfed;
+}
+
+.menubgclass {
+    background-color : #ffffff;
+}
+
+.menuhilite {
+    background-color : #aae7f6;
+}
+
+.dtree a.nodeSel {
+    background-color: #d6e7f6;
+    background-color: #ff0000;
+
 }
 
 
-.button { 
-  color           	: #336699; 
+.button {
+    color           	: #336699;
 }
 
-.button:hover { 
-  color           	: #0066FF;
-} 
+.button:hover {
+    color           	: #0066FF;
+}
 
 .bordermain {
-  background-color	: #55afe8;
+    background-color	: #55afe8;
+}
+
+.mediumtableheader {
+    border-bottom: 1px solid #b1cfed;
+}
+.darktableheader {
+    border-bottom: 2px solid #92c4f0;
+}
+.darktableheader1 {
+    background :url(/img/skin/kloxo/default/default/tab_select_bg2.gif) 0 0 repeat-x;
+}
+.tableheader {
+    border-bottom: 1px solid #4a7097;
+}
+
+.tableleftpanel {
+    border-left: 1px solid #7ca2c9;
+    border-bottom: 1px solid #7ca2c9;
+    border-right: 1px solid #7ca2c9;
 }
 
 .textdisable {
-  border			: 1px solid #A5C7E7;
 }
 
 .legend {
-  color				: #3333ff;
+    color				: #3333ff;
 }
 
 .textchmoddisable {
-  border			: 1px solid #A5C7E7;
 }
 
 .textenable {
-  border			: 1px solid #A5C7E7;
 }
 
 .textbox {
-  border			: 1px solid #A5C7E7;
 }
 
 .textarea {
-  border			: 1px solid #A5C7E7;
 }
 
 .frmtextarea {
-  border			: 1px solid #A5C7E7;
 }
 
 .frmtextareadisable {
-  border			: 1px solid #A5C7E7;
 }
 
 .frmline {
-	background-color : #A5C7E7; 
+    background-color : #b1cfed;
 }
 
 .lpanelbuttonrow1 {
-  color				: #336699;
+    color				: #336699;
 }
 
 .lpanelbuttonrow2 {
-  color				: #0066ff;
+    color				: #0066ff;
 }
 
 .buttonunselect {
-  color				: #ffffff;
-  font-weight		: bold;
-  font-size			: 12px;
-  font-family       : arial;
+    color				: #ffffff;
+    font-weight		: bold;
+    font-size			: 12px;
+    font-family       : arial;
 }
 
 .buttonselect {
-  color				: #336699;
-  font-weight		: bold;
-  font-size			: 12px;
-  font-family       : arial;
-  background-color 	: #f5f5f5;
-  cursor			: pointer;
+    color				: #336699;
+    font-weight		: bold;
+    font-size			: 12px;
+    font-family       : arial;
+    background-color 	: #f5f5f5;
+    cursor			: pointer;
 }
 
 .helparea {
-  border-color		: #3399CC;
+    border-color		: #3399CC;
 }
 
 .lpanelbutton {
-  color				: #0066ff;
+    color				: #0066ff;
 }
 
 .formtablerow0 {
-  background-color   : #f5f5f5;
+    background-color   : #f9f9f9;
 }
 
 .formtablerow1 {
-  background-color   : #f5f5f5;
+    background-color   : #f0f0f0;
 }
 
 .formtablerow2 {
-  background-color   : #ffd5d5;
+    background-color   : #ffd5d5;
 }
 
 .submitbutton {
- border:1px solid #666666; 
+    border:1px solid #666666;
+    background:url(/img/skin/kloxo/default/default/backsubmit.gif);
+}
+
+.submitbutton:hover {
+    border:1px solid #666666;
+    background:#fafafa;
 }
 
 .tableheadtext {
-  color				: #000000;
+    color				: #000000;
 }
 
 
 .sortby {
-  background-color  : #a5cbfa;
+    background-color  : #a5cbfa;
 }
 
 .tablerowhead {
-  background-color  : #e6efff;
+    background-color  : #e6efff;
 }
 
 .detailtablehead {
-  color				: #003366;
-  background-color  : #7db3ee;
+    color				: #003366;
+    background-color  : #7db3ee;
 }
 
 .detailleft {
-  color				: #003366;
-  background-color  : #a5e7c7;
+    color				: #003366;
+    background-color  : #a5e7c7;
 }
 
 
 .tablerow0 {
-  background-color   : #f9f9f9;
-  border-bottom: 10px solid #000 ;
+    background-color   : #f9f9f9;
+    border: 1px solid red;
 }
 
 .tablerow1 {
-  background-color   : #f7f3f7;
-  border-bottom: 10px solid #000 ;
+    background-color   : #f7f3f7;
+    border: 1px solid red ;
 }
 
 .tablerow2 {
-  background-color   : #f2f2f2;
-}
-
-.tablerowhilite {
-  background-color   : #ff0000;
+    background-color   : #f2f2f2;
+    border: 1px solid red ;
 }
 
 .hiliterow {
-  background-color	: #dddddd;
+    background-color	: #dddddd;
 }
 
 .tablerowdetail0 {
-  background-color  : #f9f9f9;
+    background-color  : #f9f9f9;
 }
 
 .tablerowdetail1 {
-  background-color  : #f2f2f2;
+    background-color  : #f2f2f2;
 }
 
 .hiliterowdetail {
-  color				: #336699;
-  background-color	: #dddddd;
+    color				: #336699;
+    background-color	: #dddddd;
 }
 
 .filebox {
-  font-family		: arial; 
-  color				: #000000;
-  font-size			: 9px; 
-  font-weight		: normal; 
-  background-color	: #FFFFFF;
+    font-family		: arial;
+    color				: #000000;
+    font-size			: 9px;
+    font-weight		: normal;
+    background-color	: #FFFFFF;
 
 }
 
 .colHighLight {
-  color				: #ff6666;
+    color				: #ff6666;
 }
 
 .copyright {
-  color				: #336699;
+    color				: #336699;
 }
+

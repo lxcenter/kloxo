@@ -1,17 +1,99 @@
+/*
+ *  Scrollbars
+ */
 
-
-body {
- scrollbar-face-color		: #b1cfed;
- scrollbar-shadow-color		: #ffffff;
- scrollbar-highlight-color	: #ffffff;
- scrollbar-3dlight-color	: #336699;
- scrollbar-track-color		: #ECF3FF;
- scrollbar-darkshadow-color	: #336699;
- scrollbar-arrow-color		: #ffffff; 
+::-webkit-scrollbar-track
+{
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+    background-color: #F5F5F5;
+    border-radius: 10px;
 }
 
+::-webkit-scrollbar
+{
+    width: 10px;
+    background-color: #F5F5F5;
+}
+
+::-webkit-scrollbar-thumb
+{
+    border-radius: 10px;
+    background-image: -webkit-gradient(linear,
+    left bottom,
+    left top,
+    color-stop(0.0, rgb(177,207,237)),
+    color-stop(0.50, rgb(51,102,153)),
+    color-stop(1.00, rgb(177,207,237)));
+}
+
+/*
+ *  Body
+ */
+
+body {
+    margin: 0;
+    background-color: #FFFFFF;
+}
+
+table {
+    border: 0;
+    border-spacing: 0;
+    border-collapse: separate;
+}
+
+/*
+ *  Bread Crumb Table
+ */
+
+.breadmain {
+    margin-top: 5px;
+    width: 98%;
+    -webkit-border-radius: 15px;
+    -moz-border-radius: 15px;border-radius: 15px;
+    border:1px solid #55AFE8;
+    background:rgba(255,255,255,0.0);
+    -webkit-box-shadow: #d6e7f6 5px 5px 5px;
+    -moz-box-shadow: #d6e7f6 5px 5px 5px;
+    box-shadow: #d6e7f6 5px 5px 5px;
+}
+
+.breadtable1 {
+    padding: 5px;
+}
+
+.breadtable2 {
+    padding: 5px;
+}
+
+.breadtable3 {
+    padding: 5px;
+}
+
+.breadtable4 {
+    text-align: left;
+    padding: 5px;
+    height: 10px;
+}
+
+.breadcrumbs {
+    font-size: 7pt;
+    font-weight: normal;
+    padding-left: 5px;
+    padding-right: 5px;
+}
+.breadcrumbsbold {
+    font-size: 7pt;
+    font-weight: bold;
+    padding-left: 5px;
+    padding-right: 5px;
+}
+
+/*
+ * Seems not in use
+ */
+
 .menus { 
-  color           	: #336699; 
+  color           	: #336699;
 }
 
 .menuimage {
@@ -28,6 +110,8 @@ body {
 
 .dtree a.nodeSel {
 	background-color: #d6e7f6;
+    background-color: #ff0000;
+
 }
 
 
@@ -217,3 +301,4 @@ body {
 .copyright {
   color				: #336699;
 }
+
