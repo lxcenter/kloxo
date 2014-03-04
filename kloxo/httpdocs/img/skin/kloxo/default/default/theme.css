@@ -302,3 +302,59 @@ table {
   color				: #336699;
 }
 
+/*
+ *  Block tables (main frame)
+ */
+
+div.section, div#createNew
+{
+    border: 1px solid #55AFE8;
+    margin: 10px 10px;
+    padding: 0px 0px 10px 0px;
+    width: 450px;
+}
+
+div#createNew input
+{
+    margin-left: 5px;
+}
+
+div#createNew h3, div.section h3
+{
+    font-size: 12px;
+    padding: 2px 5px;
+    margin: 0 0 10px 0;
+    display: block;
+    font-family: "trebuchet ms", verdana, sans-serif;
+    color: #003360;
+    border-bottom: 1px solid #55AFE8;
+}
+
+div.section h3
+{
+    cursor: move;
+}
+
+div.section.demo div.example span
+{
+    margin: 0px;
+    margin-bottom: 0px;
+    padding: 0px;
+    font-size: 1.0em;
+    text-align: center;
+    display: block;
+}
+
+div.section.demo
+{
+    margin: 0px;
+    overflow: visible;
+    position: relative;
+    width: 100%;
+}
+
+div.section h1
+{
+    margin-bottom: 0;
+    font-size: 18px
+}

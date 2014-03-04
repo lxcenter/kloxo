@@ -535,79 +535,6 @@ class HtmlLib
 		$this->print_action_block($obj, $obj->get__table(), $alist, $num);
 	}
 
-	function print_action_block_old($title, $alist)
-	{
-		$i = 0;
-		/* This is a mighty hack... The first element of $alist is
-        supposed to be the main title. You use it as the first title and
-        unset the variable. This is a hack from the previous code where
-        the first title was preset here itself. */
-
-		if (!$title) {
-			$title = $alist['__title_main'];
-			unset($alist['__title_main']);
-		}
-
-		?>
-	<table cellpadding="0" width="100%" cellspacing="0" border="1">
-	<tr>
-	<td>
-	<table cellpadding="2" cellspacing="7" border="0" width="25%">
-	<tr align="left">
-	<td align="left">
-		<?php
-								$t = 2;
-		foreach ($alist as $k => $u) {
-			$i++;
-			if (csb($k, "__title")) {
-				$i = 0;
-				$t++;
-				?>
-                                        </td> </tr> </table> </td> <td>
-                                        <table cellpadding=0 border=0 cellspacing=0> <tr> <td>
-                                        <?php
-										continue;
-			}
-
-
-			if ($t % 4 === 1) {
-				?>
-                                        </td> </tr> </table> </tr> <tr> <table cellpadding=0 cellspacing=0 border=2> <tr> <td>
-                                        <?php
-
-			}
-
-			if ($i % 2) {
-				?>
-                                        </td> </tr> <tr> <td>
-                                        <?php
-
-			}
-			$this->print_div_button(null, "block", false, $k, $u);
-		}
-		if ($i <= 7) {
-			for (; $i <= 7; $i++) {
-				print("</td><td width=40>&nbsp;");
-			}
-		}
-
-
-
-
-		?>
-	</td>
-	</tr>
-	</table>
-		</td>
-	</tr>
-	</table>
-	</fieldset>
-	<br/>
-	<br/>
-		<?php
-
-	}
-
 	function print_action_block_dumb($title, $alist)
 	{
 		global $gbl, $sgbl, $login, $ghtml;
@@ -1497,19 +1424,22 @@ class HtmlLib
 				dialog.addKeyListener(27, dialog.hide, dialog);
 				g_okBtn = dialog.addButton('OK', this.okComment, this);
 				dialog.addButton('Cancel', dialog.hide, dialog);
-                                switch(get_language()) {
-                                 case "hu":
-                                        dialog.addButton('Mégse', dialog.hide, dialog);
-                                        g_postBtn = dialog.addButton('Alkalmaz', this.submitComment, this);
-                                        g_allBtn = dialog.addButton('Mindet frissít', this.allComment, this);
-                
-                                         break;
-                                 default:
+				//
+				// This breaks AJAX
+				//
+                                //switch(get_language()) {
+                                // case "hu":
+                                //        dialog.addButton('Mégse', dialog.hide, dialog);
+                                //        g_postBtn = dialog.addButton('Alkalmaz', this.submitComment, this);
+                                //        g_allBtn = dialog.addButton('Mindet frissít', this.allComment, this);
+                //
+                //                         break;
+                //                 default:
                                         dialog.addButton('Cancel', dialog.hide, dialog);
                                         g_postBtn = dialog.addButton('Apply', this.submitComment, this);
                                         g_allBtn = dialog.addButton('All Update', this.allComment, this);
                  
-                                 }
+                //                 }
          
 
 				// clear any messages and indicators when the dialog is closed
@@ -1899,13 +1829,14 @@ class HtmlLib
 	function print_action_block($obj, $class, $alist, $num)
 	{
 		global $gbl, $sgbl, $login, $ghtml;
-		$lclass = $login->get__table();
-		$skindir = $login->getSkinDir();
-		$talist = $alist;
-		$ret = $this->create_action_block($class, $alist);
-		$col = $login->getSkinColor();
-		$plus = "$skindir/plus.gif";
-		$minus = "$skindir/minus.gif";
+
+		$lclass     = $login->get__table();
+		$skindir    = $login->getSkinDir();
+		$talist     = $alist;
+		$ret        = $this->create_action_block($class, $alist);
+		$plus       = $skindir . "plus.gif";
+		$minus      = $skindir . "minus.gif";
+		$backgimage = $skindir . "expand.gif";
 		$buttonpath = get_image_path() . "/button/";
 
 		if ($sgbl->isDebug()) {
@@ -1914,85 +1845,19 @@ class HtmlLib
 			$outputdisplay = 'none';
 		}
 
+//
+// Ajax is broken so dont show
+//		$dragstring = _("Enable Ajax to Drag");
+		$dragstring = "";
+
 		if ($login->getSpecialObject('sp_specialplay')->isOn('enable_ajax')) {
 			$this->print_dialog($talist, $obj);
 			$this->print_drag_drop($obj, $ret, $class);
+//			$dragstring = _("Enable Ajax to Drag");
 		}
 
-		if ($sgbl->isBlackBackground()) {
-			$backgimage = "$skindir/black.gif";
-			$minus = "$skindir/black.gif";
-			$plus = "$skindir/black.gif";
-			$col = "333";
-		} else {
-			$backgimage = "$skindir/expand.gif";
-		}
-		?>
-
-	<style>
-
-		div.section, div#createNew
-		{
-			border: 1px solid #<?echo $col?>;
-			margin: 9px 5px;
-			padding: 0px 0px 10px 0px;
-			width: 520;
-		}
-
-		div#createNew input
-		{
-			margin-left: 5px;
-		}
-
-		div#createNew h3, div.section h3
-		{
-			font-size: 12px;
-			padding: 2px 5px;
-			margin: 0 0 10px 0;
-			display: block;
-			font-family: "trebuchet ms", verdana, sans-serif;
-			color: #003360;
-			background: url(<?=$skindir?>/expand.gif);
-			border-bottom: 1px solid #<?echo $col?>;
-		}
-
-		div.section h3
-		{
-			cursor: move;
-		}
-
-		div.demo div.example span
-		{
-			margin: 0px;
-			margin-bottom: 0px;
-			padding: 0px;
-			font-size: 1.0em;
-			text-align: center;
-			display: block;
-		}
-
-		div.demo
-		{
-			margin: 0px;
-			overflow: visible;
-			position: relative;
-			width: 100%;
-		}
-
-		h1
-		{
-			margin-bottom: 0;
-			font-size: 18px
-		}
-	</style>
-	<div id="show_page">
-		<?php
-
-		if (!$login->getSpecialObject('sp_specialplay')->isOn('enable_ajax')) {
-			$dragstring = "Enable Ajax to Drag";
-		} else {
-			$dragstring = "Drag";
-		}
+		print("<!-- Main Block Div -->\n");
+		print("	<div id=\"show_page\">\n");
 
 		$div_id_list = null;
 		$completedivlist = null;
@@ -2010,24 +1875,40 @@ class HtmlLib
 			}
 			unset($a['open']);
 			$nametitle = strfrom($title, "__title_");
-			?>
+?>
+<!-- Div one (title)-->
+			<div id="item_<?="$nametitle"?>" class="section">
+				<table cellpadding="0" cellspacing="0">
+					<tr class="handle" id="handle_<?=$nametitle?>" style="background:url(<?=$backgimage?>);"
+						onMouseover = "document.getElementById('font_<?=$nametitle?>').style.visibility='visible'; this.style.background='url(<?=$backgimage?>)'"
+						onMouseout  = "document.getElementById('font_<?=$nametitle?>').style.visibility='hidden'; this.style.background='url(<?=$backgimage?>)'" >
 
-			<div id="item_<?="$nametitle" ?>" class="section">
-				<table cellpadding=0 cellspacing=0>
-					<tr class=handle id="handle_<?=$nametitle ?>" style="background:url(<?=$backgimage?>)"
-						onMouseover="document.getElementById('font_<?=$nametitle ?>').style.visibility='visible'; this.style.background='url<?=$backgimage?>()'"
-						onMouseout="document.getElementById('font_<?=$nametitle?>').style.visibility='hidden'; this.style.background='url(<?=$backgimage?>)'">
-						<td nowrap style='cursor: move'><font id=font_<?=$nametitle?> style='visibility:hidden'>
-							&nbsp;<?=$dragstring?> </font></td>
-						<td width=100% style="cursor: move; " align=center><font
-								style='font-weight: bold'><?= $a[$title]?></font></td>
-						<td nowrap style='cursor: move'><font id=font_<?=$nametitle?> style='visibility:hidden'>
-							&nbsp;<?=$dragstring?> </font></td>
-						<td class=handle style='cursor: pointer'
-							onclick="blindUpOrDown('<?=$lclass?>', '<?=$class ?>', '<?=$skindir?>', '<?=$nametitle ?>')">
-							<img id=img_<?=$nametitle?> name=img_<?=$nametitle ?> src=<?=$minus?>></td>
+						<td nowrap style="cursor: move;">
+							<font id="font_<?=$nametitle?>" style="visibility:hidden;">
+								<?=$dragstring?>
+							</font>
+						</td>
+
+						<td width="100%" style="cursor: move;" align="center">
+							<font style="font-weight: bold;">
+								<?=$a[$title]?>
+							</font>
+						</td>
+
+						<td nowrap style="cursor: move;">
+							<font id="font_<?=$nametitle?>" style="visibility:hidden;">
+								<?=$dragstring?>
+							</font>
+						</td>
+
+						<td class="handle" style="cursor: pointer;"
+							onclick="blindUpOrDown('<?=$lclass?>', '<?=$class?>', '<?=$skindir?>', '<?=$nametitle?>')">
+							<img id="img_<?=$nametitle?>" name="img_<?=$nametitle?>" src="<?=$minus?>">
+						</td>
+
 					</tr>
 				</table>
+				<!-- Div two (icons) -->
 				<div style="<?=$dispstring?>;" id="internal_<?=$nametitle?>">
 					<table cellpadding="10" cellspacing="4" style="padding:1 2 1 1">
 						<tr>
@@ -2050,16 +1931,19 @@ class HtmlLib
 							</td></tr>
 					</table>
 				</div>
+				<!-- End Div two -->
+
 			</div>
-			<?
+			<!-- End Div one -->
+<?php
 		}
-		print("</td></tr></table>");
-		?>
-	</div>
+		print("</td>\n</tr>\n</table>\n");
+?>
+</div>
+		<!-- End Main Block Div -->
+<?php
 
-		<?php
-
-		print("<script>");
+		print("<script>\n");
 		$count = 0;
 		print("global_action_box = new Array()\n");
 		foreach ($div_id_list as $k => $v) {
@@ -2072,70 +1956,8 @@ class HtmlLib
 			}
 			$count++;
 		}
-		print("</script>");
-	}
-
-	function print_action_blockold($title, $alist, $num)
-	{
-		$i = 0;
-		$total = $num;
-
-		/// This is a mighty hack... The first element of $alist is supposed to be the main title. You use it as the first title and unset the variable. This is a hack from the previous code where the first title was preset here itself.
-
-		foreach ($alist as $k => $a) {
-			if (csb($k, "__title")) {
-				$title = $a;
-				unset($alist[$k]);
-				break;
-			}
-		}
-
-		?>
-        <fieldset width=100% style='border: 0px; border-top: 1px solid #d0d0d0'><legend
-			style='font-weight:normal;border:0px'><b> <font color=#303030
-															style='font-weight:normal'><?=$title ?> </font></b></legend>
-            <table cellpadding="2" cellspacing="7" border="0" width="95%">
-            <tr align=left> <td align=left>
-            <?php
-		foreach ($alist as $k => $u) {
-		$i++;
-		if ($i % $total === 1) {
-			print("</td> </tr> <tr align=left> <td align=left>");
-		}
-
-		if (csb($k, "__title")) {
-			if ($i <= $total) {
-				for (; $i <= $total; $i++) {
-					print("</td><td width=60>&nbsp;");
-				}
-			}
-			$i = 0;
-			?>
-                </td> </tr> </table>
-                </fieldset><fieldset style='font-weight:normal;border: 0px; border-top: 1px solid #d0d0d0'><legend
-					style='font-weight:normal'><b> <font color=#303030 style='font-weight:normal'><?=$u ?> </font> </b>
-			</legend>
-                <table cellspacing=7 width=95% border=0> <tr align=left> <td align=left>
-                <?php
-				continue;
-		}
-		$this->print_div_button(null, "block", true, $k, $u);
-	}
-		if ($i <= $total) {
-
-			for (; $i <= $total; $i++) {
-				print("</td><td width=40>&nbsp;");
-			}
-		}
-
-
-		?>
-            </td> </tr>
-            </table>
-                </fieldset>
-            <br> <br>
-			<?php
-
+		print("</script>\n");
+		print("<!-- End print_action_block function -->\n");
 	}
 
 	function cginum($key)
@@ -4513,6 +4335,7 @@ class HtmlLib
 		$col = $login->getSkinColor();
 
 		$view = null;
+        print("<!-- Block $class -->\n");
 
 		if (exec_class_method($class, "hasViews")) {
 			$blist[] = array($ghtml->getFullUrl("a=list&c=$class&frm_filter[view]=quota"), 1);
@@ -4590,10 +4413,10 @@ class HtmlLib
 		$unique_name = fix_nname_to_be_variable($unique_name);
 
 
-		?>
+?>
 	<br>
 	<script> var ckcount<?=$unique_name; ?> ; </script>
-		<?php
+<?php
 	if (!$sortby) {
 		$sortby = exec_class_method($rclass, "defaultSort");
 	}
@@ -4682,7 +4505,7 @@ class HtmlLib
 		}
 
 		if (!$sellist && !$this->isResourceClass($class) && !$gbl->__inside_ajax) {
-			?>
+?>
 		<table width=90% cellpadding=0 cellspacing=0 border=0
 			   style=' <?=$backgroundstring ?>  border: 1px solid #<?=$col?>; '>
 			<tr>
@@ -4696,7 +4519,7 @@ class HtmlLib
 				<td height=10> &nbsp; </td>
 			</tr>
 		</table>
-			<?php
+<?php
 
 		}
 
@@ -4786,7 +4609,6 @@ class HtmlLib
 		<td class="rowpoint"></td>
 		<td colspan="<?=$nlcount; ?>">
 
-			<!--    </td></tr><tr><td height=2 colspan=2></td></tr></table> -->
     <tr height="25" valign="middle">
 
     <?php
@@ -5030,7 +4852,7 @@ class HtmlLib
 		$ghtml->print_input("hidden", "frm_action", "list");
 		$ghtml->print_input("submit", "Cancel", "Cancel", "class=submitbutton");
 		print("</form> ");
-		print("</td> </tr> </table> ");
+		print("</td> </tr> </table>\n");
 
 	}
 		if ($sgbl->isBlackBackground()) {
@@ -5095,9 +4917,9 @@ class HtmlLib
 
 		}
 
-		print("</td></tr></table>");
-		print("</td></tr></table>");
-		print("</td> </tr></table>");
+		print("</td></tr></table>\n");
+		print("</td></tr></table>\n");
+		print("</td> </tr></table>\n");
 		//else {
 		//
 		//  $this->print_list_submit($blist);
@@ -6710,9 +6532,20 @@ $this->print_div_for_divbutton_on_header($url, $target, $key, $imgflag, $linkfla
 		$value = $object->text_comment;
 		$rclass = "frmtextarea";
 		$variable = "frm_{$object->getClass()}_c_text_comment";
-		print("<table cellpadding=0 cellspacing=3 align=center width=100%> <tr align=center> <td width=100%><table  align=center cellpadding=0 cellspacing=0 > <tr height=23 width=100%> <td align=center style='background:url(\"$skindir/expand.gif\")'> <font style='font-weight:bold'>&nbsp;Find </td> </tr> <tr> <td >");
-		print("<input type=text name=find onKeyUp=\"searchpage(this)\"> ");
-		print("</td> </tr> </table> </td> </tr> </table>  ");
+
+		print("<table cellpadding=0 cellspacing=3 align=center width=100%>\n");
+        print("<tr align=center>\n");
+        print("<td width=100%>\n");
+        print("<table  align=center cellpadding=0 cellspacing=0 >\n");
+        print("<tr height=23 width=100%>\n");
+        print("<td align=center style='background:url(\"$skindir/expand.gif\")'>\n");
+        print("<font style='font-weight:bold'>Search</font>\n");
+        print("</td>\n");
+        print("</tr>\n");
+        print("<tr>\n");
+        print("<td>\n");
+		print("<input type=text name=find onKeyUp=\"searchpage(this)\">\n");
+		print("</td> </tr> </table> </td> </tr> </table>\n");
 	}
 
 	function print_note($object)
