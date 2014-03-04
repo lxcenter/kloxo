@@ -311,4 +311,9 @@ $__emessage['folder_name_may_not_contain_doubledotsslash'] = "Folder name must n
 $__emessage['command_not_allowd'] = "Command not allowed! (You only have privilege to run 'php' or 'wget' in cron.)";
 
 ///6.1.19
-$__information['click_to_update_all_under']="Click Here to Update all the objects that appear in the top selectbox with the above values";
+$__information['click_to_update_all_under']="Kattintson ide, hogy a felső legördülőben levő összes objektumot ezekre a beállításokra állítsuk.";
+// File manager mod
+$__emessage['file_bad_owner_logged']="Olyan fájlhoz próbált hozzáférni, ami nem a felhasználóé. Loggolva lett az incidens.";
+
+
+

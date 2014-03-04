@@ -125,9 +125,9 @@ static function getWithoutExtension($path)
 	return "{$array['dirname']}/{$array['filename']}";
 }
 
-static function getContent($__username_o, $root, $path, $stat, $numlines)
+static function getContent($__username_o, $root, $path, $stat, $numlines, $isAdmin)
 {
-	self::checkOwnership($__username_o, $path);
+        if(!$isAdmin) self::checkOwnership($__username_o, $path);
 	if ($stat['ttype'] === "zip" || $stat['ttype'] === 'tgz' || $stat['ttype'] === 'tar') {
 		$res = lxshell_getzipcontent($path);
 		//$res = str_replace(" ", "&nbsp;  ", $res);

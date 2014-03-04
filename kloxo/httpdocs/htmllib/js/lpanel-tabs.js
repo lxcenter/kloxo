@@ -6,15 +6,17 @@
  * http://www.extjs.com/license
  */
 
+/*
+ *  Create the 2 tabs in the Left Panel side
+ *
+ */
 var TabsExample = {
     init : function(){
-        // basic tabs 1, built from existing content
         var tabs = new Ext.TabPanel('tabs1');
-        tabs.addTab('script', "Vista Style");
-        tabs.addTab('markup', "Tree View");
+        tabs.addTab('script', "Normal");
+        tabs.addTab('markup', "Tree");
+        // Activate the focus on tree
         tabs.activate('markup');
-    
-        // second tabs built from JS
-    }
+        }
 }
 Ext.EventManager.onDocumentReady(TabsExample.init, TabsExample, true);

@@ -1,29 +1,3 @@
-	/*
-	Style sheet for the navigation banner at the top of the page.
-	It is assumed the banner looks somewhat like this:
-	<div class="banner">
-	<p>
-	<a href="../"><img alt="W3C" src="../Icons/w3c_home"></a>
-	<a href="Consortium/Activities">Activities</a>
-	<a href="TR/">Tech.&nbsp;Reports</a>
-	<a href="Consortium/Translation/">Translations</a>
-	<a href="Status">Software</a>
-	<a href="Help/siteindex">Site&nbsp;index</a>
-	<a href="Consortium/">About</a>
-	<a href="Consortium/Contact">Contact</a>
-	<a href="http://search.w3.org/Public/">Search</a>
-	</p>
-	</div>
-	I.e., a DIV.banner with a P with a small logo and a couple of
-	A elements.
-	Copyright © 2000 W3C® (MIT, INRIA, Keio). All Rights Reserved.
-	See http://www.w3.org/Consortium/Legal/ipr-notice.html#Copyright
-	Author: Bert Bos <bert@w3.org>
-	Created: 26 July 2000
-	*/
-/*body div.banner { display: block } /* Overrides 'none' in banner-*.css */
-	
-	
 table  {
 	margin: 0 0 0 0;
 	padding: 0 0 0 0 ;
