@@ -33,6 +33,7 @@
 body {
     margin: 0;
     background-color: #FFFFFF;
+    font-family: arial, helvetica, sans-serif;
 }
 
 table {
@@ -55,6 +56,8 @@ table {
     -webkit-box-shadow: #d6e7f6 5px 5px 5px;
     -moz-box-shadow: #d6e7f6 5px 5px 5px;
     box-shadow: #d6e7f6 5px 5px 5px;
+    background-color: #FFFFFF;
+
 }
 
 .breadtable1 {
@@ -110,8 +113,6 @@ table {
 
 .dtree a.nodeSel {
 	background-color: #d6e7f6;
-    background-color: #ff0000;
-
 }
 
 
@@ -187,14 +188,14 @@ table {
   color				: #ffffff;
   font-weight		: bold;
   font-size			: 12px;
-  font-family       : arial;
+  font-family: arial, helvetica, sans-serif;
 }
 
 .buttonselect {
   color				: #336699;
   font-weight		: bold;
   font-size			: 12px;
-  font-family       : arial;
+  font-family: arial, helvetica, sans-serif;
   background-color 	: #f5f5f5;
   cursor			: pointer;
 }
@@ -286,12 +287,11 @@ table {
 }
 
 .filebox {
-  font-family		: arial; 
-  color				: #000000;
-  font-size			: 9px; 
-  font-weight		: normal; 
-  background-color	: #FFFFFF;
-
+    font-family: arial, helvetica, sans-serif;
+    color				: #000000;
+    font-size			: 9px;
+    font-weight		: normal;
+    background-color	: #FFFFFF;
 }
 
 .colHighLight {
@@ -308,10 +308,20 @@ table {
 
 div.section, div#createNew
 {
-    border: 1px solid #55AFE8;
-    margin: 10px 10px;
-    padding: 0px 0px 10px 0px;
-    width: 450px;
+    padding: 0;
+    margin-top: 0;
+    margin-bottom: 9px;
+    margin-left: 4px;
+    width: 98%;
+    -webkit-border-radius: 0;
+    -moz-border-radius: 0;border-radius: 0;
+    border:1px solid #55AFE8;
+    background:rgba(255,255,255,0.0);
+    -webkit-box-shadow: #d6e7f6 5px 5px 5px;
+    -moz-box-shadow: #d6e7f6 5px 5px 5px;
+    box-shadow: #d6e7f6 5px 5px 5px;
+    background-color: #FAFAFA;
+
 }
 
 div#createNew input
@@ -337,9 +347,8 @@ div.section h3
 
 div.section.demo div.example span
 {
-    margin: 0px;
-    margin-bottom: 0px;
-    padding: 0px;
+    margin: 0;
+    padding: 0;
     font-size: 1.0em;
     text-align: center;
     display: block;
@@ -357,4 +366,79 @@ div.section h1
 {
     margin-bottom: 0;
     font-size: 18px
+}
+/*
+ * This is the Section title
+ */
+div.section span {
+    padding-left: 5px;
+    font-family: arial, helvetica, sans-serif;
+    font-weight: bold;
+    font-style: oblique;
+    color: #336699;
+    margin-left: auto;
+    margin-right: auto;
+
+}
+
+.headertitletable {
+
+}
+
+.headersectiontitlerow {
+    height: 26px;
+}
+
+.icontable {
+    border-spacing: 2px;
+    border-collapse: separate;
+    width: 1px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.iconcel {
+    padding: 2px;
+    border:1px solid #55AFE8;
+    background-color: #FFFFFF;
+    width: 1px;
+}
+
+.icontextlink {
+    padding-left: 0;
+    font-family: arial, helvetica, sans-serif;
+    font-weight: normal;
+    font-style: normal;
+    color: #000000;
+    text-align: center;
+}
+
+.iconrow {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.iconimagelink img{
+    width: 32px;
+    height: 32px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.iconmaintable {
+    height: 85px;
+    width: 120px;
+    margin-left: auto;
+    margin-right: auto;
+    vertical-align: baseline;
+    cursor: pointer;
+}
+
+/*
+ *  main block div
+ */
+.mainblockdiv
+{
+    margin: 0px;
 }

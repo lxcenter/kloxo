@@ -1808,20 +1808,15 @@ class HtmlLib
 			$dividentity = "{$dividentity}$i";
 		}
 		?>
-	<td valign="middle" align="left" width=5>
-		<div id="<?php echo $dividentity ?>" style="visibility:visible;display:block">
-			<form method=<?=$formmethod ?> name=form_<?=$form_name ?> action=<?=$path?> <?=$target ?>>
-				<?php
+		<div id="<?php echo $dividentity ?>" style="visibility:visible;display:block;">
+			<form method=<?=$formmethod ?> name=form_<?=$form_name ?> action=<?=$path?> <?=$target?>>
+<?php
 		$this->print_input_vars($post);
-				?>
-				<?
-				$this->print_div_for_divbutton($key, $imgflag, $linkflag, $form_name, $name, $image, $descr);
-
-				?>
+		$this->print_div_for_divbutton($key, $imgflag, $linkflag, $form_name, $name, $image, $descr);
+?>
 			</form>
 		</div>
-	</td>
-				<?php
+<?php
 
 		return $dividentity;
 	}
@@ -1845,19 +1840,13 @@ class HtmlLib
 			$outputdisplay = 'none';
 		}
 
-//
-// Ajax is broken so dont show
-//		$dragstring = _("Enable Ajax to Drag");
-		$dragstring = "";
-
 		if ($login->getSpecialObject('sp_specialplay')->isOn('enable_ajax')) {
 			$this->print_dialog($talist, $obj);
 			$this->print_drag_drop($obj, $ret, $class);
-//			$dragstring = _("Enable Ajax to Drag");
 		}
 
 		print("<!-- Main Block Div -->\n");
-		print("	<div id=\"show_page\">\n");
+		print("	<div id=\"show_page\" class=\"mainblockdiv\">\n");
 
 		$div_id_list = null;
 		$completedivlist = null;
@@ -1878,27 +1867,13 @@ class HtmlLib
 ?>
 <!-- Div one (title)-->
 			<div id="item_<?="$nametitle"?>" class="section">
-				<table cellpadding="0" cellspacing="0">
-					<tr class="handle" id="handle_<?=$nametitle?>" style="background:url(<?=$backgimage?>);"
+				<table class="headertitletable">
+					<tr class="handle headersectiontitlerow" id="handle_<?=$nametitle?>" style="background:url(<?=$backgimage?>);"
 						onMouseover = "document.getElementById('font_<?=$nametitle?>').style.visibility='visible'; this.style.background='url(<?=$backgimage?>)'"
 						onMouseout  = "document.getElementById('font_<?=$nametitle?>').style.visibility='hidden'; this.style.background='url(<?=$backgimage?>)'" >
 
-						<td nowrap style="cursor: move;">
-							<font id="font_<?=$nametitle?>" style="visibility:hidden;">
-								<?=$dragstring?>
-							</font>
-						</td>
-
-						<td width="100%" style="cursor: move;" align="center">
-							<font style="font-weight: bold;">
-								<?=$a[$title]?>
-							</font>
-						</td>
-
-						<td nowrap style="cursor: move;">
-							<font id="font_<?=$nametitle?>" style="visibility:hidden;">
-								<?=$dragstring?>
-							</font>
+						<td width="100%" style="cursor: move;" align="left">
+							<span class="sectiontitle"><?=$a[$title]?></span>
 						</td>
 
 						<td class="handle" style="cursor: pointer;"
@@ -1910,25 +1885,27 @@ class HtmlLib
 				</table>
 				<!-- Div two (icons) -->
 				<div style="<?=$dispstring?>;" id="internal_<?=$nametitle?>">
-					<table cellpadding="10" cellspacing="4" style="padding:1 2 1 1">
+					<table class="icontable">
 						<tr>
 							<?
 							array_shift($a);
 							$n = 0;
 							foreach ($a as $k => $u) {
 								$n++;
-								if ($n === $num) {
+//								if ($n === $num) {
+								// make 4 icons in a row then go to next line
+									if ($n === 5) {
 									print("</tr><tr>");
 									$n = 1;
 								}
-								print("<td>");
+								print("<td class=\"iconcel\">");
 								$ret = $this->print_div_button($completedivlist, "block", true, $k, $u);
 								$completedivlist[$ret] = $ret;
 								$div_id_list[$nametitle][$ret] = $ret;
 								print("</td>");
 							}
 							?>
-							</td></tr>
+							</tr>
 					</table>
 				</div>
 				<!-- End Div two -->
@@ -1941,6 +1918,7 @@ class HtmlLib
 ?>
 </div>
 		<!-- End Main Block Div -->
+		<br />
 <?php
 
 		print("<script>\n");
@@ -5900,40 +5878,25 @@ class HtmlLib
 
 	function print_div_for_divbutton($key, $imgflag, $linkflag, $formname, $name, $imagesrc, $descr)
 	{
-
 		global $gbl, $sgbl, $login;
 
 		$skincolor = $login->getSkinColor();
-		$shevron = "{$login->getSkinDir()}/shevron_line.gif";
 
 		$help = $this->get_full_help($descr[2]);
 		$help = $this->get_action_or_display_help($help, "action");
 
-		$dummyimg = get_image_path() . "/button/untitled.gif";
-
-		$help = $descr['help'];
-
+		$help = trim($descr['help']);
+		$resourcetitle = trim($descr[2]);
 		$selectcolor = '#edf6fd';
-		$blackbordercolor = 'white';
-		$bgcolorstring = null;
-		$forecolorstring = "color:#002244";
-		if ($sgbl->isBlackBackground()) {
-			$bgcolorstring = "bgcolor=#000";
-			$forecolorstring = "color:#999999";
-			$selectcolor = '#444444';
-			$skincolor = '#000000';
-			$blackbordercolor = '#000000';
-			$imgflag = false;
-		}
-
+		$bordercolor = 'white';
 
 		if ($linkflag) {
-			$displayvar = "<font style='$forecolorstring' class=icontextlink id=aaid_$formname href=\"javascript:document.form_$formname.submit()\" onmouseover=\" style.textDecoration='underline';\" onmouseout=\"style.textDecoration='none'\"> $descr[2] </font> </span>";
-			$onclickvar = "onClick=\"javascript:document.form_$formname.submit()\"";
 			$alt = $help;
+			$displayvar = "<div class=\"icontextlink\" title=\"$alt\" id=aaid_$formname href=\"javascript:document.form_$formname.submit()\" onmouseover=\" style.textDecoration='underline';\" onmouseout=\"style.textDecoration='none'\">$resourcetitle</div>";
+			$onclickvar = "onClick=\"javascript:document.form_$formname.submit()\"";
 		} else {
-			$displayvar = "<span title=\"You don't have permission\" class=icontextlink>{$descr[2]} (disabled)</span>";
-			$alt = "You dont have permission";
+			$alt = "You don't have permission";
+			$displayvar = "<div class=\"icontextlink\" title=\"$alt\">$resourcetitle (disabled)</div>";
 			$onclickvar = null;
 		}
 
@@ -5943,55 +5906,30 @@ class HtmlLib
 			$idvar = "id=$key-comment";
 		}
 
-		if ($imgflag) {
-			if ($linkflag) {
-				$imgvar = "<img width=32 height=32   class=icontextlink onMouseOver=\"getElementById('aaid_$formname').style.textDecoration='underline'; \" onMouseOut=\"getElementById('aaid_$formname').style.textDecoration='none'; \" src=\"$imagesrc\" >";
-			} else {
-				$imgvar = "<img width=32 height=32 class=icontextlink   src=\"$imagesrc\" >";
-			}
-
+		if ($linkflag) {
+			$imgvar = "<div class=\"iconimagelink\" title=\"$alt\"><img onMouseOver=\"getElementById('aaid_$formname').style.textDecoration='underline'; \" onMouseOut=\"getElementById('aaid_$formname').style.textDecoration='none'; \" src=\"$imagesrc\"></div>";
 		} else {
-			$imgvar = null;
+			$imgvar = "<div class=\"iconimagelink\" title=\"$alt\"><img src=\"$imagesrc\"></div>";
 		}
-
-		?>
-
-	<!--    <span style="background: url(<?=$imagesrc; ?>) no-repeat;" >
--->
-	<table <?=$idvar?> style='border: 1px solid <?= $blackbordercolor ?> ; cursor: pointer' <?=$onclickvar ?>
+?>
+<table <?=$idvar?> class="iconmaintable" <?=$onclickvar ?>
 					   onmouseover=" getElementById('aaid_<?=$formname?>').style.textDecoration='none' ; this.style.backgroundColor='<?=$selectcolor?>' ; this.style.border='1px solid #<?=$skincolor ?>';"
-					   onmouseout="this.style.border='1px solid <?= $blackbordercolor ?>'; this.style.backgroundColor=''; getElementById('aaid_<?=$formname?>').style.textDecoration='none';"
-					   cellpadding=3 cellspacing=3 height=80 width=60 valign=top>
-		<tr>
-			<td valign=top align=center><span title='<?=$alt ?>'> <?=$imgvar ?></td>
-		</tr>
-		<tr valign=top height=100%>
-			<td width=60 align=center> <span title='<?=$alt ?>'> <?=$displayvar ?>
+					   onmouseout="this.style.border='1px solid <?=$bordercolor?>'; this.style.backgroundColor=''; getElementById('aaid_<?=$formname?>').style.textDecoration='none';"
+					   >
+			<td style="iconrow">
+				<?=$imgvar?><br>
+				<?=$displayvar?>
 			</td>
 		</tr>
-	</table>
-		<?php
+</table>
+<?php
 
 	}
 
 	function createEncForm_name($name)
 	{
 		global $gbl, $sgbl;
-
-		return $name;
-		if ($sgbl->dbg > 0) {
-			return $name;
-		}
-
-		$name = str_replace("_", "", $name);
-		$name = str_replace("php", "", $name);
-		$name = str_replace("a", "z", $name);
-		$name = str_replace("e", "r", $name);
-		$name = str_replace("i", "x", $name);
-		$name = str_replace("s", "q", $name);
-		$name = str_replace("o", "p", $name);
-		$name = str_replace("r", "j", $name);
-
+		// TODO: Remove empty function
 		return $name;
 	}
 
