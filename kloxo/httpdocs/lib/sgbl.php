@@ -249,7 +249,8 @@ class Sgbl
 		$this->__var_language['ro'] = 'Romanian';
 		$this->__var_language['br'] = 'Brazilian Portuguese';
 		$this->__var_language['hu'] = 'Hungarian';
-        $this->__var_language['fa'] = 'Persian';
+        	$this->__var_language['fa'] = 'Persian';
+        	$this->__var_language['gr'] = 'Greek';
     }
 
 	private function initDeviceDescriptions()
