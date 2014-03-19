@@ -1235,3 +1235,5 @@ $__description["path"] = array("Elérési útvonal");
 $__description["apache_optimize"] = array("Apache memory optimize");
 $__description["mysql_convert"] = array("Mysql convert");
 $__description["fix_chownchmod"] = array("Fix 'ownership' and 'permissions'");
+
+$__description["allow_cron_shell"] = array("Bármilyen parancsot futtathat cronnal");
