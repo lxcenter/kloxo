@@ -336,14 +336,14 @@ class HtmlLib
 	{
 		global $gbl, $sgbl, $login, $ghtml;
 		if ($login->isDefaultSkin()) {
-			$this->print_tab_block_old($alist);
+			$this->print_tab_block_default($alist);
 		} else {
 			include_once "lib/print_tab.phps";
 			print_tab_for_feather($alist);
 		}
 	}
 
-	function print_tab_block_old($alist)
+	function print_tab_block_default($alist)
 	{
 		global $gbl, $sgbl, $login, $ghtml;
 		$img_path = $login->getSkinDir();
@@ -354,19 +354,35 @@ class HtmlLib
 		if ($login->getSpecialObject('sp_specialplay')->isOn('enable_ajax')) {
 			$this->print_dialog($alist, $gbl->__c_object);
 		}
+		print("<!-- Print navigation tabs -->\n");
+		print("<table class=\"navigationtop\">\n");
+        print("<tr align=\"left\" valign=\"bottom\">\n");
+		print("<td width=\"10\">\n");
+        print("<img src=\"$imgtop\" width=\"10\" height=\"2\"></td>\n");
+		print("<td>\n");
 
-		echo "<br>
-        <table cellspacing=0 cellpadding=0 width=100% border=0>
-            <tr align=left valign=bottom> <td width=10>
-            <img src=$imgtop width=10 height=2></td> <td >
-            <table cellspacing=0 cellspacing=0> <tr valign=bottom> ";
-		foreach ($alist as $k => $a) $sel = $this->printTabButtonOld($k, $a);
+        print("<table>\n");
+		print("<tr valign=\"bottom\">\n");
 
-		echo " </tr> </table> </td> <td width=100%>  <img src=$imgtop width=100% height=2></td></tr> </table> <br> <br> ";
+		foreach ($alist as $k => $a) {
+			$sel = $this->printTabButtonDefault($k, $a);
+		}
+
+		print("</tr>\n");
+		print("</table>\n");
+
+		print("</td>\n");
+		print("<td width=\"100%\">\n");
+		print("<img src=\"$imgtop\" width=\"100%\" height=\"2\">\n");
+		print("</td>\n");
+		print("</tr>\n");
+		print("</table>\n");
+		print("<!-- End Print navigation tabs -->\n");
+		print("<br><br>\n");
 
 	}
 
-	function printTabButtonOld($key, $url)
+	function printTabButtonDefault($key, $url)
 	{
 
 		global $gbl, $sgbl, $login, $ghtml;
@@ -379,9 +395,8 @@ class HtmlLib
 		$imgtop = $img_path . '/top_line.gif';
 
 		$buttonpath = get_image_path() . '/button/';
-		$bpath = $login->getSkinDir();
 		$bdpath = $login->getSkinColor();
-		$button = $bpath . '/top_line_medium.gif';
+		$button = $img_path . '/top_line_medium.gif';
 
 		$this->resolve_int_ext($url, $psuedourl, $target);
 
@@ -390,23 +405,23 @@ class HtmlLib
 
 		$form_name = $this->createEncForm_name($file . "_" . $name);
 
-		$borderbottom = "style =\"border-bottom:2px solid #$bdpath;\"";
-		$borderbot = "style =\"background:url($bpath/tab_select_bg2.gif) 0 0 repeat-x;\"";
+		$borderbottom = "style=\"border-bottom: 2px solid #$bdpath;\"";
+		$borderbot = "style=\"background: url($img_path/tab_select_bg2.gif) 0 0 repeat-x;\"";
+
 		if ($check = $this->compare_urls("display.php?{$this->get_get_from_current_post(null)}", $url)) {
-			$bgcolorstring = "bgcolor=#99aaff";
+			$bgcolorstring = "bgcolor=\"#99aaff\"";
 			$sel = "_select";
 			$borderbottom = $borderbot;
 		} else {
 			$sel = "_select";
-			$bgcolorstring = "bgcolor=#99aaff";
+			$bgcolorstring = "bgcolor=\"#99aaff\"";
 		}
 
 		$imageheight = 24;
 		$height = 34;
-		$imgp = $login->getSkinDir();
-		$imglt = $imgp . "/tab{$sel}_lt.gif";
-		$imgbg = $imgp . "/tab{$sel}_bg.gif";
-		$imgrt = $imgp . "/tab{$sel}_rt.gif";
+		$imglt = $img_path . "/tab{$sel}_lt.gif";
+		$imgbg = $img_path . "/tab{$sel}_bg.gif";
+		$imgrt = $img_path . "/tab{$sel}_rt.gif";
 
 		$linkflag = true;
 		if (csa($key, "__var_")) {
@@ -423,25 +438,25 @@ class HtmlLib
 
 		?>
 	<td>
-		<table cellspacing=0 cellpadding=0  <?=$idstring?> <?=$borderbottom ?> valign=bottom>
-			<tr valign=bottom>
+		<table <?=$idstring?> <?=$borderbottom?> valign="bottom">
+			<tr valign="bottom">
 				<?php
 		if ($check) {
-				print("<td valign=middle wrap><img src=$imglt height=38 width=2></td>");
+				print("<td valign=\"middle\" wrap><img src=\"$imglt\" height=\"38\" width=\"2\"></td>\n");
 			} else {
-				print("<td valign=middle wrap><img src=$imglt height=$height width=3></td>");
+				print("<td valign=\"middle\" wrap><img src=\"$imglt\" height=\"$height\" width=\"3\"></td>\n");
 			}
 				?>
-				<form method=get name=form_<?=$form_name ?> action=<?=$path?> <?=$target ?>>
+				<form method="get" name="form_<?=$form_name?>" action="<?=$path?>">
 				<?php
-		$this->print_input_vars($post);
-					print('</form>');
+					$this->print_input_vars($post);
+					print("</form>\n");
 					$this->printTabForTabButton($key, $linkflag, $height + 2, $imageheight, $sel, $imgbg, $form_name, $name, $image, $descr, $check);
 
 					if ($check) {
-						print("<td ><img src=$imgrt width=2 height=38></td>");
+						print("<td><img src=\"$imgrt\" width=\"2\" height=\"38\"></td>\n");
 					} else {
-						print("<td ><img src=$imgrt width=3 height=$height></td>");
+						print("<td><img src=\"$imgrt\" width=\"3\" height=\"$height\"></td>\n");
 					}
 
 					?>
@@ -493,35 +508,39 @@ class HtmlLib
 		$help = $descr['help'];
 		$imgstr = null;
 		if ($imagesrc) {
-			$imgstr = "<img width=$imageheight imageheight=$imageheight src=$imagesrc>";
+			$imgstr = "<img width=\"$imageheight\" imageheight=\"$imageheight\" src=\"$imagesrc\">";
 		}
+
+		$displaystring = "<span title=\"You don't have permission\">$descr[2]</span>";
 
 		if ($linkflag) {
 			if ($login->getSpecialObject('sp_specialplay')->isOn('enable_ajax') && csb($key, "__v_dialog")) {
-				$displaystring = "<span title='$help'>  $descr[2] </span>";
+				$displaystring = "<span title=\"$help\"> $descr[2]</span>";
 			} else {
-				$displaystring = "<span title='$help'> <a href=\"Javascript:document.form_$formname.submit()\"> $descr[2]</a> </span>";
+				$displaystring = "<span title=\"$help\"><a href=\"Javascript:document.form_$formname.submit()\">$descr[2]</a></span>";
 			}
-
-		} else {
-			$displaystring = "<span title=\"You don't have permission\">$descr[2] </span>";
 		}
 
 		if ($check) {
 			?>
-		<td height="34" wrap class="alink"
-			style='cursor:pointer;padding:3 0 0 0;vertical-align:middle'><?=$imgstr ?> </td>
-		<td height="height" nowrap class="alink" style='cursor:pointer;padding:3 0 0 0;vertical-align:middle'><font
-				size=-1><?=$displaystring ?></td>
-		<?
-		} else {
-			?>
-		<td height=34 wrap class=alink
-			style='cursor:pointer;background:url(<?=$imgbg ?>);padding:3 0 0 0; vertical-align:middle'><?=$imgstr ?> </td>
-		<td height=height nowrap class=alink
-			style='cursor:pointer;background:url(<?=$imgbg ?>);padding:3 0 0 0;vertical-align:middle'><font
-				size=-1><?=$displaystring ?></td><?php
+		<td style="cursor: pointer; padding: 3px; vertical-align: middle;">
+			<?=$imgstr?>
+		</td>
+		<td nowrap style="cursor: pointer; padding: 3px; vertical-align: middle;">
+			<?=$displaystring?>
+		</td>
 
+<?php
+		} else {
+?>
+
+		<td style="cursor: pointer; background: url(<?=$imgbg?>); padding: 3px; vertical-align: middle;">
+			<?=$imgstr?>
+		</td>
+		<td nowrap style="cursor: pointer; background: url(<?=$imgbg?>); padding: 3px; vertical-align: middle;">
+			<?=$displaystring?>
+		</td>
+<?php
 		}
 	}
 
@@ -531,7 +550,7 @@ class HtmlLib
 
 		$syncserver = $this->get_server_string($obj);
 		$buttonpath = get_image_path() . "/button/";
-		$image = $ghtml->get_image($buttonpath, '', 'resource', '.gif');
+	//	$image = $ghtml->get_image($buttonpath, '', 'resource', '.gif');
 		$this->print_action_block($obj, $obj->get__table(), $alist, $num);
 	}
 
@@ -672,7 +691,7 @@ class HtmlLib
 
 		.trigger a:hover
 		{
-			cursor: poiner;
+			cursor: pointer;
 		}
 
 		.trigger
@@ -1005,10 +1024,10 @@ class HtmlLib
 	function drag_drop()
 	{
 		global $gbl, $sgbl, $login, $ghtml;
-		?>
+?>
 	<script type="text/javascript" src="wz_dragdrop.js"></script>
-        <div id="name" style="position:absolute;...">
-    <?
+        <div id="name" style="position: absolute;">
+<?php
 	}
 
 	function print_domcollapse($sel)
@@ -1248,7 +1267,7 @@ class HtmlLib
 		$buttonpath = get_image_path("/button");
 		?>
 
-	<div id="comments-dlg" style="visibility:hidden;">
+	<div id="comments-dlg" style="visibility: hidden;">
 		<div class="x-dlg-hd"><?=$obj->getId()?></div>
 		<div class="x-dlg-bd">
 
@@ -1269,11 +1288,12 @@ class HtmlLib
 		</div>
 		<div class="x-dlg-ft">
 			<div id="dlg-msg">
-				<span id="post-error" class="posting-msg"><img src="/img/extjs/warning.gif" width="16" height="16"
-															   align="absmiddle"/>&nbsp;<span
-						id="post-error-msg"></span></span>
-				<span id="post-wait" class="posting-msg"><img src="/img/extjs/default/grid/loading.gif" width="16"
-															  height="16" align="absmiddle"/>&nbsp;Updating...</span>
+				<span id="post-error" class="posting-msg">
+					<img src="/img/extjs/warning.gif" width="16" height="16" align="absmiddle"/>&nbsp;
+					<span id="post-error-msg"></span>
+				</span>
+				<span id="post-wait" class="posting-msg">
+					<img src="/img/extjs/default/grid/loading.gif" width="16" height="16" align="absmiddle"/>&nbsp;Updating...</span>
 			</div>
 		</div>
 	</div>
@@ -1581,13 +1601,11 @@ class HtmlLib
 	<script>
 		(function()
 		{
-
 			var Dom = YAHOO.util.Dom;
 			var Event = YAHOO.util.Event;
 			var DDM = YAHOO.util.DragDropMgr;
-
 			//////////////////////////////////////////////////////////////////////////////
-			// example app
+			// example app TEST
 			//////////////////////////////////////////////////////////////////////////////
 			YAHOO.example.DDApp = {
 				init: function()
@@ -1842,14 +1860,14 @@ class HtmlLib
 
 		if ($login->getSpecialObject('sp_specialplay')->isOn('enable_ajax')) {
 			$this->print_dialog($talist, $obj);
-			$this->print_drag_drop($obj, $ret, $class);
 		}
+		$this->print_drag_drop($obj, $ret, $class);
 
 		print("<!-- Main Block Div -->\n");
 		print("	<div id=\"show_page\" class=\"mainblockdiv\">\n");
 
-		$div_id_list = null;
-		$completedivlist = null;
+		$div_id_list = "";
+		$completedivlist = "" ;
 
 		$count = 1;
 
@@ -1858,9 +1876,9 @@ class HtmlLib
 			if (!isset($a[$title])) {
 				continue;
 			}
-			$dispstring = "display:none";
+			$dispstring = "display:none;";
 			if ($a['open']) {
-				$dispstring = "";
+				$dispstring = "display:visible;";
 			}
 			unset($a['open']);
 			$nametitle = strfrom($title, "__title_");
@@ -1869,8 +1887,8 @@ class HtmlLib
 			<div id="item_<?="$nametitle"?>" class="section">
 				<table class="headertitletable">
 					<tr class="handle headersectiontitlerow" id="handle_<?=$nametitle?>" style="background:url(<?=$backgimage?>);"
-						onMouseover = "document.getElementById('font_<?=$nametitle?>').style.visibility='visible'; this.style.background='url(<?=$backgimage?>)'"
-						onMouseout  = "document.getElementById('font_<?=$nametitle?>').style.visibility='hidden'; this.style.background='url(<?=$backgimage?>)'" >
+						onmouseover = "document.getElementById('font_<?=$nametitle?>').style.visibility='visible';"
+						onmouseout  = "document.getElementById('font_<?=$nametitle?>').style.visibility='hidden';" >
 
 						<td width="100%" style="cursor: move;" align="left">
 							<span class="sectiontitle"><?=$a[$title]?></span>
@@ -1884,7 +1902,7 @@ class HtmlLib
 					</tr>
 				</table>
 				<!-- Div two (icons) -->
-				<div style="<?=$dispstring?>;" id="internal_<?=$nametitle?>">
+				<div style="<?=$dispstring?>" id="internal_<?=$nametitle?>">
 					<table class="icontable">
 						<tr>
 							<?
@@ -5892,7 +5910,7 @@ class HtmlLib
 
 		if ($linkflag) {
 			$alt = $help;
-			$displayvar = "<div class=\"icontextlink\" title=\"$alt\" id=aaid_$formname href=\"javascript:document.form_$formname.submit()\" onmouseover=\" style.textDecoration='underline';\" onmouseout=\"style.textDecoration='none'\">$resourcetitle</div>";
+			$displayvar = "<div class=\"icontextlink\" title=\"$alt\" id=aaid_$formname href=\"javascript:document.form_$formname.submit()\" onmouseover=\" style.textDecoration='underline';\" onmouseout=\"style.textDecoration='none';\">$resourcetitle</div>";
 			$onclickvar = "onClick=\"javascript:document.form_$formname.submit()\"";
 		} else {
 			$alt = "You don't have permission";
@@ -5965,7 +5983,7 @@ class HtmlLib
 				print("<td nowrap width=\"20\">&nbsp;</td>\n");
 				continue;
 			}
-			print("<td valign=\"middle\" align=\"left\" width=\"5\">\n");
+			print("<td valign=\"middle\" align=\"left\" width=\"10\">\n");
 			print("<form>\n");
 			$l['ac_descr']['desc'] = "{$l['fullstr']} {$l['tag']}";
 			$this->print_div_for_divbutton_on_header($l['url'], $l['target'], null, true, true, $l['url'], $l['__t_identity'], $l['_t_image'], $l['ac_descr']);
@@ -6036,7 +6054,7 @@ class HtmlLib
 		// Use get always. Only in forms should post be used.
 		$formmethod = 'get';
 		?>
-<td valign="middle" align="left" width=5>
+<td valign="middle" align="left" width=5 height=30>
 <form>
 <?php
 $this->print_input_vars($post);
@@ -6087,9 +6105,9 @@ $this->print_div_for_divbutton_on_header($url, $target, $key, $imgflag, $linkfla
 		$idvar = null;
 		if ($imgflag) {
 			if ($linkflag) {
-				$imgvar = "<img width=15 height=15   class=icontextlink onMouseOver=\"getElementById('aaid_$formname').style.textDecoration='underline'; \" onMouseOut=\"getElementById('aaid_$formname').style.textDecoration='none'; \" src=\"$imagesrc\" >";
+				$imgvar = "<img width=25 height=25   class=icontextlink onMouseOver=\"getElementById('aaid_$formname').style.textDecoration='underline'; \" onMouseOut=\"getElementById('aaid_$formname').style.textDecoration='none'; \" src=\"$imagesrc\" >";
 			} else {
-				$imgvar = "<img width=15 height=15 class=icontextlink   src=\"$imagesrc\" >";
+				$imgvar = "<img width=25 height=25 class=icontextlink   src=\"$imagesrc\" >";
 			}
 
 		} else {

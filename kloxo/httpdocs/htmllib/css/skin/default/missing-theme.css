@@ -2,28 +2,20 @@
  *  Scrollbars
  */
 
-::-webkit-scrollbar-track
-{
-    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
     background-color: #F5F5F5;
     border-radius: 10px;
 }
 
-::-webkit-scrollbar
-{
+::-webkit-scrollbar {
     width: 10px;
     background-color: #F5F5F5;
 }
 
-::-webkit-scrollbar-thumb
-{
+::-webkit-scrollbar-thumb {
     border-radius: 10px;
-    background-image: -webkit-gradient(linear,
-    left bottom,
-    left top,
-    color-stop(0.0, rgb(177,207,237)),
-    color-stop(0.50, rgb(51,102,153)),
-    color-stop(1.00, rgb(177,207,237)));
+    background-image: -webkit-gradient(linear, left bottom, left top, color-stop(0.0, rgb(177, 207, 237)), color-stop(0.50, rgb(51, 102, 153)), color-stop(1.00, rgb(177, 207, 237)));
 }
 
 /*
@@ -33,6 +25,7 @@
 body {
     margin: 0;
     background-color: #FFFFFF;
+    font-family: arial, helvetica, sans-serif;
 }
 
 table {
@@ -49,12 +42,15 @@ table {
     margin-top: 5px;
     width: 98%;
     -webkit-border-radius: 15px;
-    -moz-border-radius: 15px;border-radius: 15px;
-    border:1px solid #55AFE8;
-    background:rgba(255,255,255,0.0);
+    -moz-border-radius: 15px;
+    border-radius: 15px;
+    border: 1px solid #55AFE8;
+    background: rgba(255, 255, 255, 0.0);
     -webkit-box-shadow: #d6e7f6 5px 5px 5px;
     -moz-box-shadow: #d6e7f6 5px 5px 5px;
     box-shadow: #d6e7f6 5px 5px 5px;
+    background-color: #FFFFFF;
+
 }
 
 .breadtable1 {
@@ -81,6 +77,7 @@ table {
     padding-left: 5px;
     padding-right: 5px;
 }
+
 .breadcrumbsbold {
     font-size: 7pt;
     font-weight: bold;
@@ -89,53 +86,82 @@ table {
 }
 
 /*
+ * Navigation (header, default skin)
+ */
+
+.headertabletabsleft {
+    width: 85px;
+    font-size: 11px;
+    color: #336699;
+    height: 34px;
+    margin: 0;
+}
+
+.headertabletabsright {
+    font-size: 11px;
+    color: #336699;
+    height: 34px;
+    width: 73px;
+    margin: 0;
+}
+
+/*
+ * Navigation (below breadcrumbs)
+ */
+
+.navigationtop {
+    margin-top: 15px;
+    width: 100%;
+}
+
+/*
  * Seems not in use
  */
 
 .menus {
-    color           	: #336699;
+    color: #336699;
 }
 
 .menuimage {
-    background-color : #b1cfed;
+    background-color: #b1cfed;
 }
 
 .menubgclass {
-    background-color : #ffffff;
+    background-color: #ffffff;
 }
 
 .menuhilite {
-    background-color : #aae7f6;
+    background-color: #aae7f6;
 }
 
 .dtree a.nodeSel {
     background-color: #d6e7f6;
-    background-color: #ff0000;
-
 }
 
-
 .button {
-    color           	: #336699;
+    color: #336699;
 }
 
 .button:hover {
-    color           	: #0066FF;
+    color: #0066FF;
 }
 
 .bordermain {
-    background-color	: #55afe8;
+    background-color: #55afe8;
 }
 
 .mediumtableheader {
     border-bottom: 1px solid #b1cfed;
 }
+
 .darktableheader {
     border-bottom: 2px solid #92c4f0;
 }
+
 .darktableheader1 {
-    background :url(/img/skin/kloxo/default/default/tab_select_bg2.gif) 0 0 repeat-x;
+    background: url(/img/skin/kloxo/default/default/tab_select_bg2.gif) 0 0 repeat-x;
 }
+
 .tableheader {
     border-bottom: 1px solid #4a7097;
 }
@@ -150,7 +176,7 @@ table {
 }
 
 .legend {
-    color				: #3333ff;
+    color: #3333ff;
 }
 
 .textchmoddisable {
@@ -172,133 +198,267 @@ table {
 }
 
 .frmline {
-    background-color : #b1cfed;
+    background-color: #b1cfed;
 }
 
 .lpanelbuttonrow1 {
-    color				: #336699;
+    color: #336699;
 }
 
 .lpanelbuttonrow2 {
-    color				: #0066ff;
+    color: #0066ff;
 }
 
 .buttonunselect {
-    color				: #ffffff;
-    font-weight		: bold;
-    font-size			: 12px;
-    font-family       : arial;
+    color: #ffffff;
+    font-weight: bold;
+    font-size: 12px;
+    font-family: arial, helvetica, sans-serif;
 }
 
 .buttonselect {
-    color				: #336699;
-    font-weight		: bold;
-    font-size			: 12px;
-    font-family       : arial;
-    background-color 	: #f5f5f5;
-    cursor			: pointer;
+    color: #336699;
+    font-weight: bold;
+    font-size: 12px;
+    font-family: arial, helvetica, sans-serif;
+    background-color: #f5f5f5;
+    cursor: pointer;
 }
 
 .helparea {
-    border-color		: #3399CC;
+    border-color: #3399CC;
 }
 
 .lpanelbutton {
-    color				: #0066ff;
+    color: #0066ff;
 }
 
 .formtablerow0 {
-    background-color   : #f9f9f9;
+    background-color: #f9f9f9;
 }
 
 .formtablerow1 {
-    background-color   : #f0f0f0;
+    background-color: #f0f0f0;
 }
 
 .formtablerow2 {
-    background-color   : #ffd5d5;
+    background-color: #ffd5d5;
 }
 
 .submitbutton {
-    border:1px solid #666666;
-    background:url(/img/skin/kloxo/default/default/backsubmit.gif);
+    border: 1px solid #666666;
+    background: url(/img/skin/kloxo/default/default/backsubmit.gif);
 }
 
 .submitbutton:hover {
-    border:1px solid #666666;
-    background:#fafafa;
+    border: 1px solid #666666;
+    background: #fafafa;
 }
 
 .tableheadtext {
-    color				: #000000;
+    color: #000000;
 }
 
-
 .sortby {
-    background-color  : #a5cbfa;
+    background-color: #a5cbfa;
 }
 
 .tablerowhead {
-    background-color  : #e6efff;
+    background-color: #e6efff;
 }
 
 .detailtablehead {
-    color				: #003366;
-    background-color  : #7db3ee;
+    color: #003366;
+    background-color: #7db3ee;
 }
 
 .detailleft {
-    color				: #003366;
-    background-color  : #a5e7c7;
+    color: #003366;
+    background-color: #a5e7c7;
 }
 
-
 .tablerow0 {
-    background-color   : #f9f9f9;
+    background-color: #f9f9f9;
     border: 1px solid red;
 }
 
 .tablerow1 {
-    background-color   : #f7f3f7;
-    border: 1px solid red ;
+    background-color: #f7f3f7;
+    border: 1px solid red;
 }
 
 .tablerow2 {
-    background-color   : #f2f2f2;
-    border: 1px solid red ;
+    background-color: #f2f2f2;
+    border: 1px solid red;
 }
 
 .hiliterow {
-    background-color	: #dddddd;
+    background-color: #dddddd;
 }
 
 .tablerowdetail0 {
-    background-color  : #f9f9f9;
+    background-color: #f9f9f9;
 }
 
 .tablerowdetail1 {
-    background-color  : #f2f2f2;
+    background-color: #f2f2f2;
 }
 
 .hiliterowdetail {
-    color				: #336699;
-    background-color	: #dddddd;
+    color: #336699;
+    background-color: #dddddd;
 }
 
 .filebox {
-    font-family		: arial;
-    color				: #000000;
-    font-size			: 9px;
-    font-weight		: normal;
-    background-color	: #FFFFFF;
-
+    font-family: arial, helvetica, sans-serif;
+    color: #000000;
+    font-size: 9px;
+    font-weight: normal;
+    background-color: #FFFFFF;
 }
 
 .colHighLight {
-    color				: #ff6666;
+    color: #ff6666;
 }
 
 .copyright {
-    color				: #336699;
+    color: #336699;
 }
 
+/*
+ *  Block tables (main frame)
+ */
+
+div.section, div#createNew {
+    padding: 0;
+    margin-top: 0;
+    margin-bottom: 9px;
+    margin-left: 4px;
+    width: 98%;
+    -webkit-border-radius: 0;
+    -moz-border-radius: 0;
+    border-radius: 0;
+    border: 1px solid #55AFE8;
+    background: rgba(255, 255, 255, 0.0);
+    -webkit-box-shadow: #d6e7f6 5px 5px 5px;
+    -moz-box-shadow: #d6e7f6 5px 5px 5px;
+    box-shadow: #d6e7f6 5px 5px 5px;
+    background-color: #FAFAFA;
+
+}
+
+div#createNew input {
+    margin-left: 5px;
+}
+
+div#createNew h3, div.section h3 {
+    font-size: 12px;
+    padding: 2px 5px;
+    margin: 0 0 10px 0;
+    display: block;
+    font-family: "trebuchet ms", verdana, sans-serif;
+    color: #003360;
+    border-bottom: 1px solid #55AFE8;
+}
+
+div.section h3 {
+    cursor: move;
+}
+
+div.section.demo div.example span {
+    margin: 0;
+    padding: 0;
+    font-size: 1.0em;
+    text-align: center;
+    display: block;
+}
+
+div.section.demo {
+    margin: 0;
+    overflow: visible;
+    position: relative;
+    width: 100%;
+}
+
+div.section h1 {
+    margin-bottom: 0;
+    font-size: 18px
+}
+
+/*
+ * This is the Section title
+ */
+div.section span {
+    padding-left: 10px;
+    font-family: arial, helvetica, sans-serif;
+    font-weight: bold;
+    font-style: oblique;
+    color: #336699;
+    margin-left: auto;
+    margin-right: auto;
+
+}
+
+.headertitletable {
+
+}
+
+.headersectiontitlerow {
+    height: 26px;
+}
+
+.icontable {
+    border-spacing: 2px;
+    border-collapse: separate;
+    width: 1px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.iconcel {
+    padding: 2px;
+    border: 1px solid #55AFE8;
+    background-color: #FFFFFF;
+    width: 1px;
+}
+
+.icontextlink {
+    padding-left: 0;
+    font-family: arial, helvetica, sans-serif;
+    font-weight: normal;
+    font-style: normal;
+    color: #000000;
+    text-align: center;
+}
+
+.iconrow {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.iconimagelink img {
+    width: 32px;
+    height: 32px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/*
+ *  Changes the icon+label boxes
+ */
+.iconmaintable {
+    height: 80px;
+    width: 80px;
+    margin-left: auto;
+    margin-right: auto;
+    vertical-align: baseline;
+    cursor: pointer;
+}
+
+/*
+ *  main block div
+ */
+.mainblockdiv {
+    margin: 0px;
+}
