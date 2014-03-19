@@ -156,7 +156,7 @@ function checkRestart()
 	if (if_demo()) {
 		return;
 	}
-    log_log("cron_exec","Check service restarts...\n");
+	log_log("cron_exec","Check service restarts...\n");
 	$res = lscandir_without_dot("__path_program_etc/.restart");
 
 	if ($res === false) {
