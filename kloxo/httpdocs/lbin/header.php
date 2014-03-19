@@ -64,7 +64,7 @@ function print_header_feather()
     $alist = $login->createShowAlist($alist);
 
     $gbl->__c_object = $login;
-    print("<table cellpadding=0 cellspacing=0 >\n<tr>\n");
+    print("<table cellpadding=0 cellspacing=0>\n<tr>\n");
     $count = 0;
     $icount = 0;
 

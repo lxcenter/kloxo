@@ -23,27 +23,23 @@ var callback =
 
 function blindUpOrDown(lclass, mclass, skindir, name)
 {
+    var YAHOO;
 	var request;
 	var plus = skindir + "/plus.gif";
 	var minus = skindir + "/minus.gif";
 	var imgel = document.getElementById("img_" + name);
 	var element = document.getElementById("internal_" + name);
-	//var element = document.getElementById("item_" + name);
+
 	var ajaxstring = 'frm_action=update&frm_subaction=boxposopen&frm_' + lclass + '_c_title_name=' + name + '&frm_' + lclass + '_c_title_class=' + mclass + '&frm_' + lclass + '_c_title_open=';
 
 	if (element.style.display == 'none') {
-		//fadeAnim=new YAHOO.util.Anim(element, { opacity:{ to:1 } }, 0.4);
 		element.style.display = 'block';
-		//element.style.visbility = 'visible';
 		imgel.src = minus;
 		request = YAHOO.util.Connect.asyncRequest('post', "/ajax.php", callback, ajaxstring + "on");
 	} else {
-		//fadeAnim = new YAHOO.util.Anim(element, {  opacity:{ to:1 } }, 0.4);
 		element.style.display = 'none';
-		//element.style.visbility = 'hidden';
 		imgel.src = plus;
 		request = YAHOO.util.Connect.asyncRequest('post', "/ajax.php", callback, ajaxstring + 'off');
 	}
-	//fadeAnim.animate();
 }
 
