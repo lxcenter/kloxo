@@ -2,10 +2,15 @@
 
 // release on Kloxo 6.1.7
 // by mustafa.ramadhan@lxcenter.org
-
+//
+// Fixed PHP Fatal error on failing objects
+// Fixed missing image directory
+// DT01032014
+//
 include_once "htmllib/lib/include.php";
 
-// initProgram('admin');
+// Need this for loading objects outside a class
+initProgram('admin');
 
 $list = parse_opt($argv);
 
@@ -73,6 +78,13 @@ function setFixUserlogoDomainPages()
 
 		foreach((array) $dlist as $l) {
 			$web = $l->nname;
+
+            // If there is no images directory so need to create that first
+            if (!lxfile_exists("{$cdir}/{$web}/images"))
+            {
+                lxfile_mkdir("{$cdir}/{$web}/images");
+            }
+
 			system("cp -rf /home/kloxo/httpd/user-logo.png {$cdir}/{$web}/images/logo.png");
 			log_cleanup("- User logo for domain pages moved to -> {$cdir}/{$web}/images/logo.png");
 		}

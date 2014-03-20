@@ -79,11 +79,12 @@ static function getweb_usage($name, $customer_name, $oldtime, $newtime, $d)
 	$web_home = "$sgbl->__path_httpd_root";
 
 	$log_path = "$web_home/$name/stats"; 
-	$processedir = "$sgbl->__path_customer_root/$customer_name/__processed_stats/";
+	$processeddir = "$sgbl->__path_customer_root/$customer_name/__processed_stats/";
 
-	lxfile_mkdir($processedir);
+	lxfile_mkdir($processeddir);
 
-
+        lxfile_generic_chown($processeddir, $customer_name);	
+        
 	$dir1 = "$log_path/";
 
 	$files = lscandir_without_dot($dir1);
@@ -97,7 +98,10 @@ static function getweb_usage($name, $customer_name, $oldtime, $newtime, $d)
 				if (isOn($d->remove_processed_stats)) {
 					lxfile_rm("$dir1/$file");
 				} else {
-					lxfile_mv("$dir1/$file", getNotexistingFile($processedir, $file));
+				
+				        $fname=  getNotexistingFile($processeddir, $file);
+					lxfile_mv("$dir1/$file",$fname);
+					lxfile_generic_chown($fname, $customer_name);
 				}
 			}
 		}

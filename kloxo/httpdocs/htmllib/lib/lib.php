@@ -652,7 +652,7 @@ function PrepareRoundCubeDb()
 
 	$result = mysql_query("CREATE DATABASE IF NOT EXISTS roundcubemail", $link);
 	if (!$result) {
-		log_cleanup("- ***** There is something REALLY wrong... Go to http://forum.lxcenter.org and report to the team *****");
+		log_cleanup("- ***** There is something REALLY wrong... Go to http://community.lxcenter.org and report to the team *****");
 		exit;
 	}
 
@@ -730,7 +730,7 @@ function PrepareHordeDb()
 
 	$result = mysql_query("CREATE DATABASE IF NOT EXISTS horde_groupware", $link);
 	if (!$result) {
-		log_cleanup("- ***** There is something REALLY wrong... Go to http://forum.lxcenter.org and report to the team *****");
+		log_cleanup("- ***** There is something REALLY wrong... Go to http://community.lxcenter.org and report to the team *****");
 		exit;
 	}
 
@@ -2639,11 +2639,11 @@ function getFullVersionList($till = null)
 
 function getVersionList($till = null)
 {
+    // Project issue #1091
+    // Removed code that skipped every version with a number 2 in it.
+    // DT22022014
 	$list = getFullVersionList($till);
 	foreach($list as $k => $l) {
-		if (preg_match("/2$/", $l) && ($k !== count($list) -1 )) {
-			continue;
-		}
 		$nnlist[] = $l;
 	}
 	$nlist = $nnlist;
@@ -2828,7 +2828,7 @@ function download_and_print_file($server, $file)
 	curl_close($ch);
 }
 
-function get_title()
+function get_title($indexheader=false)
 {
 	global $gbl, $sgbl, $login, $ghtml; 
 
@@ -2859,8 +2859,14 @@ function get_title()
 	if (file_exists('.git')) {
 		$enterprise .= ' Development';
 	}
-	$title = "$host $progname $enterprise $title" ;
-	return $title;
+
+    if ($indexheader) {
+        $title = "$progname $title $enterprise" ;
+        return $title;
+        } else {
+        $title = "$host $progname $enterprise $title" ;
+        return $title;
+    }
 }
 
 function send_mail_to_admin($subject, $message)
@@ -3996,8 +4002,12 @@ function addLineIfNotExistInside($filename, $pattern, $comment)
 
 function fix_all_mysql_root_password()
 {
+    global $gbl, $sgbl, $login, $ghtml;
+
+    // Function is Called from scavenge.php
 	$rs = get_all_pserver();
 	foreach($rs as $r) {
+        log_scavenge("- ".$r);
 		fix_mysql_root_password($r);
 	}
 }
@@ -4463,8 +4473,6 @@ function lxguard_main($clearflag = false)
 
 	get_total($list, $total);
 
-	//dprintr($list['192.168.1.11']);
-
 	dprint_r("Debug: Total: " . $total .  "\n");
 	$deny = get_deny_list($total);
 	$hdn = lfile_get_unserialize("$lxgpath/hostdeny.info");
@@ -4516,48 +4524,36 @@ function lxguard_save_hitlist($hl)
 	lxguard_main();
 }
 
-// --- move from kloxo/httpdocs/htmllib/lib/updatelib.php
-
+//
+// $nolog needs to be set else it will log to the Browser screen too.
+//
 function install_xcache($nolog = null)
 {
-	//--- issue 547 - xcache failed to install
-/*
-	return;
-	if (lxfile_exists("/etc/php.d/xcache.ini")) {
-		return;
-	}
-	if (lxfile_exists("/etc/php.d/xcache.noini")) {
-		return;
-	}
 
-	if (!lxfile_exists("../etc/flag/xcache_enabled.flg")) {
-		log_cleanup("- xcache flag not found, removing /etc/php.d/xcache.ini file");
-		lunlink("/etc/php.d/xcache.ini");
-	}
-*/
-	if (!$nolog) { log_cleanup("Install xcache if is not enabled"); }
- 
-	if (lxfile_exists("../etc/flag/xcache_enabled.flg")) {
-		if (!$nolog) { log_cleanup("- Enabled status"); }
-//		$ret = lxshell_return("php -m | grep -i xcache");
-//		$ret = system("rpm -q php-xcache | grep -i 'not installed'");
-		// --- can not use lxshell_return because always return 127
-		// --- return 0 (= false) mean not found 'not installed'
-		exec("rpm -q php-xcache | grep -i 'not installed'", $out, $ret);
-		if ($ret !== false) {
-			if (!$nolog) { log_cleanup("- Installing"); }
+	if (!$nolog) { log_cleanup("Checking for XCache..."); }
+
+    // Make sure the flagdir exists (It might missing that at slaves)
+    If (!lxfile_exists("/usr/local/lxlabs/kloxo/etc/flag")) {
+     lxfile_mkdir("/usr/local/lxlabs/kloxo/etc/flag");
+    }
+
+	if (lxfile_exists("/usr/local/lxlabs/kloxo/etc/flag/xcache_enabled.flg")) {
+		if (!$nolog) { log_cleanup("- XCache is enabled"); }
+
+        $ret = lxshell_return("rpm", "-q", "php-xcache");
+
+		if ($ret) {
+			if (!$nolog) { log_cleanup("- Installing XCache package"); }
 			lxshell_return("yum", "-y", "install", "php-xcache");
 		}
 		else {
-			if (!$nolog) { log_cleanup("- Already installed"); }
-		}		
-		// for customize?
-		lxfile_cp("../file/xcache.ini", "/etc/php.d/xcache.ini");
-	}
-	else {
-		lxshell_return("yum", "-y", "remove", "php-xcache");
-		if (!$nolog) { log_cleanup("- Disabled status"); }
-	}
+			if (!$nolog) { log_cleanup("- XCache is already installed"); }
+		}
+
+        // Copy XCache Template
+		lxfile_cp("/usr/local/lxlabs/kloxo/file/xcache.ini", "/etc/php.d/xcache.ini");
+        if (!$nolog) { log_cleanup("- XCache ini file is installed/recreated"); }
+    }
 
 }
 
@@ -4585,10 +4581,11 @@ function addcustomername()
 
 function fix_phpini()
 {
-	log_cleanup("Fix php.ini");
-	log_cleanup("- Fix process");
+	log_cleanup("Checking the php.ini file(s)");
 
 	lxshell_return("__path_php_path", "../bin/fix/fixphpini.php", "--server=localhost");
+    log_cleanup("- Re-created the php.ini file(s)");
+
 }
 
 function switchtoaliasnext()
@@ -5505,7 +5502,9 @@ function setInitialPureftpConfig()
 		@lxfile_rm("/etc/xinetd.d/pure-ftpd");
 	}
 
-	if (!lxfile_exists("/etc/xinetd.d/pureftp")) {
+	// Config file remains original if it exists, adding || true will cause
+	// overwriting.
+	if (!lxfile_exists("/etc/xinetd.d/pureftp") || true) {
 		log_cleanup("- Install /etc/xinetd.d/pureftp TCP Wrapper file");
 		lxfile_cp("../file/xinetd.pureftp", "/etc/xinetd.d/pureftp");
 	}
@@ -5675,7 +5674,7 @@ function setCheckPackages()
 	$list = array("maildrop-toaster", "spamdyke", "spamdyke-utils", "pure-ftpd",
 		"simscan-toaster", "webalizer", "php-mcrypt", "dos2unix",
 		"rrdtool", "xinetd", "lxjailshell", "php-xml", "libmhash",
-		"kloxo-core-php");
+		"kloxo-core-php", "kloxo-theme-default", "kloxo-theme-feather", "php-pear");
 		
 	foreach($list as $l) {
 		log_cleanup("- For {$l} package");
@@ -5874,16 +5873,14 @@ function setSomeScript()
 
 function setInitialLogrotate()
 {
-	return; // Kloxo 6.2.0 (#295)
-	log_cleanup("Initialize logrotate");
-
-	if (lxfile_exists("/etc/logrotate.d/kloxo")) {
-		log_cleanup("- Initialize process");
-
-		if (lxfile_exists("../file/kloxo.logrotate")) {
-			lxfile_cp("../file/kloxo.logrotate", "/etc/logrotate.d/kloxo");
-		}
-	}
+    // Project #295
+    // Added kloxo 6.1.18
+    if (!lxfile_exists("/etc/logrotate.d/kloxo")) {
+        if (lxfile_exists("../file/kloxo.logrotate")) {
+            log_cleanup("Installing kloxo logrotate file");
+            lxfile_cp("../file/kloxo.logrotate", "/etc/logrotate.d/kloxo");
+        }
+    }
 }
 
 function restart_xinetd_for_pureftp()
@@ -6346,7 +6343,7 @@ function setUpdateConfigWithVersionCheck($list, $servertype = null)
 
 function updatecleanup()
 {
-	setPrepareKloxo();
+    setPrepareKloxo();
 
     // Fixes #303 and #304
 	installThirdparty();
@@ -6400,6 +6397,8 @@ function updatecleanup()
 	setCheckPackages();
 
 	copy_script();
+
+    uploadStatsLxCenter();
 
 	install_xcache();
 
@@ -6465,8 +6464,11 @@ function updatecleanup()
 	setInitialLogrotate();
 	
 	installRoundCube();
-	
-	installHorde();
+
+// DT17022014
+// Disable horde link as horde is not in use
+// Project issue #1084
+//	installHorde();
 
 	installChooser();
 
@@ -6481,6 +6483,39 @@ function updatecleanup()
 	installInstallApp();
 	setFreshClam();
 	changeMailSoftlimit();
+
+    updatePEARchannel();
+
+}
+
+
+function uploadStatsLxCenter()
+{
+
+    global $gbl, $sgbl, $login, $ghtml;
+    $thisversion = $sgbl->__ver_major_minor_release;
+    $collectIsAllowed = $sgbl->__var_programname_stats;
+
+    if ($collectIsAllowed === "yes") {
+    system("wget -q -O /dev/null http://stats.lxcenter.org/lxstat.php?version=" . trim($thisversion) . " &");
+    }
+}
+
+function updatePEARchannel()
+{
+    //
+    // Warning! CentOS 5 is shipped with php-pear version 1,4.9
+    // Most pear packages depends on php-pear version <= 1.8.0
+    // So there could be warnings and errors until php-pear is updated.
+    // These errors and warning can be ignored for now.
+    // DT13022014
+    //
+    // php-pear package is updated for CentOS 5. See Project issue #1092
+    // DT13022014
+    log_cleanup("Update PHP PEAR software");
+    system("pear channel-update pear.php.net"); // Updates the channel
+    system("pear upgrade-all"); // Updates the software
+    log_cleanup("- You can ignore warnings from PHP PEAR updates above.");
 }
 
 function setPrepareKloxo()
@@ -6518,30 +6553,39 @@ function update_all_slave()
 
 }
 
-function findNextVersion($lastversion = null)
+/**
+ * Get a version list and see if a update is avaible
+ * Issue #781 - Update to the latest version instead one by one
+ * Added _ () for the future :)
+ *
+ * @param      string $LastVersion Not Used?
+ * @return     string    Returns zero or version number
+ * @author     Danny Terweij d.terweij@lxcenter.org
+ */
+function findNextVersion($lastVersion = null)
 {
-	global $gbl, $sgbl, $login, $ghtml; 
-	$thisversion = $sgbl->__ver_major_minor_release;
+    global $sgbl;
+    $thisVersion = $sgbl->__ver_major_minor_release;
+    $Upgrade = null;
+    $versionList = getVersionList($lastVersion);
+    print(_('Found version(s):'));
 
-	$upgrade = null;
-	$nlist = getVersionList($lastversion);
-	dprintr($nlist);
-	$k = 0;
-	print("Found version(s):");
-	foreach($nlist as $l) {
-		print(" $l");
-		if (version_cmp($thisversion, $l) === -1) {
-			$upgrade = $l;
-			break;
-		}
-		$k++;
-	}
-	print("\n");
-	if (!$upgrade) {
-		return 0;
-	}
-
-	print("Upgrading from $thisversion to $upgrade\n");
-	return $upgrade;
-
+    foreach ($versionList as $newVersion) {
+        print(' ' . $newVersion);
+    }
+    print(PHP_EOL);
+    if (version_cmp($thisVersion, $newVersion) === -1) {
+        $Upgrade = $newVersion;
+    }
+    if (version_cmp($thisVersion, $newVersion) === 1) {
+        unset($Upgrade);
+        print(_('Your version ') . $thisVersion . _(' is higher then ') . $newVersion . PHP_EOL);
+        print(_('Script aborted') . PHP_EOL);
+        exit;
+    }
+    if (!$Upgrade) {
+        return 0;
+    }
+    print(_('Upgrading from ') . $thisVersion . _(' to ') . $Upgrade . PHP_EOL);
+    return $Upgrade;
 }

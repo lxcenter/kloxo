@@ -24,7 +24,7 @@ class Sgbl
 		$this->__var_program_name = 'kloxo';
 		$this->__ver_major = "6";
 		$this->__ver_minor = "1";
-		$this->__ver_release = "15";
+		$this->__ver_release = "18";
 		$this->__ver_enterprise = "Single Server Edition";
 		$this->__ver_type = "production";
 		$this->__ver_extra = "Stable";
@@ -148,6 +148,10 @@ class Sgbl
 		$this->__var_local_port = '7776';
 		$this->__var_remote_port = '7779';
 
+        // Send version to LxCenter for statistics about Kloxo usages.
+        // Only Sends the Kloxo Version
+        $this->__var_programname_stats = 'yes';
+
 		$conffile = "$this->__path_program_root/file/conf/os.conf";
 
 		if (!file_exists($conffile)) {
@@ -245,7 +249,8 @@ class Sgbl
 		$this->__var_language['ro'] = 'Romanian';
 		$this->__var_language['br'] = 'Brazilian Portuguese';
 		$this->__var_language['hu'] = 'Hungarian';
-	}
+        $this->__var_language['fa'] = 'Persian';
+    }
 
 	private function initDeviceDescriptions()
 	{

@@ -20,8 +20,10 @@ function preloadImages()
 
 function loadImage(im, source)
 {
+    if (source != null){
 	im = new Image;
 	im.src = source;
+    }
 }
 
 function findObj(n, d) { 

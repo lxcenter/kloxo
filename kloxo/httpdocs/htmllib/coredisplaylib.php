@@ -255,9 +255,20 @@ function __ac_desc_show($object)
 
     if (($rlist || $plist || $ilist) && !$printed_message) {
 
-        print("<table cellpadding=0 cellspacing=0 valign=top align=left> <tr valign=top> <td  valign=top> <table cellpadding=0 cellspacing=0 valign=top> <tr valign=top> <td valign=top align=left>");
+        print("<!-- Main Blocks -->\n");
+        print("<table cellpadding=0 cellspacing=0 valign=top align=left>\n");
+        print("<tr valign=top>\n");
+        print("<td valign=top>\n");
 
+        print("<!-- Main Block Left side -->\n");
+        print("<table cellpadding=0 cellspacing=0 valign=top>\n");
+        print("<tr valign=top>\n");
+        print("<td valign=top align=left>\n");
+
+
+        print("<!-- Search Table -->\n");
         $ghtml->print_find($object);
+        print("<!-- End Search Table -->\n");
 
         if ($ilist)  {
             $ghtml->printObjectTable(null, $object, 'information');
@@ -276,14 +287,54 @@ function __ac_desc_show($object)
             $ghtml->printObjectTable(null, $object, 'permission');
         }
 
+        print("</td>\n");
+        print("</tr>\n");
+        print("</table>\n");
+        print("<!-- End Main Block Table -->\n");
 
-        print("</td> </tr> </table> <table cellpadding=0 cellspacing=0 height=650> <tr> <td > </td> </tr> </table>  </td> <td valign=top width=100%> <table cellpadding=0 cellspacing=0 width=100%> <tr> <td >");
+        //
+        // This is a nice table :)
+        // DT03032014
+        // TODO: Do something with this empty table
+        //
+        print("<!-- Empty table -->\n");
+        print("<table cellpadding=0 cellspacing=0 height=650>\n");
+        print("<tr>\n");
+        print("<td>\n");
+        print("</td>\n");
+        print("</tr>\n");
+        print("</table>\n");
+        print("<!-- End Empty table -->\n");
+
+        print("</td>\n");
+        print("<!-- End Main Block Left Side -->\n");
+
+        print("<!-- Blocks Right Side -->\n");
+        print("<td valign=top width=100%>\n");
+
+        print("<table cellpadding=0 cellspacing=0 width=100%>\n");
+        print("<tr>\n");
+        print("<td>\n");
+
         if (isset($nalist)) {
             $ghtml->print_object_action_block($object, $nalist, 8);
         }
-        print("</td> </tr> </table> </td> </tr> </table> ");
+
+        print("</td>\n");
+        print("</tr>\n");
+        print("</table>\n");
+        print("<!-- End Blocks Right Side -->\n");
+
+        print("</td>\n");
+        print("</tr>\n");
+        print("</table>\n");
+        print("<!-- End Main Blocks -->\n");
+
+
     } else {
         if (isset($nalist)) {
+            print("<!-- Object Blocks -->\n");
+
             print("<table cellpadding=0 cellspacing=0 height=10> <tr> <td >  ");
             $ghtml->print_object_action_block($object, $nalist, 8);
             print("</td> </tr> </table> ");
@@ -311,8 +362,11 @@ function __ac_desc_show($object)
     }
 
 
-
+    print("<!-- Print Information -->\n");
     $ghtml->print_information('post', 'show', $cname, $subaction, "");
+	print("<!-- PAGE END -->\n");
+	print("</body>\n");
+	print("</html>\n");
 
 }
 
@@ -1062,8 +1116,20 @@ function do_addform($object, $class, $dttype = null, $notitleflag = false)
     if ($notitleflag) {
         $title = null;
     } else {
-        $title = "Add $cdesc";
+//
+// This breaks AJAX
+//
+//        switch(get_language())
+//        {
+//            case "hu":
+ //               $title = ucfirst($cdesc)." hozzáadása";
+//                break;
+//           default:
+           $title = "Add $cdesc ";
+//        }
     }
+    
+    
     $string[] = $ghtml->object_variable_startblock($object, $class, $title);
 
     $string[] = $ghtml->object_inherit_classpath();
@@ -1371,8 +1437,8 @@ function print_navigation($navig)
         return;
 
     $img_path = $login->getSkinDir();
-    $imgleftpoint = "$img_path/left_point.gif";
-    $imgrightpoint = "$img_path/right_point.gif";
+    $imgleftpoint = $img_path . "left_point.gif";
+    $imgrightpoint = $img_path . "right_point.gif";
     $xpos = 0;
     $navigmenu = $gbl->__navigmenu;
 
@@ -1395,7 +1461,7 @@ function print_navigation($navig)
     $navtxt = null;
     $navigpoint = null;
 
-    $buttonpath = get_image_path() . "/button/";
+    $buttonpath = get_image_path() . "button";
 
     $url = $ghtml->get_get_from_current_post(null);
 
@@ -1415,17 +1481,17 @@ function print_navigation($navig)
     if ($ghtml->frm_action === 'show') {
 
         $list = $ob->createShowMainImageList();
-
+        print("<!-- Bread Crumbs -->\n");
         foreach((array) $list as $k => $v) {
             if ($v) {
                 if (isset($ob->$k)) {
                     $img = $ghtml->get_image($buttonpath, $ob->getClass(), "{$k}_v_" . $ob->$k, ".gif");
-                    $imgstr[] = "<span title='$k is {$ob->$k}'> <img src=$img width=30 height=30> </span>";
+                    $imgstr[] = "<span title='" . ucfirst($k) . " is " . ucfirst($ob->$k) . "'><img src=\"$img\" width=\"30\" height=\"30\"></span>";
                 }
             } else {
                 $v = $ob->display($k);
                 $img = $ghtml->get_image($buttonpath, $ob->getClass(), "{$k}_v_" . $ob->display($k), ".gif");
-                $imgstr[] = "<span title='$k is " . $ob->display($k). "'> <img src=$img width=30 height=30> </span>";
+                $imgstr[] = "<span title='" . ucfirst($k) . " is " . ucfirst($ob->display($k)) . "'><img src=\"$img\" width=\"30\" height=\"30\"></span>";
             }
         }
     }
@@ -1436,48 +1502,52 @@ function print_navigation($navig)
 
     if ($ob->isLxclient() && $ob->getSpecialObject('sp_specialplay') && $ob->getSpecialObject('sp_specialplay')->isOn('demo_status')) {
         $_timg = $ghtml->get_image($buttonpath, $ob->getClass(), "updateform_demo_status", ".gif");
-        $demoimg = "<span title='Account is Demo'> <img src=$_timg> </span>";
+        $demoimg = "<span title=\"Account is Demo\"><img src=\"$_timg\"></span>";
     }
+?>
+<script>
+var gl_imgrightpoint = '<?php echo $imgleftpoint; ?>';
+var gl_imgleftpoint  = '<?php echo $imgrightpoint; ?>';
+</script>
+<div class="breadmain">
+ <table class="breadtable1" width="100%">
+    <tr>
+    <td >
+  <table class="breadtable2">
+    <tr>
+    <td><?php echo "$demoimg"; ?><img width="35" height="35" src="<?php echo $image; ?>"></td>
+    <td>
+   <table class="breadtable3">
+    <tr>
+    <td>
+    <table class="breadtable4">
+    <tr>
+    <?php
 
-    if ($sgbl->isBlackBackground()) { $imgstr = null; $image = "/img/black.gif"; }
-    ?>
-
-    <script>
-    var gl_imgrightpoint = '<?php echo $imgleftpoint ?>' ;
-    var gl_imgleftpoint = '<?php echo $imgrightpoint ?>' ;
-
-    </script>
-    <br>
-
-    <table width=100% cellspacing=0 cellpadding=0 border=0><tr><td width=100% >
-    <table border=0 cellspacing=0> <tr> <td > &nbsp; &nbsp; </td> <td >  <?php echo "$imgstr $demoimg" ?><img width=35 height=35 src=<?php echo $image ?>>  </td> <td > <table cellspacing=0> <tr> <td >
-
-    <table height=10 align=left  border=0>  <tr> <?php
-
-
-    $forecolorstring = null; if ($sgbl->isBlackBackground()) { $forecolorstring = "color=gray" ; }
     foreach((array) $navig as $k => $h) {
 
-        //You have to actually get only the filters of the parents of this object. But let us just print all the filters anyway.
         $url = $ghtml->get_get_from_post(null, $h);
         $url = "/display.php?$url";
         $desc = $ghtml->getActionDescr('', $h, $class, $var, $name);
         $image = $ghtml->get_image($buttonpath, $class, $var, ".gif");
         $desc['help'] = $ghtml->get_action_or_display_help($desc['help'], 'action');
-        $sep = null;
-        $sep = "<td > |</td> ";
+        // TODO: Make the seperator a nice image to be in a Theme.
+        $sep = "<td >&nbsp;|&nbsp;</td>";
         $nname = substr($name, 0, 19);
 
         $bracketedname = null;
         if ($navigmenu[$k][0] != 'list') {
-            $bracketedname = "($nname)";
+            $bracketedname = "( ". ucfirst($nname). " )";
         }
 
         $menustring = null;
 
-        print("<td > &nbsp;<a href='$url'><b><font $forecolorstring style='font-size:7pt'> {$desc['desc']}</b> $bracketedname </font> </a> &nbsp; </td> $sep ");
+        print("<td>\n");
+        print("<a href=\"$url\"><span class=\"breadcrumbsbold\">" . $desc['desc'] .  "</span><span class=\"breadcrumbs\">" . $bracketedname . "</span></a>");
+        print("</td>\n");
+        print($sep . "\n");
     }
-    print("</td>  </tr></table></td> </tr>");
+    print("</td>\n</tr>\n</table>\n</td>\n</tr>\n");
 
     $ob = $gbl->__c_object;
     $name = $ob->getId();
@@ -1490,12 +1560,12 @@ function print_navigation($navig)
             if ($v) {
                 if (isset($ob->$k)) {
                     $img = $ghtml->get_image($buttonpath, $ob->getClass(), "{$k}_v_" . $ob->$k, ".gif");
-                    $imgstr[] = "<span title='$k is {$ob->$k}'> <img src=$img width=9 height=9> </span>";
+                    $imgstr[] = "<span title=\"" . ucfirst($k) . " is ". ucfirst($ob->$k) . "\"><img src=\"$img\" width=\"9\" height=\"9\"></span>";
                 }
             } else {
                 $v = $ob->display($k);
                 $img = $ghtml->get_image($buttonpath, $ob->getClass(), "{$k}_v_{$ob->display($k)}", ".gif");
-                $imgstr[] = "<span title='$k is " . $ob->display($k). "'> <img src=$img width=9 height=9> </span>";
+                $imgstr[] = "<span title=\"" . ucfirst($k) . " is " . ucfirst($ob->display($k)) . "\"><img src=\"$img\" width=\"9\" height=\"9\"></span>";
             }
         }
     }
@@ -1514,7 +1584,7 @@ function print_navigation($navig)
         $kloxourl = null;
     }
 
-    $iconpath = get_image_path() . "/button/";
+    $iconpath = get_image_path() . "button";
     $ac_descr = $ghtml->getActionDetails($curl, null, $iconpath, $path, $post, $_t_file, $_t_name, $_t_image, $__t_identity);
     $curl = base64_encode($curl);
     $desc = "{$ac_descr['desc']} $__t_identity";
@@ -1525,17 +1595,18 @@ function print_navigation($navig)
     $clienttype = null;
     if ($ob->isClient() && $ghtml->frm_action === 'show') {
         $clienttype = ucfirst($ob->cttype);
-        $clienttype = "$clienttype ";
     }
     $fullimgstr = implode(" ", $imgstr);
-    print(" <tr valign=middle > <td valign=middle id=tnavig$k onMouseOut=\"changeContent('help', 'helparea');\"> <b><font style='font-size:10pt'>&nbsp; $name {</b>$clienttype{$description['desc']}<b>}  $fullimgstr </font></a> </td></tr> ");
+        print("<tr valign=\"middle\">\n");
+        print("<td valign=\"middle\" id=\"tnavig$k\" onMouseOut=\"changeContent('help', 'helparea');\"><b><font style=\"font-size:10pt;\">&nbsp;$name&nbsp;(</b>&nbsp;$clienttype&nbsp;{$description['desc']}&nbsp;<b>)&nbsp;$fullimgstr&nbsp;</font></a></td>\n");
+        print("</tr>\n");
 
     $hypervm = null;
     if ($sgbl->isKloxo() && $gbl->c_session->ssl_param) {
         $hypervm = "HyperVM";
     }
 
-    print("</table> </td> </tr> </table> </td>");
+    print("</table>\n</td>\n</tr>\n</table>\n</td>\n");
 
     if ($login->getSpecialObject('sp_specialplay')->isOn('simple_skin')) {
 
@@ -1544,16 +1615,13 @@ function print_navigation($navig)
             $ghtml->print_div_button_on_header(null, true, $k, $v);
         }
     } else {
-
-        $imgstring = "<img width=18 height=18 src=/img/general/button/star.gif>";
-        if ($sgbl->isBlackBackground()) {
-            $imgstring = null;
-        }
-        print("<td > </td> <td width=10>&nbsp;</td> <td align=right nowrap><a href=$shurl> Add to $hypervm Favorites </a> &nbsp; </td> ");
+            // TODO: Add this to language
+            print("<td align=\"right\" nowrap><a href=\"$shurl\">Add this page to $hypervm Favorites</a></td>\n");
     }
 
-    print("</tr> ");
-    print("</table> ");
+    print("</tr>\n");
+    print("</table>\n</div>\n");
+    print("<!-- Bread Crumbs End -->\n");
 }
 
 function create_navmenu($n, $action, $stuff)
@@ -1577,7 +1645,7 @@ function create_navmenu($n, $action, $stuff)
     if(isset($gbl->__navig[$n]['frm_o_o'])) {
         $f = $gbl->__navig[$n]['frm_o_o'];
     }
-
+    print("<!-- Print Menu List -->\n");
     $ghtml->print_menulist("navig$n", $alist, $f, $type);
 
 
@@ -1590,9 +1658,20 @@ function __ac_desc_resource($object)
     $sgbl->__var_main_resource = true;
 
     $treename = fix_nname_to_be_variable($object->nname);
-    ?>
-    <table  valign=top > <tr align=left><td width=10><input class=submitbutton onClick='<?php echo $treename ?>.closeAll();' type=button value="Close"></td> <td align=left width=10> <input class=submitbutton onClick='<?php echo $treename ?>.openAll();' type=button value="Open"> </td> <td width=100%> </td> </tr></table>
-    <?php
+?>
+<!-- Resource Description -->
+<table valign="top">
+    <tr align="left">
+        <td width="10">
+            <input class="submitbutton" onClick='<?php echo $treename ?>.closeAll();' type="button" value="Close">
+        </td>
+        <td align="left" width="10">
+            <input class="submitbutton" onClick='<?php echo $treename ?>.openAll();' type="button" value="Open">
+        </td>
+        <td width="100%">&nbsp;</td>
+    </tr>
+</table>
+<?php
     $ghtml->do_full_resource($object, 0, false);
 }
 
@@ -1706,36 +1785,67 @@ function do_display_init()
     if (!ifSplashScreen()) {
         ob_start();
     }
+
+    createPrincipleObject();
+    print_open_head_tag();
+    print_meta_tags();
+    print_meta_css();
+
     if ($gbl->getSessionV('__refresh_lpanel') == 'true') {
-        print("<script> top.leftframe.window.location.reload() ; </script>");
-        print("<script> top.topframe.window.location.reload() ; </script>");
+        print("<script>top.leftframe.window.location.reload();</script>\n");
+        print("<script>top.topframe.window.location.reload();</script>\n");
         $gbl->unsetSessionV('__refresh_lpanel');
     }
 
     if ($ghtml->frm_refresh_lpanel === 'true') {
         unset($ghtml->__http_vars['frm_refresh_lpanel']);
-        print("<script> top.leftframe.window.location.reload(); </script>");
-        print("<script> top.topframe.window.location.reload() ; </script>");
+        print("<script>top.leftframe.window.location.reload();</script>\n");
+        print("<script>top.topframe.window.location.reload();</script>\n");
     }
 
-    createPrincipleObject();
+    print_close_head_tag();
+    print("<!-- Start MainFrame Body -->\n");
+    $ghtml->print_body();
 
-    print_meta_lan();
-    $ghtml->print_real_beginning();
-
-    if (!$login->isDefaultSkin())
+    if (!$login->isDefaultSkin()) {
+        // Show header picture
+        print("<!-- Display Theme image -->\n");
         print_head_image();
+    }
 
     if ($sgbl->isKloxo() && $gbl->c_session->ssl_param) {
         $url = $gbl->c_session->ssl_param['backurl'];
         $parent = $gbl->c_session->ssl_param['parent_clname'];
-        print("<table cellpadding=0 height=26 cellspacing=0 background=$skindir/expand.gif> <tr> <td nowrap> <a href=$url> Back to HyperVM ($parent) </a> </td>  <td width=10>&nbsp;|&nbsp;</td> <td > Kloxo </td> <td width=10>&nbsp;|&nbsp;</td><td ><a href=/display.php?frm_action=show>Home</a> </td> <td width=10>&nbsp;|&nbsp;</td>  <td > <a href=/display.php?frm_action=list&frm_o_cname=all_domain>All </a> </td> <td width=10>&nbsp;|&nbsp;</td><td > <a href=/display.php?frm_action=list&frm_o_cname=client>Clients</a></td><td width=100%></td> <td > <a href=/htmllib/phplib/logout.php> Logout </a> </td> </tr> </table> ");
+        print("<!-- Load HyperVM to Kloxo session table -->\n");
+        print("<table cellpadding=\"0\" height=\"26\" cellspacing=\"0\" background=\"$skindir/expand.gif\">\n");
+        print("<tr>\n");
+        print("<td nowrap><a href=\"$url\">Back to HyperVM ($parent)</a></td>\n");
+        print("<td width=\"10\">&nbsp;|&nbsp;</td>\n");
+        print("<td>Kloxo</td>\n");
+        print("<td width=\"10\">&nbsp;|&nbsp;</td>\n");
+        print("<td><a href=\"/display.php?frm_action=show\">Home</a></td>\n");
+        print("<td width=\"10\">&nbsp;|&nbsp;</td>\n");
+        print("<td><a href=\"/display.php?frm_action=list&frm_o_cname=all_domain\">All</a></td>\n");
+        print("<td width=\"10\">&nbsp;|&nbsp;</td>\n");
+        print("<td><a href=\"/display.php?frm_action=list&frm_o_cname=client\">Clients</a></td>\n");
+        print("<td width=\"100%\">&nbsp;</td>\n");
+        print("<td><a href=\"/htmllib/phplib/logout.php\">Logout</a></td>\n");
+        print("</tr>\n");
+        print("</table>\n");
     }
 
     if ($gbl->c_session->consuming_parent) {
-        print("<table cellpadding=0 cellspacing=0 bgcolor = $col > <tr> <td nowrap>  Consumed Login </td> <td > <a href=/display.php?frm_consumedlogin=true&frm_action=desktop>Desktop </a> </td>  <td width=100%> </td> <td > <a href=/htmllib/phplib/logout.php?frm_consumedlogin=true> Logout </a> </td> </tr> </table> ");
+        print("<!-- Load from Kloxo to HyperVM session (Consumed) -->\n");
+        print("<table cellpadding=\"0\" cellspacing=\"0\" bgcolor=\"$col\">\n");
+        print("<tr>\n");
+        print("<td nowrap>Consumed Login</td>\n");
+        print("<td><a href=\"/display.php?frm_consumedlogin=true&frm_action=desktop\">Desktop</a></td>\n");
+        print("<td width=\"100%\">&nbsp;</td>\n");
+        print("<td><a href=\"/htmllib/phplib/logout.php?frm_consumedlogin=true\">Logout</a></td>\n");
+        print("</tr>\n");
+        print("</table>\n");
     }
-
+    print("<!-- Load Splash -->\n");
     $ghtml->print_splash();
 
     if (ifSplashScreen()) {
@@ -1743,6 +1853,7 @@ function do_display_init()
         ob_start();
     }
 
+    print("<!-- Print Start -->\n");
     $ghtml->print_start();
 
     $gbl->__this_redirect = null;
@@ -1754,32 +1865,18 @@ function __ac_desc_about()
     $ghtml->print_about();
 }
 
-function main_system_lock()
-{
-    global $gbl, $sgbl, $login, $ghtml;
-
-    // Not needed for hyperVM. HyperVM has more intelligent per vps locking.
-    if ($sgbl->isHyperVm())
-        return;
-
-    return;
-    $lname = null;
-    $nlname = $login->getClName();
-    if ($nlname !== $lname && isModifyAction() && lx_core_lock($nlname)) {
-        $ghtml->print_redirect_back('system_is_locked_by_u', '');
-        exit;
-    }
-}
-
 function display_init()
 {
     global $gbl, $sgbl, $login, $ghtml;
+
     initProgram();
     init_language();
 
-    if ($sgbl->is_this_slave()) { print("Slave Server\n"); exit; }
+    if ($sgbl->is_this_slave()) {
+        print(_("This is a Slave Server. Operate it at the Master.") . "\n");
+        exit;
+    }
 
-    // The only thing that gets modified when the dbaction is not a modify action, is the ssession table. Other tables should get modified only inside non-form actions.
     if (isModifyAction() && isUpdating()) {
         $ghtml->print_redirect_back('system_is_updating_itself', '');
         exit;
@@ -1788,9 +1885,11 @@ function display_init()
     try
     {
         do_display_init();
-        main_system_lock();
+        print("<!-- Load Navigation -->\n");
         print_navigation($gbl->__navig);
+        print("<!-- Load Warning -->\n");
         print_warning();
+        print("<!-- Load Password Contact Check -->\n");
         password_contact_check();
 
     }
@@ -1929,11 +2028,16 @@ function exit_if_under_maintenance()
 {
     global $gbl, $sgbl, $login, $ghtml;
 
+    // TODO: Unfinished feature
+    // Maintenance mode is not implemented. Looks like a unfinished feature.
+    // DT01032014
+
     if ($login->isAdmin())
         return;
 
     $g = $login->getObject('general');
     $gen = $login->getObject('general')->generalmisc_b;
+
     if ($gen->isOn("maintenance_flag")) {
         print($g->text_maintenance_message);
         exit;
@@ -1950,8 +2054,8 @@ function display_exec()
     try {
         lx_frm_inc();
     } catch (Exception $e) {
-        log_redirect("Caught except");
-        print("The resource you requested could not be retrieved..." . $e->getMessage());
+        log_redirect("Caught exception (function display_exec)");
+        print(_("The resource you requested could not be retrieved...") . $e->getMessage());
         print("\n");
     }
 

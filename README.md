@@ -23,14 +23,14 @@ Kloxo is a fully scriptable, distributed and a 100% object oriented hosting plat
 
 Please have a look at LxCenter's [Coding Standards](http://project.lxcenter.org/projects/kloxo/wiki/Coding_Standards) and [Issue Tracker](http://project.lxcenter.org).
 
-And don't forget our [forums](http://forum.lxcenter.org)!
+And don't forget our [forums](http://community.lxcenter.org)!
 
 # Licensing - AGPLv3
 
     Kloxo, Web Hosting Controlpanel
 
     Copyright (C) 2000-2009	LxLabs
-    Copyright (C) 2009-2013	LxCenter
+    Copyright (C) 2009-2014	LxCenter
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as
