@@ -30,11 +30,7 @@ And don't forget our [forums](http://community.lxcenter.org)!
     Kloxo, Web Hosting Controlpanel
 
     Copyright (C) 2000-2009	LxLabs
-<<<<<<< HEAD
-    Copyright (C) 2009-2013	LxCenter
-=======
     Copyright (C) 2009-2014	LxCenter
->>>>>>> a4f68b0e2d4c98a76af15be0fe96efc4700d197e
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as
