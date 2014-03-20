@@ -196,6 +196,12 @@ function doBeforeUpdate()
         lxfile_rm('/usr/local/lxlabs/' . $program . '/src/lxsuexec');
     }
 
+    // DT18022014 - Cleanup the mess.
+    if (lxfile_exists('/usr/local/lxlabs/' . $program . '/httpdocs/live/common.php')) {
+        log_cleanup("- Remove live dir (not in use)");
+        lxfile_rm_rec('/usr/local/lxlabs/' . $program . '/httpdocs/live');
+        lxfile_rm('/usr/local/lxlabs/' . $program . '/etc/phplive.db');
+    }
 }
 
 function cp_dbfile()

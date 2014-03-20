@@ -406,34 +406,34 @@ function do_desc_update($object, $subaction, $param)
 
 
 	//dprintr($param['__m_group']);
-
 	if (!$param) {
 		return false;
 	}
 
-	if (array_search_bool('--Select One--', $param)) {
+	if (array_search_bool('--Select One--', $param, true)) {
 		throw new lxException("Select One is not an acceptable Value", '');
 	}
 
-
+	
 	$nparam[$class]['nname'] = $object->nname;
 	// This code is very much suspect. Looks like I copied this from the addform and dumped it here. Should tkae a more detailed look in this. The issue is, the nnamevar is not needed, since this is inside a fully formed object, and nname need not be constructed. 
-	foreach($param as $k => $v) {
-		$object->resolve_class_heirarchy($class, $k, $dclass, $dk);
+	if(is_array($param))
+		foreach($param as $k => $v) {
+			$object->resolve_class_heirarchy($class, $k, $dclass, $dk);
 
-		$object->resolve_class_differences($class, $k, $ddclass, $ddk);
-		if ($ddclass !== $class) {
-			$nnamevar = get_real_class_variable($ddclass, "__rewrite_nname_const");
-			if ($nnamevar) {
-				$nnamelist = null;
-				foreach($nnamevar as $n) {
-					$nnamelist[] = $param[$n];
+			$object->resolve_class_differences($class, $k, $ddclass, $ddk);
+			if ($ddclass !== $class) {
+				$nnamevar = get_real_class_variable($ddclass, "__rewrite_nname_const");
+				if ($nnamevar) {
+					$nnamelist = null;
+					foreach($nnamevar as $n) {
+						$nnamelist[] = $param[$n];
+					}
+					$nparam[$dclass]['nname'] = implode($sgbl->__var_nname_impstr, $nnamelist);
 				}
-				$nparam[$dclass]['nname'] = implode($sgbl->__var_nname_impstr, $nnamelist);
 			}
+			$nparam[$dclass][$dk] = $v;
 		}
-		$nparam[$dclass][$dk] = $v;
-	}
 
 
 	foreach($nparam as $k => $v) {

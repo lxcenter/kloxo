@@ -193,11 +193,12 @@ function getIPs_from_ifcfg()
 	global $gbl, $sgbl, $login, $ghtml;
 
 	$driverapp = $gbl->getSyncClass(null, null, 'ipaddress');
-//	print($driverapp);
 
-	if ($driverapp === 'redhat') {
+// Responds always as redhat on centos.
+// Project issue #735
+//	if ($driverapp === 'redhat' || $driverapp === 'centos') {
 		$list = Ipaddress__Redhat::getCurrentIps();
-	}
+//	}
 
 	$iplist = array(); // Initialize return value
 	if(!empty($list)) {

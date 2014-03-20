@@ -168,10 +168,10 @@ function lxshell_input($input, $cmd)
 /**
  * Unzip file to the given directory as given user
  * 
- * @param $username
- * @param $dir path to the output directory
- * @param $file file to unzip
- * @param $list
+ * @param string $username
+ * @param string $dir path to the output directory
+ * @param string $file file to unzip
+ * @param string $list optional
  */
 function lxuser_unzip_with_throw($username, $dir, $file, $list = null)
 {
@@ -254,7 +254,7 @@ function lxuser_mv($username, $src, $dst)
 function lxuser_put_contents($username, $file, $data, $flag = 0)
 {
 	$file = expand_real_root($file);
-    dprint("Debug: filename is: ". $file . "\n");
+	dprint("Debug: filename is: ". $file . "\n");
 	if (is_soft_or_hardlink($file)) {
 		log_log("link_error", "$file is hard or symlink. Not writing\n");
 		return false;
@@ -290,9 +290,9 @@ function lxuser_put_contents($username, $file, $data, $flag = 0)
 /**
  * Changes file mode
  * 
- * @param $username
- * @param $file path to the file
- * @param $mod mode of the specified file
+ * @param string $username
+ * @param string $file path to the file
+ * @param string $mod mode of the specified file
  */
 function lxuser_chmod($username, $file, $mod)
 {
@@ -305,9 +305,9 @@ function lxuser_chmod($username, $file, $mod)
 /**
  * Executes an external program or command as given user 
  * 
- * @param $username
- * @param $cmd command to execute
- * @return depends on executed command
+ * @param string $username
+ * @param string $cmd command to execute
+ * @return string depends on executed command
  */
 function lxuser_return($username, $cmd) {
 	global $sgbl;
@@ -332,7 +332,7 @@ function lxuser_return($username, $cmd) {
 /**
  * Deletes filename or empty directory. 
  * 
- * @param $file	path to the file or to the directory
+ * @param string $file path to the file or to the directory
  * @return TRUE on success or FALSE on failure.
  */ 
 function lxfile_rm($file)
@@ -354,8 +354,8 @@ function lxfile_rm($file)
 /**
  * Renames/Moves file
  * 
- * @param $src path to the source file
- * @param $dst destination path
+ * @param string $src path to the source file
+ * @param string $dst destination path
  * @return TRUE on success or FALSE on failure.
  */
 function lxfile_mv($src, $dst)
@@ -398,7 +398,7 @@ function lxfile_nonzero($file)
 /**
  * Makes directory
  * 
- * @param $dir the directory path
+ * @param string $dir the directory path
  * @return TRUE on success or FALSE on failure.
  */
 function lxfile_mkdir($dir)
@@ -423,8 +423,8 @@ function lxfile_mkdir($dir)
 /**
  * Copies file
  * 
- * @param $src path to the source file
- * @param $dst destination path
+ * @param string $src path to the source file
+ * @param string $dst destination path
  * @return TRUE on success or FALSE on failure.
  */
 function lxfile_cp($src, $dst)

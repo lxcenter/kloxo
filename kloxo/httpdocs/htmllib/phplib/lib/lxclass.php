@@ -259,18 +259,13 @@ function getTitleWithSync($class = null)
 	}
 
 	$desc = get_description($class);
-	$path = get_image_path();
-	$img = $ghtml->get_image($path, null, $obj->__driverappclass, '.gif');
 	$descr = null;
 	$str = null;
 	if (check_if_many_server()) {
 		$descr = "on {$obj->syncserver}";
-		//$str = ":{$obj->syncserver}";
-	} 
+	}
 
-	//<img src={$img} width=14 height=14> 
-	// Don't need this. Ruins the appearance <b> [</b>{$obj->getShowInfo()}<b>] </b>
-	return "{$desc}  <span title=\"{$desc} is Configured {$descr} on {$obj->__driverappclass}\">  {$str} {$switch}: {$obj->__driverappclass}  </span>";
+	return "{$desc}  <span title=\"{$desc} is Configured {$descr}\">{$str} {$switch}</span>";
 
 }
 
@@ -345,17 +340,8 @@ function syncToSystem()
 
 function getCommandResource($resource)
 {
+	// TODO: Remove not used function
 	return null;
-
-	$list = $this->getList($resource);
-
-	if (!$list) {
-		throw new lxexception('resource_doesnt_exist', '', $resource);
-	}
-
-	$array = get_namelist_from_objectlist($list);
-
-	return $array;
 }
 
 static function switchDriver($class, $old, $new)
@@ -498,42 +484,10 @@ final static function calldriverappFunc($class, $func)
 {
 	global $gbl, $sgbl;
 
+	// TODO; Remove not used function
 	print("I shouldn't get called\n");
 	debugBacktrace();
 	exit;
-
-	$driverapp = $gbl->getSyncClass(null, null, $class);
-
-	if (!$driverapp) {
-		dprint(" NO driverapp class for {$class}\n <br> ");
-		return;
-	}
-	$class = $class . "_" . $driverapp;
-
-	$start = 2;
-
-        $arglist = array();
-        for ($i = $start; $i < func_num_args(); $i++) {
-                if (isset($transforming_func)) {
-                        $arglist[] = $transforming_func(func_get_arg($i));
-                } else {
-                        $arglist[] = func_get_arg($i);
-                }
-        }
-
-        $arglist = array();
-        for ($i = $start; $i < func_num_args(); $i++) {
-                if (isset($transforming_func)) {
-                        $arglist[] = $transforming_func(func_get_arg($i));
-                } else {
-                        $arglist[] = func_get_arg($i);
-                }
-        }
-
-
-
-	return call_user_func_array(array($class, $func), $arglist);
-
 }
 
 
@@ -1177,38 +1131,9 @@ static function filterFunc($op, $oval, $val)
 
 function isDisplay($filter = null) 
 {
-
+	// TODO: Remove not used Function
 	global $gbl, $sgbl, $login;
 	return true;
-	if (!$filter)
-		return 1;
-
-
-	$class = lget_class($this);
-
-	$res = 1;
-	foreach($filter as $key => $val) {
-		if (char_search_a($key, "_o_")) {
-			$var = substr($key, 0, strpos($key, "_o_"));
-			$op = substr($key, strpos($key, "_o_") + 3);
-			//$op = $oplist[$op];
-
-			if (!isset($this->$var)) {
-				$oval = $a->display($var);
-			} else {
-				$oval = $this->$var;
-			}
-
-			$res &= self::filterFunc($op, $oval, $val);
-
-		} else {
-			$f = "__filter_{$key}_{$val}";
-			$string = get_real_class_variable($class, $f);
-			$res &= eval("return {$string};");
-		}
-	
-	}
-	return $res;
 }
 
 
@@ -1663,68 +1588,10 @@ function getSpecialname()
 
 function getClName()
 {
-	//return "{$this->get__table()}_s_vv_p_{$this->nname}";
 	return "{$this->get__table()}-{$this->nname}";
 }
 
-/*
-function __get($var)
-{
-	global $gbl, $sgbl, $login, $ghtml; 
-
-	 This is absurd. At least set also should trigger it. Otherwise variables will get overwritten after they are set. What the fuck....
-	if (isset($this->__dbvar)) {
-		$this->setFromArray($this->__dbvar);
-		unset($this->__dbvar);
-	}
-
-	if (isset($this->$var)) {
-		return $this->$var;
-	}
-	if ($var === 'cttype') {
-		return lget_class($this);
-	}
-
-	$string = backtrace_once();
-	if ($string) {
-		dprint("\n\n<br> <br> <b> Non Existent: </b> {$this->get__table()}:$this->nname $var ");
-		dprintr("Backtrace: $string<br><br>\n \n");
-	} else {
-		dprint(" Non Existent: {$this->get__table()}:$this->nname $var <br> ");
-	}
-
-	//debugBacktrace();
-	return null;
-}
-*/
-/*
-
-function __set($var, $val)
-{
-	print("$var $val");
-	$this->$var = $val;
-}
-
-function __get($var)
-{
-	if (preg_match("/_o$/i", $var)) {
-		$class = preg_replace("/_o$/i", "", $var);
-		dprint("Class: $class", 2);
-	$this->initObjectIfUndef($class);
-	return $this->$var;
-}
-if (preg_match("/_l$/i", $var)) {
-	$class = preg_replace("/_l$/i", "", $var);
-	$this->initListIfUndef($class);
-	return $this->$var;
-}
-
-return $this->$var;
-}
-
-*/
-
-/** 
+/**
 * @return void 
 * @param 
 * @param 
@@ -1856,7 +1723,7 @@ final function addObject($class, $obj)
 
 function findLeastId($listclass)
 {
-
+    // TODO: Remove empty function
 
 }
 
