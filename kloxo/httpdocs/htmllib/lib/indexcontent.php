@@ -1,4 +1,8 @@
 <?php
+/*
+ * This file is used by the /login/ page.
+ * Refactoring is needed. Wrong place, wrong name
+ */
 
 $accountlist = array('client' => "Kloxo Account",'domain' => 'Domain Owner', 'mailaccount' => "Mail Account");
 $progname = $sgbl->__var_program_name;
@@ -17,10 +21,6 @@ if(!$cgi_forgotpwd ){
         include_once "lib/demologins.php";
     } else {
         ?>
-
-        <style type="text/css">
-            @import url("/htmllib/lib/admin_login.css");
-        </style>
 
         <div id="ctr" align="center">
             <div class="login">
@@ -62,10 +62,6 @@ if(!$cgi_forgotpwd ){
 elseif ($cgi_forgotpwd == 1) {
     ?>
 
-    <style type="text/css">
-        @import url(/htmllib/lib/admin_login.css);
-    </style>
-
     <div id="ctr" align="center">
         <div class="login">
             <div class="login-form">
@@ -84,7 +80,7 @@ elseif ($cgi_forgotpwd == 1) {
                 </form>
             </div>
             <div class="login-text">
-                <div class="ctr"><img src="/img/login/icon1.gif" width="64" height="64" alt="security" /></div>
+                <div class="ctr"><img border=0 src="/img/login/icon1.gif" width="64" height="64" alt="security" /></div>
                 <p>Welcome to <?php echo  $sgbl->__var_program_name; ?></p>
                 <p>Use a valid username and email-id to get password.</p>
                 <br />
