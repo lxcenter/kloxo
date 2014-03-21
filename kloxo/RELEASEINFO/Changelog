@@ -1,5 +1,17 @@
 Changelog
 
+Kloxo 6.1.19 - 22-mar-2014
+##################################
+Bug #519: Spamdyke On Additional Smtp Port affects also primary port
+Bug #781: Upgrade slave fails
+Bug #900: post_max_size is definied two times in php.ini.temp
+Bug #941: Forgot Password in Kloxo doesn't work
+Bug #992: wrong package installing tinydns
+Bug #994: Apache optimization causes crashing hold
+Bug #1098: Client file manager - No files
+Bug #788: Partial fix for pure-ftpd
+Enhancement #1099: Improvement GUI (part 1)
+
 Kloxo 6.1.18 - 23-feb-2014
 ##################################
 Bug #863: Adding parked/redirected domain breaks Apache config

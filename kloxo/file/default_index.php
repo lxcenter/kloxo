@@ -13,56 +13,16 @@
 		$incfile = "./inc.php";
 	}
 ?>
+<!DOCTYPE html>
 <html>
-
-<head>
-<title>Kloxo Control Panel</title>
-<meta http-equiv="Content-Language" content="en-us">
-<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
-</head>
-
-<style>
-body {
-	font-family: Tahoma, Verdana, Arial, Helvertica, sans-serif;
-	font-size: 8pt;
-	font-weight: 100;
-	background: #ddeeff;
-	margin: 0;
-}
-a {
-	text-decoration: none;
-}
-img {
-	border: 0;
-}
-
-img.logo {
-	margin: 5px;
-	padding: 0;
-}
-
-table.header {
-	border-collapse: collapse;
-	border-spacing: 0;
-	background-color: #66aadd;
-	/* height: 110px; */
-	width: 100%;
-	font-family: Tahoma, Verdana, Arial, Helvertica, sans-serif;
-	font-size: 8pt;
-	font-weight: 100;
-}
-
-table.content {
-	border-collapse: collapse;
-	border-spacing: 0;
-	width: 100%;
-	font-family: Tahoma, Verdana, Arial, Helvertica, sans-serif;
-	font-size: 8pt;
-	font-weight: 100;
-}
-</style>
+	<head>
+		<title>Kloxo Control Panel</title>
+			<meta http-equiv="Content-Language" content="en-us">
+			<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+			<link href="/htmllib/css/skin/default/missing-common.css" rel="stylesheet" type="text/css">
+			<link href="/htmllib/lib/admin_login.css" rel="stylesheet" type="text/css">
+	</head>
 <body>
-
 <table class="header">
 	<tr>
 		<td valign="top" width="100%"><img class="logo" src="images/logo.png" height="75" alt="hosting-logo"></td>
