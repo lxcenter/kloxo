@@ -279,7 +279,7 @@ function getMysqlDbAdmin(&$alist)
 {
 	if (!$this->isLocalhost('mysqldbsyncserver')) {
 		$fqdn = getFQDNforServer($this->mysqldbsyncserver);
-		//$dbadminUrl =  "http://$fqdn:7778/thirdparty/phpMyAdmin/";
+
 		if (http_is_self_ssl()) {
 			$dbadminUrl =  "https://$fqdn:7777/thirdparty/phpMyAdmin/";
 		} else {
@@ -296,7 +296,7 @@ function getMysqlDbAdmin(&$alist)
 		$user = $dbad->nname;
 		$pass = $dbad->dbpassword;
 		if (if_demo()) {
-			//$pass = "demopass";
+			throw new lxexception("Not_Allowed_In_Demo","");
 		}
 		$alist[] = create_simpleObject(array('url' => "$dbadminUrl?pma_username=$user&pma_password=$pass", 'purl' => "c=mysqldb&a=updateform&sa=phpmyadmin", 'target' => "target='_blank'"));
 	} catch (Exception $e) {

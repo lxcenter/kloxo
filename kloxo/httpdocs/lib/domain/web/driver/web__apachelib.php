@@ -1437,11 +1437,10 @@ function fullUpdate()
 	self::createSSlConf($this->main->__var_ipssllist, $this->main->__var_domainipaddress);
 
 	$this->createConffile();
-//	$this->updateMainConfFile();
 
-//	self::createWebDefaultConfig();
+	// Removed recursive
+	lxfile_unix_chown("{$droot}/", "{$uname}:{$uname}");
 
-	lxfile_unix_chown_rec("{$droot}/", "{$uname}:{$uname}");
 	lxfile_unix_chmod("{$droot}/", "0755");
 	lxfile_unix_chmod("{$droot}", "0755");
 	lxfile_unix_chown("{$hroot}/{$domname}", "{$uname}:apache");
