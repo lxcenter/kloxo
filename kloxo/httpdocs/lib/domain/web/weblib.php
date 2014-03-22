@@ -219,7 +219,7 @@ function postAdd()
 	try {
 		$dns->was();
 	} catch (exception $e) {
-		throw new lxException("alis_not_added_due_to_dns_conflict", 'nname', $this->nname);
+		throw new lxException("alias_not_added_due_to_dns_conflict", 'nname', $this->nname);
 	}
 }
 
@@ -386,17 +386,13 @@ function createExtraVariables()
 		$this->__var_index_list = lx_array_merge(array($list, $ol));
 	}
 
-//	$this->__var_sslport = $port->sslport;
-//	if (!$this->__var_sslport) $this->__var_sslport = "7777";
 	$this->__var_sslport = (isset($port->sslport)) ? $port->sslport : "7777";
 
-//	$this->__var_nonsslport = $port->nonsslport;
-//	if (!$this->__var_nonsslport) $this->__var_nonsslport = "7778";
 	$this->__var_nonsslport = (isset($port->nonsslport)) ? $port->nonsslport : "7778";
 
-//	if (!$this->docroot) { $this->docroot = $this->nname; }
-//	if (!$this->corelocation) { $this->corelocation = "__path_customer_root"; }
+	// TODO: Check (Sanitize?) the nname!
 	if (!isset($this->docroot)) { $this->docroot = $this->nname; }
+
 	if (!isset($this->corelocation)) { $this->corelocation = "__path_customer_root"; }
 
 	$this->__var_extrabasedir = $gen->extrabasedir;
@@ -411,13 +407,11 @@ function createExtraVariables()
 		}
 	}
 
-	//$dvlist = $this->getList('davuser');
-
 	$dvlist = null;
 	foreach((array) $dvlist as $v) {
 		$ndvlist[$v->directory][] = null;
 	}
-	//$this->__var_davuser = $ndvlist;
+
 	$this->__var_davuser = null;
 
 	if (!$this->customer_name) {
@@ -449,15 +443,6 @@ function createExtraVariables()
 	$iplist = $ipdb->getRowsWhere($string, array('ipaddr'));
 	$this->__var_ipaddress = $iplist;
 	$mydb = new Sqlite($this->__masterserver, "web");
-	
-/* This is to ensure that the excess domainipaddress entries are filtered out.
-	$siplist = get_namelist_from_arraylist($iplist, 'ipaddr');
-	foreach($this->__var_domainipaddress as $k) {
-		if (!isset($siplist[$k])) {
-			unset($this->__var_domainipaddress[$k]);
-		}
-	}
-*/
 
 	if ($this->dbaction === 'update' && $this->subaction !== 'full_update' && $this->subaction !== 'fixipdomain') {
 		return ;
@@ -470,10 +455,6 @@ function createExtraVariables()
 
 	$string = "syncserver = '$syncserver'" ;
 	$this->__var_vdomain_list = $mydb->getRowsWhere($string, array('nname', 'ipaddress'));
-	/*
-	$string = "ttype='forward' AND syncserver = '$syncserver'" ;
-	$this->__var_fdomain_list = $mydb->getRowsWhere($string, array('nname'));
-	*/
 
 	// new -- related to apache/lighttpd new structure
 	$mmaildb = new Sqlite($this->__masterserver, 'mmail');
@@ -592,6 +573,7 @@ function getMultiUpload($var)
 
 static function findTotalUsage($driver, $list)
 {
+	// TODO: Remove not used function
 	foreach($list as $k => $d) {
 		$tlist[$k] = self::web_getdisk_usage($d['customer_name'], $d['nname']);
 	}
@@ -600,20 +582,8 @@ static function findTotalUsage($driver, $list)
 
 static function web_getdisk_usage($customer_name, $domainname)
 {
-	global $gbl, $sgbl, $login, $ghtml; 
-
-	return;
-
-	//$path[] = "__path_customer_root/$customer_name/$domainname";
-	$path[] = "__path_customer_root/$customer_name/__processed_stats/$domainname";
-	$path[] = "__path_program_home/domain/$domainname/__backup/";
-	//$path[] = "__path_httpd_root/$domainname";
-
-	$t = 0;
-	foreach($path as $p) {
-		$t += lxfile_dirsize($p);
-	}
-	return $t;
+	// TODO: Remove not used function
+	return null;
 }
 
 function deleteDir()
@@ -647,7 +617,9 @@ function webChangeOwner()
 
 function getFullDocRoot()
 {
+	// TODO: Check (Sanitize?) the nname
 	if (!$this->docroot) { $this->docroot = $this->nname; }
+
 	$path = "__path_customer_root/$this->customer_name/$this->docroot";
 	$path = expand_real_root($path);
 	return $path;
@@ -656,8 +628,10 @@ function getFullDocRoot()
 function getParentFullDocRoot()
 {
 	if (!$this->docroot) {
+		// TODO: Check (Sanitize?) the nname
 		$parent = $this->nname;
 	} else {
+		// TODO: Check (Sanitize?) the nname
 		$parent = $this->docroot;
 		$pos = strpos($parent, '/');
 		if ($pos > 0) {
@@ -694,7 +668,8 @@ function getDirprotectFromVirtualList($name)
 function do_backup()
 {
 	global $gbl, $sgbl, $login, $ghtml; 
-	$name = $this->nname; $fullpath = "$sgbl->__path_customer_root/{$this->customer_name}/$name/";
+	$name = $this->nname;
+	$fullpath = "$sgbl->__path_customer_root/{$this->customer_name}/$name/";
 	lxfile_mkdir($fullpath);
 	$list = lscandir_without_dot_or_underscore($fullpath);
 	return array($fullpath, $list);
@@ -760,32 +735,6 @@ function createDir()
 
 	$domname = $this->nname;
  
-/*
-	print("+++++++++++++++++++++++++++++++++++++++++++++++++++++");
-
-	print("This is the Conf file Path  $v_dir 		=" );
-    print("This is the LogPath  	$log_path 	= ");
-    print("This is the  LogPath $log_path1 	="); 
-    print("This is the Custom  LogPath $cust_log 	=" );
-    print("This is the Error LoG Path  $err_log 	= ");
-	print("$stat_conf 	= ");
-	print("This is THE User Home $user_home = ");	
-
-	print("+++++++++++++++++++++++++++++++++++++++++++++++++++");
-
-*/
-	// Protection for webstats.
-
-/*
-	$new_user_dir = false;
-	lxfile_mkdir($user_home);
-
-	if ((count(lscandir_without_dot($user_home)) == 0) && isset($this->__var_skelfile) && $this->__var_skelfile) {
-		$this->getAndUnzipSkeleton($this->__var_skelmachine, $this->__var_skelfile, "$user_home/");
-		$new_user_dir = true;
-	}
-	lxfile_mkdir("$web_home/$domname/webstats");
-*/
 	$wsstring = "Stats not yet generated\n";
 
 	lfile_put_contents("$web_home/$domname/webstats/index.html", $wsstring);
@@ -805,33 +754,15 @@ function createDir()
 
 	lxfile_mkdir($v_dir);
 	lxfile_mkdir($log_path);
-	//lxfile_mkdir($log_path1);
-	// issue #589 - Change httpd config structure
-//	lxfile_mkdir("__path_apache_path/kloxo");
-//	lxfile_touch("__path_apache_path/kloxo/virtualhost.conf");
 
 	$parent_doc_root = $this->getParentFullDocRoot();
+
+	// Removed the recursive chown
 	if ($user_home != $parent_doc_root) {
-		lxfile_generic_chown_rec($parent_doc_root, "{$this->username}:{$this->username}");
+		lxfile_generic_chown($parent_doc_root, "{$this->username}:{$this->username}");
 	} else {
-		lxfile_generic_chown_rec($user_home, "{$this->username}:{$this->username}");
+		lxfile_generic_chown($user_home, "{$this->username}:{$this->username}");
 	}
-/*
-	// Issue #565 - Domain skeleton files chmodded to 0755
-	// latest info from William
-
-	if ($new_user_dir) {
-		lxfile_generic_chmod_rec($user_home, "755");
-	}
-
-
-	system("find {$user_home} -type f -exec chmod 644 {} \;");
-	system("find {$user_home} -type d -exec chmod 755 {} \;");
-*/
-
-	// MR --- consistence with fix-chownchmod script
-	// fixed 64bit slave (skeleton.zip always zero)
-	// back to original because problem with suphp
 
 	lxfile_generic_chown($user_home, "{$this->username}:apache");
 	lxfile_generic_chown("__path_customer_root/$this->customer_name", "{$this->username}:apache");
@@ -841,32 +772,11 @@ function createDir()
 	lxfile_generic_chown("$web_home/{$this->nname}", "{$this->username}:apache");
 
 	if (!lxfile_exists("$web_home/{$this->nname}/httpdocs")) {
-		//lxfile_mkdir("$sgbl->__path_customer_root/$this->customer_name/domain/$this->nname");
-		//lxfile_symlink("{$this->getFullDocRoot()}", "$sgbl->__path_customer_root/$this->customer_name/domain/$this->nname/www");
 		lxfile_symlink("{$this->getFullDocRoot()}", "$web_home/$this->nname/httpdocs");
-		//lxfile_symlink("$web_home/{$this->nname}/httpdocs", "$web_home/{$this->nname}/{$this->nname}");
 	}
 
 	$this->createstatsConf($this->nname, $this->stats_username, $this->stats_password);
-/*
-	print("This is the User Home : $user_home \n");                                                   
-	print("This is the certificate Pah : $sgbl->__path_ssl_root/certificate/\n");            
-	print("This is the Private Key Pah: $sgbl->__path_ssl_root/privatekey/\n");             
-	print("This is the Domain Name :$web_home/{$this->nname}\n");                              
-	
-	print( "This is teh User Httpdocs  :$user_home/www/");                                         
-	print("GO to the User Dir (chmod 775");                                                    
-	print("Chown To The :{$this->username}:{$this->username}, $user_home\n");  
-	print("This is the Vdir :  $v_dir\n");                                                         
-	print("Creating log path :$log_path\n");                                                            
-	print("Creating Dir:$log_path1\n");                                                           
-	print("Touching :$sgbl->__path_apache_path/kloxo\n");                           
-	print("Touching Virtual hOPs$sgbl->__path_apache_path/kloxo/virtualhost.conf\n");                  
-	print("$err_log\n");                                                             
-	print("Install ALL : $install_all\n");
-	print("chown  :{$this->username} , $web_home/{$this->nname}\n");
-	exit;
-*/
+
 	// MR -- make guarantee the last process!
 	// mod_php still possible not work (ftp issue) for tranfer skeleton.zip from master to slave
 	$this->getAndUnzipSkeleton($this->__var_skelmachine, $this->__var_skelfile, "$user_home/");
@@ -885,7 +795,6 @@ static function createstatsConf($domname, $stats_name, $stats_password)
     $inp = "__path_program_root/file/awstats.model.conf";
     $outp = "__path_real_etc_root/awstats/awstats.$domname.conf";
 	self::docreatestatsConf($inp, $outp, $domname, $stats_name, $stats_password);
-	//lxfile_cp("__path_real_etc_root/awstats/awstats.$domname.conf", "__path_real_etc_root/awstats/awstats.www.$domname.conf");
 	lxfile_mkdir("/home/kloxo/httpd/awstats/dirdata/$domname");
 
 }
@@ -935,7 +844,7 @@ static function docreatestatsConf($inp, $outp, $domain, $stats_name, $stats_pass
 
 function getShowInfo()
 {
-	//return "Primary Ftp User: $this->ftpusername; Subdomains: {$this->used->subweb_a_num}";
+	// TODO: Remove not used function
 }
 
 function hasFileResource() { return true; }
@@ -974,11 +883,7 @@ static function createSession($ar)
 
 function createShowPropertyList(&$alist) 
 { 
-
 	$alist['property'][] = 'a=show';
-	//$alist['property'][] = "goback=1&o=mmail&a=list&c=mailaccount";
-	//$alist['property'][] = 'goback=1&a=show&sa=config';
-
 }
 
 static function removeOtherDriver($driverapp)
@@ -1016,15 +921,11 @@ static function switchProgramPre($old, $new)
 	}
 
 	if ($new === 'apache') {
-//		addLineIfNotExistInside("/etc/httpd/conf/httpd.conf", "Include /etc/httpd/conf/kloxo/kloxo.conf", "");
 		lxshell_return("__path_php_path", "../bin/misc/installsuphp.php");
-		//lxshell_return("__path_php_path", "../bin/fix/fixfrontpage.php");
 	} else {
 		lxfile_mkdir("/etc/lighttpd/");
 		lxfile_mkdir("/etc/lighttpd/conf/kloxo");
 		lxfile_cp("../file/lighttpd/lighttpd.conf", "/etc/lighttpd/lighttpd.conf");
-//		lxfile_cp("../file/lighttpd/conf/kloxo/kloxo.conf", "/etc/lighttpd/conf/kloxo/kloxo.conf");
-//		lxfile_cp("../file/lighttpd/conf/kloxo/webmail.conf", "/etc/lighttpd/conf/kloxo/webmail.conf");
 		lxfile_cp("../file/lighttpd/etc_init.d", "/etc/init.d/lighttpd");
 		lxfile_unix_chmod("/etc/init.d/lighttpd", "0755");
 		lxfile_mkdir("/home/kloxo/httpd/lighttpd");
@@ -1047,40 +948,18 @@ function createShowAlist(&$alist, $subaction = null)
 static function get_full_alist()
 {
 	$alist['__title_class_web'] = '__title_class_web';
-
-	//$alist[] = "a=list&c=webindexdir_a";
-	
 	$alist[] = "a=list&c=dirprotect";
 	$alist[] = "a=show&l[class]=ffile&l[nname]=/";
 	$alist[] = "a=list&c=ftpuser";
 	$alist[] = 'a=list&c=ftpsession';
-
-	//$this->getSwitchServerUrl($alist);
-
-	//$alist[] = "a=updateForm&sa=ipaddress";
-
 	$alist['__title_script'] = 'script';
 	$alist[] = create_simpleObject(array('url' => "http://nname/__kloxo/phpinfo.php", 'purl' => 'a=updateform&sa=phpinfo', 'target' => "target='_blank'")); 
-
 	$alist[] = "a=show&o=phpini";
 	$alist[] = "a=updateform&sa=lighty_rewrite";
 	$alist[] = "a=list&c=component";
-
 	$alist[] = "a=updateform&sa=permalink";
-
 	$alist[] = "a=show&k[class]=allinstallapp&k[nname]=installapp";
-
-	/*
-	$alist['action'][] = "a=update&sa=backup";
-	$alist['action'][] = "a=updateform&sa=restore";
-	*/
-	/*
-	if ($this->priv->isOn('frontpage_flag')) {
-		$alist[] = create_simpleObject(array( 'url' => "http://$this->nname:8080", 'purl' => 'a=update&sa=frontpage_admin&l[class]=web&l[nname]=$this->nname', 'target' => "target='_blank'")); 
-	}
-*/
 	return $alist;
-
 }
 
 function createGraphList()
@@ -1097,6 +976,7 @@ function isDomainVirtual()
 
 function preSync()
 {
+	// TODO: Useless function?
 	//Syncing uuser before everything else. If uuser is not there, everythign else will get fucked up...
 	if ($this->isDomainVirtual() && ($this->dbaction === 'add' || $this->dbaction === 'syncadd')) {
 		//$this->getObject('uuser')->was();
@@ -1211,9 +1091,16 @@ function updateform($subaction, $param)
 				if(preg_match("/\.\.\//", $param['docroot'])) {
 					throw new lxexception("folder_name_may_not_contain_doubledotsslash", "");
 				}
-			if(preg_match("/.*({|}|%|\"|$|'|`).*/", $web-docroot)){
-				throw new lxexception("folder_name_may_not_contain_bad_characters","");
+			if(preg_match("/.*[\'].*/", $this->docroot)){
+				throw new lxexception("the_folder_name_may_not_contain_a_quote_character", "");
 			}
+			if(preg_match("/.*[\`].*/", $this->docroot)){
+				throw new lxexception("the_folder_name_may_not_contain_a_backtick_character", "");
+			}
+			if(preg_match("/.*[\{].*/", $this->docroot)){
+				throw new lxexception("the_folder_name_may_not_contain_a_accolade_char", "");
+			}
+
 			return $vlist;
 
 		case "blockip":
@@ -1418,4 +1305,3 @@ static function initThisList($parent, $class)
 }
 
 }
-
