@@ -1091,13 +1091,13 @@ function updateform($subaction, $param)
 				if(preg_match("/\.\.\//", $param['docroot'])) {
 					throw new lxexception("folder_name_may_not_contain_doubledotsslash", "");
 				}
-			if(preg_match("/.*[\'].*/", $this->docroot)){
+			if(preg_match("/.*[\'].*/", $param['docroot'])){
 				throw new lxexception("the_folder_name_may_not_contain_a_quote_character", "");
 			}
-			if(preg_match("/.*[\`].*/", $this->docroot)){
+			if(preg_match("/.*[\`].*/", $param['docroot'])){
 				throw new lxexception("the_folder_name_may_not_contain_a_backtick_character", "");
 			}
-			if(preg_match("/.*[\{].*/", $this->docroot)){
+			if(preg_match("/.*[\{].*/", $param['docroot'])){
 				throw new lxexception("the_folder_name_may_not_contain_a_accolade_char", "");
 			}
 
