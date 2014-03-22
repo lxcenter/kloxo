@@ -618,8 +618,17 @@ function postAdd()
 
 	if (!$this->docroot) { $this->docroot = $this->nname; }
 	///#1069 
-	if(preg_match("/\.\.\//", $web-docroot)){
+	if(preg_match("/\.\.\//", $this->docroot)){
 	throw new lxexception("folder_name_may_not_contain_doubledotsslash","");
+	}
+	if(preg_match("/.*[\'].*/", $this->docroot)){
+		throw new lxexception("the_folder_name_may_not_contain_a_quote_character", "");
+	}
+	if(preg_match("/.*[\`].*/", $this->docroot)){
+		throw new lxexception("the_folder_name_may_not_contain_a_backtick_character", "");
+	}
+	if(preg_match("/.*[\{].*/", $this->docroot)){
+		throw new lxexception("the_folder_name_may_not_contain_a_accolade_char", "");
 	}
 
 	$this->docroot = coreFfile::getRealpath($this->docroot);
@@ -648,6 +657,16 @@ function postAdd()
     if(preg_match("/\.\.\//", $web-docroot)){
     	throw new lxexception("folder_name_may_not_contain_doubledotsslash","");
     }
+	if(preg_match("/.*[\'].*/", $this->docroot)){
+		throw new lxexception("the_folder_name_may_not_contain_a_quote_character", "");
+	}
+	if(preg_match("/.*[\`].*/", $this->docroot)){
+		throw new lxexception("the_folder_name_may_not_contain_a_backtick_character", "");
+	}
+	if(preg_match("/.*[\{].*/", $this->docroot)){
+		throw new lxexception("the_folder_name_may_not_contain_a_accolade_char", "");
+	}
+
 
     ///#656 When adding a subdomain, the Document Root field is not being validated
     if (csa($web->docroot, " /")) {
