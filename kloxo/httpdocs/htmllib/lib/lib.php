@@ -5502,7 +5502,9 @@ function setInitialPureftpConfig()
 		@lxfile_rm("/etc/xinetd.d/pure-ftpd");
 	}
 
-	if (!lxfile_exists("/etc/xinetd.d/pureftp")) {
+	// Config file remains original if it exists, adding || true will cause
+	// overwriting.
+	if (!lxfile_exists("/etc/xinetd.d/pureftp") || true) {
 		log_cleanup("- Install /etc/xinetd.d/pureftp TCP Wrapper file");
 		lxfile_cp("../file/xinetd.pureftp", "/etc/xinetd.d/pureftp");
 	}

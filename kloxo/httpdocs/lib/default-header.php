@@ -84,12 +84,12 @@ function print_a_right_button($something, $ttype, $id, $pos)
 	$skindir = $login->getSkinDir();
 ?>
 <td>
-<table border="0" cellspacing=0 cellpadding=0 style='font-size:11;color:#004466;height:34;width:73;background:url(<?php echo $skindir ?>right_btn.gif);' OnMouseOver="style.cursor='pointer'; top.mainframe.changeContent('help','<?php echo $name?>');"  <?php echo $onclickstring ?> onmouseout="changeContent('help','helparea')">
+<table class="headertabletabsright" style="background: url(<?php echo $skindir ?>right_btn.gif);" OnMouseOver="style.cursor='pointer';" <?php echo $onclickstring ?>>
     <tr>
-        <td valign=bottom width=17 height=34 align=left style='padding-bottom:5;padding-left:6'>
-            <img height=8 width=8 src='/img/image/<?php echo $login->getSpecialObject('sp_specialplay')->icon_name ?>/button/<?php echo $icon ?>'>
+        <td valign="bottom" width="17" height="34" align="left" style="padding-bottom: 5px; padding-left: 6px;">
+            <img height="8" width="8" src="/img/image/<?php echo $login->getSpecialObject('sp_specialplay')->icon_name ?>/button/<?php echo $icon ?>">
         </td>
-        <td valign=bottom width=53 style='padding-left:3;padding-bottom:3;' align=left><b><?php echo  $name ?> </font> </b>
+        <td valign="bottom" width="53" style="padding-left: 3px; padding-bottom: 3px;" align="left"><b><?php echo  $name ?></b>
         </td>
     </tr>
 </table>
@@ -105,28 +105,28 @@ function print_a_button($side, $ttype, $id, $pos, $menupos = 0)
 	$icon = $gdata[$id][2];
 
 	if ($side === 'right') {
-		$imgprop = "height=8 width=8";
+		$imgprop = 'height="8" width="8"';
 		$menu = "rightmenu";
 		$bgimg = "right_btn.gif";
-		$imgtdprop = "width=17";
-		$tdstyle = "style='padding-top:10";
+		$imgtdprop = 'width="17"';
+		$tdstyle = 'style="padding-top: 10px;"';
 		$arg = "0, $menupos";
 	} else {
 		$bgimg = "left_btn.gif";
-		$imgprop = "height=15 width=13";
+		$imgprop = 'height="15" width="13"';
 		$menu = "showMenuInFrame";
-		$imgtdprop = "width=25";
-		$tdstyle = "style='padding-top:1";
+		$imgtdprop = 'width="25"';
+		$tdstyle = 'style="padding-top: 1px;"';
 		$arg = "$menupos, 0";
 	}
 ?>
 <td>
-<table width=85 cellspacing=0 cellpadding=0 border=0 style='font-size:11;color:#004466;height:34;margin:0 0 0 0;background:url(<?php echo $login->getSkinDir() ?><?php echo $bgimg ?>)' OnMouseOver="style.cursor='pointer' ;  top.mainframe.changeContent('help','<?php echo $name?>');" onClick="top.mainframe.location='<?php echo $url ?>';" onmouseout="top.mainframe.changeContent('help','helparea')">
+<table class="headertabletabsleft" style="background: url(<?php echo $login->getSkinDir() ?><?php echo $bgimg ?>)" OnMouseOver="style.cursor='pointer';" onClick="top.mainframe.location='<?php echo $url ?>';">
     <tr>
-        <td <?php echo $imgtdprop ?>  align=center <?php echo $tdstyle ?>'>
-            <img <?php echo $imgprop ?>  src='/img/image/<?php echo $login->getSpecialObject('sp_specialplay')->icon_name ?>/button/<?php echo $icon ?>'>
+        <td <?php echo $imgtdprop ?> align="center" <?php echo $tdstyle ?>>
+            <img <?php echo $imgprop ?>  src="/img/image/<?php echo $login->getSpecialObject('sp_specialplay')->icon_name ?>/button/<?php echo $icon ?>">
         </td>
-        <td <?php $tdstyle ?> valign=middle align=center><b><?php echo $name ?></b>
+        <td <?php $tdstyle ?> valign="middle" align="center"><b><?php echo $name ?></b>
         </td>
     </tr>
 </table>
@@ -146,9 +146,6 @@ function print_header_default()
 	$logo_loading = "/img/kloxo-splash.gif";
 ?>
 <script>
-if (document.captureEvents) {
-	document.captureEvents(Event.MOUSEUP);
-}
 
 function changeLogo(flag)
 {
@@ -170,17 +167,17 @@ createNavigationTabData();
 <!-- Start Body -->
 <body>
 <!-- Start Header Table -->
-<table width=100% height="59" border="0" valign=top align="center" cellpadding="0" cellspacing="0">
+<table width="100%" height="58" valign="top" align="center">
 <tr>
-    <td width=100% style='background:url(<?php echo $login->getSkinDir() ?>/header_top_bg.gif)'></td>
-    <td width=326 style='background:url(<?php echo $login->getSkinDir() ?>/header_top_rt.gif);background-repeat:no-repeat'>
-        <table width=326>
-            <tr align=right>
-                <td width=200>&nbsp;</td>
-                <td align=right>
-                    <img id=main_logo width=84 height=23 src="<?php echo $logo_loading?>">
+    <td width="100%" style="background: url(<?php echo $login->getSkinDir() ?>/header_top_bg.gif);"></td>
+    <td width="326" style="background: url(<?php echo $login->getSkinDir() ?>/header_top_rt.gif); background-repeat: no-repeat;">
+        <table width="326">
+            <tr align="right">
+                <td width="200">&nbsp;</td>
+                <td align="right">
+                    <img id="main_logo" width="84" height="23" src="<?php echo $logo_loading?>">
                 </td>
-                <td width=10%>&nbsp;</td>
+                <td width="10%">&nbsp;</td>
             </tr>
         </table>
     </td>
@@ -189,7 +186,7 @@ createNavigationTabData();
 <!-- End Header Table -->
  <!-- Start navigation -->
   <!-- Main Table -->
-<table border="0" width=100%  cellspacing=0 cellpadding=0 background="<?php echo $login->getSkinDir() ?>/header_panel_bg.gif">
+<table width="100%" background="<?php echo $login->getSkinDir() ?>/header_panel_bg.gif">
 <tr><!-- Main  Row -->
 <?php
     print("<!-- Cell Left -->\n");
@@ -205,7 +202,7 @@ createNavigationTabData();
     print_left_side($ttype, $count);
 
     print("<!-- Cell Middle -->\n");
-    print("<td width=100%>&nbsp;</td>\n");
+    print("<td width=\"100%\">&nbsp;</td>\n");
 
     print("<!-- Cell Right -->\n");
     if (!$login->is__table('mailaccount')) {

@@ -1,128 +1,158 @@
+/*
+ * This CSS file is used by the /login/ page.
+ * Refactoring is needed. Wrong place, wrong name
+ */
 body {
- 	margin: 0px;
-	padding: 0px;
-	color : #333;
-	background-color : #FFF;
-	font-size : 11px;
-	font-family : Arial, Helvetica, sans-serif;
-		 }
+    font-family: Tahoma, Verdana, Arial, Helvertica, sans-serif;
+    font-size: 8pt;
+    font-weight: 100;
+    background: #ddeeff;
+    margin: 0;
+}
+
+a {
+    text-decoration: none;
+}
+
+img {
+    border: 0;
+}
+
+img.logo {
+    margin: 5px;
+    padding: 0;
+}
+
+table.header {
+    border-collapse: collapse;
+    border-spacing: 0;
+    background-color: #66aadd;
+    /* height: 110px; */
+    width: 100%;
+    font-family: Tahoma, Verdana, Arial, Helvertica, sans-serif;
+    font-size: 8pt;
+    font-weight: 100;
+}
+
+table.content {
+    border-collapse: collapse;
+    border-spacing: 0;
+    width: 100%;
+    font-family: Tahoma, Verdana, Arial, Helvertica, sans-serif;
+    font-size: 8pt;
+    font-weight: 100;
+}
 
 #wrapper {
-    border: 0px;
-    margin: 0px;
+    border: 0;
+    margin: 0;
     margin-left: auto;
     margin-right: auto;
-    padding: 0px;
+    padding: 0;
 }
 
 #break {
-	height: 20px;
+    height: 20px;
 }
 
 form {
-	margin: 0px;
+    margin: 0;
 }
 
 .button {
-	border : solid 1px #cccccc;
-	background: #E9ECEF;
-	color : #666666;
-	font-weight : bold;
-	font-size : 11px;
-	padding: 4px;
+    border: solid 1px #cccccc;
+    background: #E9ECEF;
+    color: #666666;
+    font-weight: bold;
+    font-size: 11px;
+    padding: 4px;
 }
 
 .login {
-	margin-left: auto;
-	margin-right: auto;
-	margin-top: 6em;
-	padding: 15px;
-	border: 1px solid #cccccc;
-	width: 429px;
-	background: #F1F3F5;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 6em;
+    padding: 15px;
+    border: 1px solid #cccccc;
+    width: 429px;
+    background: #F1F3F5;
 }
-	
+
 .login p {
-	padding: 0 1em 0 1em;
+    padding: 0 1em 0 1em;
 }
-					
+
 .form-block {
-	border: 1px solid #cccccc;
-	background: #E9ECEF;
-	padding-top: 15px;
-	padding-left: 10px;
-	padding-bottom: 10px;
-	padding-right: 10px;
+    border: 1px solid #cccccc;
+    background: #E9ECEF;
+    padding: 15px 10px 10px 10px;
 }
 
 .login-form {
-	text-align: left;
-	float: right;
-	width: 60%;
+    text-align: left;
+    float: right;
+    width: 60%;
 }
 
 .login-text {
-	text-align: left;
-	width: 40%;
-	float: left;
+    text-align: left;
+    width: 40%;
+    float: left;
 }
 
 .inputlabel {
-	font-weight: bold;
-	text-align: left;
+    font-weight: bold;
+    text-align: left;
 }
 
 .inputbox {
-	COLOR: #000000;
-	FONT-FAMILY: Verdana, Tahoma;
-	FONT-SIZE: 11px;
-	BORDER: 1px SOLID #666666;
-	WIDTH: 190px;
-	PADDING: 2px 2px 3px 2px;
-	MARGIN: 0px;
-	BACKGROUND: URL(/img/login/user.gif) no-repeat;
-	BACKGROUND-POSITION: 1px 1px;
-	BACKGROUND-COLOR: #FFFFFF;
-	PADDING-LEFT: 18px;
-	VERTICAL-ALIGN: middle;
-	margin: 0 0 1em 0;
-	border: 1px solid #cccccc;
+    COLOR: #000000;
+    font-family: verdana, tahoma, arial, helvetica, sans-serif;
+    FONT-SIZE: 11px;
+    WIDTH: 190px;
+    PADDING: 2px 2px 3px 2px;
+    BACKGROUND: URL(/img/login/user.gif) no-repeat;
+    BACKGROUND-POSITION: 1px 1px;
+    BACKGROUND-COLOR: #FFFFFF;
+    PADDING-LEFT: 18px;
+    VERTICAL-ALIGN: middle;
+    margin: 0 0 1em 0;
+    border: 1px solid #cccccc;
 }
+
 .passbox {
-	COLOR: #000000;
-	FONT-FAMILY: Verdana, Tahoma;
-	FONT-SIZE: 11px;
-	BORDER: 1px SOLID #666666;
-	WIDTH: 190px;
-	PADDING: 2px 2px 3px 2px;
-	MARGIN: 0px;
-	BACKGROUND-POSITION: 1px 1px;
-	BACKGROUND-COLOR: #FFFFFF;
-	VERTICAL-ALIGN: middle;
-	margin: 0 0 1em 0;
-	border: 1px solid #cccccc;
+    COLOR: #000000;
+    font-family: verdana, tahoma, arial, helvetica, sans-serif;
+    FONT-SIZE: 11px;
+    WIDTH: 190px;
+    PADDING: 2px 2px 3px 2px;
+    BACKGROUND-POSITION: 1px 1px;
+    BACKGROUND-COLOR: #FFFFFF;
+    VERTICAL-ALIGN: middle;
+    margin: 0 0 1em 0;
+    border: 1px solid #cccccc;
 }
 
 .clr {
-    clear:both;
+    clear: both;
 }
 
 .ctr {
-	text-align: center;
+    text-align: center;
 }
 
 .version {
-	font-size: 0.8em;
+    font-size: 0.8em;
 }
 
 .message {
-	margin-top: 10px; 
-	padding: 7px; 
-	width: 400px;
-	border: 1px solid #B22222;
-	background: #F1F3F5;
-	color: #B22222;	
-	font-weight: bold;
-	font-size: 13px;
+    margin-top: 10px;
+    padding: 7px;
+    width: 400px;
+    border: 1px solid #B22222;
+    background: #F1F3F5;
+    color: #B22222;
+    font-weight: bold;
+    font-size: 13px;
 }
 
