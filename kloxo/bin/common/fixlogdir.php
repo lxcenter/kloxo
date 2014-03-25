@@ -27,7 +27,6 @@ function fixlogdir_main()
 
 	$progname = $sgbl->__var_program_name;
 	$logl = lscandir_without_dot("../log");
-	log_scavenge("- Create processed_log dir");
 	lxfile_mkdir("../processed_log");
 
 	// DT25032014 - Project #1103
@@ -37,25 +36,19 @@ function fixlogdir_main()
 	// @ lunlink("/usr/local/lxlabs/ext/php/error.log");
 
 	$dir = getNotexistingFile("../processed_log", "proccessed");
-	log_scavenge("- Move logfiles to processed_log/$dir");
 	system("mv ../log ../processed_log/$dir");
 
-	log_scavenge("- Create log dir");
 	mkdir("../log");
 
 	// DT25032014 - Changed from 6 to 30 days so System admins can analyze if there are problems.
 	$list = lscandir_without_dot("../processed_log");
-	log_scavenge("- Remove old processed_log/*/ dir of older then 30 days");
 	foreach ( $list as $l ) {
-		log_scavenge("- Processing $l");
 		remove_directory_if_older_than_a_day("../processed_log/$l", 30);
 	}
 	foreach ( $logl as $l ) {
-		log_scavenge("- Create new file log/$l");
 		lxfile_touch("../log/$l");
 	}
 
-	log_scavenge("- Setting dir and file permissions");
 
 	lxfile_generic_chown_rec("../log", "lxlabs:lxlabs");
 
@@ -64,15 +57,18 @@ function fixlogdir_main()
 	//
 	lxfile_generic_chmod_rec("../log", "0640");
 	lxfile_generic_chmod_rec("../processed_log", "0640");
+
 	lxfile_generic_chmod("../log", "0700");
 	lxfile_generic_chmod("../processed_log", "0700");
+
 	lxfile_generic_chmod("../log/lighttpd_error.log", "0644");
 	lxfile_generic_chmod("../log/access_log", "0644");
+
 	lxfile_generic_chown("../log/lighttpd_error.log", "lxlabs:root");
 	lxfile_generic_chown("../log/access_log", "lxlabs:root");
 	//
-	log_scavenge("- Restarting $progname");
 
+	// Restart ourself.
 	os_restart_program();
 }
 
