@@ -2777,7 +2777,6 @@ function remove_directory_if_older_than_a_day($dir, $day = 1)
 	$stat = llstat($dir);
 
 	if ($stat['mtime'] && ((time() - $stat['mtime']) > $day * 24 * 3600)) {
-		log_scavenge("- Removing: $dir");
 		lxfile_rm_rec($dir);
 	}
 }
