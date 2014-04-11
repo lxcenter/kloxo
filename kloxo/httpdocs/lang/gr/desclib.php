@@ -1274,3 +1274,4 @@ $__description["path"] = array("Διαδρομή");
 $__description["apache_optimize"] = array("Βελτιστοποίηση Μνήμης Apache");
 $__description["mysql_convert"] = array("Μετατροπή Mysql");
 $__description["fix_chownchmod"] = array("Διόρθωση 'Δικαιωμάτων' Και 'Ιδιοκτησιών'");
+$__description["add"] = array("Προσθήκη");
