@@ -2,15 +2,15 @@
 function get_plural($word)
 {
 	if ($word[strlen($word) - 1] === 'ί') {
-		$ret = "{$word}ά";
+		$ret = "{$word}";
 	} else if ($word[strlen($word) - 1] === 'α') {
 		if ($word[strlen($word) - 2] === 'α') {
 			$ret = "{$word}τα";
 		} else {
-			$ret = substr($word, 0, strlen($word) - 1) . "ies";
+			$ret = substr($word, 0, strlen($word) - 1) . "ί";
 		}
-	} else if ($word[strlen($word) - 1] === 'α') {
-		$ret = substr($word, 0, strlen($word) - 1) . "τατα";
+	} else if ($word[strlen($word) - 1] === 'τατα') {
+		$ret = substr($word, 0, strlen($word) - 1) . "τατατα";
 	} else {
 		$ret = "{$word}α";
 	}
