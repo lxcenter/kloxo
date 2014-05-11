@@ -1,5 +1,25 @@
-<?php 
-
+<?php
+//    Kloxo, Hosting Control Panel
+//
+//    Copyright (C) 2000-2009	LxLabs
+//    Copyright (C) 2009-2014	LxCenter
+//
+//    This program is free software: you can redistribute it and/or modify
+//    it under the terms of the GNU Affero General Public License as
+//    published by the Free Software Foundation, either version 3 of the
+//    License, or (at your option) any later version.
+//
+//    This program is distributed in the hope that it will be useful,
+//    but WITHOUT ANY WARRANTY; without even the implied warranty of
+//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//    GNU Affero General Public License for more details.
+//
+//    You should have received a copy of the GNU Affero General Public License
+//    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+//
+// This file is started from etc/init.d/kloxo
+// It generates the lighttpd webserver config before lighttpd starts.
+//
 include_once "htmllib/lib/displayinclude.php";
 
 
@@ -30,8 +50,10 @@ $list = lfile("htmllib/filecore/lighttpd.conf");
 $ret = lxshell_return("__path_php_path", "../bin/common/misc/checktotalmemory.php");
 
 if ($ret === 15) {
+	// memory is < 180MB
 	$user = "###username..";
 } else {
+	// memory is > 180MB
 	$user = "server.username            = \"lxlabs\"";
 }
 
@@ -41,7 +63,14 @@ $out = lxshell_output("/usr/local/lxlabs/ext/php/bin/php_cgi", "-v");
 $lightout = lxshell_output("/usr/local/lxlabs/ext/lxlighttpd/sbin/kloxo.httpd", "-v");
 
 $php_st = null;
-if (csa($lightout, "1.4.") && csa($out, "cgi-fcgi") && $sgbl->isKloxo() && trim(`hostname`) !== 'support.lxlabs.com' && $ret === 15) {
+
+// There are 3 checks. Mostly it defaults to number 2 these days.
+// 1. use fastcgi when memory is below 180MB
+// 2. use phpsuexec when memory is above 180MB and not in debug mode
+// 3. use phpcgi when memory is above 180MB and debug mode is on.
+
+// lighttpd version 1.4.x and fastcgi and kloxo and memory is smaller then 180MB
+if (csa($lightout, "1.4.") && csa($out, "cgi-fcgi") && $sgbl->isKloxo()  && $ret === 15) {
 	$php_st .= "fastcgi.server  = (\".php\" => \n";
 	$php_st .= "		(( \"socket\" => \"/usr/local/lxlabs/$sgbl->__var_program_name/etc/php_socket.socket\",\n";
 	$php_st .= "		   \"bin-path\" => \"/usr/local/lxlabs/ext/php/bin/php_cgi\",\n";
@@ -55,8 +84,10 @@ if (csa($lightout, "1.4.") && csa($out, "cgi-fcgi") && $sgbl->isKloxo() && trim(
 	$php_st .= "		 ))\n";
 	$php_st .= "		)\n";
 } else if ($sgbl->isKloxo() && !$sgbl->isDebug()) {
+	// memory is more then 180MB and kloxo is not in debug mode
 	$php_st .= "cgi.assign	=						   (\".php\" => \"/usr/local/lxlabs/kloxo/file/phpsuexec.sh\" )\n";
 } else {
+	// debug mode
 	$php_st .= "cgi.assign	=						   (\".php\" => \"/usr/local/lxlabs/ext/php/bin/php_cgi\" )\n";
 }
 
@@ -80,10 +111,19 @@ if (!lxfile_exists($pemfile)) {
 	lxfile_generic_chown($pemfile, "lxlabs");
 }
 
-lxfile_touch("__path_program_root/log/lighttpd_error.log");
-lxfile_touch("__path_program_root/log/access_log");
+lxfile_mkdir("__path_program_root/log");
+lxfile_generic_chmod_rec("__path_program_root/log", "0640");
 lxfile_generic_chmod("__path_program_root/log", "0700");
-lxfile_generic_chown("__path_program_root/log", "lxlabs:lxlabs");
+
+if (!lxfile_exists("__path_program_root/log/lighttpd_error.log")) {
+	lxfile_touch("__path_program_root/log/lighttpd_error.log");
+}
+if (!lxfile_exists("__path_program_root/log/access_log")) {
+	lxfile_touch("__path_program_root/log/access_log");
+}
+
+lxfile_generic_chown_rec("__path_program_root/log", "lxlabs:lxlabs");
+
 lxfile_generic_chmod("__path_program_root/log/lighttpd_error.log", "0644");
 lxfile_generic_chmod("__path_program_root/log/access_log", "0644");
 lxfile_generic_chown("__path_program_root/log/lighttpd_error.log", "lxlabs:root");
