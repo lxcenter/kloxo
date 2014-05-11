@@ -1,18 +1,18 @@
 <?php 
 function get_plural($word)
 {
-	if ($word[strlen($word) - 1] === 'ί') {
+	if ($word[strlen($word) - 1] === '') {
 		$ret = "{$word}";
-	} else if ($word[strlen($word) - 1] === 'α') {
-		if ($word[strlen($word) - 2] === 'α') {
+	} else if ($word[strlen($word) - 1] === '') {
+		if ($word[strlen($word) - 2] === '') {
 			$ret = "{$word}τα";
 		} else {
-			$ret = substr($word, 0, strlen($word) - 1) . "ί";
+			$ret = substr($word, 0, strlen($word) - 1) . "";
 		}
-	} else if ($word[strlen($word) - 1] === 'τατα') {
-		$ret = substr($word, 0, strlen($word) - 1) . "τατατα";
+	} else if ($word[strlen($word) - 1] === '') {
+		$ret = substr($word, 0, strlen($word) - 1) . "";
 	} else {
-		$ret = "{$word}α";
+		$ret = "{$word}";
 	}
 	return ucfirst($ret);
 }
