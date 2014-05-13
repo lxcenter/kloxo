@@ -1103,7 +1103,9 @@ function syncToPort($port, $cust_log, $err_log)
 		$rednname = remove_extra_slash("/{$red->nname}");
 
 		if ($red->ttype === 'local') {
-			$string .= "\tAlias \"{$rednname}\" \"{$user_home}\"/{$red->redirect}\"\n";
+			// changing for issue 1004 
+			//$string .= "\tAlias \"{$rednname}\" \"{$user_home}\"/{$red->redirect}\"\n";
+			$string .= "\tAlias \"{$rednname}\" \"{$user_home}/{$red->redirect}\"\n";
 		} else {
 			if (!redirect_a::checkForPort($port, $red->httporssl)) { continue; }
 
