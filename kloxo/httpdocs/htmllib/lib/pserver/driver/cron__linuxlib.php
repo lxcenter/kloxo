@@ -101,6 +101,12 @@ function syncCreateConf()
 		
 		//We should find a regexp for this and add a global config var 
 		// to enable users add their own allowed commands...
+		
+		// OA 20150523: this should be here, however, we are running on
+		// the slave now, cannot check for client's privileges
+		// alas, if message is faked, we are done anyways.
+		// Moving it to cronlib.php
+		/*
                 if (substr($v['command'], 0, 5 ) === "wget ") {
                     $escarg = escapeshellarg(substr($v['command'], 5));
                     $v['command'] = 'wget ' . $escarg;
@@ -114,7 +120,7 @@ function syncCreateConf()
                     $v['command'] = 'php ' . $escarg;
                 }
                 else $v['command'] = 'bad';
-
+                */
 		
 		$cmd .= implode("\t", array($v['minute'], $v['hour'], $v['ddate'], $v['month'],$v['weekday'], $v['command']));
 		$cmd .= "\n";

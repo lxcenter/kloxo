@@ -337,8 +337,20 @@ static function add($parent, $class, $param)
 	$parambase = implode("_", array($param['username'], $param['command']));
 
         if ( !$parent->priv->isOn('cron_shell_flag')) {
-                if (!(substr($param['command'], 0, 5 ) === "wget ") &&  !(substr($param['command'], 0, 4 ) === "php ")) {
-
+                if (substr($param['command'], 0, 5 ) === "wget ") {
+                    $escarg = escapeshellarg(substr($param['command'], 5));
+                    $param['command'] = 'wget ' . $escarg;
+                }
+                else if (substr($param['command'], 0, 4 ) === "php ") {
+                    $escarg = escapeshellarg(substr($param['command'], 4));
+                    $param['command'] = 'php ' . $escarg;
+                }
+                else if (substr($param['command'], 0, 19 ) === "/usr/local/bin/php ") {
+                    $escarg = escapeshellarg(substr($param['command'], 19));
+                    $param['command'] = 'php ' . $escarg;
+                }
+                else {
+                	$param['command'] = 'bad';
                         throw new lxException ("command_not_allowd", '', '');
                 }
         }
