@@ -6,3 +6,4 @@
 # Ignore .diff files on development
 *.diff
 
+/nbproject/private/
