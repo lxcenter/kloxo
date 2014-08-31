@@ -37,7 +37,7 @@ static function generateDKey($domain)
 		return null;
 	}
 
-	lxshell_return("openssl", "genrsa", "-out", "private", 384);
+	lxshell_return("openssl", "genrsa", "-out", "private", 2048);
 
 	$tfile = lx_tmp_file("rsagen");
 
