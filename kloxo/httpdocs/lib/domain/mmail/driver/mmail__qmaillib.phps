@@ -14,16 +14,17 @@ function do_backup()
 	return array($mailpath, $list);
 }
 
-static function generateDKey($domain)
+static function generateDKey($domain, $forceGen=false)
 {
 
 	$pfile = "/var/qmail/control/domainkeys/$domain/public.txt";
 	if (!$domain) {
 		return;
 	}
-	if(lxfile_exists("/var/qmail/control/domainkeys/$domain/public.txt")) {
-		return lfile_get_contents("/var/qmail/control/domainkeys/$domain/public.txt");
-	}
+	if(!$forceGen)
+		if(lxfile_exists("/var/qmail/control/domainkeys/$domain/public.txt")) {
+			return lfile_get_contents("/var/qmail/control/domainkeys/$domain/public.txt");
+		}
 
 	lxfile_mkdir("/var/qmail/control/domainkeys/$domain");
 

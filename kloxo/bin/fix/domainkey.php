@@ -10,7 +10,7 @@ $list = $login->getList('client');
 foreach($list as $c) {
 	$dlist = $c->getList('domaina');
 	foreach((array) $dlist as $l) {
-		$l->generateDomainKey(false);
+		$l->generateDomainKey(false, true);
 	}
 }
 

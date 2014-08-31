@@ -845,7 +845,7 @@ function postAdd()
 
 }
 
-function generateDomainKey($dontwasflag)
+function generateDomainKey($dontwasflag, $forceGen= false)
 {
 
 	global $gbl, $sgbl, $login, $ghtml; 
@@ -864,7 +864,7 @@ function generateDomainKey($dontwasflag)
 		return;
 	}
 
-	$dkey = rl_exec_in_driver($mmail, 'mmail', 'generateDKey', array($this->nname));
+	$dkey = rl_exec_in_driver($mmail, 'mmail', 'generateDKey', array($this->nname, $forceGen));
 
 	if (!$dkey) { return; }
 
