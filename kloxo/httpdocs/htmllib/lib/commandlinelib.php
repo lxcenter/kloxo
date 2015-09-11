@@ -194,6 +194,9 @@ function __cmd_desc_getproperty($param)
 		if ($object->dbaction === 'add') {
 			throw new lxException('object_doesnt_exist', 'name', $name);
 		}
+			if (!$object->checkIfSomeParent($login->getClName())) {
+			 throw new lxException("the_object_doesnt_exist_under_you", "", $object->nname);
+			}
 	} else {
 		$object = $login;
 	}
