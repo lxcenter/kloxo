@@ -876,7 +876,7 @@ function validate_domain_name($name)
 		throw new lxException('add_without_www', 'nname');
 	}
 
-	if(!preg_match('/^([a-z0-9]([a-z0-9-]{0,61}[a-z0-9])?\.)+(([a-z]{2,6})|(xn--[a-z0-9]{4,14}))$/i', $name)) {
+	if(!preg_match('/^([a-z0-9]([a-z0-9-]{0,61}[a-z0-9])?\.)+(([a-z]{2,9})|(xn--[a-z0-9]{4,14}))$/i', $name)) {
 		throw new lxException('invalid_domain_name', 'nname');
 	}
 	
@@ -1331,7 +1331,7 @@ function do_actionlog($login, $object, $action, $subaction)
 function validate_email($email)
 {
 	$regexp = "/^([\w\!\#$\%\&\'\*\+\-\/\=\?\^\`{\|\}\~]+\.)*[\w\!\#$\%\&\'\*\+\-\/\=\?\^\`{\|\}\~]+@" .
-		"((((([a-z0-9]{1}[a-z0-9\-]{0,62}[a-z0-9]{1})|[a-z])\.)+[a-z]{2,6})|(\d{1,3}\.){3}\d{1,3}(\:\d{1,5})?)$/i";
+		"((((([a-z0-9]{1}[a-z0-9\-]{0,62}[a-z0-9]{1})|[a-z])\.)+[a-z]{2,9})|(\d{1,3}\.){3}\d{1,3}(\:\d{1,5})?)$/i";
 	if(!preg_match($regexp, $email)) {
 		return false;
 	}
