@@ -1103,7 +1103,9 @@ function syncToPort($port, $cust_log, $err_log)
 		$rednname = remove_extra_slash("/{$red->nname}");
 
 		if ($red->ttype === 'local') {
-			$string .= "\tAlias \"{$rednname}\" \"{$user_home}\"/{$red->redirect}\"\n";
+			// dkstiler changing for issue 1004 according to williams response
+			//$string .= "\tAlias \"{$rednname}\" \"{$user_home}\"/{$red->redirect}\"\n";
+			$string .= "\tAlias \"{$rednname}\" \"{$user_home}/{$red->redirect}\"\n";
 		} else {
 			if (!redirect_a::checkForPort($port, $red->httporssl)) { continue; }
 
@@ -1182,6 +1184,40 @@ function syncToPort($port, $cust_log, $err_log)
 	$string .= $this->getDirIndexCore("/stats");
 
 	return $string;
+}
+
+function createSuexec()
+{
+global $gbl, $sgbl, $login, $ghtml;
+
+$string = null;
+
+$uid = os_get_uid_from_user($this->main->username);
+$gid = os_get_gid_from_user($this->main->username);
+
+$phprc = null;
+$phprc .= "export PHPRC=/home/httpd/{$this->main->nname}\n";
+
+$string .= "#!/bin/sh\n";
+$string .= "### Username: {$this->main->username}\n";
+$string .= "export MUID={$uid}\n";
+$string .= "export GID={$gid}\n";
+$string .= $phprc;
+$string .= "export TARGET=<%program%>\n";
+$string .= "export NON_RESIDENT=1\n";
+$string .= "exec lxsuexec \$*\n";
+
+$st = str_replace("<%program%>", "/usr/bin/php-cgi", $string);
+lfile_put_contents("{$sgbl->__path_httpd_root}/{$this->main->nname}/phpsuexec.sh", $st);
+$st = str_replace("<%program%>", "/usr/bin/lxexec", $string);
+lfile_put_contents("{$sgbl->__path_httpd_root}/{$this->main->nname}/shsuexec.sh", $st);
+
+$st = str_replace("<%program%>", "/usr/bin/perl", $string);
+lfile_put_contents("{$sgbl->__path_httpd_root}/{$this->main->nname}/perlsuexec.sh", $st);
+
+lxfile_unix_chmod("{$sgbl->__path_httpd_root}/{$this->main->nname}/shsuexec.sh", "0755");
+lxfile_unix_chmod("{$sgbl->__path_httpd_root}/{$this->main->nname}/phpsuexec.sh", "0755");
+lxfile_unix_chmod("{$sgbl->__path_httpd_root}/{$this->main->nname}/perlsuexec.sh", "0755");
 }
 
 function getRailsConf($app)

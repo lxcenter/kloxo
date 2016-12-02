@@ -1092,6 +1092,14 @@ static function addCommand($parent, $class, $p)
 
 function commandUpdate($subaction, $param)
 {
+	if_demo_throw_exception('info');
+	if (isset($param['cttype'])) {
+		if (!$this->isAdmin()) {
+			if ($this->getParentO()->isGt($param['cttype'])) {
+				throw new lxException("parent_doesnt_have_privileges", 'cttype', '');
+			}
+		}
+	}
 	switch($subaction) {
 		case "change_plan":
 			checkIfVariablesSetOr($param, $param, 'newresourceplan', array('resourceplan_name'));
