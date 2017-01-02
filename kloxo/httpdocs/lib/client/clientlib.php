@@ -466,7 +466,8 @@ function createShowAlist(&$alist, $subaction = null)
 			$alist[] = "a=show&o=lxbackup";
 		}
 
-
+		// Server Information [issues #1053]
+		$alist[] = "a=show&o=serverinfo";
 
 		$alist[] = "a=list&c=ipaddress";
 		if ($this->getList('ipaddress')) {

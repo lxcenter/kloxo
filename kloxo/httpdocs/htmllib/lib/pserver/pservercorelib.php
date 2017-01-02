@@ -155,6 +155,9 @@ static $__acdesc_update_information =  array("","",  "information");
 static $__acdesc_update_timezone =  array("","",  "timezone"); 
 static $__acdesc_update_phpmyadmin = array("", "",  "phpmyadmin");
 
+// Server Information [issues #1053]
+static $__acdesc_update_serverinfo = array("", "",  "serverinfo");
+
 function syncToSystem()
 {
 	// Special for pserver... Since the whole idea of remote syncing is handled here, it makes sense to have the special case of pserver when it is added here itself.
