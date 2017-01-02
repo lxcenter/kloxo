@@ -117,3 +117,5 @@ $gl_class_array['custombutton'] = "htmllib/lib/custombuttonlib.php";
 $gl_class_array['lxguardwhitelist'] = "htmllib/lib/pserver/lxguardwhitelistlib.php";
 $gl_class_array['browsebackup'] = "htmllib/lib/browsebackuplib.php";
 
+// Server Information [issues #1053]
+$gl_class_array["serverinfo"] = "htmllib/lib/pserver/serverinfolib.php";

@@ -189,6 +189,10 @@ function createShowAlist(&$alist, $subaction = null)
         $alist[] = "a=list&c=sshauthorizedkey";
 
         $alist['__title_main_pserver'] = $this->getTitleWithSync();
+		
+		// Server Information [issues #1053]
+		$alist[] = "a=show&o=serverinfo";
+		
         $alist[] = "a=list&c=service";
         $alist[] = "a=list&c=cron";
         $alist[] = "a=list&c=process";

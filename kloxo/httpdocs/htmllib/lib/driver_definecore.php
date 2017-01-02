@@ -67,3 +67,6 @@ $gl_class_array['watchdog__sync'] = "htmllib/lib/pserver/driver/watchdog__syncli
 $gl_class_array['lxguard__sync'] = "htmllib/lib/pserver/driver/lxguard__synclib.php";
 $gl_class_array['lxguardwhitelist__sync'] = "htmllib/lib/pserver/driver/lxguardwhitelist__synclib.php";
 $gl_class_array['sshconfig__linux'] = "htmllib/lib/pserver/driver/sshconfig__linuxlib.php";
+
+// Server Information [issues #1053]
+$gl_class_array['serverinfo__linux'] = "htmllib/lib/pserver/driver/serverinfo_linuxlib.php";
