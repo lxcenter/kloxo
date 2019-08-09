@@ -21,9 +21,8 @@ Kloxo is a fully scriptable, distributed and a 100% object oriented hosting plat
 
 # CentOS 6
 
-Not supported yet.
-Main installer fails
-Development deploy-dev fails
+* Not supported.
+* deploy-dev is working on CentOS 6 64 bit (august 2019). But only the Kloxo GUI is running. No FTP, DNS, MAIL and many more.
 
 # CentOS 7
 
