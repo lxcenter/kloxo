@@ -2,7 +2,7 @@
 # Kloxo, a light and efficient webhosting platform.
 #
 # Copyright (C) 2000-2009 LxLabs
-# Copyright (C) 2009-2014 LxCenter
+# Copyright (C) 2009-2019 LxCenter
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Affero General Public License as
@@ -21,6 +21,12 @@
 #
 # Install and deploy a develoment version on a local enviroment
 #
+# Do a full yum update first before running this script!
+#
+# Add this to your /etc/hosts file:
+# 66.160.179.101 download.lxcenter.org download.lxlabs.com srvc.lxcenter.org
+#
+# version 0.7 Changed to a working GIT URL and newest version
 # Version 0.6 Added better argument handling and --single-branch to git by Semir 
 # Version 0.5 Copied and patched for Kloxo by dkstiler [ Dionysis Kladis <dkstiler@gmail.com> ]
 # Version 0.4 Added which, zip and unzip as requirement [ Danny Terweij <d.terweij@lxcenter.org> ]
@@ -76,10 +82,10 @@ install_GIT()
 
   # @todo Try to get the lastest version from some site. LATEST file?
   ## GIT_VERSION='1.8.3.4'
-  GIT_VERSION='1.9.0'
+  GIT_VERSION='2.9.5'
 
   echo "Downloading and compiling GIT ${GIT_VERSION}"
-  wget http://git-core.googlecode.com/files/git-${GIT_VERSION}.tar.gz
+  wget https://mirrors.edge.kernel.org/pub/software/scm/git/git-${GIT_VERSION}.tar.gz
   tar xvfz git-*.tar.gz; cd git-*;
   ./configure --prefix=/usr --with-curl --with-expat
   make all
