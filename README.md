@@ -4,7 +4,7 @@ Kloxo is a fully scriptable, distributed and a 100% object oriented hosting plat
 
 # Features
 
-* CentOS 5 Support
+* CentOS 5 Support (CentOS 5 has reached End Of Life, install Kloxo at your own risc)
 * Integrates with billing software such as AWBS, WHMCS and HostBill
 * Kloxo HostinABox: Feature Complete web hosting platform that uses 10MB RSS.
 * Kloxo Enterprise: distributed hosting platform.
@@ -19,11 +19,15 @@ Kloxo is a fully scriptable, distributed and a 100% object oriented hosting plat
 * Integrated RoR
 * And many more!
 
-# Contributing
+# CentOS 6
 
-Please have a look at LxCenter's [Coding Standards](http://project.lxcenter.org/projects/kloxo/wiki/Coding_Standards) and [Issue Tracker](http://project.lxcenter.org).
+Not supported yet.
+Main installer fails
+Development deploy-dev fails
 
-And don't forget our [forums](http://community.lxcenter.org)!
+# CentOS 7
+
+Not working, no support, dont try to install.
 
 # Licensing - AGPLv3
 
