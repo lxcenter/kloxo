@@ -23,6 +23,9 @@
 #
 # Do a full yum update first before running this script!
 #
+# Note:
+# On C5.11 (yum update via the vault) manualy install yum install make first.
+#
 # Add this to your /etc/hosts file:
 # 66.160.179.101 download.lxcenter.org download.lxlabs.com srvc.lxcenter.org
 #
