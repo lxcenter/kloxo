@@ -4,70 +4,56 @@ K.T. Ligesh original developer of HyperVM/Kloxo/LxAdmin, rest in peace m8.. we m
 
 
 Former Consortium:
-Brijesh			- India 		- Head (Cousin of Ligesh)	- brijesh@lxcenter.org
-S. Bhargava 	- India 		- General Leader			- bhargava@lxcenter.org
-Danny Terweij 	- Netherlands	- Leader					- d.terweij@lxcenter.org
-
+Brijesh			- India 		- Head (Cousin of Ligesh)
+S. Bhargava 	- India 		- General Leader
+Danny Terweij 	- Netherlands	- Leader
 
 Secretary
 ---------
-* Peter Jones	- peter.jones@lxcenter.org
+*
 
 
 Core Leader
 ---------------
-
+*
 
 System Operations LxCenter (Managing LxCenter Servers)
 --------------------------
-* Danny Terweij         - d.terweij@lxcenter.org
+* Danny Terweij         - d.terweij@
 
 
 Web Designers
 -------------
-* Peter Jones			- peter.jones@lxcenter.org
-* Walter Secco (GFX)	- walter.secco@lxcenter.org
+*
 
 
 Core
 ----------
-* Andrew Ying			- andrew.ying@lxcenter.org
-* William Leonard		- william.leonard@lxcenter.org
-* semir
+
 
 Other Developers/Representatives/Contributors
 ----------
-* dkstiler
+*
 
 Sponsors
 --------
-* DMEHosting	- IRC Server
-* Razorservers	- Test/Development servers
-* Spry/VPSLink	- Test/Development server
-* MercuryVPS
-* Castlegem 
-* A2
-* CHCenter 
+* a2hosting.com       - Type: VPS
+- Main download server & uptime service
+* castlegem.co.uk     - Type: Server
+- Running: download mirror, RPM package buildsystems, making new releases, small development and testings
 
  Special thanks
 --------------
-* Andre Allen
-* Eduardo Silva
-* Keiran Smith
-* Arthur Thornton
-* Angel Guzman
-* DME Hosting
+*
 
-Software
+Development Software
 --------
 * JetBrains PHPStorm ( http://www.jetbrains.com )
 - An PHP Development IDE.
 
 Donations
 ---------
-We still need your Donation.
-Send it by paypal to donations@lxcenter.org
-Every cent helps!
+* Currently not needed
 
 Security
 ---------

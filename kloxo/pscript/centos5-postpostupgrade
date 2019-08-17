@@ -1,4 +1,8 @@
-
+#
+#
+# ToDo: Remove this file ?
+#
+#
 if [ -f /proc/user_beancounters ] ; then 
 mv /sbin/udevd /sbin/udevd.back ; 
 rm -rf /dev/*

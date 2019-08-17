@@ -5808,8 +5808,14 @@ function addLineIfNotExist($filename, $pattern, $comment) {
 
 }
 
+/**
+ *
+ */
 function setExecuteCentos5Script()
 {
+	/*
+	 *
+	 * ToDo: Check if needed in Centos 7+
 	log_cleanup("Executing centos 5 script and remove epel repo");
 
 	if (is_centosfive()) {
@@ -5822,6 +5828,7 @@ function setExecuteCentos5Script()
 	else {
 		log_cleanup("- Not needed to execute");
 	}
+	*/
 }
 
 function setJailshellSystem()
@@ -5913,6 +5920,7 @@ function install_bogofilter()
 	lxfile_mkdir($dir);
 
 	lxfile_rm($wordlist);
+	// ToDo: just put this in the release. Waste of download time :)
 	$content = file_get_contents("http://download.lxcenter.org/download/wordlist.db");
 	file_put_contents($wordlist, $content);
 	lxfile_unix_chown_rec($dir, "lxpopuser:lxpopgroup");

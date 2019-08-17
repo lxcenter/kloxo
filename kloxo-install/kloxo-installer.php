@@ -39,8 +39,8 @@ function lxins_main()
 	system("mkdir -p /var/cache/kloxo/");
 	system("echo 1 > /var/cache/kloxo/kloxo-install-firsttime.flg");
 
-	if (!char_search_beg($osversion, "centos") && !char_search_beg($osversion, "rhel")) {
-		print("Kloxo is only supported on CentOS 5 and RHEL 5\n");
+	if (!char_search_beg($osversion, "centos") ) {
+		print("Kloxo is only supported on CentOS\n");
 		exit;
 	}
 
@@ -472,7 +472,7 @@ function install_yum_repo($osversion) {
 
 function find_os_version() {
 	// list os support
-	$ossup = array('redhat' => 'rhel', 'fedora' => 'fedora', 'centos' => 'centos');
+	$ossup = array('centos' => 'centos');
 	
 	foreach(array_keys($ossup) as $k) {
 		$osrel = file_get_contents("/etc/{$k}-release");
