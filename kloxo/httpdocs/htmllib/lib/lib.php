@@ -6504,6 +6504,7 @@ function uploadStatsLxCenter()
     $thisversion = $sgbl->__ver_major_minor_release;
     $collectIsAllowed = $sgbl->__var_programname_stats;
 
+	// ToDo: stats server is lost, need to create a new one.
     if ($collectIsAllowed === "yes") {
     system("wget -q -O /dev/null http://stats.lxcenter.org/lxstat.php?version=" . trim($thisversion) . " &");
     }
