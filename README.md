@@ -4,29 +4,22 @@ Kloxo is a fully scriptable, distributed and a 100% object oriented hosting plat
 
 # Features
 
-* CentOS 5 Support (CentOS 5 has reached End Of Life, install Kloxo at your own risc)
+* CentOS 7 Support
 * Integrates with billing software such as AWBS, WHMCS and HostBill
-* Kloxo HostinABox: Feature Complete web hosting platform that uses 10MB RSS.
-* Kloxo Enterprise: distributed hosting platform.
+* Kloxo HostinABox: Features a complete web hosting platform.
+* Kloxo Enterprise: Features a distributed hosting platform.
 * View, Search and Manage your entire hosting, and every domain from a single page.
 * Lxguard, advanced intrusion detection management interface.
-* Supports apache/lighttpd, djbdns/bind and pure-ftpd
-* On the fly Switch between applications
-* Scale to million hits per day, using fastcgi
+* Supports apache/lighttpd, djbdns/bind, pure-ftpd and qmail.
+* On the fly Switch between services
 * Advanced Backup/Restore
 * Upgrade from HostInABox to Enterprise without re-installing
 * Parked/Redirected Domains
-* Integrated RoR
 * And many more!
-
-# CentOS 6
-
-* Not supported.
-* deploy-dev is working on CentOS 6 64 bit (6.1.x branch) (august 2019). But only the Kloxo GUI is running. No FTP, DNS, MAIL and many more.
 
 # CentOS 7
 
-Not working, no support, dont try to install.
+Work in progress.
 
 # Licensing - AGPLv3
 
