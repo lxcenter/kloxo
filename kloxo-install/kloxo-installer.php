@@ -91,7 +91,8 @@ function lxins_main()
 		exec("rpm -e --nodeps $package > /dev/null 2>&1");
 	}
 
-	$packages = array("php-mbstring", "php-mysql", "which", "gcc-c++", "php-imap", "php-pear", "php-devel", "lxlighttpd", "httpd", "mod_ssl", "zip", "unzip", "kloxo-core-php", "mysql", "mysql-server", "curl", "autoconf", "automake", "libtool", "bogofilter", "gcc", "cpp", "openssl", "pure-ftpd", "yum-protectbase");
+	$packages = array("php-mbstring", "php-mysql", "which", "gcc-c++", "php-imap", "php-pear", "php-devel", "kloxo-core-lighttpd", "httpd", "mod_ssl", "zip", "unzip", "kloxo-core-php", "mariadb",
+						"mariadb-server", "curl", "autoconf", "automake", "libtool", "bogofilter", "gcc", "cpp", "openssl", "pure-ftpd", "yum-protectbase");
 
 	$list = implode(" ", $packages);
 
@@ -317,10 +318,10 @@ function installcomp_mail() {
 
 function install_main() {
 
-	$installcomp['mail'] = array("vpopmail", "courier-imap-toaster", "courier-authlib-toaster", "qmail", "safecat", "httpd", "spamassassin", "ezmlm-toaster", "autorespond-toaster");
+	$installcomp['mail'] = array("vpopmail", "courier-imap-toaster", "courier-authlib-toaster", "qmail", "safecat", "spamassassin", "ezmlm-toaster", "autorespond-toaster");
 	$installcomp['web'] = array("httpd", "pure-ftpd");
 	$installcomp['dns'] = array("bind", "bind-chroot");
-	$installcomp['database'] = array("mysql");
+	$installcomp['database'] = array("mariadb");
 
 	global $argv;
 	$comp = array("web", "mail", "dns", "database");

@@ -5674,7 +5674,8 @@ function setCheckPackages()
 	$list = array("maildrop-toaster", "spamdyke", "spamdyke-utils", "pure-ftpd",
 		"simscan-toaster", "webalizer", "php-mcrypt", "dos2unix",
 		"rrdtool", "xinetd", "lxjailshell", "php-xml", "libmhash",
-		"kloxo-core-php", "kloxo-theme-default", "kloxo-theme-feather", "php-pear");
+		"kloxo-core-php", "kloxo-theme-default", "kloxo-theme-feather", "php-pear",
+		"kloxo-core-lighttpd");
 		
 	foreach($list as $l) {
 		log_cleanup("- For {$l} package");
