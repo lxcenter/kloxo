@@ -1,4 +1,11 @@
 Changelog
+Kloxo 7.0.x for Centos 7 - 2019
+##################################
+Remove: Support CentOS 5
+Remove: Support CentOS 6
+Add: Support Centos 7
+Can we make that happen? after all this time of dead silence?
+
 
 Kloxo 6.1.19 - 22-mar-2014
 ##################################

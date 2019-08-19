@@ -22,9 +22,9 @@ class Sgbl
 		$this->initCtTypes();
 
 		$this->__var_program_name = 'kloxo';
-		$this->__ver_major = "6";
-		$this->__ver_minor = "1";
-		$this->__ver_release = "19";
+		$this->__ver_major = "7";
+		$this->__ver_minor = "0";
+		$this->__ver_release = "0";
 		$this->__ver_enterprise = "Single Server Edition";
 		$this->__ver_type = "production";
 		$this->__ver_extra = "Stable";

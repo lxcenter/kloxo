@@ -39,8 +39,8 @@ function lxins_main()
 	system("mkdir -p /var/cache/kloxo/");
 	system("echo 1 > /var/cache/kloxo/kloxo-install-firsttime.flg");
 
-	if (!char_search_beg($osversion, "centos") && !char_search_beg($osversion, "rhel")) {
-		print("Kloxo is only supported on CentOS 5 and RHEL 5\n");
+	if (!char_search_beg($osversion, "centos") ) {
+		print("Kloxo is only supported on CentOS\n");
 		exit;
 	}
 
@@ -91,7 +91,8 @@ function lxins_main()
 		exec("rpm -e --nodeps $package > /dev/null 2>&1");
 	}
 
-	$packages = array("php-mbstring", "php-mysql", "which", "gcc-c++", "php-imap", "php-pear", "php-devel", "lxlighttpd", "httpd", "mod_ssl", "zip", "unzip", "kloxo-core-php", "mysql", "mysql-server", "curl", "autoconf", "automake", "libtool", "bogofilter", "gcc", "cpp", "openssl", "pure-ftpd", "yum-protectbase");
+	$packages = array("php-mbstring", "php-mysql", "which", "gcc-c++", "php-imap", "php-pear", "php-devel", "kloxo-core-lighttpd", "httpd", "mod_ssl", "zip", "unzip", "kloxo-core-php", "mariadb",
+						"mariadb-server", "curl", "autoconf", "automake", "libtool", "bogofilter", "gcc", "cpp", "openssl", "pure-ftpd", "yum-protectbase");
 
 	$list = implode(" ", $packages);
 
@@ -251,15 +252,15 @@ function lxins_main()
 	//--- Prevent mysql socket problem (especially on 64bit system)
 	if (!file_exists("/var/lib/mysql/mysql.sock")) {
 		print("Create mysql.sock...\n");
-		system("/etc/init.d/mysqld stop");
+		system("systemctl disable mariadb.service");
 		system("mksock /var/lib/mysql/mysql.sock");	
-		system("/etc/init.d/mysqld start");
+		system("systemctl enable mariadb.service");
 	}
 	
 	//--- Prevent for Mysql not start after reboot for fresh kloxo slave install
-	print("Setting Mysql for always running after reboot and restart now...\n");
-	system("chkconfig mysqld on");
-	system("service mysqld restart");	
+	//print("Setting Mysql for always running after reboot and restart now...\n");
+	//system("chkconfig mysqld on");
+	//system("service mysqld restart");
 
 	//--- Fix for old thirdparty version
 	if (!file_exists("/usr/local/lxlabs/kloxo/httpdocs/thirdparty")) {
@@ -317,10 +318,10 @@ function installcomp_mail() {
 
 function install_main() {
 
-	$installcomp['mail'] = array("vpopmail", "courier-imap-toaster", "courier-authlib-toaster", "qmail", "safecat", "httpd", "spamassassin", "ezmlm-toaster", "autorespond-toaster");
+	$installcomp['mail'] = array("vpopmail", "courier-imap-toaster", "courier-authlib-toaster", "qmail", "safecat", "spamassassin", "ezmlm-toaster", "autorespond-toaster");
 	$installcomp['web'] = array("httpd", "pure-ftpd");
 	$installcomp['dns'] = array("bind", "bind-chroot");
-	$installcomp['database'] = array("mysql");
+	$installcomp['database'] = array("mariadb");
 
 	global $argv;
 	$comp = array("web", "mail", "dns", "database");
@@ -472,7 +473,7 @@ function install_yum_repo($osversion) {
 
 function find_os_version() {
 	// list os support
-	$ossup = array('redhat' => 'rhel', 'fedora' => 'fedora', 'centos' => 'centos');
+	$ossup = array('centos' => 'centos');
 	
 	foreach(array_keys($ossup) as $k) {
 		$osrel = file_get_contents("/etc/{$k}-release");

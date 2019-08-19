@@ -5674,7 +5674,8 @@ function setCheckPackages()
 	$list = array("maildrop-toaster", "spamdyke", "spamdyke-utils", "pure-ftpd",
 		"simscan-toaster", "webalizer", "php-mcrypt", "dos2unix",
 		"rrdtool", "xinetd", "lxjailshell", "php-xml", "libmhash",
-		"kloxo-core-php", "kloxo-theme-default", "kloxo-theme-feather", "php-pear");
+		"kloxo-core-php", "kloxo-theme-default", "kloxo-theme-feather", "php-pear",
+		"kloxo-core-lighttpd");
 		
 	foreach($list as $l) {
 		log_cleanup("- For {$l} package");
@@ -5808,8 +5809,14 @@ function addLineIfNotExist($filename, $pattern, $comment) {
 
 }
 
+/**
+ *
+ */
 function setExecuteCentos5Script()
 {
+	/*
+	 *
+	 * ToDo: Check if needed in Centos 7+
 	log_cleanup("Executing centos 5 script and remove epel repo");
 
 	if (is_centosfive()) {
@@ -5822,6 +5829,7 @@ function setExecuteCentos5Script()
 	else {
 		log_cleanup("- Not needed to execute");
 	}
+	*/
 }
 
 function setJailshellSystem()
@@ -5913,6 +5921,7 @@ function install_bogofilter()
 	lxfile_mkdir($dir);
 
 	lxfile_rm($wordlist);
+	// ToDo: just put this in the release. Waste of download time :)
 	$content = file_get_contents("http://download.lxcenter.org/download/wordlist.db");
 	file_put_contents($wordlist, $content);
 	lxfile_unix_chown_rec($dir, "lxpopuser:lxpopgroup");
@@ -6496,6 +6505,7 @@ function uploadStatsLxCenter()
     $thisversion = $sgbl->__ver_major_minor_release;
     $collectIsAllowed = $sgbl->__var_programname_stats;
 
+	// ToDo: stats server is lost, need to create a new one.
     if ($collectIsAllowed === "yes") {
     system("wget -q -O /dev/null http://stats.lxcenter.org/lxstat.php?version=" . trim($thisversion) . " &");
     }

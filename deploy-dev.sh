@@ -27,7 +27,7 @@
 # On C5.11 (yum update via the vault) manualy install yum install make first.
 #
 # Add this to your /etc/hosts file:
-# 66.160.179.101 download.lxcenter.org download.lxlabs.com srvc.lxcenter.org
+# 66.160.179.101 download.lxcenter.org download.lxlabs.com
 #
 # version 0.7 Changed to a working GIT URL and newest version
 # Version 0.6 Added better argument handling and --single-branch to git by Semir 
@@ -39,7 +39,7 @@
 #
 KLOXO_PATH='/usr/local/lxlabs'
 REPO="lxcenter"
-BRANCH="6.1.x"
+BRANCH="7.0.x"
 
 usage(){
     echo "Usage: $0 [BRANCH] [REPOSITORY] [-h]"
@@ -49,7 +49,7 @@ usage(){
     exit 1
 }
 
-while getopts “h:r:b:” OPTION
+while getopts "h:r:b:" OPTION
 do
      case $OPTION in
          h)
@@ -73,14 +73,10 @@ echo "Using REPO: $REPO BRANCH: $BRANCH "
 
 install_GIT()
 {
-  # Redhat based
-  if [ -f /etc/redhat-release ] ; then
+  # CentOS
+  if [ -f /etc/centos-release ] ; then
   # Install git with curl and expat support to enable support on github cloning
   yum install -y gcc gettext-devel expat-devel curl-devel zlib-devel openssl-devel perl-ExtUtils-MakeMaker
-  # Debian based
-  elif [ -f /etc/debian_version ] ; then
-  # No tested
-  apt-get install gcc
   fi
 
   # @todo Try to get the lastest version from some site. LATEST file?
