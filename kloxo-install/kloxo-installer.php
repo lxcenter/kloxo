@@ -252,15 +252,15 @@ function lxins_main()
 	//--- Prevent mysql socket problem (especially on 64bit system)
 	if (!file_exists("/var/lib/mysql/mysql.sock")) {
 		print("Create mysql.sock...\n");
-		system("/etc/init.d/mysqld stop");
+		system("systemctl disable mariadb.service");
 		system("mksock /var/lib/mysql/mysql.sock");	
-		system("/etc/init.d/mysqld start");
+		system("systemctl enable mariadb.service");
 	}
 	
 	//--- Prevent for Mysql not start after reboot for fresh kloxo slave install
-	print("Setting Mysql for always running after reboot and restart now...\n");
-	system("chkconfig mysqld on");
-	system("service mysqld restart");	
+	//print("Setting Mysql for always running after reboot and restart now...\n");
+	//system("chkconfig mysqld on");
+	//system("service mysqld restart");
 
 	//--- Fix for old thirdparty version
 	if (!file_exists("/usr/local/lxlabs/kloxo/httpdocs/thirdparty")) {
